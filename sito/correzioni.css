@@ -1,0 +1,18 @@
+/* Novaula · Correzioni di Claude (solo docente) */
+.corr-board{gap:18px}
+.corr-group h3{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 10px}
+.corr-left{font-size:.85rem;font-weight:700;color:var(--muted)}
+.corr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.corr{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}
+.subs .corr{box-shadow:none;margin-top:8px}
+.corr.is-reviewed{opacity:.72}
+.corr-head{display:flex;align-items:center;gap:12px;min-width:0}
+.corr-who{display:flex;flex-direction:column;gap:4px;min-width:0}
+.corr-who b{overflow-wrap:anywhere}
+.corr-grade{flex:none;display:grid;place-items:center;min-width:48px;height:48px;padding:0 8px;border-radius:12px;background:var(--hl);color:var(--hl-ink);font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.35rem}
+.corr-counts{display:flex;flex-wrap:wrap;gap:6px}
+.corr-n{font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:999px}
+.corr-n.ok{background:var(--ok-soft);color:var(--ok)}
+.corr-n.half{background:color-mix(in srgb,#e08a00 16%,var(--card));color:color-mix(in srgb,#e08a00 80%,var(--ink))}
+.corr-n.ko{background:color-mix(in srgb,var(--danger) 14%,var(--card));color:var(--danger)}
+.corr-sum{margin:0;font-size:.92rem;color:var(--ink);overflow-wrap:anywhere}
