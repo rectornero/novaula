@@ -398,12 +398,15 @@
   function classPage(id, tab) {
     var c = findClass(id);
     if (!c) return homePage();
-    tab = ["programma", "materiali", "compiti", "verifiche", "chat", "domande", "aiuto"].indexOf(tab) >= 0 ? tab : "programma";
+    tab = (tab || "").split("?")[0];
+    tab = ["programma", "materiali", "compiti", "verifiche", "chat", "domande", "aiuto", "profilo"].indexOf(tab) >= 0 ? tab : "programma";
     setPage(c.name);
     store("last-class", id);
     var p = classParts(c);
     app.appendChild(h("header", { class: "class-head", style: "--cc:" + classColor(c) },
-      h("a", { class: "back", href: "#/", text: "← Tutte le classi" }),
+      h("div", { class: "class-top" },
+        h("a", { class: "back", href: "#/", text: "← Tutte le classi" }),
+        window.NovaulaProfili && api.client ? window.NovaulaProfili.chip(c, pctx()) : null),
       h("h1", null, h("span", { class: "code", text: p[0] }), " ", h("span", { class: "subject", text: p[1] }))
     ));
     app.appendChild(h("nav", { class: "tabs", style: "--cc:" + classColor(c), "aria-label": "Sezioni" }, [["programma", "Programma"], ["materiali", "Materiali"], ["compiti", "Compiti"], ["verifiche", "Verifiche"], ["aiuto", "Aiuto"], ["chat", "Chat"]].map(function (t) {
@@ -416,6 +419,7 @@
     else if (tab === "compiti") assignmentsTab(c, box);
     else if (tab === "verifiche") testsTab(c, box);
     else if (tab === "domande") questionsTab(c, box);
+    else if (tab === "profilo" && window.NovaulaProfili) window.NovaulaProfili.page(c, box, pctx());
     else if (tab === "aiuto" && window.NovaulaHelpdesk) stopChat = window.NovaulaHelpdesk(c, box, { h: h, api: api, store: store, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, fmtTime: fmtTime, hue: hue, initials: initials, cc: classColor(c) });
     else chatTab(c, box);
   }
@@ -613,14 +617,17 @@
             h("span", { class: "cal-d", text: String(dd.getDate()) })),
           h("div", { class: "assign-title" },
             h("h2", { text: a.title }),
-            a.due_date && h("p", { class: "due", text: "Consegna entro il " + fmtDate(a.due_date) + " · " + status }))
+            a.due_date && h("p", { class: "due", text: "Consegna entro il " + fmtDate(a.due_date) + " · " + status }),
+            (a.group_work || (a.kind && a.kind !== "compito")) && h("div", { class: "row" },
+              a.kind && a.kind !== "compito" && h("span", { class: "badge", text: KINDS[a.kind] || a.kind }),
+              a.group_work && h("span", { class: "badge", text: "Lavoro di gruppo" })))
         ),
         a.description && h("p", { class: "desc", text: a.description }),
         a.pdf_url && h("div", { class: "row actions" },
           h("a", { class: "btn", href: openHref(a.pdf_url, c.id, "compiti", { url: a.pdf_url, title: a.title }), target: "_blank", rel: "noopener", text: "Apri la scheda (PDF)" }),
           h("a", { class: "btn link", href: a.pdf_url, download: a.pdf_url.split("/").pop(), text: "Scarica" }))
       );
-      card.appendChild(api.isTeacher() ? teacherSubmissions(a) : submitForm(a, c));
+      card.appendChild(api.isTeacher() ? teacherSubmissions(a) : window.NovaulaProfili && api.client ? window.NovaulaProfili.submitForm(a, c, pctx()) : submitForm(a, c));
       box.appendChild(card);
     });
     if (waiting.length) {
@@ -728,11 +735,14 @@
     list.forEach(function (q) { box.appendChild(questionCard(q, c.id, titles, teacher)); });
   }
 
+  var KINDS = { compito: "Compito a casa", classe: "Lavoro in classe", progetto: "Progetto", verifica: "Verifica" };
   function addAssignmentForm(c) {
     var msg = h("div");
     var form = h("form", { class: "stack" },
       h("label", null, "Titolo", h("input", { type: "text", name: "title", required: true, maxlength: 200 })),
       h("label", null, "Consegna", h("textarea", { name: "description", maxlength: 4000, placeholder: "Cosa devono fare gli studenti" })),
+      h("label", null, "Tipo di lavoro", h("select", { name: "kind" }, Object.keys(KINDS).map(function (k) { return h("option", { value: k, text: KINDS[k] }); }))),
+      h("label", { class: "check-row" }, h("input", { type: "checkbox", name: "group" }), h("span", { text: "Lavoro di gruppo: si consegna una volta per tutto il gruppo" })),
       h("label", null, "Scadenza (facoltativa)", h("input", { type: "date", name: "due" })),
       h("button", { class: "btn primary", type: "submit", text: "Assegna il compito" }),
       msg
@@ -742,7 +752,9 @@
       var f = form.elements;
       form.querySelector("button").disabled = true;
       try {
-        await api.addAssignment({ class_id: c.id, title: f.title.value.trim(), description: f.description.value.trim() || null, due_date: f.due.value || null });
+        var row = { class_id: c.id, title: f.title.value.trim(), description: f.description.value.trim() || null, due_date: f.due.value || null };
+        if (!DEMO) { row.kind = f.kind.value; row.group_work = f.group.checked; }
+        await api.addAssignment(row);
         route();
       } catch (err) { msg.replaceChildren(notice("err", errText(err))); form.querySelector("button").disabled = false; }
     });
@@ -785,7 +797,16 @@
     return h("details", { open: !done }, h("summary", { class: "btn", text: done ? "Consegnato ✓" : "Consegna" }), form);
   }
 
-  function corrCtx() { return { h: h, sb: api.client, findClass: findClass, toast: toast, errText: errText, notice: notice }; }
+  function corrCtx() {
+    var x = { h: h, sb: api.client, findClass: findClass, toast: toast, errText: errText, notice: notice };
+    if (window.NovaulaProfili && api.client) x.extra = function (c) { return window.NovaulaProfili.correctionExtra(c, pctx()); };
+    return x;
+  }
+  // Aiuti per profili.js
+  function pctx() {
+    return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
+      fmtDate: fmtDate, fmtTime: fmtTime, findClass: findClass, route: route, openHref: openHref, kindOf: kindOf, uid: uid, safeName: safeName };
+  }
 
   function teacherSubmissions(a) {
     var list = h("div", { class: "subs" });
@@ -798,6 +819,7 @@
       try {
         var subs = await api.submissions(a.id);
         var corr = window.NovaulaCorrezioni && api.client ? await window.NovaulaCorrezioni.forAssignment(a.id, corrCtx()).catch(function () { return null; }) : null;
+        var prof = window.NovaulaProfili && api.client ? await window.NovaulaProfili.forAssignment(a, subs, Object.assign(pctx(), { reopen: function () { det.open = false; det.open = true; } })).catch(function () { return null; }) : null;
         list.textContent = "";
         if (!subs.length) list.appendChild(h("p", { class: "muted", text: "Nessuna consegna finora." }));
         else list.appendChild(h("p", { class: "muted small", text: subs.length + (subs.length === 1 ? " consegna" : " consegne") }));
@@ -812,7 +834,8 @@
               } }),
               confirmBtn("Elimina", "btn link", async function () { await api.deleteSubmission(s); det.open = false; det.open = true; })
             ),
-            corr && corr(s, a.title)
+            corr && corr(s, a.title),
+            prof && prof(s)
           ));
         });
       } catch (e) { list.replaceChildren(notice("err", errText(e))); }
@@ -924,13 +947,14 @@
     if (api.isTeacher()) {
       nowBoard();
       app.appendChild(h("div", { class: "card" },
-        h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat." }),
+        h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
       ));
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
+      if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
       var qbox = h("section", { class: "list" }, h("p", { class: "empty", text: "Caricamento delle domande…" }));
       app.appendChild(h("h2", { text: "Domande senza risposta" }));
       app.appendChild(qbox);

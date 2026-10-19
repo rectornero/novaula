@@ -1,0 +1,114 @@
+/* Novaula · Profili degli studenti e voti (vedi profili.js) */
+.class-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.profile-chip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:4px 14px 4px 4px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-weight:700;font-size:.92rem;box-shadow:var(--shadow);max-width:60vw}
+.profile-chip>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-chip.in{border-color:var(--cc)}
+.pc-av{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--cc,var(--accent));color:#fff;font:800 .8rem/1 var(--display)}
+.pc-av.big{width:56px;height:56px;font-size:1.3rem}
+
+/* Accesso */
+.pf-login{gap:14px}
+.pf-login-head{display:flex;flex-direction:column;gap:4px}
+.pf-login input[type=search]{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-weight:400;-webkit-appearance:none;appearance:none}
+.who-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:8px;max-height:52vh;overflow:auto;padding:2px}
+.who-btn{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 12px;border-radius:14px;border:1px solid var(--line);background:var(--paper);cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
+.who-btn:active{transform:scale(.98)}
+.who-btn:hover{border-color:var(--cc)}
+.who-name{flex:1;min-width:0;overflow-wrap:anywhere}
+.who-lock{flex:none}
+.pin-form{border:2px solid var(--cc);gap:12px}
+.pin-in{width:100%;max-width:220px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font:800 1.8rem/1 var(--display);letter-spacing:.5em;text-align:center}
+.pin-in:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.pf-create{padding:0;gap:0}
+.pf-sum{cursor:pointer;font-weight:800;padding:16px 20px;display:flex;align-items:center;gap:8px}
+.pf-sum::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--cc,var(--accent));color:#fff;font-weight:800;flex:none}
+details[open]>.pf-sum::before{content:"–"}
+.pf-create form{padding:0 20px 18px}
+.pf-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pf-two>*{min-width:0}
+@media (max-width:420px){.pf-two{grid-template-columns:1fr}}
+fieldset.pf-pin{border:1px dashed var(--line);border-radius:12px;padding:10px 14px 14px;margin:0;display:flex;flex-direction:column;gap:8px}
+fieldset.pf-pin legend{font-weight:700;font-size:.95rem;padding:0 4px}
+.pf-pin .pin-in{max-width:none;font-size:1.4rem}
+
+/* Profilo */
+.pf-head{gap:14px;border-top:6px solid var(--cc)}
+.pf-id{display:flex;align-items:center;gap:14px}
+.pf-id h2{font-size:1.4rem;overflow-wrap:anywhere}
+.pf-stats{display:flex;gap:10px;flex-wrap:wrap}
+.pf-stat{flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.pf-stat b{font:800 1.5rem/1.1 var(--display)}
+.pf-tools{display:flex;flex-direction:column;gap:10px;border-top:1px dashed var(--line);padding-top:10px}
+.pf-sec{display:flex;flex-direction:column;gap:10px}
+.pf-sec>h2{padding:0 4px}
+.pf-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.pf-cat{display:flex;flex-direction:column;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.pf-cat b{font:800 1.3rem/1.2 var(--display)}
+.good{color:var(--ok)} .bad{color:var(--danger)} .mid{color:#b7791f}
+.mk-list{display:flex;flex-direction:column;gap:8px}
+.mk-row{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);flex-wrap:wrap}
+.mk-row.is-redo{border-color:color-mix(in srgb,var(--danger) 45%,var(--line))}
+.mk-row.is-prop{border-style:dashed;background:color-mix(in srgb,var(--hl) 12%,var(--card))}
+.mk-body{flex:1;min-width:150px;display:flex;flex-direction:column;gap:2px}
+.mk-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mk{flex:none;display:inline-grid;place-items:center;min-width:44px;height:44px;padding:0 8px;border-radius:12px;background:var(--soft);color:var(--ink);font:800 1.15rem/1 var(--display)}
+.mk.big{min-width:64px;height:48px;font-size:1.5rem}
+.mk.good{background:var(--ok-soft);color:var(--ok)}
+.mk.bad{background:color-mix(in srgb,var(--danger) 14%,var(--card));color:var(--danger)}
+.mk.mid{background:color-mix(in srgb,#e08a00 16%,var(--card));color:color-mix(in srgb,#e08a00 80%,var(--ink))}
+.mk.redo{background:color-mix(in srgb,var(--danger) 14%,var(--card));color:var(--danger);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+.mk.proposed{background:var(--hl);color:var(--hl-ink);outline:2px dashed color-mix(in srgb,var(--hl-ink) 30%,transparent);outline-offset:-4px}
+.redo-t{color:var(--danger);font-weight:700}
+.badge.redo-badge{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.badge.ok-badge{background:var(--ok-soft);color:var(--ok)}
+.badge.flag-badge{background:color-mix(in srgb,#e08a00 18%,transparent);color:color-mix(in srgb,#e08a00 80%,var(--ink));text-transform:none;letter-spacing:0}
+.pf-sub{gap:4px;padding:12px 16px}
+.pf-sub.is-redo{border-left:5px solid var(--danger)}
+.pf-mat h3{font-size:1.05rem}
+.pf-req{margin:0;padding:6px 0;border-bottom:1px dashed var(--line)}
+.pf-req.done{color:var(--muted)}
+.pf-submit{display:flex;flex-direction:column;gap:8px}
+.pf-submit details>summary.btn{width:max-content}
+.pf-submit form{margin-top:12px}
+
+/* Docente: voto sotto una consegna */
+.pf-subx{display:flex;flex-direction:column;gap:8px}
+.gp{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.gp-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gp-edit{display:flex;flex-direction:column;gap:8px}
+.gp-fields{display:grid;grid-template-columns:110px 1fr;gap:8px}
+@media (max-width:420px){.gp-fields{grid-template-columns:1fr}}
+input.gp-in{width:100%;max-width:110px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);font:800 1.05rem/1 var(--display);text-align:center}
+.gp-fields input:not(.gp-in){width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.gp-more summary{cursor:pointer;color:var(--accent);font-weight:700;width:max-content}
+.gp-more[open] summary{margin-bottom:8px}
+.pf-link select{width:auto;min-width:180px;flex:1}
+.pf-corrx:empty{display:none}
+.small-btn{min-height:38px;padding:6px 14px;font-size:.9rem}
+
+/* Docente: elenco studenti e controlli */
+.pf-checks{padding:0;gap:0}
+.pf-checks .pf-sum::before{background:#e08a00}
+.pf-flags{list-style:none;margin:0;padding:0 20px 18px;display:flex;flex-direction:column;gap:8px}
+.pf-flags li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--paper)}
+.pf-flags li>div{min-width:0;overflow-wrap:anywhere}
+.pf-flags .lv-high{border-left:4px solid var(--danger)}
+.pf-flags .lv-high .badge{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.pf-flags .lv-mid{border-left:4px solid #e08a00}
+.pf-flags .lv-mid .badge{background:color-mix(in srgb,#e08a00 18%,transparent);color:color-mix(in srgb,#e08a00 80%,var(--ink))}
+.pf-flags .lv-low{border-left:4px solid var(--line)}
+.pf-flags .badge{flex:none}
+.pf-checks>p{padding:0 20px 18px}
+.bulk{display:flex;flex-direction:column;gap:4px;max-height:60vh;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--card)}
+.bulk-row{display:grid;grid-template-columns:1fr 90px auto;gap:10px;align-items:center;min-height:44px;border-bottom:1px dashed var(--line)}
+.bulk-row:last-child{border-bottom:0}
+.bulk-row>span{overflow-wrap:anywhere;font-weight:700;font-size:.95rem}
+.bulk-row label.check-row{min-height:0;gap:6px}
+.pf-students{gap:10px}
+.pf-student{padding:0;gap:0}
+.pf-ssum{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;flex-wrap:wrap}
+.pf-sname{flex:1;min-width:140px;display:flex;flex-direction:column}
+.pf-sbody{padding:0 16px 16px;gap:10px}
+.pf-sbody h3{font-size:1rem;margin-top:6px}
+.pf-subline{margin:0}
+.pf-reqcard{gap:6px;padding:14px 16px}
