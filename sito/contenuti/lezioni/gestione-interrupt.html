@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La gestione degli interrupt · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>La gestione<br>degli interrupt</h1>
+  <p class="lead">Premi un tasto e la CPU, che stava facendo tutt'altro, si ferma per un istante e ti ascolta. Come fa a non perdere il filo? Polling, interrupt, routine di servizio e un allarme famoso sulla Luna.</p>
+  <p class="meta"><span class="chip">3E TPSI</span><span>Interrupt hardware e software, ISR, polling, /proc/interrupts</span></p>
+  <aside class="notes">Obiettivi: distinguere polling e interrupt e confrontarne il costo; conoscere interrupt hardware, eccezioni e chiamate di sistema; descrivere le fasi della gestione di un interrupt (salvataggio dello stato, vettore delle interruzioni, routine di servizio, ripristino); collegare l'interrupt del timer al Round Robin della lezione precedente; osservare interrupt veri in Linux (/proc/interrupts in JSLinux) e in Windows (Gestione dispositivi e "Interrupt di sistema"). Durata indicativa: 2 ore. Prima della lezione: provare JSLinux dal laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Aspetti un pacco che arriva "in giornata". Che cosa fai?</h2></div>
+  <div class="poll" data-id="int-pacco">
+    <ol><li>Vado ad aprire la porta ogni 10 minuti per vedere se c'è il corriere</li><li>Controllo l'app di tracciamento ogni tanto</li><li>Faccio altro e aspetto che suoni il campanello</li><li>Resto in casa davanti alla finestra tutto il giorno</li></ol>
+  </div>
+  <aside class="notes">A, B e D sono forme di polling (controllare periodicamente o di continuo); C è un interrupt: il campanello avvisa quando l'evento accade e intanto tu fai altro. Chiedere: quale strategia è la più efficiente? Dipende: se il corriere suona sempre, C; se il campanello è rotto, serve A. Anche nei computer si usano entrambe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due strategie</p><h2>Polling o interrupt?</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Polling</h3><p>La CPU chiede in continuazione al dispositivo: "Hai qualcosa per me?"</p><p class="muted">Semplice, ma spreca tempo di CPU quando gli eventi sono rari.</p></div>
+    <div class="card ok"><h3>Interrupt</h3><p>Il dispositivo manda un <b>segnale</b> alla CPU solo quando ha qualcosa da dire.</p><p class="muted">La CPU lavora ad altro e si ferma solo quando serve.</p></div>
+  </div>
+  <div class="callout">In classe: il docente che chiede a ogni studente "hai una domanda?" fa polling; lo studente che <b>alza la mano</b> genera un interrupt.</div>
+  <aside class="notes">Il termine "interrupt" si usa anche in italiano; il libro parla anche di "interruzioni". Il polling non è sempre sbagliato: con un dispositivo che produce eventi continuamente (una scheda di rete sotto un traffico enorme) controllare a intervalli può costare meno che essere interrotti ogni microsecondo. Lo vedremo nel box "Oggi".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>La CPU controlla la tastiera 1000 volte al secondo. Tu premi 5 tasti al secondo. Quanti controlli sono inutili, ogni secondo?</h2></div>
+  <div class="poll" data-id="int-polling-costo" data-tipo="quiz" data-risposta="B">
+    <ol><li>5</li><li>995</li><li>200</li><li>1000</li></ol>
+    <p class="why">Su 1000 controlli solo 5 trovano un tasto premuto: gli altri 995 sono lavoro sprecato, il 99,5%. Con gli interrupt la tastiera avvisa la CPU 5 volte e basta. (200 è il numero di controlli tra un tasto e l'altro.)</p>
+  </div>
+  <aside class="notes">Fare il calcolo sul quaderno: 1000 − 5 = 995, cioè 995/1000 = 99,5%. Domanda in più: perché allora non controllare la tastiera solo 5 volte al secondo? Perché i tasti non arrivano a intervalli regolari: un tasto premuto subito dopo un controllo aspetterebbe fino a 200 ms, un ritardo che si nota. Con il polling bisogna scegliere tra spreco e ritardo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è un interrupt</p><h2>Un segnale che interrompe la CPU per farle eseguire il kernel</h2></div>
+  <table class="data">
+    <tr><th>Tipo</th><th>Chi lo genera</th><th>Esempi</th></tr>
+    <tr><td><b>Interrupt hardware</b></td><td>un dispositivo esterno alla CPU</td><td>tasto premuto, pacchetto dalla rete, disco che ha finito, timer</td></tr>
+    <tr><td><b>Eccezione</b> (trap)</td><td>la CPU stessa, per un errore</td><td>divisione per zero, accesso a memoria vietata, istruzione non valida</td></tr>
+    <tr><td><b>Chiamata di sistema</b></td><td>il programma, con un'istruzione apposita</td><td>apri un file, leggi la tastiera, crea un processo</td></tr>
+  </table>
+  <div class="callout">Le ultime due sono <b>interrupt software</b>: nascono da un'istruzione eseguita, non da un dispositivo. In tutti i casi la CPU passa in <b>kernel mode</b>.</div>
+  <aside class="notes">Collegamento con la lezione sui ring: l'interrupt è l'unica porta di ingresso controllata per passare da user mode a kernel mode. Sui processori x86 storici la chiamata di sistema di Linux era l'istruzione int 0x80; oggi si usa l'istruzione dedicata syscall. Gli interrupt hardware sono asincroni (arrivano in qualunque momento), le eccezioni e le chiamate di sistema sono sincrone (dipendono dall'istruzione eseguita).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni evento al tipo di interrupt</h2></div>
+  <dl class="puzzle-abbina" data-id="int-tipi">
+    <dt>Muovi il mouse</dt><dd>Interrupt hardware da una periferica di input</dd>
+    <dt>Scade il quanto di tempo</dt><dd>Interrupt hardware del timer</dd>
+    <dt>Un programma divide per zero</dt><dd>Eccezione generata dalla CPU</dd>
+    <dt>Calc chiede di salvare un file</dt><dd>Chiamata di sistema</dd>
+    <dt>Arriva un messaggio dal Wi-Fi</dt><dd>Interrupt hardware della scheda di rete</dd>
+  </dl>
+  <aside class="notes">Il secondo è il più interessante: anche il timer è un dispositivo hardware, e senza il suo interrupt il Round Robin non potrebbe esistere. Calc non scrive sul disco da solo: chiede al kernel con una chiamata di sistema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si gestisce</p><h2>Dal segnale alla ripresa, in sei passi</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps" style="gap:14px">
+      <li>Il dispositivo invia una <b>richiesta di interrupt</b> (IRQ).</li>
+      <li>La CPU <b>termina l'istruzione</b> in corso.</li>
+      <li>Salva <b>program counter</b> e registri, passa in kernel mode.</li>
+      <li>Cerca la routine nel <b>vettore delle interruzioni</b>.</li>
+      <li>Esegue la <b>routine di servizio</b> (ISR).</li>
+      <li>Ripristina lo stato: il processo <b>riprende</b>.</li>
+    </ol>
+    <div class="card soft"><h3>Il vettore delle interruzioni</h3><p>Una tabella in memoria: per ogni numero di interrupt, l'indirizzo della sua routine. Come l'indice di una rubrica.</p></div>
+  </div>
+  <aside class="notes">Ricollegare all'analogia di Tanenbaum della lezione sui processi: il cuoco che prepara la torta viene interrotto dal figlio punto da un'ape; segna a che punto della ricetta era (salvataggio dello stato), prende il manuale di pronto soccorso (la routine di servizio), poi torna alla torta dal punto segnato. Dopo l'interrupt non è detto che riprenda lo stesso processo: se l'interrupt era il timer, lo scheduler può scegliere un altro processo (cambio di contesto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Premi un tasto mentre Calc ricalcola: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="int-tasto">
+    <li>La tastiera invia una richiesta di interrupt</li>
+    <li>La CPU finisce l'istruzione di Calc in corso</li>
+    <li>Salva program counter e registri di Calc</li>
+    <li>Trova la routine della tastiera nel vettore delle interruzioni</li>
+    <li>La routine legge il codice del tasto e lo mette in un buffer</li>
+    <li>Lo stato di Calc viene ripristinato e il ricalcolo continua</li>
+  </ol>
+  <aside class="notes">Il buffer è una piccola zona di memoria in cui il kernel mette i tasti premuti finché il programma giusto non li legge. Tutta la sequenza dura pochi microsecondi: per questo non ci accorgiamo che Calc si è fermato. Errore tipico: mettere il salvataggio dei registri prima della fine dell'istruzione in corso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Contare gli interrupt di Linux, in JSLinux</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>bellard.org/jslinux</b> e avvia una console Linux.</li>
+      <li>Scrivi <code>cat /proc/interrupts</code>: ogni riga è una sorgente, con il numero di interrupt ricevuti finora.</li>
+      <li>Aspetta 10 secondi senza toccare nulla e ripeti il comando. Quale riga è cresciuta di più?</li>
+      <li>Ora scrivi una frase lunga e ripeti: quale altra riga è cresciuta?</li>
+      <li>Annota le righe e i numeri in <b>interrupt-linux.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> anche senza fare nulla cresce la riga del <b>timer</b> (di centinaia di unità in 10 secondi). Scrivendo cresce la riga della console o della tastiera. Le righe ferme sono dispositivi che non hanno lavorato.</div>
+  </div>
+  <aside class="notes">I nomi delle righe dipendono dalla macchina virtuale scelta (per esempio timer, serial, virtio, i8042). Il timer cresce anche a sistema fermo: è il "battito" del kernel. Calcolo da fare: se in 10 secondi il timer cresce di 1000, la frequenza è 100 interrupt al secondo, cioè uno ogni 10 ms. Su un vero Linux il comando watch -n1 cat /proc/interrupts lo mostra in diretta. Fallback: il docente mostra /proc/interrupts su un Linux alla LIM, oppure si passa direttamente al laboratorio su Windows.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il battito del sistema</p><h2>L'interrupt del timer rende possibile il Round Robin</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:52px"><small>Periodo del timer</small>periodo = 1 ÷ <span class="hl">frequenza</span></div>
+    <div class="card soft"><h3>Esempi</h3><p>Timer a 1000 Hz: un interrupt ogni <b>1 ms</b>.<br>Timer a 64 Hz: uno ogni <b>15,6 ms</b> (circa).<br>Timer a 250 Hz: uno ogni <b>4 ms</b>.</p></div>
+  </div>
+  <div class="callout">Senza il timer, un processo che non chiede mai I/O terrebbe la CPU <b>per sempre</b>: il kernel non avrebbe modo di riprendersela. Il timer è la sveglia che riporta il controllo allo scheduler.</div>
+  <aside class="notes">1 ÷ 64 = 0,015625 s = 15,625 ms: è il periodo predefinito del clock di sistema di Windows (i programmi possono chiedere una risoluzione più fine, per esempio per l'audio). Linux si compila con frequenze tra 100 e 1000 Hz (molte distribuzioni usano 250 o 1000), e i kernel moderni possono sospendere il tick quando la CPU è inattiva per risparmiare energia (tickless). Nei vecchi sistemi senza prelazione (Windows 3.1, Mac OS classico) un programma bloccato in un ciclo infinito bloccava tutto il computer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un programma in C esegue una divisione intera per zero. Che cosa succede nella CPU?</h2></div>
+  <div class="poll" data-id="int-div-zero" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il risultato è infinito e il programma continua</li><li>La tastiera manda un interrupt hardware di errore</li><li>La CPU genera un'eccezione e il kernel decide che cosa fare</li><li>Nulla: il compilatore lo impedisce sempre</li></ol>
+    <p class="why">La divisione intera per zero è un'eccezione: la genera la CPU stessa durante l'istruzione. Il controllo passa al kernel, che di solito termina il processo con un errore. La A vale per i numeri in virgola mobile dello standard IEEE 754, che danno infinito: non per gli interi.</p>
+  </div>
+  <aside class="notes">Tranello doppio: chi ricorda la lezione su IEEE 754 sceglie A, ma vale solo per float e double (1.0/0 dà Infinity). Per gli interi il processore x86 genera l'eccezione "divide error". In Java la stessa divisione intera produce una ArithmeticException. La D è falsa: il compilatore se ne accorge solo se il divisore è una costante, non se arriva da un input.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Priorità degli interrupt</p><h2>Luglio 1969: il computer di Apollo 11 lancia l'allarme 1202</h2></div>
+  <figure class="citazione">
+    <blockquote>Sono sovraccarico, ho più compiti di quanti dovrei svolgere in questo momento, e terrò solo i più importanti.</blockquote>
+    <figcaption><b>Margaret Hamilton</b>, a capo del software di bordo dell'Apollo, spiegando il significato dell'allarme, 1971</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><p>Il radar di rendezvous, lasciato attivo, rubava tempo alla CPU con richieste continue.</p></div>
+    <div class="card soft"><p>Il software scartò i compiti meno importanti e tenne quelli per l'allunaggio: Armstrong e Aldrin atterrarono.</p></div>
+  </div>
+  <aside class="notes">La frase è nella lettera di Margaret Hamilton "Computer Got Loaded", pubblicata su Datamation il 1° marzo 1971: "I'm overloaded with more tasks than I should be doing at this time and I'm going to keep only the more important tasks". Traduzione nostra. Durante la discesa del 20 luglio 1969 il computer di guida (AGC) ricevette in più le richieste del radar di rendezvous, per una configurazione degli interruttori prevista dalla procedura ma non adatta: le operazioni "rubavano" cicli alla CPU (cycle stealing). Il sistema operativo, a priorità, si riavviò tenendo solo i compiti essenziali. Collegamenti: priorità (lezione sullo scheduling) e gestione degli eventi esterni (oggi). Nel 2016 Hamilton ha ricevuto la Medaglia presidenziale della libertà.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Più interrupt insieme</p><h2>Chi passa per primo?</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Priorità</h3><p class="muted">Ogni interrupt ha un livello: un guasto di alimentazione conta più di un tasto premuto.</p></div>
+    <div class="card"><h3>Annidamento</h3><p class="muted">Un interrupt più importante può interrompere la routine di uno meno importante.</p></div>
+    <div class="card"><h3>Mascheramento</h3><p class="muted">Il kernel può disattivare per un attimo gli interrupt mascherabili, nei pezzi di codice delicati.</p></div>
+  </div>
+  <div class="callout hl">Alcuni interrupt sono <b>non mascherabili</b> (NMI): segnalano guasti gravi e non si possono ignorare. Le routine di servizio devono essere <b>brevi</b>: mentre girano, altri eventi aspettano.</div>
+  <aside class="notes">Per tenere brevi le routine, i sistemi operativi dividono il lavoro in due parti: la routine vera, velocissima (prende il dato e lo mette nel buffer), e un lavoro rimandato che gira dopo, con gli interrupt attivi (in Linux "bottom half", in Windows DPC, Deferred Procedure Call). In Gestione attività di Windows il tempo speso qui compare come "Interrupt di sistema": lo cerchiamo nel prossimo laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Gli interrupt di Windows</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>devmgmt.msc</code>: si apre <b>Gestione dispositivi</b> (se chiede, rispondi che vuoi solo guardare).</li>
+      <li>Menu <b>Visualizza</b>, <b>Risorse per tipo</b>, apri <b>Richiesta di interrupt (IRQ)</b>: annota 4 dispositivi con il loro numero.</li>
+      <li>In Gestione attività, scheda Processi, trova <b>Interrupt di sistema</b>: annota la CPU a PC fermo.</li>
+      <li>Muovi velocemente il mouse e avvia un video: come cambia? Salva tutto in <b>interrupt-windows.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella lista IRQ trovi dispositivi come il timer di sistema, la tastiera, i controller USB e la scheda di rete. "Interrupt di sistema" non è un vero processo: misura il tempo che la CPU passa nelle routine di servizio. Di solito resta sotto l'1%.</div>
+  </div>
+  <aside class="notes">Senza diritti di amministratore Gestione dispositivi si apre in sola lettura con un avviso: va bene. Le etichette possono essere leggermente diverse; in inglese il nodo si chiama "Interrupt request (IRQ)". Su PC moderni molti dispositivi usano interrupt "MSI" con numeri molto alti o negativi: è normale. Se "Interrupt di sistema" resta sopra il 5-10% a PC fermo, di solito c'è un driver o un dispositivo difettoso: è un caso reale di diagnosi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Polling contro eventi, nel browser</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri una pagina qualsiasi, premi <b>F12</b>, scheda <b>Console</b>.</li>
+      <li>Polling: scrivi <code>let n=0; let t=setInterval(()=>n++,10)</code> e conta 10 secondi.</li>
+      <li>Eventi: scrivi <code>let k=0; onkeydown=()=>k++</code>, clicca sulla pagina e premi 20 tasti.</li>
+      <li>Torna in console, scrivi <code>clearInterval(t); [n,k]</code> e annota i due numeri.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> n vale centinaia (circa 100 controlli al secondo, quasi tutti inutili), k vale esattamente i tasti premuti: la funzione è stata chiamata solo quando serviva, come un interrupt.</div>
+  </div>
+  <aside class="notes">È un'analogia, non un vero interrupt: nel browser gli eventi passano dall'event loop di JavaScript. Ma la catena parte davvero da un interrupt della tastiera gestito dal kernel, che lo consegna al browser, che chiama la funzione registrata. setInterval con 10 ms può essere rallentato dal browser (per esempio nelle schede in background): n può essere un po' meno di 1000. Domanda: quale dei due conviene per un videogioco che deve leggere i comandi? Spesso i giochi controllano lo stato dei tasti a ogni fotogramma (polling a 60 Hz), perché devono comunque ridisegnare lo schermo: il polling non è sempre sbagliato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Interrupt nella tecnologia di tutti i giorni</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>"Ehi, assistente!"</h3><p>Il telefono non tiene acceso il processore principale per ascoltarti. Un piccolo circuito a bassissimo consumo riconosce solo la parola di attivazione e, quando la sente, <b>sveglia</b> il resto del sistema e l'AI vocale: un interrupt intelligente.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Troppi interrupt</h3><p>Una scheda di rete veloce riceve milioni di pacchetti al secondo: un interrupt per ognuno bloccherebbe la CPU. Linux allora, sotto carico, passa al <b>polling</b> e torna agli interrupt quando il traffico cala.</p></div>
+  </div>
+  <div class="callout">Morale: interrupt e polling non sono rivali. Un buon sistema operativo sceglie il meccanismo giusto <b>in base a quanto spesso arrivano gli eventi</b>.</div>
+  <aside class="notes">Assistente vocale: il rilevamento della parola di attivazione gira su un processore dedicato (spesso un DSP o un coprocessore always-on) che consuma pochissimo; solo dopo la parola chiave si attivano il processore principale e il riconoscimento vocale completo, spesso con una NPU. Rete: in Linux il meccanismo si chiama NAPI (dal 2003 circa): al primo pacchetto arriva un interrupt, poi il driver disattiva gli interrupt e legge i pacchetti a blocchi in polling finché ce ne sono. Morale: interrupt e polling si combinano secondo il carico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4602" data-aiuto="periodo = 1 ÷ frequenza: 250 ms sta 4 volte in un secondo">
+    <ul class="points">
+      <li>1ª cifra: quanti interrupt al secondo dà un timer con periodo di 250 ms</li>
+      <li>2ª cifra: in quanti passi abbiamo descritto la gestione di un interrupt</li>
+      <li>3ª cifra: quanti interrupt genera la tastiera se la CPU la legge solo con il polling</li>
+      <li>4ª cifra: quanti tipi di interrupt software abbiamo visto (eccezioni e…)</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1 ÷ 0,25 s = 4; sei passi; 0 interrupt con il polling; 2 tipi software: eccezioni e chiamate di sistema.</div>
+  </div>
+  <aside class="notes">Codice 4602. A squadre: la prima che apre vince. L'errore più comune è sulla terza cifra: con il polling puro la tastiera non genera interrupt, è la CPU che va a chiedere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Controllare periodicamente un dispositivo si chiama <span class="blank" data-risposta="polling"></span>.</p>
+    <p>La tabella con gli indirizzi delle routine di servizio è il vettore delle <span class="blank" data-risposta="interruzioni|interrupt"></span>.</p>
+    <p>Una divisione intera per zero genera un'<span class="blank" data-risposta="eccezione|trap"></span>.</p>
+    <p>Un timer a 500 Hz genera un interrupt ogni <span class="blank" data-risposta="2"></span> millisecondi.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: polling; interruzioni (accettato interrupt); eccezione (accettato trap); 2 (1 ÷ 500 = 0,002 s).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Polling: la CPU chiede; interrupt: il dispositivo avvisa</li>
+      <li>Hardware, eccezioni, chiamate di sistema</li>
+      <li>Salva lo stato, vettore, ISR, ripristina</li>
+    </ul>
+    <ul class="points">
+      <li>Il timer riporta la CPU allo scheduler</li>
+      <li>Priorità, annidamento, mascheramento, NMI</li>
+      <li>/proc/interrupts, IRQ, Interrupt di sistema</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Caccia agli interrupt" su Novaula. Con questa lezione si chiude l'unità 6: annunciare la verifica e indicare la simulazione su Novaula per prepararsi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

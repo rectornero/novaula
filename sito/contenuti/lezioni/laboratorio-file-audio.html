@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio: i file audio · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità · Laboratorio</p>
+  <h1>Laboratorio:<br>i file audio</h1>
+  <p class="lead">Registra, taglia, pulisci ed esporta la tua voce con un editor audio nel browser. Poi apri il file e leggi i numeri della sua intestazione.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>AudioMass · HexEd.it · Calc</span></div>
+  <aside class="notes">Lezione di laboratorio (2 ore). Strumenti: audiomass.co (editor audio nel browser, senza account, i file restano sul computer), hexed.it, Calc. Servono cuffie (meglio con microfono). Preparare nella cartella condivisa un file voce.wav di 10-20 secondi (anche registrato dal docente con il telefono) per chi non ha il microfono. Controllare prima che audiomass.co non sia bloccato e che il browser possa usare il microfono. Fallback: Audacity se installato. L'interfaccia di AudioMass è in inglese: i nomi dei menu sono riportati come appaiono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quando ascolti la tua voce registrata, che effetto ti fa?</h2></div>
+  <div class="poll" data-id="fa-voce">
+    <ol><li>Non mi riconosco</li><li>Mi sembra più acuta</li><li>Mi suona uguale</li><li>Non la sopporto</li></ol>
+  </div>
+  <aside class="notes">Quasi tutti si sentono "strani". Motivo: quando parli senti la tua voce anche attraverso le ossa del cranio (conduzione ossea), che rinforza le frequenze basse; la registrazione arriva solo dall'aria, come la sentono gli altri. Quindi la registrazione è più vicina a come ti sentono gli altri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>La forma d'onda: il grafico dei campioni</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <svg viewBox="0 0 600 160" width="900" height="240" role="img" aria-label="Forma d'onda di una voce con parti forti, deboli e un silenzio"><rect width="600" height="160" fill="#141c30" rx="10"/><line x1="0" y1="80" x2="600" y2="80" stroke="#596179" stroke-width="1"/><path fill="#c8326f" d="M20 78h60v4h-60zM80 60h4v40h-4zM88 40h4v80h-4zM96 30h4v100h-4zM104 50h4v60h-4zM112 25h4v110h-4zM120 45h4v70h-4zM128 35h4v90h-4zM136 55h4v50h-4zM144 70h4v20h-4zM152 78h70v4h-70zM222 50h4v60h-4zM230 20h4v120h-4zM238 10h4v140h-4zM246 6h4v148h-4zM254 6h4v148h-4zM262 15h4v130h-4zM270 30h4v100h-4zM278 50h4v60h-4zM286 65h4v30h-4zM294 78h40v4h-40zM334 60h4v40h-4zM342 45h4v70h-4zM350 50h4v60h-4zM358 40h4v80h-4zM366 55h4v50h-4zM374 65h4v30h-4zM382 72h4v16h-4zM390 78h190v4h-190z"/><text x="20" y="152" font-family="Arial" font-size="14" fill="#a9b3cc">silenzio</text><text x="300" y="22" font-family="Arial" font-size="14" fill="#ffe45c">tocca il bordo: clipping!</text></svg>
+      <p>In orizzontale il <b>tempo</b>, in verticale l'<b>ampiezza</b> di ogni campione. Dove l'onda è piatta c'è silenzio.</p>
+    </div>
+    <div class="card soft"><h3>Il clipping</h3><p>Se il suono supera il valore massimo rappresentabile, i campioni vengono «tagliati» al massimo: si sente un gracchiare. <b>Non si ripara</b> dopo: si registra di nuovo, più piano o più lontano.</p></div>
+  </div>
+  <aside class="notes">Collegamento con la lezione sui suoni: con 16 bit i valori vanno da −32 768 a +32 767; un campione che "vorrebbe" essere 40 000 diventa 32 767. È lo stesso concetto dell'overflow visto nell'Unità 1, ma qui il valore viene bloccato al massimo invece di ricominciare. Consiglio pratico: registrare con i picchi a circa metà-tre quarti dell'altezza.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Registra o carica la tua voce</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>audiomass.co</b>. Con le cuffie con microfono scegli <b>File › Record Audio</b> e consenti il microfono.</li>
+      <li>Registra 15 secondi: presentati in due frasi, con un secondo di silenzio prima e dopo.</li>
+      <li>Senza microfono: <b>File › Load from computer</b> e carica <b>voce.wav</b> dalla cartella condivisa.</li>
+      <li>Ascolta con la barra spaziatrice. Trova sulla forma d'onda: i silenzi, la parola più forte, eventuali picchi tagliati.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> vedi una forma d'onda con «isole» per le parole e tratti piatti per i silenzi. Se tocca i bordi in alto e in basso c'è clipping: registra di nuovo più lontano dal microfono.</div>
+  </div>
+  <aside class="notes">Se il browser non chiede il permesso del microfono: icona del lucchetto nella barra degli indirizzi › Microfono › Consenti. Lavorare in silenzio a turno, oppure tutti con le cuffie. Per la privacy: nessuno deve registrare compagni senza il loro consenso; AudioMass lavora nel browser e non carica l'audio su un server.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni effetto a quello che fa ai campioni</h2></div>
+  <dl class="puzzle-abbina" data-id="fa-effetti">
+    <dt>Gain</dt><dd>Moltiplica tutti i campioni per lo stesso numero</dd>
+    <dt>Normalize</dt><dd>Alza il volume finché il picco più alto arriva al massimo scelto</dd>
+    <dt>Fade In</dt><dd>Moltiplica i campioni per un valore che sale da 0 a 1</dd>
+    <dt>Fade Out</dt><dd>Moltiplica i campioni per un valore che scende da 1 a 0</dd>
+    <dt>Reverse</dt><dd>Legge i campioni dall'ultimo al primo</dd>
+  </dl>
+  <aside class="notes">Messaggio chiave: ogni effetto è un piccolo algoritmo applicato a una lunga lista di numeri. Esempio: Gain del 200% = ogni campione × 2 (con il rischio di clipping). Il Fade In su 0,5 secondi a 44 100 Hz agisce su 22 050 campioni. Si può chiedere di scrivere in pseudocodice il Reverse: per i da n-1 a 0, nuovo[n-1-i] = vecchio[i].</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Montaggio: taglia, sfuma, normalizza</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Seleziona trascinando il silenzio iniziale e cancellalo (tasto Canc o <b>Edit › Delete</b>). Lascia circa 0,3 secondi.</li>
+      <li>Fai lo stesso con il silenzio finale e con un eventuale «ehm».</li>
+      <li>Seleziona il primo mezzo secondo › <b>Effects › Fade In</b>; l'ultimo mezzo secondo › <b>Fade Out</b>.</li>
+      <li>Seleziona tutto (Ctrl+A) › <b>Effects › Normalize</b>.</li>
+      <li>Annota la durata prima e dopo il montaggio.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la durata è diminuita; l'inizio e la fine salgono e scendono dolcemente, senza «clic»; dopo Normalize il picco più alto arriva vicino al bordo ma non lo supera.</div>
+  </div>
+  <aside class="notes">Il "clic" all'inizio o alla fine di un taglio nasce da un salto brusco tra un campione e il successivo: il fade lo elimina. Se il menu ha nomi leggermente diversi nella versione di AudioMass in uso, cercare nel menu Effects. Ctrl+Z annulla. Ricordare di non chiudere la scheda: il lavoro è nel browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Dopo «Normalize» il file esportato in WAV pesa…</h2></div>
+  <div class="poll" data-id="fa-normalize" data-tipo="quiz" data-risposta="B">
+    <ol><li>di più, perché il suono è più forte</li><li>uguale, se durata e formato restano gli stessi</li><li>di meno, perché i silenzi spariscono</li><li>il doppio, perché ogni campione raddoppia</li></ol>
+    <p class="why">In un WAV non compresso il peso dipende solo da frequenza di campionamento, bit, canali e durata. Un campione «forte» occupa gli stessi 16 bit di uno debole. Normalize non toglie i silenzi: li lascia (solo un po' più forti).</p>
+  </div>
+  <aside class="notes">Misconcezione: "più volume = più dati". Il volume cambia il valore dei numeri, non quanti sono. Diverso il caso di un MP3: a bitrate costante pesa uguale, a bitrate variabile può cambiare leggermente. La C confonde Normalize con il taglio dei silenzi fatto prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Una macchina che compone musica?</h2></div>
+  <figure class="citazione">
+    <blockquote>La macchina potrebbe comporre brani musicali elaborati e scientifici, di qualunque complessità ed estensione.</blockquote>
+    <figcaption><b>Ada Lovelace</b>, matematica inglese, Note sulla macchina analitica, 1843</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Esistono modelli di AI che generano canzoni intere da una descrizione testuale. Nel 2024 alcune grandi case discografiche hanno fatto causa a due di questi servizi per l'uso di brani protetti nell'addestramento: chi è l'autore, e chi va pagato, è una domanda ancora aperta.</p></div>
+  <aside class="notes">Traduzione nostra dalla Nota A di Lovelace (1843). Nell'originale la frase è condizionata: "supponendo che le relazioni fondamentali dei suoni nella scienza dell'armonia possano essere espresse in questo modo". Le cause del 2024 sono quelle promosse dalle major tramite la RIAA contro Suno e Udio (giugno 2024). Collegamento con l'educazione civica (diritto d'autore e contenuti generati con l'AI).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Esporta e confronta: WAV contro MP3</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>File › Export / Download</b>: salva in <b>WAV</b> come <b>voce.wav</b>.</li>
+      <li>Esporta in <b>MP3</b> a 64, 128 e 320 kbps: <b>voce-64.mp3</b>, <b>voce-128.mp3</b>, <b>voce-320.mp3</b>.</li>
+      <li>Annota i 4 pesi in byte (Esplora file › Proprietà) in un foglio Calc <b>export-audio.ods</b>.</li>
+      <li>Calcola il peso atteso: WAV = 44 100 × 16 × canali × secondi ÷ 8; MP3 = kbps × 1000 × secondi ÷ 8.</li>
+      <li>Ascolta in cuffia: distingui il 64 dal 320?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per 12 s mono a 16 bit il WAV pesa circa 1 058 400 byte (+44 di intestazione); l'MP3 a 128 kbps circa 192 000 byte. Se il WAV pesa il doppio, è stereo oppure a 32 bit.</div>
+  </div>
+  <aside class="notes">Calcoli: 44 100 × 2 byte × 12 = 1 058 400; 128 000 × 12 ÷ 8 = 192 000. Gli MP3 reali hanno qualche centinaio di byte in più (intestazioni, tag) o in meno (arrotondamento dei fotogrammi MP3). Alcune versioni di AudioMass salvano il WAV in virgola mobile a 32 bit: è un'ottima occasione per ricordare IEEE 754 (Unità 1). Sulla voce il 64 kbps si nota soprattutto sulle "s".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Converti un MP3 a 128 kbps in WAV. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="fa-mp3-wav" data-tipo="quiz" data-risposta="D">
+    <ol><li>La qualità del CD originale, perché il WAV è senza perdita</li><li>Un file più piccolo, perché il WAV è più semplice</li><li>Un file identico all'MP3, cambia solo l'estensione</li><li>Un file circa 11 volte più grande, con la stessa qualità dell'MP3</li></ol>
+    <p class="why">Quello che l'MP3 ha scartato è perso per sempre: il WAV salva fedelmente l'audio già impoverito, ma in forma non compressa, quindi molto più pesante (1411 ÷ 128 ≈ 11 volte, se stereo a 44,1 kHz e 16 bit).</p>
+  </div>
+  <aside class="notes">Lo stesso vale per le immagini: un JPEG riconvertito in PNG non recupera i dettagli. Nei siti di musica "lossless", un file FLAC ricavato da un MP3 è un falso lossless; con uno spettrogramma si vede il taglio delle frequenze alte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dentro il file</p><h2>I primi 44 byte di un WAV</h2></div>
+  <table class="data compact">
+    <tr><th>Indirizzo</th><th>Byte</th><th>Significato</th></tr>
+    <tr><td class="mono">00</td><td class="mono">52 49 46 46</td><td>«RIFF»</td></tr>
+    <tr><td class="mono">08</td><td class="mono">57 41 56 45 66 6D 74 20</td><td>«WAVEfmt »</td></tr>
+    <tr><td class="mono">14</td><td class="mono">01 00</td><td>formato: 1 = PCM intero (3 = virgola mobile)</td></tr>
+    <tr><td class="mono">16</td><td class="mono">01 00</td><td>canali: 1 = mono, 2 = stereo</td></tr>
+    <tr><td class="mono hl">18</td><td class="mono hl">44 AC 00 00</td><td class="hl">frequenza di campionamento</td></tr>
+    <tr><td class="mono">22</td><td class="mono">10 00</td><td>bit per campione</td></tr>
+    <tr><td class="mono">24</td><td class="mono">64 61 74 61</td><td>«data», poi la lunghezza e i campioni</td></tr>
+  </table>
+  <aside class="notes">Gli indirizzi sono in esadecimale, come in HexEd.it: 14 hex = 20, 16 = 22, 18 = 24, 22 = 34, 24 = 36. Come nel GIF, i numeri sono little-endian: 44 AC 00 00 si legge 0000AC44 = 44 100. 10 00 = 0x0010 = 16 bit. Tra «fmt » e «data» alcuni programmi inseriscono altri blocchi (per esempio LIST con i metadati): allora «data» si trova più avanti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>HexEd.it: leggi l'intestazione del tuo WAV</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>voce.wav</b> su <b>hexed.it</b>.</li>
+      <li>Trova RIFF all'indirizzo 00 e WAVE all'indirizzo 08.</li>
+      <li>Leggi formato (14), canali (16), frequenza (18–1B) e bit per campione (22).</li>
+      <li>Converti i valori in decimale ricordando che sono little-endian.</li>
+      <li>Annotali in <b>hex-wav.txt</b> e confrontali con quello che hai scelto in AudioMass.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>44 AC 00 00</code> = 44 100 Hz, <code>80 BB 00 00</code> = 48 000 Hz. Bit: <code>10 00</code> = 16, <code>20 00</code> = 32.</div>
+  </div>
+  <aside class="notes">0xBB80 = 48 000; 0x20 = 32. Se il formato è 03 00 e i bit sono 32, il WAV è in virgola mobile. HexEd.it permette anche di selezionare 4 byte e leggere il valore decimale nel pannello laterale ("Data inspector"), scegliendo little-endian: utile per verificare il calcolo a mano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· sfida a coppie, 15 minuti</span></p>
+  <h2>Il messaggio al contrario</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>A coppie. Ognuno registra in AudioMass una parola di almeno 3 sillabe, senza dirla al compagno.</li>
+      <li>Seleziona tutto › <b>Effects › Reverse</b> ed esporta <b>segreto-nome.mp3</b>.</li>
+      <li>Scambiatevi i file (cartella condivisa o chiavetta). Ascoltate il file al contrario: provate a indovinare.</li>
+      <li>Poi applicate di nuovo Reverse e verificate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> applicando Reverse due volte si torna esattamente al file di partenza: è un'operazione che non perde informazione. La squadra che indovina più parole al primo ascolto vince.</div>
+  </div>
+  <aside class="notes">Variante per squadre forti: provare a pronunciare la parola al contrario, registrarla e invertirla: deve tornare comprensibile. Collegamento: Reverse è reversibile, mentre la compressione MP3 no. Tenere il volume basso: 25 coppie che ascoltano insieme sono rumorose.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Prepari un podcast di classe: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="fa-podcast">
+    <li>Scrivi la scaletta e chiedi il consenso a chi parla</li>
+    <li>Registra in un ambiente silenzioso, senza clipping</li>
+    <li>Taglia silenzi lunghi ed errori</li>
+    <li>Aggiungi fade in e fade out</li>
+    <li>Normalizza il volume</li>
+    <li>Esporta in MP3 e conserva anche il WAV originale</li>
+  </ol>
+  <aside class="notes">Si normalizza dopo aver tagliato, perché un errore tagliato via poteva contenere il picco più alto. Il WAV originale si conserva per poter riesportare in futuro senza perdere ancora qualità. Consenso: per pubblicare la voce di una persona serve il suo permesso (e per i minorenni quello dei genitori).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>L'AI che toglie il rumore</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molte app di videochiamata usano reti neurali per la <b>soppressione del rumore</b>: sono addestrate su migliaia di ore di voce e di rumori (tastiere, cani, traffico) e, campione dopo campione, tengono la voce e attenuano il resto. In tempo reale, con pochi millisecondi di ritardo.</p></div>
+    <div class="stack">
+      <p>Un filtro classico toglie <b>frequenze</b> fisse; una rete addestrata riconosce i <b>suoni</b>.</p>
+      <p class="muted small">Non è magia: con rumori mai visti nell'addestramento può tagliare anche la voce.</p>
+    </div>
+  </div>
+  <aside class="notes">Esempi noti: la soppressione del rumore di Microsoft Teams e Google Meet, e strumenti come RNNoise (progetto open source di Xiph, 2017, che combina elaborazione classica e una piccola rete neurale). Demo facoltativa: in una videochiamata con il docente, battere sulla tastiera con la soppressione attiva e disattiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto leggendo un'intestazione WAV</h2></div>
+  <div class="puzzle-codice" data-risposta="8000" data-aiuto="little-endian: leggi 00 00 1F 40">
+    <p>Agli indirizzi 18–1B di un file WAV trovi i byte:</p>
+    <p class="mono">40 1F 00 00</p>
+    <p>Il codice è la frequenza di campionamento in hertz.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> 0x00001F40 = 1 × 4096 + 15 × 256 + 4 × 16 = 8000 Hz: qualità telefono.</div>
+  </div>
+  <aside class="notes">Codice: 8000. Errore tipico: leggere 401F (big-endian) = 16 415. Si può usare la calcolatrice di Windows in modalità Programmatore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Quando i campioni superano il valore massimo e vengono tagliati si ha il <span class="blank" data-risposta="clipping" style="--w:8ch"></span>.</p>
+    <p>L'effetto che porta il picco più alto al massimo si chiama <span class="blank" data-risposta="Normalize|normalizza|normalizzazione" style="--w:10ch"></span>.</p>
+    <p>Un file WAV inizia con le lettere <span class="blank" data-risposta="RIFF"></span>.</p>
+    <p>I byte 44 AC 00 00 indicano <span class="blank" data-risposta="44100|44 100|44.100" style="--w:7ch"></span> Hz.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: clipping, Normalize (normalizza), RIFF, 44 100.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Forma d'onda: tempo in orizzontale, ampiezza in verticale</li>
+      <li>Il clipping non si ripara: si registra di nuovo</li>
+      <li>Ogni effetto è un calcolo sui campioni</li>
+    </ul>
+    <ul class="points">
+      <li>WAV: intestazione di 44 byte + campioni PCM</li>
+      <li>Da MP3 a WAV: file più grande, qualità uguale all'MP3</li>
+      <li>Registrare e pubblicare la voce di altri richiede consenso</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: intelligenza artificiale e computer vision.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

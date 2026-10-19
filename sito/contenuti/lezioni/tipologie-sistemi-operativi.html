@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tipologie di sistemi operativi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>Tipologie di<br>sistemi operativi</h1>
+  <p class="lead">La banca che calcola gli stipendi di notte, l'airbag che decide in un lampo, il telefono che deve durare fino a sera: problemi diversi, sistemi operativi diversi.</p>
+  <aside class="notes">Obiettivi: conoscere l'evoluzione e le caratteristiche dei sistemi batch, multiprogrammati, time sharing, real time (hard e soft), distribuiti, mobili ed embedded; calcolare a mano l'utilizzo della CPU; distinguere "veloce" da "real time". Durata indicativa: 2 ore. Servono LibreOffice Calc e, per l'ultimo laboratorio, il sito humanbenchmark.com (verificare che non sia bloccato; alternativa: un righello da 30 cm per coppia).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Quanti oggetti con un sistema operativo ci sono a casa tua?</h2></div>
+  <div class="poll" data-id="tip-oggetti-casa">
+    <ol><li>Da 1 a 3</li><li>Da 4 a 8</li><li>Da 9 a 15</li><li>Più di 15</li></ol>
+  </div>
+  <p class="muted">Conta tutto: telefoni, TV, console, router, auto, elettrodomestici, orologi…</p>
+  <aside class="notes">Quasi tutti sottostimano: router, smart TV, decoder, console, stampante, auto, lavatrice con display, smartwatch, assistente vocale hanno un sistema operativo (spesso embedded). Riprendere i numeri alla fine della lezione e nel compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il viaggio</p><h2>Ogni epoca ha risolto un problema</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Quando nasce</th><th>Il problema che risolve</th></tr>
+    <tr><td><b>Batch</b></td><td>Anni '50</td><td>Non sprecare il computer tra un lavoro e l'altro</td></tr>
+    <tr><td><b>Multiprogrammato</b></td><td>Anni '60</td><td>Non lasciare la CPU ferma mentre si aspetta l'I/O</td></tr>
+    <tr><td><b>Time sharing</b></td><td>1961 (CTSS, MIT)</td><td>Far lavorare tante persone insieme, in modo interattivo</td></tr>
+    <tr><td><b>Real time</b></td><td>Anni '60 (Apollo)</td><td>Rispondere sempre entro una scadenza</td></tr>
+    <tr><td><b>Distribuito</b></td><td>Anni '80-'90</td><td>Far collaborare molti computer in rete</td></tr>
+    <tr><td><b>Mobile ed embedded</b></td><td>Anni '70 (embedded), 2007 (smartphone)</td><td>Batteria, sensori, pochi watt, un solo compito</td></tr>
+  </table>
+  <aside class="notes">Le categorie non si escludono: Linux è time sharing e multiprogrammato, può essere configurato per il real time e gira nei cluster; Android è mobile ed è basato su Linux. Le date sono indicative: servono a capire l'ordine delle idee. Il 2007 è l'anno del primo iPhone; i sistemi embedded esistono da quando esistono i microprocessori (1971).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sistemi batch</p><h2>Consegna il mazzo, torna domani</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il programmatore preparava il suo <b>job</b> su schede perforate: programma, dati e istruzioni di controllo. Gli operatori riunivano i job in un <b>lotto</b> (batch) e il sistema li eseguiva uno dopo l'altro, senza interruzioni.</p>
+      <p class="muted small">Un errore di battitura? Lo scoprivi il giorno dopo, sulla stampa dei risultati.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il batch non è morto. Le banche calcolano di notte stipendi ed estratti conto. E i servizi di AI offrono una <b>modalità batch</b>: invii migliaia di richieste a un modello linguistico tutte insieme e ricevi le risposte entro alcune ore, pagando meno.</p></div>
+  </div>
+  <aside class="notes">Collegamento con la storia del GM-NAA I/O vista nella prima lezione. Nei sistemi batch non c'è interazione: il job contiene già tutto. Ancora oggi su Linux e Windows esistono programmi per lavori pianificati (cron, Utilità di pianificazione) e nel cloud si parla di "batch processing", per esempio per elaborare milioni di foto. Esempio reale: le API di Anthropic e di OpenAI hanno una modalità batch con risultati entro 24 ore e costo ridotto (circa la metà, secondo la loro documentazione): conviene quando la risposta non serve subito, proprio come negli anni '50.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Multiprogrammazione</p><h2>Mentre uno aspetta, un altro calcola</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Un programma alterna <b>uso della CPU</b> e <b>attese di I/O</b> (disco, stampante, rete). Durante l'attesa la CPU sarebbe ferma.</p>
+      <p>Con più programmi in memoria, il SO dà la CPU a un altro programma <mark>mentre il primo aspetta</mark>.</p>
+    </div>
+    <div class="formula" style="font-size:46px"><small>Un job: 10 ms di CPU, poi 40 ms di I/O</small>utilizzo = 10 / (10 + 40)<br>= <span class="hl">20%</span> con un solo job</div>
+  </div>
+  <div class="callout">Con 5 job così, alternati alla perfezione, la CPU potrebbe arrivare vicino al 100%.</div>
+  <aside class="notes">Calcolo: in 50 ms la CPU lavora 10 ms, cioè il 20% del tempo. Con 5 job che si danno il turno nei momenti giusti, in ogni intervallo di 50 ms ci sono 5 × 10 = 50 ms di lavoro: la CPU non si ferma mai. Nella realtà i job non si incastrano perfettamente, quindi l'utilizzo resta sotto il 100%. Lo verifichiamo nel laboratorio con un caso concreto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un job usa la CPU per 30 ms, poi aspetta l'I/O per 70 ms, e così via. Utilizzo della CPU con quel solo job?</h2></div>
+  <div class="poll" data-id="tip-quiz-utilizzo" data-tipo="quiz" data-risposta="C">
+    <ol><li>70%</li><li>43%</li><li>30%</li><li>100%, perché la CPU è sempre occupata dal job</li></ol>
+    <p class="why">Un ciclo dura 30 + 70 = 100 ms e la CPU lavora 30 ms: 30/100 = 30%. Il 43% viene da 30/70, che confronta il lavoro con l'attesa invece che con il tempo totale. Il 70% è la percentuale di attesa.</p>
+  </div>
+  <aside class="notes">Errore tipico: dividere per il tempo di attesa (30/70 = 0,43). Domanda di rilancio: con quanti job uguali, al massimo, la CPU potrebbe arrivare al 100%? Risposta: 100/30 ≈ 3,3, quindi almeno 4 job (con 3 si arriva al 90%).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Disegna la multiprogrammazione in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Due job, A e B. Ognuno ripete 3 volte: <b>2 unità di CPU</b>, poi <b>3 unità di I/O</b>. Un'unità = una colonna.</li>
+      <li>Riga 1: tempi da 0 a 29 (B1:AE1). Righe 2-3: <b>monoprogrammazione</b>, prima tutto A, poi tutto B. Scrivi C (CPU) o I (I/O) e colora le celle.</li>
+      <li>Righe 5-6: <b>multiprogrammazione</b>. B usa la CPU appena è libera e A è in I/O. Una sola C per colonna!</li>
+      <li>Calcola per i due casi: tempo totale, unità di CPU, utilizzo % (CPU / totale).</li>
+      <li>Salva come <b>multiprogrammazione.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> monoprogrammazione <b>30 unità</b>, CPU usata 12, utilizzo <b>40%</b>. Multiprogrammazione <b>17 unità</b> (da 0 a 16), CPU 12, utilizzo circa <b>71%</b>.</div>
+  </div>
+  <aside class="notes">Soluzione multiprogrammazione (C = CPU, I = I/O). A: C a 0-1, I 2-4, C 5-6, I 7-9, C 10-11, I 12-14. B: aspetta a 0-1, C 2-3, I 4-6, C 7-8, I 9-11, C 12-13, I 14-16. Fine al tempo 16, quindi 17 unità; 12/17 = 70,6%. Le due C non sono mai nella stessa colonna, mentre due I sì (dispositivi diversi, ipotesi del problema). Per contare le C in Calc: =CONTA.SE(B5:AE6;"C"). Sfida extra: aggiungere un job C uguale e ricalcolare. Chi finisce prima può usare la formattazione condizionale per colorare automaticamente C e I.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Time sharing</p><h2>Un turno a testa, così veloce che sembra tutto tuo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nel 1961 al MIT il gruppo di Fernando Corbató presenta il <b>CTSS</b>: più persone, ognuna al proprio terminale, usano lo stesso computer <b>in modo interattivo</b>.</p>
+      <p>Il SO dà a ogni processo un <b>quanto di tempo</b> (pochi millisecondi), poi passa al successivo. Da qui nascono Multics e poi Unix.</p>
+    </div>
+    <div class="card fill"><h3>Fai il conto</h3><p>Quanto di 10 ms, 50 utenti attivi: dopo il tuo turno aspetti al massimo 49 × 10 ms ≈ <b>0,5 s</b>. Ancora accettabile per scrivere comandi.</p></div>
+  </div>
+  <aside class="notes">Differenza chiave con la multiprogrammazione: lì la CPU cambia processo quando uno si blocca sull'I/O; nel time sharing la cambia anche a forza, allo scadere del quanto, grazie a un timer (interrupt). Così nessuno monopolizza la CPU e ognuno riceve risposte rapide. Corbató ricevette il premio Turing nel 1990. I sistemi di oggi (Windows, Linux, macOS, Android) sono tutti time sharing. Lo scheduling Round Robin si studia nella seconda parte dell'Unità 6.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Chi ha davvero usato la CPU?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Gestione attività, scheda <b>Dettagli</b>.</li>
+      <li>Clic destro sull'intestazione di una colonna, <b>Seleziona colonne</b>, attiva <b>Tempo CPU</b>. Ordina per questa colonna.</li>
+      <li>In <b>Prestazioni</b>, <b>CPU</b> leggi il <b>Tempo di attività</b> del PC.</li>
+      <li>In Calc riporta i 5 processi con più Tempo CPU e calcola, per ognuno, Tempo CPU / Tempo di attività in percentuale.</li>
+      <li>Salva come <b>tempo-cpu.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> anche i processi più "affamati" hanno usato la CPU per una <b>piccola frazione</b> del tempo (spesso meno del 5%); in fondo alla lista ci sono decine di processi con pochi secondi. Il resto del tempo hanno aspettato il loro turno o un evento.</div>
+  </div>
+  <aside class="notes">Tempo CPU è nel formato ore:minuti:secondi. Esempio: 0:03:00 (180 s) su un tempo di attività di 2 ore (7200 s) = 2,5%. Il processo "Processo inattivo del sistema" (System Idle Process) ha moltissimo Tempo CPU: non è un vero programma, rappresenta il tempo in cui la CPU non ha nulla da fare; escluderlo dai 5 e farlo notare come curiosità. Il Tempo CPU è sommato su tutti i core, quindi in rari casi può superare il tempo reale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Real time</p><h2>Non "veloce": puntuale</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Hard real time</h3><p>Una scadenza mancata è un <b>guasto</b>, anche se il risultato è giusto.</p><p class="muted">Airbag, ABS, pacemaker, pilota automatico, robot industriali.</p></div>
+    <div class="card soft"><h3>Soft real time</h3><p>Una scadenza mancata <b>peggiora la qualità</b>, ma il sistema continua.</p><p class="muted">Videochiamate, streaming, videogiochi, audio in diretta.</p></div>
+  </div>
+  <div class="callout">Un sistema real time deve garantire il <b>caso peggiore</b>, non la media: meglio sempre 5 ms che di solito 1 ms e ogni tanto 200.</div>
+  <aside class="notes">Esempi di sistemi operativi real time: FreeRTOS (microcontrollori), QNX e VxWorks (auto, aerei, sonde spaziali), Zephyr. Linux ha opzioni real time (PREEMPT_RT, integrate nel kernel principale dalla versione 6.12 del 2024). Un videogioco a 60 fotogrammi al secondo ha circa 16,7 ms per fotogramma: se ne salta uno, l'immagine scatta ma nessuno si fa male (soft).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>20 luglio 1969: "Program alarm, 1202"</h2></div>
+  <figure class="citazione">
+    <blockquote>Sono sovraccarico di compiti, più di quanti dovrei svolgere ora, e terrò solo quelli più importanti.</blockquote>
+    <figcaption><b>Margaret Hamilton</b>, responsabile del software di bordo dell'Apollo al MIT, spiegando il significato dell'allarme, 1971</figcaption>
+  </figure>
+  <p>Durante la discesa sulla Luna il computer di bordo ricevette più lavoro di quanto potesse svolgere. Il suo sistema, basato sulle <b>priorità</b>, ripartì scartando i compiti meno importanti e tenne quelli per l'atterraggio.</p>
+  <aside class="notes">Traduzione nostra da Margaret Hamilton, lettera "Computer Got Loaded", Datamation, marzo 1971: l'allarme significava per l'astronauta "I'm overloaded with more tasks than I should be doing at this time and I'm going to keep only the more important tasks", cioè quelli necessari all'atterraggio. Il sovraccarico era dovuto al radar di rendezvous, che rubava cicli al computer. Il controllo missione, sentiti gli esperti, rispose "We're go on that alarm" e Armstrong e Aldrin atterrarono. È un sistema real time con scheduling a priorità: oggi fanno così i sistemi di bordo di auto, aerei e droni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina il sistema alla sua tipologia</h2></div>
+  <dl class="puzzle-abbina" data-id="tip-abbina">
+    <dt>Batch</dt><dd>Il calcolo notturno degli stipendi di una banca</dd>
+    <dt>Time sharing</dt><dd>Un server Linux con 200 studenti collegati insieme</dd>
+    <dt>Hard real time</dt><dd>La centralina che decide se aprire l'airbag</dd>
+    <dt>Distribuito</dt><dd>Migliaia di computer che addestrano un modello di AI</dd>
+    <dt>Mobile</dt><dd>Il telefono che deve durare fino a sera</dd>
+    <dt>Embedded</dt><dd>Il programma della lavatrice</dd>
+  </dl>
+  <aside class="notes">Sfida a squadre, 2 minuti. Discussione: la lavatrice ha anche vincoli di tempo (soft o hard?), il telefono è anche time sharing. Si sceglie la caratteristica principale. Chiedere a ogni squadra un altro esempio per riga.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Distribuiti, mobili, embedded</p><h2>Il sistema operativo è uscito dalla sala macchine</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Distribuiti</h3><p class="muted">Molti computer in rete che appaiono come un unico sistema: cloud, cluster, supercomputer.</p></div>
+    <div class="card"><h3>Mobili</h3><p class="muted">Batteria, sensori, rete che va e viene, app isolate una dall'altra: Android, iOS.</p></div>
+    <div class="card"><h3>Embedded</h3><p class="muted">Dentro un oggetto, per un solo compito, con poca memoria: spesso un RTOS.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I grandi modelli linguistici vengono addestrati su <b>migliaia di GPU</b> distribuite in tanti server: il software deve dividere il lavoro, sincronizzarlo e sopravvivere ai guasti di qualche macchina. È un sistema distribuito, e quei server quasi sempre usano <b>Linux</b>.</p></div>
+  <aside class="notes">Esempio vicino: il supercomputer Leonardo del Cineca (Bologna) è un sistema distribuito con migliaia di nodi, usato anche per l'AI. Un sistema mobile spegne e "congela" le app in background per risparmiare batteria: per questo un'app può ricaricarsi quando ci si torna. Gli embedded sono di gran lunga i più numerosi: un'auto moderna contiene decine di centraline.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa significa davvero "sistema real time"?</h2></div>
+  <div class="poll" data-id="tip-quiz-realtime" data-tipo="quiz" data-risposta="D">
+    <ol><li>Un sistema velocissimo, il più veloce possibile</li><li>Un sistema sempre connesso a internet</li><li>Un sistema che mostra i dati appena arrivano, come le notifiche</li><li>Un sistema che garantisce una risposta entro una scadenza nota</li></ol>
+    <p class="why">Real time vuol dire prevedibile: il tempo di risposta nel caso peggiore è garantito. Un sistema real time può essere più lento, in media, di un PC normale. "In tempo reale" nel linguaggio di tutti i giorni (notifiche, dati live) è un'altra cosa.</p>
+  </div>
+  <aside class="notes">È la misconcezione più comune. Esempio: un PC da gioco è velocissimo, ma ogni tanto si blocca per mezzo secondo (aggiornamenti, antivirus): per un airbag sarebbe inaccettabile. Un microcontrollore da pochi euro con un RTOS risponde sempre entro pochi microsecondi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Sei abbastanza "real time"?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Vai su <b>humanbenchmark.com/tests/reactiontime</b> (non serve l'account). Fai <b>5 prove</b>.</li>
+      <li>In Calc scrivi i 5 tempi in ms; calcola <code>=MEDIA()</code>, <code>=MIN()</code> e <code>=MAX()</code>.</li>
+      <li>Sei hard real time con scadenza 300 ms? Conta le prove oltre la scadenza: <code>=CONTA.SE(A1:A5;"&gt;300")</code>.</li>
+      <li>Scrivi 2 righe: conta di più la media o il caso peggiore? Salva <b>reazione.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> i tempi di una persona sono di solito tra <b>200 e 350 ms</b> e cambiano parecchio da una prova all'altra. Per un sistema hard real time conta il <b>MAX</b>, non la media.</div>
+  </div>
+  <aside class="notes">Se il sito è bloccato: prova del righello a coppie. Uno tiene un righello da 30 cm verticale, l'altro ha le dita aperte allo zero; lo lascia cadere senza avvisare e si legge a quanti cm viene afferrato. Il tempo è t = RADQ(2·d/9,81) con d in metri: in Calc =RADQ(2*B1/100/9,81) con B1 in cm. Esempio: 20 cm → 0,20 s. Anche il tempo misurato dal sito include la latenza di mouse e schermo (qualche decina di ms). Discussione finale: il nostro cervello non è un sistema hard real time; per questo l'airbag non aspetta il guidatore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>I job eseguiti uno dopo l'altro senza interazione formano un sistema <span class="blank" data-risposta="batch|a lotti"></span>.</p>
+    <p>Nel time sharing ogni processo riceve un <span class="blank" data-risposta="quanto"></span> di tempo.</p>
+    <p>Un job con 20 ms di CPU e 80 ms di I/O usa la CPU al <span class="blank" data-risposta="20|20%"></span> %.</p>
+    <p>Se una scadenza mancata è un guasto, il sistema è real time <span class="blank" data-risposta="hard|stretto"></span>.</p>
+    <p>Il computer nascosto in una lavatrice ha un sistema <span class="blank" data-risposta="embedded|integrato|dedicato"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: batch (accettato "a lotti"), quanto, 20 (20/(20+80)), hard (accettato stretto), embedded (accettati integrato, dedicato).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Batch: lotti di job, senza interazione</li>
+      <li>Multiprogrammazione: la CPU lavora mentre altri aspettano l'I/O</li>
+      <li>Time sharing: quanti di tempo, utenti interattivi</li>
+    </ul>
+    <ul class="points">
+      <li>Real time: scadenze garantite, hard o soft</li>
+      <li>Distribuiti: molti computer come uno solo</li>
+      <li>Mobili ed embedded: batteria, sensori, un compito</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "Caccia ai sistemi operativi di casa" (si apre quando l'argomento viene segnato come svolto). Riprendere il sondaggio iniziale: quanti oggetti avevate contato?</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

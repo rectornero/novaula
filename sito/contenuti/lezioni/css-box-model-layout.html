@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il box model e i layout CSS · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Il box model<br>e i layout CSS</h1>
+  <p class="lead">Per il browser ogni titolo, paragrafo, immagine e link è una scatola rettangolare. Impara a misurarle, a distanziarle e a metterle una accanto all'altra.</p>
+  <aside class="notes">Obiettivi: conoscere content, padding, border e margin; calcolare a mano le dimensioni di un elemento con content-box e border-box; conoscere il collasso dei margini; distinguere display block, inline, inline-block e none; realizzare una colonna centrata e un layout a due colonne con float. Durata: 2 ore. Flexbox e Grid sono nell'Unità 5: qui si prepara il terreno. Servono un editor di testo e un browser con i DevTools (F12).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Indovina</p><h2>Quante scatole ci sono nella home di un sito di notizie?</h2></div>
+  <div class="poll" data-id="u4b-quante-scatole">
+    <ol><li>Meno di 100</li><li>Da 100 a 500</li><li>Da 500 a 2000</li><li>Più di 2000</li></ol>
+  </div>
+  <p class="muted">Lo verifichiamo insieme: nella console dei DevTools si scrive <code>document.querySelectorAll("*").length</code>.</p>
+  <aside class="notes">Sondaggio di stima. Dopo il voto aprire alla LIM la home di un quotidiano online, F12, scheda Console, e digitare il comando: conta tutti gli elementi della pagina. I grandi siti di notizie arrivano di solito a qualche migliaio di elementi; il numero cambia ogni giorno, quindi non c'è una risposta fissa. Messaggio: ognuno di questi elementi è una scatola con le stesse quattro parti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il box model</p><h2>Quattro strati, dall'interno all'esterno</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 900 560" style="width:100%;height:auto" role="img" aria-label="Schema del box model: margin, border, padding e contenuto uno dentro l'altro">
+      <rect x="10" y="10" width="880" height="540" rx="18" fill="#fff" stroke="#9aa3b8" stroke-width="4" stroke-dasharray="16 12"/>
+      <rect x="90" y="90" width="720" height="380" rx="8" fill="#d0541f"/>
+      <rect x="120" y="120" width="660" height="320" fill="#fbe7dc"/>
+      <rect x="230" y="210" width="440" height="140" fill="#fff" stroke="#172033" stroke-width="3"/>
+      <text x="40" y="62" font-family="DM Sans, sans-serif" font-size="32" font-weight="700" fill="#596179">margin</text>
+      <text x="112" y="112" font-family="DM Sans, sans-serif" font-size="22" font-weight="700" fill="#fff">border</text>
+      <text x="150" y="168" font-family="DM Sans, sans-serif" font-size="32" font-weight="700" fill="#d0541f">padding</text>
+      <text x="450" y="292" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="34" font-weight="700" fill="#172033">contenuto</text>
+      <text x="450" y="332" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="24" fill="#596179">width × height</text>
+    </svg>
+    <ul class="points small">
+      <li><b>contenuto</b>: testo o immagine; misura <code>width</code> e <code>height</code></li>
+      <li><b>padding</b>: spazio interno, prende lo sfondo dell'elemento</li>
+      <li><b>border</b>: il bordo, con spessore, stile e colore</li>
+      <li><b>margin</b>: spazio esterno, sempre trasparente, allontana le altre scatole</li>
+    </ul>
+  </div>
+  <aside class="notes">Paragone utile: un quadro appeso. Il contenuto è la tela, il padding è il passe-partout, il border è la cornice, il margin è lo spazio di muro che lo separa dagli altri quadri. Domanda: "se do un colore di sfondo, dove arriva?" Fino al bordo (contenuto + padding), mai nel margin.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le proprietà</p><h2>Scriverle per esteso o in forma breve</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:25px"><span class="k">.riquadro</span> {
+  width: 300px;
+  padding: 20px;          <span class="c">/* 4 lati */</span>
+  border: 5px solid #d0541f;
+  margin: 10px 20px;      <span class="c">/* su/giù, sx/dx */</span>
+}
+<span class="k">.nota</span> {
+  margin: 10px 0 30px 0;  <span class="c">/* T R B L */</span>
+  padding-left: 40px;     <span class="c">/* un lato */</span>
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Quattro valori: senso orario</h3><p><b>T</b>op, <b>R</b>ight, <b>B</b>ottom, <b>L</b>eft: si ricorda con l'inglese <b>TRouBLe</b>, "guai".</p></div>
+      <ul class="points small">
+        <li>1 valore: tutti i lati</li>
+        <li>2 valori: verticale, orizzontale</li>
+        <li><code>border</code>: spessore, stile, colore</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Esistono anche le forme con 3 valori (sopra, orizzontale, sotto), meno usate. Gli stili di bordo più comuni: solid, dashed, dotted, double. Unità: px per ora; em e % le useremo nel responsive (Unità 5). Chiedere di tradurre a voce "margin: 0 auto" (sopra e sotto 0, sinistra e destra automatico): ci servirà per centrare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Facciamo i conti</p><h2>Quanto spazio occupa davvero?</h2></div>
+  <div class="formula"><small>larghezza visibile = width + 2 × padding + 2 × border</small>300 + 2×20 + 2×5 = <span class="hl">350 px</span></div>
+  <div class="cols-2">
+    <div class="card"><h3>E il margin?</h3><p>Non fa parte della scatola visibile, ma <b>occupa spazio</b>: con <code>margin: 10px</code> lo spazio orizzontale totale è 350 + 2×10 = <b>370 px</b>.</p></div>
+    <div class="card soft"><h3>La sorpresa</h3><p>Hai scritto <code>width: 300px</code> e la scatola è larga 350. Per i CSS, di base, <code>width</code> misura <b>solo il contenuto</b>.</p></div>
+  </div>
+  <aside class="notes">Fare il conto alla lavagna con il riquadro della slide precedente. Lo stesso vale in verticale con height. Il comportamento in cui width misura solo il contenuto si chiama box-sizing: content-box ed è il valore predefinito. Prossima slide: un quiz per verificare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quanto è larga la scatola che vedi?</h2></div>
+  <p class="small"><code>width: 200px; padding: 20px; border: 2px solid; margin: 10px;</code></p>
+  <div class="poll" data-id="u4b-larghezza" data-tipo="quiz" data-risposta="B">
+    <ol><li>200 px</li><li>244 px</li><li>264 px</li><li>222 px</li></ol>
+    <p class="why">200 + 2×20 + 2×2 = 244 px. Il margin (264 è con i margini) è spazio esterno e non si vede; 222 conta padding e bordo su un lato solo.</p>
+  </div>
+  <aside class="notes">Distrattori: 200 (chi pensa che width sia tutta la scatola), 264 (chi aggiunge anche i margini: è lo spazio occupato, non la scatola visibile), 222 (chi conta un solo lato). Con box-sizing: border-box la risposta sarebbe 200.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>La guerra delle scatole e il box-sizing</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Fine anni '90</h3>
+      <p>Internet Explorer 5 per Windows calcolava <code>width</code> includendo padding e bordo, al contrario dello standard. Stesso CSS, pagine diverse nei diversi browser: per anni i web designer hanno usato trucchi come il "box model hack".</p>
+    </div>
+    <div class="card soft">
+      <h3>Oggi</h3>
+      <p>La proprietà <code>box-sizing</code> fa scegliere a te:</p>
+      <ul class="points small"><li><code>content-box</code>: width = solo contenuto (predefinito)</li><li><code>border-box</code>: width = contenuto + padding + bordo</li></ul>
+      <p class="small">Molti siti iniziano con <code>* { box-sizing: border-box; }</code></p>
+    </div>
+  </div>
+  <aside class="notes">Il modello di IE5 sopravvive nella "quirks mode" dei browser, attivata quando manca il DOCTYPE: è uno dei motivi per scriverlo sempre (aggancio al quiz della lezione di laboratorio). Il "box model hack" fu proposto da Tantek Çelik intorno al 2000. Ironia della storia: il modello di IE era più comodo, ed è quello che oggi scegliamo con border-box.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Misura le scatole con i DevTools</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Crea <b>scatole.html</b> con lo scheletro e, nel head, un tag <code>&lt;style&gt;</code>.</li>
+      <li>Dentro <code>&lt;style&gt;</code> copia le due regole qui a destra.</li>
+      <li>Nel body: <code>&lt;div class="box"&gt;A&lt;/div&gt;</code> e <code>&lt;div class="box bb"&gt;B&lt;/div&gt;</code></li>
+      <li>Apri nel browser, premi <b>F12</b>, scheda <b>Elementi</b>, seleziona A e poi B: guarda lo schema del box model in <b>Calcolato</b>.</li>
+      <li>Scrivi su un foglio: larghezza visibile e larghezza del contenuto di A e di B.</li>
+    </ol>
+    <div class="stack">
+<pre class="code" style="font-size:22px;padding:18px 24px"><span class="k">.box</span> {
+  width: 300px;
+  padding: 20px;
+  border: 5px solid #d0541f;
+  margin: 10px;
+  background-color: #fbe7dc;
+}
+<span class="k">.bb</span> { box-sizing: border-box; }</pre>
+    <div class="check small"><b>Controllo:</b> A: contenuto 300, visibile 350. B: visibile 300, contenuto 250 (300 − 40 − 10). Passando il mouse sullo schema, il browser colora padding e margin nella pagina.</div>
+    </div>
+  </div>
+  <aside class="notes">In Chrome ed Edge la scheda si chiama Elementi › Calcolato (Computed); in Firefox Ispettore › Layout. Se i DevTools sono in inglese: Elements › Computed. Chi finisce: cambiare padding nello schema con doppio clic sui numeri e osservare la pagina in diretta (la modifica si perde ricaricando).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che distanza c'è tra i due paragrafi?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">.primo</span>   { margin-bottom: 30px; }
+<span class="k">.secondo</span> { margin-top: 20px; }
+
+&lt;<span class="k">p</span> class=<span class="s">"primo"</span>&gt;Uno&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">p</span> class=<span class="s">"secondo"</span>&gt;Due&lt;/<span class="k">p</span>&gt;</pre>
+    <div class="poll" data-id="u4b-collasso" data-tipo="quiz" data-risposta="C">
+      <ol><li>50 px</li><li>20 px</li><li>30 px</li><li>10 px</li></ol>
+      <p class="why">30 px. I margini verticali tra due blocchi vicini "collassano": non si sommano, vince il più grande. In orizzontale invece si sommano.</p>
+    </div>
+  </div>
+  <aside class="notes">Il collasso dei margini (margin collapsing) sorprende quasi tutti: la risposta istintiva è 50. Vale solo per i margini verticali di elementi di blocco nel flusso normale; non vale per padding e bordi, né per i margini orizzontali. Si può verificare con i DevTools nel file scatole.html.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La proprietà display</p><h2>Blocchi, righe e scatole che spariscono</h2></div>
+  <table class="data compact">
+    <tr><th>display</th><th>Va a capo?</th><th>width e height?</th><th>Esempi predefiniti</th></tr>
+    <tr><td class="mono">block</td><td>sì, occupa tutta la riga</td><td>sì</td><td class="mono">div, p, h1, ul, li, table</td></tr>
+    <tr><td class="mono">inline</td><td>no, scorre nel testo</td><td>ignorate</td><td class="mono">span, a, strong, em</td></tr>
+    <tr><td class="mono">inline-block</td><td>no, ma è una vera scatola</td><td>sì</td><td class="mono">button, input</td></tr>
+    <tr><td class="mono">none</td><td colspan="3">l'elemento non viene disegnato e non occupa spazio</td></tr>
+  </table>
+  <div class="callout small">Con <code>display</code> cambi il comportamento, non il significato: un link con <code>display: block</code> resta un link, ma diventa cliccabile su tutta la riga.</div>
+  <aside class="notes">Precisazione per i curiosi: img è inline, ma è un elemento "sostituito", per cui width e height funzionano; per questo si comporta di fatto come un inline-block. Su un elemento inline padding e margin orizzontali funzionano, quelli verticali non spostano le righe. Esempio pratico: i link di un menu orizzontale si trasformano spesso in inline-block per dar loro padding.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la regola a ciò che succede</h2></div>
+  <dl class="puzzle-abbina" data-id="u4b-display">
+    <dt>display: none</dt><dd>Sparisce e gli altri elementi ne prendono il posto</dd>
+    <dt>visibility: hidden</dt><dd>Diventa invisibile ma il suo spazio resta vuoto</dd>
+    <dt>display: block</dt><dd>Va a capo e si allarga quanto il contenitore</dd>
+    <dt>display: inline</dt><dd>Resta nella riga e ignora width e height</dd>
+    <dt>display: inline-block</dt><dd>Resta nella riga ma accetta width, height e padding</dd>
+  </dl>
+  <aside class="notes">La coppia più discussa è none / visibility: hidden. Demo in 30 secondi con i DevTools: aggiungere le due regole a un paragrafo e osservare il resto della pagina. Gli screen reader ignorano sia display: none sia visibility: hidden.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Primo layout</p><h2>Una colonna centrata</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:28px"><span class="k">*</span> { box-sizing: border-box; }
+
+<span class="k">.pagina</span> {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}</pre>
+    <div class="stack">
+      <ul class="points small">
+        <li><code>max-width</code>: al massimo 900 px, ma si stringe sui telefoni</li>
+        <li><code>margin: 0 auto</code>: i margini sinistro e destro si dividono lo spazio libero</li>
+      </ul>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">I layout complessi si fanno con <b>Flexbox</b> e <b>Grid</b>, supportati da tutti i browser moderni: li vedremo nell'Unità 5. Sotto, però, ci sono sempre le stesse scatole con padding, bordo e margin.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Differenza da far notare: con width: 900px sul telefono comparirebbe la barra di scorrimento orizzontale, con max-width no. margin: 0 auto funziona solo sugli elementi di blocco con una larghezza (o max-width) minore del contenitore. È il primo passo verso il responsive (Unità 5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due colonne</p><h2>Il layout classico con float</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px"><span class="k">.principale</span> {
+  float: left;
+  width: 70%;
+  padding: 20px;
+}
+<span class="k">.laterale</span> {
+  float: right;
+  width: 30%;
+  padding: 20px;
+}
+<span class="k">footer</span> { clear: both; }</pre>
+    <div class="stack">
+      <div class="card soft" style="padding:20px 24px"><p class="small"><b>header</b></p></div>
+      <div class="row" style="align-items:stretch;gap:16px">
+        <div class="card" style="flex:7;padding:20px 24px;min-height:150px"><p class="small"><b>.principale</b> 70%</p></div>
+        <div class="card" style="flex:3;padding:20px 24px"><p class="small"><b>.laterale</b> 30%</p></div>
+      </div>
+      <div class="card soft" style="padding:20px 24px"><p class="small"><b>footer</b>: clear: both</p></div>
+    </div>
+  </div>
+  <aside class="notes">float nasce per far scorrere il testo attorno a un'immagine; per quasi vent'anni è stato anche il modo standard per fare le colonne. clear: both obbliga il footer a scendere sotto entrambe le colonne. Domanda chiave da fare: senza box-sizing: border-box le due colonne stanno ancora affiancate? No: 70% + 30% + 80 px di padding supera il 100% e la colonna laterale scende sotto. Lo verifichiamo nel prossimo laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Una pagina a due colonne</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Crea la cartella <b>due-colonne</b> con <b>index.html</b> e <b>stile.css</b>.</li>
+      <li>Nel body: un <code>div class="pagina"</code> che contiene <code>header</code>, <code>div class="principale"</code>, <code>div class="laterale"</code> e <code>footer</code>, ognuno con un titolo e un po' di testo.</li>
+      <li>In stile.css copia le regole delle ultime due slide e dai a ogni parte un bordo colorato diverso.</li>
+      <li>Restringi e allarga la finestra del browser.</li>
+      <li>Ora togli la riga <code>* { box-sizing: border-box; }</code>, salva e ricarica.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con border-box le due colonne stanno affiancate a ogni larghezza. Senza, la colonna laterale scende sotto la principale: 70% + 30% + 80 px di padding non ci stanno. Rimetti la riga prima di salvare.</div>
+  </div>
+  <aside class="notes">Errori tipici: dimenticare clear: both (il footer si infila accanto alle colonne o sale dietro di esse); mettere il bordo con content-box e vedere la colonna cadere anche per pochi pixel. Chi finisce: aggiungere un margine tra le due colonne riducendo le larghezze (per esempio 68% e 30% con margin-right: 2% sulla principale). Questo layout è la base del laboratorio successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dall'esterno verso l'interno della scatola</h2></div>
+  <ol class="puzzle-ordina" data-id="u4b-strati">
+    <li>margin: spazio trasparente che separa dalle altre scatole</li>
+    <li>border: la cornice, con spessore, stile e colore</li>
+    <li>padding: spazio interno, colorato dallo sfondo</li>
+    <li>contenuto: testo o immagine, misurato da width e height</li>
+  </ol>
+  <aside class="notes">Ordine come in elenco. Variante a squadre: una squadra dice una proprietà, l'altra deve dire se il background-color la colora (contenuto sì, padding sì, bordo no perché ha il suo colore, margin no).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Tutto è una scatola, per specifica</h2></div>
+  <figure class="citazione">
+    <blockquote>CSS1 presuppone un semplice modello di formattazione basato su scatole, in cui ogni elemento formattato produce uno o più riquadri rettangolari.</blockquote>
+    <figcaption><b>Håkon Wium Lie e Bert Bos</b>, specifica CSS livello 1, W3C, 17 dicembre 1996</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">Anche le AI ragionano a scatole: un modello di computer vision segna gli oggetti trovati in una foto con <b>bounding box</b>, rettangoli descritti da posizione, larghezza e altezza. Gli agenti AI che usano il browser ricevono spesso la pagina come screenshot più l'elenco dei rettangoli cliccabili.</p></div>
+  <aside class="notes">Traduzione nostra da: "CSS1 assumes a simple box-oriented formatting model where each formatted element results in one or more rectangular boxes" (W3C Recommendation CSS1, sezione 4, 17 dicembre 1996; frase successiva: "All boxes have a core content area with optional surrounding padding, border and margin areas"). Collegamento all'Unità 2 (computer vision): i rilevatori di oggetti restituiscono rettangoli con classe e probabilità. Sugli agenti AI restare generici: le tecniche cambiano rapidamente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Ai raggi X: le scatole di un sito vero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>it.wikipedia.org</b> e premi <b>F12</b>.</li>
+      <li>Nel pannello Stili aggiungi una nuova regola con il pulsante <b>+</b> e scrivi <code>* { outline: 1px solid red; }</code></li>
+      <li>Ora vedi il contorno di ogni scatola. Seleziona un titolo, un paragrafo e un link: per ognuno annota display, margin e padding (scheda Calcolato).</li>
+      <li>Modifica il padding di un paragrafo direttamente nei DevTools e osserva.</li>
+      <li>Ricarica la pagina: che fine fanno le tue modifiche?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il titolo e il paragrafo sono <code>block</code>, il link è <code>inline</code>. Dopo il ricaricamento la pagina torna com'era: hai cambiato solo la copia nel tuo browser, non il sito.</div>
+  </div>
+  <aside class="notes">outline disegna un contorno senza occupare spazio, quindi non sposta le scatole (a differenza di border): è il trucco dei professionisti per "vedere" il layout. Se Wikipedia è lenta, va bene qualunque sito, anche il proprio file due-colonne. Sottolineare il punto 5: i DevTools non modificano il server, utile anche per smontare le bufale "ho modificato il sito della banca" fatte con lo screenshot.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo spazio interno tra contenuto e bordo si chiama <span class="blank" data-risposta="padding"></span>.</p>
+    <p>Con width 100px, padding 10px e bordo 1px la scatola visibile è larga <span class="blank" data-risposta="122|122px|122 px"></span> px.</p>
+    <p>Con <code>box-sizing: border-box</code> la stessa scatola è larga <span class="blank" data-risposta="100|100px|100 px"></span> px.</p>
+    <p>Margini verticali di 15px e 25px tra due paragrafi danno uno spazio di <span class="blank" data-risposta="25|25px|25 px"></span> px.</p>
+    <p>Per centrare un blocco con una larghezza si usa <code>margin: 0</code> <span class="blank" data-risposta="auto"></span>.</p>
+  </div>
+  <div class="timer" data-min="4"></div>
+  <aside class="notes">Quattro minuti. Soluzioni: padding; 100 + 20 + 2 = 122; 100; 25 (collasso dei margini); auto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Contenuto, padding, border, margin</li>
+      <li>Visibile = width + 2 padding + 2 bordi</li>
+      <li><code>border-box</code>: width include tutto</li>
+    </ul>
+    <ul class="points">
+      <li>Margini verticali collassano</li>
+      <li>block, inline, inline-block, none</li>
+      <li>Colonna centrata e due colonne con float</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Conservare la cartella due-colonne: nel prossimo laboratorio diventa un piccolo sito con intestazione, menu, contenuto e piè di pagina.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

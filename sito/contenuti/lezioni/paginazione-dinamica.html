@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La paginazione dinamica · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>La memoria virtuale<br>a paginazione dinamica</h1>
+  <p class="lead">Carichiamo una pagina solo quando serve. Ma quando la RAM è piena, chi buttiamo fuori? FIFO, LRU, l'algoritmo ottimo e un'anomalia che ha sorpreso tutti.</p>
+  <aside class="notes">Obiettivi: spiegare la paginazione su richiesta e il bit di validità; descrivere i passi di un page fault; compilare a mano le tabelle FIFO, LRU e OPT e contare i page fault; conoscere l'anomalia di Belady e il thrashing. Prerequisito: paginazione statica (pagine, frame, tabella delle pagine). Durata: 2-3 ore: le tabelle richiedono esercizio. Portare fogli a quadretti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Torni su un'app aperta poco fa e la trovi ricaricata da capo. Ti succede?</h2></div>
+  <div class="poll" data-id="pd-app">
+    <ol><li>Sì, spesso</li><li>Ogni tanto</li><li>Mai</li><li>Non ci ho mai fatto caso</li></ol>
+  </div>
+  <aside class="notes">Succede più spesso sui telefoni con poca RAM: il sistema ha liberato memoria togliendo l'app. Oggi vediamo come un sistema operativo decide che cosa togliere dalla RAM, pagina per pagina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Paginazione su richiesta</p><h2>In RAM solo le pagine che servono adesso</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il programma parte con poche pagine in RAM; le altre restano sul disco. Ogni riga della tabella ha un <b>bit di validità</b>:</p>
+      <ul class="points">
+        <li><b>1</b>: la pagina è in RAM, nel frame indicato</li>
+        <li><b>0</b>: la pagina è sul disco</li>
+      </ul>
+      <div class="callout">Se il programma tocca una pagina con bit 0 scatta un <mark>page fault</mark>: il sistema operativo la va a prendere.</div>
+    </div>
+    <table class="data compact">
+      <tr><th>Pagina</th><th>Frame</th><th>Valida</th></tr>
+      <tr><td class="mono">0</td><td class="mono">4</td><td class="mono">1</td></tr>
+      <tr><td class="mono">1</td><td class="mono">-</td><td class="mono hl">0</td></tr>
+      <tr><td class="mono">2</td><td class="mono">9</td><td class="mono">1</td></tr>
+      <tr><td class="mono">3</td><td class="mono">-</td><td class="mono hl">0</td></tr>
+      <tr><td class="mono">4</td><td class="mono">2</td><td class="mono">1</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Con la paginazione dinamica (o "su richiesta", demand paging) un programma può essere più grande della RAM: è la memoria virtuale vera e propria della prima lezione. Molte parti di un programma non vengono quasi mai usate (gestione degli errori, funzioni rare): perché caricarle? Il page fault non è un errore del programma: è un evento normale, gestito dal sistema operativo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Page fault: metti in ordine che cosa succede</h2></div>
+  <ol class="puzzle-ordina" data-id="pd-ordine">
+    <li>Il programma accede a un indirizzo della pagina 3</li>
+    <li>La MMU trova il bit di validità a 0 e avvisa il sistema operativo</li>
+    <li>Il sistema operativo cerca un frame libero o sceglie una vittima</li>
+    <li>Legge la pagina 3 dal disco e la copia nel frame</li>
+    <li>Aggiorna la tabella: frame e bit di validità a 1</li>
+    <li>L'istruzione interrotta viene ripetuta, e stavolta funziona</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Durante la lettura dal disco (lentissima, ricordare "1 ns = 1 s") il processo è bloccato e la CPU passa a un altro processo: collegamento con lo scheduling dell'Unità 6. Se la vittima era stata modificata (bit "dirty" o di modifica a 1), prima va riscritta sul disco: doppio costo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cos'è un page fault?</h2></div>
+  <div class="poll" data-id="pd-cose-fault" data-tipo="quiz" data-risposta="B">
+    <ol><li>Un errore che fa chiudere il programma</li><li>Un accesso a una pagina che non è in RAM</li><li>Un guasto della memoria RAM</li><li>Un indirizzo fuori dallo spazio del processo</li></ol>
+    <p class="why">Il page fault è normale: la pagina esiste ma è sul disco, il sistema operativo la carica e il programma continua senza accorgersene. La D è un'altra cosa: un accesso illegale, che invece blocca il programma.</p>
+  </div>
+  <aside class="notes">Il nome inglese "fault" inganna: fa pensare a un errore. La A e la D descrivono la violazione di accesso (in Linux "segmentation fault"), di cui parleremo nella lezione sulla segmentazione. La C è un guasto hardware, tutt'altra storia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Conta i page fault di Windows</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il Task Manager, scheda <b>Dettagli</b>. Clic destro sull'intestazione di una colonna, <b>Seleziona colonne</b>.</li>
+      <li>Attiva la colonna degli <b>errori di pagina</b> (in inglese <i>Page faults</i>) e ordina dal più grande.</li>
+      <li>Annota i 3 processi con più errori. Apri una pagina web pesante e guarda il browser.</li>
+      <li>Ora <b>Win+R</b>, <code>resmon</code>, scheda <b>Memoria</b>: annota gli <b>errori gravi/sec</b>.</li>
+      <li>Scrivi i dati in <b>page-fault.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel Task Manager i numeri sono enormi (anche milioni), negli errori gravi al secondo quasi sempre 0. Windows conta anche i fault "leggeri", risolti senza il disco; solo quelli gravi leggono dal disco.</div>
+  </div>
+  <aside class="notes">Soft fault: la pagina è già in RAM (per esempio in un'altra lista o condivisa) e basta aggiornare la tabella. Hard fault: va letta dal disco. Se gli errori gravi/sec restano alti a lungo, il PC ha poca RAM per quello che sta facendo. I nomi esatti delle colonne cambiano tra versioni di Windows; se il Task Manager è bloccato dalle policy, fare una dimostrazione alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La RAM è piena</p><h2>Chi esce per far posto? Tre algoritmi</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">FIFO</p><h3>Il più vecchio</h3><p>Esce la pagina entrata in RAM per prima. Semplice: basta una coda.</p></div>
+    <div class="card soft"><p class="num">LRU</p><h3>Il meno usato di recente</h3><p>Esce la pagina che non viene usata da più tempo. Guarda il <b>passato</b>.</p></div>
+    <div class="card soft"><p class="num">OPT</p><h3>L'ottimo</h3><p>Esce la pagina che servirà più tardi. Guarda il <b>futuro</b>: impossibile davvero.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando la RAM scarseggia, Android chiude per prime le app in background che non usi da più tempo: un'idea simile a LRU, applicata alle app intere invece che alle pagine.</p></div>
+  <aside class="notes">FIFO = First In First Out; LRU = Least Recently Used; OPT (o MIN) = ottimo, proposto da László Bélády nel 1966: non si può realizzare perché richiede di conoscere il futuro, ma serve come metro di paragone. Nella realtà si usano approssimazioni di LRU (algoritmo dell'orologio, "seconda chance"). Su Android: il sistema tiene le app in cache in ordine di uso recente e, con poca memoria, termina prima quelle meno importanti e meno recenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Esempio svolto</p><h2>FIFO con 3 frame</h2></div>
+  <table class="data compact mono" style="text-align:center">
+<tr><th>Rif.</th><th>2</th><th>3</th><th>2</th><th>4</th><th>2</th><th>1</th><th>4</th><th>2</th><th>5</th><th>4</th><th>3</th><th>1</th></tr>
+<tr><td>Frame 1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td><td>4</td><td>4</td><td>4</td></tr>
+<tr><td>Frame 2</td><td>-</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>Frame 3</td><td>-</td><td>-</td><td>-</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>5</td><td>5</td><td>5</td><td>1</td></tr>
+<tr><td>Fault</td><td class="hl">F</td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td></tr>
+</table>
+  <p>Totale: <mark><b>9 page fault</b></mark> su 12 riferimenti. Esce sempre chi è entrato da più tempo.</p>
+  <aside class="notes">Svolgere alla lavagna colonna per colonna. I primi 3 fault sono inevitabili (frame vuoti). Al riferimento 1: in RAM 2, 3, 4; il più vecchio è 2, esce 2 (anche se l'abbiamo appena usato! FIFO non guarda gli accessi, solo gli ingressi). Poi 2 rientra al posto di 3, 5 al posto di 4, 4 al posto di 1, 3 al posto di 2, 1 al posto di 5. Trucco: segnare con un pallino il frame "più vecchio" e spostarlo in giro come una lancetta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tocca a te</p><h2>Stessa sequenza 2 3 2 4 2 1 4 2 5 4 3 1, 3 frame, ma con LRU. Quanti page fault?</h2></div>
+  <div class="poll" data-id="pd-lru" data-tipo="quiz" data-risposta="C">
+    <ol><li>9, come FIFO</li><li>6</li><li>7</li><li>8</li></ol>
+    <p class="why">Con LRU la pagina 2, usata spessissimo, non esce mai fino al riferimento 3: i fault sono 7. Con 6 si ottiene l'ottimo (OPT), che conosce il futuro: LRU ci va vicino ma non lo raggiunge.</p>
+  </div>
+  <aside class="notes">Dare 5 minuti, a coppie, su carta. La tabella completa è nella slide successiva. Chi ottiene 9 ha probabilmente applicato FIFO (guarda l'entrata invece dell'ultimo uso). Chi ottiene 6 ha "sbirciato il futuro": ottimo istinto, ma è OPT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le soluzioni</p><h2>LRU: 7 page fault. OPT: 6 page fault</h2></div>
+  <div class="cols-2">
+    <div class="stack"><h3>LRU</h3><table class="data compact mono">
+<tr><th>Rif.</th><th>2</th><th>3</th><th>2</th><th>4</th><th>2</th><th>1</th><th>4</th><th>2</th><th>5</th><th>4</th><th>3</th><th>1</th></tr>
+<tr><td>Fr1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>Fr2</td><td>-</td><td>3</td><td>3</td><td>3</td><td>3</td><td>1</td><td>1</td><td>1</td><td>5</td><td>5</td><td>5</td><td>1</td></tr>
+<tr><td>Fr3</td><td>-</td><td>-</td><td>-</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+<tr><td>PF</td><td class="hl">F</td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td class="hl">F</td></tr>
+</table></div>
+    <div class="stack"><h3>OPT</h3><table class="data compact mono">
+<tr><th>Rif.</th><th>2</th><th>3</th><th>2</th><th>4</th><th>2</th><th>1</th><th>4</th><th>2</th><th>5</th><th>4</th><th>3</th><th>1</th></tr>
+<tr><td>Fr1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>5</td><td>5</td><td>3</td><td>3</td></tr>
+<tr><td>Fr2</td><td>-</td><td>3</td><td>3</td><td>3</td><td>3</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>Fr3</td><td>-</td><td>-</td><td>-</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+<tr><td>PF</td><td class="hl">F</td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td></td><td></td><td class="hl">F</td><td></td><td class="hl">F</td><td></td></tr>
+</table></div>
+  </div>
+  <aside class="notes">LRU, riferimento 1 (sesto): in RAM 2 (usato al passo 5), 3 (passo 2), 4 (passo 4): esce 3. Riferimento 5: 2 (passo 8), 1 (passo 6), 4 (passo 7): esce 1. Riferimento 3: esce 2. Ultimo 1: esce 5. OPT, riferimento 1: nel futuro 4 arriva subito, 2 dopo, 3 molto tardi: esce 3. Riferimento 5: il 2 non servirà più, esce 2. Riferimento 3: 5 e 4 non servono più, va bene toglierne uno qualunque (qui il 5). Classifica: OPT 6 ≤ LRU 7 ≤ FIFO 9.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Le tabelle in Calc, con i colori</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In B1:M1 scrivi la sequenza 2 3 2 4 2 1 4 2 5 4 3 1. In A2:A4 scrivi Frame 1, 2, 3; in A5 Fault.</li>
+      <li>Compila a mano le colonne FIFO e scrivi F nella riga 5 a ogni fault. Colora di giallo le celle che cambiano.</li>
+      <li>In N5: <code>=CONTA.VALORI(B5:M5)</code></li>
+      <li>Copia il foglio (clic destro sulla linguetta) e rifallo con LRU, poi con OPT.</li>
+      <li>Salva come <b>sostituzione-pagine.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> N5 vale 9 per FIFO, 7 per LRU, 6 per OPT. Se un numero non torna, confronta colonna per colonna con le slide precedenti.</div>
+  </div>
+  <aside class="notes">CONTA.VALORI conta le celle non vuote: ecco perché nelle colonne senza fault la riga 5 va lasciata vuota. Chi finisce prima: inventare una sequenza di 12 riferimenti in cui LRU fa peggio di FIFO (esistono!) e farla risolvere al compagno. Esempio pronto: 4 1 2 4 3 1 5 4 2 1 3 4 con 3 frame dà FIFO 10, LRU 11, OPT 7.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Se diamo più frame a un processo, i page fault diminuiscono sempre?</h2></div>
+  <div class="poll" data-id="pd-belady" data-tipo="quiz" data-risposta="A">
+    <ol><li>No: con FIFO a volte aumentano</li><li>Sì, più RAM vuol dire sempre meno fault</li><li>Sì, ma solo con l'algoritmo FIFO</li><li>No: con LRU aumentano sempre</li></ol>
+    <p class="why">È l'anomalia di Belady: con la sequenza 1 2 3 4 1 2 5 1 2 3 4 5, FIFO fa 9 page fault con 3 frame e 10 con 4. LRU e OPT non hanno questo problema: con più frame non peggiorano mai.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono B: è l'intuizione naturale, ed è proprio quella che smentirono László Bélády, Robert Nelson e Gerald Shedler in un articolo del 1969 (Communications of the ACM). La D è falsa: LRU è un algoritmo "a pila" e non soffre dell'anomalia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'anomalia di Belady</p><h2>Sequenza 1 2 3 4 1 2 5 1 2 3 4 5 con FIFO</h2></div>
+  <div class="cols-2">
+    <div class="stack"><h3>3 frame: <mark>9 page fault</mark></h3><table class="data compact mono">
+<tr><th>Rif.</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td>Fr1</td><td>1</td><td>1</td><td>1</td><td>4</td><td>4</td><td>4</td><td>5</td><td>5</td><td>5</td><td>5</td><td>5</td><td>5</td></tr>
+<tr><td>Fr2</td><td>-</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>Fr3</td><td>-</td><td>-</td><td>3</td><td>3</td><td>3</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>4</td><td>4</td></tr>
+<tr><td>PF</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td></td><td></td><td class="hl">F</td><td class="hl">F</td><td></td></tr>
+</table></div>
+    <div class="stack"><h3>4 frame: <mark>10 page fault</mark></h3><table class="data compact mono">
+<tr><th>Rif.</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td>Fr1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>5</td><td>5</td><td>5</td><td>5</td><td>4</td><td>4</td></tr>
+<tr><td>Fr2</td><td>-</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td><td>5</td></tr>
+<tr><td>Fr3</td><td>-</td><td>-</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>Fr4</td><td>-</td><td>-</td><td>-</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>PF</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td></td><td></td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td><td class="hl">F</td></tr>
+</table></div>
+  </div>
+  <p>Più RAM, più fault! Con LRU o OPT non succede mai.</p>
+    <aside class="notes">Svolgere entrambe le tabelle alla lavagna (o farle fare a due squadre in parallelo, poi confrontare). 3 frame: dopo 1 2 3 4 1 2 5 in RAM ci sono 5 1 2, e i successivi 1 e 2 sono "hit". 4 frame: 1 e 2 sono hit subito, ma poi FIFO butta fuori proprio le pagine che servono dopo, e da 5 in poi è tutto un fault. L'anomalia è uno dei motivi per cui FIFO puro non si usa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Simulazione in Java</p><h2>Un contatore di page fault FIFO</h2></div>
+  <pre class="code" style="font-size:23px;line-height:1.4;padding:24px 40px">
+<span class="k">public class</span> Fifo {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">int</span>[] rif = {1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5};
+<span class="hl">    int n = 3;</span>                               <span class="c">// numero di frame</span>
+    <span class="k">int</span>[] frame = <span class="k">new int</span>[n];
+    java.util.Arrays.fill(frame, -1);          <span class="c">// -1 = frame vuoto</span>
+    <span class="k">int</span> prossimo = 0, fault = 0;             <span class="c">// prossimo = il frame più vecchio</span>
+    <span class="k">for</span> (<span class="k">int</span> p : rif) {
+      <span class="k">boolean</span> presente = <span class="k">false</span>;
+      <span class="k">for</span> (<span class="k">int</span> f : frame) <span class="k">if</span> (f == p) presente = <span class="k">true</span>;
+      <span class="k">if</span> (!presente) {
+        frame[prossimo] = p;
+        prossimo = (prossimo + 1) % n;
+        fault++;
+      }
+    }
+    System.out.println(<span class="s">"Frame: "</span> + n + <span class="s">", page fault: "</span> + fault);
+  }
+}</pre>
+  <aside class="notes">Il trucco: i frame si riempiono in ordine e la vittima FIFO è sempre il frame indicato da "prossimo", che gira in cerchio grazie al resto % n. Così non serve una coda vera. Spiegare il ciclo interno: controlla se la pagina è già in uno dei frame.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Scopri l'anomalia con OnlineGDB</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>onlinegdb.com</b> scegli <b>Java</b>, copia il programma e premi <b>Run</b>.</li>
+      <li>Cambia <code>n</code> in 4 ed esegui di nuovo. Poi prova 5.</li>
+      <li>Metti in <code>rif</code> la sequenza della lezione, 2 3 2 4 2 1 4 2 5 4 3 1, e prova n = 3.</li>
+      <li>Annota i risultati in un commento in fondo al file.</li>
+      <li>Scarica il file come <b>Fifo.java</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con la sequenza di Belady: n = 3 → 9 fault, n = 4 → 10, n = 5 → 5. Con la sequenza della lezione e n = 3 → 9, come nella tabella FIFO.</div>
+  </div>
+  <aside class="notes">Con 5 frame tutte le 5 pagine diverse entrano e restano: solo i 5 fault iniziali. Sfida per i più veloci: trasformare il programma in LRU (serve un array con l'ultimo istante di uso di ogni frame). Se OnlineGDB non è raggiungibile: altro compilatore Java online o IDE del laboratorio. Facoltativo: esistono visualizzatori online degli algoritmi di sostituzione; il docente controlli prima che il link funzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Atlas, 1962: la prima memoria virtuale</h2></div>
+  <figure class="citazione">
+    <blockquote style="font-size:46px">Un sistema automatico che può essere applicato a qualunque combinazione di due sistemi di memoria, così che l'utente della macchina possa considerarla come un unico livello.</blockquote>
+    <figcaption><b>Tom Kilburn e colleghi</b>, Università di Manchester, articolo "One-Level Storage System", 1962</figcaption>
+  </figure>
+  <p>Atlas univa una memoria veloce a nuclei magnetici e un tamburo magnetico lento. Il programmatore vedeva un'unica grande memoria: pagine e page fault li gestiva la macchina.</p>
+  <aside class="notes">Fonte: T. Kilburn, D. B. G. Edwards, M. J. Lanigan, F. H. Sumner, "One-Level Storage System", IRE Transactions on Electronic Computers, aprile 1962; la frase è dal sommario dell'articolo ("…an automatic system which in principle can be applied to any combination of two storage systems so that the combination can be regarded by the machine user as a single level"). Traduzione nostra, leggermente abbreviata. Atlas usava pagine da 512 parole e un meccanismo di sostituzione basato sull'osservazione degli accessi passati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando tutto si inceppa</p><h2>Thrashing: più tempo a spostare pagine che a lavorare</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Troppi processi, troppo pochi frame: ogni processo fa page fault di continuo, il disco lavora sempre, la CPU aspetta.</p>
+      <ul class="points">
+        <li>Rimedio: dare a ogni processo il suo <b>working set</b>, le pagine che usa in questo periodo</li>
+        <li>Se non bastano i frame, sospendere qualche processo</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un'AI troppo grande per la RAM</h3><p>Programmi come llama.cpp, che fanno girare modelli linguistici su un PC, mappano il file del modello in memoria virtuale: le pagine dei pesi arrivano dal disco con i page fault. Se il modello non entra in RAM, le pagine vanno e vengono di continuo e il modello scrive una parola ogni tanto.</p></div>
+  </div>
+  <aside class="notes">Peter Denning descrisse il thrashing e il modello del working set nel 1968. Segnale tipico: CPU poco usata, disco al 100%, tutto lentissimo. Su llama.cpp: per impostazione predefinita usa mmap per caricare i pesi del modello; se la RAM non basta il sistema li rilegge dal disco continuamente. Collegare al conto della prima lezione: 7 miliardi di parametri a 16 bit = 14 GB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="pd-abbina">
+    <dt>Page fault</dt><dd>Accesso a una pagina valida che non è in RAM</dd>
+    <dt>Bit di validità</dt><dd>Dice se la pagina è in RAM oppure no</dd>
+    <dt>FIFO</dt><dd>Esce la pagina entrata per prima</dd>
+    <dt>LRU</dt><dd>Esce la pagina non usata da più tempo</dd>
+    <dt>OPT</dt><dd>Esce la pagina che servirà più tardi</dd>
+    <dt>Thrashing</dt><dd>Il sistema passa il tempo a spostare pagine</dd>
+  </dl>
+  <aside class="notes">Coppie corrette come scritte. Da fare a squadre, a tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con le tabelle</h2></div>
+  <div class="puzzle-codice" data-risposta="9764" data-aiuto="sono i page fault di FIFO, LRU e OPT sulla sequenza della lezione, poi i frame dell'anomalia">
+    <ul class="points">
+      <li>1ª cifra: page fault di FIFO sulla sequenza della lezione</li>
+      <li>2ª cifra: page fault di LRU sulla stessa sequenza</li>
+      <li>3ª cifra: page fault di OPT sulla stessa sequenza</li>
+      <li>4ª cifra: con quanti frame FIFO fa peggio nell'esempio di Belady</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> FIFO 9, LRU 7, OPT 6; con 4 frame Belady conta 10 fault invece di 9.</div>
+  </div>
+  <aside class="notes">Codice: 9764. Vince la prima squadra che lo apre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una pagina con bit di validità a 0 provoca un page <span class="blank" data-risposta="fault"></span>.</p>
+    <p>L'algoritmo che toglie la pagina non usata da più tempo si chiama <span class="blank" data-risposta="LRU"></span>.</p>
+    <p>L'algoritmo ottimo non si può realizzare perché bisognerebbe conoscere il <span class="blank" data-risposta="futuro"></span>.</p>
+    <p>Più frame e più page fault con FIFO: è l'anomalia di <span class="blank" data-risposta="Belady"></span>.</p>
+    <p>Quando il sistema sposta solo pagine e non lavora, siamo in <span class="blank" data-risposta="thrashing"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: fault, LRU, futuro, Belady, thrashing.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Pagine caricate solo quando servono</li>
+      <li>Bit di validità 0 → page fault, gestito dal SO</li>
+      <li>FIFO, LRU, OPT: chi esce dalla RAM</li>
+    </ul>
+    <ul class="points">
+      <li>OPT ≤ LRU, e di solito LRU ≤ FIFO</li>
+      <li>Belady: con FIFO più frame possono peggiorare</li>
+      <li>Thrashing: troppi processi, pochi frame</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. "Di solito": esistono sequenze in cui LRU fa peggio di FIFO (vedi note del laboratorio Calc). Prossima lezione: la segmentazione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

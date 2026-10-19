@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il Comune a raggi X · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Progetto di gruppo · 3E TPSI</p>
+  <h1>Il nostro Comune<br>a raggi X</h1>
+  <p class="lead">Rifiuti ed energia della vostra città raccontati con dati pubblici veri, in un sito responsive e accessibile che tutti possono leggere, anche dal telefono.</p>
+  <div class="meta"><span class="chip">dati aperti</span><span class="chip">HTML e CSS</span><span class="chip">Flexbox e Grid</span><span class="chip">accessibilità</span></div>
+  <aside class="notes">Secondo progetto di gruppo, da svolgere dopo l'Unità 5 (Flexbox, Grid, responsive). Durata indicativa: 6 settimane, circa 2 ore a settimana più lavoro a casa. Il tema (energia e sostenibilità) viene dal libro; il progetto è nostro. Niente JavaScript richiesto: il valore sta nei dati verificati, nella chiarezza e nell'accessibilità. Se più squadre abitano nello stesso Comune, una può scegliere il Comune della scuola e l'altra un Comune vicino da confrontare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che cosa vorreste scoprire sul vostro Comune?</h2></div>
+  <div class="poll" data-id="amb-curiosita">
+    <ol><li>Quanti rifiuti produce ogni abitante</li><li>Quanta differenziata fa davvero</li><li>Quanti pannelli solari ci sono</li><li>Da dove arriva la corrente che usiamo</li><li>Come se la cava rispetto ai Comuni vicini</li></ol>
+  </div>
+  <aside class="notes">Sondaggio per far emergere le domande: un buon sito di dati risponde a domande precise, non "parla dell'ambiente". Annotare alla LIM le domande più votate: diventeranno le pagine del sito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il brief</p><h2>Un sito di 5 pagine, ogni numero con la sua fonte</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Home</b>: tre numeri chiave del Comune e una domanda</li>
+      <li><b>Rifiuti</b>: quantità per abitante, differenziata, andamento negli anni</li>
+      <li><b>Energia</b>: fotovoltaico, consumi, mix elettrico italiano</li>
+      <li><b>Cosa possiamo fare</b>: 5 azioni concrete per la scuola</li>
+      <li><b>Fonti</b>: ogni dato con ente, link, anno e licenza</li>
+    </ul>
+    <div class="card soft"><p class="num">0</p><h3>numeri inventati</h3><p>Un dato senza fonte non entra nel sito. Un dato vecchio va bene, se dite di che anno è.</p></div>
+  </div>
+  <aside class="notes">Regola d'oro del progetto: ogni numero deve essere rintracciabile. È lo stesso principio della citazione delle fonti visto in educazione civica (diritto d'autore). Pagine minime 5; chi vuole può aggiungerne una sull'aria o sull'acqua.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove si trovano i dati</p><h2>Abbina la fonte al dato che offre</h2></div>
+  <dl class="puzzle-abbina" data-id="amb-fonti">
+    <dt>ISPRA, Catasto rifiuti</dt><dd>Rifiuti urbani e differenziata, Comune per Comune</dd>
+    <dt>GSE</dt><dd>Impianti di energia rinnovabile incentivati sul territorio</dd>
+    <dt>Terna</dt><dd>Produzione e consumi di elettricità in Italia per fonte</dd>
+    <dt>ISTAT</dt><dd>Popolazione residente di ogni Comune</dd>
+    <dt>Our World in Data</dt><dd>Grafici e tabelle sull'energia di tutti i Paesi</dd>
+  </dl>
+  <aside class="notes">ISPRA: catasto-rifiuti.isprambiente.it (dati per Comune, annuali). GSE: il portale Atlaimpianti (atla.gse.it) mostra gli impianti sulla mappa. Terna pubblica ogni anno i "Dati statistici" sull'energia elettrica. ISTAT: demo.istat.it per la popolazione. Our World in Data: ourworldindata.org/energy, dati con licenza CC BY. Prima della lezione verificare che i siti si aprano dalla rete della scuola; in caso contrario il docente scarica i file e li mette su Classroom.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T1: caccia ai dati del vostro Comune</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Calc e crea le colonne: <b>Dato</b>, <b>Valore</b>, <b>Unità</b>, <b>Anno</b>, <b>Ente</b>, <b>Link</b>, <b>Licenza</b>.</li>
+      <li>Su <b>catasto-rifiuti.isprambiente.it</b> cerca il tuo Comune: rifiuti totali, per abitante, % di differenziata, ultimi 5 anni.</li>
+      <li>Aggiungi almeno 2 dati sull'energia (GSE, Terna o Our World in Data).</li>
+      <li>Salva <b>dati-squadraN.ods</b>: è la base di tutto il sito.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 10 righe, nessuna cella vuota in Anno ed Ente. Ricalcola a mano un "per abitante": totale (in kg) diviso abitanti deve tornare con il valore del sito.</div>
+  </div>
+  <aside class="notes">Il ricalcolo a mano serve a capire le unità: il catasto dà i totali in tonnellate, quindi va moltiplicato per 1000 prima di dividere per gli abitanti. Esempio nazionale per la LIM (ISPRA, Rapporto rifiuti urbani 2025, dati 2024): poco più di 29,9 milioni di tonnellate; con circa 59 milioni di abitanti fanno circa 500 kg a testa all'anno. Differenziata nazionale 2024: 67,7%. Se il catasto non risponde: dati regionali dallo stesso rapporto ISPRA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chi manda meno rifiuti all'indifferenziato, per abitante?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Comune A</h3><p>800 kg per abitante all'anno</p><p><b>85%</b> di differenziata</p></div>
+    <div class="card"><h3>Comune B</h3><p>300 kg per abitante all'anno</p><p><b>65%</b> di differenziata</p></div>
+  </div>
+  <div class="poll" data-id="amb-percentuali" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il Comune A, ha l'85%</li><li>Sono praticamente uguali</li><li>Il Comune B</li><li>Non si può dire senza gli abitanti</li></ol>
+    <p class="why">A: 15% di 800 kg = 120 kg. B: 35% di 300 kg = 105 kg. B fa meno differenziata ma produce molti meno rifiuti. I dati sono già "per abitante", quindi la popolazione non serve.</p>
+  </div>
+  <aside class="notes">Numeri inventati per l'esercizio (dirlo chiaramente). Il messaggio: una percentuale da sola può ingannare, serve anche la quantità. Il primo obiettivo dell'economia circolare è produrre meno rifiuti, poi differenziarli. Nel sito: mostrare sempre sia kg per abitante sia percentuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Our World in Data usa la licenza CC BY. Che cosa devi fare?</h2></div>
+  <div class="poll" data-id="amb-licenza" data-tipo="quiz" data-risposta="A">
+    <ol><li>Citare la fonte, anche se rielabori i dati in un tuo grafico</li><li>Niente: i dati aperti non hanno regole</li><li>Chiedere il permesso per email prima di usarli</li><li>Usarli solo così come sono, senza modifiche</li></ol>
+    <p class="why">CC BY permette di copiare, modificare e ripubblicare, anche rielaborando, a una condizione: attribuire la fonte (BY). Il divieto di modifiche sarebbe la clausola ND, che qui non c'è.</p>
+  </div>
+  <aside class="notes">Molti dati pubblici italiani usano CC BY 4.0 o la Italian Open Data License (IODL 2.0): entrambe chiedono l'attribuzione. Formato di citazione per il sito: "Fonte: ISPRA, Catasto rifiuti, dati 2024, consultato il [data], licenza [...]". Se la licenza non è indicata, scrivere comunque la fonte e chiedere al docente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Dal dato grezzo al sito: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="amb-pipeline">
+    <li>Formulare una domanda precisa sul Comune</li>
+    <li>Trovare la fonte ufficiale e scaricare il dato</li>
+    <li>Annotare ente, anno, link e licenza in Calc</li>
+    <li>Controllare unità e conti con un ricalcolo</li>
+    <li>Fare il grafico e la tabella in Calc</li>
+    <li>Pubblicare nella pagina con testo alternativo e fonte</li>
+  </ol>
+  <aside class="notes">Errore tipico: partire dal grafico "bello" e cercare dopo i dati. Un altro: dimenticare l'anno, che rende impossibile capire se un dato è aggiornato. Collegare alla Kanban: ogni passo può diventare una scheda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Squadra e calendario</p><h2>Quattro ruoli, sei settimane</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="chips"><span class="chip">Coordinatore e Kanban</span><span class="chip">Ricercatore di dati</span><span class="chip">Designer</span><span class="chip">Sviluppatore e test</span></div>
+      <p class="small muted">Kanban su Excalidraw o su un cartellone: Da fare, In corso, Da verificare, Fatto. Chi verifica non è chi ha fatto.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Sett.</th><th>Traguardo</th></tr>
+      <tr><td>1</td><td><b>T1</b> ruoli, Kanban, dati-squadraN.ods</td></tr>
+      <tr><td>2</td><td><b>T2</b> mappa del sito e wireframe</td></tr>
+      <tr><td>3</td><td>HTML delle 5 pagine</td></tr>
+      <tr><td>4</td><td><b>T3</b> CSS responsive, grafici</td></tr>
+      <tr><td>5</td><td><b>T4</b> test di accessibilità</td></tr>
+      <tr><td>6</td><td><b>T5</b> zip e presentazione</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Il ricercatore di dati è responsabile del file Calc e della pagina Fonti; il designer di wireframe, colori e grafici; lo sviluppatore di HTML e CSS; il coordinatore della Kanban e della presentazione. Tutti scrivono almeno una pagina HTML. Con 3 persone, il coordinatore fa anche il ricercatore.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>T2: prima il telefono</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>excalidraw.com</b> disegna la mappa del sito: 5 riquadri collegati dalla Home.</li>
+      <li>Wireframe della Home <b>larga 360 px</b>: menu, titolo, tre numeri chiave uno sotto l'altro, link alle pagine.</li>
+      <li>Poi la stessa Home su PC: i tre numeri affiancati (Flexbox) e le sezioni in griglia (Grid).</li>
+      <li>Esporta <b>wireframe-squadraN.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> su telefono nessun elemento è affiancato a un altro se il testo diventa più piccolo di una riga leggibile; ogni numero chiave ha scritto anno e fonte.</div>
+  </div>
+  <aside class="notes">Mobile first: si parte dal layout più stretto e si aggiunge spazio con le media query (min-width). Ripasso della lezione sulla progettazione responsive. Fallback: carta e foto con il telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il Web è nato per tutti</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del Web sta nella sua universalità. L'accesso da parte di chiunque, a prescindere dalla disabilità, ne è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web, all'avvio della Web Accessibility Initiative del W3C, 1997</figcaption>
+  </figure>
+  <p class="lead">Un sito sull'ambiente che una persona cieca non può leggere lascia fuori qualcuno: anche l'accessibilità è sostenibilità.</p>
+  <aside class="notes">Originale: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." Comunicato stampa del W3C per il lancio della WAI, 1997; traduzione nostra. Domanda: chi altro usa il vostro sito con difficoltà? Persone anziane, chi ha un telefono vecchio, chi è in treno con poca rete.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Grafici accessibili</p><h2>Un grafico è un'immagine: serve anche il testo</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:24px">&lt;figure&gt;
+  &lt;img src="differenziata.png"
+   alt="Differenziata a Rivalta dal 2020
+   al 2024: da 58% a 71%, sempre in
+   crescita."&gt;
+  &lt;figcaption&gt;Fonte: ISPRA, Catasto
+   rifiuti, consultato il 20/10/2026
+  &lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+    <ul class="points">
+      <li>Il testo <code>alt</code> dice il <b>messaggio</b>, non "grafico"</li>
+      <li>Sotto, una <code>&lt;table&gt;</code> con <code>&lt;caption&gt;</code> e <code>&lt;th&gt;</code></li>
+      <li>Colori distinguibili anche in bianco e nero</li>
+      <li>Fonte e anno sempre visibili</li>
+    </ul>
+  </div>
+  <aside class="notes">Rivalta e i numeri nel codice sono un esempio inventato: nel sito vanno i dati veri del vostro Comune. Chi usa un lettore di schermo sente l'alt; la tabella permette di leggere i numeri esatti. Mostrare con WAVE la differenza tra alt="grafico" e un alt che dice il messaggio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T3: dal foglio di calcolo alla pagina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc seleziona anni e % di differenziata, <b>Inserisci &gt; Grafico</b>, tipo linee. Titolo con unità.</li>
+      <li>Clic destro sul grafico, esporta come immagine: <b>differenziata.png</b> nella cartella <b>img</b> del sito.</li>
+      <li>In <b>rifiuti.html</b> inserisci la <code>&lt;figure&gt;</code> con alt che dice il messaggio e la fonte.</li>
+      <li>Sotto, la tabella con <code>&lt;caption&gt;</code> e intestazioni <code>&lt;th&gt;</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> coprendo il grafico con la mano, l'alt e la tabella bastano per capire il messaggio. Il file PNG pesa meno di 200 KB.</div>
+  </div>
+  <aside class="notes">In alcune versioni di LibreOffice l'esportazione del grafico è "Esporta come immagine" dal menu contestuale con il grafico selezionato; in alternativa copiarlo in Draw o fare uno screenshot ritagliato. Se il PNG è grande, comprimerlo con Squoosh (squoosh.app). Il limite di 200 KB è una nostra regola per tenere il sito leggero.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T3: il layout che si adatta</h2>
+  <div class="cols-2">
+<pre class="code" style="font-size:25px"><span class="c">/* telefono: tutto in colonna */</span>
+.numeri { display: flex;
+  flex-direction: column; gap: 16px; }
+
+<span class="k">@media</span> (min-width: 768px) {
+  .numeri { flex-direction: row; }
+  main { display: grid;
+    grid-template-columns: 2fr 1fr; }
+}</pre>
+    <div class="stack">
+      <p class="small">Nell'<code>&lt;head&gt;</code> di ogni pagina:</p>
+<pre class="code" style="font-size:22px;padding:20px 28px">&lt;meta name="viewport"
+  content="width=device-width, initial-scale=1"&gt;</pre>
+      <p class="small">Immagini fluide: <code>img { max-width: 100%; }</code></p>
+      <div class="check"><b>Controllo:</b> in DevTools (F12, modalità dispositivo) a 360 px i tre numeri sono in colonna, a 1024 px affiancati, e non compare mai la barra di scorrimento orizzontale.</div>
+    </div>
+  </div>
+  <aside class="notes">Senza il meta viewport il telefono mostra la pagina "rimpicciolita" come se fosse larga circa 980 px e la media query non scatta. 768 px è un punto di rottura comune ma non obbligatorio: lo decide il contenuto. Ripasso di Flexbox Froggy e Grid Garden per chi è in difficoltà.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Anche il digitale consuma energia</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Secondo l'Agenzia Internazionale dell'Energia, nel 2024 i data center hanno usato circa <b>415 TWh</b>, l'1,5% dell'elettricità mondiale, e potrebbero arrivare a circa <b>945 TWh</b> nel 2030, spinti soprattutto dall'AI. Un sito leggero, senza video e immagini enormi, consuma meno a ogni visita.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Chiedere a un chatbot "quanti rifiuti fa il mio Comune?" è rapido, ma il modello può <b>inventare un numero plausibile</b>. Usatelo per capire una tabella o correggere il CSS; i dati si prendono solo dalla fonte ufficiale.</p></div>
+  </div>
+  <aside class="notes">Fonte: IEA, "Energy and AI", aprile 2025, executive summary. Le stime future sono scenari, non certezze: dirlo. Proposta: misurare il peso della home con DevTools, scheda Rete (Network), e fissare un obiettivo, per esempio meno di 1 MB. Demo dal docente alla LIM: chiedere a un chatbot il dato del Comune e confrontarlo con il catasto ISPRA.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T4: il collaudo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Ogni pagina su <b>validator.w3.org</b> (Validate by Direct Input): zero errori.</li>
+      <li>Colori su <b>webaim.org/resources/contrastchecker</b>: almeno 4,5:1.</li>
+      <li>Naviga tutto il sito <b>solo con Tab e Invio</b>: si vede sempre dove sei?</li>
+      <li>Zoom del browser al 200%: si legge ancora tutto?</li>
+      <li>Annota tutto in <b>test-squadraN.ods</b>: controllo, esito, correzione, chi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni link ha un testo che si capisce da solo ("Dati sui rifiuti", non "clicca qui") e ogni pagina ha un solo <code>&lt;h1&gt;</code>.</div>
+  </div>
+  <aside class="notes">Se il sito è pubblicato online (per esempio in uno spazio indicato dal docente), si può usare WAVE (wave.webaim.org) direttamente sull'indirizzo; altrimenti bastano il validatore e il controllo manuale. La navigazione con la tastiera scopre spesso il problema del focus nascosto da outline: none.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Settimana 6</p><h2>Presentazione e valutazione</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>6 minuti, tutti parlano:</b> la domanda di partenza, il dato più sorprendente con la sua fonte, demo su telefono, un problema di accessibilità risolto, una proposta per la scuola.</p>
+      <p class="small muted">Slide in PDF (massimo 6) nello zip. Dichiarate dove avete usato un'AI.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Criterio</th><th>Punti</th></tr>
+      <tr><td>Dati veri, verificati, citati</td><td>2,5</td></tr>
+      <tr><td>HTML semantico e valido</td><td>1,5</td></tr>
+      <tr><td>Layout responsive</td><td>2</td></tr>
+      <tr><td>Accessibilità e test</td><td>2</td></tr>
+      <tr><td>Kanban e presentazione</td><td>2</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Griglia su 10 punti. I dati pesano di più perché sono il cuore del progetto: un dato inventato o senza fonte azzera la voce relativa a quel dato. Le proposte per la scuola migliori si possono mandare al dirigente o al consiglio d'istituto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="4518" data-aiuto="45 viene da 4,5:1; per le ultime due cifre calcola 120 - 105 + 3">
+    <ul class="points">
+      <li>1ª e 2ª cifra: il contrasto minimo per il testo normale, senza virgola</li>
+      <li>3ª e 4ª cifra: la differenza in kg tra l'indifferenziato del Comune A e del Comune B del quiz, più 3</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> Contrasto 4,5:1 e 120 - 105 = 15, più 3 = 18.</div>
+  </div>
+  <aside class="notes">Codice 4518: 45 (da 4,5:1) e 18 (120 - 105 = 15, + 3). Squadre in gara; chi apre per primo sceglie l'ordine delle presentazioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Ogni dato del sito ha ente, link, licenza e <span class="blank" data-risposta="anno"></span>.</p>
+    <p>La licenza CC BY chiede di <span class="blank" data-risposta="citare|attribuire|citare la fonte"></span> la fonte.</p>
+    <p>Per far funzionare le media query sul telefono serve il meta <span class="blank" data-risposta="viewport"></span>.</p>
+    <p>Il testo che descrive un grafico per chi non lo vede va nell'attributo <span class="blank" data-risposta="alt"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: anno, citare (accettati attribuire, citare la fonte), viewport, alt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>La rotta del progetto</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Domande precise, dati ufficiali, fonte e anno</li>
+      <li>Percentuali e quantità, sempre insieme</li>
+      <li>Mobile first: wireframe a 360 px</li>
+    </ul>
+    <ul class="points">
+      <li>Flexbox, Grid, media query e viewport</li>
+      <li>Grafici con alt, didascalia e tabella</li>
+      <li>Collaudo: W3C, contrasto, tastiera, zoom</li>
+    </ul>
+  </div>
+  <p class="lead">Dubbi su una tappa? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Pubblicare su Novaula la scheda "Lavoro di gruppo" con il brief completo. Il coordinatore di ogni squadra carica un solo zip.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

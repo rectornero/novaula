@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi di elaborazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>I sistemi<br>di elaborazione</h1>
+  <p class="lead">Dal progetto di von Neumann del 1945 al telefono che hai in tasca: lo schema è sempre lo stesso. Oggi apriamo la scatola.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Dati · hardware · von Neumann · CPU · memorie · periferiche</span></div>
+  <aside class="notes">Obiettivi: definire un sistema di elaborazione; distinguere dato e informazione (un byte non significa niente senza interpretazione); descrivere l'architettura di von Neumann, il ciclo della CPU, la gerarchia delle memorie e le periferiche. Durata indicativa: 2 ore. Strumenti: Gestione attività di Windows, Esplora file, LibreOffice Calc, il simulatore Little Man Computer nel browser (peterhigginson.co.uk/lmc, senza account: controllare prima che il sito sia raggiungibile dalla rete della scuola).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti computer ci sono in questa aula, adesso?</h2></div>
+  <div class="poll" data-id="computer-aula">
+    <ol><li>Meno di 10</li><li>Da 10 a 30</li><li>Da 30 a 100</li><li>Più di 100</li></ol>
+  </div>
+  <p class="muted">Conta tutto ciò che ha un processore che esegue un programma.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto contare insieme: PC del laboratorio, smartphone (uno a testa), LIM e proiettore, router e switch, smartwatch, calcolatrici, e poi i sistemi embedded nascosti: ogni tastiera e ogni mouse USB ha un microcontrollore, così come le chiavette USB, gli SSD, i caricabatterie rapidi, le carte con il chip. La risposta "più di 100" è spesso la più vicina al vero. Messaggio: un sistema di elaborazione non è solo "il PC".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Che cos'è un sistema di elaborazione</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un insieme di <b>hardware</b> e <b>software</b> che acquisisce dati, li <mark>elabora seguendo un programma</mark> e produce risultati.</p>
+      <ul class="points">
+        <li><b>Dato</b>: un valore codificato, per il computer sempre una sequenza di bit.</li>
+        <li><b>Informazione</b>: il dato più la sua interpretazione, cioè un significato.</li>
+        <li>Il programma decide <b>come</b> leggere i bit.</li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">01000001</p><h3>Un byte</h3><p>Otto bit, nient'altro. Che cosa vuol dire? Dipende da chi lo legge.</p></div>
+  </div>
+  <aside class="notes">Ripasso dalla prima: dato contro informazione. Il passo in più di quest'anno: dentro il computer tutto è bit, e lo stesso byte può essere un numero, una lettera, un colore o un'istruzione. Lasciare la domanda aperta per il quiz successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In un file trovi il byte 01000001. Che cos'è?</h2></div>
+  <div class="poll" data-id="byte-significato" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il numero 65, perché è binario</li><li>La lettera A, perché è testo</li><li>Dipende dal programma che lo interpreta</li><li>Un errore: i file contengono lettere, non bit</li></ol>
+    <p class="why">Lo stesso byte è 65 per una calcolatrice, la lettera A per un editor di testo (codice ASCII), un grigio scuro per un programma di grafica. I bit non portano con sé il loro significato: lo dà il programma.</p>
+  </div>
+  <aside class="notes">A e B sono entrambe "vere a metà": è proprio questo il punto. La D rivela chi pensa che il computer contenga davvero le lettere. Collegare alla lezione su ASCII e Unicode della stessa unità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un byte, tre significati</p><h2>Gira le carte: 01000001 è…</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Per la calcolatrice</h3><p class="mono">01000001</p></div><div class="retro"><p><b>Il numero 65</b></p><p class="muted">64 + 1: i pesi dove c'è un 1.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Per il Blocco note</h3><p class="mono">01000001</p></div><div class="retro"><p><b>La lettera A</b></p><p class="muted">Nel codice ASCII la A maiuscola ha numero 65.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Per un'immagine in scala di grigi</h3><p class="mono">01000001</p></div><div class="retro"><p><b>Un pixel grigio scuro</b></p><p class="muted">Intensità 65 su una scala da 0 (nero) a 255 (bianco).</p></div></div>
+  </div>
+  <aside class="notes">Far indovinare prima di girare. Aggiungere a voce: per la CPU quel byte potrebbe anche essere parte di un'istruzione. Nel Little Man Computer di oggi vedremo istruzioni e dati scritti nella stessa memoria, come numeri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Hardware</p><h2>I blocchi di ogni sistema di elaborazione</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>CPU</h3><p class="muted small">Esegue le istruzioni: unità di controllo, ALU, registri.</p></div>
+    <div class="card"><h3>Memoria centrale</h3><p class="muted small">La RAM: contiene programmi e dati mentre lavorano.</p></div>
+    <div class="card"><h3>Memorie di massa</h3><p class="muted small">SSD, disco, chiavetta: conservano i dati a computer spento.</p></div>
+    <div class="card"><h3>Periferiche</h3><p class="muted small">Input e output: tastiera, schermo, rete, sensori.</p></div>
+  </div>
+  <div class="callout">Tutti i blocchi sono collegati dal <b>bus di sistema</b>, fatto di tre parti: <b>bus dati</b>, <b>bus indirizzi</b> e <b>bus di controllo</b>.</div>
+  <aside class="notes">Il bus dati trasporta i valori, il bus indirizzi dice quale cella di memoria o quale periferica si vuole usare, il bus di controllo porta i comandi (leggi, scrivi, il segnale di clock). Il firmware (UEFI) è il software scritto in una memoria non volatile della scheda madre: fa partire tutto il resto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'architettura di von Neumann</p><h2>Programma e dati nella stessa memoria</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Input</h3><p class="small">tastiera, rete, sensori</p></div>
+    <div class="card fill"><h3>CPU</h3><p class="small">unità di controllo<br>ALU · registri</p></div>
+    <div class="card soft"><h3>Output</h3><p class="small">schermo, casse, rete</p></div>
+  </div>
+  <div class="card night"><h3>Memoria centrale</h3><p>Una sola memoria, fatta di celle numerate (gli <b>indirizzi</b>). In alcune celle ci sono le <b>istruzioni</b> del programma, in altre i <b>dati</b>: per la memoria sono tutti numeri.</p></div>
+  <aside class="notes">Lo schema viene dal "First Draft of a Report on the EDVAC" (1945), firmato dal solo John von Neumann ma frutto del lavoro del gruppo dell'ENIAC (Eckert, Mauchly e altri): ancora oggi se ne discute il merito. L'idea chiave è il programma memorizzato: per cambiare lavoro non si ricabla la macchina, si carica un altro programma. Il limite storico si chiama "collo di bottiglia di von Neumann": CPU e memoria si parlano attraverso lo stesso canale, e la CPU spesso aspetta i dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un rapporto "provvisorio" che dura da 80 anni</h2></div>
+  <figure class="citazione">
+    <blockquote>Qualsiasi dispositivo che debba eseguire sequenze di operazioni lunghe e complicate deve avere una memoria considerevole.</blockquote>
+    <figcaption><b>John von Neumann</b>, matematico, "First Draft of a Report on the EDVAC", 1945</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il problema della memoria è ancora il centro di tutto. Per far rispondere un grande modello linguistico bisogna spostare miliardi di parametri dalla memoria al processore: spesso il limite non è la velocità dei calcoli ma quella della <b>memoria</b>. Per questo i chip per l'AI usano memorie speciali, molto veloci, montate vicinissime al processore.</p></div>
+  <aside class="notes">Traduzione nostra dall'originale inglese (sezione 2.4 del First Draft): "Any device which is to carry out long and complicated sequences of operations (specifically of calculations) must have a considerable memory." Il ponte con l'AI: la generazione di testo di un LLM, quando risponde a una sola persona, è in gran parte limitata dalla banda di memoria; le GPU per l'AI usano memorie HBM impilate accanto al chip. Non serve entrare nei dettagli: basta il concetto "il collo di bottiglia è la memoria".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La CPU</p><h2>Prendi, decodifica, esegui. Miliardi di volte al secondo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points">
+        <li><b>Unità di controllo</b>: legge le istruzioni e comanda le altre parti.</li>
+        <li><b>ALU</b>: fa i calcoli aritmetici e logici.</li>
+        <li><b>Registri</b>: piccolissime memorie interne; il <b>PC</b> (program counter) contiene l'indirizzo della prossima istruzione.</li>
+        <li><b>Clock</b>: 3 GHz = 3 miliardi di cicli al secondo. <b>Core</b>: più CPU nello stesso chip.</li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">1971</p><h3>Intel 4004</h3><p class="small">Il primo microprocessore in vendita, progettato con l'italiano <b>Federico Faggin</b>: circa 2300 transistor. Oggi i chip più grandi ne hanno decine di miliardi.</p></div>
+  </div>
+  <aside class="notes">Il ciclo si chiama fetch-decode-execute: prelievo, decodifica, esecuzione. Faggin, nato a Vicenza nel 1941, guidò il progetto del 4004 alla Intel e inventò la tecnica di fabbricazione (silicon gate) che lo rese possibile; poi fondò la Zilog (Z80). I GHz da soli non dicono tutto: conta anche quante istruzioni si eseguono per ciclo e quanti core lavorano insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il ciclo di un'istruzione</h2></div>
+  <ol class="puzzle-ordina" data-id="ciclo-cpu">
+    <li>Il PC indica l'indirizzo della prossima istruzione</li>
+    <li>L'istruzione viene letta dalla memoria (fetch)</li>
+    <li>L'unità di controllo la decodifica (decode)</li>
+    <li>La ALU esegue il calcolo (execute)</li>
+    <li>Il risultato va in un registro o in memoria</li>
+    <li>Il PC passa all'istruzione successiva e si ricomincia</li>
+  </ol>
+  <aside class="notes">Lavoro a coppie, 3 minuti. Errore tipico: mettere l'esecuzione prima della decodifica. Precisare che il PC viene incrementato di solito subito dopo il fetch: nell'ordine del puzzle lo mettiamo alla fine per chiarezza, come "si passa alla successiva". Lo rivedremo dal vivo nel Little Man Computer.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Spia la CPU e la RAM del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Ctrl + Maiusc + Esc</b>: si apre Gestione attività. Vai su <b>Prestazioni</b>, poi <b>CPU</b>.</li>
+      <li>Annota: nome del processore, velocità di base, core, processori logici, cache L1, L2, L3.</li>
+      <li>Clicca su <b>Memoria</b>: annota RAM totale, in uso e velocità.</li>
+      <li>Apri un video nel browser e guarda come cambia l'utilizzo della CPU.</li>
+      <li>Scrivi tutto in Calc e salva come <b>cpu-ram-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i processori logici sono uguali o più numerosi dei core; la cache cresce da L1 a L3 (da centinaia di KB a diversi MB); la RAM si misura in GB.</div>
+  </div>
+  <aside class="notes">Se i processori logici sono il doppio dei core, la CPU usa l'hyper-threading (o SMT): ogni core gestisce due flussi di istruzioni. La cache è una memoria piccola e velocissima dentro la CPU. Alternativa se Gestione attività è bloccata: nel Prompt dei comandi il comando systeminfo mostra processore e memoria fisica totale. Far confrontare i risultati tra due postazioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le memorie</p><h2>Più è veloce, più è piccola (e costosa)</h2></div>
+  <table class="data compact">
+    <tr><th>Memoria</th><th>Dove sta</th><th>Tempo di accesso (ordine di grandezza)</th><th>Se 1 ns fosse 1 secondo…</th></tr>
+    <tr><td>Registri e cache L1</td><td>dentro la CPU</td><td class="mono">circa 1 ns</td><td>1 secondo</td></tr>
+    <tr><td>RAM</td><td>sulla scheda madre</td><td class="mono">circa 100 ns</td><td>quasi 2 minuti</td></tr>
+    <tr><td>SSD</td><td>memoria di massa</td><td class="mono">circa 0,1 ms</td><td>più di un giorno</td></tr>
+    <tr><td>Disco a piatti (HDD)</td><td>memoria di massa</td><td class="mono">circa 10 ms</td><td>circa 4 mesi</td></tr>
+  </table>
+  <div class="callout">RAM e cache sono <b>volatili</b>: si svuotano quando togli la corrente. SSD e HDD sono <b>non volatili</b>.</div>
+  <aside class="notes">Valori indicativi, solo ordini di grandezza (variano molto tra modelli): sono quelli della nota tabella "Latency numbers every programmer should know". Conti della colonna di destra: 100 ns → 100 s; 0,1 ms = 100 000 ns → 100 000 s ≈ 28 ore; 10 ms = 10 000 000 ns → 10 milioni di secondi ≈ 116 giorni. Domanda: perché allora non facciamo tutto con la cache? Costa troppo per byte e scalda. Da qui la gerarchia delle memorie, che riprenderemo nell'Unità 7.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Compri un SSD da 1 TB. Windows mostra circa 931 GB. Perché?</h2></div>
+  <div class="poll" data-id="tera-931" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il sistema operativo occupa 69 GB</li><li>Il produttore conta 1 TB = 10¹² byte, Windows divide per 1024³</li><li>Il disco è difettoso e va restituito</li><li>Una parte del disco è riservata ai file nascosti</li></ol>
+    <p class="why">Per il produttore (e per il Sistema Internazionale) 1 TB = 1 000 000 000 000 byte. Windows divide per 1024 × 1024 × 1024 ma scrive "GB": 10¹² / 1024³ ≈ 931. Il nome corretto della sua unità sarebbe GiB (gibibyte).</p>
+  </div>
+  <aside class="notes">Il trabocchetto classico: 1 KB = 1000 o 1024 byte? Dal 1998 la IEC ha introdotto i prefissi binari: 1 KiB = 1024 byte, 1 MiB = 1024², 1 GiB = 1024³. kB, MB, GB nel senso del SI sono potenze di 1000. Windows usa le potenze di 1024 con i nomi del SI; macOS dal 2009 usa le potenze di 1000. La A è il distrattore più scelto: lo spazio occupato dal sistema compare come "spazio usato", non riduce la capacità. Lo verifichiamo subito nel prossimo laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Smaschera i gigabyte del tuo disco</h2>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th></tr>
+    <tr><th>1</th><td>Capacità in byte</td><td>÷ 1000³</td><td>÷ 1024³</td></tr>
+    <tr><th>2</th><td>(dal disco C:)</td><td class="f">=A2/POTENZA(1000;3)</td><td class="f sel">=A2/POTENZA(1024;3)</td></tr>
+  </table>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Esplora file, <b>Questo PC</b>, tasto destro su <b>C:</b>, <b>Proprietà</b>: copia la capacità in byte in A2 (senza i punti).</li>
+      <li>Scrivi le formule in B2 e C2. Quale colonna dà il numero in GB scritto da Windows?</li>
+      <li>Salva come <b>disco-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il valore di Windows coincide con la colonna C. La colonna B è più grande di circa il 7%.</div>
+  </div>
+  <aside class="notes">Esempio: 511 101 054 976 byte → B: 511,1; C: 475,9 (Windows scrive 475 GB). Il rapporto 1024³ / 1000³ ≈ 1,074: per questo la differenza è circa il 7% sui GB e circa il 10% sui TB (1024⁴ / 1000⁴ ≈ 1,0995). Se i PC della scuola non permettono di vedere le proprietà di C:, usare una chiavetta USB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le periferiche</p><h2>Abbina ogni dispositivo al suo ruolo</h2></div>
+  <dl class="puzzle-abbina" data-id="periferiche">
+    <dt>Microfono</dt><dd>Solo input: trasforma il suono in numeri</dd>
+    <dt>Stampante</dt><dd>Solo output: porta i dati sulla carta</dd>
+    <dt>Touchscreen</dt><dd>Input e output nello stesso pannello</dd>
+    <dt>SSD esterno</dt><dd>Memoria di massa collegata via USB</dd>
+    <dt>Scheda di rete</dt><dd>Comunicazione: dati che entrano ed escono da altri computer</dd>
+  </dl>
+  <aside class="notes">Discussione: la scheda di rete e il touchscreen sono periferiche di input/output. Ogni periferica parla con il sistema operativo attraverso un driver (lo vedremo nella prossima lezione). Domanda bonus: la fotocamera del telefono è input o output? Input; il flash è un output.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Programma un computer di von Neumann</h2>
+  <div class="cols-2">
+<pre class="code" style="font-size:30px">     INP
+     STA A
+     INP
+     ADD A
+     OUT
+     HLT
+A    DAT</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Apri <b>peterhigginson.co.uk/lmc</b> (Little Man Computer, senza account).</li>
+        <li>Scrivi il programma nel riquadro a sinistra e premi il pulsante che lo carica nella RAM (<i>Submit</i> o <i>Assemble into RAM</i>).</li>
+        <li>Premi <b>Run</b>, inserisci 25 e poi 17. Rifallo con <b>Step</b>, guardando PC e accumulatore.</li>
+        <li>Fai uno screenshot e salvalo come <b>lmc-cognome.png</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> l'output è 42. Nelle celle 0–5 della RAM leggi 901 306 901 106 902 000: sono le istruzioni, scritte come numeri accanto ai dati.</div>
+    </div>
+  </div>
+  <aside class="notes">Il Little Man Computer è un modello didattico di macchina di von Neumann (ideato da Stuart Madnick al MIT nel 1965). Codici: INP 901, OUT 902, HLT 000, ADD 1xx, SUB 2xx, STA 3xx, LDA 5xx; xx è l'indirizzo. STA A salva il primo numero nella cella 6 (A), ADD A lo somma all'accumulatore. Sfida extra: cambiare ADD in SUB per fare la sottrazione (attenzione all'ordine: viene secondo meno primo). Se il sito non è raggiungibile: simulazione su carta alla lavagna, con una tabella di 7 celle e due studenti che fanno la CPU e la memoria.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo schema oggi</p><h2>Il telefono: un intero computer in un chip</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>CPU</h3><p class="muted small">Più core, alcuni potenti e altri a basso consumo.</p></div>
+    <div class="card"><h3>GPU</h3><p class="muted small">Migliaia di unità semplici che lavorano in parallelo: grafica e calcoli.</p></div>
+    <div class="card"><h3>NPU</h3><p class="muted small">Unità per le reti neurali: moltiplicazioni tra matrici, velocissime e a basso consumo.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel telefono CPU, GPU, NPU e controller di memoria stanno sullo stesso chip, il <b>SoC</b> (System on a Chip). La NPU fa girare l'AI direttamente sul dispositivo: sfocatura dello sfondo, riconoscimento vocale, traduzione, senza mandare i dati in rete. Lo schema di von Neumann è ancora lì: unità di calcolo, memoria, input e output.</p></div>
+  <aside class="notes">Chiedere: perché l'AI preferisce GPU e NPU alla CPU? Perché una rete neurale fa soprattutto moltiplicazioni e somme tutte uguali, che si possono fare in parallelo. Collegamento alla privacy: se il calcolo avviene sul telefono, i dati non escono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="5843" data-aiuto="la prima cifra viene dall'anno del First Draft, 1945">
+    <ul class="points">
+      <li>1ª cifra: l'ultima cifra dell'anno del "First Draft" di von Neumann</li>
+      <li>2ª cifra: quanti bit ci sono in un byte</li>
+      <li>3ª cifra: la prima cifra del nome del primo microprocessore Intel</li>
+      <li>4ª cifra: in quante parti si divide il bus di sistema</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1945, 8 bit, Intel 4004, bus dati, indirizzi e controllo.</div>
+  </div>
+  <aside class="notes">Codice: 5843. A squadre di 4: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nell'architettura di von Neumann istruzioni e dati stanno nella stessa <span class="blank" data-risposta="memoria|ram" style="--w:9ch"></span>.</p>
+    <p>Il registro che contiene l'indirizzo della prossima istruzione si chiama <span class="blank" data-risposta="pc|program counter" style="--w:9ch"></span>.</p>
+    <p>Una CPU a 3 GHz compie 3 <span class="blank" data-risposta="miliardi" style="--w:9ch"></span> di cicli al secondo.</p>
+    <p>La RAM perde i dati senza corrente: è una memoria <span class="blank" data-risposta="volatile" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: memoria (accettato RAM), PC (accettato program counter), miliardi, volatile.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un byte non ha significato: glielo dà il programma</li>
+      <li>Von Neumann: CPU, memoria unica, input e output, bus</li>
+      <li>La CPU ripete fetch, decode, execute</li>
+    </ul>
+    <ul class="points">
+      <li>Memorie: più veloci, più piccole; volatili e non</li>
+      <li>1 TB per il produttore = 10¹² byte ≈ 931 GiB</li>
+      <li>Nel telefono tutto è in un SoC, con la NPU per l'AI</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: la carta d'identità hardware di un dispositivo di casa.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

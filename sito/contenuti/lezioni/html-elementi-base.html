@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gli elementi base di HTML · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Gli elementi base<br>di HTML</h1>
+  <p class="lead">Tag, elementi, attributi: la lingua che il server spedisce e il browser legge. Oggi scrivi la tua prima pagina con il Blocco note, come nel 1991.</p>
+  <aside class="notes">Obiettivi: capire che HTML è un linguaggio di markup; distinguere tag, elemento, attributo e valore; scrivere la struttura minima di una pagina (doctype, html, head, body, meta charset, title); usare titoli, paragrafi, a capo e formattazione del testo; scrivere i caratteri speciali con le entità; annidare correttamente; validare con il W3C. Durata: 2 ore. Servono Blocco note (o VS Code se installato) e un browser; CodePen funziona senza account.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai scritto una pagina in HTML?</h2></div>
+  <div class="poll" data-id="html-esperienza">
+    <ol><li>Mai</li><li>Ho copiato del codice senza capirlo</li><li>Sì, in un corso o a scuola</li><li>Sì, da solo, per un mio progetto</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio senza giudizio. Chi ha già esperienza può fare da tutor nei laboratori: formare coppie miste. Ricordare la pagina del CERN vista nella lezione sul web: aveva i tag in maiuscolo, ma era già HTML.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è HTML</p><h2>HTML descrive, il browser disegna</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead"><b>H</b>yper<b>T</b>ext <b>M</b>arkup <b>L</b>anguage: un linguaggio di <mark>marcatura</mark>. Metti delle etichette intorno al testo per dire che cosa è: un titolo, un paragrafo, un link.</p>
+      <ul class="points"><li>Non è un linguaggio di programmazione: niente variabili, niente cicli</li><li>È solo testo: si scrive con qualunque editor</li><li>Lo standard oggi è l'<b>HTML Living Standard</b> del WHATWG</li></ul>
+    </div>
+    <pre class="code"><span class="k">&lt;h1&gt;</span>Ricetta<span class="k">&lt;/h1&gt;</span>
+<span class="k">&lt;p&gt;</span>Servono
+  <span class="k">&lt;strong&gt;</span>3 uova<span class="k">&lt;/strong&gt;</span>.
+<span class="k">&lt;/p&gt;</span></pre>
+  </div>
+  <aside class="notes">Il "markup" viene dalla tipografia: i correttori segnavano a mano sui fogli che cosa era titolo, corsivo, grassetto. HTML5 è stato raccomandazione W3C nel 2014; dal 2019 W3C e WHATWG hanno concordato che lo standard unico è il Living Standard del WHATWG (html.spec.whatwg.org), aggiornato di continuo. Domanda: "Perché non è programmazione?" Perché non fa calcoli né decisioni: descrive un documento. La logica arriverà con JavaScript, nei prossimi anni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Anatomia di un elemento</p><h2>Tag, contenuto, attributo</h2></div>
+  <div class="formula" style="font-size:52px"><small>un elemento completo</small><span class="hl">&lt;a</span> href="https://info.cern.ch"<span class="hl">&gt;</span>Il primo sito<span class="hl">&lt;/a&gt;</span></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Tag di apertura</h3><p class="small"><code>&lt;a …&gt;</code> tra parentesi angolari</p></div>
+    <div class="card soft"><h3>Attributo</h3><p class="small"><code>href="…"</code>: nome = "valore", solo nel tag di apertura</p></div>
+    <div class="card soft"><h3>Contenuto</h3><p class="small">Il testo che vedi: <i>Il primo sito</i></p></div>
+    <div class="card soft"><h3>Tag di chiusura</h3><p class="small"><code>&lt;/a&gt;</code> con la barra</p></div>
+  </div>
+  <p class="small muted">Elementi vuoti, senza contenuto e senza chiusura: <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;meta&gt;</code>.</p>
+  <aside class="notes">Elemento = tag di apertura + contenuto + tag di chiusura. Il tag è solo l'etichetta tra &lt; e &gt;. Un elemento può avere più attributi separati da spazi; i valori vanno tra virgolette (in HTML a volte si possono omettere, ma noi le mettiamo sempre). Negli elementi vuoti si vede a volte &lt;br /&gt; con la barra finale: è un'abitudine ereditata da XHTML, accettata ma non necessaria.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua parte di codice</h2></div>
+  <dl class="puzzle-abbina" data-id="html-termini">
+    <dt>Tag di chiusura</dt><dd><code>&lt;/p&gt;</code></dd>
+    <dt>Attributo</dt><dd><code>lang</code> in <code>&lt;html lang="it"&gt;</code></dd>
+    <dt>Valore</dt><dd><code>it</code> in <code>&lt;html lang="it"&gt;</code></dd>
+    <dt>Elemento vuoto</dt><dd><code>&lt;br&gt;</code></dd>
+    <dt>Elemento completo</dt><dd><code>&lt;em&gt;subito&lt;/em&gt;</code></dd>
+  </dl>
+  <aside class="notes">Il tranello è tra attributo e valore: l'attributo è il nome (lang), il valore è ciò che sta tra virgolette (it). Far notare che "tag" ed "elemento" nel parlato si confondono spesso, ma non sono la stessa cosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La struttura minima</p><h2>Lo scheletro di ogni pagina</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:29px"><span class="k">&lt;!DOCTYPE html&gt;</span>
+<span class="k">&lt;html</span> lang=<span class="s">"it"</span><span class="k">&gt;</span>
+<span class="k">&lt;head&gt;</span>
+  <span class="k">&lt;meta</span> charset=<span class="s">"utf-8"</span><span class="k">&gt;</span>
+  <span class="k">&lt;title&gt;</span>La mia pagina<span class="k">&lt;/title&gt;</span>
+<span class="k">&lt;/head&gt;</span>
+<span class="k">&lt;body&gt;</span>
+  <span class="k">&lt;h1&gt;</span>Ciao, web!<span class="k">&lt;/h1&gt;</span>
+  <span class="k">&lt;p&gt;</span>La mia prima pagina.<span class="k">&lt;/p&gt;</span>
+<span class="k">&lt;/body&gt;</span>
+<span class="k">&lt;/html&gt;</span></pre>
+    <div class="stack">
+      <div class="card soft"><h3>head</h3><p class="small">Informazioni <b>sulla</b> pagina: codifica dei caratteri, titolo della scheda. Non si vede nella pagina.</p></div>
+      <div class="card"><h3>body</h3><p class="small">Tutto quello che il visitatore <b>vede</b>: testi, immagini, link.</p></div>
+    </div>
+  </div>
+  <aside class="notes">DOCTYPE dice al browser di usare le regole moderne (senza, entra in "quirks mode" e imita i vecchi browser). lang="it" serve a screen reader, traduttori e correttori. meta charset="utf-8": collegarsi alla codifica UTF-8 vista nell'Unità 1; senza, le lettere accentate possono diventare simboli strani (è) se il file è salvato in un'altra codifica. Il title compare nella scheda del browser, nei preferiti e nei risultati dei motori di ricerca. Indentare (rientrare) il codice non cambia nulla per il browser, ma lo rende leggibile per le persone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle a squadre</p><h2>Rimetti in ordine lo scheletro</h2></div>
+  <ol class="puzzle-ordina" data-id="html-scheletro">
+    <li><code>&lt;!DOCTYPE html&gt;</code></li>
+    <li><code>&lt;html lang="it"&gt;</code></li>
+    <li><code>&lt;head&gt;</code></li>
+    <li><code>&lt;title&gt;Orario 3E&lt;/title&gt;</code></li>
+    <li><code>&lt;/head&gt;</code></li>
+    <li><code>&lt;body&gt;</code></li>
+    <li><code>&lt;/html&gt;</code></li>
+  </ol>
+  <aside class="notes">Il body qui è solo aperto: chiedere alla classe che cosa manca prima di &lt;/html&gt; (la chiusura &lt;/body&gt; e il contenuto). Errore tipico: mettere title dentro body, o &lt;/head&gt; dopo &lt;body&gt;. Gara a squadre da 90 secondi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La prima pagina con il Blocco note</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea sul Desktop la cartella <b>web-cognome</b>.</li>
+      <li>Apri il <b>Blocco note</b> e scrivi lo scheletro della slide precedente; nel body metti un <code>&lt;h1&gt;</code> con il tuo nome e un paragrafo su di te.</li>
+      <li><b>File › Salva con nome</b>: nome <b>index.html</b>, tipo <b>Tutti i file</b>, codifica <b>UTF-8</b>.</li>
+      <li>Fai doppio clic sul file: si apre nel browser.</li>
+      <li>Cambia una parola, salva (Ctrl+S) e nel browser premi <b>F5</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la scheda del browser mostra il testo del tuo <code>&lt;title&gt;</code>; le lettere accentate si vedono bene; dopo F5 compare la modifica. Se si apre di nuovo il Blocco note, il file si chiama <b>index.html.txt</b>!</div>
+  </div>
+  <aside class="notes">Il problema index.html.txt è il più frequente: in Esplora file attivare Visualizza › Mostra › Estensioni nomi file. Se le accentate escono come "Ã¨", il file non è in UTF-8 oppure manca il meta charset. Chi ha VS Code può usarlo (scrivendo ! e premendo Tab genera lo scheletro, ma chiedere di scriverlo a mano almeno la prima volta). Conservare la cartella: servirà nelle prossime lezioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Titoli e paragrafi</p><h2>I titoli sono una mappa, non una taglia</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points"><li><code>&lt;h1&gt;</code>…<code>&lt;h6&gt;</code>: sei livelli di titolo, dal più importante</li><li><code>&lt;p&gt;</code>: un paragrafo; <code>&lt;br&gt;</code>: va a capo nello stesso paragrafo</li><li><code>&lt;hr&gt;</code>: una linea che separa due parti</li><li>Un solo <code>&lt;h1&gt;</code> per pagina e non saltare livelli (da h2 non si passa a h4)</li></ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Chi usa uno <b>screen reader</b> salta da un titolo all'altro come in un indice. Anche gli <b>agenti AI</b> che navigano i siti per conto di qualcuno leggono la struttura della pagina, non i colori: titoli ben fatti aiutano persone e macchine.</p></div>
+  </div>
+  <aside class="notes">Errore classico: usare h3 perché "è della grandezza giusta". La grandezza si decide con i CSS (lezione 4); il livello del titolo dice quanto è importante quel pezzo nella struttura. Gli screen reader (NVDA su Windows, VoiceOver su iPhone) hanno un tasto per passare al titolo successivo (H in NVDA). Gli agenti che usano il browser lavorano in genere sul DOM o sull'albero di accessibilità della pagina, cioè proprio sulla struttura HTML. Si riprende nell'Unità 5 sull'accessibilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel codice scrivi questo. Che cosa mostra il browser?</h2></div>
+  <pre class="code" style="align-self:flex-start;padding:20px 40px"><span class="k">&lt;p&gt;</span>Ciao        mondo
+
+   bello<span class="k">&lt;/p&gt;</span></pre>
+    <div class="poll" data-id="html-spazi" data-tipo="quiz" data-risposta="C">
+      <ol><li>Tutto uguale, con spazi e righe vuote</li><li>Un errore: troppi spazi</li><li>Ciao mondo bello, su una riga</li><li>Due righe: Ciao mondo, poi bello</li></ol>
+      <p class="why">Il browser riduce ogni gruppo di spazi, tabulazioni e a capo a un solo spazio. Per andare a capo serve &lt;br&gt; o un nuovo &lt;p&gt;.</p>
+    </div>
+  <aside class="notes">È la sorpresa più grande per chi arriva da Word. Per questo l'indentazione del codice non cambia l'aspetto della pagina. Se serve davvero uno spazio in più si usa l'entità &amp;nbsp; (spazio unificatore), ma di solito si fa con i CSS. Fanno eccezione gli elementi &lt;pre&gt;, che mantengono spazi e a capo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il testo</p><h2>Significato prima dell'aspetto</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Codice</th><th>Risultato</th></tr>
+      <tr><td class="mono">&lt;strong&gt;</td><td><strong>importante</strong> (grassetto)</td></tr>
+      <tr><td class="mono">&lt;em&gt;</td><td><em>enfasi</em> (corsivo)</td></tr>
+      <tr><td class="mono">&lt;mark&gt;</td><td><mark>evidenziato</mark></td></tr>
+      <tr><td class="mono">H&lt;sub&gt;2&lt;/sub&gt;O</td><td>H<sub>2</sub>O</td></tr>
+      <tr><td class="mono">2&lt;sup&gt;10&lt;/sup&gt;</td><td>2<sup>10</sup></td></tr>
+    </table>
+    <table class="data compact">
+      <tr><th>Entità</th><th>Carattere</th></tr>
+      <tr><td class="mono">&amp;lt;</td><td class="mono">&lt;</td></tr>
+      <tr><td class="mono">&amp;gt;</td><td class="mono">&gt;</td></tr>
+      <tr><td class="mono">&amp;amp;</td><td class="mono">&amp;</td></tr>
+      <tr><td class="mono">&amp;nbsp;</td><td>spazio che non va a capo</td></tr>
+      <tr><td class="mono">&amp;copy;</td><td>&copy;</td></tr>
+    </table>
+  </div>
+  <aside class="notes">strong ed em dicono "questo è importante / enfatizzato" (uno screen reader può cambiare il tono); b e i esistono ancora ma indicano solo uno stile senza significato particolare. Le entità servono per i caratteri che HTML usa per sé: se scrivo "3 &lt; 5" con il simbolo minore, il browser potrebbe pensare all'inizio di un tag. Con UTF-8 le lettere accentate si scrivono direttamente, non servono &amp;egrave; e simili. 2 alla 10 = 1024: il KiB visto nell'Unità 1.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio di testo su CodePen</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>codepen.io/pen</b>: si usa senza account. Lavora nel riquadro <b>HTML</b>.</li>
+      <li>Scrivi un <code>&lt;h1&gt;</code> "Formule e simboli" e tre paragrafi.</li>
+      <li>Paragrafo 1: <i>2<sup>10</sup> byte = 1024 byte = 1 KiB</i>.</li>
+      <li>Paragrafo 2: <i>3 &lt; 5 &amp;&amp; 5 &gt; 2</i>, usando le entità per i simboli.</li>
+      <li>Paragrafo 3: <i>la formula dell'acqua è H<sub>2</sub>O</i>, con la parola acqua <b>importante</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'anteprima in basso mostra l'esponente in alto e il 2 dell'acqua in basso; i simboli &lt; &gt; &amp;&amp; si vedono come testo. Copia il codice nel Blocco note e salvalo come <b>simboli.html</b> nella cartella web-cognome.</div>
+  </div>
+  <aside class="notes">Soluzione paragrafo 2: &lt;p&gt;3 &amp;lt; 5 &amp;amp;&amp;amp; 5 &amp;gt; 2&lt;/p&gt;. In pratica "3 &lt; 5" con lo spazio spesso viene mostrato bene lo stesso perché il browser perdona: per questo si usa il validatore. Paragrafo 3: &lt;p&gt;La formula dell'&lt;strong&gt;acqua&lt;/strong&gt; è H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;. Senza account CodePen non salva in modo permanente: per questo si copia nel Blocco note. Alternativa se CodePen è bloccato: jsfiddle.net, oppure direttamente Blocco note e browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Una tecnologia fatta per le persone</h2></div>
+  <figure class="citazione">
+    <blockquote>Il web è più una creazione sociale che tecnica. L'ho progettato per un effetto sociale, per aiutare le persone a lavorare insieme, e non come un giocattolo tecnico.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del web, nel libro <i>Weaving the Web</i>, 1999</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un assistente di programmazione con l'AI scrive una pagina HTML in pochi secondi. Ma può sbagliare l'annidamento o inventare attributi che non esistono: chi sa leggere l'HTML se ne accorge, chi lo incolla e basta no. Il validatore del W3C non si lascia convincere.</p></div>
+  <aside class="notes">Originale: "The Web is more a social creation than a technical one. I designed it for a social effect, to help people work together, and not as a technical toy." (Weaving the Web, 1999; in italiano "L'architettura del nuovo Web"). Traduzione nostra. Domanda: "Se oggi un'AI scrive il codice, a che cosa serve impararlo?" Far emergere: per controllarlo, correggerlo e capire che cosa chiedere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Annidamento</p><h2>Chi apre per ultimo, chiude per primo</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Giusto</h3><pre class="code">&lt;p&gt;Ciao &lt;strong&gt;mondo&lt;/strong&gt;&lt;/p&gt;</pre><p class="small">Le scatole stanno una dentro l'altra.</p></div>
+    <div class="card bad"><h3>Sbagliato</h3><pre class="code">&lt;p&gt;Ciao &lt;strong&gt;mondo&lt;/p&gt;&lt;/strong&gt;</pre><p class="small">Le scatole si incrociano.</p></div>
+  </div>
+  <p class="lead">Gli elementi formano un <b>albero</b>: html contiene head e body, body contiene h1 e p, p contiene strong. Il browser lo chiama <b>DOM</b>.</p>
+  <aside class="notes">Analogia delle matrioske o delle parentesi in matematica: ( [ ] ) va bene, ( [ ) ] no. Il DOM (Document Object Model) si vede nei DevTools, scheda Elements/Elementi: far notare i triangolini che aprono e chiudono i rami dell'albero. Le pre in queste card sono strette: leggerle ad alta voce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Dimentichi di chiudere un &lt;p&gt;. Che cosa succede?</h2></div>
+  <div class="poll" data-id="html-errore" data-tipo="quiz" data-risposta="A">
+    <ol><li>Quasi sempre la pagina si vede lo stesso</li><li>Pagina bianca: il browser si blocca</li><li>Compare un messaggio di errore rosso</li><li>Tutto il testo dopo diventa grassetto</li></ol>
+    <p class="why">I browser sono molto tolleranti: correggono da soli molti errori seguendo regole precise. Così però gli errori restano nascosti e possono fare danni altrove (stili sbagliati, screen reader confusi). Per trovarli serve un validatore.</p>
+  </div>
+  <aside class="notes">Lo standard HTML definisce esattamente come i browser devono recuperare dagli errori: per questo tutti i browser mostrano la stessa cosa anche con codice sbagliato. Diverso da Java, dove un errore di sintassi impedisce di compilare: bel confronto con l'Unità 3. La D è un effetto che si può vedere davvero con un &lt;strong&gt; non chiuso, non con un &lt;p&gt;.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia agli errori con il validatore W3C</h2>
+  <div class="cols-2">
+    <pre class="code" style="font-size:26px">&lt;!DOCTYPE html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;&lt;title&gt;Errori&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Benvenuti&lt;/h2&gt;
+&lt;p&gt;Testo &lt;strong&gt;importante&lt;/p&gt;&lt;/strong&gt;
+&lt;img src="logo.png"&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Ricopia il codice in un file <b>errori.html</b>.</li>
+        <li>Apri <b>validator.w3.org</b>, scheda <b>Validate by Direct Input</b>, incolla e premi <b>Check</b>.</li>
+        <li>Correggi un errore alla volta e ricontrolla. Aggiungi anche <code>&lt;meta charset="utf-8"&gt;</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> 3 problemi (h1 chiuso con h2, strong incrociato, img senza alt) e alla fine "No errors or warnings to show".</div>
+    </div>
+  </div>
+  <aside class="notes">Correzioni: &lt;h1&gt;Benvenuti&lt;/h1&gt;; &lt;p&gt;Testo &lt;strong&gt;importante&lt;/strong&gt;&lt;/p&gt;; &lt;img src="logo.png" alt="Logo della scuola"&gt;. Il validatore può contare un errore in più per lo stesso problema (per esempio "End tag p violates nesting rules" e poi "Stray end tag strong"): far capire che contano le cause, non il numero di righe rosse. Poi validare anche il proprio index.html del primo laboratorio (Validate by File Upload). Il validatore è in inglese: buona occasione per tradurre insieme i messaggi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="6144" data-aiuto="la seconda cifra: quanti spazi restano di tanti spazi di fila">
+    <ul class="points">
+      <li>1ª cifra: quanti livelli di titolo esistono in HTML</li>
+      <li>2ª cifra: quanti spazi mostra il browser se nel codice ne scrivi otto di fila</li>
+      <li>3ª cifra: quante lettere ha la sigla del linguaggio di oggi</li>
+      <li>4ª cifra: l'ultima cifra del risultato di 2<sup>10</sup></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> h1…h6, un solo spazio, H-T-M-L, 1024.</div>
+  </div>
+  <aside class="notes">Codice: 6144. A squadre. Errore tipico: rispondere 8 alla seconda cifra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il titolo che compare nella scheda del browser va nell'elemento <span class="blank" data-risposta="title|&lt;title&gt;"></span>.</p>
+    <p>Quello che il visitatore vede sta dentro l'elemento <span class="blank" data-risposta="body|&lt;body&gt;"></span>.</p>
+    <p>In <code>&lt;html lang="it"&gt;</code>, la parola lang è un <span class="blank" data-risposta="attributo"></span>.</p>
+    <p>Per scrivere il simbolo &lt; si usa l'entità <span class="blank" style="--w:8ch" data-risposta="&amp;lt;|&amp;lt|lt"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: title, body, attributo, &amp;lt; (accettato anche senza punto e virgola).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>HTML è un linguaggio di marcatura, non di programmazione</li>
+      <li>Elemento = tag di apertura + contenuto + tag di chiusura</li>
+      <li>Scheletro: doctype, html, head (meta, title), body</li>
+    </ul>
+    <ul class="points">
+      <li>h1-h6 danno la struttura; p, br, strong, em il testo</li>
+      <li>Spazi multipli = uno spazio; simboli speciali con le entità</li>
+      <li>Annidamento corretto, e il validatore W3C come arbitro</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito su Novaula. Prossima lezione: link, immagini, elenchi e tabelle, usando la cartella web-cognome creata oggi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

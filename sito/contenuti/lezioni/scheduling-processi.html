@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gli algoritmi di scheduling dei processi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.gantt-box{display:flex;flex-direction:column;gap:8px}
+.gantt{display:flex;height:104px;border:3px solid var(--ink);border-radius:14px;overflow:hidden}
+.gantt>div{display:grid;place-items:center;font-family:var(--display);font-weight:750;font-size:36px;color:#fff;border-right:3px solid #fff}
+.gantt>div:last-child{border-right:0}
+.g1{background:#2f6fde}.g2{background:#11845f}.g3{background:#d0541f}.g4{background:#7e45cc}
+.tempi{position:relative;height:40px;font-family:var(--mono);font-size:28px;color:var(--muted)}
+.tempi span{position:absolute;top:0;transform:translateX(-50%)}
+.tempi span:first-child{transform:none}
+.tempi span:last-child{transform:translateX(-100%)}
+</style>
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>Gli algoritmi di<br>scheduling dei processi</h1>
+  <p class="lead">Una CPU, tanti processi in coda. Chi passa per primo? Quattro regole diverse, quattro risultati diversi: li calcoliamo a mano, in Calc e giocando a fare la CPU.</p>
+  <p class="meta"><span class="chip">3E TPSI</span><span>FCFS, SJF, priorità, Round Robin, diagrammi di Gantt</span></p>
+  <aside class="notes">Obiettivi: conoscere gli algoritmi FCFS, SJF, a priorità e Round Robin; distinguere scheduling con e senza prelazione; disegnare il diagramma di Gantt e calcolare tempi di attesa, di completamento e di risposta e le loro medie; costruire in Calc un foglio per l'FCFS con tempi di arrivo diversi. Durata indicativa: 3 ore (una di teoria con esercizi, una di gioco a squadre, una di laboratorio). Materiale: lavagna o LIM, pennarelli (uno solo per il gioco della CPU), fogli a quadretti. Esempio guida usato in tutta la lezione: P1, P2, P3, P4 con burst 6, 3, 8, 2, tutti arrivati al tempo 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Al supermercato hai il carrello pieno. Dietro di te c'è chi ha solo una bottiglia d'acqua.</h2></div>
+  <div class="poll" data-id="sched-supermercato">
+    <ol><li>Lo faccio passare, sempre</li><li>No: chi prima arriva, prima è servito</li><li>Dipende da quanta fretta ho io</li><li>Solo se me lo chiede</li></ol>
+  </div>
+  <aside class="notes">Ogni risposta è un algoritmo di scheduling: A è SJF (prima il lavoro più corto), B è FCFS, C è a priorità, D è una politica in cui il processo chiede di cambiare posto. Tornare su questo sondaggio a fine lezione: far passare chi ha una bottiglia abbassa l'attesa media di tutti (lo dimostreremo con i numeri).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo scheduler</p><h2>La parte del kernel che sceglie chi usa la CPU</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Senza prelazione</h3><p>Il processo tiene la CPU finché termina o si mette in attesa da solo. <span class="muted">(non preemptive)</span></p><p class="muted">FCFS, SJF, priorità nella versione base.</p></div>
+    <div class="card soft"><h3>Con prelazione</h3><p>Il sistema può <b>togliere</b> la CPU a un processo, per esempio quando scade il suo tempo. <span class="muted">(preemptive)</span></p><p class="muted">Round Robin; Windows, Linux, Android, iOS.</p></div>
+  </div>
+  <div class="callout">Il <b>burst</b> di CPU è il tempo di cui un processo ha bisogno per lavorare senza interruzioni. Oggi lo misuriamo in "unità di tempo" (per esempio millisecondi).</div>
+  <aside class="notes">Collegamento con la lezione sui processi: lo scheduler sceglie quale processo passa da Pronto a Esecuzione. Con prelazione serve un interrupt del timer che riporti il controllo al kernel (lo vedremo nella lezione sugli interrupt). Tutti i sistemi operativi moderni per PC e telefoni usano scheduling con prelazione e priorità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'esempio guida</p><h2>Quattro processi pronti al tempo 0</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data">
+      <tr><th>Processo</th><th>Arrivo</th><th>Burst</th><th>Priorità</th></tr>
+      <tr><td><b>P1</b></td><td class="mono">0</td><td class="mono">6</td><td class="mono">2</td></tr>
+      <tr><td><b>P2</b></td><td class="mono">0</td><td class="mono">3</td><td class="mono">1</td></tr>
+      <tr><td><b>P3</b></td><td class="mono">0</td><td class="mono">8</td><td class="mono">4</td></tr>
+      <tr><td><b>P4</b></td><td class="mono">0</td><td class="mono">2</td><td class="mono">3</td></tr>
+    </table>
+    <div class="stack">
+      <div class="formula" style="font-size:38px"><small>Tempo di completamento</small>fine − arrivo</div>
+      <div class="formula" style="font-size:38px"><small>Tempo di attesa</small>completamento − burst</div>
+      <p class="small muted">Priorità: <b>1 = la più alta</b>. Arrivati insieme, sono in coda nell'ordine P1, P2, P3, P4.</p>
+    </div>
+  </div>
+  <aside class="notes">Far copiare la tabella sul quaderno: la useremo per tutti e quattro gli algoritmi. Attesa = completamento − burst vale in generale, anche con la prelazione; senza prelazione coincide con "inizio − arrivo". Attenzione alla convenzione delle priorità: in molti libri e in Linux un numero più basso indica una priorità più alta, in Windows è il contrario. Va sempre dichiarata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">FCFS · First Come, First Served</p><h2>Chi prima arriva, prima è servito</h2></div>
+  <div class="gantt-box">
+    <div class="gantt"><div class="g1" style="flex:6">P1</div><div class="g2" style="flex:3">P2</div><div class="g3" style="flex:8">P3</div><div class="g4" style="flex:2">P4</div></div>
+    <div class="tempi"><span style="left:0">0</span><span style="left:31.58%">6</span><span style="left:47.37%">9</span><span style="left:89.47%">17</span><span style="left:100%">19</span></div>
+  </div>
+  <table class="data">
+    <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>Media</th></tr>
+    <tr><td><b>Completamento</b></td><td class="mono">6</td><td class="mono">9</td><td class="mono">17</td><td class="mono">19</td><td class="mono hl">12,75</td></tr>
+    <tr><td><b>Attesa</b></td><td class="mono">0</td><td class="mono">6</td><td class="mono">9</td><td class="mono">17</td><td class="mono hl">8</td></tr>
+  </table>
+  <aside class="notes">Il diagramma di Gantt mette il tempo in orizzontale: ogni rettangolo è un processo che usa la CPU. Calcolo: attese 0 + 6 + 9 + 17 = 32, diviso 4 = 8. Completamenti 6 + 9 + 17 + 19 = 51, diviso 4 = 12,75. Pro: semplicissimo, nessuno resta escluso per sempre. Contro: i processi corti che arrivano dietro uno lungo aspettano tanto (effetto convoglio). Il diagramma prende il nome da Henry Gantt, che lo usò per pianificare lavori nei primi anni del Novecento: lo stesso strumento visto nell'unità 3 sulla gestione dei progetti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'effetto convoglio</p><h2>FCFS: P1 dura 24, P2 e P3 durano 3. Arrivano in quest'ordine. Attesa media?</h2></div>
+  <div class="poll" data-id="sched-convoglio" data-tipo="quiz" data-risposta="D">
+    <ol><li>3</li><li>10</li><li>27</li><li>17</li></ol>
+    <p class="why">Attese: P1 0, P2 24, P3 27. Media (0 + 24 + 27) ÷ 3 = 17. Se lo stesso lavoro arrivasse nell'ordine P2, P3, P1 le attese sarebbero 0, 3, 6: media 3. Stessi processi, attesa media quasi 6 volte più bassa.</p>
+  </div>
+  <aside class="notes">Esempio classico dei manuali di sistemi operativi (Silberschatz). La A è la risposta dell'ordine "furbo": chi la sceglie ha già intuito SJF. 27 è l'attesa di P3, non la media; 10 è la media di 0, 3 e 27 (errore di calcolo comune). Il messaggio: con FCFS il risultato dipende dal caso, cioè dall'ordine di arrivo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>FCFS in Calc, con tempi di arrivo diversi</h2>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr>
+    <tr><th>1</th><td>Processo</td><td>Arrivo</td><td>Burst</td><td>Inizio</td><td>Fine</td><td>Attesa</td><td>Completam.</td></tr>
+    <tr><th>2</th><td>P1</td><td>0</td><td>5</td><td class="f">=B2</td><td class="f">=D2+C2</td><td class="f">=D2-B2</td><td class="f">=E2-B2</td></tr>
+    <tr><th>3</th><td>P2</td><td>1</td><td>3</td><td class="f sel">=MAX(E2;B3)</td><td class="f">=D3+C3</td><td class="f">=D3-B3</td><td class="f">=E3-B3</td></tr>
+  </table>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Copia il foglio. Righe 4-6: P3 (2, 8), P4 (3, 6), P5 (25, 2).</li>
+      <li>Trascina le formule della riga 3 fino alla riga 6.</li>
+      <li>In F8 e G8 le medie con <code>=MEDIA(F2:F6)</code>; in B8 l'utilizzo con <code>=SOMMA(C2:C6)/E6</code>. Salva come <b>fcfs.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> fine di P5 = 27, attesa media 4,6, completamento medio 9,4, utilizzo 0,89 (89%). P5 trova la CPU libera: aspetta 0.</div>
+  </div>
+  <aside class="notes">Soluzione: inizi 0, 5, 8, 16, 25; fini 5, 8, 16, 22, 27; attese 0, 4, 6, 13, 0 (somma 23); completamenti 5, 7, 14, 19, 2 (somma 47). MAX serve perché un processo non può iniziare prima di arrivare: tra 22 e 25 la CPU resta inattiva. Utilizzo = 24 ÷ 27 = 0,8889: è il parametro della lezione sulle prestazioni. Throughput: 5 processi in 27 unità. Formato percentuale: Formato, Celle, Percentuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">SJF · Shortest Job First</p><h2>Prima il lavoro più corto</h2></div>
+  <div class="gantt-box">
+    <div class="gantt"><div class="g4" style="flex:2">P4</div><div class="g2" style="flex:3">P2</div><div class="g1" style="flex:6">P1</div><div class="g3" style="flex:8">P3</div></div>
+    <div class="tempi"><span style="left:0">0</span><span style="left:10.53%">2</span><span style="left:26.32%">5</span><span style="left:57.89%">11</span><span style="left:100%">19</span></div>
+  </div>
+  <table class="data">
+    <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>Media</th></tr>
+    <tr><td><b>Completamento</b></td><td class="mono">11</td><td class="mono">5</td><td class="mono">19</td><td class="mono">2</td><td class="mono hl">9,25</td></tr>
+    <tr><td><b>Attesa</b></td><td class="mono">5</td><td class="mono">2</td><td class="mono">11</td><td class="mono">0</td><td class="mono hl">4,5</td></tr>
+  </table>
+  <aside class="notes">Calcolo: attese 5 + 2 + 11 + 0 = 18, diviso 4 = 4,5 (contro 8 di FCFS). Completamenti 11 + 5 + 19 + 2 = 37, diviso 4 = 9,25. SJF dà l'attesa media minima possibile tra gli algoritmi senza prelazione. Due problemi: il sistema operativo non conosce in anticipo il burst (lo stima dai burst precedenti, con una media) e un processo lungo può aspettare per sempre se continuano ad arrivarne di corti (starvation). La versione con prelazione si chiama SRTF (Shortest Remaining Time First).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Il sorpasso di SJF: basta ordinare</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>fcfs.ods</b> copia il foglio (clic destro sulla linguetta, <b>Sposta o copia</b>).</li>
+      <li>Nel nuovo foglio metti <b>0</b> in tutti gli arrivi (B2:B6) e annota l'attesa media FCFS.</li>
+      <li>Seleziona A1:C6 e ordina per <b>Burst</b> crescente (menu Dati, Ordina, con intestazioni).</li>
+      <li>Annota la nuova attesa media e rinomina il foglio <b>SJF</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> FCFS con tutti gli arrivi a 0: attesa media <b>10,2</b>. Dopo l'ordinamento (SJF): <b>6,6</b>. Le formule si aggiornano da sole perché ordini solo le colonne A, B e C.</div>
+  </div>
+  <aside class="notes">Burst 5, 3, 8, 6, 2. FCFS: attese 0, 5, 8, 16, 22, somma 51, media 10,2. SJF ordinato 2, 3, 5, 6, 8: attese 0, 2, 5, 10, 16, somma 33, media 6,6. Se qualcuno ordina anche le colonne D:G le formule si scompongono: annullare con Ctrl + Z e selezionare solo A1:C6. In Calc l'opzione "L'intervallo contiene etichette di colonna" è nella scheda Opzioni della finestra Ordina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scheduling a priorità</p><h2>Prima il più importante (1 = priorità più alta)</h2></div>
+  <div class="gantt-box">
+    <div class="gantt"><div class="g2" style="flex:3">P2</div><div class="g1" style="flex:6">P1</div><div class="g4" style="flex:2">P4</div><div class="g3" style="flex:8">P3</div></div>
+    <div class="tempi"><span style="left:0">0</span><span style="left:15.79%">3</span><span style="left:47.37%">9</span><span style="left:57.89%">11</span><span style="left:100%">19</span></div>
+  </div>
+  <figure class="citazione">
+    <blockquote>Si dice che, quando nel 1973 spensero l'IBM 7094 del MIT, trovarono un processo a bassa priorità inviato nel 1967 e mai eseguito.</blockquote>
+    <figcaption><b>Silberschatz, Galvin e Gagne</b>, "Operating System Concepts", il manuale di sistemi operativi più diffuso</figcaption>
+  </figure>
+  <aside class="notes">Calcolo: attese P1 3, P2 0, P3 11, P4 9: somma 23, media 5,75. Completamenti P1 9, P2 3, P3 19, P4 11: somma 42, media 10,5. Il problema della priorità è la starvation (il processo "muore di fame"): se arrivano sempre processi più importanti, quello meno importante non parte mai. La soluzione è l'invecchiamento (aging): più un processo aspetta, più la sua priorità sale. La frase del manuale (traduzione nostra) è presentata dagli autori stessi come una voce che circolava ("Rumor has it…"): è un aneddoto, non un fatto documentato, e va raccontato così.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gioco a squadre</p><h2>Siete la CPU: un solo pennarello, quattro processi</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Quattro processi scrivono alla lavagna una lettera per "tic": <b>P1</b> KERNEL, <b>P2</b> PID, <b>P3</b> PROCESSO, <b>P4</b> OS.</li>
+      <li>Il pennarello è la CPU: uno solo. Lo scheduler lo consegna, il cronometrista dice "tic" ogni 2 secondi.</li>
+      <li>Giro 1 <b>FCFS</b>; giro 2 <b>Round Robin</b>: dopo 3 lettere il pennarello passa.</li>
+      <li>Le squadre disegnano il Gantt e calcolano l'attesa media: vince chi è esatto per primo.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h3>Ruoli</h3><p>4 processi, 1 scheduler, 1 cronometrista, 2 squadre di "contabili".</p></div>
+      <div class="timer" data-min="5"></div>
+    </div>
+  </div>
+  <aside class="notes">Le parole hanno 6, 3, 8 e 2 lettere: sono esattamente i burst dell'esempio guida, così i risultati si confrontano con le slide (FCFS: attesa media 8; Round Robin con quanto 3: 7,75). Nel Round Robin il processo a cui viene tolto il pennarello torna in fondo alla fila e ricorda a che lettera era arrivato: è il PCB! Variante: aggiungere un quinto studente che entra a metà (arrivo al tempo 5) o un "processo di sistema" con priorità massima che interrompe tutti. Tempo totale del gioco: circa 15 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Round Robin</p><h2>A turno, per un quanto di tempo (q = 3)</h2></div>
+  <div class="gantt-box">
+    <div class="gantt"><div class="g1" style="flex:3">P1</div><div class="g2" style="flex:3">P2</div><div class="g3" style="flex:3">P3</div><div class="g4" style="flex:2">P4</div><div class="g1" style="flex:3">P1</div><div class="g3" style="flex:3">P3</div><div class="g3" style="flex:2">P3</div></div>
+    <div class="tempi"><span style="left:0">0</span><span style="left:15.79%">3</span><span style="left:31.58%">6</span><span style="left:47.37%">9</span><span style="left:57.89%">11</span><span style="left:73.68%">14</span><span style="left:89.47%">17</span><span style="left:100%">19</span></div>
+  </div>
+  <table class="data">
+    <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>Media</th></tr>
+    <tr><td><b>Completamento</b></td><td class="mono">14</td><td class="mono">6</td><td class="mono">19</td><td class="mono">11</td><td class="mono hl">12,5</td></tr>
+    <tr><td><b>Attesa</b> (compl. − burst)</td><td class="mono">8</td><td class="mono">3</td><td class="mono">11</td><td class="mono">9</td><td class="mono hl">7,75</td></tr>
+    <tr><td><b>Risposta</b> (prima volta in CPU)</td><td class="mono">0</td><td class="mono">3</td><td class="mono">6</td><td class="mono">9</td><td class="mono hl">4,5</td></tr>
+  </table>
+  <aside class="notes">Svolgimento con la coda: 0-3 P1 (restano 3), coda P2 P3 P4 P1; 3-6 P2 termina; 6-9 P3 (restano 5); 9-11 P4 termina (usa solo 2 dei 3); 11-14 P1 termina; 14-17 P3 (restano 2); 17-19 P3 termina. A 17 P3 è solo in coda e riprende subito, senza cambio di contesto. Cambi di contesto tra processi diversi: 5. Il Round Robin non vince sull'attesa media ma sul tempo di risposta: tutti iniziano entro 9 unità, mentre con FCFS P4 aspettava 17. È l'idea del time sharing: CTSS, al MIT, nel 1961 (Fernando Corbató, premio Turing 1990).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Round Robin con q = 2: A dura 4, B 2, C 3. Metti in ordine i turni</h2></div>
+  <ol class="puzzle-ordina" data-id="sched-rr-ordine">
+    <li>A usa la CPU per 2 unità (le restano 2)</li>
+    <li>B usa la CPU per 2 unità e termina</li>
+    <li>C usa la CPU per 2 unità (le resta 1)</li>
+    <li>A usa la CPU per 2 unità e termina</li>
+    <li>C usa la CPU per 1 unità e termina</li>
+  </ol>
+  <aside class="notes">Arrivano tutti al tempo 0 nell'ordine A, B, C. Gantt: A 0-2, B 2-4, C 4-6, A 6-8, C 8-9. Completamenti A 8, B 4, C 9 (media 7); attese A 4, B 2, C 6 (media 4). Chiedere di calcolarli dopo il puzzle. Errore tipico: far lavorare due volte di fila A, dimenticando che torna in fondo alla coda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel Round Robin scegli un quanto più lungo del burst di tutti i processi. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="sched-quanto" data-tipo="quiz" data-risposta="A">
+    <ol><li>Esattamente l'FCFS</li><li>Esattamente l'SJF</li><li>Un Round Robin più equo</li><li>Un errore: il quanto deve essere più corto</li></ol>
+    <p class="why">Se nessun processo esaurisce il quanto, ognuno lavora fino alla fine, nell'ordine della coda: è FCFS. All'opposto, un quanto troppo piccolo genera tantissimi cambi di contesto e la CPU spreca tempo a passare da un processo all'altro.</p>
+  </div>
+  <aside class="notes">La scelta del quanto è un compromesso: abbastanza lungo da rendere trascurabile il costo del cambio di contesto, abbastanza corto da dare una buona risposta interattiva. Nei sistemi reali è dell'ordine di qualche millisecondo o decina di millisecondi. La D è un distrattore plausibile: non è un errore, è solo una scelta poco utile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un Gantt a celle colorate per il Round Robin</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo foglio Calc: in A2:A5 scrivi P1…P4, in B1:T1 i tempi da 0 a 18.</li>
+      <li>Simula il Round Robin con q = 3 sull'esempio guida: scrivi <b>1</b> nella cella del processo che usa la CPU in quell'istante e colorala.</li>
+      <li>Autocontrollo: in U2 <code>=CONTA.NUMERI(B2:T2)</code> deve dare il burst; in B6 <code>=SOMMA(B2:B5)</code> deve dare 1.</li>
+      <li>In V scrivi il tempo di completamento, in W l'attesa <code>=V2-U2</code>, poi la media. Salva come <b>round-robin.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> U2:U5 = 6, 3, 8, 2; tutta la riga 6 vale 1; completamenti 14, 6, 19, 11; attesa media <b>7,75</b>.</div>
+  </div>
+  <aside class="notes">Il tempo di completamento è l'ultima colonna con un 1, più uno (la cella del tempo 13 significa l'intervallo da 13 a 14). È l'errore più frequente: far notare che la colonna "18" rappresenta l'intervallo 18-19. Per chi finisce prima: rifare con q = 2 e confrontare (completamenti P1 15, P2 11, P3 19, P4 8; attese 9, 8, 11, 6; media 8,5). Facoltativo: un simulatore di scheduling online per verificare; il docente deve controllare prima della lezione che il sito funzioni, il foglio di calcolo resta lo strumento principale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il confronto</p><h2>Stessi quattro processi, quattro risultati</h2></div>
+  <table class="data">
+    <tr><th>Algoritmo</th><th>Attesa media</th><th>Completamento medio</th><th>Risposta media</th><th>Rischio</th></tr>
+    <tr><td><b>FCFS</b></td><td class="mono">8</td><td class="mono">12,75</td><td class="mono">8</td><td>effetto convoglio</td></tr>
+    <tr><td><b>SJF</b></td><td class="mono hl">4,5</td><td class="mono hl">9,25</td><td class="mono hl">4,5</td><td>starvation dei lunghi</td></tr>
+    <tr><td><b>Priorità</b></td><td class="mono">5,75</td><td class="mono">10,5</td><td class="mono">5,75</td><td>starvation dei meno importanti</td></tr>
+    <tr><td><b>Round Robin</b> q = 3</td><td class="mono">7,75</td><td class="mono">12,5</td><td class="mono hl">4,5</td><td>troppi cambi di contesto</td></tr>
+  </table>
+  <div class="callout">Nessun algoritmo vince in tutto. I sistemi reali li <b>combinano</b>: più code con priorità diverse, Round Robin dentro ogni coda, aging contro la starvation.</div>
+  <aside class="notes">Senza prelazione la risposta coincide con l'attesa (ogni processo, quando parte, va fino in fondo). Il Round Robin pareggia SJF sul tempo di risposta senza bisogno di conoscere i burst: per questo è la base dei sistemi interattivi. Il modello a code multiple con retroazione (multilevel feedback queue) è quello da cui derivano gli scheduler di Windows e dei vecchi Unix.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="sched-termini">
+    <dt>FCFS</dt><dd>Chi prima arriva, prima è servito: semplice, ma soffre l'effetto convoglio</dd>
+    <dt>SJF</dt><dd>Prima il lavoro più corto: attesa media minima, ma serve conoscere il burst</dd>
+    <dt>Round Robin</dt><dd>A turno per un tempo massimo: ottimo per i sistemi interattivi</dd>
+    <dt>Starvation</dt><dd>Un processo pronto che non riceve mai la CPU</dd>
+    <dt>Aging</dt><dd>Alzare la priorità a chi aspetta da troppo tempo</dd>
+    <dt>Quanto</dt><dd>La fetta di tempo concessa a ogni turno</dd>
+  </dl>
+  <aside class="notes">Due minuti a coppie. Il più confuso di solito è starvation contro aging: il primo è il problema, il secondo la cura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Lo scheduling non è finito negli anni Sessanta</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Core grandi e core piccoli</h3><p>Telefoni e molti PC recenti hanno core potenti e core a basso consumo. Lo scheduler non sceglie più solo <b>chi</b> usa la CPU, ma anche <b>quale</b> core: il gioco su quelli veloci, la sincronizzazione delle email su quelli che consumano poco.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La coda del chatbot</h3><p>I server di un chatbot ricevono migliaia di richieste insieme e le devono distribuire sulle GPU. Anche lì si confrontano attesa, tempo di risposta e throughput, come nella nostra tabella.</p></div>
+  </div>
+  <div class="callout">Linux, nel 2023 (versione 6.6), ha cambiato il suo scheduler principale: l'algoritmo nuovo si chiama <b>EEVDF</b>.</div>
+  <aside class="notes">Core ibridi: ARM big.LITTLE nei telefoni, core Performance ed Efficient nei processori Intel dalla 12ª generazione, che con Windows 11 forniscono suggerimenti allo scheduler (Thread Director). Server di modelli linguistici: le richieste vengono raggruppate (batching) per usare bene la GPU; più grandi sono i gruppi, più alto il throughput ma più lunga l'attesa del singolo. EEVDF (Earliest Eligible Virtual Deadline First) ha sostituito CFS (Completely Fair Scheduler, del 2007) nel kernel 6.6, uscito a fine ottobre 2023.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Con FCFS e burst 4, 2, 6 (tutti arrivati a 0, in quest'ordine) l'attesa media è <span class="blank" data-risposta="10/3|3,33|3.33|3,3|3.3"></span>.</p>
+    <p>Con SJF sugli stessi processi l'attesa media è <span class="blank" data-risposta="8/3|2,67|2.67|2,7|2.7"></span>.</p>
+    <p>L'algoritmo che dà a turno un quanto di tempo si chiama Round <span class="blank" data-risposta="Robin"></span>.</p>
+    <p>Alzare la priorità di chi aspetta da tanto si chiama <span class="blank" data-risposta="aging|invecchiamento"></span>.</p>
+  </div>
+  <div class="timer" data-min="4"></div>
+  <aside class="notes">Quattro minuti. FCFS: attese 0, 4, 6, somma 10, media 10/3 = 3,33. SJF (2, 4, 6): attese 0, 2, 6, somma 8, media 8/3 = 2,67. Si accettano anche le frazioni scritte come 10/3 e 8/3. Round Robin; aging (accettato invecchiamento).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>FCFS: in ordine di arrivo, effetto convoglio</li>
+      <li>SJF: prima il più corto, attesa media minima</li>
+      <li>Priorità: rischio starvation, cura con l'aging</li>
+    </ul>
+    <ul class="points">
+      <li>Round Robin: quanto di tempo, buona risposta</li>
+      <li>Completamento = fine − arrivo</li>
+      <li>Attesa = completamento − burst</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Lo scheduler sei tu" su Novaula. Prossima lezione: come fa il kernel a riprendersi la CPU allo scadere del quanto? Con gli interrupt.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ruolo del sistema operativo · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>Il ruolo del<br>sistema operativo</h1>
+  <p class="lead">Il primo programma che parte quando accendi il PC e l'ultimo che si ferma quando lo spegni. Che cosa fa, esattamente, in mezzo?</p>
+  <aside class="notes">Obiettivi: definire il sistema operativo (SO); conoscere le due visioni classiche, macchina estesa (astrazione) e gestore di risorse; riconoscere le risorse gestite (CPU, memoria, file, periferiche, protezione); osservare il SO al lavoro con Gestione attività, Monitoraggio risorse e le proprietà dei file. Durata indicativa: 2 ore. Servono PC Windows con Gestione attività non bloccata dalle policy della scuola e LibreOffice Calc. Nell'Unità 1 ("Il software") la classe ha già distinto software di base e applicativo: si parte da lì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Quanti processi stanno girando adesso sul PC davanti a te?</h2></div>
+  <div class="poll" data-id="so-ruolo-quanti">
+    <ol><li>Meno di 10</li><li>Tra 10 e 50</li><li>Tra 50 e 150</li><li>Più di 150</li></ol>
+  </div>
+  <p class="muted">Un <b>processo</b> è un programma in esecuzione. Tra poco lo controlliamo davvero.</p>
+  <aside class="notes">Sondaggio senza risposta giusta "a priori": la risposta la dà il primo laboratorio. Su un Windows 10/11 appena avviato, con pochi programmi aperti, di solito si vedono da circa 100 a oltre 200 processi, quasi tutti servizi del sistema. Chiedere: "Chi li ha avviati, se voi avete aperto solo il browser?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Lo strato che sta in mezzo</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 900 600" style="width:100%;height:auto" aria-hidden="true">
+      <g font-family="DM Sans, sans-serif" text-anchor="middle">
+        <rect x="200" y="10" width="500" height="90" rx="18" fill="#e3ecfc"/><text x="450" y="68" font-size="38" font-weight="700" fill="#172033">Utente</text>
+        <rect x="120" y="150" width="660" height="90" rx="18" fill="#ffffff" stroke="#dcdfe8" stroke-width="3"/><text x="450" y="208" font-size="36" font-weight="700" fill="#172033">Applicazioni</text>
+        <rect x="60" y="290" width="780" height="110" rx="18" fill="#2f6fde"/><text x="450" y="358" font-size="42" font-weight="700" fill="#ffffff">Sistema operativo</text>
+        <rect x="0" y="450" width="900" height="110" rx="18" fill="#141c30"/><text x="450" y="518" font-size="36" font-weight="700" fill="#eef1f8">Hardware: CPU, RAM, disco, periferiche</text>
+      </g>
+    </svg>
+    <div class="stack">
+      <p>Il <b>sistema operativo</b> è il software di base che <mark>gestisce le risorse hardware</mark> e le mette a disposizione, in modo ordinato e sicuro, di programmi e utenti.</p>
+      <p class="muted small">Nessuna applicazione tocca direttamente l'hardware: chiede sempre al sistema operativo.</p>
+    </div>
+  </div>
+  <aside class="notes">Far notare la posizione: il SO è l'unico strato che "vede" sia l'hardware sia le applicazioni. Esempi di richieste: il browser chiede di aprire una connessione di rete, Calc chiede di salvare un file, un gioco chiede memoria e il disegno sullo schermo. Le richieste formali si chiamano chiamate di sistema: le vediamo nella prossima lezione, con kernel e shell.</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">Una storia</p>
+  <h2>Negli anni '50 il "sistema operativo" era una persona.</h2>
+  <p class="lead">Si prenotava il computer a ore. L'<b>operatore</b> caricava le schede perforate di un programma, aspettava la fine, poi caricava il successivo. Nel 1956 General Motors e North American Aviation scrivono per l'IBM 704 il <b>GM-NAA I/O</b>, che passa da un lavoro all'altro da solo: è considerato uno dei primi sistemi operativi.</p>
+  <aside class="notes">Il nome "sistema operativo" viene proprio da qui: un programma che automatizza il lavoro dell'operatore. Mentre l'operatore cambiava i mazzi di schede, il computer (costosissimo) restava fermo: automatizzare voleva dire risparmiare. Ripresa nella lezione "Tipologie di sistemi operativi" (sistemi batch).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due modi di vederlo</p><h2>Macchina estesa e gestore di risorse</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><p class="num">Dall'alto</p><h3>Una macchina più comoda</h3><p>Nasconde i dettagli dell'hardware e offre <b>astrazioni</b>: file invece di settori del disco, finestre invece di pixel, processi invece di registri della CPU.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">Dal basso</p><h3>Un arbitro delle risorse</h3><p>Tanti programmi vogliono CPU, RAM, disco e rete nello stesso momento: il sistema operativo <b>decide chi, quando e quanto</b>, e protegge ognuno dagli altri.</p></div>
+  </div>
+  <div class="callout">Le due visioni sono vere insieme: chi programma vede la macchina estesa, chi guarda l'hardware vede un gestore.</div>
+  <aside class="notes">È la presentazione classica dei manuali (per esempio Tanenbaum, "I moderni sistemi operativi"). Metafora: un albergo. Per l'ospite (il programma) c'è "la mia camera" con servizi pronti; per il direttore (il SO) ci sono 200 camere, personale e lavanderia da dividere tra tutti senza che un ospite entri nella stanza di un altro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Astrazione</p><h2>Quello che vedi e quello che succede davvero</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Un file</h3><p>Vedi "tema.odt", 24 KB, in una cartella.</p></div><div class="retro"><p><b>Blocchi sparsi sul disco</b>, spesso da 4096 byte, più una tabella del file system che ricorda dove sono e in che ordine.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Tutto insieme</h3><p>Musica, browser e chat funzionano nello stesso momento.</p></div><div class="retro"><p><b>Turni velocissimi</b>: ogni processo usa un core per pochi millisecondi, poi tocca a un altro. I core sono pochi, i processi centinaia.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>La memoria</h3><p>Ogni programma crede di avere la RAM tutta per sé.</p></div><div class="retro"><p><b>Memoria virtuale</b>: il SO traduce gli indirizzi di ogni programma in pezzi diversi della RAM fisica, e se serve usa il disco.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare ogni carta chiedere alla classe di ipotizzare che cosa c'è "sotto". Ogni carta anticipa un argomento futuro: file system e cluster (oggi in laboratorio, poi Unità 7), scheduling della CPU (Unità 6, seconda parte), memoria virtuale (Unità 7). 4096 byte è la dimensione predefinita del cluster NTFS per i dischi comuni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Conta il lavoro del sistema operativo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Ctrl + Maiusc + Esc</b> (Gestione attività). Se serve, clicca <b>Più dettagli</b>.</li>
+      <li>Vai su <b>Prestazioni</b>, poi <b>CPU</b>. Annota: Processi, Thread, Core, Processori logici, Tempo di attività.</li>
+      <li>In Calc scrivi i valori in A1:B5 (nome, valore). In B7 calcola <code>=B1/B3</code>: processi per core.</li>
+      <li>Apri 3 programmi e riguarda il numero di processi.</li>
+      <li>Salva come <b>risorse-cpu.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i processi sono <b>decine di volte</b> più dei core (per esempio 160 processi su 4 core = 40 per core) e i thread sono migliaia. Aprendo i programmi il numero cresce.</div>
+  </div>
+  <aside class="notes">Etichette di Windows 11 in italiano: Utilizzo, Velocità, Processi, Thread, Handle, Tempo di attività; a destra Core e Processori logici. Il Tempo di attività conta dall'ultimo avvio completo: con l'avvio rapido di Windows può essere di giorni anche se il PC è stato "spento". Domanda: come fanno 4 core a far girare 160 processi? Risposta nel quiz successivo. Se Gestione attività è bloccata: dal Prompt dei comandi <code>tasklist | find /c ".exe"</code> conta le righe dei processi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>4 core, 160 processi. Come è possibile?</h2></div>
+  <div class="poll" data-id="so-ruolo-core" data-tipo="quiz" data-risposta="C">
+    <ol><li>Ogni core esegue 40 processi esattamente nello stesso istante</li><li>156 processi sono fermi per sempre e aspettano lo spegnimento</li><li>Il SO li alterna sui core; quasi tutti, intanto, aspettano un evento</li><li>I processi in più li esegue la scheda video</li></ol>
+    <p class="why">Un core esegue un flusso di istruzioni alla volta (due con l'hyper-threading). Il sistema operativo alterna i processi a turni di pochi millisecondi e la maggior parte di loro è in attesa: un tasto, un pacchetto di rete, un timer. Per questo l'utilizzo della CPU può essere al 5% con 160 processi.</p>
+  </div>
+  <aside class="notes">Tranello A: confonde "contemporaneo per noi" con "contemporaneo per la CPU". Tranello B: i processi in attesa non sono fermi per sempre, si risvegliano quando arriva il loro evento. Tranello D: la GPU esegue calcoli grafici e di AI su richiesta, non i processi del SO. Collegamento: i processi e i loro stati sono una lezione della seconda parte dell'Unità 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gestore di risorse</p><h2>Ogni risorsa ha il suo problema</h2></div>
+  <table class="data compact">
+    <tr><th>Risorsa</th><th>Il problema</th><th>Chi se ne occupa nel SO</th></tr>
+    <tr><td><b>CPU</b></td><td>Pochi core, centinaia di processi</td><td>Lo <b>scheduler</b> dei processi</td></tr>
+    <tr><td><b>RAM</b></td><td>I programmi chiedono più memoria di quella che c'è</td><td>Il gestore della <b>memoria</b></td></tr>
+    <tr><td><b>Disco</b></td><td>Miliardi di byte da trovare per nome</td><td>Il <b>file system</b></td></tr>
+    <tr><td><b>Periferiche</b></td><td>Ogni modello parla una lingua diversa</td><td>I <b>driver</b> e il gestore dell'I/O</td></tr>
+    <tr><td><b>Dati e utenti</b></td><td>Nessuno deve leggere i file o la memoria altrui</td><td><b>Protezione</b> e sicurezza</td></tr>
+  </table>
+  <p class="muted small">Più l'<b>interfaccia</b> con l'utente: grafica, a riga di comando, vocale, touch.</p>
+  <aside class="notes">Ogni riga è un capitolo del corso: CPU e processi (Unità 6), memoria e file system (Unità 7), periferiche e protezione (lezioni online dell'Unità 7). Chiedere un esempio vissuto per ogni riga: PC lento con troppe schede (RAM), stampante che non stampa senza driver, account della scuola (protezione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la situazione al compito del SO</h2></div>
+  <dl class="puzzle-abbina" data-id="so-ruolo-abbina">
+    <dt>Gestione dei processi</dt><dd>La musica continua mentre scrivi in Writer</dd>
+    <dt>Gestione della memoria</dt><dd>Chiudi 20 schede del browser e la RAM libera aumenta</dd>
+    <dt>File system</dt><dd>Salvi "tema.odt" oggi e lo ritrovi domani</dd>
+    <dt>Gestione dell'I/O</dt><dd>Inserisci una chiavetta e compare in Esplora file</dd>
+    <dt>Protezione</dt><dd>Il tuo compagno non può aprire i tuoi Documenti</dd>
+    <dt>Interfaccia utente</dt><dd>Trascini una finestra con il mouse</dd>
+  </dl>
+  <aside class="notes">Sfida a squadre (2 minuti): ogni squadra scrive su un foglio le sei coppie, poi si verifica alla LIM. Discussione: la chiavetta coinvolge anche il file system (deve leggerne il contenuto), la musica anche l'I/O (scheda audio). Il SO lavora sempre su più fronti insieme: qui scegliamo il compito principale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La RAM sotto pressione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>resmon</code> e premi Invio: si apre Monitoraggio risorse. Scheda <b>Memoria</b>.</li>
+      <li>Annota in MB <b>In uso</b> e <b>Disponibile</b> (barra in basso).</li>
+      <li>Apri il browser con 10 schede di siti diversi (video, mappe, notizie). Aspetta 30 secondi e annota di nuovo.</li>
+      <li>Chiudi il browser e annota una terza volta.</li>
+      <li>In Calc calcola le differenze e salva come <b>ram-sotto-pressione.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con le 10 schede "In uso" cresce di <b>centinaia di MB</b> (spesso oltre 1000 MB); chiudendo il browser scende di nuovo. In uso + Disponibile non cambia molto: la RAM non si crea, si sposta.</div>
+  </div>
+  <aside class="notes">Nella tabella dei processi di Monitoraggio risorse, ordinando per "Working set (KB)", si vede che il browser crea molti processi (uno o più per scheda): è una scelta di sicurezza e stabilità, se una scheda si blocca le altre sopravvivono. La somma non è perfettamente costante perché cambiano anche le voci "Modificata" e "Standby" (cache). Se resmon è bloccato, usare Gestione attività, Prestazioni, Memoria ("In uso" e "Disponibile").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di questi NON è un compito del sistema operativo?</h2></div>
+  <div class="poll" data-id="so-ruolo-non-compito" data-tipo="quiz" data-risposta="B">
+    <ol><li>Impedire a un programma di leggere la memoria di un altro</li><li>Correggere le formule sbagliate in un foglio di Calc</li><li>Decidere su quali blocchi del disco scrivere un file</li><li>Far partire i driver della scheda di rete all'avvio</li></ol>
+    <p class="why">Le formule di Calc sono affare dell'applicazione: il SO non sa che cosa c'è dentro un file, sa solo dove sono i suoi byte. Protezione della memoria, allocazione dei blocchi e avvio dei driver sono invece lavoro tipico del sistema operativo.</p>
+  </div>
+  <aside class="notes">La A sembra un lavoro dell'antivirus, ma è il SO (con l'aiuto della CPU) a separare la memoria dei processi: lo vedremo nella lezione sul modello a ring. La C sembra "troppo tecnica" per essere vera: è proprio l'astrazione del file system.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Scrivere un sistema operativo è un'impresa</h2></div>
+  <figure class="citazione">
+    <blockquote>Aggiungere persone a un progetto software in ritardo lo rende ancora più in ritardo.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile del progetto OS/360 di IBM, in "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <p class="lead">Brooks guidò negli anni '60 lo sviluppo di OS/360, il sistema operativo dei mainframe IBM System/360. Nel momento di punta ci lavoravano <b>più di 1000 persone</b>.</p>
+  <aside class="notes">Traduzione nostra dell'originale: "Adding manpower to a late software project makes it later" (legge di Brooks). Nel libro Brooks stima che tra il 1963 e il 1966 siano stati spesi circa 5000 anni-persona per progettare, costruire e documentare OS/360. Collegamento con l'Unità 3 (ingegneria del software e gestione dei progetti): perché aggiungere persone rallenta? Ogni nuovo arrivato va formato e ogni coppia di persone in più è un canale di comunicazione in più. Con n persone i canali sono n(n-1)/2: 10 persone, 45 canali; 20 persone, 190.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il SO e l'intelligenza artificiale</p><h2>Una risorsa nuova da gestire</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La NPU</h3><p>Molti PC e telefoni recenti hanno una <b>NPU</b> (Neural Processing Unit), un processore dedicato ai calcoli delle reti neurali. Il sistema operativo la gestisce come la CPU: decide quale programma la usa. Su alcuni PC con Windows 11, Gestione attività mostra la NPU accanto a CPU, memoria e GPU.</p></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Su Android 14 e successivi, il modello <b>Gemini Nano</b> gira sul telefono dentro un servizio di sistema chiamato <b>AICore</b>: le app non portano il proprio modello, lo chiedono al sistema operativo. È la visione "macchina estesa" applicata all'AI.</p></div>
+  <aside class="notes">Fonti: documentazione Microsoft su Gestione attività e NPU (Windows 11, PC con driver NPU compatibili); documentazione Android per sviluppatori su AICore e Gemini Nano (disponibile solo su alcuni modelli di telefono). Domanda: perché conviene un modello condiviso gestito dal SO? Risposta: una sola copia in memoria, aggiornamenti centralizzati, i dati restano sul telefono.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il file system arrotonda per eccesso</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Documenti scegli 4 file di tipo diverso (un .odt, un .jpg, un .pdf, un .ods).</li>
+      <li>Per ognuno: clic destro, <b>Proprietà</b>. Annota in byte <b>Dimensioni</b> e <b>Dimensioni su disco</b>.</li>
+      <li>In Calc metti i nomi in A, le dimensioni in B, le dimensioni su disco in C.</li>
+      <li>In D2 scrivi <code>=ARROTONDA.PER.ECC(B2/4096;0)*4096</code> e copia in basso. In E2 <code>=C2-B2</code>: lo spazio sprecato.</li>
+      <li>Salva come <b>cluster.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la colonna C è uguale alla D: lo spazio su disco è sempre un <b>multiplo di 4096 byte</b>. Esempio: un file di 10 000 byte occupa 12 288 byte (3 blocchi), con 2288 byte sprecati.</div>
+  </div>
+  <aside class="notes">Il cluster (unità di allocazione) di NTFS è di 4096 byte per i dischi di dimensioni comuni. Eccezioni da spiegare se compaiono: file piccolissimi (qualche centinaio di byte) possono avere "Dimensioni su disco: 0 byte" perché NTFS li conserva dentro la sua tabella (MFT); file compressi o sincronizzati con OneDrive "solo online" danno valori diversi; una chiavetta FAT32/exFAT può avere cluster più grandi. Questa è l'astrazione: l'utente vede 10 000 byte, il SO gestisce 3 blocchi. Se ARROTONDA.PER.ECC non viene riconosciuta, cercarla con la procedura guidata fx (in inglese è ROUNDUP).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4624" data-aiuto="la prima cifra sono i KB di un blocco da 4096 byte">
+    <ul class="points">
+      <li>1ª cifra: quanti KB misura il blocco (cluster) standard di NTFS</li>
+      <li>2ª cifra: l'ultima cifra dell'anno del GM-NAA I/O</li>
+      <li>3ª cifra: quante "visioni" classiche del sistema operativo abbiamo visto</li>
+      <li>4ª cifra: l'ultima cifra dell'anno in cui IBM annunciò il System/360 (1964)</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 4096 byte = 4 KB, 1956, macchina estesa e gestore di risorse, 1964.</div>
+  </div>
+  <aside class="notes">Codice: 4624. Gara a squadre: la prima squadra che apre il lucchetto vince. Dopo tre tentativi sbagliati compare l'aiuto. Tranello: qualcuno scrive 409 o 1 per la prima cifra; 4096 byte = 4 × 1024 = 4 KB (KiB, a rigore).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un programma in esecuzione si chiama <span class="blank" data-risposta="processo"></span>.</p>
+    <p>Il SO nasconde l'hardware e offre astrazioni: è una macchina <span class="blank" data-risposta="estesa|virtuale"></span>.</p>
+    <p>Il SO decide chi usa CPU, RAM e disco: è un gestore di <span class="blank" data-risposta="risorse"></span>.</p>
+    <p>La parte del SO che organizza i file sul disco si chiama file <span class="blank" data-risposta="system"></span>.</p>
+    <p>Un file di 5000 byte, con blocchi da 4096 byte, occupa su disco <span class="blank" style="--w:7ch" data-risposta="8192"></span> byte.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: processo; estesa (accettato virtuale); risorse; system; 8192 (servono 2 blocchi: 2 × 4096).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il SO sta tra hardware, applicazioni e utente</li>
+      <li>Macchina estesa: file, processi, finestre al posto dei dettagli</li>
+      <li>Gestore di risorse: CPU, RAM, disco, periferiche, protezione</li>
+    </ul>
+    <ul class="points">
+      <li>Centinaia di processi, pochi core: turni di millisecondi</li>
+      <li>Il disco si usa a blocchi, spesso da 4096 byte</li>
+      <li>Nuove risorse, come la NPU per l'AI</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "Il diario di bordo del mio computer" (si apre quando l'argomento viene segnato come svolto). Prossima lezione: kernel e shell.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

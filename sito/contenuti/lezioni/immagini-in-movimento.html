@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le immagini in movimento · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità</p>
+  <h1>Le immagini<br>in movimento</h1>
+  <p class="lead">Un video è una pila di foto mostrate in fretta. Ma un minuto di Full HD non compresso pesa 9 GB: come fa a starci in uno streaming?</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Fotogrammi · frame rate · bitrate · codec · contenitori · streaming</span></div>
+  <aside class="notes">Obiettivi: definire fotogramma e frame rate; calcolare il peso di un video non compresso e il bitrate; distinguere codec e contenitore; capire compressione intra e inter-frame e lo streaming adattivo. Durata: 2 ore. Strumenti: Photopea ed ezgif.com (senza account), Calc, le proprietà dei file di Windows o il telefono, YouTube con "Statistiche per nerd" (se YouTube è bloccato, demo del docente alla LIM). Prerequisiti: immagini raster e laboratorio sui file immagine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nei videogiochi, noti la differenza tra 30 e 60 fotogrammi al secondo?</h2></div>
+  <div class="poll" data-id="m-fps">
+    <ol><li>Sì, subito</li><li>Solo nei giochi veloci</li><li>No, mi sembrano uguali</li><li>Non gioco ai videogiochi</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di apertura. Molte persone notano la differenza soprattutto nei movimenti rapidi di telecamera. Chiedere: secondo voi quanti fotogrammi al secondo ha un film al cinema? Risposta nella prossima slide: 24.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Fotogrammi</p><h2>Quante immagini al secondo?</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">24</p><h3>Cinema</h3><p class="muted">1 fotogramma ogni 41,7 ms</p></div>
+    <div class="card"><p class="num">25</p><h3>TV europea</h3><p class="muted">1 fotogramma ogni 40 ms</p></div>
+    <div class="card"><p class="num">60</p><h3>Giochi, telefoni</h3><p class="muted">1 fotogramma ogni 16,7 ms</p></div>
+    <div class="card"><p class="num">240</p><h3>Slow motion</h3><p class="muted">rivisti a 30 fps: 8 volte più lenti</p></div>
+  </div>
+  <p>Il <b>frame rate</b> si misura in <b>fps</b>. Il cervello unisce le immagini fisse in un movimento continuo.</p>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcune schede video usano l'AI per <b>inventare fotogrammi intermedi</b> (per esempio DLSS Frame Generation): il gioco sembra più fluido, ma quei fotogrammi sono stime.</p></div>
+  <aside class="notes">Tempo per fotogramma = 1 ÷ fps: 1/24 = 0,0417 s; 1/25 = 0,04 s; 1/60 = 0,0167 s. La vecchia spiegazione della "persistenza retinica" è considerata incompleta: oggi si parla di movimento apparente, elaborato dal cervello. Slow motion: 240 ÷ 30 = 8. Frame generation: introduce un po' di latenza, per questo nei giochi competitivi non sempre conviene.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="m-storia">
+    <li>Muybridge fotografa un cavallo al galoppo con 12 fotocamere</li>
+    <li>I fratelli Lumière proiettano il primo film a pagamento a Parigi</li>
+    <li>La BBC avvia un servizio regolare di televisione</li>
+    <li>JVC mette in vendita le videocassette VHS</li>
+    <li>Arrivano in commercio i primi lettori DVD</li>
+    <li>Viene caricato il primo video su YouTube</li>
+    <li>Netflix inizia a trasmettere film in streaming</li>
+  </ol>
+  <aside class="notes">Date: Muybridge 1878 (scommessa sul fatto che il cavallo al galoppo stacchi tutte e quattro le zampe da terra: sì, le stacca); Lumière 28 dicembre 1895, Salon Indien du Grand Café; BBC 1936; VHS 1976; DVD 1996 (in Giappone); YouTube aprile 2005 ("Me at the zoo"); streaming Netflix gennaio 2007. Tranello: DVD e YouTube sono più vicini di quanto si pensi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La palla che rimbalza: la tua prima animazione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Photopea crea un'immagine 200 × 200. Disegna una palla in alto ed esporta <b>palla1.png</b>.</li>
+      <li>Sposta la palla un po' più in basso ed esporta <b>palla2.png</b>. Arriva a 6 fotogrammi (giù e su).</li>
+      <li>Apri <b>ezgif.com</b> › GIF maker, carica i 6 file, metti <b>Delay time = 10</b> e crea la GIF.</li>
+      <li>Prova delay 4 e delay 20. Salva la versione che preferisci: <b>palla-cognome.gif</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il delay è in centesimi di secondo. Delay 10 = 0,1 s per fotogramma = 10 fps: un rimbalzo dura 0,6 s. Delay 4 = 25 fps, delay 20 = 5 fps.</div>
+  </div>
+  <aside class="notes">Per spostare la palla senza ridisegnarla: strumento Sposta (V) sul livello della palla. Chi vuole un effetto più realistico può schiacciare la palla nel fotogramma a terra (lo "squash" dei cartoni animati). Fallback se ezgif è bloccato: Photopea esporta GIF animate in cui ogni livello è un fotogramma (File › Esporta come › GIF, opzione animazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il peso di un video</p><h2>Un fotogramma Full HD, non compresso</h2></div>
+  <div class="formula"><small>byte di un fotogramma a 24 bit</small>1920 × 1080 × 3 = <span class="hl">6 220 800 byte</span></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Per avere un video</h3><p>Moltiplica per i fotogrammi al secondo, poi per i secondi di durata.</p></div>
+    <div class="card"><h3>E l'audio?</h3><p>Si aggiunge a parte, ma pesa pochissimo rispetto alle immagini.</p></div>
+  </div>
+  <aside class="notes">Stessa formula della lezione sulle immagini raster: larghezza × altezza × byte per pixel. Lasciare che gli studenti facciano da soli il passo successivo con il quiz della prossima slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola</p><h2>Quanto pesa 1 secondo di video Full HD a 25 fps, non compresso?</h2></div>
+  <div class="poll" data-id="m-secondo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Circa 6 MB</li><li>Circa 155 MB</li><li>Circa 1,5 GB</li><li>Circa 50 MB</li></ol>
+    <p class="why">6 220 800 byte × 25 = 155 520 000 byte, circa 155 MB al secondo. Un minuto: 155,5 MB × 60 = 9,3 GB. Per questo nessuno salva video non compressi.</p>
+  </div>
+  <aside class="notes">La A è un solo fotogramma. La C è il valore di circa 10 secondi. Far notare: 155 MB/s = oltre 1,2 Gbit/s, molto più di una normale connessione di casa. Lo streaming funziona solo grazie alla compressione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Compressione video</p><h2>Salvare solo ciò che cambia</h2></div>
+  <div class="flow">
+    <div class="card fill"><p class="num" style="color:#fff">I</p><h3>Fotogramma chiave</h3><p>Immagine completa, compressa come un JPEG.</p></div>
+    <div class="card soft"><p class="num">P</p><h3>Predetto</h3><p>Solo le differenze dal fotogramma precedente: «questo blocco si è spostato di 3 pixel».</p></div>
+    <div class="card soft"><p class="num">B</p><h3>Bidirezionale</h3><p>Usa sia il fotogramma prima sia quello dopo.</p></div>
+  </div>
+  <div class="callout">Compressione <b>intra</b>-frame: dentro un fotogramma. Compressione <b>inter</b>-frame: tra fotogrammi vicini. Una scena ferma pesa pochissimo; coriandoli, pioggia e acqua sono un incubo per il codec.</div>
+  <aside class="notes">Un gruppo che parte da un fotogramma I si chiama GOP (group of pictures). Se un fotogramma I si perde o si danneggia, compaiono i classici "blocchi colorati" che si trascinano finché non arriva il successivo. Quando si salta avanti in un video, il lettore deve ripartire da un fotogramma I: per questo a volte il salto non è preciso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Registri lo stesso video a 60 fps invece che a 30. Il file…</h2></div>
+  <div class="poll" data-id="m-fps-peso" data-tipo="quiz" data-risposta="D">
+    <ol><li>pesa sempre esattamente il doppio</li><li>pesa uguale: i secondi sono gli stessi</li><li>pesa meno, perché i fotogrammi sono più simili</li><li>dipende soprattutto dal bitrate scelto dal codec</li></ol>
+    <p class="why">Con la compressione inter-frame, fotogrammi più fitti sono molto simili tra loro e le differenze costano poco. Il peso è circa bitrate × durata: molti telefoni usano a 60 fps un bitrate più alto, ma di solito non il doppio.</p>
+  </div>
+  <aside class="notes">Misconcezione: "più fps = file proporzionalmente più grande". Vale solo per il video non compresso. Nel laboratorio sulle proprietà del video gli studenti possono verificarlo confrontando due registrazioni del telefono. La C è parzialmente vera (fotogrammi più simili), ma il file non pesa meno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Codec e contenitore</p><h2>La scatola e quello che c'è dentro</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Contenitore</th><th>Codec video</th><th>Codec audio</th></tr>
+      <tr><td class="mono">.mp4</td><td>H.264, H.265 (HEVC), AV1</td><td>AAC</td></tr>
+      <tr><td class="mono">.webm</td><td>VP9, AV1</td><td>Opus</td></tr>
+      <tr><td class="mono">.mkv</td><td>quasi tutti</td><td>quasi tutti</td></tr>
+      <tr><td class="mono">.mov</td><td>H.264, H.265, ProRes</td><td>AAC</td></tr>
+    </table>
+    <div class="stack">
+      <p>Il <b>codec</b> (codificatore-decodificatore) comprime e decomprime.</p>
+      <p>Il <b>contenitore</b> mette insieme video, audio, sottotitoli e metadati in un file.</p>
+      <div class="callout hl">Un .mp4 che non parte su un vecchio TV ha spesso dentro un codec che il TV non conosce.</div>
+    </div>
+  </div>
+  <aside class="notes">Esempio concreto: due file .mp4, uno in H.264 e uno in H.265: il vecchio TV apre solo il primo. Rinominare .mkv in .mp4 non cambia il codec (come per le immagini: rinominare non converte). VLC apre quasi tutto perché contiene molti decodificatori. AV1 è un codec aperto e senza royalty, usato da YouTube e Netflix per parte dei contenuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="m-termini">
+    <dt>MP4</dt><dd>Contenitore che tiene insieme video, audio e metadati</dd>
+    <dt>H.264</dt><dd>Codec video tra i più diffusi al mondo</dd>
+    <dt>AAC</dt><dd>Codec audio usato spesso negli MP4</dd>
+    <dt>Fotogramma I</dt><dd>Immagine completa da cui ripartire</dd>
+    <dt>Bitrate</dt><dd>Bit al secondo usati per il flusso</dd>
+    <dt>fps</dt><dd>Immagini mostrate in un secondo</dd>
+  </dl>
+  <aside class="notes">Due minuti a coppie. Chi confonde MP4 e H.264 rilegga la slide precedente: "MP4" non dice da solo con che codec è compresso il video.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La carta d'identità di un video</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Prendi un video breve: uno tuo dal telefono o quello nella cartella condivisa.</li>
+      <li>Su Windows: tasto destro › <b>Proprietà › Dettagli</b>. Annota durata, larghezza, altezza, frequenza fotogrammi, velocità in bit e dimensione.</li>
+      <li>Calcola il bitrate tu stesso: <b>byte × 8 ÷ secondi</b>. Coincide con quello di Windows?</li>
+      <li>Calcola quanto peserebbe non compresso e il rapporto di compressione.</li>
+      <li>Scrivi tutto in <b>video-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> esempio: 10 s, 18 000 000 byte → 18 000 000 × 8 ÷ 10 = 14,4 Mbit/s. Non compresso in Full HD a 30 fps: 6 220 800 × 30 × 10 = circa 1,87 GB, cioè circa 100 volte di più.</div>
+  </div>
+  <aside class="notes">1 866 240 000 ÷ 18 000 000 = 103,7. Windows mostra "Velocità in bit totale" (video + audio). Sul telefono: Android, Galleria › Dettagli; iPhone, nell'app Foto scorrere verso l'alto sulla foto. Se si usa il telefono, ricordare le regole della scuola. Fallback: preparare due video (uno a 30 fps e uno a 60 fps, 10 secondi ciascuno) nella cartella condivisa: utile anche per verificare il quiz sugli fps.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Non compresso contro streaming, in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In A1:H1: <b>L, A, fps, Byte/s, GB/min, Mbit/s streaming, MB/min streaming, Rapporto</b>.</li>
+      <li>Righe: 1920, 1080, 25, 5 · 3840, 2160, 60, 16 · 1280, 720, 30, 2,5 (l'ultimo numero va in F).</li>
+      <li>D2 <code>=A2*B2*3*C2</code> · E2 <code>=D2*60/10^9</code> · G2 <code>=F2*60/8</code> · H2 <code>=D2/(F2*10^6/8)</code>.</li>
+      <li>Salva come <b>video-calcoli.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Full HD: 155 520 000 byte/s, 9,33 GB/min, 37,5 MB/min, rapporto 249. 4K a 60 fps: 89,58 GB/min e rapporto 746. 720p: 4,98 GB/min e rapporto 265.</div>
+  </div>
+  <aside class="notes">I bitrate di streaming della colonna F sono valori di esempio realistici, non quelli di un servizio preciso. Domanda finale: perché il rapporto del 4K è più alto? Più pixel e più fotogrammi vuol dire più ripetizioni da sfruttare, e i codec moderni sono più efficienti alle alte risoluzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo streaming</p><h2>Il video arriva a pezzi</h2></div>
+  <ol class="puzzle-ordina" data-id="m-streaming">
+    <li>Il video viene codificato in più qualità, da 144p a 4K</li>
+    <li>Ogni versione è tagliata in segmenti di pochi secondi</li>
+    <li>I segmenti vengono copiati su server vicini agli utenti (CDN)</li>
+    <li>Il lettore misura la tua connessione e sceglie la qualità</li>
+    <li>I segmenti scaricati riempiono il buffer</li>
+    <li>Il codec decodifica i fotogrammi e li mostra sullo schermo</li>
+  </ol>
+  <aside class="notes">È lo streaming adattivo (protocolli HLS e MPEG-DASH): se la connessione peggiora, il segmento successivo arriva in una qualità più bassa invece di fermare il video. Il buffer è la scorta di secondi già scaricati: quando si svuota compare la rotellina. CDN = Content Delivery Network.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Spia lo streaming: «Statistiche per nerd»</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri un video qualsiasi su YouTube (senza accedere).</li>
+      <li>Tasto destro sul video › <b>Statistiche per nerd</b>.</li>
+      <li>Annota: risoluzione attuale, codec video e audio, velocità di connessione, salute del buffer.</li>
+      <li>Cambia qualità da 1080p a 144p: che cosa cambia nei numeri?</li>
+      <li>Scrivi le osservazioni in <b>streaming.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella riga dei codec trovi sigle come <code>avc1</code> (H.264), <code>vp09</code> (VP9) o <code>av01</code> (AV1) per il video e <code>opus</code> o <code>mp4a</code> (AAC) per l'audio.</div>
+  </div>
+  <aside class="notes">Se tutti guardano video insieme la rete della scuola soffre: abbassare la qualità o fare la demo alla LIM. Se YouTube è bloccato, demo del docente. Domanda: perché il codec cambia tra un video e l'altro, o tra PC e telefono? Il server sceglie in base a ciò che il dispositivo sa decodificare in hardware.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Guardare avanti</h2></div>
+  <figure class="citazione">
+    <blockquote>Riusciamo a vedere solo a breve distanza davanti a noi, ma possiamo vedere che lì c'è molto da fare.</blockquote>
+    <figcaption><b>Alan Turing</b>, ultima frase di «Computing Machinery and Intelligence», 1950</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I generatori di video con l'AI producono una sequenza di fotogrammi a partire da un testo. La parte difficile è la <b>coerenza</b> tra un fotogramma e l'altro: mani, scritte e oggetti che cambiano forma sono ancora errori frequenti, e aiutano a riconoscere i video sintetici.</p></div>
+  <aside class="notes">Traduzione nostra dell'ultima frase dell'articolo di Turing su Mind (1950). Discussione: un video realistico generato con l'AI pone problemi di fiducia (deepfake). Consiglio pratico: verificare la fonte prima di condividere. Non serve mostrare generatori che richiedono account; eventualmente demo del docente con video di esempio ufficiali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4048" data-aiuto="1 ÷ 25 di secondo, in millisecondi">
+    <ul class="points">
+      <li>1ª e 2ª cifra: quanti millisecondi dura un fotogramma a 25 fps</li>
+      <li>3ª e 4ª cifra: quanti fotogrammi proietta il cinema in 2 secondi</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1000 ÷ 25 = 40 ms; 24 × 2 = 48 fotogrammi.</div>
+  </div>
+  <aside class="notes">Codice: 4048. A squadre. Variante orale per chi finisce prima: quanti fotogrammi in un minuto a 60 fps? 3600.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il numero di immagini mostrate in un secondo si chiama frame <span class="blank" data-risposta="rate"></span>.</p>
+    <p>H.264 è un <span class="blank" data-risposta="codec"></span>, MP4 è un <span class="blank" data-risposta="contenitore" style="--w:11ch"></span>.</p>
+    <p>Il fotogramma completo da cui ripartire si chiama fotogramma <span class="blank" data-risposta="I|chiave"></span>.</p>
+    <p>Un video di 10 s che pesa 10 000 000 byte ha un bitrate di <span class="blank" data-risposta="8"></span> Mbit/s.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: rate, codec, contenitore, I (o chiave), 8 (10 000 000 × 8 ÷ 10 = 8 000 000 bit/s).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Video = sequenza di fotogrammi; frame rate in fps</li>
+      <li>Non compresso: L × A × 3 × fps byte al secondo</li>
+      <li>Bitrate = byte × 8 ÷ secondi</li>
+    </ul>
+    <ul class="points">
+      <li>Fotogrammi I, P, B: si salva soprattutto ciò che cambia</li>
+      <li>Codec comprime, contenitore impacchetta</li>
+      <li>Streaming adattivo: segmenti, CDN, buffer</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: i suoni, campionamento e quantizzazione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

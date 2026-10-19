@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le immagini vettoriali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità</p>
+  <h1>Le immagini<br>vettoriali</h1>
+  <p class="lead">Non pixel ma istruzioni: «disegna un cerchio qui, di questo raggio». Oggi scriviamo immagini a mano, in SVG, con il Blocco note.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Vettoriale e raster · coordinate · SVG · tracciati</span></div>
+  <aside class="notes">Obiettivi: confrontare grafica raster e vettoriale; capire il sistema di coordinate; scrivere un file SVG con rect, circle, line, polygon, path e text; rasterizzare un SVG. Durata indicativa: 2 ore. Servono: Blocco note (o VS Code) e il browser; facoltativi CodePen (codepen.io, senza account) e Photopea. Prerequisiti: immagini raster, esadecimale per i colori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove ti è capitato di vedere un'immagine «sgranata»?</h2></div>
+  <div class="poll" data-id="v-sgranata">
+    <ol><li>Foto profilo ingrandita</li><li>Logo stirato in una presentazione</li><li>Texture in un videogioco</li><li>Screenshot zoomato</li><li>Mai notato</li></ol>
+  </div>
+  <aside class="notes">Tutti i casi sono immagini raster ingrandite oltre la loro risoluzione: i pixel diventano quadrati visibili. Domanda guida: esiste un modo di salvare un'immagine che non si sgrana mai? Sì, se invece dei pixel salviamo le forme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due filosofie</p><h2>Salvare i pixel o salvare le forme?</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Raster · ingrandito 8 volte</h3>
+      <svg viewBox="0 0 16 16" width="340" height="340" role="img" aria-label="Cerchio fatto di pixel"><rect width="16" height="16" fill="#ffffff"/><path fill="#c8326f" d="M6 2h4v1h2v1h1v2h1v4h-1v2h-1v1h-2v1h-4v-1h-2v-1h-1v-2h-1v-4h1v-2h1v-1h2z"/></svg>
+      <p class="muted">Una griglia di colori: ingrandendo compaiono gli scalini.</p>
+    </div>
+    <div class="card soft">
+      <h3>Vettoriale · ingrandito quanto vuoi</h3>
+      <svg viewBox="0 0 16 16" width="340" height="340" role="img" aria-label="Cerchio vettoriale"><rect width="16" height="16" fill="#ffffff"/><circle cx="8" cy="8" r="6" fill="#c8326f"/></svg>
+      <p class="mono small">&lt;circle cx="8" cy="8" r="6"/&gt;</p>
+    </div>
+  </div>
+  <aside class="notes">La grafica vettoriale descrive figure geometriche con coordinate e formule; il programma che la mostra la ridisegna ("rasterizza") alla risoluzione dello schermo ogni volta. Va benissimo per loghi, icone, caratteri, schemi, mappe, disegni tecnici (CAD). Non va bene per le foto: una foto ha milioni di sfumature che non sono forme geometriche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un logo SVG pesa 2 KB. Lo mostri 10 volte più grande. Quanto pesa ora il file?</h2></div>
+  <div class="poll" data-id="v-peso" data-tipo="quiz" data-risposta="C">
+    <ol><li>20 KB: 10 volte tanto</li><li>200 KB: l'area cresce di 100 volte</li><li>Sempre 2 KB</li><li>Dipende dallo schermo</li></ol>
+    <p class="why">Il file contiene le istruzioni, non i pixel: «cerchio di raggio 6» non diventa più lungo da scrivere se il cerchio è più grande. Cresce solo il lavoro del programma che lo disegna. Per un'immagine raster, invece, 10 volte più grande significa 100 volte più pixel.</p>
+  </div>
+  <aside class="notes">La B è il tranello di chi ha capito bene il raster: lato × 10 vuol dire area × 100. La D confonde il file con la sua visualizzazione. Collegamento con il compito: confronteremo un SVG con il PNG dello stesso disegno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Dalla penna luminosa alle carrozzerie</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1963</p><h3>Sketchpad</h3><p>Ivan Sutherland, al MIT, disegna linee e cerchi direttamente sullo schermo con una <b>penna luminosa</b>. Il computer ricorda le forme, non i punti: è il primo programma di grafica interattiva.</p></div>
+    <div class="card"><p class="num">Anni '60</p><h3>Le curve di Bézier</h3><p>Pierre Bézier alla Renault, e prima Paul de Casteljau alla Citroën, descrivono le curve delle carrozzerie con pochi <b>punti di controllo</b>. Le stesse curve sono nei font e negli SVG.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le lettere che leggi su questo schermo sono vettoriali: un font come OpenType contiene il contorno di ogni carattere fatto di curve. Il sistema operativo le trasforma in pixel a ogni dimensione.</p></div>
+  <aside class="notes">Sutherland ricevette il premio Turing nel 1988 anche per Sketchpad. Le curve di Bézier si usano in Illustrator, Inkscape, nei font TrueType (curve quadratiche) e OpenType/CFF (curve cubiche). Domanda: perché un testo resta nitido anche a zoom 400% nel browser? Perché il font è vettoriale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il formato SVG</p><h2>Un'immagine che si legge come un testo</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="k">&lt;svg</span> xmlns=<span class="s">"http://www.w3.org/2000/svg"</span>
+     viewBox=<span class="s">"0 0 200 120"</span><span class="k">&gt;</span>
+  <span class="k">&lt;rect</span> x=<span class="s">"10"</span> y=<span class="s">"10"</span> width=<span class="s">"180"</span>
+        height=<span class="s">"100"</span> fill=<span class="s">"#FBE1EC"</span><span class="k">/&gt;</span>
+  <span class="k">&lt;circle</span> cx=<span class="s">"60"</span> cy=<span class="s">"60"</span> r=<span class="s">"30"</span>
+          fill=<span class="s">"#C8326F"</span><span class="k">/&gt;</span>
+  <span class="k">&lt;text</span> x=<span class="s">"105"</span> y=<span class="s">"70"</span>&gt;3E<span class="k">&lt;/text&gt;</span>
+<span class="k">&lt;/svg&gt;</span></pre>
+    <div class="stack">
+      <svg viewBox="0 0 200 120" width="560" height="336" role="img" aria-label="Rettangolo rosa con un cerchio e la scritta 3E"><rect x="10" y="10" width="180" height="100" fill="#FBE1EC"/><circle cx="60" cy="60" r="30" fill="#C8326F"/><text x="105" y="70" font-family="Arial" font-size="32" font-weight="bold" fill="#172033">3E</text></svg>
+      <p class="small"><b>SVG</b> = Scalable Vector Graphics, standard del W3C dal 2001. È XML: tag, attributi, testo.</p>
+    </div>
+  </div>
+  <aside class="notes">Tutto ciò che serve è un editor di testo. Far notare: i tag hanno la stessa forma dell'HTML che studieremo nell'Unità 4, e un SVG si può mettere direttamente dentro una pagina web. L'attributo xmlns serve quando l'SVG è un file a sé. Il disegno a destra è esattamente il codice a sinistra (con in più la dimensione del testo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le coordinate</p><h2>Dove si trova il punto (0, 0) in un SVG?</h2></div>
+  <div class="poll" data-id="v-origine" data-tipo="quiz" data-risposta="A">
+    <ol><li>In alto a sinistra, e y cresce verso il basso</li><li>In basso a sinistra, come in matematica</li><li>Al centro dell'immagine</li><li>In alto a sinistra, e y cresce verso l'alto</li></ol>
+    <p class="why">Come per i pixel di uno schermo, che si contano riga per riga dall'alto: l'origine è in alto a sinistra e la y aumenta scendendo. Un punto con y = 100 sta più in basso di uno con y = 20.</p>
+  </div>
+  <aside class="notes">La B è la risposta "da quaderno di matematica" ed è l'errore più frequente: disegnando, gli studenti mettono il tetto della casa sotto i muri. Disegnare alla lavagna gli assi con la y verso il basso. Il viewBox "0 0 200 120" dice: la tela va da x 0 a 200 e da y 0 a 120, qualunque sia la dimensione sullo schermo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La bandiera in tre righe</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code small">&lt;svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 300 200"&gt;
+  &lt;rect x="0" y="0" width="100"
+        height="200" fill="#009246"/&gt;
+  &lt;!-- aggiungi bianco e rosso --&gt;
+&lt;/svg&gt;</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Copia il codice nel Blocco note e completa i due rettangoli (rosso <code>#CE2B37</code>).</li>
+        <li><b>Salva con nome</b>, tipo «Tutti i file», codifica UTF-8: <b>bandiera.svg</b>.</li>
+        <li>Trascina il file nel browser e ingrandisci al 500%.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> tre bande uguali, bordi nitidi a ogni zoom; il file pesa circa 300 byte.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: &lt;rect x="100" y="0" width="100" height="200" fill="#FFFFFF"/&gt; e &lt;rect x="200" y="0" width="100" height="200" fill="#CE2B37"/&gt;. Errore frequente: il Blocco note salva bandiera.svg.txt; per questo "Tutti i file" (e le estensioni visibili in Esplora file). Se il browser mostra il codice o un errore XML, manca una virgoletta o la barra di chiusura "/&gt;". Per chi finisce presto: la bandiera di un altro paese a scelta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni elemento SVG a quello che disegna</h2></div>
+  <dl class="puzzle-abbina" data-id="v-elementi">
+    <dt>&lt;rect&gt;</dt><dd>Rettangolo: x, y, width, height</dd>
+    <dt>&lt;circle&gt;</dt><dd>Cerchio: centro cx, cy e raggio r</dd>
+    <dt>&lt;line&gt;</dt><dd>Segmento da x1, y1 a x2, y2</dd>
+    <dt>&lt;polygon&gt;</dt><dd>Figura chiusa da un elenco di punti</dd>
+    <dt>&lt;path&gt;</dt><dd>Tracciato con comandi M, L, Q, C, Z</dd>
+    <dt>&lt;text&gt;</dt><dd>Una scritta nel punto x, y</dd>
+  </dl>
+  <aside class="notes">Gli attributi di stile comuni: fill (riempimento), stroke (colore del contorno), stroke-width (spessore). fill="none" lascia la figura vuota. Esiste anche &lt;ellipse&gt; con rx e ry.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una faccina con una curva</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code small">&lt;svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 200 200"&gt;
+  &lt;circle cx="100" cy="100" r="90"
+    fill="#FFD43B" stroke="#172033"
+    stroke-width="6"/&gt;
+  &lt;circle cx="70" cy="80" r="10"/&gt;
+  &lt;circle cx="130" cy="80" r="10"/&gt;
+  &lt;path d="M 60 125 Q 100 165 140 125"
+    fill="none" stroke="#172033"
+    stroke-width="6"/&gt;
+&lt;/svg&gt;</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Salva il codice come <b>faccina.svg</b> e aprilo nel browser.</li>
+        <li>Cambia solo la riga del <code>path</code> per renderla <b>triste</b>.</li>
+        <li>Aggiungi un cappello con un <code>rect</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> faccina triste con <code>M 60 145 Q 100 105 140 145</code>: il punto di controllo sale sopra gli estremi.</div>
+    </div>
+  </div>
+  <aside class="notes">Q = curva di Bézier quadratica: parte dal punto corrente, è "tirata" verso il punto di controllo (100, 165) e arriva in (140, 125). Il punto di controllo non sta sulla curva. Alternativa al Blocco note: codepen.io, incollando l'SVG nel riquadro HTML, si vede il risultato mentre si scrive. Cappello: per esempio &lt;rect x="50" y="0" width="100" height="25" fill="#172033"/&gt;.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I tracciati</p><h2>Path: disegnare come con la penna</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Comando</th><th>Significato</th></tr>
+        <tr><td class="mono">M x y</td><td>sposta la penna senza disegnare</td></tr>
+        <tr><td class="mono">L x y</td><td>linea fino al punto</td></tr>
+        <tr><td class="mono">Q cx cy x y</td><td>curva con un punto di controllo</td></tr>
+        <tr><td class="mono">Z</td><td>chiudi tornando all'inizio</td></tr>
+      </table>
+      <p class="mono small">&lt;path d="M 40 120 L 150 30 L 260 120 Z"/&gt;</p>
+    </div>
+    <svg viewBox="0 0 300 260" width="520" height="450" role="img" aria-label="Casetta: tetto triangolare, muri e porta"><path d="M 40 120 L 150 30 L 260 120 Z" fill="#c8326f"/><rect x="60" y="120" width="180" height="120" fill="#fbe1ec" stroke="#172033" stroke-width="3"/><rect x="130" y="170" width="40" height="70" fill="#172033"/><circle cx="40" cy="120" r="6" fill="#172033"/><circle cx="150" cy="30" r="6" fill="#172033"/><circle cx="260" cy="120" r="6" fill="#172033"/></svg>
+  </div>
+  <aside class="notes">I punti neri mostrano i tre vertici del tetto. I muri sono &lt;rect x="60" y="120" width="180" height="120"/&gt;, la porta &lt;rect x="130" y="170" width="40" height="70"/&gt;. Lettere maiuscole = coordinate assolute, minuscole = relative al punto precedente. C è la curva cubica, con due punti di controllo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La stella in dieci punti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>stella.svg</b> con <code>viewBox="0 0 200 230"</code>.</li>
+      <li>Scrivi un <code>path</code> che parte da <code>M 100 10</code> e passa per: 129 90, 195 90, 141 140, 161 220, 100 170, 39 220, 59 140, 5 90, 71 90. Chiudi con <code>Z</code>.</li>
+      <li>Colore pieno <code>#C8326F</code>, contorno scuro di 4.</li>
+      <li>Aggiungi sotto la casetta della slide precedente, spostata in basso.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> una stella a cinque punte, dritta e simmetrica rispetto alla retta x = 100. Se è storta, controlla l'ordine dei punti.</div>
+  </div>
+  <aside class="notes">Codice: &lt;path d="M 100 10 L 129 90 L 195 90 L 141 140 L 161 220 L 100 170 L 39 220 L 59 140 L 5 90 L 71 90 Z" fill="#C8326F" stroke="#172033" stroke-width="4"/&gt;. Far notare la simmetria: ogni punto (x, y) ha il suo gemello (200 − x, y). Per spostare la casetta senza riscrivere le coordinate: &lt;g transform="translate(0,230)"&gt; … &lt;/g&gt; (allargando il viewBox).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un'immagine che anche chi non vede può «leggere»</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del Web sta nella sua universalità. L'accesso per tutti, indipendentemente dalla disabilità, è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web, al lancio della Web Accessibility Initiative, 1997</figcaption>
+  </figure>
+  <div class="callout">Un SVG è testo: con <code>&lt;title&gt;</code> e <code>&lt;desc&gt;</code> descrivi il disegno per i lettori di schermo, e le scritte in <code>&lt;text&gt;</code> si possono cercare e tradurre.</div>
+  <aside class="notes">Traduzione nostra dal comunicato del W3C sul lancio della WAI (ottobre 1997). SVG è uno standard aperto del W3C, come HTML e CSS: chiunque può scriverlo e leggerlo senza programmi a pagamento. Ne riparleremo nell'Unità 5 (HTML semantico e accessibilità). Esempio: &lt;svg …&gt;&lt;title&gt;Bandiera italiana&lt;/title&gt; … &lt;/svg&gt;.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Da vettoriale a raster: rasterizza</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>bandiera.svg</b> in Photopea: alla domanda sulla dimensione scegli larghezza 3000 pixel.</li>
+      <li>Esporta come PNG: <b>bandiera-3000.png</b>. Poi ripeti con 300 pixel: <b>bandiera-300.png</b>.</li>
+      <li>In Esplora file confronta i pesi dei tre file.</li>
+      <li>Calcola il peso non compresso del PNG grande (3000 × 2000 × 24 bit).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'SVG pesa qualche centinaio di byte; il PNG da 3000 pixel, non compresso, sarebbe 18 000 000 byte. Compresso pesa molto meno, perché le bande sono tinte piatte, ma comunque più dell'SVG.</div>
+  </div>
+  <aside class="notes">Calcolo: 3000 × 2000 × 3 = 18 000 000 byte. Rasterizzare è ciò che fa ogni volta il browser per mostrare l'SVG sullo schermo. Il viaggio inverso (da raster a vettoriale) si chiama vettorializzazione o tracing: è un'approssimazione, funziona su loghi semplici ma non sulle foto. Fallback senza Photopea: aprire l'SVG nel browser e fare uno screenshot, che però prende la risoluzione dello schermo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Un'AI può disegnare scrivendo codice</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Siccome l'SVG è testo, un modello linguistico può scriverlo come scrive un programma: chiedi «un gatto in SVG» e ottieni <span class="mono">&lt;circle&gt;</span> e <span class="mono">&lt;path&gt;</span>. Spesso però sbaglia proporzioni e coordinate: il codice va letto e corretto, proprio come stai imparando a fare.</p></div>
+    <div class="stack">
+      <p>Le icone delle app e dei siti sono quasi sempre SVG: una sola versione per tutte le dimensioni dello schermo.</p>
+      <p class="muted small">I generatori di immagini «a pixel», invece, producono raster.</p>
+    </div>
+  </div>
+  <aside class="notes">Se il docente vuole, demo alla LIM con un chatbot (account del docente): chiedere un SVG semplice, incollarlo in CodePen, poi far trovare agli studenti gli errori e correggerli. Non serve che gli studenti usino account personali. Messaggio: l'AI accelera, ma serve chi capisce il codice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con le coordinate</h2></div>
+  <div class="puzzle-codice" data-risposta="4060" data-aiuto="angolo in basso a destra: x + width e y + height">
+    <p>Il rettangolo è <span class="mono">&lt;rect x="10" y="20" width="30" height="40"/&gt;</span></p>
+    <p>Il codice è formato dalle coordinate x e y del suo angolo <b>in basso a destra</b>, scritte una dopo l'altra.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> x = 10 + 30 = 40; y = 20 + 40 = 60, perché la y cresce verso il basso.</div>
+  </div>
+  <aside class="notes">Codice: 4060. Chi scrive 40-20 o 4020 ha pensato con la y verso l'alto (o ha preso l'angolo in alto a destra): ottima occasione per ripassare il sistema di coordinate.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una grafica fatta di forme e coordinate si dice <span class="blank" data-risposta="vettoriale" style="--w:10ch"></span>.</p>
+    <p>SVG significa Scalable <span class="blank" data-risposta="Vector"></span> Graphics.</p>
+    <p>Per disegnare un cerchio si usa l'elemento <span class="blank" data-risposta="circle|<circle>"></span>.</p>
+    <p>Nel path, il comando che chiude la figura è <span class="blank" data-risposta="Z"></span>.</p>
+    <p>Trasformare un SVG in pixel si dice <span class="blank" data-risposta="rasterizzare" style="--w:11ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: vettoriale, Vector, circle, Z, rasterizzare.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Vettoriale = forme descritte da coordinate e curve</li>
+      <li>Si ingrandisce senza perdere qualità e senza cambiare peso</li>
+      <li>Ottimo per loghi, icone, font e schemi; non per le foto</li>
+    </ul>
+    <ul class="points">
+      <li>SVG: testo XML, standard del W3C</li>
+      <li>Origine in alto a sinistra, y verso il basso</li>
+      <li>rect, circle, line, polygon, path, text; rasterizzare = trasformare in pixel</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: le immagini in movimento.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

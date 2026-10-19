@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La mia prima pagina web · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web · Laboratorio</p>
+  <h1>La mia prima<br>pagina web</h1>
+  <p class="lead">Oggi il web non lo guardi: lo scrivi. Un editor di testo, un browser e due file, <b>index.html</b> e <b>stile.css</b>, bastano per costruire una pagina tutta tua.</p>
+  <aside class="notes">Lezione di laboratorio (2 ore) che mette insieme le lezioni "Gli elementi base di HTML", "Le pagine web con link, immagini, elenchi e tabelle" e "Lo stile della pagina web: i CSS". Obiettivi: creare a mano una pagina HTML valida con un foglio di stile esterno, organizzare i file in una cartella, capire i percorsi relativi. Servono: Blocco note (o VS Code se installato) e un browser. Alternativa se i PC hanno problemi: CodePen (codepen.io/pen, senza account) con i pannelli HTML e CSS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai visto il codice di una pagina web?</h2></div>
+  <div class="poll" data-id="u4b-codice-visto">
+    <ol><li>Mai</li><li>Sì, con "Visualizza sorgente"</li><li>Sì, ho già scritto un po' di HTML</li><li>Ho fatto un sito con Wix, Google Sites o simili</li></ol>
+  </div>
+  <p class="muted">Prova adesso: su qualsiasi sito premi <code>Ctrl</code> + <code>U</code>. Quello che vedi è ciò che il server manda al tuo browser.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Far provare Ctrl+U su un sito semplice (per esempio info.cern.ch, la ricostruzione della prima pagina web). Far notare che i costruttori di siti producono comunque HTML e CSS: oggi lo scriviamo noi, riga per riga, e capiamo che cosa fanno quegli strumenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il piano di oggi</p><h2>Due file, due mestieri diversi</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>index.html</h3><p>Il <b>contenuto</b> e la struttura: titoli, paragrafi, elenchi, link, immagini, tabelle.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>stile.css</h3><p>L'<b>aspetto</b>: colori, caratteri, margini, bordi.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Il browser</h3><p>Legge i due file e disegna la pagina sullo schermo.</p></div>
+  </div>
+  <div class="callout">Tenere separati contenuto e aspetto è l'idea centrale dei CSS: cambi un file solo e <b>tutte</b> le pagine che lo usano cambiano look.</div>
+  <aside class="notes">Ripasso veloce delle lezioni precedenti. Domanda: "se domani voglio il sito in blu invece che in arancione, quanti file devo toccare?" Risposta: uno, il CSS. Ricordare che il file principale si chiama index.html perché i server web lo aprono automaticamente quando si visita una cartella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il primo browser era anche un editor</h2></div>
+  <figure class="citazione">
+    <blockquote>Il primo browser web, o meglio il primo browser-editor, si chiamava WorldWideWeb.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del Web, ricordando il 1990 nella pagina "The WorldWideWeb browser" sul sito del W3C</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 1990 il primo programma, WorldWideWeb, permetteva di <b>leggere e scrivere</b> pagine. Oggi miliardi di pagine pubbliche scritte da persone sono anche i testi da cui i modelli linguistici hanno imparato a scrivere HTML: per questo un'AI lo sa generare. Ma per capire se è giusto, serve qualcuno che lo sappia leggere.</p></div>
+  <aside class="notes">Traduzione nostra da: "The first web browser - or browser-editor rather - was called WorldWideWeb" (T. Berners-Lee, w3.org/People/Berners-Lee/WorldWideWeb.html). Il programma girava su un computer NeXT al CERN (fine 1990): si potevano modificare e salvare le pagine, ma solo quelle sul proprio disco, perché il server non accettava ancora modifiche. Sull'AI: molti modelli linguistici sono addestrati anche su grandi raccolte di pagine web pubbliche (per esempio Common Crawl). Chiedere: "se un'AI vi scrive una pagina, chi è responsabile degli errori?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo scheletro</p><h2>Le righe che scriverai in ogni pagina</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px">&lt;!DOCTYPE html&gt;
+&lt;<span class="k">html</span> lang=<span class="s">"it"</span>&gt;
+&lt;<span class="k">head</span>&gt;
+  &lt;<span class="k">meta</span> charset=<span class="s">"utf-8"</span>&gt;
+  &lt;<span class="k">title</span>&gt;Chi sono · Giulia Rossi&lt;/<span class="k">title</span>&gt;
+  &lt;<span class="k">link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"stile.css"</span>&gt;
+&lt;/<span class="k">head</span>&gt;
+&lt;<span class="k">body</span>&gt;
+  &lt;<span class="k">h1</span>&gt;Ciao, sono Giulia&lt;/<span class="k">h1</span>&gt;
+  &lt;<span class="k">p</span>&gt;Studio nella 3E e mi piace…&lt;/<span class="k">p</span>&gt;
+&lt;/<span class="k">body</span>&gt;
+&lt;/<span class="k">html</span>&gt;</pre>
+    <ul class="points small">
+      <li><code>head</code>: informazioni per il browser, non si vedono nella pagina</li>
+      <li><code>charset="utf-8"</code>: le lettere accentate appaiono giuste</li>
+      <li><code>title</code>: il testo della scheda del browser</li>
+      <li><code>link</code>: collega il foglio di stile</li>
+      <li><code>body</code>: tutto ciò che si vede</li>
+    </ul>
+  </div>
+  <aside class="notes">Far leggere lo scheletro ad alta voce, un tag per volta, chiedendo "si vede o non si vede nella pagina?". L'indentazione non è obbligatoria per il browser, ma lo è per noi: rende visibile l'annidamento. Il link al CSS c'è già: il file stile.css lo creeremo più tardi (fino ad allora il browser semplicemente non lo trova e non dà errore visibile).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Crea la cartella e il file index.html</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>Documenti</b> crea la cartella <b>pagina-web</b> e, dentro, la cartella <b>immagini</b>.</li>
+      <li>Apri <b>Blocco note</b> (o VS Code, se c'è) e scrivi lo scheletro della slide precedente, con il tuo nome.</li>
+      <li><b>File › Salva con nome</b>: nome <b>index.html</b>, tipo <b>Tutti i file</b>, codifica <b>UTF-8</b>.</li>
+      <li>Fai doppio clic su index.html: si apre nel browser.</li>
+      <li>Cambia il testo del paragrafo, salva (<code>Ctrl</code>+<code>S</code>) e nel browser premi <code>F5</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la scheda del browser mostra il tuo titolo, la parola "è" appare corretta e l'icona del file è quella del browser. Se Esplora file mostra <b>index.html.txt</b>, attiva "Estensioni nomi file" nel menu Visualizza e rinomina.</div>
+  </div>
+  <aside class="notes">Errori tipici: (1) il file salvato come index.html.txt perché il tipo era "Documenti di testo"; (2) lettere accentate strane se manca il meta charset o la codifica non è UTF-8; (3) dimenticare di salvare prima di F5. In Windows 11 l'opzione è in Esplora file › Visualizza › Mostra › Estensioni nomi file. Chi finisce prima: aggiungere un h2 e un secondo paragrafo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il doppio clic su "index.html" riapre Blocco note. Perché?</h2></div>
+  <div class="poll" data-id="u4b-index-txt" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il browser non è installato sul PC</li><li>Manca la riga <code>&lt;!DOCTYPE html&gt;</code></li><li>Il file in realtà si chiama <code>index.html.txt</code></li><li>I tag sono scritti in minuscolo</li></ol>
+    <p class="why">Windows nasconde le estensioni conosciute: il file sembra "index.html" ma è un .txt, quindi si apre con Blocco note. Il DOCTYPE cambia il modo in cui il browser interpreta la pagina, non il programma che la apre. I tag minuscoli sono la norma.</p>
+  </div>
+  <aside class="notes">È l'errore più frequente della prima ora di HTML. Collegare all'Unità 1: l'estensione è solo un'etichetta nel nome, il contenuto del file non cambia. Il DOCTYPE è il tranello: senza DOCTYPE il browser entra in "quirks mode" (ne riparleremo con il box model), ma il file si apre comunque nel browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine le righe dell'intestazione</h2></div>
+  <ol class="puzzle-ordina" data-id="u4b-scheletro">
+    <li><code>&lt;!DOCTYPE html&gt;</code></li>
+    <li><code>&lt;html lang="it"&gt;</code></li>
+    <li><code>&lt;head&gt;</code></li>
+    <li><code>&lt;meta charset="utf-8"&gt;</code></li>
+    <li><code>&lt;title&gt;La mia pagina&lt;/title&gt;</code></li>
+    <li><code>&lt;/head&gt;</code></li>
+    <li><code>&lt;body&gt;</code></li>
+  </ol>
+  <aside class="notes">Ordine corretto come in elenco. Si accetta in discussione anche title prima di meta (il browser funziona lo stesso), ma la regola è mettere meta charset il prima possibile: lo standard chiede che stia nei primi 1024 byte del documento. Da fare a squadre alla LIM: chi sbaglia spiega perché ha messo body dove l'ha messo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso lampo</p><h2>I mattoni che già conosci</h2></div>
+  <table class="data compact">
+    <tr><th>Elemento</th><th>A che cosa serve</th><th>Esempio</th></tr>
+    <tr><td class="mono">h1 … h6</td><td>Titoli, dal più importante</td><td class="mono">&lt;h2&gt;Le mie passioni&lt;/h2&gt;</td></tr>
+    <tr><td class="mono">p, strong, em</td><td>Paragrafo, testo importante, enfasi</td><td class="mono">&lt;p&gt;Gioco a &lt;strong&gt;basket&lt;/strong&gt;&lt;/p&gt;</td></tr>
+    <tr><td class="mono">ul / ol, li</td><td>Elenco puntato / numerato</td><td class="mono">&lt;ul&gt;&lt;li&gt;Musica&lt;/li&gt;&lt;/ul&gt;</td></tr>
+    <tr><td class="mono">a href</td><td>Collegamento</td><td class="mono">&lt;a href="https://…"&gt;Sito&lt;/a&gt;</td></tr>
+    <tr><td class="mono">img src alt</td><td>Immagine con testo alternativo</td><td class="mono">&lt;img src="immagini/bici.jpg" alt="…"&gt;</td></tr>
+    <tr><td class="mono">table, tr, th, td</td><td>Tabella: righe, intestazioni, celle</td><td class="mono">&lt;tr&gt;&lt;td&gt;Lun&lt;/td&gt;&lt;/tr&gt;</td></tr>
+  </table>
+  <aside class="notes">Ripasso dalla lezione "Le pagine web con link, immagini, elenchi e tabelle". Sottolineare l'attributo alt: è obbligatorio, lo leggono gli screen reader e compare se l'immagine non si carica (approfondimento nell'Unità 5 sull'accessibilità). Il percorso "immagini/bici.jpg" è relativo: parte dalla cartella in cui si trova index.html.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Riempi la pagina "Chi sono"</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Sotto il paragrafo aggiungi un <code>h2</code> <b>Le mie passioni</b> e un elenco <code>ul</code> con 3 voci.</li>
+      <li>Aggiungi un <code>h2</code> <b>Siti che consiglio</b> e 2 link completi di <code>https://</code>.</li>
+      <li>Scarica un'immagine con licenza libera da <b>commons.wikimedia.org</b> e salvala come <b>immagini/passione.jpg</b>.</li>
+      <li>Inseriscila con <code>&lt;img src="immagini/passione.jpg" alt="…"&gt;</code> e un alt che la descriva.</li>
+      <li>Aggiungi una tabella <b>La mia settimana</b>: 3 colonne (Giorno, Attività, Orario) e 3 righe.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i link aprono il sito giusto, l'immagine si vede (niente icona rotta), la tabella ha una riga di intestazione con <code>th</code>. Nessuna foto del tuo volto o di compagni: scegli un oggetto, un luogo, un animale.</div>
+  </div>
+  <aside class="notes">Se l'immagine non si vede: controllare cartella, nome e maiuscole, estensione reale (.jpg o .jpeg o .webp). Se un link porta a una pagina "file non trovato" sul PC, manca https:// e il browser lo tratta come percorso relativo. Se Wikimedia Commons è lenta, va bene un'immagine disegnata in Paint e salvata come PNG (cambiare l'estensione nel codice). Ricordare la lezione di educazione civica sul diritto d'autore: annotare autore e licenza dell'immagine in un paragrafo piccolo sotto la foto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sul tuo PC la foto si vede, online no. Perché?</h2></div>
+  <p class="small">Nel codice c'è <code>&lt;img src="Immagini/Passione.JPG" alt="La mia bici"&gt;</code>; il file si chiama <code>immagini/passione.jpg</code>.</p>
+  <div class="poll" data-id="u4b-maiuscole" data-tipo="quiz" data-risposta="B">
+    <ol><li>I server web non accettano le immagini JPG</li><li>Sul server maiuscole e minuscole nei nomi contano</li><li>Manca l'attributo <code>width</code></li><li>L'attributo <code>alt</code> blocca l'immagine se è troppo lungo</li></ol>
+    <p class="why">Windows tratta "Passione.JPG" e "passione.jpg" come lo stesso file; la maggior parte dei server web gira su Linux, dove sono due nomi diversi. Regola d'oro: nomi di file tutti minuscoli, senza spazi e senza accenti.</p>
+  </div>
+  <aside class="notes">Tranello realistico: funziona in classe e si rompe il giorno della pubblicazione. Collegamento all'Unità 6 sui sistemi operativi: file system case sensitive (Linux) e case insensitive (Windows, di default). width non è obbligatorio; alt non blocca nulla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo stile</p><h2>Il file stile.css</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">body</span> {
+  font-family: Verdana, sans-serif;
+  background-color: <span class="s">#fdf6ec</span>;
+  color: <span class="s">#222222</span>;
+  margin: 40px;
+}
+<span class="k">h1</span>, <span class="k">h2</span> { color: <span class="s">#d0541f</span>; }
+<span class="k">ul</span> { list-style-type: square; }
+<span class="k">table</span> { border-collapse: collapse; }
+<span class="k">th</span>, <span class="k">td</span> { border: 1px solid #999999; padding: 8px; }
+<span class="k">img</span> { width: 300px; }</pre>
+    <div class="card soft">
+      <h3>Anatomia di una regola</h3>
+      <p><code>h1 { color: red; }</code></p>
+      <ul class="points small"><li><b>selettore</b>: a chi si applica</li><li><b>proprietà</b>: che cosa cambi</li><li><b>valore</b>: come lo cambi</li><li>ogni dichiarazione finisce con <code>;</code></li></ul>
+    </div>
+  </div>
+  <aside class="notes">Ripasso dalla lezione "Lo stile della pagina web: i CSS". Far notare: un selettore può elencare più elementi separati da virgola (h1, h2). border-collapse unisce i bordi doppi delle celle. #fdf6ec è un colore esadecimale: collegamento all'Unità 1 (fd = 253, f6 = 246, ec = 236, un bianco caldo). Lasciare il codice proiettato durante il laboratorio successivo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Dai uno stile alla tua pagina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Blocco note crea un nuovo file e scrivi le regole della slide precedente.</li>
+      <li>Salvalo nella cartella <b>pagina-web</b> come <b>stile.css</b> (tipo Tutti i file, UTF-8).</li>
+      <li>Ricarica index.html nel browser: lo stile si applica subito.</li>
+      <li>Personalizza: scegli tu due colori e un carattere (<code>Georgia</code>, <code>Tahoma</code>, <code>"Courier New"</code>…).</li>
+      <li>Aggiungi <code>text-align: center;</code> al titolo <code>h1</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> titoli colorati, celle della tabella con bordo singolo, quadratini nell'elenco. Se non cambia nulla: il file si chiama davvero <b>stile.css</b>? Il <code>href</code> del <code>link</code> è uguale? Prova <code>Ctrl</code>+<code>F5</code>.</div>
+  </div>
+  <aside class="notes">Struttura finale attesa: pagina-web/index.html, pagina-web/stile.css, pagina-web/immagini/passione.jpg. Se una sola regola non funziona, di solito manca un punto e virgola o una graffa nella regola precedente: il browser ignora la dichiarazione sbagliata e prosegue. Chi finisce: aggiungere a { text-decoration: none; } e un bordo arrotondato all'immagine con border-radius: 12px.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni proprietà al suo effetto</h2></div>
+  <dl class="puzzle-abbina" data-id="u4b-proprieta">
+    <dt>color</dt><dd>Colore del testo</dd>
+    <dt>background-color</dt><dd>Colore dello sfondo</dd>
+    <dt>font-family</dt><dd>Carattere tipografico, con alternative</dd>
+    <dt>text-align</dt><dd>Allineamento del testo: sinistra, centro, destra</dd>
+    <dt>list-style-type</dt><dd>Forma del punto negli elenchi</dd>
+    <dt>border-collapse</dt><dd>Bordi delle celle uniti in una sola linea</dd>
+  </dl>
+  <aside class="notes">Abbinamenti come in elenco. Tranello frequente: color viene scambiato per il colore di sfondo. Chiedere perché font-family elenca più caratteri: se il primo non è installato, il browser prova il successivo; sans-serif è la famiglia generica finale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trova l'errore</p><h2>Ogni riga ha un problema: quale?</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>&lt;a href="www.wikipedia.org"&gt;</b></p><p>Il link non funziona.</p></div><div class="retro"><p><b>Manca https://</b></p><p class="muted small">Senza protocollo il browser cerca un file "www.wikipedia.org" nella tua cartella.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>p { font-size: 18; }</b></p><p>Il testo non cambia.</p></div><div class="retro"><p><b>Manca l'unità di misura</b></p><p class="muted small">Si scrive 18px. Un valore non valido viene ignorato in silenzio.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>&lt;img src="gatto.jpg"&gt;</b></p><p>Si vede, ma è sbagliato.</p></div><div class="retro"><p><b>Manca l'attributo alt</b></p><p class="muted small">Chi usa uno screen reader non sa che cosa c'è nell'immagine.</p></div></div>
+  </div>
+  <div class="callout hl">Nessuno di questi tre errori fa comparire un messaggio: il browser <b>ignora</b> ciò che non capisce e va avanti. Gli errori li trovi solo se rileggi il codice, o con un validatore.</div>
+  <aside class="notes">Far votare prima di girare ogni carta. Messaggio: il browser perdona quasi tutto e non mostra errori; per trovarli serve il validatore W3C, che vedremo nella lezione sugli strumenti. Altri errori tipici: colour al posto di color (visto nella lezione sui CSS), valori senza unità, punto e virgola dimenticato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il browser perdona</p><h2>Perché un HTML sbagliato si vede lo stesso?</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Tag non chiusi, virgolette mancanti…</h3>
+      <p>Lo standard HTML descrive passo per passo come il browser deve <b>riparare</b> gli errori. Così tutti i browser mostrano la pagina sbagliata allo stesso modo.</p>
+      <p class="muted small">Comodo per chi legge, pericoloso per chi scrive: l'errore resta nascosto finché qualcosa non si rompe.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un assistente AI scrive la pagina in 5 secondi</h3><p>Gli assistenti di programmazione generano HTML e CSS da una richiesta in italiano. Spesso funziona, ma possono dimenticare l'attributo <b>alt</b>, usare colori poco leggibili o codice vecchio. Chi sa leggere il codice se ne accorge, gli altri no.</p></div>
+  </div>
+  <aside class="notes">La specifica HTML (HTML Living Standard del WHATWG) contiene un algoritmo di parsing che definisce anche il trattamento degli errori: è il motivo per cui i browser moderni sono così coerenti tra loro. Demo facoltativa alla LIM: cancellare un &lt;/p&gt; e mostrare che la pagina non cambia. L'uso degli assistenti AI lo approfondiamo nella lezione "Strumenti software per sviluppare pagine web": oggi il messaggio è "prima impari a leggere, poi deleghi".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il file principale di un sito si chiama di solito <span class="blank" data-risposta="index.html|index"></span>.</p>
+    <p>Il foglio di stile si collega nel head con il tag <span class="blank" data-risposta="link|&lt;link&gt;"></span>.</p>
+    <p>Il testo alternativo di un'immagine va nell'attributo <span class="blank" data-risposta="alt"></span>.</p>
+    <p>Per le lettere accentate serve la codifica <span class="blank" data-risposta="utf-8|utf8"></span>.</p>
+    <p>La proprietà CSS per il colore del testo è <span class="blank" data-risposta="color"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: index.html (accettato index), link, alt, UTF-8, color. Chi sbaglia "color" ha scritto "colour" o "font-color": ricollegare alla carta dell'errore.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Una cartella: index.html, stile.css, immagini/</li>
+      <li>Scheletro: DOCTYPE, html, head, body</li>
+      <li>Salva come "Tutti i file" in UTF-8</li>
+    </ul>
+    <ul class="points">
+      <li>Percorsi relativi, nomi minuscoli senza spazi</li>
+      <li>Regola CSS: selettore, proprietà, valore</li>
+      <li>Il browser perdona: tu controlla</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Far salvare la cartella pagina-web su chiavetta o Drive: serve per il compito e per la lezione sugli strumenti, dove la valideremo. Prossima lezione: classi, identificatori e altri selettori CSS.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

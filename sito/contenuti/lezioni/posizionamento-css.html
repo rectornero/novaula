@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il posizionamento degli elementi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.demo{position:relative;background:var(--card);border:3px dashed var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:12px;font-family:var(--mono);font-size:26px}
+.demo .b{background:var(--accent-soft);border:3px solid var(--accent);border-radius:12px;padding:10px 18px}
+.demo .b.on{background:var(--accent);color:#fff;position:relative;left:280px;top:34px;z-index:1;margin-right:280px}
+.demo .ghost{border:3px dashed var(--accent);border-radius:12px;padding:10px 18px;color:var(--muted);position:absolute;left:22px;right:22px;top:102px}
+.carta{position:relative;background:var(--card);border:3px solid var(--line);border-radius:22px;padding:34px 36px;display:flex;flex-direction:column;gap:10px;font-size:31px}
+.carta .badge{position:absolute;top:-22px;right:-22px;background:var(--bad);color:#fff;font-family:var(--display);font-weight:750;font-size:34px;width:110px;height:110px;border-radius:50%;display:grid;place-items:center;transform:rotate(12deg)}
+.strati{position:relative;height:380px}
+.strati div{position:absolute;width:300px;height:220px;border-radius:20px;padding:18px 22px;font-family:var(--mono);font-size:26px;color:#fff;border:3px solid rgba(0,0,0,.15)}
+.strati .s1{left:0;top:0;background:#2f6fde;z-index:1}
+.strati .s2{left:120px;top:70px;background:#11845f;z-index:3}
+.strati .s3{left:240px;top:140px;background:#d0541f;z-index:2}
+</style>
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Sviluppare siti web responsive e accessibili · Lezione 2</p>
+  <h1>Il posizionamento<br>degli elementi</h1>
+  <p class="lead">Badge sugli angoli, menu che restano in alto, pulsanti che non se ne vanno mai: cinque valori di position e uno z-index per decidere chi sta sopra.</p>
+  <aside class="notes">Obiettivi: conoscere il flusso normale, usare position static, relative, absolute, fixed e sticky, capire rispetto a che cosa si sposta un elemento, gestire la sovrapposizione con z-index. Prerequisiti: box model (Unità 4) e HTML semantico (lezione 1). Durata: 2 ore. Laboratori su CodePen o JSFiddle senza account, oppure Blocco note e browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale elemento "appiccicato" allo schermo ti dà più fastidio?</h2></div>
+  <div class="poll" data-id="pos-fastidio">
+    <ol><li>Il banner dei cookie</li><li>La chat di assistenza nell'angolo</li><li>La pubblicità che copre il testo</li><li>Il menu che occupa mezzo schermo del telefono</li></ol>
+  </div>
+  <p class="lead">Sono tutti elementi posizionati. Oggi impari a farli, e a farli bene.</p>
+  <aside class="notes">Sondaggio leggero. Chiedere: "C'è invece un elemento fisso che trovate utile?" (la barra per scrivere in una chat, il carrello, il pulsante torna su). Collegamento all'accessibilità della lezione 1: un elemento fisso non deve coprire il contenuto né il punto in cui si trova il focus della tastiera (criterio WCAG 2.2 "Focus Not Obscured").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di partenza</p><h2>Il flusso normale: <code>position: static</code></h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Gli elementi <b>blocco</b> (h1, p, div, section) vanno uno sotto l'altro</li>
+      <li>Gli elementi <b>inline</b> (a, span, strong) scorrono nella riga come le parole</li>
+      <li>È il valore predefinito: <code>static</code></li>
+      <li>Su un elemento static, <code>top</code>, <code>left</code> e <code>z-index</code> non hanno effetto</li>
+    </ul>
+    <div class="demo">
+      <div class="b">&lt;h1&gt; blocco</div>
+      <div class="b">&lt;p&gt; blocco con &lt;a&gt;inline&lt;/a&gt;</div>
+      <div class="b">&lt;section&gt; blocco</div>
+      <div class="b">&lt;footer&gt; blocco</div>
+    </div>
+  </div>
+  <aside class="notes">Ripasso del box model. Far aprire DevTools (F12) su una pagina qualunque, selezionare un paragrafo e cercare "position" nella scheda Computed (Calcolato): il valore è static. Tutto ciò che vedremo oggi "toglie" o "sposta" un elemento rispetto a questo flusso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La mappa</p><h2>Cinque valori, cinque comportamenti</h2></div>
+  <table class="data compact">
+    <tr><th>position</th><th>Si sposta rispetto a…</th><th>Il suo posto nel flusso</th><th>Esempio tipico</th></tr>
+    <tr><td class="mono">static</td><td>non si sposta</td><td>occupato</td><td>testo normale</td></tr>
+    <tr><td class="mono">relative</td><td>la sua posizione normale</td><td>resta occupato</td><td>piccoli ritocchi, contenitore di riferimento</td></tr>
+    <tr><td class="mono">absolute</td><td>il primo antenato posizionato</td><td class="hl">liberato</td><td>badge nell'angolo di una card</td></tr>
+    <tr><td class="mono">fixed</td><td>la finestra (viewport)</td><td class="hl">liberato</td><td>pulsante "torna su", banner dei cookie</td></tr>
+    <tr><td class="mono">sticky</td><td>la finestra, ma solo dopo una soglia</td><td>resta occupato</td><td>intestazione che resta in alto</td></tr>
+  </table>
+  <p class="small muted">Le distanze si danno con <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code>. "Posizionato" = qualunque valore diverso da static.</p>
+  <aside class="notes">Lasciare la tabella proiettata durante i laboratori. Precisazione per i più curiosi: un elemento fixed si posiziona rispetto a un antenato se quell'antenato ha una trasformazione (transform), ma è un caso raro. Il posizionamento è arrivato con CSS2 (1998); sticky è molto più recente ed è supportato da tutti i browser moderni solo dalla fine degli anni 2010.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">position: relative</p><h2>Si sposta, ma il suo posto resta prenotato</h2></div>
+  <div class="cols-2">
+<pre class="code">.evidenziato {
+  <span class="k">position</span>: relative;
+  <span class="k">top</span>: 30px;   <span class="c">/* scende */</span>
+  <span class="k">left</span>: 280px; <span class="c">/* a destra */</span>
+}</pre>
+    <div class="demo">
+      <div class="b">primo</div>
+      <div class="ghost">posto originale</div>
+      <div class="b on">.evidenziato</div>
+      <div class="b">terzo: non si è mosso</div>
+    </div>
+  </div>
+  <div class="callout"><code>top: 30px</code> significa "allontanati di 30px <b>dal bordo superiore</b>": quindi l'elemento <b>scende</b>.</div>
+  <aside class="notes">Il malinteso più comune: top fa salire. No: top indica da quale lato misurare la distanza. Per far salire servirebbe top negativo o bottom. Far notare il rettangolo tratteggiato: lo spazio originale resta vuoto e il terzo elemento non si sposta. Uso più frequente di relative: non spostare niente, ma fare da riferimento a un figlio absolute (lo vediamo tra poco).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un div ha <code>position: relative; top: 50px</code>. E i blocchi sotto?</h2></div>
+  <div class="poll" data-id="pos-relative" data-tipo="quiz" data-risposta="B">
+    <ol><li>Salgono a occupare il posto lasciato libero</li><li>Restano dove erano: il posto resta riservato</li><li>Scendono anche loro di 50px</li><li>Finiscono tutti sopra il div spostato</li></ol>
+    <p class="why">Con relative l'elemento viene disegnato più in basso, ma per il flusso è ancora al suo posto. Gli altri non se ne accorgono: per questo può sovrapporsi al blocco che segue.</p>
+  </div>
+  <aside class="notes">Chi risponde A confonde relative con absolute. Chi risponde C pensa che lo spostamento "spinga" gli altri, come farebbe un margin-top: buona occasione per confrontare margin-top: 50px (spinge giù tutto) e top: 50px con relative (non spinge niente).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">position: absolute</p><h2>La coppia d'oro: padre relative, figlio absolute</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:30px">.card {
+  <span class="k">position</span>: relative; <span class="c">/* riferimento */</span>
+}
+.badge {
+  <span class="k">position</span>: absolute;
+  <span class="k">top</span>: -22px;
+  <span class="k">right</span>: -22px;
+}</pre>
+    <div class="stack" style="padding:30px 30px 0 0">
+      <div class="carta"><span class="badge">-20%</span><b>Felpa TPSI</b><span class="muted">Cotone, taglie S-XL</span><span>39 €</span></div>
+    </div>
+  </div>
+  <ul class="points small">
+    <li>Esce dal flusso: gli altri elementi si comportano come se non ci fosse</li>
+    <li>Si misura dal bordo del <b>primo antenato posizionato</b>; se non c'è, dalla pagina intera</li>
+  </ul>
+  <aside class="notes">Disegnare alla lavagna l'albero: body, section, card, badge. Il browser risale l'albero dal badge e si ferma al primo antenato con position diversa da static. Valori negativi spingono il badge fuori dal bordo della card. Il badge della slide è fatto proprio così.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Badge absolute, ma nessun antenato posizionato. Dove va?</h2></div>
+  <div class="poll" data-id="pos-absolute" data-tipo="quiz" data-risposta="D">
+    <ol><li>Nell'angolo del suo genitore diretto</li><li>Resta al suo posto, absolute viene ignorato</li><li>Nell'angolo della finestra, fisso mentre scorri</li><li>Nell'angolo della pagina, e scorre con essa</li></ol>
+    <p class="why">Senza antenati posizionati il riferimento è il blocco contenitore iniziale, cioè la pagina. Il badge vola nell'angolo in alto a destra della pagina e scorre via con lei: non è fixed.</p>
+  </div>
+  <aside class="notes">È l'errore più frequente nei laboratori: "il badge è scappato dalla card". La soluzione è quasi sempre aggiungere position: relative al contenitore. La C confonde absolute con fixed.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La card con il badge</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>codepen.io/pen</b> (o jsfiddle.net): non serve l'account.</li>
+      <li>Nell'HTML: un <code>&lt;article class="card"&gt;</code> con <code>h2</code>, un prezzo e uno <code>&lt;span class="badge"&gt;-20%&lt;/span&gt;</code>.</li>
+      <li>Nel CSS: card larga 300px con bordo e padding; badge rotondo, rosso, <code>position: absolute; top: -20px; right: -20px</code>.</li>
+      <li>Aggiungi <code>margin: 80px</code> alla card e guarda dove finisce il badge. Poi dai <code>position: relative</code> alla card.</li>
+      <li>Copia HTML e CSS in un file <b>card-badge.html</b> sul tuo PC.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> senza relative il badge sta nell'angolo della pagina; con relative sta a cavallo dell'angolo in alto a destra della card e la segue se cambi il margin.</div>
+  </div>
+  <aside class="notes">Soluzione CSS: .card{position:relative;width:300px;margin:80px;padding:24px;border:2px solid #ccc;border-radius:16px} .badge{position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;background:#b42318;color:#fff;display:grid;place-items:center;font-weight:700}. Con CodePen senza account non si può salvare: per questo si copia il codice nel file. Fallback: Blocco note e browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">fixed e sticky</p><h2>Restare sullo schermo mentre scorri</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3><code>position: fixed</code></h3><p class="small">Fisso rispetto alla <b>finestra</b>: non si muove mai, esce dal flusso.</p>
+<pre class="code" style="font-size:27px">.torna-su {
+  <span class="k">position</span>: fixed;
+  <span class="k">bottom</span>: 20px;
+  <span class="k">right</span>: 20px;
+}</pre></div>
+    <div class="card"><h3><code>position: sticky</code></h3><p class="small">Normale finché non arriva alla <b>soglia</b>, poi resta attaccato. Solo dentro il suo genitore.</p>
+<pre class="code" style="font-size:27px">header {
+  <span class="k">position</span>: sticky;
+  <span class="k">top</span>: 0; <span class="c">/* obbligatorio */</span>
+}</pre></div>
+  </div>
+  <aside class="notes">Sticky senza top (o bottom) si comporta come relative: errore classico, "sticky non funziona". Altro motivo frequente: un antenato con overflow: hidden. Sticky resta attaccato solo finché il suo genitore è visibile: un titolo sticky dentro una section si stacca quando la section finisce, ed è proprio così che funzionano gli elenchi con le lettere dell'alfabeto nella rubrica del telefono. Attenzione con fixed: il contenuto sotto un header fixed va spostato con un padding-top, altrimenti resta coperto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Header sticky e pulsante "torna su"</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo pen: un <code>header</code> con il titolo, un <code>main</code> con 15 paragrafi (copia e incolla), un link <code>&lt;a href="#" class="su"&gt;Torna su&lt;/a&gt;</code>.</li>
+      <li>Header: sfondo colorato, <code>position: sticky; top: 0</code>.</li>
+      <li>Link: <code>position: fixed; bottom: 20px; right: 20px</code>, con sfondo e padding.</li>
+      <li>Scorri. Poi togli <code>top: 0</code> e scorri di nuovo.</li>
+      <li>Salva in <b>sticky-fixed.html</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> scorrendo, l'header resta incollato in alto e il pulsante resta nell'angolo in basso a destra. Senza <code>top: 0</code> l'header scorre via. Cliccando "Torna su" la pagina torna all'inizio.</div>
+  </div>
+  <aside class="notes">Per il testo dei paragrafi va bene qualunque frase ripetuta. Se l'header sticky copre i paragrafi, dare z-index: 1 all'header (anticipa la prossima slide). Bonus per i veloci: aggiungere html{scroll-behavior:smooth} per lo scorrimento morbido.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">z-index</p><h2>Chi sta sopra? Il terzo asse</h2></div>
+  <div class="cols-2">
+    <div class="strati"><div class="s1">z-index: 1</div><div class="s2">z-index: 3</div><div class="s3">z-index: 2</div></div>
+    <ul class="points">
+      <li>Gli elementi sovrapposti si ordinano lungo l'asse <b>z</b>, verso chi guarda</li>
+      <li>Vince il valore <b>più alto</b>; a parità vince chi viene dopo nell'HTML</li>
+      <li>Funziona sugli elementi <b>posizionati</b> (e sui figli di flex e grid)</li>
+      <li>z-index conta solo tra "fratelli" dello stesso <b>contesto di impilamento</b></li>
+    </ul>
+  </div>
+  <aside class="notes">Il verde (3) è sopra l'arancione (2), che è sopra il blu (1), anche se l'arancione viene dopo nell'HTML. Contesto di impilamento in parole semplici: se un genitore ha z-index 1, tutti i suoi figli restano "chiusi" a quel livello, anche con z-index 9999, rispetto a un altro elemento con z-index 2. È il motivo per cui nei progetti reali si vedono z-index enormi: tentativi a caso. Meglio una scala piccola e decisa (1 contenuto, 10 header, 100 finestre modali).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un paragrafo ha <code>z-index: 9999</code> ma resta sotto. Perché?</h2></div>
+  <div class="poll" data-id="pos-zindex" data-tipo="quiz" data-risposta="A">
+    <ol><li>È static: lo z-index viene ignorato</li><li>9999 è oltre il valore massimo consentito</li><li>Lo z-index funziona solo con le immagini</li><li>Serve scrivere <code>z-index: 9999px</code></li></ol>
+    <p class="why">Su un elemento static (non posizionato, e non figlio di flex o grid) lo z-index non ha effetto. Basta position: relative per attivarlo, senza spostare nulla.</p>
+  </div>
+  <aside class="notes">Il limite reale esiste (un intero a 32 bit, circa 2,1 miliardi) ma 9999 è lontanissimo. La D è sbagliata: z-index è un numero intero senza unità. Altra causa possibile, da citare: il contesto di impilamento del genitore.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Prima la semplicità</h2></div>
+  <figure class="citazione">
+    <blockquote>La semplicità è un prerequisito dell'affidabilità.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, Premio Turing 1972, nel manoscritto EWD498, 1975</figcaption>
+  </figure>
+  <p class="lead">Una pagina tutta in <b>absolute</b> con numeri messi a occhio sembra perfetta sul tuo schermo e si rompe sul telefono. Il flusso normale è la scelta affidabile: posiziona solo ciò che deve davvero uscirne.</p>
+  <aside class="notes">Fonte: E. W. Dijkstra, "How do we tell truths that might hurt?", EWD498 (18 giugno 1975), archivio Dijkstra dell'Università del Texas. Originale: "Simplicity is prerequisite for reliability." Traduzione nostra. Collegare: nelle lezioni 3 e 4 vedremo Flexbox e Grid, che hanno sostituito quasi tutti i vecchi trucchi con absolute e float per impaginare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la situazione al valore di position</h2></div>
+  <dl class="puzzle-abbina" data-id="pos-abbina">
+    <dt>fixed</dt><dd>Il banner dei cookie, sempre in fondo alla finestra</dd>
+    <dt>absolute</dt><dd>Il pallino rosso delle notifiche sull'icona</dd>
+    <dt>sticky</dt><dd>La riga dei titoli di una tabella lunga, che resta visibile</dd>
+    <dt>relative</dt><dd>La card che fa da riferimento al suo badge</dd>
+    <dt>static</dt><dd>I paragrafi di un articolo, uno sotto l'altro</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Discussione sul pallino delle notifiche: absolute dentro un'icona con position relative. La riga dei titoli di una tabella: th { position: sticky; top: 0 }.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il mazzo di carte: z-index e DevTools</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo file <b>carte.html</b>: un <code>div.tavolo</code> con <code>position: relative; height: 400px</code> e tre <code>div.carta</code> (rossa, verde, blu) di 200 × 280px.</li>
+      <li>Ogni carta <code>position: absolute</code>, spostata di 60px a destra e in basso rispetto alla precedente.</li>
+      <li>Con <code>z-index</code> metti la <b>blu sopra</b>, poi la rossa, la verde sotto.</li>
+      <li>Apri DevTools (F12), seleziona la carta verde e nella scheda Stili prova <code>z-index: 10</code>: che cosa cambia?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per l'ordine richiesto servono per esempio blu 3, rossa 2, verde 1. In DevTools, con z-index 10 la verde passa in cima; ricaricando la pagina torna sotto, perché DevTools non salva il file.</div>
+  </div>
+  <aside class="notes">Soluzione: .carta{position:absolute;width:200px;height:280px;border-radius:14px} .rossa{left:0;top:0;background:#c62828;z-index:2} .verde{left:60px;top:60px;background:#2e7d32;z-index:1} .blu{left:120px;top:120px;background:#1565c0;z-index:3}. Far notare che DevTools serve a sperimentare: le modifiche vanno poi riportate nel file. Bonus: aggiungere .carta:hover{z-index:10} per far "salire" la carta sotto il mouse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il posizionamento oggi</p><h2>Assistenti AI e CSS nuovo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Chiedi a un'AI di spostare un bottone</h3><p>Un assistente di programmazione scrive CSS in un secondo, ma alla richiesta "sposta quel bottone più a destra" può proporre position: absolute con numeri fissi: funziona sul suo esempio e si rompe sul telefono. Saper leggere il codice ti fa accorgere dell'errore.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'ancoraggio CSS</h3><p>Il nuovo <b>CSS Anchor Positioning</b> permette di "agganciare" un tooltip o un menu a un altro elemento senza la coppia relative/absolute e senza JavaScript. È disponibile in Chrome ed Edge dal 2024 e sta arrivando negli altri browser: prima di usarlo, controlla su caniuse.com.</p></div>
+  </div>
+  <aside class="notes">Primo box: non è una statistica, è un'esperienza comune; mostrare se possibile un esempio preparato dal docente con un assistente AI alla LIM e farne la revisione con la classe. Secondo box: Anchor Positioning (proprietà anchor-name e position-anchor) è arrivato in Chrome 125, maggio 2024; verificare su caniuse.com lo stato attuale degli altri browser prima della lezione. Per il laboratorio resta la tecnica classica, che funziona ovunque.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il valore predefinito di position è <span class="blank" data-risposta="static" style="--w:8ch"></span>.</p>
+    <p>Un elemento absolute si misura dal primo antenato <span class="blank" data-risposta="posizionato|relative" style="--w:12ch"></span>.</p>
+    <p>Il pulsante "torna su" sempre visibile usa position <span class="blank" data-risposta="fixed" style="--w:8ch"></span>.</p>
+    <p>Un header sticky ha bisogno anche di <code>top</code> uguale a <span class="blank" data-risposta="0|0px"></span>.</p>
+    <p>Tra due elementi sovrapposti vince lo z-index più <span class="blank" data-risposta="alto|grande"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: static, posizionato (accettato relative), fixed, 0, alto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>static: il flusso normale, il valore predefinito</li>
+      <li>relative: si sposta, il posto resta riservato</li>
+      <li>absolute: dal primo antenato posizionato</li>
+    </ul>
+    <ul class="points">
+      <li>fixed: fermo nella finestra; sticky: dopo la soglia</li>
+      <li>z-index: vince il più alto, solo se posizionato</li>
+      <li>Posiziona poco: il flusso normale è affidabile</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: Flexbox, il modo moderno di allineare e distribuire gli elementi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Copiare, citare, creare · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Educazione civica · 3E TPSI</p>
+  <h1>Copiare, citare, creare</h1>
+  <p class="lead">Foto, musica, codice e immagini fatte con l'AI nei vostri progetti web: che cosa si può usare, come si danno i crediti e come proteggere quello che create voi.</p>
+  <aside class="notes">Obiettivi: conoscere le regole base della legge italiana sul diritto d'autore (L. 633/1941), le eccezioni per la scuola, le licenze Creative Commons e le licenze del software, le novità sull'AI (legge 132/2025 e AI Act); saper scrivere i crediti in HTML e scegliere una licenza per la propria opera. Durata: 2 ore. Gli studenti hanno già sentito parlare di diritto d'autore alle medie o in prima: qui si va sul pratico per i progetti web della 3E.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per il sito sull'ambiente ti serve la foto di un parco eolico. Dove la prendi?</h2></div>
+  <div class="poll" data-id="da-foto">
+    <ol><li>La prima di Google Immagini</li><li>Da un sito di foto gratuite</li><li>Da Wikimedia Commons</li><li>La genero con un'AI</li><li>La scatto io, o la disegno</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta è giusta o sbagliata in sé: alla fine della lezione si torna a questo sondaggio e si vede che cosa serve controllare in ogni caso. Solo la E non richiede permessi, e anche lì attenzione a persone riconoscibili nella foto (diritto all'immagine e privacy).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La legge italiana</p><h2>Tre numeri da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1941</p><h3>La legge</h3><p>La L. 633/1941, aggiornata molte volte: protegge le opere dell'ingegno <b>dal momento in cui nascono</b>, senza registrazioni né ©.</p></div>
+    <div class="card soft"><p class="num">70</p><h3>anni dopo la morte</h3><p>Dell'autore: poi l'opera entra nel <b>pubblico dominio</b>. Il diritto di essere riconosciuto autore non scade mai.</p></div>
+    <div class="card"><p class="num">20</p><h3>anni per le foto "semplici"</h3><p>Una foto senza creatività (un documento, un oggetto ripreso così com'è) ha una tutela più breve, dalla data in cui è scattata.</p></div>
+  </div>
+  <aside class="notes">Riferimenti: art. 25 L. 633/1941 (70 anni post mortem); diritti morali, art. 20 e seguenti, inalienabili e senza scadenza; fotografie semplici, artt. 87-92, durata 20 anni dalla produzione (art. 92). La distinzione tra foto creativa e foto semplice la decide, nei casi dubbi, un giudice: per i progetti meglio considerare ogni foto protetta. La legge protegge la forma espressiva, non l'idea: l'idea di un sito sui rifiuti è di tutti, il testo e le foto di un sito no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Se scrivo "Fonte: Google Immagini", posso usare la foto?</h2></div>
+  <div class="poll" data-id="da-fonte" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sì, citare la fonte basta sempre</li><li>Sì, se il sito è di scuola e non guadagno</li><li>Sì, se la rimpicciolisco o la ritaglio</li><li>No: Google non è l'autore e citare non sostituisce il permesso</li></ol>
+    <p class="why">Google è solo un motore di ricerca: l'autore è altrove. Citare è obbligatorio, ma non dà il permesso di usare un'opera. Servono una licenza (per esempio Creative Commons), il pubblico dominio o un'eccezione di legge.</p>
+  </div>
+  <aside class="notes">È il malinteso più diffuso. B è il secondo tranello: l'uso scolastico ha un'eccezione (prossima slide), ma con limiti precisi, non è un via libera generale; e un sito pubblico è visibile a tutti. C: ritagliare o ridurre non cambia chi è l'autore. Nei filtri di Google Immagini esiste "Diritti di utilizzo > Licenze Creative Commons", ma va sempre controllata la pagina di origine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'eccezione per la scuola</p><h2>Articolo 70: citare si può, con quattro condizioni</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Solo <b>parti</b> dell'opera, quanto serve allo scopo</li>
+      <li>Per <b>critica, discussione o insegnamento</b>, a scopo illustrativo</li>
+      <li><b>Senza fini commerciali</b> e senza fare concorrenza all'opera</li>
+      <li>Sempre con <b>titolo, autore</b> ed editore o fonte</li>
+    </ul>
+    <div class="card soft"><h3>Esempio sì</h3><p>Nella relazione citi 3 righe di un articolo di giornale e le commenti.</p><h3>Esempio no</h3><p>Copi tutto l'articolo nel sito della classe.</p></div>
+  </div>
+  <aside class="notes">Art. 70 comma 1 L. 633/1941; comma 3: menzione di titolo, autore, editore. Il comma 1-bis permette di pubblicare in rete, gratuitamente, immagini e musiche a bassa risoluzione o degradate per uso didattico o scientifico e senza scopo di lucro: utile, ma il confine è incerto. Per il sito di un progetto pubblicato online la strada più sicura resta usare opere con licenza libera o proprie.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Una foto libera, con i crediti in HTML</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>commons.wikimedia.org</b> cerca "wind farm" o "parco eolico" e apri una foto.</li>
+      <li>Clicca <b>Riutilizza questo file</b> (Use this file): leggi autore, licenza e link.</li>
+      <li>In CodePen (o in un file <b>crediti.html</b>) scrivi una <code>&lt;figure&gt;</code> con <code>&lt;img&gt;</code>, <code>alt</code> e una <code>&lt;figcaption&gt;</code>.</li>
+      <li>Nella didascalia: titolo, autore con link, licenza con link alla licenza, eventuali modifiche.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> chi legge la didascalia può ritrovare la foto originale e il testo della licenza con due clic. Se la licenza è CC BY-SA, scrivi anche "SA".</div>
+  </div>
+  <aside class="notes">Esempio di didascalia: "Parco eolico di …" di [Nome autore] (link alla pagina del file), licenza CC BY-SA 4.0 (link a creativecommons.org/licenses/by-sa/4.0/), ritagliata. Commons offre il testo dei crediti già pronto, anche in HTML. Le immagini di Commons sono quasi tutte con licenze libere o di pubblico dominio, ma ognuna ha la sua: leggerla sempre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Creative Commons</p><h2>Abbina la licenza a quello che ti permette</h2></div>
+  <dl class="puzzle-abbina" data-id="da-licenze">
+    <dt>CC BY</dt><dd>Usi e modifichi, anche per guadagnare, citando l'autore</dd>
+    <dt>CC BY-SA</dt><dd>Modifichi, ma condividi il risultato con la stessa licenza</dd>
+    <dt>CC BY-NC</dt><dd>Usi e modifichi, ma solo senza scopo commerciale</dd>
+    <dt>CC BY-ND</dt><dd>Condividi l'opera solo com'è, senza modifiche</dd>
+    <dt>CC0</dt><dd>L'autore rinuncia ai diritti: nessun obbligo</dd>
+  </dl>
+  <aside class="notes">Le licenze Creative Commons sono nate nel 2001 (prime licenze nel 2002); la versione attuale è la 4.0 (2013). BY = attribuzione, SA = condividi allo stesso modo, NC = non commerciale, ND = non opere derivate. Esistono anche le combinazioni BY-NC-SA e BY-NC-ND. Con CC0 non c'è obbligo di citare, ma citare resta corretto e utile a chi legge.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La musica</p><h2>Beethoven è morto nel 1827. Posso usare qualsiasi registrazione della Quinta nel video del progetto?</h2></div>
+  <div class="poll" data-id="da-beethoven" data-tipo="quiz" data-risposta="A">
+    <ol><li>No: la registrazione ha diritti propri di orchestra e casa discografica</li><li>Sì: dopo 70 anni dalla morte è tutto libero</li><li>Sì, ma solo i primi 30 secondi</li><li>No: la musica classica non va mai in pubblico dominio</li></ol>
+    <p class="why">La composizione è di pubblico dominio, ma ogni esecuzione e ogni registrazione ha i suoi diritti "connessi" (interpreti e produttore del disco), che durano in genere 70 anni dalla pubblicazione. Servono registrazioni libere, per esempio quelle di Musopen.</p>
+  </div>
+  <aside class="notes">Diritti connessi: artt. 72 e seguenti (produttori di fonogrammi) e 80 e seguenti (artisti interpreti) della L. 633/1941; la durata per le registrazioni pubblicate è di 70 anni dalla pubblicazione. C è una leggenda molto diffusa (la "regola dei 30 secondi" non esiste). Musopen (musopen.org) offre registrazioni di musica classica con licenze libere o in pubblico dominio: controllare la licenza del singolo brano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove trovare materiale libero</p><h2>La cassetta degli attrezzi del progetto</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Che cosa</th><th>Dove</th></tr>
+      <tr><td>Foto e disegni</td><td>Wikimedia Commons, Openverse</td></tr>
+      <tr><td>Musica</td><td>Free Music Archive, ccMixter, Musopen</td></tr>
+      <tr><td>Icone</td><td>Material Symbols (Google), Tabler Icons</td></tr>
+      <tr><td>Caratteri</td><td>Google Fonts (licenza OFL)</td></tr>
+      <tr><td>Dati</td><td>dati.gov.it, ISPRA, ISTAT</td></tr>
+    </table>
+    <div class="stack">
+      <div class="callout hl">"Gratis" non vuol dire "libero": alcuni siti hanno una <b>licenza propria</b> (non Creative Commons) con regole diverse. Leggila sempre.</div>
+      <p class="small muted">Su ogni sito, prima di scaricare: chi è l'autore? quale licenza? posso modificare? devo citare?</p>
+    </div>
+  </div>
+  <aside class="notes">Esempi di licenza propria: Pixabay, Unsplash e Pexels permettono molti usi senza obbligo di citare, ma vietano per esempio di rivendere le foto così come sono; non sono CC. Material Symbols e Tabler Icons sono distribuiti con licenze open source (Apache 2.0 e MIT): l'obbligo di attribuzione riguarda soprattutto la ridistribuzione del pacchetto. Google Fonts: in gran parte licenza SIL Open Font License. Verificare i siti prima della lezione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Detective: da dove viene questa immagine?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Il docente ti dà il link di un'immagine che circola in rete senza firma.</li>
+      <li>Vai su <b>tineye.com</b> (nessun account), incolla il link e avvia la ricerca inversa.</li>
+      <li>Ordina i risultati per data (<b>Oldest</b>): qual è la pubblicazione più vecchia?</li>
+      <li>Apri quella pagina: c'è un autore? una licenza? Annota tutto in <b>detective.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel file ci sono il primo sito che l'ha pubblicata, l'autore (o "non trovato") e la tua conclusione: posso usarla nel progetto? sì / no / solo chiedendo il permesso.</div>
+  </div>
+  <aside class="notes">Scegliere prima un'immagine adatta, per esempio una foto famosa di Commons ripresa da molti siti, così l'origine si trova. Alternativa: Google Lens dal browser Chrome (clic destro, "Cerca immagine con Google"). Messaggio: la ricerca inversa aiuta a trovare l'autore, ma "l'ho trovata in 500 siti" non significa che sia libera.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Di chi è un'opera?</h2></div>
+  <figure class="citazione">
+    <blockquote>Il libro, come libro, appartiene all'autore; ma come pensiero appartiene, e la parola non è troppo grande, al genere umano.</blockquote>
+    <figcaption><b>Victor Hugo</b>, scrittore, discorso di apertura del Congresso letterario internazionale, Parigi, 1878</figcaption>
+  </figure>
+  <p class="lead">Da quel congresso nacque l'associazione che preparò la Convenzione di Berna (1886): ancora oggi la base del diritto d'autore in quasi tutto il mondo.</p>
+  <aside class="notes">Originale: "Le livre, comme livre, appartient à l'auteur, mais comme pensée, il appartient — le mot n'est pas trop vaste — au genre humain." Traduzione nostra. Al congresso del 1878 nacque l'ALAI (Association Littéraire et Artistique Internationale), che promosse la Convenzione di Berna del 1886. Domanda: le licenze Creative Commons sono un modo per realizzare l'idea di Hugo? Perché?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice è un'opera</p><h2>Anche il software ha un autore e una licenza</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Nessuna licenza</h3><p>Un repository senza file LICENSE: puoi leggerlo, ma <b>non</b> hai il permesso di copiarlo nel tuo progetto.</p></div>
+    <div class="card soft"><h3>MIT</h3><p>Puoi fare quasi tutto, anche usi commerciali, se mantieni l'avviso di copyright e la licenza.</p></div>
+    <div class="card soft"><h3>GPL</h3><p>Se distribuisci un programma che la usa, anche il tuo codice deve essere GPL e aperto.</p></div>
+  </div>
+  <div class="callout">Le risposte di Stack Overflow sono CC BY-SA: se copi un pezzo di codice, metti in un commento il link alla risposta.</div>
+  <aside class="notes">La legge italiana tutela i programmi per elaboratore come opere letterarie (art. 2 n. 8 L. 633/1941). GPL: in modo semplificato, il vincolo scatta quando si distribuisce il programma. I contributi su Stack Overflow sono rilasciati con licenza CC BY-SA (4.0 per quelli recenti). Collegamento al progetto DomoDash: lo script di partenza è dato dal docente per uso scolastico; dichiarare comunque da dove viene il codice non vostro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Intelligenza artificiale</p><h2>Che cosa dice la legge italiana dal 2025?</h2></div>
+  <div class="poll" data-id="da-ai" data-tipo="quiz" data-risposta="C">
+    <ol><li>Tutto ciò che genera un'AI è protetto, come un'opera</li><li>Niente di ciò che si fa con l'AI può essere protetto</li><li>È protetta l'opera fatta con l'aiuto dell'AI se è il risultato del lavoro intellettuale di una persona</li><li>L'autore dell'opera è l'azienda che ha creato l'AI</li></ol>
+    <p class="why">La legge 132/2025 ha aggiunto all'articolo 1 della legge sul diritto d'autore che le opere devono essere dell'ingegno "umano", anche se create con strumenti di AI, purché siano frutto del lavoro intellettuale dell'autore.</p>
+  </div>
+  <aside class="notes">Legge 23 settembre 2025, n. 132, in vigore dal 10 ottobre 2025, art. 25: modifica l'art. 1 della L. 633/1941 e introduce l'art. 70-septies sull'estrazione di testo e dati (text and data mining) da parte di modelli di AI, consentita su contenuti a cui si ha accesso legittimo, salvo che il titolare dei diritti si sia opposto (opt-out). Quanto contributo umano basti (un prompt? molte revisioni?) lo diranno i giudici caso per caso: dirlo onestamente agli studenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Immagini vere, immagini generate</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con l'<b>AI Act</b> europeo, dal 2 agosto 2026 chi pubblica un deepfake (immagini, audio o video generati che sembrano reali) deve dichiarare che è artificiale, e i sistemi generativi devono marcare i contenuti in modo leggibile dalle macchine.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Lo standard <b>C2PA</b> (Content Credentials) aggiunge al file una specie di "carta d'identità" firmata: chi l'ha creato, con quale strumento, quali modifiche. Limite: basta uno screenshot per perderla.</p></div>
+  </div>
+  <div class="callout">Regola del corso: se nel progetto usate testo, codice o immagini generate, scrivetelo nei crediti, con lo strumento usato.</div>
+  <aside class="notes">AI Act: regolamento (UE) 2024/1689, articolo 50 (obblighi di trasparenza), applicabile dal 2 agosto 2026. La legge italiana 132/2025 rimanda all'AI Act per questi obblighi. C2PA: Coalition for Content Provenance and Authenticity, fondata nel 2021 da aziende tra cui Adobe, Microsoft, Intel, BBC; diversi generatori di immagini e alcune fotocamere aggiungono già queste credenziali. Demo: contentcredentials.org/verify su un'immagine che le contiene (verificare il sito prima).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Scegli la licenza per la tua opera</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Vai su <b>creativecommons.org/chooser</b> e rispondi alle domande: permetti modifiche? usi commerciali?</li>
+      <li>Inserisci titolo e tuo nome (anche solo l'iniziale del cognome), poi copia il codice <b>HTML</b> proposto.</li>
+      <li>Incollalo nel <code>&lt;footer&gt;</code> di <b>crediti.html</b> (o in CodePen) e apri l'anteprima.</li>
+      <li>Accanto, in un commento HTML, scrivi perché hai scelto quella licenza.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel piè di pagina compare il nome della licenza con un link a creativecommons.org. Se hai scelto "no modifiche" e "no usi commerciali", la sigla è <b>CC BY-NC-ND 4.0</b>.</div>
+  </div>
+  <aside class="notes">Il chooser non richiede account. Discussione: per un sito di progetto scolastico, quale licenza aiuta di più le altre classi? Spesso CC BY o CC BY-SA. Ricordare che si può concedere una licenza solo su ciò che è proprio: se nel sito ci sono foto di altri, la licenza del footer riguarda solo i contenuti vostri, e va scritto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Prima di pubblicare il sito del progetto: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="da-checklist">
+    <li>Elenca ogni foto, musica, icona e pezzo di codice non vostro</li>
+    <li>Per ognuno trova autore e fonte originale</li>
+    <li>Controlla la licenza: puoi usarlo e modificarlo così?</li>
+    <li>Sostituisci quello che non puoi usare con materiale libero o vostro</li>
+    <li>Scrivi i crediti nella pagina e dichiara l'uso dell'AI</li>
+    <li>Scegli la licenza per i vostri contenuti e pubblica</li>
+  </ol>
+  <aside class="notes">Questa checklist vale per i due progetti di gruppo (DomoDash e il Comune a raggi X). Errore tipico: scrivere i crediti alla fine, a memoria, quando non si ricorda più da dove arriva un'immagine. Meglio tenere una tabella dei crediti fin dal primo giorno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Le opere entrano nel pubblico dominio <span class="blank" data-risposta="70|settanta"></span> anni dopo la morte dell'autore.</p>
+    <p>La sigla Creative Commons che vieta le modifiche è <span class="blank" data-risposta="ND"></span>.</p>
+    <p>L'eccezione per citare parti di un'opera è nell'articolo <span class="blank" data-risposta="70|settanta"></span> della legge.</p>
+    <p>Un repository senza file LICENSE non dà il permesso di <span class="blank" data-risposta="copiare|riusare|usare"></span> il codice.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 70, ND, 70 (coincidenza utile da far notare: articolo 70 e 70 anni), copiare (accettati riusare, usare).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ogni opera è protetta da subito, anche senza ©</li>
+      <li>Citare è obbligatorio, ma non dà il permesso</li>
+      <li>Art. 70: parti, scopo didattico, niente commercio, fonte</li>
+    </ul>
+    <ul class="points">
+      <li>CC: BY, SA, NC, ND; CC0; licenze proprie da leggere</li>
+      <li>Musica: composizione e registrazione hanno diritti diversi</li>
+      <li>AI: serve il contributo umano; dichiaralo sempre</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Tornare al sondaggio iniziale: che cosa bisogna controllare per ciascuna delle cinque scelte? Assegnare il compito su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

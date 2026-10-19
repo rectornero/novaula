@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Link, immagini, elenchi e tabelle · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Link, immagini,<br>elenchi e tabelle</h1>
+  <p class="lead">Il web è una ragnatela perché le pagine si tengono per mano. Oggi la tua pagina impara a collegarsi, a mostrare immagini e a mettere ordine nei dati.</p>
+  <aside class="notes">Obiettivi: scrivere link assoluti, relativi, interni (#), mailto; capire i percorsi relativi con ../; inserire immagini con src, alt, width e height; scrivere un buon testo alternativo; costruire elenchi puntati, numerati e annidati; costruire tabelle con caption, th, td, colspan e rowspan. Durata: 2 ore. Serve la cartella web-cognome della lezione precedente (se qualcuno non l'ha, la ricrea con index.html in 5 minuti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Una pagina senza nessun link fa ancora parte del web?</h2></div>
+  <div class="poll" data-id="lit-senza-link">
+    <ol><li>Sì: ha un URL, la apri con il browser</li><li>No: nessuno può arrivarci per caso</li><li>Dipende: se altri la collegano, sì</li></ol>
+  </div>
+  <aside class="notes">Domanda aperta. Spunto: la pagina si raggiunge solo se qualcuno conosce l'URL o se un'altra pagina la collega; i crawler dei motori di ricerca la trovano proprio seguendo i link (lezione sul web). Berners-Lee: il valore del web è nei collegamenti. Due minuti di discussione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I collegamenti</p><h2>L'elemento &lt;a&gt; e il suo href</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Codice</th><th>Dove porta</th></tr>
+    <tr><td>Assoluto</td><td class="mono">&lt;a href="https://www.w3.org"&gt;W3C&lt;/a&gt;</td><td>A un altro sito, URL completo</td></tr>
+    <tr><td>Relativo</td><td class="mono">&lt;a href="hobby.html"&gt;Hobby&lt;/a&gt;</td><td>A un file del tuo sito</td></tr>
+    <tr><td>Interno</td><td class="mono">&lt;a href="#contatti"&gt;Contatti&lt;/a&gt;</td><td>All'elemento con <code>id="contatti"</code></td></tr>
+    <tr><td>Posta</td><td class="mono">&lt;a href="mailto:a@b.it"&gt;Scrivimi&lt;/a&gt;</td><td>Apre il programma di posta</td></tr>
+    <tr><td>Nuova scheda</td><td class="mono">&lt;a href="…" target="_blank"&gt;</td><td>Apre il link in un'altra scheda</td></tr>
+  </table>
+  <p class="small muted">Il testo del link deve dire dove porta: "Orario della 3E", non "clicca qui".</p>
+  <aside class="notes">href = hypertext reference. Il link interno usa il frammento dell'URL visto nella prima lezione (#Storia di Wikipedia). target="_blank" va usato con misura: chi naviga con lo screen reader si perde se si aprono schede senza avviso. "Clicca qui" è un errore di accessibilità: chi scorre l'elenco dei link sente solo "clicca qui, clicca qui". Nel codice dell'esempio a@b.it è un indirizzo inventato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Percorsi relativi</p><h2>Muoversi tra le cartelle del sito</h2></div>
+  <div class="cols-2">
+    <pre class="code">web-cognome/
+├── index.html
+├── hobby.html
+├── img/
+│   └── <span class="hl">logo.png</span>
+└── pagine/
+    └── <span class="s">orario.html</span></pre>
+    <table class="data compact">
+      <tr><th>Da</th><th>Verso</th><th>Percorso</th></tr>
+      <tr><td class="mono">index.html</td><td class="mono">hobby.html</td><td class="mono">hobby.html</td></tr>
+      <tr><td class="mono">index.html</td><td class="mono">logo.png</td><td class="mono">img/logo.png</td></tr>
+      <tr><td class="mono">index.html</td><td class="mono">orario.html</td><td class="mono">pagine/orario.html</td></tr>
+      <tr><td class="mono">orario.html</td><td class="mono">index.html</td><td class="mono hl">../index.html</td></tr>
+    </table>
+  </div>
+  <p class="lead"><code>../</code> vuol dire "sali di una cartella". Il percorso parte sempre dal file in cui scrivi il link.</p>
+  <aside class="notes">Collegare all'albero delle cartelle del sistema operativo (Unità 6). Un percorso relativo funziona sia sul PC sia quando il sito viene pubblicato su un server, perché si sposta insieme alla cartella. Usare sempre la barra / (non la \ di Windows) e nomi senza spazi né accenti: su un server Linux Logo.png e logo.png sono due file diversi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Sei in pagine/orario.html. Come mostri img/logo.png?</h2></div>
+  <div class="poll" data-id="lit-percorso" data-tipo="quiz" data-risposta="B">
+    <ol><li><code>img/logo.png</code></li><li><code>../img/logo.png</code></li><li><code>C:\Users\mario\img\logo.png</code></li><li><code>/logo.png</code></li></ol>
+    <p class="why">Da pagine/ bisogna prima salire di una cartella (../) e poi entrare in img/. La C sembra funzionare sul tuo PC, ma si rompe su qualunque altro computer e sul server.</p>
+  </div>
+  <aside class="notes">La C è il tranello più pericoloso: lo studente vede l'immagine, consegna, e il docente vede l'icona dell'immagine rotta. La A cerca pagine/img/logo.png, che non esiste. La D con la barra iniziale significa "dalla radice del sito": su un server cercherebbe logo.png nella cartella principale; aperto da file locale cercherebbe nella radice del disco.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Due pagine che si tengono per mano</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella cartella <b>web-cognome</b> crea <b>hobby.html</b> (copia lo scheletro di index.html) con un h1 e un paragrafo sul tuo hobby.</li>
+      <li>In index.html aggiungi il link <code>&lt;a href="hobby.html"&gt;I miei hobby&lt;/a&gt;</code>; in hobby.html il link per tornare alla home.</li>
+      <li>In hobby.html aggiungi un link a una pagina di Wikipedia sul tuo hobby, che si apra in una nuova scheda.</li>
+      <li>In fondo a index.html metti <code>&lt;h2 id="contatti"&gt;</code> e in cima un link interno che ci porti.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> clicchi avanti e indietro tra le due pagine senza errori; il link a Wikipedia apre un'altra scheda; il link interno fa scorrere la pagina fino ai contatti. I link già visitati cambiano colore (viola).</div>
+  </div>
+  <aside class="notes">Se un link porta a una pagina "File non trovato" (ERR_FILE_NOT_FOUND): controllare maiuscole, estensione e cartella. Per vedere bene lo scorrimento del link interno, la pagina deve essere più lunga dello schermo: aggiungere qualche paragrafo o restringere la finestra. Chi finisce prima aggiunge un link mailto con un indirizzo inventato (non il proprio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le immagini</p><h2>&lt;img&gt;: un elemento vuoto con quattro attributi</h2></div>
+  <pre class="code"><span class="k">&lt;img</span> src=<span class="s">"img/cern.jpg"</span> alt=<span class="s">"Il primo server web, un computer NeXT del CERN"</span>
+     width=<span class="s">"400"</span> height=<span class="s">"300"</span><span class="k">&gt;</span></pre>
+  <div class="cols-4">
+    <div class="card soft"><h3>src</h3><p class="small">Il percorso del file, come per i link.</p></div>
+    <div class="card soft"><h3>alt</h3><p class="small">Il testo che sostituisce l'immagine. <b>Obbligatorio.</b></p></div>
+    <div class="card soft"><h3>width, height</h3><p class="small">In pixel: il browser riserva lo spazio prima di scaricarla.</p></div>
+    <div class="card soft"><h3>Formato</h3><p class="small">JPEG foto, PNG grafica, SVG vettoriale, WebP leggero.</p></div>
+  </div>
+  <aside class="notes">Ripasso dall'Unità 2: una foto da 4000×3000 pixel pesa diversi MB; se nella pagina la mostro larga 400 pixel, conviene ridimensionarla prima (Squoosh o Photopea) invece di far scaricare tutto. width e height evitano che la pagina "salti" mentre le immagini arrivano. L'immagine non è dentro il file HTML: è un file separato e una richiesta in più (si vede nella scheda Network).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un web per tutti, anche per chi non vede</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del web sta nella sua universalità. L'accesso per tutti, indipendentemente dalla disabilità, ne è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, al lancio della Web Accessibility Initiative del W3C, 1997</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Dal 2016 alcuni social generano in automatico un testo alternativo per le foto con la visione artificiale, e oggi i modelli di AI descrivono un'immagine in una frase. Ma l'AI vede che cosa c'è, non <b>perché</b> l'hai messa lì: l'alt migliore lo scrive chi crea la pagina.</p></div>
+  <aside class="notes">Originale: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." (comunicato del W3C, 22 ottobre 1997). Traduzione nostra. Facebook ha introdotto l'"automatic alternative text" nell'aprile 2016. Esempio: una foto di classe con alt generato "un gruppo di persone sorridenti all'aperto" contro l'alt scritto dall'autore "La 3E alla gita al CERN di Ginevra". Regola pratica: se l'immagine è solo decorativa, alt="" (vuoto ma presente) così lo screen reader la salta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un'immagine con il suo testo alternativo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>web-cognome</b> crea la cartella <b>img</b>.</li>
+      <li>Da <b>commons.wikimedia.org</b> scarica una foto legata al tuo hobby; salvala in img con un nome breve, minuscolo, senza spazi (es. <b>chitarra.jpg</b>).</li>
+      <li>In hobby.html inseriscila con src, alt, e <code>width="400"</code>.</li>
+      <li>Sotto la foto scrivi in piccolo autore e licenza, presi dalla pagina di Commons.</li>
+      <li>Prova: cambia una lettera di src e ricarica. Poi rimetti a posto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la foto è larga 400 pixel e mantiene le proporzioni (hai dato solo width). Con src sbagliato vedi l'icona dell'immagine rotta e, al suo posto, il testo dell'alt.</div>
+  </div>
+  <aside class="notes">Wikimedia Commons non richiede account per scaricare; il pulsante "Scarica" propone varie dimensioni: scegliere una piccola (per esempio 640 px). Le licenze Creative Commons richiedono di citare l'autore: collegamento con la lezione di educazione civica sul diritto d'autore. In alternativa una foto fatta da loro con il telefono (niente volti di compagni senza permesso). Con solo width, il browser calcola height in proporzione; con entrambi sbagliati l'immagine si deforma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli elenchi</p><h2>Puntati, numerati, uno dentro l'altro</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:29px"><span class="k">&lt;ol&gt;</span>
+  <span class="k">&lt;li&gt;</span>Accendi il PC<span class="k">&lt;/li&gt;</span>
+  <span class="k">&lt;li&gt;</span>Apri il browser
+    <span class="k">&lt;ul&gt;</span>
+      <span class="k">&lt;li&gt;</span>Chrome<span class="k">&lt;/li&gt;</span>
+      <span class="k">&lt;li&gt;</span>Firefox<span class="k">&lt;/li&gt;</span>
+    <span class="k">&lt;/ul&gt;</span>
+  <span class="k">&lt;/li&gt;</span>
+  <span class="k">&lt;li&gt;</span>Premi F12<span class="k">&lt;/li&gt;</span>
+<span class="k">&lt;/ol&gt;</span></pre>
+    <div class="stack">
+      <div class="card"><ol style="margin:0;padding-left:1.4em"><li>Accendi il PC</li><li>Apri il browser<ul style="margin:0"><li>Chrome</li><li>Firefox</li></ul></li><li>Premi F12</li></ol></div>
+      <ul class="points small"><li><code>&lt;ul&gt;</code> puntato, quando l'ordine non conta</li><li><code>&lt;ol&gt;</code> numerato, quando conta; attributi <code>start</code> e <code>reversed</code></li><li>Dentro ul e ol ci vanno solo <code>&lt;li&gt;</code></li></ul>
+    </div>
+  </div>
+  <aside class="notes">L'elenco annidato va DENTRO un li, prima della sua chiusura: errore frequentissimo è metterlo direttamente dentro ol, che il validatore segnala. ol start="5" parte da 5; ol reversed conta alla rovescia (utile per una classifica "top 5"). type="A" o type="i" cambia lo stile dei numeri, ma oggi lo si fa con i CSS. Menù di navigazione dei siti veri: quasi sempre un ul di link.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le tabelle</p><h2>Righe, celle e intestazioni</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:27px"><span class="k">&lt;table&gt;</span>
+  <span class="k">&lt;caption&gt;</span>Lunedì 3E<span class="k">&lt;/caption&gt;</span>
+  <span class="k">&lt;tr&gt;</span>
+    <span class="k">&lt;th&gt;</span>Ora<span class="k">&lt;/th&gt;&lt;th&gt;</span>Materia<span class="k">&lt;/th&gt;</span>
+  <span class="k">&lt;/tr&gt;</span>
+  <span class="k">&lt;tr&gt;</span>
+    <span class="k">&lt;td&gt;</span>1ª<span class="k">&lt;/td&gt;&lt;td&gt;</span>TPSI<span class="k">&lt;/td&gt;</span>
+  <span class="k">&lt;/tr&gt;</span>
+<span class="k">&lt;/table&gt;</span></pre>
+    <div class="stack">
+      <table class="data compact"><tr><th>Ora</th><th>Materia</th></tr><tr><td>1ª</td><td>TPSI</td></tr></table>
+      <ul class="points small"><li><code>tr</code> = riga (table row)</li><li><code>th</code> = cella di intestazione, <code>td</code> = cella di dati</li><li><code>caption</code> = il titolo della tabella</li><li><code>colspan</code> e <code>rowspan</code> uniscono celle</li></ul>
+    </div>
+  </div>
+  <aside class="notes">Una tabella HTML si costruisce per righe: non esiste un elemento "colonna" per i dati; le colonne nascono dal numero di celle in ogni riga. Senza CSS la tabella non ha bordi: quella a destra ha lo stile della slide. Per aggiungere i bordi in fretta oggi si può usare l'attributo border="1" su table (sconsigliato in HTML moderno ma ancora funzionante; il validatore lo segnala come obsoleto): nella lezione sui CSS lo faremo nel modo giusto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Una riga ha una cella con colspan="3" e altre 2 celle. Quante colonne occupa?</h2></div>
+  <div class="poll" data-id="lit-colspan" data-tipo="quiz" data-risposta="D">
+    <ol><li>2</li><li>3</li><li>4</li><li>5</li></ol>
+    <p class="why">La cella con colspan="3" vale tre colonne, più le altre due: 3 + 2 = 5. Tutte le righe della tabella dovrebbero arrivare allo stesso totale, altrimenti la tabella si sfalsa.</p>
+  </div>
+  <aside class="notes">Chi risponde 3 conta le celle scritte nel codice, non le colonne occupate. Estensione: con rowspan="2" una cella occupa anche la riga sotto, che quindi deve avere una cella in meno. Disegnare alla lavagna una griglia 5×3 e colorare le celle.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>L'orario della 3E in una tabella</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea la cartella <b>pagine</b> e dentro il file <b>orario.html</b>.</li>
+      <li>Scrivi una tabella con caption "Orario della 3E": prima riga di <code>th</code> con Ora e i giorni da lunedì a venerdì.</li>
+      <li>Una riga per ogni ora: <code>td</code> con le materie vere.</li>
+      <li>Due ore consecutive della stessa materia? Unisci le celle con <code>rowspan="2"</code>.</li>
+      <li>Metti <code>border="1"</code> su table, un link a <b>../index.html</b> e valida su validator.w3.org.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 6 colonne allineate (Ora + 5 giorni), le celle unite non spostano le altre, il link torna alla home. Il validatore segnala solo una cosa: border è obsoleto.</div>
+  </div>
+  <aside class="notes">Errore tipico con rowspan: nella riga sotto lasciare la cella in più, così la riga ha una colonna di troppo e si sfalsa. Il validatore segnala anche "A table row was 7 columns wide, which is wider than the column count established by the first row (6)". Il messaggio su border="1" è un errore di conformità ("The border attribute on the table element is obsolete"): spiegare che è voluto e sarà sostituito dai CSS nella prossima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vero o falso?</p><h2>Gira le carte e discutine con il compagno</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>L'alt serve solo quando l'immagine non si carica.</h3></div><div class="retro"><p><b>Falso.</b></p><p class="muted">Lo leggono gli screen reader, i motori di ricerca e i programmi che analizzano la pagina, sempre.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Con le tabelle si impagina il sito in colonne.</h3></div><div class="retro"><p><b>Falso, oggi.</b></p><p class="muted">Si faceva negli anni '90. Le tabelle sono per i dati; l'impaginazione si fa con i CSS.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Un link può portare a un punto preciso della pagina.</h3></div><div class="retro"><p><b>Vero.</b></p><p class="muted">Con <code>href="#id"</code> verso un elemento che ha quell'id, anche su un'altra pagina: <code>hobby.html#foto</code>.</p></div></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Una tabella vera, con th e caption, si legge bene con uno screen reader e si copia in un foglio di calcolo; anche gli strumenti che estraggono dati dalle pagine, compresi quelli con l'AI, lavorano meglio su tabelle scritte bene.</p></div>
+  <aside class="notes">Flip a coppie, poi correzione collettiva. Le tabelle per l'impaginazione erano lo standard di fatto prima della diffusione dei CSS (fine anni '90, primi 2000). Prova veloce: selezionare la tabella dell'orario nel browser, copiarla e incollarla in Calc: le celle finiscono nelle celle.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni elemento al suo lavoro</h2></div>
+  <dl class="puzzle-abbina" data-id="lit-elementi">
+    <dt><code>&lt;a&gt;</code></dt><dd>Collega a un'altra risorsa</dd>
+    <dt><code>&lt;img&gt;</code></dt><dd>Mostra un file immagine, senza tag di chiusura</dd>
+    <dt><code>&lt;ul&gt;</code></dt><dd>Elenco in cui l'ordine non conta</dd>
+    <dt><code>&lt;ol&gt;</code></dt><dd>Elenco in cui l'ordine conta</dd>
+    <dt><code>&lt;th&gt;</code></dt><dd>Cella di intestazione di una tabella</dd>
+    <dt><code>&lt;td&gt;</code></dt><dd>Cella di dati di una tabella</dd>
+  </dl>
+  <aside class="notes">Ripasso veloce a squadre. Il distrattore più insidioso è ul/ol: ricordare "u = unordered, o = ordered".</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="2562" data-aiuto="la seconda cifra è la risposta del quiz su colspan">
+    <ul class="points">
+      <li>1ª cifra: quante lettere ha il tag dell'elenco numerato</li>
+      <li>2ª cifra: le colonne occupate da colspan="3" più 2 celle</li>
+      <li>3ª cifra: le celle th della prima riga dell'orario (Ora + i giorni)</li>
+      <li>4ª cifra: quante volte compare <code>../</code> in <code>../../img/a.png</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> ol, 3+2 = 5, Ora + 5 giorni = 6, due salti di cartella.</div>
+  </div>
+  <aside class="notes">Codice: 2562. Se la scuola ha lezione anche il sabato la terza cifra cambierebbe: il testo dice "i giorni" riferendosi al laboratorio (lunedì-venerdì).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'attributo che indica la destinazione di un link è <span class="blank" data-risposta="href"></span>.</p>
+    <p>Il testo che sostituisce un'immagine va nell'attributo <span class="blank" data-risposta="alt"></span>.</p>
+    <p>Per salire di una cartella in un percorso relativo si scrive <span class="blank" data-risposta="../|.."></span>.</p>
+    <p>Ogni voce di un elenco ul oppure ol è un elemento <span class="blank" data-risposta="li|&lt;li&gt;"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: href, alt, ../ (accettato anche ..), li.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>&lt;a href&gt;: link assoluti, relativi, interni (#id), mailto</li>
+      <li>Percorsi relativi dal file corrente; ../ sale di una cartella</li>
+      <li>&lt;img&gt; con src, alt, width e height; alt pensato da chi scrive</li>
+    </ul>
+    <ul class="points">
+      <li>ul se l'ordine non conta, ol se conta, sempre con li</li>
+      <li>Tabelle per righe: tr, th, td, caption</li>
+      <li>colspan e rowspan uniscono celle; le righe devono tornare</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito su Novaula. Prossima lezione: i CSS, per dare stile a tutto quello che abbiamo scritto (e togliere il border="1").</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

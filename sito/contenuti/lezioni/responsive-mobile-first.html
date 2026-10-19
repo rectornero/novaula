@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Progettare un sito responsive · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Siti web responsive e accessibili · Lezione 5</p>
+  <h1>Progettare un sito<br>responsive</h1>
+  <p class="lead">Lo stesso HTML deve stare bene su un telefono largo 390 pixel e su un monitor da 1920. Si parte dal piccolo: mobile first, viewport e media query.</p>
+  <aside class="notes">Obiettivi: capire il problema dei tanti schermi, il meta viewport e i pixel CSS, la strategia mobile first, la sintassi delle media query, le immagini fluide, la modalità dispositivo dei DevTools. Prerequisiti: box model, Flexbox e Grid (lezioni 3 e 4 dell'unità). Durata: 2 ore. Servono Chrome o Edge (DevTools) e un editor di testo (Blocco note o VS Code).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Da quale schermo hai aperto l'ultimo sito web?</h2></div>
+  <div class="poll" data-id="rwd-schermo">
+    <ol><li>Telefono</li><li>PC o portatile</li><li>Tablet</li><li>TV, console o altro</li></ol>
+  </div>
+  <p class="muted">Ora pensa: chi ha scritto quel sito sapeva che lo avresti aperto proprio da lì?</p>
+  <aside class="notes">Quasi sempre vince il telefono. Le statistiche di StatCounter (gs.statcounter.com) mostrano che da alcuni anni, nel mondo, più della metà delle pagine web viene vista da dispositivi mobili; si può aprire il grafico aggiornato sulla LIM. Domanda ponte: "il sito della scuola è comodo dal telefono?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Un solo sito, schermi larghissimi e strettissimi</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 900 420" width="900" height="420" role="img" aria-label="Lo stesso sito su telefono, tablet e computer">
+      <rect x="10" y="60" width="150" height="300" rx="22" fill="#fff" stroke="#172033" stroke-width="6"/>
+      <rect x="30" y="90" width="110" height="26" rx="6" fill="#11845f"/>
+      <rect x="30" y="128" width="110" height="60" rx="6" fill="#daf2e8"/>
+      <rect x="30" y="198" width="110" height="60" rx="6" fill="#daf2e8"/>
+      <rect x="30" y="268" width="110" height="60" rx="6" fill="#daf2e8"/>
+      <rect x="200" y="40" width="270" height="340" rx="22" fill="#fff" stroke="#172033" stroke-width="6"/>
+      <rect x="222" y="66" width="226" height="28" rx="6" fill="#11845f"/>
+      <rect x="222" y="106" width="108" height="110" rx="6" fill="#daf2e8"/>
+      <rect x="340" y="106" width="108" height="110" rx="6" fill="#daf2e8"/>
+      <rect x="222" y="226" width="226" height="130" rx="6" fill="#daf2e8"/>
+      <rect x="510" y="20" width="380" height="290" rx="14" fill="#fff" stroke="#172033" stroke-width="6"/>
+      <rect x="650" y="310" width="100" height="50" fill="#172033"/>
+      <rect x="530" y="40" width="340" height="30" rx="6" fill="#11845f"/>
+      <rect x="530" y="82" width="104" height="200" rx="6" fill="#daf2e8"/>
+      <rect x="648" y="82" width="104" height="200" rx="6" fill="#daf2e8"/>
+      <rect x="766" y="82" width="104" height="200" rx="6" fill="#daf2e8"/>
+      <text x="85" y="405" font-size="26" text-anchor="middle" fill="#596179">390 px</text>
+      <text x="335" y="410" font-size="26" text-anchor="middle" fill="#596179">768 px</text>
+      <text x="700" y="400" font-size="26" text-anchor="middle" fill="#596179">1920 px</text>
+    </svg>
+    <div class="stack">
+      <p>Nel 2010 Ethan Marcotte chiama <mark>responsive web design</mark> un sito che <b>si adatta</b> allo schermo, con tre ingredienti:</p>
+      <ul class="points">
+        <li>una griglia fluida</li>
+        <li>immagini flessibili</li>
+        <li>le media query</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Le larghezze sono in pixel CSS (lo vediamo tra poco): 390 è un iPhone recente, 768 un iPad in verticale, 1920 un monitor Full HD. L'articolo è "Responsive Web Design" di Ethan Marcotte, A List Apart, 25 maggio 2010. Far notare che griglia fluida significa misure relative (%, fr), che conoscono già da Flexbox e Grid.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Non un sito per ogni dispositivo</h2></div>
+  <figure class="citazione">
+    <blockquote>Invece di confezionare design separati per un numero sempre crescente di dispositivi, possiamo trattarli come facce della stessa esperienza.</blockquote>
+    <figcaption><b>Ethan Marcotte</b>, web designer statunitense, "Responsive Web Design", A List Apart, 2010</figcaption>
+  </figure>
+  <p class="lead">Prima si faceva spesso un secondo sito, <code>m.sito.it</code>, solo per i telefoni: due siti da aggiornare, contenuti diversi, link che si rompono.</p>
+  <aside class="notes">Traduzione nostra dall'inglese; l'originale: "Rather than tailoring disconnected designs to each of an ever-increasing number of web devices, we can treat them as facets of the same experience." Chiedere: quali svantaggi ha un sito separato per il mobile? (doppio lavoro, contenuti disallineati, link condivisi da telefono che portano alla versione sbagliata). Molti grandi siti hanno usato a lungo i domini m.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il meta viewport</p><h2>Una riga che cambia tutto sul telefono</h2></div>
+  <pre class="code"><span class="k">&lt;meta</span> name=<span class="s">"viewport"</span> content=<span class="s">"width=device-width, initial-scale=1"</span><span class="k">&gt;</span></pre>
+  <div class="cols-2">
+    <div class="card bad"><h3>Senza</h3><p>Il browser del telefono finge di essere largo <b>980 pixel</b>, disegna la pagina come su un PC e poi la rimpicciolisce: testo minuscolo, bisogna zoomare.</p></div>
+    <div class="card ok"><h3>Con</h3><p>La larghezza della pagina è quella vera dello schermo, per esempio <b>390 pixel CSS</b>. Le media query ora funzionano.</p></div>
+  </div>
+  <aside class="notes">Il valore di 980 px fu scelto da Apple per Safari sul primo iPhone (2007), perché i siti di allora erano progettati per schermi da PC; Apple introdusse anche il tag meta viewport, poi adottato da tutti i browser mobili. Va nell'head, sempre. Non usare user-scalable=no o maximum-scale=1: impediscono lo zoom a chi vede poco (è un errore di accessibilità segnalato da Lighthouse).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Pixel CSS e pixel veri</p><h2>Lo schermo ha 1170 pixel, ma la pagina ne vede 390</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Gli schermi moderni sono così fitti che un <b>pixel CSS</b> è fatto da più pixel fisici. Il rapporto si chiama <code>devicePixelRatio</code>.</p>
+      <div class="formula"><small>larghezza in pixel CSS</small>pixel fisici ÷ devicePixelRatio</div>
+    </div>
+    <div class="card soft"><h3>Esempio</h3><p>Uno schermo largo <b>1080</b> pixel fisici con rapporto <b>3</b>:</p><p class="num">360 px</p><p class="muted">È la larghezza che vedono il CSS e le media query.</p></div>
+  </div>
+  <aside class="notes">Il rapporto è 1 su molti monitor da ufficio, 2 sui Mac Retina e su molti tablet, intorno a 2,6-3,5 sui telefoni. Collegamento con l'Unità 2 (immagini raster): più pixel fisici per pixel CSS significa che un'immagine larga 390 pixel su quel telefono appare sgranata; per questo servono le immagini a più risoluzioni (srcset), più avanti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quanto è largo il viewport, in pixel CSS?</h2></div>
+  <p>Un telefono ha lo schermo largo <b>1170 pixel fisici</b> e <code>devicePixelRatio</code> uguale a <b>3</b>. La pagina ha il meta viewport.</p>
+  <div class="poll" data-id="rwd-dpr" data-tipo="quiz" data-risposta="B">
+    <ol><li>1170 px</li><li>390 px</li><li>980 px</li><li>3510 px</li></ol>
+    <p class="why">1170 ÷ 3 = 390 pixel CSS (è un iPhone 12, 13 o 14). 980 sarebbe la larghezza finta senza meta viewport; 3510 è la moltiplicazione al posto della divisione.</p>
+  </div>
+  <aside class="notes">Il distrattore 980 è utile: chi lo sceglie ha capito il trucco dei 980 pixel ma ha dimenticato che il meta viewport c'è. Far ripetere il calcolo per un Pixel con 1080 fisici e rapporto 2,625: 1080 ÷ 2,625 = 411,4, quindi circa 412 px (il valore che Chrome mostra per il Pixel 7).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La modalità dispositivo dei DevTools</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea la cartella <b>u5-responsive</b> e dentro il file <b>viewport.html</b> con un <code>&lt;h1&gt;</code> e due paragrafi, senza meta viewport.</li>
+      <li>Aprilo in Chrome o Edge, premi <b>F12</b> e poi <b>Ctrl+Shift+M</b>: scegli il dispositivo <b>iPhone 12 Pro</b>.</li>
+      <li>Nella scheda <b>Console</b> scrivi <code>innerWidth</code> e poi <code>devicePixelRatio</code>. Annota.</li>
+      <li>Aggiungi il meta viewport nell'head, salva, ricarica e ripeti il punto 3.</li>
+      <li>Scegli <b>Dimensioni reattive</b> (Responsive) e trascina il bordo: guarda la larghezza in alto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> senza meta viewport <code>innerWidth</code> vale <b>980</b> e il testo è minuscolo; con il meta vale <b>390</b>. <code>devicePixelRatio</code> vale <b>3</b> in entrambi i casi.</div>
+  </div>
+  <aside class="notes">Se Chrome è in inglese il menu si chiama "Dimensions: Responsive". Se iPhone 12 Pro non c'è nell'elenco, va bene un altro dispositivo: la larghezza con il meta è quella scritta accanto al nome (es. Pixel 7: 412). Ricordare che la modalità dispositivo è una simulazione: la prova finale si fa anche su un telefono vero. Ctrl+Shift+M funziona solo con i DevTools aperti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La strategia</p><h2>Mobile first: si parte dallo schermo piccolo</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Mobile first</h3><ul class="points"><li>CSS base pensato per il telefono</li><li>poi si <b>aggiunge</b> con <code>min-width</code></li><li>costringe a scegliere i contenuti che contano</li></ul></div>
+    <div class="card"><h3>Desktop first</h3><ul class="points"><li>CSS base per il PC</li><li>poi si <b>toglie</b> con <code>max-width</code></li><li>sul telefono si scaricano regole che non servono</li></ul></div>
+  </div>
+  <div class="callout">Il nome viene da Luke Wroblewski (2009): se il contenuto non sta su un telefono, forse <b>non è così importante</b>.</div>
+  <aside class="notes">Luke Wroblewski, progettista statunitense, scrisse il post "Mobile First" nel novembre 2009 e il libro omonimo nel 2011. Esempio da far discutere: il sito della scuola; che cosa metteresti nella prima schermata del telefono? (orari, circolari, registro), che cosa sposteresti più in basso? Mobile first non vuol dire "solo mobile".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le media query</p><h2>Regole che valgono solo da una certa larghezza</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px"><span class="c">/* base: vale per tutti (il telefono) */</span>
+<span class="k">.menu</span> { display: block; }
+
+<span class="c">/* da 768 px in su si aggiunge */</span>
+<span class="k">@media</span> (<span class="hl">min-width: 768px</span>) {
+  <span class="k">.menu</span> { display: flex; gap: 24px; }
+}</pre>
+    <ul class="points">
+      <li>Il punto in cui il layout cambia si chiama <b>breakpoint</b>.</li>
+      <li>Lo decide il <b>contenuto</b>, non il modello di telefono.</li>
+      <li>Allarga piano la finestra: dove il layout si rompe, lì serve un breakpoint.</li>
+    </ul>
+  </div>
+  <aside class="notes">Tra gli autori della specifica Media Queries c'è Håkon Wium Lie, lo stesso della proposta dei CSS del 1994; è diventata raccomandazione W3C nel 2012. Sottolineare: una media query non aumenta la specificità; vale la cascata normale, quindi conta l'ordine. È il tranello del prossimo quiz.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Finestra larga 1200 px: quanto è grande il testo?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="k">p</span> { font-size: 16px; }
+<span class="k">@media</span> (min-width: 1000px) {
+  <span class="k">p</span> { font-size: 20px; }
+}
+<span class="k">@media</span> (min-width: 600px) {
+  <span class="k">p</span> { font-size: 18px; }
+}</pre>
+    <div class="poll" data-id="rwd-ordine" data-tipo="quiz" data-risposta="C">
+      <ol><li>16px</li><li>20px</li><li>18px</li><li>Dipende dal browser</li></ol>
+      <p class="why">A 1200 px valgono entrambe le media query. Hanno la stessa specificità, quindi vince l'ultima scritta: 18px. Nel mobile first le media query vanno in ordine di min-width crescente.</p>
+    </div>
+  </div>
+  <aside class="notes">Quasi tutti rispondono 20px pensando che "vinca la condizione più grande". Far correggere il codice scambiando i due blocchi e chiedere di nuovo il risultato a 800 px (18px) e a 1200 px (20px). Si può verificare dal vivo in CodePen.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Progetti una pagina mobile first: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="rwd-passi">
+    <li>Elenchi i contenuti e li ordini per importanza</li>
+    <li>Disegni il wireframe per il telefono</li>
+    <li>Scrivi l'HTML semantico e il CSS base</li>
+    <li>Provi in modalità dispositivo a 360 px</li>
+    <li>Allarghi finché il layout si rompe e aggiungi un breakpoint</li>
+    <li>Provi su un telefono vero e con la tastiera</li>
+  </ol>
+  <aside class="notes">A squadre di 3, due minuti. L'errore tipico è mettere il CSS prima del wireframe o scegliere i breakpoint "per dispositivo". La prova con la tastiera (Tab) ricorda la lezione su HTML semantico e accessibilità: un menu a scomparsa deve funzionare anche senza mouse.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Tre schede, tre larghezze</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">In <b>schede.html</b> (con meta viewport) metti un <code>&lt;main class="pagina"&gt;</code> con un <code>&lt;div class="schede"&gt;</code> che contiene tre <code>&lt;article class="scheda"&gt;</code>, ognuno con titolo e testo. Poi nello <code>&lt;style&gt;</code>:</p>
+      <pre class="code" style="font-size:25px"><span class="k">.schede</span> { display: flex; flex-direction: column; gap: 16px; }
+<span class="k">@media</span> (min-width: 700px) {
+  <span class="k">.schede</span> { flex-direction: row; }
+  <span class="k">.scheda</span> { flex: 1; }
+}
+<span class="k">@media</span> (min-width: 1100px) {
+  <span class="k">.pagina</span> { max-width: 1000px; margin: 0 auto; }
+}</pre>
+    </div>
+    <div class="check"><b>Controllo:</b> in modalità dispositivo a <b>390 px</b> le schede sono una sotto l'altra, a <b>800 px</b> sono affiancate, a <b>1280 px</b> la pagina resta larga 1000 px e centrata. Trascinando, il cambio avviene esattamente a 700 px.</div>
+  </div>
+  <aside class="notes">Aggiungere un bordo e un padding alle schede per vederle bene. Se a 800 px restano in colonna: manca il meta viewport o c'è un errore di parentesi graffe (fare validare con jigsaw.w3.org/css-validator). Domanda: perché non serve una media query per il telefono? Perché il CSS base è già quello del telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Immagini fluide</p><h2>Un'immagine non deve mai uscire dallo schermo</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <pre class="code" style="font-size:28px"><span class="k">img</span> { max-width: 100%; height: auto; }</pre>
+      <p class="small">L'immagine si restringe con il contenitore e non diventa mai più grande della sua dimensione vera. <code>height: auto</code> mantiene le proporzioni.</p>
+      <pre class="code" style="font-size:24px"><span class="k">&lt;img</span> src=<span class="s">"bici-800.jpg"</span> alt=<span class="s">"…"</span>
+  srcset=<span class="s">"bici-400.jpg 400w, bici-800.jpg 800w,
+          bici-1600.jpg 1600w"</span><span class="k">&gt;</span></pre>
+    </div>
+    <div class="flip" style="--h:420px"><div class="fronte"><h3>Telefono largo 390 px con rapporto 3, foto a tutta larghezza.</h3><p>Quale file sceglie il browser dal srcset?</p></div><div class="retro"><p>Servono 390 × 3 = <b>1170 pixel fisici</b>.</p><p>Il file più piccolo che basta è <b>bici-1600.jpg</b>: il 800w sarebbe sgranato.</p><p class="muted">Su un vecchio PC con rapporto 1 e colonna da 400 px basta bici-400.jpg: si risparmiano dati.</p></div></div>
+  </div>
+  <aside class="notes">Con srcset e i descrittori w il browser sceglie in base alla larghezza di visualizzazione (attributo sizes, che di default vale 100vw) e al devicePixelRatio. Il calcolo 390 × 3 riprende il quiz di prima. Il browser può anche scegliere diversamente se la rete è lenta o l'immagine è già in cache: è una scelta sua, noi diamo le opzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Non solo larghezza</p><h2>Abbina la media query a quando vale</h2></div>
+  <dl class="puzzle-abbina" data-id="rwd-media">
+    <dt><code>(min-width: 768px)</code></dt><dd>Da 768 pixel CSS in su</dd>
+    <dt><code>(max-width: 767px)</code></dt><dd>Fino a 767 pixel CSS compresi</dd>
+    <dt><code>(orientation: landscape)</code></dt><dd>Telefono girato in orizzontale</dd>
+    <dt><code>(prefers-color-scheme: dark)</code></dt><dd>Chi ha scelto il tema scuro nel sistema</dd>
+    <dt><code>(prefers-reduced-motion: reduce)</code></dt><dd>Chi ha chiesto meno animazioni</dd>
+    <dt><code>(hover: hover)</code></dt><dd>C'è un mouse che può passare sopra gli elementi</dd>
+  </dl>
+  <aside class="notes">Tranello: min-width e max-width sono inclusivi, quindi 768 rientra in (min-width: 768px) e non in (max-width: 767px). prefers-reduced-motion è importante per l'accessibilità: animazioni e parallax possono dare vertigini e nausea a chi soffre di disturbi vestibolari. (hover: hover) serve a non affidare un menu solo al passaggio del mouse, che sul touch non esiste.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Tema scuro e tre screenshot</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>schede.html</b> aggiungi in fondo allo stile <code>@media (prefers-color-scheme: dark)</code> con dentro <code>body { background: #121212; color: #eee; }</code>.</li>
+      <li>Nei DevTools premi <b>Ctrl+Shift+P</b>, apri <b>Rendering</b> e imposta <i>prefers-color-scheme</i> su <b>dark</b>.</li>
+      <li>In modalità dispositivo, a 360, 768 e 1280 px, apri il menu dei tre puntini e scegli <b>Acquisisci screenshot</b>.</li>
+      <li>Rinomina i file <b>schede-360.png</b>, <b>schede-768.png</b>, <b>schede-1280.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con l'emulazione dark lo sfondo diventa quasi nero e il testo chiaro; con <i>light</i> torna come prima, senza toccare il codice. Con rapporto 1 i tre PNG sono larghi 360, 768 e 1280 pixel.</div>
+  </div>
+  <aside class="notes">Il menu dei tre puntini è quello della barra della modalità dispositivo (in inglese "Capture screenshot"). Se il rapporto è impostato a 2, gli screenshot escono larghi il doppio: è un buon ripasso del devicePixelRatio. Controllare il contrasto anche in tema scuro: #eeeeee su #121212 è ampiamente sopra il 4,5:1 richiesto dalle WCAG AA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Chi guarda il tuo sito dal telefono, oltre a te</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Google indicizza la versione mobile</h3><p>Con il <b>mobile-first indexing</b> Google legge e valuta i siti come li vedrebbe uno smartphone: nel 2023 ha annunciato che il passaggio era completo. Se un contenuto c'è solo nella versione per PC, per la ricerca è come se non ci fosse.</p></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un assistente AI per il codice scrive un layout in pochi secondi, ma spesso con larghezze fisse in pixel o senza meta viewport. Il tuo lavoro è <b>provarlo</b> a 360 px: la modalità dispositivo non perdona.</p></div>
+  <aside class="notes">Fonte: Google Search Central Blog, "Mobile-first indexing has landed", ottobre 2023. Le demo con assistenti AI vanno fatte dal docente sulla LIM (account e limiti di età). Esercizio rapido: chiedere a un'AI "fai una pagina con tre colonne" e controllare se il risultato regge a 360 px.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con i numeri della lezione</h2></div>
+  <div class="puzzle-codice" data-risposta="9803" data-aiuto="le prime tre cifre sono la larghezza finta senza meta viewport">
+    <ul class="points">
+      <li>Prime tre cifre: quanti pixel finge di essere largo il browser del telefono senza meta viewport</li>
+      <li>Quarta cifra: quanti ingredienti ha il responsive web design di Marcotte</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 980 pixel finti e 3 ingredienti: griglia fluida, immagini flessibili, media query.</div>
+  </div>
+  <aside class="notes">Codice: 9803. Gara a squadre: vince la prima squadra che lo apre. Dopo tre errori compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Senza meta viewport il telefono finge una larghezza di <span class="blank" data-risposta="980"></span> pixel.</p>
+    <p>Uno schermo da 1080 pixel fisici con rapporto 3 è largo <span class="blank" data-risposta="360"></span> pixel CSS.</p>
+    <p>Nel mobile first le media query usano <span class="blank" data-risposta="min-width" style="--w:9ch"></span>.</p>
+    <p>Il punto in cui il layout cambia si chiama <span class="blank" data-risposta="breakpoint" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 980, 360, min-width, breakpoint. Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Responsive: griglia fluida, immagini flessibili, media query</li>
+      <li>Il meta viewport serve sempre</li>
+      <li>Pixel CSS = pixel fisici ÷ devicePixelRatio</li>
+    </ul>
+    <ul class="points">
+      <li>Mobile first: CSS base piccolo, poi <code>min-width</code></li>
+      <li>I breakpoint li decide il contenuto</li>
+      <li>Si prova in modalità dispositivo e su un telefono vero</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: laboratorio con un sito completo con Flexbox e Grid, che riusa tutto questo.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

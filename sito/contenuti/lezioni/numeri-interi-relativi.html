@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numeri con il segno · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Numeri con il segno</h1>
+  <p class="lead">Nel computer ci sono solo 0 e 1: non esiste un bit "meno". Allora come fa il termometro digitale a mostrare −5 °C?</p>
+  <p class="meta"><span class="chip">Modulo e segno</span><span class="chip">Complemento a 2</span><span class="chip">Overflow</span></p>
+  <aside class="notes">Prerequisiti: le lezioni "Numeri decimali e binari" (pesi, 2ⁿ valori con n bit) e "Altri sistemi di numerazione". Obiettivi: rappresentare gli interi relativi in modulo e segno, complemento a 1 e complemento a 2 su 8 bit; fare somme e sottrazioni in binario; riconoscere l'overflow. Durata indicativa: 2 ore. Tenere a portata di mano la calcolatrice di Windows e un foglio a quadretti per ogni studente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come scriveresti −5 usando solo bit?</h2></div>
+  <div class="poll" data-id="interi-meno-cinque">
+    <ol><li>Uso un bit in più per il segno</li><li>Salvo il testo "−5", carattere per carattere</li><li>Non si può: il computer conosce solo numeri positivi</li><li>Uso una regola furba che ancora non conosco</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di ingresso, senza risposta giusta. La A è l'idea più naturale ed è il "modulo e segno"; la B funziona per il testo (lezione sui caratteri) ma non per fare i conti; la C è falsa ma molto diffusa; la D è la risposta che vorremmo raggiungere: il complemento a 2. Lasciare il risultato visibile e riprenderlo alla fine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso lampo</p><h2>Con 8 bit ci sono 256 combinazioni: dividiamole</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Senza segno</h3><p>Da <code>0000 0000</code> a <code>1111 1111</code>: i valori da <b>0</b> a <b>255</b>.</p><p class="muted">È quello che hai fatto nelle lezioni sul binario: 2⁸ = 256 valori.</p></div>
+    <div class="card soft"><h3>Con il segno</h3><p>Le stesse 256 combinazioni, metà ai positivi e metà ai negativi: più o meno da <b>−128</b> a <b>+127</b>.</p><p class="muted">Il problema: decidere quale combinazione vale quale numero.</p></div>
+  </div>
+  <div class="callout">Un numero <b>intero relativo</b> è un intero con il segno: …, −2, −1, 0, +1, +2, … Vedremo tre modi di codificarlo.</div>
+  <aside class="notes">Far ricordare la regola "con n bit, 2ⁿ valori". Domanda: "se uso 16 bit?" 65 536 combinazioni, da −32 768 a +32 767 con il complemento a 2. Il numero di bit lo scegliamo noi (8, 16, 32, 64): oggi lavoriamo su 8 bit, un byte, per fare i conti a mano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Primo tentativo</p><h2>Modulo e segno: il primo bit fa da segno</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="bits"><span><b class="on">0</b><small>segno</small></span><span><b>0</b><small>64</small></span><span><b>0</b><small>32</small></span><span><b>0</b><small>16</small></span><span><b>0</b><small>8</small></span><span><b>1</b><small>4</small></span><span><b>0</b><small>2</small></span><span><b>1</b><small>1</small></span></div>
+      <p class="small"><code>0000 0101</code> = <b>+5</b> &nbsp; e &nbsp; <code>1000 0101</code> = <b>−5</b></p>
+      <ul class="points small"><li>Bit più a sinistra: 0 = più, 1 = meno</li><li>Gli altri 7 bit: il valore assoluto (modulo)</li><li>Intervallo: da −127 a +127</li></ul>
+    </div>
+    <div class="card bad"><h3>Due difetti</h3><p><b>Due zeri:</b> <code>0000 0000</code> (+0) e <code>1000 0000</code> (−0).</p><p><b>La somma non funziona:</b> 5 + (−5) con le regole del binario dà <code>1000 1010</code>, cioè −10.</p></div>
+  </div>
+  <aside class="notes">È il metodo che usiamo anche noi sulla carta: segno davanti al valore. Fare la somma alla lavagna: 0000 0101 + 1000 0101 = 1000 1010, che in modulo e segno vale −10 invece di 0. Per sommare servirebbe un circuito che guarda i segni e decide se sommare o sottrarre: più complicato e più lento. Il modulo e segno resta in uso nel bit di segno dei numeri reali (IEEE 754, prossima lezione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quanti numeri diversi rappresenta il modulo e segno su 8 bit?</h2></div>
+  <div class="poll" data-id="interi-quanti-ms" data-tipo="quiz" data-risposta="B">
+    <ol><li>256</li><li>255</li><li>128</li><li>254</li></ol>
+    <p class="why">Le combinazioni sono 256, ma due di esse valgono zero (+0 e −0). I numeri diversi sono quindi 255: da −127 a +127.</p>
+  </div>
+  <aside class="notes">Risposta B. Chi risponde 256 confonde combinazioni e valori: è proprio il difetto dei due zeri. Chi risponde 128 pensa solo ai positivi. Conto: 127 negativi + zero + 127 positivi = 255.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Secondo tentativo</p><h2>Complemento a 1: inverti tutti i bit</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>+5</h3><p class="mono">0000 0101</p></div>
+    <div class="card fill"><h3>inverti</h3><p>ogni 0 diventa 1, ogni 1 diventa 0</p></div>
+    <div class="card soft"><h3>−5</h3><p class="mono">1111 1010</p></div>
+  </div>
+  <ul class="points">
+    <li>Il primo bit indica ancora il segno: 1 = negativo</li>
+    <li>Le somme quasi funzionano, ma a volte serve una correzione</li>
+    <li>Gli zeri sono ancora due: <code>0000 0000</code> e <code>1111 1111</code></li>
+  </ul>
+  <aside class="notes">Il complemento a 1 era usato da alcuni computer storici (per esempio i CDC 6600 degli anni Sessanta). Oggi serve soprattutto come passo intermedio per calcolare il complemento a 2. La "correzione" è il riporto circolare: il riporto uscito a sinistra va risommato a destra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La soluzione usata da tutti</p><h2>Complemento a 2: il primo bit pesa −128</h2></div>
+  <div class="bits"><span><b class="on">1</b><small>−128</small></span><span><b class="on">1</b><small>64</small></span><span><b class="on">1</b><small>32</small></span><span><b class="on">1</b><small>16</small></span><span><b class="on">1</b><small>8</small></span><span><b>0</b><small>4</small></span><span><b class="on">1</b><small>2</small></span><span><b class="on">1</b><small>1</small></span></div>
+  <div class="formula"><small>Si sommano i pesi dove c'è un 1, come sempre</small>−128 + 64 + 32 + 16 + 8 + 2 + 1 = <span class="hl">−5</span></div>
+  <p>Un solo zero, intervallo da <b>−128</b> a <b>+127</b>, e le somme funzionano con le regole normali.</p>
+  <aside class="notes">Questa è l'idea più semplice da ricordare: nel complemento a 2 su 8 bit il bit più a sinistra non vale +128 ma −128. Così 1000 0000 = −128 e 0111 1111 = +127. Il metodo con i pesi serve per leggere un numero; nella slide seguente il metodo per scriverlo. Il complemento a 2 è descritto già nel "First Draft of a Report on the EDVAC" di John von Neumann (1945) e oggi lo usano praticamente tutti i processori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Da +N a −N in tre passi</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Scrivi N in binario su 8 bit: <code>0001 0100</code> (20)</li>
+      <li>Inverti tutti i bit: <code>1110 1011</code></li>
+      <li>Aggiungi 1: <code>1110 1100</code> = <b>−20</b></li>
+    </ol>
+    <div class="card soft"><h3>Due scorciatoie</h3><p><b>Da destra:</b> copia i bit fino al primo 1 compreso, poi inverti tutti gli altri.</p><p><b>Con il decimale:</b> −N si scrive come 256 − N senza segno. 256 − 20 = 236 = <code>1110 1100</code>.</p></div>
+  </div>
+  <div class="callout">Lo stesso metodo funziona all'indietro: se il primo bit è 1, inverti e aggiungi 1 per trovare il modulo.</div>
+  <aside class="notes">Fare insieme −20 e poi far provare −1 (1111 1111), −100 (1001 1100) e −128 (1000 0000: 128 non sta in 8 bit con il segno, ma il metodo dà comunque il risultato giusto). Controllo con i pesi: 1110 1100 = −128+64+32+8+4 = −20. La scorciatoia 256 − N spiega il nome "complemento a 2": si complementa rispetto a una potenza di 2.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La calcolatrice in modalità Programmatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri la <b>Calcolatrice</b> di Windows, menu ☰, scegli <b>Programmatore</b>.</li>
+      <li>Clicca su QWORD finché compare <b>BYTE</b>: ora lavori su 8 bit.</li>
+      <li>In DEC scrivi 5, premi <b>+/−</b> e leggi la riga BIN. Ripeti con −1, −20, −128 e 127.</li>
+      <li>Scrivi 127, poi <b>+ 1 =</b>. Che cosa succede?</li>
+      <li>Annota tutto in Blocco note e salva come <b>complemento-a-due.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> −5 = <code>1111 1011</code>, −1 = <code>1111 1111</code>, −20 = <code>1110 1100</code>, −128 = <code>1000 0000</code>, 127 = <code>0111 1111</code>. E 127 + 1 dà <b>−128</b>.</div>
+  </div>
+  <aside class="notes">Se la calcolatrice non c'è (PC non Windows), usare la console del browser (F12, scheda Console): (-5 &amp; 0xFF).toString(2) restituisce "11111011". 127 + 1 = −128 anticipa l'overflow: non commentarlo ancora, chiedere solo "vi sembra giusto?". Far notare che con QWORD lo stesso −5 diventa 64 bit tutti a 1 tranne due: il complemento a 2 si estende ripetendo il bit di segno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni numero al suo byte in complemento a 2</h2></div>
+  <dl class="puzzle-abbina" data-id="interi-abbina-c2">
+    <dt>−1</dt><dd><code>1111 1111</code></dd>
+    <dt>−128</dt><dd><code>1000 0000</code></dd>
+    <dt>+127</dt><dd><code>0111 1111</code></dd>
+    <dt>−2</dt><dd><code>1111 1110</code></dd>
+    <dt>−127</dt><dd><code>1000 0001</code></dd>
+    <dt>0</dt><dd><code>0000 0000</code></dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti, senza calcolatrice. Tranelli: −1 è "tutto a 1" (molti si aspettano 1000 0001, che in modulo e segno sarebbe −1 ma in complemento a 2 è −127). Controllo con i pesi: 1000 0001 = −128 + 1 = −127; 1111 1110 = −128 + 126 = −2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Somme in binario</p><h2>Sottrarre è sommare l'opposto</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Somma</th><th>Risultato</th><th>Riporto</th></tr>
+        <tr><td class="mono">0 + 0</td><td class="mono">0</td><td class="mono">0</td></tr>
+        <tr><td class="mono">0 + 1</td><td class="mono">1</td><td class="mono">0</td></tr>
+        <tr><td class="mono">1 + 1</td><td class="mono">0</td><td class="mono">1</td></tr>
+        <tr><td class="mono">1 + 1 + 1</td><td class="mono">1</td><td class="mono">1</td></tr>
+      </table>
+    </div>
+    <pre class="code">  riporti <span class="c">1111 111</span>
+     7    0000 0111
+ + (−5)   1111 1011
+ ─────────────────
+       <span class="c">1</span> <span class="hl">0000 0010</span>  = 2</pre>
+  </div>
+  <div class="callout">Il riporto che esce a sinistra (il nono bit) si <b>scarta</b>: il risultato resta su 8 bit ed è giusto. 7 − 5 = 2.</div>
+  <aside class="notes">Fare la somma colonna per colonna alla lavagna, da destra. Il processore ha un solo circuito sommatore: per sottrarre trasforma il secondo numero nell'opposto e somma. È il motivo per cui tutti usano il complemento a 2. Controllo con il decimale senza segno: 7 + 251 = 258 = 256 + 2.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Tre conti a mano, poi la prova</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su un foglio converti in complemento a 2 su 8 bit e calcola: <b>a)</b> 12 + (−20) &nbsp; <b>b)</b> −30 + (−50) &nbsp; <b>c)</b> 100 − 45.</li>
+      <li>Scrivi i riporti e scarta il nono bit.</li>
+      <li>Rileggi ogni risultato in decimale con i pesi (−128, 64, …, 1).</li>
+      <li>Controlla con la calcolatrice in modalità BYTE.</li>
+      <li>Aggiungi i tre risultati in fondo a <b>complemento-a-due.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a) <code>1111 1000</code> = −8 &nbsp; b) <code>1011 0000</code> = −80 &nbsp; c) <code>0011 0111</code> = 55</div>
+  </div>
+  <aside class="notes">Soluzioni: a) 12 = 0000 1100; −20 = 1110 1100; somma 1111 1000 = −8, nessun riporto finale. b) −30 = 1110 0010; −50 = 1100 1110; somma 1 1011 0000, si scarta il nono bit: 1011 0000 = −128+32+16 = −80. c) 100 = 0110 0100; −45 = 1101 0011; somma 1 0011 0111 → 0011 0111 = 55. Chi finisce prima prova 100 + 50: è l'aggancio alla slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando i bit non bastano</p><h2>Overflow: il risultato esce dall'intervallo</h2></div>
+  <div class="cols-2">
+    <pre class="code">     100    0110 0100
+  +   50    0011 0010
+  ─────────────────
+            <span class="hl">1001 0110</span>  = −106 ?!</pre>
+    <div class="card bad"><h3>Che cosa è successo</h3><p>150 è più grande di 127: non sta in 8 bit con il segno. Il bit di segno viene "invaso" e il risultato diventa negativo.</p></div>
+  </div>
+  <div class="callout hl"><b>Regola:</b> c'è overflow quando sommi due numeri <b>dello stesso segno</b> e ottieni un risultato di <b>segno opposto</b>. Sommando numeri di segno diverso non può mai esserci.</div>
+  <aside class="notes">Attenzione a non confondere riporto e overflow: nella somma 7 + (−5) c'era un riporto ma nessun overflow; qui c'è overflow senza riporto. Il processore segnala l'overflow con un bit apposito (flag), ma molti linguaggi, Java compreso, non lo controllano: il programma va avanti con il numero sbagliato. Controllo: 150 − 256 = −106.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Su 8 bit in complemento a 2 calcoli 127 + 1. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="interi-127-piu-1" data-tipo="quiz" data-risposta="C">
+    <ol><li>128</li><li>Un errore: il computer si ferma</li><li>−128</li><li>0</li></ol>
+    <p class="why">0111 1111 + 1 = 1000 0000, che in complemento a 2 vale −128. Il processore non si ferma: il risultato "fa il giro" come il contachilometri di un'auto.</p>
+  </div>
+  <aside class="notes">Risposta C, già vista in laboratorio con la calcolatrice. La A è l'errore di chi pensa al numero senza segno. La B è falsa per gli interi in quasi tutti i linguaggi (alcuni, come Rust in modalità debug, possono segnalarlo, ma non è il comportamento del processore). Immagine utile: un contachilometri a 3 cifre che da 999 passa a 000.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Storia vera</p><h2>Ariane 5, 4 giugno 1996: 40 secondi di volo</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Il primo razzo Ariane 5 esplode poco dopo il decollo. Il software di navigazione converte una velocità in un <b>intero con segno a 16 bit</b> (massimo 32 767): il valore era troppo grande.</p>
+      <p class="muted small">Il codice veniva da Ariane 4, più lento: lì quel numero non aveva mai superato il limite.</p>
+    </div>
+    <figure class="citazione">
+      <blockquote>Il collaudo dei programmi può mostrare la presenza di errori, mai la loro assenza.</blockquote>
+      <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, "Notes on Structured Programming", 1970</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Fonte: rapporto della commissione d'inchiesta ESA (Lions, luglio 1996): l'errore nasce dalla conversione di un numero in virgola mobile a 64 bit in un intero con segno a 16 bit; il sistema di riferimento inerziale si fermò e il lanciatore si autodistrusse circa 40 secondi dopo l'accensione. Traduzione nostra dall'originale "Program testing can be used to show the presence of bugs, but never to show their absence" (EWD249, 1970). Domanda alla classe: "quanti bit sarebbero bastati?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>I limiti degli interi esistono anche adesso</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il contatore di YouTube</h3><p>Nel dicembre 2014 il video "Gangnam Style" superò 2 147 483 647 visualizzazioni, il massimo di un intero con segno a 32 bit. YouTube passò a un contatore a 64 bit.</p><p class="small">E il 19 gennaio 2038 i sistemi che contano i secondi dal 1970 in 32 bit andranno in overflow: è il "problema dell'anno 2038".</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI a 8 bit</h3><p>I modelli di intelligenza artificiale hanno miliardi di numeri chiamati "pesi". Per farli girare su un portatile o su un telefono spesso si <b>quantizzano</b>: ogni peso diventa un intero a 8 bit (da −128 a 127) o anche a 4 bit.</p><p class="small">Si perde un po' di precisione, ma il modello occupa da 2 a 4 volte meno memoria.</p></div>
+  </div>
+  <aside class="notes">YouTube lo annunciò sul suo profilo Google+ il 1° dicembre 2014. Anno 2038: il tempo Unix con segno a 32 bit si ferma a 2 147 483 647 secondi, cioè il 19/01/2038 alle 03:14:07 UTC; i sistemi moderni usano già 64 bit. Quantizzazione: i pesi sono di solito numeri reali a 16 o 32 bit; portarli a interi int8 o int4 riduce la memoria di 2-4 volte rispetto a 16 bit. Collegamento: 2 147 483 647 = 2³¹ − 1, lo ritroveremo come limite del tipo int di Java.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'overflow in Java</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:26px">public class Main {
+  public static void main(String[] args) {
+    <span class="k">byte</span> b = 127;   <span class="c">// 8 bit con segno</span>
+    b++;
+    System.out.println(b);
+    <span class="k">byte</span> x = (<span class="k">byte</span>) 200;
+    System.out.println(x);
+    System.out.println(Integer.toBinaryString(-5));
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small"><li>Apri <b>onlinegdb.com</b>, in Language scegli <b>Java</b>.</li><li>Copia il programma e premi <b>Run</b>.</li><li>Prima di guardare, prevedi le tre righe.</li><li>Salva il codice in <b>OverflowByte.txt</b>.</li></ol>
+      <div class="check"><b>Controllo:</b> −128, poi −56 (200 − 256), poi 29 uni seguiti da 011: −5 su 32 bit.</div>
+    </div>
+  </div>
+  <aside class="notes">In Java byte è un intero con segno a 8 bit in complemento a 2. b++ su 127 dà −128 senza errori. (byte) 200 tiene gli 8 bit di 200 (1100 1000), che letti con segno valgono −56. Integer.toBinaryString(-5) stampa 11111111111111111111111111111011: il complemento a 2 su 32 bit (tipo int). Se OnlineGDB non è raggiungibile: programiz.com/java-programming/online-compiler. Nel laboratorio sul debugger rivedremo l'overflow con il tipo int.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2312" data-aiuto="la seconda cifra: inverti 1111 1101 e aggiungi 1">
+    <ul class="points small">
+      <li>1ª cifra: quanti zeri diversi ha il modulo e segno</li>
+      <li>2ª cifra: il modulo di <b class="mono">1111 1101</b> in complemento a 2</li>
+      <li>3ª cifra: quanti bit valgono 1 in −128 su 8 bit</li>
+      <li>4ª cifra: il risultato di <b class="mono">0000 0111</b> + <b class="mono">1111 1011</b></li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> Due zeri (+0 e −0), 1111 1101 = −3, 1000 0000 ha un solo 1, 7 + (−5) = 2.</div>
+  </div>
+  <aside class="notes">Codice 2312. Squadre da 3-4, la prima che apre vince. Dopo tre errori compare l'aiuto. Verifica: 1111 1101 → inverti 0000 0010 → +1 = 0000 0011 = 3, quindi −3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Su 8 bit in complemento a 2 il bit più a sinistra pesa <span class="blank" data-risposta="-128|−128|meno 128" style="--w:7ch"></span>.</p>
+    <p>Per ottenere −N si invertono i bit di N e si aggiunge <span class="blank" data-risposta="1|uno"></span>.</p>
+    <p>In complemento a 2, −1 su 8 bit si scrive <span class="blank" data-risposta="11111111|1111 1111" style="--w:9ch"></span>.</p>
+    <p>Se due positivi danno un risultato negativo c'è <span class="blank" data-risposta="overflow|traboccamento" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: −128; 1; 11111111; overflow (accettato traboccamento).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Modulo e segno: semplice, ma due zeri e somme difficili</li>
+      <li>Complemento a 1: inverti i bit</li>
+      <li>Complemento a 2: inverti e aggiungi 1; il primo bit pesa −128</li>
+    </ul>
+    <ul class="points">
+      <li>8 bit: da −128 a +127, un solo zero</li>
+      <li>Sottrarre = sommare l'opposto, il nono bit si scarta</li>
+      <li>Overflow: stesso segno in entrata, segno opposto in uscita</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Riprendere il sondaggio iniziale: la "regola furba" era il complemento a 2. Assegnare il compito "Il termometro della base polare" su Novaula. Prossima lezione: i numeri con la virgola.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

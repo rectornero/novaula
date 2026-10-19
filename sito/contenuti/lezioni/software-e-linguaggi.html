@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il software · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Il software</h1>
+  <p class="lead">Programmi che fanno funzionare altri programmi: dal firmware al sistema operativo, dal compilatore Java alle licenze che dicono che cosa puoi farne.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Software di base e applicativo · linguaggi · compilatori e interpreti · licenze</span></div>
+  <aside class="notes">Obiettivi: distinguere software di base e applicativo; descrivere le funzioni del sistema operativo; riconoscere linguaggio macchina, assembly e alto livello; spiegare compilatore, interprete e il caso di Java (bytecode e JVM); distinguere le principali licenze. Durata indicativa: 2 ore. Strumenti: Impostazioni e Gestione dispositivi di Windows, OnlineGDB (onlinegdb.com, senza account), il browser. Prerequisito: la lezione sui sistemi di elaborazione (Little Man Computer).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale software usi di più in una giornata?</h2></div>
+  <div class="poll" data-id="software-giornata">
+    <ol><li>App di messaggi</li><li>Social e video</li><li>Giochi</li><li>Il browser</li><li>Il sistema operativo del telefono</li></ol>
+  </div>
+  <aside class="notes">Il trucco è l'ultima opzione: nessuno la sceglie, ma è l'unico software che lavora sempre, anche mentre usiamo tutti gli altri. Usarla come ponte verso la distinzione tra software di base e applicativo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è il software</p><h2>Una torre a strati, dall'hardware a te</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack" style="gap:14px">
+      <div class="card fill" style="padding:20px 32px"><h4>Software applicativo</h4><p class="small">Risolve un compito dell'utente: scrivere, disegnare, giocare.</p></div>
+      <div class="card soft" style="padding:20px 32px"><h4>Sistema operativo e utility</h4><p class="small">Gestisce le risorse e offre servizi a tutti i programmi.</p></div>
+      <div class="card soft" style="padding:20px 32px"><h4>Driver e firmware</h4><p class="small">Parlano con l'hardware; il firmware (UEFI) avvia il PC.</p></div>
+      <div class="card night" style="padding:20px 32px"><h4>Hardware</h4></div>
+    </div>
+    <div class="stack">
+      <p class="lead">Software = <b>programmi</b> + i <b>dati</b> che usano + la <b>documentazione</b>.</p>
+      <p>Il <mark>software di base</mark> sono gli strati in basso: fanno funzionare il computer. Quello in alto è <mark>applicativo</mark>.</p>
+    </div>
+  </div>
+  <aside class="notes">Il firmware sta in una memoria non volatile della scheda madre: all'accensione controlla l'hardware e carica il sistema operativo. Le utility (antivirus, compressori, strumenti di backup) stanno a metà: spesso si classificano come software di sistema. Compilatori e ambienti di sviluppo, per chi programma, sono strumenti di sviluppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni software al suo lavoro</h2></div>
+  <dl class="puzzle-abbina" data-id="tipi-software">
+    <dt>Firmware UEFI</dt><dd>Controlla l'hardware all'accensione e carica il sistema operativo</dd>
+    <dt>Sistema operativo</dt><dd>Gestisce CPU, memoria, file e periferiche per tutti i programmi</dd>
+    <dt>Driver</dt><dd>Fa dialogare il sistema operativo con una periferica precisa</dd>
+    <dt>Utility</dt><dd>Comprime file, fa i backup, cerca i virus</dd>
+    <dt>Applicativo</dt><dd>Serve all'utente per un compito: scrivere, disegnare, giocare</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Il driver e il firmware sono i più confusi: il firmware sta nella scheda madre (o dentro la periferica stessa), il driver è un pezzo del sistema operativo installato sul disco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il sistema operativo</p><h2>Il direttore d'orchestra delle risorse</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Processi</h3><p class="muted small">Decide a turno quale programma usa la CPU.</p></div>
+    <div class="card"><h3>Memoria</h3><p class="muted small">Assegna la RAM ai programmi e la protegge.</p></div>
+    <div class="card"><h3>File system</h3><p class="muted small">Organizza file e cartelle sul disco.</p></div>
+    <div class="card"><h3>Periferiche</h3><p class="muted small">Gestisce input e output tramite i driver.</p></div>
+    <div class="card"><h3>Sicurezza</h3><p class="muted small">Utenti, password, permessi.</p></div>
+    <div class="card"><h3>Interfaccia</h3><p class="muted small">Grafica (finestre, tocco) o a riga di comando.</p></div>
+  </div>
+  <aside class="notes">Ognuna di queste funzioni avrà spazio nelle Unità 6 e 7 (processi e scheduling, memoria e paginazione, file system). Esempi di sistemi operativi: Windows, macOS, Linux per i PC; Android e iOS per i telefoni; sistemi real time negli impianti industriali e nelle auto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un hobby diventato il kernel più diffuso</h2></div>
+  <figure class="citazione">
+    <blockquote>Sto facendo un sistema operativo (libero), solo un hobby, non sarà grande e professionale come GNU.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, studente finlandese di 21 anni, messaggio sul newsgroup comp.os.minix, 25 agosto 1991</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il kernel Linux nato da quel messaggio gira in ogni telefono Android, nella grande maggioranza dei server di internet e in tutti i 500 supercomputer più potenti del mondo. È scritto e corretto da migliaia di sviluppatori, molti pagati da aziende concorrenti tra loro.</p></div>
+  <aside class="notes">Traduzione nostra. Originale: "I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu) for 386(486) AT clones." Il dato sui supercomputer: dal novembre 2017 tutti i sistemi della classifica TOP500 usano Linux. Domanda: perché aziende concorrenti collaborano allo stesso software? Conviene a tutti avere una base comune, sicura e gratuita.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il censimento del software del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>winver</code> e premi Invio: annota versione e build di Windows.</li>
+      <li>Apri <b>Impostazioni</b>, <b>App</b>, <b>App installate</b>: scegli 8 programmi.</li>
+      <li>Tasto destro su Start, <b>Gestione dispositivi</b>, <b>Schede video</b>, doppio clic, scheda <b>Driver</b>: annota fornitore e versione.</li>
+      <li>In Calc fai una tabella: <b>Nome · Tipo (base, utility, applicativo, driver) · Perché</b>.</li>
+      <li>Salva come <b>software-pc-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 10 righe, con Windows e il driver video tra il software di base. Il browser e Calc sono applicativi.</div>
+  </div>
+  <aside class="notes">Sui PC della scuola alcune voci possono essere bloccate: in alternativa systeminfo nel Prompt dei comandi mostra la versione del sistema. Discussione: un antivirus è base o applicativo? Accettare "utility" se motivato. Il driver video è scritto dal produttore della scheda (Intel, AMD, NVIDIA), non da Microsoft: un esempio di software di base fatto da terzi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I linguaggi di programmazione</p><h2>La stessa somma, a tre livelli</h2></div>
+  <div class="cols-3">
+    <div class="stack"><h3>Alto livello: Java</h3><pre class="code" style="font-size:30px"><span class="k">int</span> c = a + b;</pre><p class="small muted">Vicino al modo di pensare delle persone. Uguale su ogni computer.</p></div>
+    <div class="stack"><h3>Assembly (LMC)</h3><pre class="code" style="font-size:30px">LDA A
+ADD B
+STA C</pre><p class="small muted">Un'istruzione della CPU per riga, con nomi leggibili.</p></div>
+    <div class="stack"><h3>Linguaggio macchina</h3><pre class="code" style="font-size:30px">5<span class="hl">07</span>
+1<span class="hl">08</span>
+3<span class="hl">09</span></pre><p class="small muted">Solo numeri: codice dell'istruzione e indirizzo della cella.</p></div>
+  </div>
+  <div class="callout">La CPU capisce <b>solo</b> il linguaggio macchina. Tutto il resto va tradotto.</div>
+  <aside class="notes">Riprendere il Little Man Computer della lezione scorsa: LDA (carica) = 5xx, ADD = 1xx, STA (salva) = 3xx; qui supponiamo che A, B, C siano nelle celle 7, 8 e 9. Nei processori veri il linguaggio macchina è in binario e cambia da una famiglia all'altra (x86 nei PC, ARM nei telefoni): per questo un programma compilato per uno non gira sull'altro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tradurre</p><h2>Compilatore o interprete?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Compilatore</h3><p class="small">Traduce <b>tutto</b> il programma prima di eseguirlo e produce un file eseguibile. Gli errori di sintassi escono subito, tutti insieme.</p><p class="small muted">Esempi: C, C++, Rust.</p></div>
+    <div class="card"><h3>Interprete</h3><p class="small">Legge ed esegue il programma <b>un'istruzione alla volta</b>, ogni volta che lo lanci. Un errore salta fuori solo quando ci arriva.</p><p class="small muted">Esempi: Python, i primi BASIC.</p></div>
+  </div>
+  <div class="flow">
+    <div class="card soft"><h4>Main.java</h4><p class="small">codice sorgente</p></div>
+    <div class="card soft"><h4>javac</h4><p class="small">compilatore</p></div>
+    <div class="card soft"><h4>Main.class</h4><p class="small">bytecode</p></div>
+    <div class="card fill"><h4>JVM</h4><p class="small">Windows, Mac, Linux, Android…</p></div>
+  </div>
+  <aside class="notes">Java usa una via di mezzo: javac compila in bytecode, un linguaggio macchina "di una CPU immaginaria"; la Java Virtual Machine lo esegue su qualsiasi computer, interpretandolo e compilando al volo le parti più usate (compilazione JIT, just in time). Era lo slogan di Sun nel 1995: "write once, run anywhere". Anche JavaScript nei browser moderni usa interpretazione e compilazione JIT insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Java è compilato o interpretato?</h2></div>
+  <div class="poll" data-id="java-compilato" data-tipo="quiz" data-risposta="D">
+    <ol><li>Solo compilato, come il C: si ottiene un .exe</li><li>Solo interpretato, riga per riga, come i primi BASIC</li><li>Nessuno dei due: la CPU legge direttamente il file .java</li><li>Compilato in bytecode, poi eseguito dalla JVM</li></ol>
+    <p class="why">javac traduce Main.java in Main.class (bytecode, non codice per la tua CPU). Poi la JVM esegue il bytecode, interpretandolo e compilando al volo le parti più usate. Per questo lo stesso .class gira su Windows, Mac e Linux.</p>
+  </div>
+  <aside class="notes">La A è il distrattore più scelto da chi conosce un po' di C. La C rivela chi pensa che la CPU capisca il codice sorgente: ricordare la slide dei tre livelli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dal codice all'output: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="percorso-java">
+    <li>Scrivi il codice nel file Main.java</li>
+    <li>javac controlla la sintassi e segnala gli errori</li>
+    <li>javac produce Main.class con il bytecode</li>
+    <li>Il comando java avvia la JVM</li>
+    <li>La JVM carica Main.class ed esegue il metodo main</li>
+    <li>Sullo schermo compare l'output</li>
+  </ol>
+  <aside class="notes">Su OnlineGDB tutto questo succede premendo Run: il sito compila ed esegue per noi su un server. Errore tipico: invertire le righe 2 e 3. Se c'è un errore di sintassi il file .class non viene prodotto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Errori di compilazione ed errori di esecuzione</h2>
+  <div class="cols-2">
+<pre class="code" style="font-size:27px"><span class="k">public class</span> Main {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">int</span> a = 10;
+    <span class="k">int</span> b = 0;
+    System.out.println(<span class="s">"Inizio"</span>);
+    System.out.println(a / b);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Apri <b>onlinegdb.com</b>, in alto a destra scegli <b>Java</b>.</li>
+        <li>Copia il programma e premi <b>Run</b>. Che cosa viene stampato prima dell'errore?</li>
+        <li>Togli il <code>;</code> dopo <code>int a = 10</code> e premi Run: leggi il messaggio.</li>
+        <li>Annota i due messaggi in <b>errori-cognome.txt</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> prima prova: compare "Inizio", poi <code>ArithmeticException: / by zero</code> (errore di esecuzione). Seconda: <code>error: ';' expected</code> con il numero di riga, e non parte niente (errore di compilazione).</div>
+    </div>
+  </div>
+  <aside class="notes">Messaggio chiave: l'errore di compilazione blocca tutto prima di partire (nemmeno "Inizio" viene stampato); l'errore di esecuzione arriva a metà, quando il programma tenta l'operazione impossibile. Sfida veloce: cambiare b in 3 e prevedere il risultato (3: divisione intera tra int). Se OnlineGDB non è raggiungibile: usare un altro compilatore online come programiz.com/java-programming/online-compiler, oppure mostrare alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia</p><h2>Grace Hopper e il programma che scrive programmi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nei primi anni '50 si programmava in codice macchina. <b>Grace Hopper</b>, matematica e ufficiale della Marina degli Stati Uniti, scrisse nel 1952 il sistema <b>A-0</b>, uno dei primi compilatori.</p>
+      <p>Le dicevano che i computer sapevano solo fare conti, non scrivere programmi. Lei insistette: da quella idea nacque il <b>COBOL</b> (1959), ancora oggi usato da banche ed enti pubblici.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli <b>assistenti di programmazione con l'AI</b> scrivono codice a partire da una richiesta in italiano. Ma il codice va comunque compilato e provato: a volte usano funzioni che non esistono o sbagliano i casi limite. La responsabilità di controllare resta tua.</p></div>
+  </div>
+  <aside class="notes">Grace Hopper (1906-1992) raccontò più volte che all'inizio nessuno credeva in un compilatore. A lei si deve anche la diffusione del termine "bug" dopo la falena trovata nel 1947 nel computer Mark II (lo hanno visto in prima). Il ponte con l'AI: i modelli linguistici prevedono il codice più probabile, non lo eseguono per controllarlo; per questo possono inventare nomi di funzioni. Nelle lezioni di laboratorio useremo i test per scoprire questi errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le licenze</p><h2>Che cosa puoi fare con un programma?</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Costa?</th><th>Codice sorgente</th><th>Esempi</th></tr>
+    <tr><td><b>Proprietario</b> a pagamento</td><td>Sì</td><td>Chiuso</td><td>Microsoft Office, Photoshop, Minecraft</td></tr>
+    <tr><td><b>Freeware</b></td><td>No</td><td>Chiuso</td><td>Google Chrome, Zoom (versione base)</td></tr>
+    <tr><td><b>Shareware / prova</b></td><td>Dopo la prova</td><td>Chiuso</td><td>WinRAR, molti antivirus</td></tr>
+    <tr><td><b>Open source</b></td><td>Di solito no</td><td>Aperto, modificabile</td><td>LibreOffice (MPL), VLC (GPL), Linux (GPL)</td></tr>
+    <tr><td><b>Software libero</b></td><td>Di solito no</td><td>Aperto, con 4 libertà</td><td>Programmi GNU (GPL)</td></tr>
+  </table>
+  <p class="small">La licenza (per i programmi chiusi l'<b>EULA</b>) è il contratto che accetti installando: non compri il programma, compri il <mark>diritto di usarlo</mark> a certe condizioni.</p>
+  <aside class="notes">Le quattro libertà del software libero (Richard Stallman, Free Software Foundation, anni '80): usare il programma per qualsiasi scopo (libertà 0), studiarlo e modificarlo (1), ridistribuirlo (2), distribuire le versioni modificate (3). La GPL è "copyleft": chi distribuisce versioni modificate deve mantenerle libere. Chrome è freeware ma si basa sul progetto open source Chromium. WinRAR: prova gratuita di 40 giorni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un programma gratuito è sempre open source?</h2></div>
+  <div class="poll" data-id="gratis-open" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sì: se non lo paghi, il codice è di tutti</li><li>No: un freeware è gratis ma il codice resta chiuso</li><li>Sì, ma solo se è scaricato da un sito ufficiale</li><li>No: l'open source si paga sempre</li></ol>
+    <p class="why">Gratis e aperto sono due cose diverse. Chrome è gratis ma il suo codice non è pubblico; un programma open source può anche essere venduto, purché si rispetti la licenza. "Free" in "free software" vuol dire libero, non gratuito.</p>
+  </div>
+  <aside class="notes">Citare la frase della Free Software Foundation: "free" come in "libertà di parola", non come in "birra gratis" (free speech, not free beer). Esempio di open source venduto: distribuzioni Linux aziendali con assistenza a pagamento, come Red Hat Enterprise Linux.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Detective delle licenze</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Writer: <b>Aiuto</b>, <b>Informazioni su LibreOffice</b>, poi il pulsante o il link delle licenze. Che licenza è?</li>
+      <li>Cerca nel browser la pagina ufficiale della licenza di <b>VLC</b> (videolan.org) e di <b>7-Zip</b> (7-zip.org).</li>
+      <li>Per un programma proprietario che usi (un gioco, un'app) trova l'EULA o i "Termini".</li>
+      <li>In Calc: <b>Programma · Licenza · Codice aperto? · Si può modificare?</b> Salva come <b>licenze-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> LibreOffice usa la <b>MPL 2.0</b> (Mozilla Public License), VLC la <b>GPL</b>, 7-Zip la <b>LGPL</b> (con una piccola eccezione per la parte RAR).</div>
+  </div>
+  <aside class="notes">7-Zip: la maggior parte del codice è GNU LGPL; il codice di decompressione RAR ha una restrizione (non si può usare per ricostruire il compressore RAR). Domanda finale: nell'EULA del programma proprietario c'è scritto che non si può decompilare o modificare? Quasi sempre sì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Licenze e AI</p><h2>"Open source" anche per i modelli di AI?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Modelli chiusi</h3><p class="small">Si usano solo attraverso un sito o un'app dell'azienda. Non si scaricano.</p></div>
+    <div class="card"><h3>Modelli "a pesi aperti"</h3><p class="small">Si possono scaricare i <b>pesi</b> (i numeri imparati) e farli girare sul proprio computer.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcuni modelli scaricabili hanno licenze con limiti d'uso, e quasi mai si pubblicano i dati di addestramento. Per questo si parla di <b>open weights</b> (pesi aperti) e non sempre di open source. Prima di usare un modello in un progetto, come per ogni software, si legge la licenza.</p></div>
+  <aside class="notes">Esempi di licenze diverse: alcuni modelli sono pubblicati con licenza Apache 2.0, altri con licenze proprie che vietano certi usi o pongono limiti alle grandi aziende. La Open Source Initiative ha pubblicato nel 2024 una definizione di "open source AI" che chiede anche informazioni dettagliate sui dati. Restare sul concetto, senza giudizi sui singoli prodotti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4131" data-aiuto="la terza cifra: conta le lettere di JVM">
+    <ul class="points">
+      <li>1ª cifra: quante libertà definiscono il software libero</li>
+      <li>2ª cifra: l'ultima cifra dell'anno del messaggio di Torvalds</li>
+      <li>3ª cifra: quante lettere ha la sigla della macchina virtuale di Java</li>
+      <li>4ª cifra: la prima cifra del codice macchina LMC dell'istruzione ADD</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 4 libertà, 1991, JVM, ADD = 1xx.</div>
+  </div>
+  <aside class="notes">Codice: 4131. Squadre di 4; dopo tre tentativi compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il software che fa dialogare il sistema operativo con una periferica si chiama <span class="blank" data-risposta="driver" style="--w:8ch"></span>.</p>
+    <p>Il compilatore Java trasforma Main.java in un file .class che contiene il <span class="blank" data-risposta="bytecode" style="--w:8ch"></span>.</p>
+    <p>Dividere un int per zero causa un errore di <span class="blank" data-risposta="esecuzione|runtime" style="--w:8ch"></span>, non di compilazione.</p>
+    <p>Un programma gratuito ma con codice chiuso si chiama <span class="blank" data-risposta="freeware" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: driver, bytecode, esecuzione (accettato runtime), freeware.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Software di base: firmware, driver, sistema operativo</li>
+      <li>Software applicativo: risolve i compiti dell'utente</li>
+      <li>La CPU capisce solo il linguaggio macchina</li>
+    </ul>
+    <ul class="points">
+      <li>Compilatore: traduce tutto prima; interprete: un'istruzione alla volta</li>
+      <li>Java: javac produce bytecode, la JVM lo esegue</li>
+      <li>Gratis non vuol dire aperto: leggi la licenza</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: l'inventario del software di un dispositivo di casa con le licenze.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

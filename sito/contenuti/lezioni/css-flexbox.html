@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il layout CSS Flexbox · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.fx{display:flex;gap:10px;background:var(--card);border:3px dashed var(--accent);border-radius:14px;padding:10px;min-height:76px}
+.fx i{font-style:normal;font-family:var(--mono);font-size:24px;background:var(--accent);color:#fff;border-radius:10px;width:70px;height:52px;display:grid;place-items:center}
+.fx-row{display:grid;grid-template-columns:360px 1fr;align-items:center;gap:20px;font-family:var(--mono);font-size:26px}
+.assi{position:relative;height:330px;background:var(--card);border:3px dashed var(--accent);border-radius:18px;display:flex;align-items:center;gap:16px;padding:0 40px}
+.assi i{font-style:normal;font-family:var(--mono);font-size:30px;background:var(--accent);color:#fff;border-radius:12px;width:110px;height:110px;display:grid;place-items:center;z-index:1}
+.assi .main{position:absolute;left:20px;right:20px;top:50%;border-top:5px solid var(--ink)}
+.assi .cross{position:absolute;top:16px;bottom:16px;left:560px;border-left:5px dashed var(--bad)}
+.assi .lm{position:absolute;right:24px;top:calc(50% + 10px);font-family:var(--display);font-weight:700;font-size:26px}
+.assi .lc{position:absolute;left:580px;top:14px;font-family:var(--display);font-weight:700;font-size:26px;color:var(--bad)}
+.gr{display:flex;gap:0;font-family:var(--mono);font-size:26px;border:3px solid var(--ink);border-radius:12px;overflow:hidden}
+.gr div{padding:16px 12px;color:#fff;text-align:center}
+</style>
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Sviluppare siti web responsive e accessibili · Lezione 3</p>
+  <h1>Il layout CSS<br>Flexbox</h1>
+  <p class="lead">Menu, barre, card in fila, un elemento centrato al millimetro: con display: flex bastano poche righe. E c'è anche una rana da salvare.</p>
+  <aside class="notes">Obiettivi: distinguere contenitore flex ed elementi flex, asse principale e asse trasversale, usare flex-direction, justify-content, align-items, flex-wrap, gap, calcolare a mano la larghezza con flex-grow. Prerequisiti: box model, lezione 2 sul posizionamento. Durata: 2-3 ore. Strumenti: Flexbox Froggy (flexboxfroggy.com, senza account), CodePen o JSFiddle senza account, DevTools di Chrome o Firefox.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Finora, come hai centrato qualcosa in una pagina?</h2></div>
+  <div class="poll" data-id="flex-centrare">
+    <ol><li>Con <code>text-align: center</code></li><li>Con <code>margin: 0 auto</code></li><li>Con spazi e righe vuote</li><li>Non ci sono mai riuscito davvero</li></ol>
+  </div>
+  <p class="lead">"Come si centra un div?" è stata per anni una delle domande più famose tra chi programma per il web. Oggi la risposta sta in tre righe.</p>
+  <aside class="notes">text-align centra solo il contenuto inline (testo), margin: 0 auto centra un blocco solo in orizzontale e solo se ha una larghezza. Centrare anche in verticale era davvero complicato prima di Flexbox: si usavano tabelle, posizionamento assoluto con trasformazioni, calcoli a mano. Diventato un meme tra gli sviluppatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea</p><h2>Un contenitore, tanti elementi, due assi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code">.menu {           <span class="c">/* contenitore */</span>
+  <span class="k">display</span>: flex;
+}
+<span class="c">/* i figli diretti diventano
+   elementi flex */</span></pre>
+      <ul class="points small">
+        <li><b>Asse principale</b>: la direzione in cui si mettono in fila</li>
+        <li><b>Asse trasversale</b>: perpendicolare al principale</li>
+      </ul>
+    </div>
+    <div class="assi"><i>1</i><i>2</i><i>3</i><span class="main"></span><span class="cross"></span><span class="lm">principale →</span><span class="lc">trasversale ↓</span></div>
+  </div>
+  <aside class="notes">Flexbox ("Flexible Box Layout") ha avuto la prima bozza del W3C nel 2009 e la sintassi attuale dal 2012; dal 2015 circa funziona in tutti i browser diffusi. Solo i figli diretti diventano elementi flex, non i nipoti. Con flex-direction: row (predefinito) l'asse principale è orizzontale; con column diventa verticale e i due assi si scambiano: tenerlo a mente per il quiz.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Asse principale</p><h2><code>justify-content</code>: come distribuisco lungo la fila</h2></div>
+  <div class="stack">
+    <div class="fx-row"><span>flex-start</span><div class="fx" style="justify-content:flex-start"><i>1</i><i>2</i><i>3</i></div></div>
+    <div class="fx-row"><span>center</span><div class="fx" style="justify-content:center"><i>1</i><i>2</i><i>3</i></div></div>
+    <div class="fx-row"><span>flex-end</span><div class="fx" style="justify-content:flex-end"><i>1</i><i>2</i><i>3</i></div></div>
+    <div class="fx-row"><span>space-between</span><div class="fx" style="justify-content:space-between"><i>1</i><i>2</i><i>3</i></div></div>
+    <div class="fx-row"><span>space-evenly</span><div class="fx" style="justify-content:space-evenly"><i>1</i><i>2</i><i>3</i></div></div>
+  </div>
+  <aside class="notes">Queste righe sono vere: sono dei contenitori flex disegnati con il CSS che stiamo studiando. space-between: niente spazio ai bordi, tutto lo spazio tra gli elementi (classico per logo a sinistra e menu a destra). space-evenly: spazi tutti uguali, anche ai bordi. Esiste anche space-around: ogni elemento ha la stessa quantità di spazio a sinistra e a destra, quindi ai bordi lo spazio è la metà di quello tra due elementi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Asse trasversale</p><h2><code>align-items</code> e il centro perfetto</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="fx-row" style="grid-template-columns:250px 1fr"><span>stretch</span><div class="fx" style="height:120px;align-items:stretch"><i style="height:auto">1</i><i style="height:auto">2</i></div></div>
+      <div class="fx-row" style="grid-template-columns:250px 1fr"><span>flex-start</span><div class="fx" style="height:120px;align-items:flex-start"><i>1</i><i>2</i></div></div>
+      <div class="fx-row" style="grid-template-columns:250px 1fr"><span>center</span><div class="fx" style="height:120px;align-items:center"><i>1</i><i>2</i></div></div>
+    </div>
+    <div class="stack">
+<pre class="code">.scatola {
+  <span class="k">display</span>: flex;
+  <span class="k">justify-content</span>: center;
+  <span class="k">align-items</span>: center;
+  <span class="k">height</span>: 100vh;
+}</pre>
+      <p class="small">Centrato in orizzontale <b>e</b> in verticale nella finestra.</p>
+    </div>
+  </div>
+  <aside class="notes">stretch è il valore predefinito: gli elementi si allungano su tutta l'altezza del contenitore se non hanno un'altezza propria (nella demo la loro altezza è auto). 100vh = 100% dell'altezza della finestra (viewport height). Senza un'altezza del contenitore il centro verticale non si vede: il contenitore è alto quanto il contenuto. Risposta al sondaggio iniziale: ecco le tre righe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Con <code>flex-direction: column</code>, <code>justify-content: center</code> centra…</h2></div>
+  <div class="poll" data-id="flex-column" data-tipo="quiz" data-risposta="B">
+    <ol><li>in orizzontale, come sempre</li><li>in verticale</li><li>in entrambe le direzioni</li><li>niente: con column non funziona</li></ol>
+    <p class="why">justify-content lavora sempre sull'asse principale. Con column l'asse principale diventa verticale, quindi centra in verticale (se il contenitore è più alto del contenuto). Per centrare in orizzontale ora serve align-items.</p>
+  </div>
+  <aside class="notes">La maggior parte risponde A perché associa "justify" a "orizzontale". Il ragionamento giusto è per assi, non per direzioni. Collegare a Flexbox Froggy: diversi livelli usano proprio questo scambio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Flexbox Froggy: salva le rane</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>flexboxfroggy.com</b> (gratis, senza account). In alto a destra scegli la lingua.</li>
+      <li>In ogni livello scrivi le proprietà CSS che portano ogni rana sulla sua ninfea.</li>
+      <li>Lavorate a coppie: uno scrive, l'altro legge la spiegazione; cambiate ogni 3 livelli.</li>
+      <li>Annotate su un foglio le proprietà nuove che incontrate.</li>
+      <li>Obiettivo: livello 12. I più veloci arrivano al 24.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il livello è superato quando il pulsante <i>Next</i> si attiva e le rane sono sulle ninfee del loro colore. Il gioco tiene traccia dei livelli completati nel browser che stai usando.</div>
+  </div>
+  <div class="timer" data-min="25"></div>
+  <aside class="notes">Flexbox Froggy è un gioco di Codepip (Thomas Park), 24 livelli. Soluzioni dei primi livelli: 1 justify-content: flex-end; 2 justify-content: center; 3 justify-content: space-around; 4 justify-content: space-between; 5 align-items: flex-end; 6 justify-content: center + align-items: center. Gli ultimi livelli usano flex-flow, order, align-self e align-content. Se il sito è bloccato dalla rete della scuola: usare la demo alla LIM o il laboratorio successivo su CodePen. Il progresso è salvato solo nel browser: su un altro PC si ricomincia, ma si possono scegliere i livelli dal menu.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Andare a capo</p><h2><code>flex-wrap</code> e <code>gap</code></h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code">.galleria {
+  <span class="k">display</span>: flex;
+  <span class="k">flex-wrap</span>: wrap;
+  <span class="k">gap</span>: 16px;
+}</pre>
+      <ul class="points small">
+        <li>Senza wrap gli elementi restano su <b>una riga</b> e si stringono</li>
+        <li>Con wrap vanno a capo quando non c'è più posto</li>
+        <li><code>gap</code>: spazio <b>tra</b> gli elementi, non ai bordi</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <p class="small muted">nowrap (predefinito)</p>
+      <div class="fx" style="flex-wrap:nowrap"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></div>
+      <p class="small muted">wrap</p>
+      <div class="fx" style="flex-wrap:wrap;width:520px"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></div>
+    </div>
+  </div>
+  <aside class="notes">Nella demo nowrap gli elementi si stringono (flex-shrink vale 1 di default) finché il testo lo consente. Con wrap e larghezza limitata vanno su più righe. gap sostituisce i vecchi margin tra elementi, che lasciavano spazio anche sull'ultimo. Con wrap, align-content distribuisce le righe sull'asse trasversale (compare negli ultimi livelli di Froggy).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli elementi flessibili</p><h2><code>flex-grow</code>: chi si prende lo spazio libero?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small">Contenitore largo <b>900px</b>, tre elementi con <code>flex-basis: 200px</code>.</p>
+      <div class="formula" style="font-size:40px"><small>spazio libero</small>900 − 3 × 200 = <span class="hl">300px</span></div>
+      <p class="small">flex-grow <b>1, 2, 0</b>: il libero si divide in 1 + 2 + 0 = <b>3 parti</b> da 100px.</p>
+    </div>
+    <div class="stack">
+      <div class="gr"><div style="width:300px;background:#11845f">300px<br>grow 1</div><div style="width:400px;background:#0b5e43">400px<br>grow 2</div><div style="width:200px;background:#596179">200px<br>grow 0</div></div>
+      <ul class="points small">
+        <li><code>flex-basis</code>: la misura di partenza</li>
+        <li><code>flex-grow</code>: quante parti di spazio libero prende</li>
+        <li><code>flex: 1</code> su tutti: parti uguali</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Calcolo: 200 + 1 × 100 = 300; 200 + 2 × 100 = 400; 200 + 0 = 200. Totale 900. Con gap bisogna togliere anche gli spazi: con gap 30px lo spazio libero sarebbe 900 − 600 − 60 = 240. flex-shrink fa il contrario: quando lo spazio manca, decide chi si restringe. flex: 1 è la scorciatoia per flex-grow 1, flex-shrink 1, flex-basis 0%.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola a mano</p><h2>Contenitore 1000px, tre elementi da 200px, grow 1, 1, 3. Il terzo?</h2></div>
+  <div class="poll" data-id="flex-calcolo" data-tipo="quiz" data-risposta="D">
+    <ol><li>333px</li><li>600px</li><li>520px</li><li>440px</li></ol>
+    <p class="why">Spazio libero: 1000 − 600 = 400px. Parti: 1 + 1 + 3 = 5, quindi 80px a parte. Il terzo: 200 + 3 × 80 = 440px. I primi due: 280px ciascuno. Totale 280 + 280 + 440 = 1000.</p>
+  </div>
+  <aside class="notes">333 è chi divide 1000 in tre; 600 è chi pensa che grow 3 voglia dire "tre volte più largo" (3 × 200); 520 è chi divide il libero per 3 elementi invece che per 5 parti e poi aggiunge a caso. Messaggio: flex-grow divide lo spazio libero, non la larghezza totale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Barra di navigazione e card in fila</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su <b>codepen.io/pen</b>: un <code>header</code> con un <code>&lt;b&gt;</code> logo e un <code>nav</code> con 4 link; sotto, un <code>main</code> con 3 <code>article.card</code>.</li>
+      <li>Header: <code>display: flex; justify-content: space-between; align-items: center</code>.</li>
+      <li>Nav: <code>display: flex; gap: 24px</code>.</li>
+      <li>Main: <code>display: flex; flex-wrap: wrap; gap: 20px</code>; card: <code>flex: 1 1 250px</code>.</li>
+      <li>Stringi la finestra o il riquadro di anteprima. Salva in <b>flex-nav.html</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> logo a sinistra e menu a destra, centrati in verticale; le tre card hanno la stessa larghezza e, quando lo spazio scende sotto circa 250px per card, vanno a capo una alla volta.</div>
+  </div>
+  <aside class="notes">flex: 1 1 250px significa: parti da 250px, cresci e restringiti in parti uguali. È un primo assaggio di layout che si adatta da solo allo schermo, tema della lezione sul responsive. Errore tipico: display: flex sul nav ma i link sono dentro un ul: allora il flex va sull'ul (i figli diretti!). Fallback senza CodePen: Blocco note e browser.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una frase per ricordare</p><h2>Meno codice, non più codice</h2></div>
+  <figure class="citazione">
+    <blockquote>La perfezione si raggiunge non quando non c'è più niente da aggiungere, ma quando non c'è più niente da togliere.</blockquote>
+    <figcaption><b>Antoine de Saint-Exupéry</b>, scrittore e aviatore, in "Terra degli uomini", 1939</figcaption>
+  </figure>
+  <p class="lead">Prima di Flexbox, una barra di menu richiedeva float, clearfix e margini calcolati. Oggi: <b>display: flex</b> e una riga di allineamento.</p>
+  <aside class="notes">Fonte: Antoine de Saint-Exupéry, "Terre des hommes" (1939), capitolo "L'avion": "Il semble que la perfection soit atteinte non quand il n'y a plus rien à ajouter, mais quand il n'y a plus rien à retrancher." Traduzione nostra. Saint-Exupéry parlava della progettazione degli aerei: la frase è citata spessissimo da ingegneri e programmatori. Domanda: nel vostro CSS del laboratorio, c'è qualcosa che si può togliere senza cambiare il risultato?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la proprietà a che cosa fa</h2></div>
+  <dl class="puzzle-abbina" data-id="flex-abbina">
+    <dt>flex-direction</dt><dd>Sceglie se mettere gli elementi in riga o in colonna</dd>
+    <dt>justify-content</dt><dd>Distribuisce gli elementi lungo l'asse principale</dd>
+    <dt>align-items</dt><dd>Allinea gli elementi sull'asse trasversale</dd>
+    <dt>flex-wrap</dt><dd>Permette di andare a capo quando manca spazio</dd>
+    <dt>flex-grow</dt><dd>Quante parti di spazio libero prende un elemento</dd>
+    <dt>order</dt><dd>Cambia l'ordine visivo senza toccare l'HTML</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Su order aprire una parentesi di accessibilità (lezione 1): lo screen reader e il tasto Tab seguono l'ordine dell'HTML, non quello visivo; se order cambia troppo l'ordine, chi naviga con la tastiera salta da una parte all'altra. Usarlo con prudenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Flexbox fuori dal browser</p><h2>Lo stesso modello, ovunque</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>App per telefono</h3><p>React Native, usato per molte app per Android e iPhone, impagina le schermate con Flexbox tramite il motore open source Yoga di Meta. In Figma, lo strumento con cui si disegnano le interfacce, l'<b>Auto layout</b> ha le stesse idee: direzione, spaziatura, allineamento.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il codice scritto dall'AI</h3><p>Chiedi a un assistente AI "una barra con logo a sinistra e menu a destra": molto spesso risponde con <b>display flex</b>, justify-content space-between e align-items center. Ora sai leggerlo, controllarlo e correggerlo, invece di incollarlo alla cieca.</p></div>
+  </div>
+  <aside class="notes">Yoga è un motore di layout open source di Meta che implementa Flexbox ed è usato da React Native (in React Native la direzione predefinita è column, non row: curiosità da citare). Il secondo box non riporta statistiche: è una prova che il docente può fare alla LIM con un assistente AI, facendo poi leggere e commentare il codice alla classe (con le framework come Tailwind lo stesso codice appare come classi "flex items-center justify-between").</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'ispettore Flexbox di DevTools</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>flex-nav.html</b> in Chrome o Edge e premi <b>F12</b>.</li>
+      <li>Nella scheda Elementi, accanto a <code>&lt;header&gt;</code> c'è l'etichetta <b>flex</b>: cliccala. Compaiono le linee dell'asse e degli spazi.</li>
+      <li>Nella scheda Stili, clicca l'icona accanto a <code>display: flex</code>: si apre l'editor visivo.</li>
+      <li>Prova direction column, justify-content center, align-items flex-end e osserva.</li>
+      <li>Scrivi nel file, in un commento, la combinazione che ti piace di più.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con l'etichetta flex attiva vedi una sovrapposizione colorata sul contenitore con gli spazi tratteggiati; ogni clic nell'editor cambia subito il CSS nella scheda Stili. Ricaricando, il file torna com'era.</div>
+  </div>
+  <aside class="notes">In Firefox: scheda Ispettore, icona flex accanto al contenitore, e la sezione Layout con l'"Ispettore Flexbox". Le etichette esatte dei menu possono cambiare tra versioni: indicare la posizione sullo schermo alla LIM. Chi finisce prima riprende Flexbox Froggy da dove era arrivato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Il lucchetto si apre con un calcolo</h2></div>
+  <div class="puzzle-codice" data-risposta="475" data-aiuto="spazio libero 800 − 300 = 500, diviso in 0 + 1 + 3 = 4 parti">
+    <p>Contenitore largo <b>800px</b>, nessun gap. Tre elementi con <b>flex-basis: 100px</b> e flex-grow <b>0</b>, <b>1</b> e <b>3</b>.</p>
+    <p>Il codice è la larghezza in pixel del <b>terzo</b> elemento.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> Libero 500px, 4 parti da 125px: 100, 225 e 100 + 375 = 475px.</div>
+  </div>
+  <aside class="notes">Codice: 475. A squadre, carta e penna. Verifica: 100 + 225 + 475 = 800.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per attivare Flexbox sul contenitore scrivo <code>display:</code> <span class="blank" data-risposta="flex"></span>.</p>
+    <p>Lungo l'asse principale distribuisco gli elementi con <span class="blank" data-risposta="justify-content" style="--w:15ch"></span>.</p>
+    <p>Per far andare a capo gli elementi uso <code>flex-wrap:</code> <span class="blank" data-risposta="wrap"></span>.</p>
+    <p>Con <code>flex-direction: column</code> l'asse principale è <span class="blank" data-risposta="verticale" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: flex, justify-content, wrap, verticale.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>display: flex sul contenitore, i figli diretti si mettono in fila</li>
+      <li>justify-content: asse principale</li>
+      <li>align-items: asse trasversale</li>
+    </ul>
+    <ul class="points">
+      <li>column scambia gli assi</li>
+      <li>flex-wrap e gap per andare a capo con ordine</li>
+      <li>flex-grow divide lo spazio libero in parti</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: CSS Grid, il layout in due dimensioni (e un orto da annaffiare: Grid Garden).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

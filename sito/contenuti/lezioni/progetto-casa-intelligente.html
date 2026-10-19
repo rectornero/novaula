@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Progetto DomoDash · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Progetto di gruppo · 3E TPSI</p>
+  <h1>DomoDash:<br>il cruscotto della casa intelligente</h1>
+  <p class="lead">Sensori, luci, allarmi: in sei settimane la vostra squadra progetta e costruisce il pannello web che mostra lo stato di una casa domotica.</p>
+  <div class="meta"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">un po' di JavaScript</span><span class="chip">Kanban</span></div>
+  <aside class="notes">Deck di lancio e di guida del progetto: si usa all'inizio (slide 1-9) e poi si riprende ogni settimana alla tappa corrispondente. Durata complessiva indicativa: 6 settimane, circa 2 ore a settimana in laboratorio più lavoro a casa. Prerequisiti: HTML e CSS di base (Unità 4), un'idea di Kanban (lezione sulle metodologie). Il progetto è originale: dal libro prendiamo solo il tema della domotica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale casa vorreste rendere intelligente?</h2></div>
+  <div class="poll" data-id="domo-scenario">
+    <ol><li>Il bilocale di nonna Lina, che vive da sola</li><li>Il laboratorio di informatica della 3E</li><li>Lo studentato di sei ragazzi fuori sede</li><li>Una casa in montagna usata solo nel weekend</li></ol>
+  </div>
+  <p class="small muted">Ogni squadra sceglie uno scenario: cambiano i sensori, gli utenti e quello che conta davvero.</p>
+  <aside class="notes">Sondaggio per orientare la scelta; poi ogni squadra sceglie il proprio scenario (anche due squadre con lo stesso scenario vanno bene, faranno scelte diverse). Spunti: per nonna Lina contano caratteri grandi, allarme caduta e fumo; per il laboratorio CO2, temperatura, PC accesi a fine giornata; per lo studentato consumi e lavatrice; per la casa in montagna temperatura minima antigelo e porta d'ingresso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il brief</p><h2>Che cosa costruite</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Una pagina web, <b>il cruscotto</b>, con una card per ogni dispositivo</li>
+      <li>Card raggruppate per <b>stanza</b>, con nome, stato e valore</li>
+      <li>Colori e icone che fanno capire subito che cosa va bene e che cosa no</li>
+      <li>Dati letti da un file <code>dati.js</code> in formato JSON</li>
+      <li>Usabile da telefono e accessibile anche a chi vede poco</li>
+    </ul>
+    <div class="card soft"><p class="num">6</p><h3>settimane, 5 traguardi</h3><p>Alla fine: sito in un file .zip e presentazione di 5 minuti con le slide in PDF.</p></div>
+  </div>
+  <aside class="notes">Precisare che il cruscotto MOSTRA i dati, non comanda dispositivi veri: niente collegamenti a impianti reali. I valori sono simulati nel file dati.js. Chi vuole può aggiungere un pulsante che cambia uno stato nella pagina, ma non è richiesto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il lessico della domotica</p><h2>Sensori misurano, attuatori agiscono</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Sensore</h3><p>Trasforma una grandezza fisica in un dato: temperatura, umidità, CO2, movimento, fumo, porta aperta.</p></div>
+    <div class="card fill"><h3>Centralina</h3><p>Raccoglie i dati, applica le regole ("se CO2 &gt; 1000 ppm, avvisa") e li manda al cruscotto.</p></div>
+    <div class="card"><h3>Attuatore</h3><p>Fa qualcosa nel mondo fisico: accende una luce, chiude una tapparella, apre una valvola.</p></div>
+  </div>
+  <div class="callout">Nel vostro cruscotto ogni dispositivo ha un <b>tipo</b> (sensore o attuatore), una <b>stanza</b> e uno <b>stato</b>.</div>
+  <aside class="notes">Il valore di 1000 ppm di CO2 è una soglia usata spesso come indicatore di aria da cambiare negli ambienti interni (l'aria esterna è intorno ai 420 ppm); è un riferimento pratico, non un limite di legge. Chiedere esempi di sensori nel telefono: accelerometro, luminosità, prossimità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di questi è un attuatore?</h2></div>
+  <div class="poll" data-id="domo-attuatore" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il termostato che legge 19,5 °C</li><li>Il rilevatore di fumo in cucina</li><li>Il contatto magnetico sulla finestra</li><li>La valvola che chiude il radiatore</li></ol>
+    <p class="why">La valvola agisce sul mondo fisico: è un attuatore. Il termometro, il rilevatore di fumo e il contatto magnetico misurano o rilevano qualcosa: sono sensori, anche se il termostato poi comanda la caldaia.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: un termostato intero contiene sia un sensore sia la logica che comanda la caldaia, ma "legge 19,5 °C" descrive la parte che misura. Il rilevatore di fumo suona una sirena: far discutere, la sirena è un attuatore integrato, ma la funzione principale è rilevare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La squadra</p><h2>Quattro ruoli, una sola consegna</h2></div>
+  <dl class="puzzle-abbina" data-id="domo-ruoli">
+    <dt>Coordinatore</dt><dd>Tiene aggiornata la Kanban e controlla i traguardi</dd>
+    <dt>Designer</dt><dd>Disegna schizzi e wireframe, sceglie colori e caratteri</dd>
+    <dt>Sviluppatore</dt><dd>Scrive l'HTML e i CSS delle card e della griglia</dd>
+    <dt>Dati e test</dt><dd>Prepara dati.js, prova il sito su telefono e con WAVE</dd>
+  </dl>
+  <aside class="notes">Abbinamento corretto come scritto. Regola: i ruoli dicono chi è RESPONSABILE di una parte, non chi la fa da solo; tutti scrivono un po' di codice. Con squadre di 3, il coordinatore fa anche dati e test. I ruoli ruotano a metà progetto se il docente lo desidera, così tutti provano l'HTML.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il calendario</p><h2>Sei settimane, cinque traguardi</h2></div>
+  <table class="data compact">
+    <tr><th>Settimana</th><th>Fase</th><th>Traguardo (si consegna o si mostra)</th></tr>
+    <tr><td>1</td><td>Brief e organizzazione</td><td><b>T1</b> scenario, ruoli, Kanban con almeno 12 schede</td></tr>
+    <tr><td>2</td><td>Progetto</td><td><b>T2</b> schizzo su carta, wireframe in Excalidraw, elenco dei dispositivi</td></tr>
+    <tr><td>3</td><td>HTML e CSS</td><td><b>T3</b> pagina statica con le card scritte a mano</td></tr>
+    <tr><td>4</td><td>Dati dinamici</td><td><b>T4</b> card generate da dati.js con JavaScript</td></tr>
+    <tr><td>5</td><td>Accessibilità e test</td><td>Checklist dei test compilata, errori corretti</td></tr>
+    <tr><td>6</td><td>Presentazione</td><td><b>T5</b> consegna .zip e presentazione di 5 minuti</td></tr>
+  </table>
+  <aside class="notes">Il docente controlla ogni traguardo a inizio della settimana successiva (2-3 minuti a squadra, alla postazione). Se una squadra è in ritardo, si taglia una funzione, non la qualità: richiamare la legge di Brooks nella slide successiva. Le date precise le mette il docente su Novaula.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Una scheda attraversa la Kanban: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="domo-kanban">
+    <li>Il coordinatore scrive la scheda "Card della cucina" in Da fare</li>
+    <li>Lo sviluppatore la sposta in In corso e ci mette il suo nome</li>
+    <li>Scrive l'HTML e il CSS della card</li>
+    <li>La scheda passa in Da verificare</li>
+    <li>Un compagno prova la card su telefono e con WAVE</li>
+    <li>La scheda arriva in Fatto</li>
+  </ol>
+  <aside class="notes">Colonne della nostra Kanban: Da fare, In corso, Da verificare, Fatto. Regola WIP: massimo 2 schede In corso per persona. Il passaggio chiave è che chi verifica è una persona diversa da chi ha scritto il codice. Ripasso della lezione su Scrum e Kanban.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>T1: la Kanban della squadra</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>excalidraw.com</b> (nessun account) e disegna quattro colonne: Da fare, In corso, Da verificare, Fatto.</li>
+      <li>Scrivi almeno <b>12 schede</b>, una per ogni attività piccola (una card, il menu, i colori, un test…).</li>
+      <li>Su ogni scheda: titolo, responsabile, traguardo T1-T5.</li>
+      <li>Esporta come PNG: <b>kanban-squadraN.png</b> (N = numero della squadra).</li>
+      <li>Salva anche il file <b>.excalidraw</b> per aggiornarlo ogni settimana.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nessuna scheda è più grande di "un'ora di lavoro" (no "fare il sito"!), ogni scheda ha un nome e almeno una scheda riguarda i test.</div>
+  </div>
+  <aside class="notes">Se Excalidraw è bloccato dalla rete della scuola: Kanban su un foglio A3 con i post-it, fotografata con il telefono, oppure una tabella in Calc con quattro colonne. Il file .excalidraw si riapre trascinandolo nella pagina. Esempi di schede buone: "Card temperatura soggiorno", "Scegliere 3 colori con contrasto ok", "Test su telefono di Lucia".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Prima il funzionamento, poi i fronzoli</h2></div>
+  <figure class="citazione">
+    <blockquote>Il software funzionante più che la documentazione esaustiva. Rispondere al cambiamento più che seguire un piano.</blockquote>
+    <figcaption><b>Manifesto per lo sviluppo agile del software</b>, firmato da 17 sviluppatori a Snowbird (Utah), febbraio 2001</figcaption>
+  </figure>
+  <div class="callout hl">Ogni settimana il cruscotto deve <b>funzionare</b>, anche se è brutto. La versione bella arriva per gradi.</div>
+  <aside class="notes">Il Manifesto è pubblicato su agilemanifesto.org, che ne offre anche una traduzione italiana; qui riportiamo due dei quattro valori. Il manifesto aggiunge: "pur riconoscendo valore agli elementi a destra, consideriamo più importanti quelli a sinistra". Collegare alla legge di Brooks (1975): aggiungere persone a un progetto in ritardo lo ritarda ancora di più; meglio togliere una funzione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>T2: dallo schizzo al wireframe</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su carta, in 5 minuti, ognuno disegna il cruscotto <b>per telefono</b>. Confrontate e scegliete il migliore.</li>
+      <li>In Excalidraw ridisegnatelo in grigio: rettangoli per le card, scritte vere al posto dei "lorem ipsum".</li>
+      <li>Aggiungete la versione <b>per PC</b>: quante card per riga?</li>
+      <li>Accanto, la tabella dei dispositivi: stanza, nome, tipo, valore di esempio (almeno 8).</li>
+      <li>Esportate <b>wireframe-squadraN.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel wireframe si capisce in 3 secondi se c'è un allarme. Ci sono almeno 3 stanze e almeno un attuatore.</div>
+  </div>
+  <aside class="notes">Il wireframe non ha colori né foto: serve a decidere la disposizione. Far notare che un allarme deve risaltare non solo per il colore (rosso) ma anche con una parola o un'icona: il 8% circa dei maschi ha un'alterazione della visione dei colori (dato di letteratura medica per le popolazioni di origine europea). Fallback se Excalidraw non va: wireframe su carta fotografato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il formato dei dati</p><h2>La casa diventa un array JSON</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="c">// dati.js</span>
+<span class="k">const</span> dispositivi = [
+  {<span class="s">"stanza"</span>: <span class="s">"Cucina"</span>, <span class="s">"nome"</span>: <span class="s">"Fumo"</span>,
+   <span class="s">"tipo"</span>: <span class="s">"sensore"</span>, <span class="s">"stato"</span>: <span class="s">"ok"</span>,
+   <span class="s">"valore"</span>: <span class="s">"nessun fumo"</span>},
+  {<span class="s">"stanza"</span>: <span class="s">"Soggiorno"</span>, <span class="s">"nome"</span>: <span class="s">"CO2"</span>,
+   <span class="s">"tipo"</span>: <span class="s">"sensore"</span>, <span class="s">"stato"</span>: <span class="s">"allarme"</span>,
+   <span class="s">"valore"</span>: <span class="s">"1350 ppm"</span>}
+];</pre>
+    <ul class="points">
+      <li><code>[ ]</code> elenco, <code>{ }</code> oggetto</li>
+      <li>Chiavi sempre tra <b>virgolette doppie</b></li>
+      <li>Virgola tra gli elementi, mai dopo l'ultimo</li>
+      <li><code>stato</code>: ok, avviso o allarme</li>
+    </ul>
+  </div>
+  <aside class="notes">Perché dati.js e non dati.json? Un cruscotto vero chiederebbe il file JSON a un server con fetch(); ma aprendo la pagina dal disco (file://) il browser blocca fetch per sicurezza. Per questo mettiamo lo stesso JSON dentro una costante JavaScript. In JavaScript la virgola finale sarebbe tollerata, in JSON puro no: abituarsi alla regola più severa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale riga è JSON valido?</h2></div>
+  <div class="poll" data-id="domo-json" data-tipo="quiz" data-risposta="B">
+    <ol><li><code>{'nome': 'Luce'}</code></li><li><code>{"nome": "Luce", "accesa": true}</code></li><li><code>{nome: "Luce"}</code></li><li><code>{"nome": "Luce", "accesa": true,}</code></li></ol>
+    <p class="why">Solo la B. In JSON chiavi e stringhe vogliono le virgolette doppie (A e C sbagliano) e non è ammessa la virgola dopo l'ultimo elemento (D). true senza virgolette è un valore booleano.</p>
+  </div>
+  <aside class="notes">Tranello: A e C funzionano come oggetti JavaScript, quindi chi ha già visto un po' di JS pensa che siano giuste. Mostrare alla LIM: nella console del browser JSON.parse('{"nome": "Luce", "accesa": true,}') dà errore, mentre senza virgola finale funziona.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T3: le card in HTML e CSS</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Cartella <b>domodash</b> con <b>index.html</b> e <b>stile.css</b> (Blocco note e browser, oppure CodePen).</li>
+      <li>Nel <code>&lt;main&gt;</code> scrivi a mano 3 card <code>&lt;article&gt;</code> con titolo, stanza e valore.</li>
+      <li>Nel CSS metti la griglia qui accanto.</li>
+      <li>Tre classi di stato <code>.ok</code> <code>.avviso</code> <code>.allarme</code>: bordo colorato e una parola scritta.</li>
+    </ol>
+    <div class="stack">
+<pre class="code" style="font-size:25px">main {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}</pre>
+      <div class="check"><b>Controllo:</b> stringendo la finestra le card vanno a capo da sole (4 per riga su PC, 1 su telefono), senza media query.</div>
+    </div>
+  </div>
+  <aside class="notes">auto-fit con minmax crea tante colonne quante ne entrano, ognuna larga almeno 220px: è il trucco del "responsive senza media query" del libro (Unità 5). In CodePen il CSS va nel riquadro CSS e non serve il link; su disco serve &lt;link rel="stylesheet" href="stile.css"&gt;. Esempio di stato: .allarme { border-left: 8px solid #b42318; }.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 50 minuti</span></p>
+  <h2>T4: le card nascono dai dati</h2>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:26px"><span class="c">// script.js: codice di partenza</span>
+<span class="k">const</span> main = document.querySelector(<span class="s">"main"</span>);
+<span class="k">for</span> (<span class="k">const</span> d <span class="k">of</span> dispositivi) {
+  <span class="k">const</span> card = document.createElement(<span class="s">"article"</span>);
+  card.className = <span class="s">"card "</span> + d.stato;
+  card.innerHTML = <span class="s">"&lt;h3&gt;"</span> + d.nome + <span class="s">"&lt;/h3&gt;"</span>
+    + <span class="s">"&lt;p&gt;"</span> + d.stanza + <span class="s">"&lt;/p&gt;"</span>
+    + <span class="s">"&lt;p&gt;"</span> + d.valore + <span class="s">"&lt;/p&gt;"</span>;
+  main.appendChild(card);
+}</pre>
+    <div class="stack">
+      <p class="small">In fondo al <code>&lt;body&gt;</code>, in quest'ordine: <code>&lt;script src="dati.js"&gt;</code> e poi <code>&lt;script src="script.js"&gt;</code>. Togli le card scritte a mano.</p>
+      <div class="check"><b>Controllo:</b> aggiungi un oggetto in dati.js, ricarica: compare una card in più. Se la pagina è vuota, apri la console (F12).</div>
+    </div>
+  </div>
+  <aside class="notes">Il ciclo for...of è come il for-each di Java: per ogni oggetto d dell'array crea un elemento article. Errori tipici: dati.js caricato dopo script.js (dispositivi is not defined), virgola mancante tra oggetti (SyntaxError con numero di riga), nome della chiave scritto diversamente (undefined nella card). In CodePen: incollare prima il contenuto di dati.js e poi lo script nel riquadro JS. Chi finisce prima: mostrare anche il tipo (sensore/attuatore) o contare quanti allarmi ci sono e scriverlo in un &lt;p&gt; in alto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le case vere parlano tutte la stessa lingua?</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per anni ogni marca di domotica aveva la sua app. Lo standard aperto <b>Matter</b>, pubblicato nel 2022 dalla Connectivity Standards Alliance, permette a lampadine e sensori di marche diverse di funzionare insieme. I dati viaggiano in formati strutturati, come il vostro JSON.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti vocali basati su modelli linguistici trasformano "fa freddo in camera" in un comando per la valvola. Ma un modello può <b>sbagliare a capire</b>: per serrature e allarmi servono conferme e regole fisse, non solo una frase interpretata.</p></div>
+  </div>
+  <aside class="notes">Matter: versione 1.0 rilasciata dalla Connectivity Standards Alliance nell'ottobre 2022; lavora su reti IP (Wi-Fi, Ethernet, Thread). Domanda per la classe: quali comandi della vostra casa NON affidereste mai solo alla voce? Possibili risposte: apertura della porta, disattivazione dell'allarme, forno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accessibilità e test</p><h2>La checklist della settimana 5</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un solo <code>&lt;h1&gt;</code>, titoli in ordine, <code>&lt;main&gt;</code> e <code>&lt;header&gt;</code></li>
+      <li>Lo stato è scritto a parole, non solo colorato</li>
+      <li>Contrasto del testo almeno <b>4,5:1</b></li>
+      <li>Testo ingrandito al 200%: si legge ancora tutto</li>
+    </ul>
+    <ul class="points">
+      <li>Telefono vero o DevTools in modalità dispositivo</li>
+      <li><b>WAVE</b>: zero errori rossi</li>
+      <li>Validatore W3C: zero errori</li>
+      <li>Un compagno di un'altra squadra prova senza aiuti</li>
+    </ul>
+  </div>
+  <aside class="notes">Il rapporto 4,5:1 è il minimo WCAG 2.x livello AA per il testo normale. WAVE (wave.webaim.org) analizza una pagina online; per file sul disco si può incollare il codice nel validatore W3C (validator.w3.org, scheda "Validate by Direct Input") e controllare il contrasto con il contrast checker di WebAIM. Il test con un compagno di un'altra squadra è il più utile: chiedergli di dire ad alta voce "c'è un allarme? dove?".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>Settimana 5: a caccia di errori</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Copia in Calc la checklist della slide precedente: colonne <b>Controllo</b>, <b>Esito</b>, <b>Correzione</b>, <b>Chi</b>.</li>
+      <li>Incolla l'HTML su <b>validator.w3.org</b> (Validate by Direct Input) e annota gli errori.</li>
+      <li>Verifica i colori su <b>webaim.org/resources/contrastchecker</b>.</li>
+      <li>DevTools (F12) in modalità dispositivo: prova a 360 px di larghezza.</li>
+      <li>Salva <b>test-squadraN.ods</b> e correggi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni riga ha un esito; ogni "non ok" ha una correzione e un nome. Il bianco su arancio #d0541f, per esempio, NON passa per il testo normale.</div>
+  </div>
+  <aside class="notes">Bianco su #d0541f ha contrasto circa 4,2:1 (sotto 4,5): verificarlo insieme alla LIM con il contrast checker, è un buon esempio di colore "che sembra leggibile". Una correzione: scurire l'arancio o usare testo scuro. Il file test-squadraN.ods va nello zip finale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ispirazione</p><h2>La tecnologia migliore è quella che sparisce</h2></div>
+  <figure class="citazione">
+    <blockquote>Le tecnologie più profonde sono quelle che scompaiono. Si intrecciano nella vita di ogni giorno fino a diventarne indistinguibili.</blockquote>
+    <figcaption><b>Mark Weiser</b>, informatico dello Xerox PARC, "The Computer for the 21st Century", Scientific American, 1991</figcaption>
+  </figure>
+  <p class="lead">Un buon cruscotto non chiede attenzione: la chiede solo quando serve.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it." Weiser coniò il termine ubiquitous computing. Domanda: nel vostro cruscotto, che cosa deve "sparire" (i dati normali) e che cosa deve saltare all'occhio (gli allarmi)?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Settimana 6</p><h2>Presentazione e valutazione</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>5 minuti, tutti parlano:</b> scenario e utenti, demo dal vivo con un allarme, una scelta difficile, un errore trovato nei test, chi ha fatto cosa.</p>
+      <p class="small muted">Slide in PDF (massimo 6) nello zip. Se avete usato un'AI per scrivere codice, dite dove e cosa avete controllato.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Criterio</th><th>Punti</th></tr>
+      <tr><td>Progetto: wireframe, dati, scenario</td><td>2</td></tr>
+      <tr><td>HTML semantico e CSS ordinato</td><td>2</td></tr>
+      <tr><td>Card generate dai dati</td><td>2</td></tr>
+      <tr><td>Accessibilità e test documentati</td><td>2</td></tr>
+      <tr><td>Kanban, traguardi, presentazione</td><td>2</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Griglia su 10 punti, uguale per la squadra; il docente può differenziare fino a 1 punto per persona in base alla Kanban (chi ha chiuso quali schede) e all'esposizione. Dichiarare l'uso dell'AI non toglie punti; nasconderlo sì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un dispositivo che misura la temperatura è un <span class="blank" data-risposta="sensore"></span>; uno che chiude la tapparella è un <span class="blank" data-risposta="attuatore"></span>.</p>
+    <p>In JSON le chiavi vanno sempre tra virgolette <span class="blank" data-risposta="doppie"></span>.</p>
+    <p>Nella Kanban, dopo In corso, la scheda passa in Da <span class="blank" data-risposta="verificare"></span>.</p>
+    <p>Il contrasto minimo per il testo normale è <span class="blank" data-risposta="4,5|4.5|4,5:1|4.5:1"></span> a 1.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: sensore, attuatore, doppie, verificare, 4,5 (accettati 4.5 e 4,5:1).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>La rotta del progetto</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Scenario, ruoli e Kanban: T1</li>
+      <li>Schizzo, wireframe, elenco dispositivi: T2</li>
+      <li>Card in HTML e CSS Grid: T3</li>
+    </ul>
+    <ul class="points">
+      <li>Card generate da dati.js: T4</li>
+      <li>Test: W3C, contrasto, telefono, compagno</li>
+      <li>Zip e presentazione di 5 minuti: T5</li>
+    </ul>
+  </div>
+  <p class="lead">Dubbi su una tappa? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Pubblicare su Novaula la scheda "Lavoro di gruppo" con il brief completo. Ricordare che il referente di ogni squadra carica un solo zip.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

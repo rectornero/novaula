@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La gestione delle periferiche · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>La gestione delle periferiche</h1>
+  <p class="lead">Tastiera, stampante, SSD, webcam: velocità diversissime, linguaggi diversi, tutti che vogliono la CPU. Come fa il sistema operativo a farli lavorare insieme senza perdere un byte?</p>
+  <aside class="notes">Lezione online del libro ("La gestione delle periferiche"): si può svolgere in classe o assegnare a casa. Obiettivi: classificare le periferiche; distinguere controller e driver; ripassare polling e interrupt e capire il DMA; capire buffering e spooling con esempi quotidiani (streaming, rimozione sicura, coda di stampa); usare Gestione dispositivi di Windows. Durata indicativa: 2 ore. Prerequisiti: la lezione sugli interrupt (unità 6) e quella sul file system. Servono i PC del laboratorio con Windows e il browser per JSLinux.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Confessa</p><h2>Prima di staccare una chiavetta usi "Rimozione sicura"?</h2></div>
+  <div class="poll" data-id="per-rimozione">
+    <ol><li>Sempre</li><li>Solo se ci ho appena scritto</li><li>Mai, la stacco e basta</li><li>Non so che cosa sia</li></ol>
+  </div>
+  <aside class="notes">Nessun giudizio: la risposta tecnica arriva con il buffering, più avanti. Chiedere a chi risponde "mai" se ha mai perso un file: di solito qualcuno racconta una chiavetta "rovinata".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Periferiche diverse, velocità lontanissime</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Periferica</th><th>Velocità indicativa</th></tr>
+      <tr><td>Tastiera (chi scrive veloce)</td><td class="mono">≈ 10 byte/s</td></tr>
+      <tr><td>Stampante laser</td><td class="mono">≈ 30 pagine/min</td></tr>
+      <tr><td>Chiavetta USB 2.0</td><td class="mono">fino a 60 MB/s</td></tr>
+      <tr><td>SSD NVMe (PCIe 4.0)</td><td class="mono">fino a 7 GB/s</td></tr>
+      <tr><td>RAM DDR4</td><td class="mono">≈ 25 GB/s</td></tr>
+    </table>
+    <div class="stack">
+      <div class="card soft"><h3>A blocchi</h3><p>leggono e scrivono blocchi interi, in qualunque ordine: dischi, SSD, chiavette</p></div>
+      <div class="card soft"><h3>A caratteri</h3><p>un flusso di byte, uno dopo l'altro: tastiera, mouse, porta seriale</p></div>
+    </div>
+  </div>
+  <aside class="notes">Tra la tastiera e la RAM ci sono circa 9 ordini di grandezza: per questo la CPU non può "aspettare" le periferiche. USB 2.0 = 480 Mbit/s = 60 MB/s teorici; nella pratica una chiavetta USB 2.0 scrive molto meno. I valori di NVMe e DDR4 sono massimi teorici tipici (DDR4-3200 su un canale: 25,6 GB/s). Le schede di rete sono un terzo tipo, gestito attraverso i socket.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli strati</p><h2>Dal clic su "Stampa" alla carta</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Programma</h3><p class="small">chiede "scrivi questi dati" con una chiamata di sistema</p></div>
+    <div class="card soft"><h3>Sistema operativo</h3><p class="small">sottosistema di I/O: code, buffer, permessi</p></div>
+    <div class="card fill"><h3>Driver</h3><p class="small">software che parla la lingua di quel modello</p></div>
+    <div class="card soft"><h3>Controller</h3><p class="small">hardware con registri e un piccolo buffer</p></div>
+    <div class="card soft"><h3>Dispositivo</h3><p class="small">la parte meccanica o elettronica</p></div>
+  </div>
+  <div class="callout">Il programma non sa nulla della stampante: usa le stesse chiamate per stampare su una laser, su una inkjet o in un PDF. È l'<b>astrazione</b>, uno dei compiti del sistema operativo.</div>
+  <aside class="notes">Ripasso dell'unità 6: i primi strati lavorano in user mode, il driver e il sottosistema di I/O in kernel mode; il passaggio avviene con la chiamata di sistema. Unix porta l'astrazione all'estremo: ogni periferica è un file in /dev (lo vedremo in JSLinux). Ritchie e Thompson, nello stesso articolo del 1974 citato nella lezione sul file system, scrivevano che i file speciali "si leggono e si scrivono come i normali file su disco", ma l'operazione attiva la periferica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Controller e driver</p><h2>Uno è hardware, l'altro è software</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="icon">▣</p><h3>Controller</h3><p>Circuito sulla scheda madre o nella periferica. Ha dei <b>registri</b>: uno di <b>comando</b> ("leggi il blocco 500"), uno di <b>stato</b> ("occupato", "fatto", "errore") e uno o più di <b>dati</b>.</p></div>
+    <div class="card"><p class="icon">{ }</p><h3>Driver</h3><p>Programma che gira nel <b>kernel</b> e conosce i registri di quel controller. Traduce le richieste generiche del sistema operativo in comandi specifici. Ogni modello ha il suo.</p></div>
+  </div>
+  <div class="callout hl">Il <b>firmware</b> è un terzo pezzo: il programma che gira <b>dentro</b> la periferica, sul suo microcontrollore.</div>
+  <aside class="notes">Analogia: il controller è lo sportello di un ufficio con i suoi moduli; il driver è l'impiegato che sa compilare proprio quei moduli. Un SSD, una stampante o una tastiera hanno tutti un piccolo processore con il proprio firmware. Esempio concreto: un aggiornamento della scheda video aggiorna il driver (sul PC); un aggiornamento dell'SSD aggiorna il firmware (nell'SSD).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il driver della stampante, dove viene eseguito?</h2></div>
+  <div class="poll" data-id="per-driver" data-tipo="quiz" data-risposta="C">
+    <ol><li>Dentro la stampante, sul suo processore</li><li>Nel controller USB della scheda madre</li><li>Sul computer, come parte del sistema operativo</li><li>Su un server del produttore, via internet</li></ol>
+    <p class="why">Il driver è software del computer e lavora insieme al kernel. Quello che gira dentro la stampante è il firmware; il controller USB è hardware e trasporta solo i dati.</p>
+  </div>
+  <aside class="notes">La A è l'errore più comune: confondere driver e firmware. La D nasce dal fatto che i driver si scaricano da internet: ma una volta installati girano sul PC. Precisazione per i più curiosi: in Windows alcuni driver (per esempio una parte di quelli delle stampanti) girano in user mode per sicurezza; il concetto resta: sono software del computer.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Gestione dispositivi: l'anagrafe delle periferiche</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Premi <b>Win + X</b> e scegli <b>Gestione dispositivi</b>.</li>
+      <li>Apri <b>Tastiere</b>: doppio clic sulla tastiera, scheda <b>Driver</b>. Annota fornitore, data e versione del driver.</li>
+      <li>Fai lo stesso per altri 4 dispositivi: scheda video, scheda di rete, unità disco, mouse.</li>
+      <li>Menu <b>Visualizza</b>, <b>Dispositivi per connessione</b>: cerca il mouse e guarda sotto quale controller si trova.</li>
+      <li>In Calc fai una tabella: Categoria, Nome, Fornitore driver, Versione. Salva <b>periferiche-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni dispositivo ha un driver con una versione; molti sono firmati <b>Microsoft</b>, la scheda video di solito da Intel, AMD o NVIDIA. Nella vista per connessione il mouse USB sta sotto un <b>controller USB</b>.</div>
+  </div>
+  <aside class="notes">Non modificare né disinstallare nulla: è un'esplorazione in sola lettura (sui PC della scuola molte azioni richiedono l'amministratore). Un triangolo giallo indica un dispositivo senza driver o con un problema. Vista utile in più: Visualizza, Risorse per tipo, mostra le richieste di interrupt (IRQ) e gli indirizzi usati dai controller: collegamento con la lezione sugli interrupt. Alternativa da tastiera: Win + R, devmgmt.msc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi muove i dati</p><h2>Polling, interrupt, DMA</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Polling</h3><p>La CPU chiede in continuazione "hai finito?". Semplice, ma spreca cicli.</p><p class="muted small">Come controllare il telefono ogni 10 secondi.</p></div>
+    <div class="card"><h3>Interrupt</h3><p>La periferica avvisa quando è pronta. Ma per ogni dato è la CPU a copiarlo.</p><p class="muted small">Come aspettare la notifica.</p></div>
+    <div class="card fill"><h3>DMA</h3><p>Un controller copia <b>da solo</b> un blocco intero tra periferica e RAM, poi manda <b>un</b> interrupt.</p><p class="small">Direct Memory Access</p></div>
+  </div>
+  <aside class="notes">Polling e interrupt li avete visti nell'unità 6. Il DMA si usa per tutto ciò che sposta molti dati: dischi, SSD, schede di rete, schede audio e video. Durante il trasferimento la CPU esegue altri processi; c'è solo una piccola competizione per il bus della memoria. Il driver "programma" il DMA indicando l'indirizzo in RAM, la quantità di byte e la direzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola</p><h2>Copiare 1 GB: quante volte disturbiamo la CPU?</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:44px"><small>senza DMA: la CPU sposta un byte alla volta, spostamenti =</small>2³⁰ = <span class="hl">1 073 741 824</span></div>
+    <div class="formula" style="font-size:44px"><small>con DMA: un interrupt ogni blocco da 4 KiB, interrupt =</small>2³⁰ ÷ 2¹² = <span class="hl">262 144</span></div>
+  </div>
+  <p class="lead">Con il DMA la CPU interviene circa <b>4000 volte meno</b>. E nei controller moderni un solo comando DMA può spostare anche molti blocchi insieme.</p>
+  <aside class="notes">1 GiB = 2^30 byte; 4 KiB = 2^12 byte; 2^30 / 2^12 = 2^18 = 262 144. Rapporto: 2^12 = 4096. Il conto è volutamente semplificato (le CPU vere spostano 8 byte per volta, e un comando DMA può riguardare più blocchi), ma l'ordine di grandezza è quello. Domanda: e se i blocchi fossero da 64 KiB? (2^30 / 2^16 = 16 384 interrupt.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Una lettura dal disco con il DMA: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="per-dma">
+    <li>Il programma chiede di leggere un file con una chiamata di sistema</li>
+    <li>Il driver programma il controller DMA: indirizzo in RAM e quantità</li>
+    <li>Il processo si blocca e la CPU passa a un altro processo</li>
+    <li>Il controller copia i blocchi dal disco direttamente nella RAM</li>
+    <li>Finita la copia, il controller manda un interrupt</li>
+    <li>Il sistema operativo rimette il processo tra i pronti</li>
+  </ol>
+  <aside class="notes">Collegamento con gli stati dei processi (unità 6): durante l'I/O il processo è "in attesa" (bloccato), poi torna "pronto", non subito "in esecuzione". Errore tipico: mettere l'interrupt prima della copia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Apollo 11, 1969: una periferica ruba tempo alla CPU</h2></div>
+  <figure class="citazione">
+    <blockquote>Il computer (o meglio il software al suo interno) fu abbastanza intelligente da riconoscere che gli si chiedeva di svolgere più compiti del dovuto.</blockquote>
+    <figcaption><b>Margaret Hamilton</b>, responsabile del software di bordo dell'Apollo, lettera alla rivista Datamation, 1971</figcaption>
+  </figure>
+  <p class="small">Durante la discesa sulla Luna un radar, con un interruttore nella posizione sbagliata, mandava al computer dati inutili che gli rubavano tempo. Comparvero gli allarmi 1201 e 1202: il software scartò i compiti meno importanti e tenne quelli per l'atterraggio.</p>
+  <aside class="notes">La traduzione è nostra; la lettera di Hamilton a Datamation è del 1° marzo 1971 ed è riportata dal Computer History Museum. Nella stessa lettera si spiega che il radar di rendezvous, per un errore nella lista di controllo, inviava segnali spuri. Il computer di guida (AGC) aveva uno scheduler a priorità: invece di bloccarsi, si riavviava conservando i lavori importanti. Il 20 luglio 1969 il modulo lunare atterrò. Gli allarmi 1201 e 1202 sono già comparsi nella lezione sulle tipologie di sistemi operativi (unità 6): qui interessa la causa, una periferica che ruba tempo alla CPU. Collegamento: interrupt e trasferimenti da periferiche consumano tempo di CPU, per questo serve il DMA; e lo scheduling a priorità visto nell'unità 6 salvò la missione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Buffering</p><h2>Un magazzino in RAM tra chi corre e chi cammina</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un <b>buffer</b> è una zona di memoria dove i dati aspettano, per compensare la differenza di velocità tra chi li produce e chi li usa.</p>
+      <ul class="points">
+        <li><b>Streaming</b>: il video scarica qualche secondo in anticipo</li>
+        <li><b>Tastiera</b>: i tasti premuti mentre il PC è occupato non si perdono</li>
+        <li><b>Cache in scrittura</b>: i dati per il disco vengono scritti dopo, in blocco</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Il prezzo</h3><p>Se i dati sono ancora nel buffer quando stacchi la corrente o la chiavetta, <b>non sono sul disco</b>.</p></div>
+  </div>
+  <aside class="notes">Doppio buffer: si riempie uno mentre si svuota l'altro. Si usa anche nella grafica: si disegna il fotogramma successivo in un buffer nascosto mentre lo schermo mostra l'altro, così non si vedono immagini a metà. Il buffer di YouTube è la barra grigia davanti al pallino rosso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>A che cosa serve davvero "Rimozione sicura dell'hardware"?</h2></div>
+  <div class="poll" data-id="per-rimozione-quiz" data-tipo="quiz" data-risposta="B">
+    <ol><li>A togliere la corrente alla porta USB per non bruciarla</li><li>A finire le scritture in sospeso e chiudere i file aperti</li><li>A cancellare i file temporanei dalla chiavetta</li><li>A controllare che la chiavetta non abbia virus</li></ol>
+    <p class="why">Il sistema operativo può tenere dei dati in un buffer o avere file ancora aperti. "Rimozione sicura" li scrive tutti sulla chiavetta e poi dice "puoi staccarla".</p>
+  </div>
+  <aside class="notes">La A è il mito più diffuso: le porte USB sono fatte per collegare e scollegare a caldo. Da Windows 10 versione 1809 le chiavette usano per impostazione predefinita la "rimozione rapida", che disattiva la cache in scrittura: il rischio è minore, ma un file ancora aperto o una copia in corso si possono comunque rovinare. Tornare al sondaggio iniziale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Spooling</p><h2>30 studenti, una stampante: la coda</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>La stampante non può mescolare le pagine di 30 documenti. Lo <b>spooling</b> salva ogni lavoro su disco, in una <b>coda</b>, e lo manda alla stampante uno alla volta.</p>
+      <ul class="points">
+        <li>Il programma "finisce di stampare" subito e tu continui a lavorare</li>
+        <li>Si può vedere, sospendere o annullare un lavoro</li>
+        <li>In Windows lo fa il servizio <b>Spooler di stampa</b></li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">SPOOL</p><p><b>S</b>imultaneous <b>P</b>eripheral <b>O</b>perations <b>O</b>n-<b>L</b>ine: operazioni sulle periferiche in contemporanea.</p></div>
+  </div>
+  <aside class="notes">Lo spooling nasce sui mainframe degli anni Sessanta, quando lettori di schede e stampanti erano lentissimi rispetto alla CPU. Differenza con il buffer: il buffer è in RAM e "assorbe" velocità diverse; lo spool è su disco e mette in fila lavori interi di processi diversi. In Windows i lavori in coda stanno in C:\Windows\System32\spool\PRINTERS. Curiosità di sicurezza: nel 2021 una grave vulnerabilità dello Spooler di stampa (soprannominata PrintNightmare) costrinse Microsoft ad aggiornamenti urgenti: anche i servizi "noiosi" vanno aggiornati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Ferma la coda di stampa</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri il prompt dei comandi e scrivi <code>sc query spooler</code>: annota lo stato del servizio.</li>
+      <li>In Impostazioni apri la stampante <b>Microsoft Print to PDF</b> e poi <b>Apri coda di stampa</b>. Menu <b>Stampante</b>, <b>Sospendi stampa</b>.</li>
+      <li>Da Blocco note stampa due documenti su Microsoft Print to PDF.</li>
+      <li>Guarda la coda: fai uno screenshot e salvalo come <b>coda-cognome.png</b>.</li>
+      <li>Togli la spunta a <b>Sospendi stampa</b>: salva i due PDF quando Windows lo chiede.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> lo spooler è <code>RUNNING</code>. Con la stampa sospesa i due lavori restano nella coda, uno sotto l'altro; appena riprendi escono nell'ordine in cui sono entrati.</div>
+  </div>
+  <aside class="notes">In Windows 11 il percorso è Impostazioni, Bluetooth e dispositivi, Stampanti e scanner; in Windows 10 Dispositivi, Stampanti e scanner. Se la sospensione non fosse permessa sui PC della scuola (servono a volte diritti di amministratore), basta osservare la coda durante la stampa di un documento lungo, oppure fare la demo alla LIM con la stampante di classe. La coda è FIFO: collegamento con lo scheduling FCFS.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>In Linux le periferiche sono file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su <b>bellard.org/jslinux</b> apri la console Alpine Linux.</li>
+      <li><code>ls -l /dev | head -20</code>: guarda la prima lettera di ogni riga.</li>
+      <li>Scrivi nel "buco nero": <code>echo ciao &gt; /dev/null</code>. Poi leggi 16 byte casuali: <code>head -c 16 /dev/urandom | od -x</code></li>
+      <li>Conta gli interrupt: <code>cat /proc/interrupts</code>, premi qualche tasto, ripeti il comando e confronta i numeri.</li>
+      <li>Fai uno screenshot e salvalo come <b>dev-cognome.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le righe iniziano con <b>c</b> (periferica a caratteri, come <code>null</code> e <code>tty</code>) o <b>b</b> (a blocchi, come il disco). Il secondo <code>cat /proc/interrupts</code> mostra contatori più alti.</div>
+  </div>
+  <aside class="notes">/dev/null butta via tutto ciò che riceve; /dev/urandom genera byte casuali; od -x li mostra in esadecimale (ripasso dell'unità 1). /proc/interrupts elenca, per ogni linea di interrupt, quante volte è scattata: in JSLinux crescono soprattutto il timer e la console. È l'idea di Unix: una periferica si usa con le stesse operazioni di un file (open, read, write). Se JSLinux non va: copy.sh/v86 o demo alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parola al suo lavoro</h2></div>
+  <dl class="puzzle-abbina" data-id="per-termini">
+    <dt>Driver</dt><dd>Software che traduce le richieste per un certo modello</dd>
+    <dt>Controller</dt><dd>Circuito con registri di comando, stato e dati</dd>
+    <dt>Buffer</dt><dd>Memoria dove i dati aspettano chi è più lento</dd>
+    <dt>Spooling</dt><dd>Lavori interi in coda su disco, uno alla volta</dd>
+    <dt>DMA</dt><dd>Copia blocchi in RAM senza disturbare la CPU</dd>
+    <dt>Firmware</dt><dd>Programma che gira dentro la periferica</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Le coppie più confuse sono buffer e spooling, driver e firmware: farle rispiegare a parole da uno studente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le periferiche dell'intelligenza artificiale</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La NPU è una periferica</h3><p>Nei PC più recenti la NPU (Neural Processing Unit) ha un suo driver, come la scheda video. Windows la usa per esempio per sfocare lo sfondo della webcam durante una videochiamata (Windows Studio Effects) senza caricare la CPU.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>DMA per allenare le AI</h3><p>Le GPU che addestrano i modelli di AI devono ricevere enormi quantità di dati. Tecnologie come <b>GPUDirect Storage</b> di NVIDIA usano il DMA per copiare i dati dall'SSD alla memoria della GPU senza passare dalla RAM della CPU.</p></div>
+  </div>
+  <aside class="notes">Windows Studio Effects (sfocatura dello sfondo, contatto visivo, inquadratura automatica) funziona sui PC con una NPU compatibile. GPUDirect Storage è descritto nella documentazione NVIDIA come un percorso DMA diretto tra memoria di massa e memoria della GPU. Messaggio chiave: le idee di questa lezione (driver, controller, DMA) sono le stesse dei data center dove si allenano le AI, solo più grandi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="5493" data-aiuto="la terza cifra viene dall'anno dello sbarco sulla Luna">
+    <ul class="points">
+      <li>Cifra 1: quante lettere ha la parola SPOOL</li>
+      <li>Cifra 2: quanti interrupt servono con il DMA per 16 KB in blocchi da 4 KB</li>
+      <li>Cifra 3: l'ultima cifra dell'anno di Apollo 11</li>
+      <li>Cifra 4: quante lettere ha la sigla del trasferimento diretto in memoria</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> SPOOL = 5; 16 ÷ 4 = 4; 1969; DMA = 3.</div>
+  </div>
+  <aside class="notes">Codice: 5493. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il software che fa parlare il sistema operativo con una periferica si chiama <span class="blank" data-risposta="driver"></span>.</p>
+    <p>La zona di memoria dove i dati aspettano il dispositivo più lento è il <span class="blank" data-risposta="buffer"></span>.</p>
+    <p>La coda di stampa è un esempio di <span class="blank" data-risposta="spooling|spool" style="--w:9ch"></span>.</p>
+    <p>Con il <span class="blank" data-risposta="DMA"></span> il controller copia i dati in RAM e alla fine manda un interrupt.</p>
+    <p>Il programma che gira dentro la periferica si chiama <span class="blank" data-risposta="firmware" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: driver; buffer; spooling (accettato spool); DMA; firmware.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Periferiche a blocchi e a caratteri, velocità lontanissime</li>
+      <li>Programma → SO → driver → controller → dispositivo</li>
+      <li>Driver (software del PC) ≠ firmware (dentro la periferica)</li>
+    </ul>
+    <ul class="points">
+      <li>Polling, interrupt e DMA per muovere i dati</li>
+      <li>Buffer in RAM, spool su disco</li>
+      <li>Gestione dispositivi in Windows, /dev in Linux</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione (online): la protezione e la sicurezza dei dati.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La memoria a segmentazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>La memoria virtuale<br>a segmentazione</h1>
+  <p class="lead">Le pagine sono fette tutte uguali. Ma un programma è fatto di parti con un senso: codice, dati, stack. E se la memoria seguisse le parti?</p>
+  <aside class="notes">Obiettivi: descrivere segmenti e tabella dei segmenti; tradurre un indirizzo (segmento, offset) con controllo del limite; collegare segmentazione, protezione e "segmentation fault"; confrontare paginazione e segmentazione e conoscere la segmentazione paginata. Prerequisiti: le lezioni precedenti dell'Unità 7, soprattutto base e limite. Durata: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come sono organizzati i tuoi appunti?</h2></div>
+  <div class="poll" data-id="seg-appunti">
+    <ol><li>Un unico quaderno, pagina dopo pagina</li><li>Un raccoglitore con una sezione per materia</li><li>Tutto sul telefono o sul PC</li><li>Fogli sparsi, li ritrovo a memoria</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione. Il quaderno a pagine numerate è la paginazione: pezzi uguali, nessun significato. Il raccoglitore a sezioni è la segmentazione: ogni sezione ha un senso e una lunghezza diversa. Chiedere: quale dei due rende più facile prestare solo gli appunti di storia a un compagno? (La condivisione di un segmento.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea</p><h2>Un segmento per ogni parte logica del programma</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><p class="num">0</p><h3>Codice</h3><p>Le istruzioni del programma, compilate.</p></div>
+    <div class="card soft"><p class="num">1</p><h3>Dati</h3><p>Le variabili globali e le costanti.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Stack</h3><p>Le chiamate di funzione e le variabili locali.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Heap</h3><p>Gli oggetti creati durante l'esecuzione (in Java con <b>new</b>).</p></div>
+  </div>
+  <div class="callout">Ogni segmento ha la sua <b>lunghezza</b>, diversa dagli altri, e può cambiare: lo stack e lo heap crescono.</div>
+  <aside class="notes">La segmentazione rispecchia il modo in cui il programmatore e il compilatore vedono il programma. In Java non vediamo i segmenti, ma esistono: lo stack (dove vivono le variabili locali di main) e lo heap (dove vivono gli array e gli oggetti creati con new). Collegare all'Unità 3 (lo stack delle chiamate visto con il debugger).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La traduzione</p><h2>Indirizzo logico = (segmento, offset)</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula" style="font-size:44px"><small>se offset &lt; limite(s)</small>fisico = <span class="hl">base(s) + offset</span></div>
+      <div class="card bad"><h3>Altrimenti: segmentation fault</h3><p>Il programma ha superato la fine del segmento: il sistema operativo lo ferma.</p></div>
+    </div>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Seg.</th><th>Base</th><th>Limite</th></tr>
+        <tr><td>0 codice</td><td class="mono">2000</td><td class="mono">1200</td></tr>
+        <tr><td>1 dati</td><td class="mono">6000</td><td class="mono">500</td></tr>
+        <tr><td>2 stack</td><td class="mono">4500</td><td class="mono">800</td></tr>
+        <tr><td>3 heap</td><td class="mono">8000</td><td class="mono">1500</td></tr>
+      </table>
+      <p class="small">La <b>tabella dei segmenti</b>: una per processo.</p>
+    </div>
+  </div>
+  <aside class="notes">È la stessa coppia base-limite della prima lezione, ma ora ce n'è una per ogni segmento: la tabella dei segmenti. A differenza della paginazione, l'indirizzo logico non si "taglia" in automatico: il numero di segmento lo indica esplicitamente il programma (o il compilatore). Useremo questa tabella per tutti gli esercizi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Esempio svolto</p><h2>Indirizzo logico (0, 700)</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Segmento 0</h3><p>codice: base 2000, limite 1200</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Controllo</h3><p class="mono">700 &lt; 1200: valido</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Fisico</h3><p class="mono">2000 + 700 = <b>2700</b></p></div>
+  </div>
+  <div class="callout">E (3, 1500)? Il limite dello heap è 1500: l'offset 1500 è già fuori. <b>Segmentation fault</b>, anche se 9500 è un indirizzo che esiste in RAM.</div>
+  <aside class="notes">Altri esempi alla lavagna: (2, 799) → 4500 + 799 = 5299, valido perché 799 &lt; 800; (3, 0) → 8000, il primo byte dello heap. Far notare che l'ultimo offset valido è sempre limite − 1, come nella prima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Con la stessa tabella, dove porta l'indirizzo logico (1, 520)?</h2></div>
+  <div class="poll" data-id="seg-1-520" data-tipo="quiz" data-risposta="B">
+    <ol><li>6520</li><li>Segmentation fault</li><li>520</li><li>2520</li></ol>
+    <p class="why">Il segmento 1 (dati) è lungo 500 byte: l'offset 520 lo supera. Prima del calcolo si controlla il limite, e qui il controllo fallisce. 6520 sarebbe la risposta solo se il segmento fosse più lungo.</p>
+  </div>
+  <aside class="notes">A è il tranello: il conto 6000 + 520 è giusto, ma il controllo viene prima. C confonde logico e fisico; D usa la base del segmento 0. Chiedere: qual è l'ultimo indirizzo fisico valido del segmento dati? 6499.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La tabella dei segmenti in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In F2:H5 copia la tabella: segmento, base, limite (0 2000 1200, 1 6000 500, 2 4500 800, 3 8000 1500).</li>
+      <li>In A2:B6 le coppie (segmento, offset): (0, 700), (1, 520), (2, 799), (3, 1500), (3, 0).</li>
+      <li>C2 <code>=CERCA.VERT(A2;$F$2:$H$5;2;0)</code>, D2 <code>=CERCA.VERT(A2;$F$2:$H$5;3;0)</code></li>
+      <li>E2 <code>=SE(B2&lt;D2;C2+B2;"SEG FAULT")</code>. Copia in basso e salva come <b>mmu-segmenti.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in E2:E6 leggi 2700, SEG FAULT, 5299, SEG FAULT, 8000.</div>
+  </div>
+  <aside class="notes">C contiene la base del segmento, D il limite: CERCA.VERT con colonna 2 e 3. È lo stesso foglio della prima lezione, ma con una riga di base e limite per ogni segmento. Chi finisce prima: aggiungere una colonna "Ultimo fisico valido" = base + limite − 1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il vantaggio</p><h2>Protezione e condivisione, segmento per segmento</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Segmento</th><th>Leggere</th><th>Scrivere</th><th>Eseguire</th></tr>
+      <tr><td>Codice</td><td>sì</td><td class="hl">no</td><td>sì</td></tr>
+      <tr><td>Dati</td><td>sì</td><td>sì</td><td class="hl">no</td></tr>
+      <tr><td>Stack</td><td>sì</td><td>sì</td><td class="hl">no</td></tr>
+    </table>
+    <div class="stack">
+      <ul class="points">
+        <li>Il codice non si può modificare: un bug non può riscrivere le istruzioni</li>
+        <li>Nello stack non si esegue: niente codice "iniettato" da un attaccante</li>
+        <li>Dieci utenti con lo stesso programma possono <b>condividere</b> un solo segmento di codice</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">I permessi stanno nella tabella dei segmenti, accanto a base e limite. Ha senso perché un segmento è un'unità logica: tutto il codice va protetto allo stesso modo. Con le pagine si fa lo stesso pagina per pagina (bit di protezione), ed è ciò che fanno i sistemi di oggi (il bit NX, "no execute"). Collegamento con la sicurezza: molti attacchi storici scrivevano codice nello stack e poi lo eseguivano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I segmenti di un processo Linux, dal vivo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>bellard.org/jslinux</b> e avvia una macchina Linux (per esempio Alpine, console).</li>
+      <li>Scrivi <code>cat /proc/self/maps</code>: sono le zone di memoria del processo <code>cat</code> stesso.</li>
+      <li>Cerca le righe con <b>r-xp</b>, <b>rw-p</b>, <b>[heap]</b> e <b>[stack]</b>.</li>
+      <li>Copia l'output in un file <b>segmenti-linux.txt</b> e accanto a ogni riga scrivi: codice, dati, heap o stack.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> c'è una riga <b>[stack]</b>; le righe <b>r-xp</b> (leggi ed esegui, non scrivere) sono codice; le <b>rw-p</b> sono dati. Di solito c'è anche <b>[heap]</b>. Gli indirizzi sono in esadecimale!</div>
+  </div>
+  <aside class="notes">Ogni riga è una zona di indirizzi virtuali: inizio-fine, permessi (r lettura, w scrittura, x esecuzione, p privata), e il file da cui viene. Linux le chiama "aree di memoria virtuale": sono i segmenti logici del programma, realizzati con la paginazione. Se JSLinux non si carica o la rete della scuola lo blocca, il docente mostra l'output alla LIM da un qualunque Linux (o WSL). Sito da controllare prima della lezione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Java controlla il limite, come la MMU</h2>
+  <pre class="code" style="font-size:23px;line-height:1.35;padding:20px 36px"><span class="k">public class</span> Limite {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">int</span>[] voti = <span class="k">new int</span>[5];                  <span class="c">// indici da 0 a 4</span>
+<span class="hl">    for (int i = 0; i &lt;= 5; i++) {</span>            <span class="c">// errore voluto: &lt;= invece di &lt;</span>
+      voti[i] = 6 + i % 4;
+      System.out.println(<span class="s">"voti["</span> + i + <span class="s">"] = "</span> + voti[i]);
+    }
+  }
+}</pre>
+  <p class="small">Su <b>onlinegdb.com</b> (Java) esegui il programma e leggi l'errore; poi correggi <code>&lt;=</code> in <code>&lt;</code>, esegui di nuovo e scarica <b>Limite.java</b>.</p>
+  <div class="check"><b>Controllo:</b> prima stampa 6, 7, 8, 9, 6 e poi si ferma con <code>ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5</code>. Dopo la correzione niente errore.</div>
+  <aside class="notes">Java controlla a ogni accesso che l'indice sia minore della lunghezza dell'array: esattamente il controllo offset &lt; limite della MMU, ma fatto dalla JVM. In C questo controllo non c'è: l'accesso fuori dall'array può sovrascrivere altri dati o, se esce dalla memoria del processo, provocare un "segmentation fault". Ecco perché Java (e Rust, Python…) sono detti linguaggi "memory safe". Il messaggio esatto dell'eccezione può variare leggermente tra versioni di Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il confronto</p><h2>Paginazione e segmentazione</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>Paginazione</th><th>Segmentazione</th></tr>
+    <tr><td>Pezzi</td><td>tutti uguali (es. 4 KB)</td><td>di lunghezza variabile</td></tr>
+    <tr><td>Chi li decide</td><td>l'hardware, senza significato</td><td>il programma: codice, dati, stack…</td></tr>
+    <tr><td>Indirizzo logico</td><td>un numero, tagliato in (p, d)</td><td>una coppia (segmento, offset)</td></tr>
+    <tr><td>Tabella</td><td>pagina → frame</td><td>segmento → base, limite, permessi</td></tr>
+    <tr><td>Frammentazione</td><td>interna, solo nell'ultima pagina</td><td class="hl">esterna, come le partizioni variabili</td></tr>
+    <tr><td>Protezione</td><td>pagina per pagina</td><td>per parti logiche, più naturale</td></tr>
+  </table>
+  <aside class="notes">Il punto chiave: la segmentazione è comoda per protezione e condivisione, ma i segmenti di lunghezza variabile riportano i buchi in RAM (frammentazione esterna) e quindi i problemi di first, best e worst fit. La paginazione invece non ha buchi esterni. Soluzione: unire le due idee (slide successiva).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che tipo di frammentazione provoca la segmentazione?</h2></div>
+  <div class="poll" data-id="seg-frammentazione" data-tipo="quiz" data-risposta="C">
+    <ol><li>Solo interna, come la paginazione</li><li>Nessuna: i segmenti hanno la misura giusta</li><li>Esterna, come le partizioni variabili</li><li>Né interna né esterna, se c'è il limite</li></ol>
+    <p class="why">I segmenti hanno lunghezze diverse e vanno messi in RAM in blocchi contigui: quando si liberano lasciano buchi di misure diverse. Torna la frammentazione esterna, con first, best e worst fit.</p>
+  </div>
+  <aside class="notes">La B è il tranello più forte: è vero che dentro un segmento non si spreca spazio (niente frammentazione interna), ma il problema è fuori, tra un segmento e l'altro. Chi sceglie A confonde con la paginazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il meglio dei due mondi</p><h2>Segmentazione paginata</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Ogni segmento viene diviso in <b>pagine</b>: la segmentazione dà le parti logiche e la protezione, la paginazione elimina i buchi.</p>
+      <ul class="points">
+        <li><b>Multics</b> (anni '60, MIT e Bell Labs): segmenti paginati</li>
+        <li><b>Intel 386</b> (1985): segmentazione e paginazione insieme</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il ritorno alla semplicità</h3><p>Nei processori x86 a 64 bit la segmentazione è quasi spenta: i segmenti principali partono tutti da 0 e il controllo del limite non c'è più. Linux, Windows e macOS usano la paginazione, con permessi pagina per pagina. I segmenti restano come idea: le zone di memoria di <b>/proc/self/maps</b>.</p></div>
+  </div>
+  <aside class="notes">In modalità a 64 bit (long mode) le basi di CS, DS, ES e SS valgono 0 e i limiti non vengono controllati; restano usati i registri FS e GS (per esempio per i dati di ciascun thread). Multics ha ispirato Unix: Ken Thompson e Dennis Ritchie lavoravano al progetto Multics ai Bell Labs prima di creare Unix (1969).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché i sistemi moderni hanno scelto la strada più semplice</h2></div>
+  <figure class="citazione">
+    <blockquote>La semplicità è un prerequisito dell'affidabilità.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, nella nota EWD498, 1975</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Microsoft (2019) e il progetto Chromium (2020) hanno riferito che circa il <b>70%</b> delle loro vulnerabilità gravi nasce da errori di gestione della memoria, quelli che in C finiscono in un "segmentation fault" o peggio. Per questo si diffondono linguaggi che controllano i limiti, come Java e Rust; e anche il codice scritto da un assistente AI va controllato.</p></div>
+  <aside class="notes">Originale: "Simplicity is prerequisite for reliability." (E. W. Dijkstra, EWD498 "How do we tell truths that might hurt?", 1975). Traduzione nostra. Fonti dell'Oggi: Matt Miller (Microsoft Security Response Center), BlueHat IL 2019: circa il 70% delle vulnerabilità corrette ogni anno riguarda la sicurezza della memoria; Chromium Project, "Memory safety" (2020): circa il 70% dei bug di sicurezza gravi. Il nome "segmentation fault" viene dall'epoca della segmentazione ed è rimasto anche oggi che la protezione è fatta con le pagine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine: il programma legge (2, 300)</h2></div>
+  <ol class="puzzle-ordina" data-id="seg-ordine">
+    <li>La CPU genera la coppia (segmento 2, offset 300)</li>
+    <li>La MMU legge la riga 2 della tabella dei segmenti</li>
+    <li>Controlla i permessi: lettura consentita</li>
+    <li>Confronta 300 con il limite 800: valido</li>
+    <li>Somma la base: 4500 + 300 = 4800</li>
+    <li>La RAM restituisce il dato all'indirizzo 4800</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto (permessi e limite possono essere controllati in parallelo; l'importante è che entrambi vengano prima dell'accesso). Se il controllo del limite fallisce, al posto degli ultimi due passi c'è il segmentation fault.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="seg-abbina">
+    <dt>Segmento</dt><dd>Parte logica del programma, di lunghezza variabile</dd>
+    <dt>Pagina</dt><dd>Fetta di lunghezza fissa, senza significato logico</dd>
+    <dt>Tabella dei segmenti</dt><dd>Base, limite e permessi di ogni segmento</dd>
+    <dt>Segmentation fault</dt><dd>Accesso oltre il limite o non permesso</dd>
+    <dt>Segmentazione paginata</dt><dd>Segmenti divisi a loro volta in pagine</dd>
+  </dl>
+  <aside class="notes">Coppie corrette come scritte. Gara a squadre: chi finisce prima senza errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con la tabella dei segmenti</h2></div>
+  <div class="puzzle-codice" data-risposta="2429" data-aiuto="tabella: 0 (2000, 1200), 1 (6000, 500), 2 (4500, 800), 3 (8000, 1500)">
+    <ul class="points">
+      <li>1ª cifra: la prima cifra dell'indirizzo fisico di (0, 700)</li>
+      <li>2ª cifra: quanti segmenti ha la tabella dell'esempio</li>
+      <li>3ª cifra: il numero del segmento dello stack</li>
+      <li>4ª cifra: l'ultima cifra dell'indirizzo fisico di (2, 799)</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> (0, 700) → 2700; 4 segmenti; lo stack è il 2; (2, 799) → 5299.</div>
+  </div>
+  <aside class="notes">Codice: 2429. Vince la prima squadra che lo apre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nella segmentazione l'indirizzo logico è la coppia (segmento, <span class="blank" data-risposta="offset|spiazzamento"></span>).</p>
+    <p>Segmento con base 3000 e limite 400: l'indirizzo (s, 150) diventa <span class="blank" data-risposta="3150"></span>.</p>
+    <p>Un offset oltre il limite provoca un segmentation <span class="blank" data-risposta="fault"></span>.</p>
+    <p>La segmentazione provoca frammentazione <span class="blank" data-risposta="esterna"></span>.</p>
+    <p>Multics e il 386 usavano la segmentazione <span class="blank" data-risposta="paginata"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: offset (o spiazzamento), 3150, fault, esterna, paginata.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Segmenti: codice, dati, stack, heap</li>
+      <li>(s, d): se d &lt; limite, fisico = base + d</li>
+      <li>Permessi e condivisione per segmento</li>
+    </ul>
+    <ul class="points">
+      <li>Lunghezze variabili → frammentazione esterna</li>
+      <li>Segmentazione paginata: Multics, 386</li>
+      <li>Oggi: paginazione, con i segmenti come idea</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Con questa lezione si chiude la parte dell'Unità 7 sulla gestione della memoria; seguono il file system e le periferiche.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

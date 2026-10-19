@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gli strumenti dello sviluppatore web · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web · Lezione online</p>
+  <h1>Gli strumenti dello<br>sviluppatore web</h1>
+  <p class="lead">Editor, ambienti online, DevTools, validatori e assistenti AI: che cosa fa ciascuno, quando usarlo e come non farsi ingannare.</p>
+  <aside class="notes">Lezione "online" del libro: si può fare in classe oppure assegnare da seguire a casa con il deck aperto su Novaula (i laboratori sono pensati per funzionare anche da soli). Obiettivi: scegliere lo strumento giusto per ogni fase, usare i DevTools per ispezionare e fare debug, validare HTML e CSS con i servizi W3C, usare gli assistenti AI in modo critico. Siti da controllare prima della lezione: codepen.io, jsfiddle.net, validator.w3.org, jigsaw.w3.org/css-validator. Servono i siti del torneo o il mini-sito degli studenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Con che cosa hai scritto le tue pagine finora?</h2></div>
+  <div class="poll" data-id="u4b-strumento-usato">
+    <ol><li>Blocco note</li><li>VS Code o un altro editor di codice</li><li>CodePen o JSFiddle</li><li>Ho chiesto aiuto a un'AI</li></ol>
+  </div>
+  <p class="muted">Nessuna risposta è sbagliata: oggi scopri che cosa può darti in più ciascuno strumento.</p>
+  <aside class="notes">Sondaggio senza giudizio, anche sull'AI: è meglio sapere chi la usa per parlarne apertamente. Chiedere a chi ha usato VS Code che cosa gli è piaciuto di più rispetto a Blocco note.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La cassetta degli attrezzi</p><h2>Sei strumenti, sei mestieri</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Editor</h3><p class="small muted">Blocco note, VS Code: scrivi i file sul tuo disco.</p></div>
+    <div class="card"><p class="num">2</p><h3>Ambienti online</h3><p class="small muted">CodePen, JSFiddle: provi un'idea in 10 secondi.</p></div>
+    <div class="card"><p class="num">3</p><h3>DevTools</h3><p class="small muted">Dentro il browser: ispezioni, misuri, trovi l'errore.</p></div>
+    <div class="card"><p class="num">4</p><h3>Validatori</h3><p class="small muted">Servizi W3C: controllano che il codice rispetti lo standard.</p></div>
+    <div class="card"><p class="num">5</p><h3>Assistenti AI</h3><p class="small muted">Generano e spiegano codice. Vanno sempre verificati.</p></div>
+    <div class="card"><p class="num">6</p><h3>Accessibilità</h3><p class="small muted">WAVE, Lighthouse: chi resta escluso dal sito? (Unità 5)</p></div>
+  </div>
+  <aside class="notes">Mappa della lezione. Sottolineare che nessuno strumento sostituisce gli altri: il professionista li usa tutti, in momenti diversi. Gli strumenti per l'accessibilità si vedranno nell'Unità 5 (HTML semantico e accessibilità).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Editor</p><h2>Da Blocco note a un editor di codice</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Blocco note</h3>
+      <ul class="points small"><li>c'è su ogni PC Windows</li><li>salva testo puro: va benissimo per l'HTML</li><li>nessun aiuto: ogni errore lo trovi da solo</li></ul>
+    </div>
+    <div class="card soft">
+      <h3>VS Code (gratuito, Microsoft, 2015)</h3>
+      <ul class="points small"><li><b>colori</b> diversi per tag, attributi e valori</li><li><b>completamento</b>: chiude i tag e suggerisce le proprietà</li><li><b>Emmet</b>: scrivi <code>!</code> e premi Tab, compare lo scheletro</li><li>tutta la cartella del sito in una colonna</li></ul>
+    </div>
+  </div>
+  <div class="callout small">Un editor di codice <b>non</b> scrive il codice per te: ti fa vedere prima gli errori. Una virgoletta non chiusa colora di "stringa" tutto il resto della riga.</div>
+  <aside class="notes">Se VS Code è installato in laboratorio, mostrarlo alla LIM: aprire la cartella torneo con File › Apri cartella, scrivere ! + Tab in un file nuovo .html, mostrare la colorazione. Emmet è integrato in VS Code. L'estensione Live Server ricarica automaticamente la pagina a ogni salvataggio, ma richiede l'installazione: facoltativa. Alternative leggere: Notepad++ (Windows), o l'editor online di CodePen.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Perché non conviene scrivere l'HTML con Word?</h2></div>
+  <div class="poll" data-id="u4b-word-html" data-tipo="quiz" data-risposta="B">
+    <ol><li>Word non sa salvare file .html</li><li>Cambia le virgolette dritte " in virgolette tipografiche “ ” e aggiunge codice suo</li><li>Word costa, Blocco note no</li><li>L'HTML si può scrivere solo con programmi per programmatori</li></ol>
+    <p class="why">Il correttore automatico trasforma " in “ ”: per il browser <code>href=“pagina.html”</code> non è più un attributo valido. Inoltre "Salva come pagina web" produce molto codice superfluo. Blocco note invece salva testo puro e va benissimo.</p>
+  </div>
+  <aside class="notes">A è falsa (Word salva in HTML, ma con molto codice in più). D è il pregiudizio opposto: qualsiasi editor di testo puro va bene. Lo stesso problema delle virgolette capita copiando codice da un PDF, da una presentazione o da certe chat: se un attributo "non funziona" senza motivo, riscrivere le virgolette a mano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ambienti online</p><h2>CodePen e JSFiddle: il laboratorio nel browser</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points">
+        <li>Tre pannelli: <b>HTML</b>, <b>CSS</b>, JavaScript</li>
+        <li>L'anteprima si aggiorna mentre scrivi</li>
+        <li>Si usano <b>senza account</b> e senza installare nulla, anche da un tablet</li>
+        <li>Per salvare e condividere un link serve registrarsi; altrimenti copia il codice nei tuoi file</li>
+      </ul>
+      <div class="callout small">Ideali per provare <b>un'idea</b> (un menu, un effetto hover). Per un sito di più pagine meglio una cartella sul disco.</div>
+    </div>
+    <div class="card night"><h3>Quando usarli</h3><ul class="points small"><li>fare una prova veloce</li><li>isolare un errore in poche righe</li><li>mostrare il problema al docente</li><li>studiare un esempio trovato online</li></ul></div>
+  </div>
+  <aside class="notes">Gli studenti hanno 16-17 anni: possono registrarsi a questi servizi, ma non è necessario. Se un sito è bloccato dal filtro della scuola, si usa l'altro; in ultima istanza un file .html con un tag style sul disco. "Isolare un errore" è una competenza preziosa: ridurre il codice al minimo che mostra ancora il problema.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova lampo in CodePen con Emmet</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>codepen.io/pen</b> (o <b>jsfiddle.net</b>).</li>
+      <li>Nel pannello HTML scrivi <code>nav&gt;a*3</code> e premi <b>Tab</b>: Emmet crea il menu.</li>
+      <li>Dai un href e un testo ai tre link e la classe <code>attivo</code> al primo.</li>
+      <li>Nel pannello CSS incolla le regole del menu dal sito del torneo.</li>
+      <li>Cambia colori e padding finché il menu ti piace, poi copia il CSS nel tuo stile.css.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dopo Tab compare <code>&lt;nav&gt;</code> con tre <code>&lt;a href=""&gt;&lt;/a&gt;</code>. Il menu si aggiorna mentre scrivi, senza salvare né ricaricare. Prova anche <code>ul&gt;li*5</code> e <code>table&gt;tr*3&gt;td*2</code>.</div>
+  </div>
+  <aside class="notes">In CodePen Emmet è attivo di default nei pannelli HTML e CSS; in JSFiddle si usa ugualmente il tasto Tab (se non funziona, scrivere a mano). In VS Code le stesse abbreviazioni funzionano nei file .html. Significato: &gt; = dentro, * = ripeti. Chi finisce: provare h2+p (fratelli) e .carta*3 (tre div con classe carta).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">DevTools</p><h2>Gli strumenti nascosti in ogni browser</h2></div>
+  <table class="data compact">
+    <tr><th>Pannello</th><th>A che cosa serve</th></tr>
+    <tr><td><b>Elementi</b> e <b>Stili</b></td><td>vedere l'HTML vero, le regole applicate e quelle barrate, modificarle in diretta</td></tr>
+    <tr><td><b>Calcolato</b></td><td>lo schema del box model e i valori finali di ogni proprietà</td></tr>
+    <tr><td><b>Console</b></td><td>messaggi di errore e piccoli calcoli in JavaScript</td></tr>
+    <tr><td><b>Rete</b></td><td>ogni file scaricato, con il suo codice di stato (200, 404…)</td></tr>
+    <tr><td><b>Modalità dispositivo</b></td><td>la pagina come su un telefono (<code>Ctrl</code>+<code>Maiusc</code>+<code>M</code>)</td></tr>
+  </table>
+  <p class="muted small">Si aprono con <code>F12</code> o con tasto destro › <b>Ispeziona</b>. Nel 2006 Joe Hewitt creò Firebug, un'estensione di Firefox; la sua idea piacque così tanto che oggi è integrata in tutti i browser.</p>
+  <aside class="notes">I nomi sono quelli di Chrome ed Edge in italiano; in Firefox: Ispettore, Console, Rete, Visualizzazione flessibile. La scheda Rete l'hanno vista nella lezione sul World Wide Web (codici di stato HTTP). Firebug è stato sviluppato dal 2006 e dismesso nel 2017, quando i suoi strumenti erano ormai integrati negli strumenti di sviluppo di Firefox.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Fai il detective sul tuo sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri la home del tuo sito (torneo o mini-sito) e premi <b>F12</b>.</li>
+      <li><b>Stili</b>: seleziona un link del menu. Quali regole vedi barrate e perché?</li>
+      <li>Togli la spunta a <code>float</code> della colonna laterale: che succede?</li>
+      <li><b>Modalità dispositivo</b>: scegli un telefono. Il layout regge?</li>
+      <li>Rinomina per prova stile.css in stile2.css, ricarica con la scheda <b>Rete</b> aperta, poi rimetti il nome giusto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella scheda Rete la riga di stile.css compare in rosso con stato <b>404</b> o con "file non trovato" (aprendo da disco il messaggio cambia a seconda del browser). Sul telefono le due colonne diventano strettissime: lo risolveremo con il responsive nell'Unità 5.</div>
+  </div>
+  <aside class="notes">Punto 2: le regole barrate sono quelle sconfitte nella cascata (per esempio il colore di a sovrascritto da nav a); è il modo più rapido per capire la specificità. Punto 5: aprendo il file con file:// non c'è un vero server, quindi Chrome mostra "(failed) net::ERR_FILE_NOT_FOUND" invece di 404; il concetto è lo stesso. Ricordare: le modifiche fatte nei DevTools si perdono ricaricando.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina il problema allo strumento giusto</h2></div>
+  <dl class="puzzle-abbina" data-id="u4b-strumenti">
+    <dt>Una regola CSS non si applica</dt><dd>DevTools, pannello Stili: cerca la regola barrata</dd>
+    <dt>L'immagine non si carica</dt><dd>DevTools, pannello Rete: guarda lo stato del file</dd>
+    <dt>Rispetto lo standard HTML?</dt><dd>Il validatore W3C, validator.w3.org</dd>
+    <dt>Voglio provare un effetto in un minuto</dt><dd>CodePen o JSFiddle, senza creare file</dd>
+    <dt>Come si vede sul telefono?</dt><dd>DevTools, modalità dispositivo</dd>
+  </dl>
+  <aside class="notes">Abbinamenti come in elenco. Chiedere per ciascuno un caso reale capitato nei laboratori precedenti. Variante a squadre: una squadra descrive un problema, l'altra deve dire lo strumento entro 5 secondi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Validatori</p><h2>Un correttore severo, gratuito, del W3C</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>HTML: validator.w3.org</h3>
+      <p class="small">Controlla un indirizzo web, un <b>file caricato</b> o il codice incollato.</p>
+      <p class="small" style="font-family:var(--mono)">Error: An img element must have an alt attribute…</p>
+      <p class="small" style="font-family:var(--mono)">Error: Stray end tag div.</p>
+    </div>
+    <div class="card">
+      <h3>CSS: jigsaw.w3.org/css-validator</h3>
+      <p class="small">Controlla un foglio di stile e segnala proprietà e valori inesistenti.</p>
+      <p class="small" style="font-family:var(--mono)">colour: Proprietà inesistente</p>
+      <p class="small muted">I messaggi sono in inglese per l'HTML, in italiano per il CSS se il browser è in italiano.</p>
+    </div>
+  </div>
+  <div class="callout small">Si parte sempre dal <b>primo</b> errore: spesso un tag non chiuso ne genera altri dieci a cascata.</div>
+  <aside class="notes">Traduzione dei messaggi: "Un elemento img deve avere l'attributo alt"; "Tag di chiusura div in più, senza un div aperto". Il messaggio del CSS può avere parole leggermente diverse a seconda della versione del validatore. Il W3C (World Wide Web Consortium), fondato da Tim Berners-Lee nel 1994, scrive gli standard del web; il validatore HTML attuale si chiama "Nu Html Checker".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Zero errori: valida il tuo sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>validator.w3.org</b>, scheda <b>Validate by File Upload</b>, carica index.html e premi Check.</li>
+      <li>Correggi il primo errore nel tuo file, salva, ricarica il file nel validatore. Ripeti.</li>
+      <li>Fai lo stesso con le altre pagine.</li>
+      <li>Apri <b>jigsaw.w3.org/css-validator</b>, scheda <b>Carica file</b>, e controlla stile.css.</li>
+      <li>Annota quanti errori avevi all'inizio per ogni file e quale era il più frequente.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per l'HTML compare <b>"Document checking completed. No errors or warnings to show."</b>; per il CSS <b>"Congratulazioni! Nessun errore trovato."</b> (in inglese "Congratulations! No Error Found."). Gli avvisi (warning) non sono errori, ma leggili.</div>
+  </div>
+  <aside class="notes">Errori tipici trovati: alt mancante, tag chiusi nell'ordine sbagliato (&lt;b&gt;&lt;i&gt;…&lt;/b&gt;&lt;/i&gt;), id ripetuti, &lt;li&gt; fuori da ul/ol, attributi con virgolette tipografiche, colour al posto di color. Il validatore non vede le immagini caricate separatamente: un percorso sbagliato non è un errore di validazione (lo si trova con la scheda Rete). Se validator.w3.org è lento, si può incollare il codice nella scheda Validate by Direct Input.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il validatore dice: zero errori. Quindi la pagina…</h2></div>
+  <div class="poll" data-id="u4b-zero-errori" data-tipo="quiz" data-risposta="D">
+    <ol><li>è accessibile anche a chi non vede</li><li>si vede identica su tutti i browser e i telefoni</li><li>è leggera e veloce da caricare</li><li>rispetta le regole di scrittura dello standard</li></ol>
+    <p class="why">Il validatore controlla la sintassi: tag, attributi, annidamenti. Un alt scritto "immagine" è valido ma inutile, un layout può rompersi sul telefono, una foto da 8 MB è valida. Validare è necessario, non sufficiente.</p>
+  </div>
+  <aside class="notes">A è il distrattore più forte perché il validatore segnala l'alt mancante: ma non può giudicare se l'alt è utile, né il contrasto dei colori, né l'uso della tastiera. Per questo nell'Unità 5 useremo WAVE e Lighthouse e, soprattutto, i test con persone vere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Assistenti AI</p><h2>Un collega veloce che a volte sbaglia con sicurezza</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card ok"><h3>Usali per</h3><ul class="points small"><li>spiegare un messaggio di errore</li><li>chiedere perché una regola non funziona</li><li>avere un esempio da studiare e riscrivere</li></ul></div>
+      <div class="card bad"><h3>Non usarli per</h3><ul class="points small"><li>consegnare codice che non sai spiegare</li><li>incollare dati personali o password</li></ul></div>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">Gli assistenti di programmazione sono dentro gli editor (per esempio GitHub Copilot in VS Code, gratuito per gli studenti verificati) e ormai anche nei DevTools di alcuni browser. Generano codice prevedendo il testo più probabile: per questo possono proporre tag obsoleti, proprietà inventate o un <b>alt</b> vuoto, con lo stesso tono sicuro di quando hanno ragione.</p></div>
+  </div>
+  <aside class="notes">Demo consigliata alla LIM, guidata dal docente (molti chatbot richiedono 13+ con consenso dei genitori o 18+, quindi niente account personali in classe): chiedere a un assistente "scrivi una pagina HTML con il menu del torneo di calcetto" e far revisionare il risultato alla classe con la checklist del validatore. GitHub Copilot è gratuito per gli studenti verificati tramite GitHub Education. In Chrome l'assistenza AI nei DevTools va attivata nelle impostazioni e richiede un account, con limiti di età e di paese: solo dimostrazione. Regola di classe: se usi l'AI, lo dichiari.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Revisione del codice</p><h2>Un'AI ha scritto queste righe: che cosa non va?</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>&lt;center&gt;Torneo 3E&lt;/center&gt;</b></p></div><div class="retro"><p><b>Tag obsoleto</b></p><p class="muted small">center non fa più parte dell'HTML: la centratura si fa nel CSS con text-align: center.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>&lt;img src="campo.jpg" alt=""&gt;</b></p><p class="small">È la foto della finale.</p></div><div class="retro"><p><b>alt vuoto su un'immagine importante</b></p><p class="muted small">Il validatore non protesta, ma chi usa uno screen reader perde l'informazione.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p style="font-family:var(--mono)"><b>p { color: #cccccc; }</b></p><p class="small">Testo su sfondo bianco.</p></div><div class="retro"><p><b>Contrasto troppo basso</b></p><p class="muted small">Grigio chiaro su bianco si legge male: valido per il W3C, faticoso per le persone.</p></div></div>
+  </div>
+  <aside class="notes">Tre errori che un validatore trova solo in parte: il primo sì (center è obsoleto, il Nu Html Checker lo segnala come errore), il secondo e il terzo no. alt="" è corretto solo per le immagini decorative. Il contrasto si verifica con gli strumenti dell'Unità 5. Far votare prima di girare ogni carta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Scrivere è facile, capire è il lavoro</h2></div>
+  <figure class="citazione">
+    <blockquote>Tutti sanno che il debug è due volte più difficile che scrivere un programma. Se allora lo scrivi nel modo più astuto possibile, come farai a correggerlo?</blockquote>
+    <figcaption><b>Brian Kernighan</b>, coautore del linguaggio AWK e del libro sul C, in "The Elements of Programming Style", 1978</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Se il codice lo scrive un'AI, la parte difficile resta tutta a te: leggerlo, capirlo, trovarne gli errori. Codice semplice e ordinato aiuta te, i tuoi compagni e anche l'AI a cui chiederai aiuto la prossima volta.</p></div>
+  <aside class="notes">Traduzione nostra da: "Everyone knows that debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, how will you ever debug it?" (B. W. Kernighan e P. J. Plauger, The Elements of Programming Style, 2ª edizione, 1978, cap. 2). Kernighan ha lavorato ai Bell Labs con Ritchie e Thompson, gli autori di Unix (Unità 6). Discussione: che cosa vuol dire codice "astuto" in HTML e CSS? Selettori lunghissimi, trucchi difficili da capire, classi con nomi criptici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>La pagina non funziona: in che ordine procedi?</h2></div>
+  <ol class="puzzle-ordina" data-id="u4b-debug-ordine">
+    <li>Salvo il file e ricarico con Ctrl+F5</li>
+    <li>Apro i DevTools e guardo Console e Rete</li>
+    <li>Ispeziono l'elemento e cerco le regole barrate</li>
+    <li>Passo il file al validatore e correggo il primo errore</li>
+    <li>Isolo il problema in poche righe su CodePen</li>
+    <li>Chiedo aiuto (compagno, docente o AI) mostrando quelle righe</li>
+  </ol>
+  <aside class="notes">Ordine consigliato, non l'unico possibile: l'importante è partire dalle verifiche più veloci (ho salvato? il file si carica?) e chiedere aiuto con un esempio minimo. Un esempio minimo è il modo migliore per ottenere una risposta utile da chiunque, AI compresa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Gli strumenti di sviluppo del browser si aprono con il tasto <span class="blank" data-risposta="F12"></span>.</p>
+    <p>Il pannello che mostra i file scaricati e i codici 404 si chiama <span class="blank" data-risposta="Rete|Network"></span>.</p>
+    <p>Il validatore HTML del W3C si trova su validator.<span class="blank" data-risposta="w3.org|w3"></span>.</p>
+    <p>In VS Code e CodePen l'abbreviazione <code>ul&gt;li*3</code> si espande con il tasto <span class="blank" data-risposta="Tab"></span>.</p>
+    <p>Zero errori nel validatore non significa che la pagina sia <span class="blank" data-risposta="accessibile|veloce"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: F12, Rete (Network), w3.org, Tab, accessibile (accettato anche veloce).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Editor: testo puro, mai Word</li>
+      <li>CodePen e JSFiddle per le prove veloci</li>
+      <li>DevTools: Stili, Calcolato, Rete, dispositivo</li>
+    </ul>
+    <ul class="points">
+      <li>Validatori W3C per HTML e CSS</li>
+      <li>Valido non vuol dire accessibile</li>
+      <li>AI: ti aiuta se sai leggere il codice</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'Unità 4: prossimo appuntamento la verifica scritta (c'è una simulazione su Novaula per esercitarsi). Nell'Unità 5: HTML semantico, accessibilità, Flexbox, Grid e responsive.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

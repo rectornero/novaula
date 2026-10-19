@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>User mode e kernel mode · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>User mode e<br>kernel mode</h1>
+  <p class="lead">Perché quando un gioco va in crash si chiude solo il gioco, mentre un errore nel posto sbagliato può fermare aerei e ospedali in tutto il mondo?</p>
+  <aside class="notes">Obiettivi: capire perché serve la protezione; distinguere modalità utente e modalità kernel; conoscere il modello ad anelli (ring) di x86 e quali anelli usano davvero i sistemi operativi; capire il passaggio da una modalità all'altra con le chiamate di sistema e le eccezioni; leggere la divisione della memoria in esadecimale; distinguere un crash di un'applicazione da un crash del kernel. Durata indicativa: 2 ore. Servono PC Windows con Gestione attività, Windows PowerShell e Monitoraggio affidabilità (perfmon /rel). Richiama la lezione su kernel e shell e quella sull'esadecimale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Il programma che usi va in crash. Che cosa succede, secondo te?</h2></div>
+  <div class="poll" data-id="um-crash">
+    <ol><li>Si chiude solo quel programma</li><li>Si blocca tutto il computer</li><li>Dipende da che programma è</li><li>Si perdono tutti i file aperti, anche degli altri programmi</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza giudizio: la risposta "giusta" la costruiamo durante la lezione. Di solito la A è la più votata, e quasi sempre vera oggi; la C è la più interessante: dipende da DOVE gira il codice che sbaglia, in modalità utente o in modalità kernel. Chiedere chi ha mai visto una schermata blu di Windows.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Che cosa potrebbe fare un programma senza regole?</h2></div>
+  <div class="cols-3">
+    <div class="card bad"><h3>Scrivere ovunque</h3><p>Modificare la memoria di un altro programma, o del kernel stesso, per errore o per cattiveria.</p></div>
+    <div class="card bad"><h3>Tenersi la CPU</h3><p>Disattivare gli interrupt e non restituire mai il processore: lo scheduler non riprende più il controllo.</p></div>
+    <div class="card bad"><h3>Parlare col disco</h3><p>Mandare comandi diretti al controller e leggere i file di tutti gli utenti, password comprese.</p></div>
+  </div>
+  <div class="callout">Il software da solo non basta a fermarli: serve un aiuto dell'<b>hardware</b>, cioè della CPU.</div>
+  <aside class="notes">Negli anni '80 MS-DOS non aveva protezione: qualunque programma poteva scrivere ovunque in memoria e un errore bloccava tutto il PC, che andava riavviato. Domanda: perché non basta "controllare il programma prima di eseguirlo"? Perché i programmi sono troppi e troppo complessi, e il controllo stesso sarebbe un programma: torna utile la citazione di Dijkstra più avanti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due modalità</p><h2>La CPU sa sempre "chi sta guidando"</h2></div>
+  <table class="data">
+    <tr><th></th><th>User mode (modalità utente)</th><th>Kernel mode (modalità kernel)</th></tr>
+    <tr><td><b>Chi</b></td><td>Applicazioni, shell, servizi</td><td>Kernel e molti driver</td></tr>
+    <tr><td><b>Memoria</b></td><td>Solo la propria</td><td>Tutta</td></tr>
+    <tr><td><b>Istruzioni privilegiate</b></td><td>Vietate: la CPU genera un'eccezione</td><td>Permesse (I/O, interrupt, tabelle delle pagine)</td></tr>
+    <tr><td><b>Se sbaglia</b></td><td>Muore il processo</td><td>Si ferma il sistema</td></tr>
+  </table>
+  <aside class="notes">La CPU ha un'informazione di stato (su x86 il livello di privilegio corrente, CPL) che indica in quale modalità sta eseguendo. Esempi di istruzioni privilegiate x86: HLT (ferma la CPU), CLI (disattiva gli interrupt), le istruzioni IN/OUT verso le porte di I/O, la scrittura del registro CR3 che sceglie la tabella delle pagine. Su ARM (telefoni) gli stessi concetti si chiamano livelli di eccezione: EL0 per le app, EL1 per il kernel.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello a ring</p><h2>Quattro anelli, due usati</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 640 640" style="width:100%;max-height:640px" aria-hidden="true">
+      <g font-family="DM Sans, sans-serif" font-weight="700" text-anchor="middle">
+        <circle cx="320" cy="320" r="310" fill="#e3ecfc"/>
+        <circle cx="320" cy="320" r="235" fill="#c3d6f7"/>
+        <circle cx="320" cy="320" r="160" fill="#8fb2ef"/>
+        <circle cx="320" cy="320" r="85" fill="#141c30"/>
+        <text x="320" y="312" font-size="30" fill="#ffffff">Ring 0</text>
+        <text x="320" y="348" font-size="22" fill="#a9b3cc">kernel</text>
+        <text x="320" y="200" font-size="26" fill="#172033">Ring 1</text>
+        <text x="320" y="125" font-size="26" fill="#172033">Ring 2</text>
+        <text x="320" y="50" font-size="30" fill="#2f6fde">Ring 3</text>
+        <text x="320" y="600" font-size="24" fill="#2f6fde">applicazioni</text>
+        <text x="320" y="455" font-size="20" fill="#596179">quasi mai usati</text>
+      </g>
+    </svg>
+    <div class="stack">
+      <p>Dal 1982, con l'80286, i processori Intel hanno <b>4 livelli di privilegio</b>: il ring 0 è il più potente, il ring 3 il più limitato.</p>
+      <p>Windows, Linux e macOS usano solo <mark>ring 0 per il kernel</mark> e <mark>ring 3 per le applicazioni</mark>.</p>
+      <p class="muted small">L'idea degli anelli viene da Multics (anni '60-'70), che arrivò a 8 anelli.</p>
+    </div>
+  </div>
+  <aside class="notes">Perché solo due? Per semplicità e portabilità: molte altre architetture (ARM, RISC-V) hanno di base due livelli per sistema operativo e applicazioni, e un sistema che usa solo due anelli si adatta a tutte. Multics, sviluppato da MIT, General Electric e Bell Labs, introdusse gli anelli di protezione; sull'Honeywell 6180 erano realizzati in hardware, 8 anelli. Da Multics, per reazione alla sua complessità, nacque Unix (lezione sui sistemi in commercio). Oggi la virtualizzazione aggiunge un livello sotto il ring 0 per l'hypervisor, a volte chiamato informalmente "ring -1".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quanti ring usano davvero Windows e Linux su un PC?</h2></div>
+  <div class="poll" data-id="um-quanti-ring" data-tipo="quiz" data-risposta="B">
+    <ol><li>4, uno per ogni anello del processore</li><li>2: ring 0 e ring 3</li><li>1: il ring 0, per essere più veloci</li><li>8, come Multics</li></ol>
+    <p class="why">Il processore ne offre 4, ma i sistemi operativi più diffusi ne usano 2: ring 0 per il kernel, ring 3 per tutto il resto. Avere l'hardware non obbliga a usarlo: due livelli bastano a separare kernel e applicazioni e funzionano su ogni architettura.</p>
+  </div>
+  <aside class="notes">Tranello A: "se ci sono, si usano". Tranello C: un sistema senza separazione sarebbe più veloce ma senza protezione, come MS-DOS. Tranello D: confonde la storia con il presente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Una chiamata di sistema, dall'inizio alla fine</h2></div>
+  <ol class="puzzle-ordina" data-id="um-ordina-syscall">
+    <li>Il programma, in user mode, prepara la richiesta: "leggi 100 byte dal file"</li>
+    <li>Esegue l'istruzione speciale di chiamata di sistema (su x86-64: syscall)</li>
+    <li>La CPU passa in kernel mode e salta a un indirizzo scelto dal kernel</li>
+    <li>Il kernel controlla che il programma abbia il permesso di leggere quel file</li>
+    <li>Il kernel legge i dati e li copia nella memoria del programma</li>
+    <li>La CPU torna in user mode e il programma riprende da dove era</li>
+  </ol>
+  <aside class="notes">Punto chiave del passo 3: il programma non sceglie dove saltare, l'indirizzo d'ingresso lo ha fissato il kernel all'avvio. Così non può entrare in kernel mode eseguendo codice suo. Il passo 4 è dove agiscono i permessi (utente, gruppo, ACL). In kernel mode si entra anche con gli interrupt (un tasto premuto, un timer) e con le eccezioni (divisione per zero, accesso a memoria vietata): ne parliamo nella lezione sugli interrupt.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Vedi il tempo del kernel</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Gestione attività (<b>Ctrl + Maiusc + Esc</b>), <b>Prestazioni</b>, <b>CPU</b>.</li>
+      <li>Clic destro sul grafico: attiva la voce che <b>mostra i tempi del kernel</b>. Compare una zona più scura.</li>
+      <li>Per 30 secondi non fare nulla. Poi copia una cartella con molti file piccoli (per esempio Immagini) su una chiavetta o in un'altra cartella.</li>
+      <li>Poi guarda un video in alta risoluzione per 30 secondi.</li>
+      <li>Annota in <b>tempi-kernel.odt</b> che cosa fa la zona scura nei tre momenti, con uno screenshot.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> la zona scura (tempo in kernel mode) cresce soprattutto durante la <b>copia dei file</b>: ogni file chiede aperture, letture e scritture, cioè chiamate di sistema e lavoro dei driver.</div>
+  </div>
+  <aside class="notes">La zona scura è la parte di utilizzo della CPU spesa in modalità kernel; il resto è modalità utente. Durante il video gran parte della decodifica è affidata alla GPU, quindi la CPU può restare bassa. Se la copia è troppo veloce, usare una cartella più grande o copiare su chiavetta USB. Collegamento con la lezione sul ruolo del SO: è il gestore di risorse al lavoro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La memoria divisa in due</p><h2>Metà bassa all'utente, metà alta al kernel</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Indirizzi virtuali (x86-64)</th><th>A chi</th></tr>
+      <tr><td class="mono">FFFF FFFF FFFF FFFF<br>FFFF 8000 0000 0000</td><td>Kernel</td></tr>
+      <tr><td class="mono">… vietati …</td><td>Nessuno</td></tr>
+      <tr><td class="mono">0000 7FFF FFFF FFFF<br>0000 0000 0000 0000</td><td>Processo utente</td></tr>
+    </table>
+    <div class="stack">
+      <p class="small">Calcola: quanti byte ha la parte utente?</p>
+      <div class="formula" style="font-size:44px"><small>Ultimo indirizzo + 1</small>0x7FFF FFFF FFFF + 1<br>= 0x8000 0000 0000<br>= 2<span class="hl"><sup>47</sup></span> byte</div>
+      <p class="small">2<sup>47</sup> = 2<sup>7</sup> · 2<sup>40</sup> = <b>128 TiB</b> per ogni processo.</p>
+    </div>
+  </div>
+  <aside class="notes">Collegamento con la lezione sull'esadecimale: ogni cifra esadecimale vale 4 bit. 0x8000 0000 0000 ha un 8 (= 2^3, cioè 1000 in binario) seguito da 11 cifre zero (44 bit): 3 + 44 = 47. Sono indirizzi virtuali: nessun PC ha 128 TiB di RAM, il SO collega a RAM vera solo le pagine usate (Unità 7). Se un processo utente prova a leggere un indirizzo del kernel, la CPU genera un'eccezione e il SO lo termina ("Segmentation fault" su Linux, "violazione di accesso" su Windows). La suddivisione indicata è quella di Linux e Windows a 64 bit con paginazione a 4 livelli.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Misura utente e kernel con PowerShell</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Windows PowerShell</b> e scrivi il comando <b>M</b> (misura).</li>
+      <li>Esegui <b>C</b> (solo calcoli), poi di nuovo <b>M</b>.</li>
+      <li>Esegui <b>L</b> (legge migliaia di cartelle), poi di nuovo <b>M</b>.</li>
+      <li>In Calc calcola quanto cresce ogni tempo dopo C e dopo L. Salva <b>utente-kernel.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> dopo il ciclo cresce quasi solo il tempo <b>utente</b> (UserProcessorTime). Dopo la lettura delle cartelle cresce in modo evidente anche il tempo <b>privilegiato</b>, cioè in kernel mode.</div>
+  </div>
+<pre class="code" style="font-size:27px;padding:18px 30px"><span class="hl">M</span>  Get-Process -Id $PID | Format-List UserProcessorTime, PrivilegedProcessorTime
+<span class="hl">C</span>  for ($i=0; $i -lt 3000000; $i++) { }
+<span class="hl">L</span>  Get-ChildItem C:\Windows -Recurse -Depth 2 -ErrorAction SilentlyContinue | Out-Null</pre>
+  <aside class="notes">$PID è il numero del processo della PowerShell stessa: misuriamo noi stessi. UserProcessorTime e PrivilegedProcessorTime sono proprietà del processo (formato ore:minuti:secondi,frazioni). Il ciclo for è puro calcolo, non chiede nulla al kernel. Get-ChildItem ricorsivo deve aprire migliaia di cartelle: ogni lettura è una chiamata di sistema eseguita in kernel mode; cresce anche il tempo utente, perché PowerShell crea un oggetto per ogni file. Tempi indicativi: il ciclo dura 5-20 secondi a seconda del PC; se troppo lento, togliere uno zero. I comandi lunghi vanno scritti su una sola riga.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché il kernel non si fida di nessuno</h2></div>
+  <figure class="citazione">
+    <blockquote>Il collaudo dei programmi può mostrare la presenza di errori, ma mai la loro assenza.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, "Notes on Structured Programming", 1970</figcaption>
+  </figure>
+  <p>Se non si può dimostrare che un programma è senza errori, il sistema va costruito in modo che un errore <b>resti chiuso nel suo processo</b>.</p>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Lo stesso principio vale per l'AI: gli assistenti che scrivono ed eseguono codice da soli vengono fatti lavorare in una <b>sandbox</b>, un ambiente in user mode con permessi ridotti (niente accesso a tutti i file o alla rete), perché il codice generato può sbagliare come quello scritto da una persona.</p></div>
+  <aside class="notes">Traduzione nostra di "Program testing can be used to show the presence of bugs, but never to show their absence!" (EWD249, "Notes on Structured Programming", 1970; la frase compare anche negli atti della conferenza NATO sull'ingegneria del software del 1969). Dijkstra progettò anche il sistema operativo THE (1968), organizzato a livelli. Collegamento con l'Unità 3 (qualità del software): il test serve, ma non basta. Sandbox: è anche il modo in cui browser e telefoni isolano siti e app (ogni app Android ha un proprio utente Linux e vede solo i suoi file). Per gli agenti AI si usano spesso container o macchine virtuali dedicate.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando qualcosa va storto</p><h2>Due tipi di crash</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Errore in user mode</h3><p>"Il programma ha smesso di funzionare". La CPU segnala l'errore, il kernel <b>termina solo quel processo</b> e libera le sue risorse. Il resto continua.</p></div>
+    <div class="card bad"><h3>Errore in kernel mode</h3><p>Nessuno sopra il kernel può rimediare. Per non danneggiare i dati il sistema <b>si ferma</b>: schermata blu (Windows), kernel panic (Linux, macOS), riavvio.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il <b>19 luglio 2024</b> un aggiornamento difettoso del software di sicurezza CrowdStrike Falcon, che usa un driver in kernel mode, mandò in schermata blu circa <b>8,5 milioni</b> di PC Windows (stima Microsoft). Si fermarono aeroporti, banche e ospedali.</p></div>
+  <aside class="notes">Fonti: post di Microsoft del 20 luglio 2024 ("Helping our customers through the CrowdStrike outage", stima di 8,5 milioni di dispositivi) e la revisione dell'incidente pubblicata da CrowdStrike (un file di configurazione causò una lettura di memoria fuori dai limiti nel driver). Per ripararli serviva spesso intervenire a mano su ogni PC, in modalità provvisoria. Domanda: perché un antivirus lavora in kernel mode? Per vedere tutto (processi, file, rete) e bloccare i malware prima che agiscano: più potere, più rischio. Dopo l'incidente Microsoft ha annunciato di voler spostare questi prodotti sempre più fuori dal kernel.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un programma in user mode prova a disattivare gli interrupt. Che cosa succede?</h2></div>
+  <div class="poll" data-id="um-quiz-privilegiata" data-tipo="quiz" data-risposta="C">
+    <ol><li>L'istruzione viene eseguita, ma più lentamente</li><li>Il programma ottiene automaticamente i privilegi del kernel</li><li>La CPU genera un'eccezione e il kernel, di solito, termina il programma</li><li>Il computer si riavvia per sicurezza</li></ol>
+    <p class="why">Disattivare gli interrupt è un'istruzione privilegiata. In user mode la CPU non la esegue: genera un'eccezione di protezione e passa il controllo al kernel, che di solito chiude il processo colpevole. Gli altri programmi non se ne accorgono.</p>
+  </div>
+  <aside class="notes">Tranello B: è proprio quello che la protezione impedisce; l'unico modo per entrare nel kernel è la porta ufficiale (chiamata di sistema, interrupt, eccezione), con indirizzi decisi dal kernel. Tranello D: il riavvio avverrebbe solo per un errore nel kernel stesso. Su Windows il messaggio tipico è "istruzione privilegiata" (codice 0xC0000096).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Il diario degli incidenti del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>perfmon /rel</code> e premi Invio: si apre <b>Monitoraggio affidabilità</b>.</li>
+      <li>Passa alla vista per <b>settimane</b>. Cerca le croci rosse: errori delle applicazioni e errori di Windows.</li>
+      <li>Clicca su 3 eventi e leggi il dettaglio: quale programma, quando, che cosa.</li>
+      <li>In Calc compila una tabella: data, programma, tipo (applicazione o Windows), <b>user mode o kernel mode?</b></li>
+      <li>Salva come <b>incidenti-pc.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> la maggior parte degli errori riguarda <b>applicazioni</b> (user mode): si è chiuso un programma e il PC è andato avanti. Un arresto imprevisto di Windows, se c'è, è il segno di un problema in kernel mode o nell'hardware.</div>
+  </div>
+  <aside class="notes">Monitoraggio affidabilità conserva lo storico di circa un anno e assegna un indice di stabilità da 1 a 10. Sui PC della scuola reimpostati spesso lo storico può essere quasi vuoto: lavorare a coppie su un PC con più eventi, oppure mostrarlo alla LIM sul PC del docente. "Arresto imprevisto" può dipendere anche da una mancanza di corrente: discuterlo. Non serve essere amministratori per vedere i dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="0384" data-aiuto="la prima cifra è il ring del kernel">
+    <ul class="points">
+      <li>1ª cifra: il ring in cui gira il kernel</li>
+      <li>2ª cifra: il ring in cui girano le applicazioni</li>
+      <li>3ª cifra: quanti anelli aveva Multics</li>
+      <li>4ª cifra: quanti ring offrono i processori x86</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Kernel nel ring 0, applicazioni nel ring 3, Multics con 8 anelli, x86 con 4.</div>
+  </div>
+  <aside class="notes">Codice: 0384. Gara a squadre. Tranello: la quarta cifra è 4 (anelli offerti), non 2 (anelli usati).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Le applicazioni girano in modalità <span class="blank" data-risposta="utente|user|user mode"></span>.</p>
+    <p>Su x86 il kernel usa il ring <span class="blank" data-risposta="0|zero"></span>.</p>
+    <p>Un programma entra nel kernel in modo ufficiale con una chiamata di <span class="blank" data-risposta="sistema"></span>.</p>
+    <p>Un errore in kernel mode su Windows produce la schermata <span class="blank" data-risposta="blu"></span>.</p>
+    <p>0x8000 0000 0000 è uguale a 2 elevato alla <span class="blank" data-risposta="47"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: utente (accettati user, user mode), 0, sistema, blu, 47.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>La protezione ha bisogno dell'hardware: la CPU ha due modalità</li>
+      <li>User mode: solo la propria memoria, niente istruzioni privilegiate</li>
+      <li>Kernel mode: tutto è permesso, quindi ogni errore è grave</li>
+    </ul>
+    <ul class="points">
+      <li>x86 ha 4 ring; i SO usano il ring 0 e il ring 3</li>
+      <li>Si entra nel kernel con chiamate di sistema, interrupt, eccezioni</li>
+      <li>Crash di un'app: muore un processo. Crash del kernel: si ferma tutto</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "Rapporto d'incidente: il giorno delle schermate blu" (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

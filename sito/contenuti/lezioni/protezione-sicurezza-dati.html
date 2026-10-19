@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La protezione e la sicurezza dei dati · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>Proteggere i dati</h1>
+  <p class="lead">Utenti e permessi, password e secondo fattore, backup, malware e ransomware: come il sistema operativo difende i tuoi file, e che cosa tocca fare a te.</p>
+  <aside class="notes">Lezione online del libro ("La protezione e la sicurezza dei dati"): si può svolgere in classe o assegnare a casa. Obiettivi: distinguere protezione e sicurezza; riservatezza, integrità e disponibilità; utenti, account amministratore e standard, permessi NTFS; autenticazione a più fattori; robustezza delle password con un calcolo; backup 3-2-1 e verifica con un hash; tipi di malware e ransomware; limiti etici e legali. Tutto il materiale è difensivo: nessuna attività su sistemi altrui. Durata indicativa: 2 ore. Servono i PC del laboratorio con Windows e Calc; per l'ultimo laboratorio è utile, ma non necessaria, una chiavetta USB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi sinceramente</p><h2>Quante password diverse usi davvero?</h2></div>
+  <div class="poll" data-id="sic-password">
+    <ol><li>Una sola, per tutto</li><li>Due o tre, a rotazione</li><li>Una diversa per ogni sito</li><li>Uso un gestore di password</li></ol>
+  </div>
+  <aside class="notes">Il voto è anonimo: chiarirlo, così le risposte sono sincere. Di solito la maggioranza ne usa due o tre. Domanda: se uno di quei siti viene violato, che cosa succede agli altri account? (Gli attaccanti provano automaticamente le stesse coppie email e password su altri servizi: si chiama credential stuffing.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole giuste</p><h2>Protezione e sicurezza: due lavori diversi</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Protezione</h3><p>I meccanismi <b>interni</b> del sistema operativo che decidono chi può usare quale risorsa: utenti, permessi, memoria separata tra i processi, kernel mode.</p></div>
+    <div class="card"><h3>Sicurezza</h3><p>La difesa da <b>minacce</b>, esterne o interne: furto di password, malware, guasti, errori umani. Usa la protezione, ma anche backup, aggiornamenti e buone abitudini.</p></div>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Riservatezza</h3><p>solo chi ha diritto legge</p></div>
+    <div class="card soft"><h3>Integrità</h3><p>nessuno modifica di nascosto</p></div>
+    <div class="card soft"><h3>Disponibilità</h3><p>i dati ci sono quando servono</p></div>
+  </div>
+  <aside class="notes">Le tre proprietà (in inglese CIA: confidentiality, integrity, availability) sono il riferimento classico della sicurezza informatica. Esempi da far trovare: un compagno legge i tuoi messaggi (riservatezza); qualcuno cambia un voto nel registro (integrità); il disco si rompe la sera prima della consegna (disponibilità). Collegamento con l'unità 6: la protezione della memoria e la distinzione user mode e kernel mode sono già protezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Utenti e permessi</p><h2>Prima chi sei, poi che cosa puoi fare</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Autenticazione</h3><p class="small">dimostri chi sei: password, PIN, impronta</p></div>
+    <div class="card soft"><h3>Autorizzazione</h3><p class="small">il sistema controlla i permessi di quell'utente</p></div>
+    <div class="card fill"><h3>Accesso</h3><p class="small">leggi, modifichi o esegui solo ciò che ti è concesso</p></div>
+  </div>
+  <ul class="points">
+    <li><b>Account standard</b> per lavorare, <b>amministratore</b> solo per installare e configurare</li>
+    <li>In Windows il <b>Controllo dell'account utente</b> chiede conferma prima di un'azione da amministratore</li>
+    <li><mark>Principio del minimo privilegio</mark>: ogni utente e programma ha solo i permessi che gli servono</li>
+  </ul>
+  <aside class="notes">Collegamento con la lezione sul file system: in Linux i permessi sono rwx per proprietario, gruppo e altri; in Windows NTFS usa le ACL (liste di controllo di accesso), una lista di utenti e gruppi con i loro permessi per ogni file e cartella. Perché lavorare da utente standard? Un malware eseguito per errore ha gli stessi permessi dell'utente che lo esegue: da standard fa molti meno danni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Chi sono e che cosa posso fare in Windows</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Impostazioni, <b>Account</b>, <b>Le tue info</b>: il tuo account è amministratore o standard?</li>
+      <li>Nel prompt dei comandi scrivi <code>whoami</code>: annota la risposta.</li>
+      <li>In Documenti\TPSI\U7 crea la cartella <b>privata</b>. Clic destro, <b>Proprietà</b>, scheda <b>Sicurezza</b>.</li>
+      <li>Clicca su ogni utente o gruppo dell'elenco e annota quali permessi sono spuntati: Controllo completo, Modifica, Lettura…</li>
+      <li>Scrivi tutto in <b>sicurezza-cognome.txt</b> e confronta con i permessi rwx di Linux.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>whoami</code> risponde nella forma <code>nomepc\utente</code> o <code>dominio\utente</code>. Nell'elenco ci sono di solito <b>SYSTEM</b>, il gruppo degli amministratori e il tuo utente, tutti con Controllo completo.</div>
+  </div>
+  <aside class="notes">Sui PC della scuola gli studenti hanno quasi sempre un account standard: ottimo esempio di minimo privilegio. Non modificare i permessi (pulsante Modifica): basta osservare. Confronto atteso: Lettura ≈ r, Scrittura ≈ w, Lettura ed esecuzione ≈ r e x, Controllo completo = tutto, compreso cambiare i permessi. Differenza: in NTFS si può dare un permesso a un singolo utente o gruppo qualsiasi, in rwx solo a proprietario, gruppo, altri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Autenticazione</p><h2>Tre modi di dimostrare chi sei</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Qualcosa che sai</h3><p>password, PIN, risposta segreta</p></div>
+    <div class="card"><p class="num">2</p><h3>Qualcosa che hai</h3><p>telefono con un'app di autenticazione, chiavetta di sicurezza, smart card</p></div>
+    <div class="card"><p class="num">3</p><h3>Qualcosa che sei</h3><p>impronta, volto, voce</p></div>
+  </div>
+  <div class="callout"><b>Autenticazione a due fattori (2FA)</b>: servono due elementi di <b>categorie diverse</b>. Chi ruba la password non entra senza il tuo telefono.</div>
+  <aside class="notes">Esempi che conoscono: SPID con codice ricevuto sull'app o via SMS; la banca che chiede il codice sull'app; il registro elettronico se ha la verifica in due passaggi. Gli SMS sono il secondo fattore più debole (esistono truffe con la sostituzione della SIM), meglio un'app di autenticazione o una passkey. Mai comunicare a nessuno un codice ricevuto: nessun servizio serio lo chiede al telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Password più domanda segreta ("nome del tuo cane"): è autenticazione a due fattori?</h2></div>
+  <div class="poll" data-id="sic-2fa" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sì, sono due controlli diversi</li><li>No, sono due cose che sai: un fattore solo</li><li>Sì, se la risposta è lunga e difficile</li><li>No, perché la 2FA richiede sempre l'impronta</li></ol>
+    <p class="why">I fattori sono categorie: sapere, avere, essere. Password e domanda segreta sono entrambe "qualcosa che sai" e si possono rubare nello stesso modo. Il nome del cane, poi, spesso è sui social.</p>
+  </div>
+  <aside class="notes">La A è la risposta di quasi tutti. La D è falsa: password più codice dal telefono è una 2FA perfetta, senza biometria. Spunto: le domande segrete sono deboli perché le risposte si trovano online; meglio rispondere con qualcosa di non vero ma ricordato nel gestore di password.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola</p><h2>Quanto resiste una password a un attacco a forza bruta?</h2></div>
+  <table class="data compact">
+    <tr><th>Password</th><th>Simboli</th><th>Lunghezza</th><th>Combinazioni</th><th>Tempo a 10 miliardi di prove al secondo</th></tr>
+    <tr><td>solo minuscole</td><td class="mono">26</td><td class="mono">8</td><td>26<sup>8</sup> ≈ 2,1 × 10<sup>11</sup></td><td class="hl">circa 21 secondi</td></tr>
+    <tr><td>tutta la tastiera</td><td class="mono">94</td><td class="mono">8</td><td>94<sup>8</sup> ≈ 6,1 × 10<sup>15</sup></td><td>circa 7 giorni</td></tr>
+    <tr><td>tutta la tastiera</td><td class="mono">94</td><td class="mono">12</td><td>94<sup>12</sup> ≈ 4,8 × 10<sup>23</sup></td><td>circa 1,5 milioni di anni</td></tr>
+    <tr><td>6 parole a caso</td><td class="mono">7776</td><td class="mono">6</td><td>7776<sup>6</sup> ≈ 2,2 × 10<sup>23</sup></td><td>circa 700 000 anni</td></tr>
+  </table>
+  <p class="small">Conta più la <b>lunghezza</b> che i simboli strani. Ma tutto questo vale solo se la password è <b>casuale</b>: "Juventus2009!" cade in pochi minuti perché è nei dizionari degli attaccanti.</p>
+  <aside class="notes">10^10 prove al secondo è un'ipotesi realistica per un attacco offline con GPU contro un archivio di password protetto male (hash veloce); con hash lenti e moderni si va molto più piano, e online i siti bloccano dopo pochi tentativi. Calcoli: 26^8 = 208 827 064 576 → 20,9 s; 94^8 ≈ 6,1 × 10^15 → 6,1 × 10^5 s ≈ 7 giorni; 94^12 ≈ 4,76 × 10^23 → 4,76 × 10^13 s ≈ 1,5 milioni di anni; 7776^6 ≈ 2,21 × 10^23 → 2,2 × 10^13 s ≈ 700 000 anni. 7776 = 6^5: è la lista Diceware, in cui ogni parola si sceglie lanciando 5 dadi. Morale: una frase di parole a caso è robusta e facile da ricordare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il calcolatore della forza bruta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Calc intestazioni: A1 <b>Tipo</b>, B1 <b>Simboli</b>, C1 <b>Lunghezza</b>, D1 <b>Combinazioni</b>, E1 <b>Secondi</b>, F1 <b>Anni</b>.</li>
+      <li>Riga 2: minuscole, 26, 8. In D2 <code>=POTENZA(B2;C2)</code>, in E2 <code>=D2/10^10</code>, in F2 <code>=E2/(365*24*3600)</code>.</li>
+      <li>Aggiungi righe: 26 con lunghezza 12; 62 (lettere e cifre) con 8; 94 con 8 e con 12; 7776 con 4 e con 6.</li>
+      <li>Colora in verde le righe che superano 1000 anni. Salva <b>forza-bruta-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> minuscole da 8: circa <b>21 secondi</b>. 94 simboli da 12: circa <b>1,5 milioni di anni</b>. 4 parole da 7776: circa 4 giorni, 6 parole: circa 700 000 anni.</div>
+  </div>
+  <aside class="notes">Non scrivere mai password vere nel foglio, né in nessun sito che "misura la forza" delle password. Valori attesi: 26^12 ≈ 9,5 × 10^16 → circa 110 giorni; 62^8 ≈ 2,2 × 10^14 → circa 6 ore; 7776^4 ≈ 3,7 × 10^15 → circa 4 giorni. Calc mostra i numeri grandi in notazione scientifica (E): spiegarla. Domanda finale: meglio aggiungere un simbolo strano o 4 caratteri in più? (I caratteri in più, quasi sempre.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La sicurezza non si compra una volta per tutte</h2></div>
+  <figure class="citazione">
+    <blockquote>La sicurezza è un processo, non un prodotto.</blockquote>
+    <figcaption><b>Bruce Schneier</b>, crittografo ed esperto di sicurezza statunitense, 2000</figcaption>
+  </figure>
+  <p class="lead">Un antivirus da solo non basta: servono aggiornamenti, backup, permessi giusti e persone che sanno riconoscere un inganno. Ogni giorno, non una volta sola.</p>
+  <aside class="notes">Traduzione nostra di "Security is a process, not a product", frase che Schneier ha usato nel 2000 nella sua newsletter Crypto-Gram e nel libro "Secrets and Lies". Domanda alla classe: quali sono i "processi" di sicurezza che ognuno di voi potrebbe avere? (Aggiornare il telefono, fare un backup una volta al mese, controllare le app con troppi permessi.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Backup</p><h2>La regola 3-2-1</h2></div>
+  <div class="cols-3">
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>copie dei dati</h3><p>l'originale più due copie</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>supporti diversi</h3><p>per esempio disco del PC e disco esterno</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">1</p><h3>copia lontana</h3><p>in un altro luogo o nel cloud, possibilmente scollegata</p></div>
+  </div>
+  <div class="callout hl"><b>Sincronizzare non è fare il backup.</b> Se cancelli o rovini un file, la sincronizzazione copia subito il danno anche nel cloud. E un backup mai provato potrebbe non funzionare.</div>
+  <aside class="notes">Il backup protegge soprattutto la disponibilità e l'integrità. Una copia scollegata (offline) è l'unica che un ransomware non può raggiungere. Strumenti in Windows: Cronologia file, oppure una semplice copia periodica su disco esterno; sul telefono il backup di Google o di iCloud. Regola pratica per uno studente: una volta al mese i lavori della scuola su una chiavetta che poi si stacca.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>I tuoi file sono sincronizzati nel cloud. Un ransomware cifra il PC. Sei salvo?</h2></div>
+  <div class="poll" data-id="sic-cloud" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sì, il cloud ha sempre una copia intatta</li><li>No, il cloud viene cancellato dal ransomware</li><li>Sì, perché il cloud non accetta file cifrati</li><li>Non per forza: si sincronizzano anche i file cifrati, ti salva solo la cronologia delle versioni</li></ol>
+    <p class="why">Il programma di sincronizzazione vede i file cambiati e li carica, cifrati, nel cloud. Molti servizi conservano le versioni precedenti per un certo tempo: è quella cronologia, o un backup scollegato, che ti salva.</p>
+  </div>
+  <aside class="notes">OneDrive, Google Drive e Dropbox hanno la cronologia delle versioni e il cestino, con limiti di tempo diversi; OneDrive per alcuni abbonamenti offre anche il ripristino di tutta la cartella a una data precedente. La B è esagerata: di solito il ransomware non cancella il cloud, ma lo "contamina" attraverso la sincronizzazione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un backup si verifica: l'impronta dei file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Documenti\TPSI\U7 crea <b>relazione.txt</b> con qualche riga. Copialo su una chiavetta o nella cartella <b>backup</b>.</li>
+      <li>Apri il prompt dei comandi nella cartella (scrivi <b>cmd</b> nella barra degli indirizzi di Esplora file).</li>
+      <li>Calcola l'impronta: <code>certutil -hashfile relazione.txt SHA256</code>. Fai lo stesso sulla copia.</li>
+      <li>Nella copia cambia <b>una sola lettera</b>, salva e ricalcola l'impronta.</li>
+      <li>Incolla le tre impronte in <b>backup-cognome.txt</b> e scrivi che cosa hai notato.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'impronta SHA-256 è lunga <b>64</b> cifre esadecimali. Originale e copia identica hanno la stessa impronta; dopo aver cambiato una lettera l'impronta è <b>completamente diversa</b>.</div>
+  </div>
+  <aside class="notes">Una funzione hash produce un'impronta di lunghezza fissa (256 bit = 64 cifre esadecimali, ripasso dell'unità 1); basta un bit diverso per cambiarla tutta. Si usa per verificare che una copia di backup o un file scaricato siano integri: molti siti pubblicano l'hash SHA-256 dei loro programmi. certutil è incluso in Windows e non richiede l'amministratore. Collegamento con l'integrità della slide iniziale. In Linux (JSLinux) il comando equivalente è sha256sum.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Malware</p><h2>Abbina ogni minaccia al suo modo di agire</h2></div>
+  <dl class="puzzle-abbina" data-id="sic-malware">
+    <dt>Virus</dt><dd>Si attacca ad altri file e si diffonde quando li apri</dd>
+    <dt>Worm</dt><dd>Si copia da solo da un computer all'altro in rete</dd>
+    <dt>Trojan</dt><dd>Sembra un programma utile, ma nasconde altro</dd>
+    <dt>Ransomware</dt><dd>Cifra i tuoi file e chiede un riscatto</dd>
+    <dt>Spyware</dt><dd>Raccoglie di nascosto ciò che fai e lo invia</dd>
+    <dt>Phishing</dt><dd>Un messaggio falso che ti spinge a dare le credenziali</dd>
+  </dl>
+  <aside class="notes">Il phishing non è un programma ma un inganno: è però il modo più comune con cui il malware entra o le password vengono rubate. Vie d'ingresso tipiche: allegati, link in messaggi, programmi e giochi craccati, chiavette trovate, vulnerabilità non aggiornate. Esempio storico di worm: il worm di Morris del 1988, che bloccò una parte importante dell'internet di allora; il suo autore fu il primo condannato negli Stati Uniti in base alla legge sulle frodi informatiche.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Maggio 2017: WannaCry</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>In pochi giorni un ransomware si diffonde come un worm su centinaia di migliaia di computer in circa 150 Paesi. Negli ospedali inglesi saltano visite e interventi.</p>
+      <p>Usava una falla di Windows per cui Microsoft aveva già pubblicato la correzione <b>due mesi prima</b>.</p>
+    </div>
+    <div class="card"><h3>La lezione</h3><ul class="points"><li>aggiornare subito</li><li>backup scollegati</li><li>non pagare: niente garantisce i file</li></ul></div>
+  </div>
+  <aside class="notes">WannaCry partì il 12 maggio 2017 e sfruttava una vulnerabilità del protocollo di condivisione file SMBv1 (exploit chiamato EternalBlue); l'aggiornamento di sicurezza MS17-010 era uscito a marzo 2017. Il servizio sanitario inglese (NHS) fu tra i più colpiti. La diffusione rallentò quando un ricercatore registrò un nome di dominio che faceva da "interruttore" nel codice. Le stime più citate parlano di oltre 200 000 computer. Le autorità, compresa la Polizia Postale, consigliano di non pagare i riscatti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etica e legge</p><h2>Le competenze di sicurezza si usano solo con il permesso</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Reato</h3><ul class="points"><li>Entrare in un sistema o in un account altrui senza autorizzazione: <b>art. 615-ter</b> del codice penale</li><li>Procurarsi o diffondere password e codici d'accesso altrui: <b>art. 615-quater</b></li><li>Vale anche "per scherzo" e anche con la password del compagno</li></ul></div>
+    <div class="card ok"><h3>Lecito e utile</h3><ul class="points"><li>Esercitarsi su ambienti creati apposta: gare <b>Capture The Flag</b>, laboratori didattici</li><li>Lavorare come <b>penetration tester</b> con un contratto scritto</li><li>Segnalare una falla al responsabile del sito</li></ul></div>
+  </div>
+  <aside class="notes">L'articolo 615-ter c.p. punisce l'accesso abusivo a un sistema informatico o telematico (reclusione fino a tre anni nell'ipotesi base, di più nei casi aggravati); il 615-quater la detenzione e diffusione abusiva di codici di accesso. Esempi vicini ai ragazzi: entrare nel profilo social o nel registro elettronico di un altro con la sua password, anche se te l'ha detta in passato. In Italia esistono percorsi di formazione etica come le olimpiadi e le gare di cybersicurezza per studenti (per esempio OliCyber). Per segnalare reati online: Polizia Postale (commissariatodips.it).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tocca le carte</p><h2>Tre miti da sfatare</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>"La navigazione in incognito mi rende anonimo"</h3></div><div class="retro"><p><b>Falso.</b> Non salva la cronologia sul tuo PC, ma la scuola, il gestore della rete e i siti vedono lo stesso che cosa fai.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>"Il lucchetto vicino all'indirizzo vuol dire sito sicuro"</h3></div><div class="retro"><p><b>Falso.</b> Il lucchetto (HTTPS) dice solo che la connessione è cifrata. Anche un sito di phishing può averlo.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>"Ho l'antivirus, quindi sono al sicuro"</h3></div><div class="retro"><p><b>Falso.</b> L'antivirus non ferma chi ti convince a dare la password. Servono anche aggiornamenti, 2FA e backup.</p></div></div>
+  </div>
+  <aside class="notes">Far votare per alzata di mano prima di girare ogni carta. Collegamento con la frase di Schneier: nessun prodotto, da solo, rende sicuri. In Windows l'antivirus integrato è Microsoft Defender: per un uso normale è sufficiente, purché aggiornato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>L'AI cambia sia l'attacco sia la difesa</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Phishing senza errori e voci clonate</h3><p>Con l'AI generativa un messaggio truffa può essere scritto senza errori in qualsiasi lingua, e bastano pochi secondi di registrazione per imitare una voce. Regola: se un messaggio chiede soldi o codici, <b>verifica su un altro canale</b>, per esempio richiamando tu.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Le passkey sostituiscono le password</h3><p>Una <b>passkey</b> è una chiave crittografica salvata nel telefono o nel PC e sbloccata con impronta, volto o PIN. Non si può digitare in un sito falso e non si può indovinare. Google, Apple e Microsoft la supportano dal 2022-2023.</p></div>
+  </div>
+  <aside class="notes">Sull'AI: niente allarmismo, il punto è che l'errore di grammatica non è più un indizio affidabile di phishing. Le passkey si basano sugli standard FIDO2 e WebAuthn della FIDO Alliance e del W3C: il sito conserva solo la chiave pubblica, la chiave privata non lascia mai il dispositivo; inoltre la passkey è legata al dominio vero del sito, quindi non funziona su un sito imitato. Le passkey uniscono "qualcosa che hai" (il dispositivo) e "qualcosa che sei" o "sai" (impronta o PIN).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3212" data-aiuto="le prime tre cifre sono la regola del backup">
+    <ul class="points">
+      <li>Cifre 1, 2 e 3: la regola del backup, in ordine</li>
+      <li>Cifra 4: quanti fattori di categorie diverse servono nella 2FA</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 copie, 2 supporti, 1 lontana; 2 fattori.</div>
+  </div>
+  <aside class="notes">Codice: 3212. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Dimostrare chi sei si chiama <span class="blank" data-risposta="autenticazione" style="--w:11ch"></span>.</p>
+    <p>Ogni utente deve avere solo i permessi che gli servono: è il principio del minimo <span class="blank" data-risposta="privilegio" style="--w:9ch"></span>.</p>
+    <p>Il malware che cifra i file e chiede un riscatto si chiama <span class="blank" data-risposta="ransomware" style="--w:10ch"></span>.</p>
+    <p>Password e codice sul telefono sono un'autenticazione a due <span class="blank" data-risposta="fattori"></span>.</p>
+    <p>Per verificare che una copia sia identica si confronta il suo <span class="blank" data-risposta="hash|impronta" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: autenticazione; privilegio; ransomware; fattori; hash (accettato impronta).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Riservatezza, integrità, disponibilità</li>
+      <li>Autenticazione, poi autorizzazione; minimo privilegio</li>
+      <li>2FA: due fattori di categorie diverse; password lunghe e casuali</li>
+    </ul>
+    <ul class="points">
+      <li>Backup 3-2-1, verificato con un hash</li>
+      <li>Virus, worm, trojan, ransomware, spyware, phishing</li>
+      <li>Entrare in sistemi altrui è reato: solo con permesso</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Con questa lezione si chiude l'unità 7: annunciare la verifica (memoria, file system, disco, periferiche, sicurezza) e la simulazione disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

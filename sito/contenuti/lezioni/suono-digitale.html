@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I suoni · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità</p>
+  <h1>I suoni</h1>
+  <p class="lead">Una canzone è un'onda d'aria. Per metterla in un file la misuriamo 44 100 volte al secondo e scriviamo ogni misura come un numero.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Onde · campionamento · quantizzazione · peso · formati</span></div>
+  <aside class="notes">Obiettivi: frequenza e ampiezza; campionamento e quantizzazione; teorema del campionamento; peso di un audio non compresso e bitrate; formati senza e con perdita; MIDI. Durata: 2 ore. Servono: cuffie o casse, il generatore di toni online szynalski.com/tone-generator (senza account), LibreOffice Calc. Prerequisiti: binario (2ⁿ livelli), immagini raster (il parallelo pixel/campione aiuta molto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come ascolti la musica, di solito?</h2></div>
+  <div class="poll" data-id="s-ascolto">
+    <ol><li>Streaming gratuito con pubblicità</li><li>Streaming a pagamento</li><li>Video su YouTube o social</li><li>File scaricati</li><li>Radio, CD o vinili</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Chiedere a chi usa lo streaming a pagamento se ha mai visto l'impostazione "qualità audio": normale, alta, lossless. Oggi capiremo che cosa significano quei nomi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il suono</p><h2>Un'onda di pressione nell'aria</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="-10 0 420 200" width="860" height="410" role="img" aria-label="Onda sinusoidale con periodo e ampiezza indicati"><line x1="0" y1="100" x2="400" y2="100" stroke="#dcdfe8" stroke-width="2"/><polyline fill="none" stroke="#c8326f" stroke-width="5" points="0,100.0 20,75.3 40,53.0 60,35.3 80,23.9 100,20.0 120,23.9 140,35.3 160,53.0 180,75.3 200,100.0 220,124.7 240,147.0 260,164.7 280,176.1 300,180.0 320,176.1 340,164.7 360,147.0 380,124.7 400,100.0"/><line x1="100" y1="100" x2="100" y2="22" stroke="#172033" stroke-width="2"/><text x="100" y="14" text-anchor="middle" font-family="Arial" font-size="16" fill="#172033">ampiezza</text><line x1="0" y1="194" x2="400" y2="194" stroke="#172033" stroke-width="2"/><text x="150" y="188" font-family="Arial" font-size="16" fill="#172033">un periodo</text></svg>
+    <div class="stack">
+      <div class="card soft"><h3>Frequenza → altezza</h3><p>Oscillazioni al secondo, in <b>hertz</b>. Il La del diapason: 440 Hz.</p></div>
+      <div class="card"><h3>Ampiezza → volume</h3><p>Quanto è forte la variazione di pressione. Si misura in decibel.</p></div>
+      <p class="small">L'orecchio umano sente circa da <b>20 Hz</b> a <b>20 000 Hz</b>, e il limite alto cala con l'età.</p>
+    </div>
+  </div>
+  <aside class="notes">Un suono reale (voce, chitarra) è la somma di molte onde di frequenze diverse: per questo un La di chitarra e un La di pianoforte suonano diversi (timbro). Il microfono trasforma la pressione in una tensione elettrica che varia nello stesso modo: un segnale analogico.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Fin dove arriva il tuo orecchio?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Indossa le cuffie e metti il <b>volume basso</b>.</li>
+      <li>Apri <b>szynalski.com/tone-generator</b> e premi Play a 440 Hz.</li>
+      <li>Alza la frequenza a passi: 2000, 8000, 12 000, 15 000, 17 000 Hz… Annota l'ultima che senti.</li>
+      <li>Fai lo stesso verso il basso: 100, 50, 30, 20 Hz.</li>
+      <li>Scrivi i tuoi limiti in <b>udito.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a 16–17 anni di solito si sentono suoni oltre i 16 000 Hz; molti adulti si fermano prima. Sotto i 30 Hz, con cuffie piccole, il suono si sente appena o non si sente.</div>
+  </div>
+  <aside class="notes">Sicurezza: mai alzare il volume per "sentire meglio" le frequenze estreme. Le cuffie e le casse economiche spesso non riproducono bene i bassi profondi né gli acuti estremi: il limite misurato è quello di orecchio + cuffie. Fallback: demo del docente alle casse della LIM, con la classe che alza la mano finché sente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da analogico a digitale</p><h2>Campionare e quantizzare</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="-10 0 450 200" width="880" height="400" role="img" aria-label="Onda campionata a intervalli regolari e approssimata a gradini"><line x1="0" y1="100" x2="425" y2="100" stroke="#dcdfe8" stroke-width="2"/><polyline fill="none" stroke="#dcb3c6" stroke-width="4" points="0,100.0 20,75.3 40,53.0 60,35.3 80,23.9 100,20.0 120,23.9 140,35.3 160,53.0 180,75.3 200,100.0 220,124.7 240,147.0 260,164.7 280,176.1 300,180.0 320,176.1 340,164.7 360,147.0 380,124.7 400,100.0"/><path fill="none" stroke="#172033" stroke-width="3" d="M0 88.6H25V65.7H50V42.9H75V20.0H150V42.9H175V65.7H200V88.6H225V134.3H250V157.1H275V180.0H350V157.1H375V134.3H400V111.4H425"/><g fill="#c8326f"><circle cx="0" cy="100.0" r="5"/><circle cx="25" cy="69.4" r="5"/><circle cx="50" cy="43.4" r="5"/><circle cx="75" cy="26.1" r="5"/><circle cx="100" cy="20.0" r="5"/><circle cx="125" cy="26.1" r="5"/><circle cx="150" cy="43.4" r="5"/><circle cx="175" cy="69.4" r="5"/><circle cx="200" cy="100.0" r="5"/><circle cx="225" cy="130.6" r="5"/><circle cx="250" cy="156.6" r="5"/><circle cx="275" cy="173.9" r="5"/><circle cx="300" cy="180.0" r="5"/><circle cx="325" cy="173.9" r="5"/><circle cx="350" cy="156.6" r="5"/><circle cx="375" cy="130.6" r="5"/><circle cx="400" cy="100.0" r="5"/></g></svg>
+    <div class="stack">
+      <div class="card soft"><h3>Campionamento</h3><p>Misuro l'onda a intervalli regolari (i punti). Quante misure al secondo: <b>frequenza di campionamento</b>.</p></div>
+      <div class="card"><h3>Quantizzazione</h3><p>Ogni misura viene arrotondata a uno dei 2ⁿ livelli (i gradini). n = <b>bit per campione</b>.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Qui: 16 campioni per periodo e 3 bit, cioè 8 livelli: per questo i gradini sono grossolani. Il parallelo con le immagini: frequenza di campionamento ↔ risoluzione, bit per campione ↔ profondità di colore. L'errore tra onda vera e gradini si chiama errore (o rumore) di quantizzazione. Il componente che fa tutto questo è il convertitore analogico-digitale (ADC).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Quanti campioni bastano?</h2></div>
+  <figure class="citazione">
+    <blockquote>Se una funzione non contiene frequenze più alte di W cicli al secondo, è completamente determinata dai suoi valori in punti distanti 1/(2W) secondi.</blockquote>
+    <figcaption><b>Claude Shannon</b>, «Communication in the Presence of Noise», 1949</figcaption>
+  </figure>
+  <div class="formula"><small>teorema del campionamento (Nyquist-Shannon)</small>f<sub>campionamento</sub> &gt; <span class="hl">2</span> × f<sub>massima</sub></div>
+  <aside class="notes">Traduzione nostra, leggermente abbreviata (nell'originale "f(t)" e "cps"), dal Teorema 1 dell'articolo di Shannon del 1949. L'idea era già nei lavori di Harry Nyquist (1928); per questo si parla di teorema di Nyquist-Shannon. Se si campiona troppo lentamente compaiono frequenze "fantasma" (aliasing), come le ruote delle auto che nei video sembrano girare al contrario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Vuoi registrare fedelmente suoni fino a 20 000 Hz. A quanto devi campionare, almeno?</h2></div>
+  <div class="poll" data-id="s-nyquist" data-tipo="quiz" data-risposta="C">
+    <ol><li>20 000 campioni al secondo</li><li>10 000 campioni al secondo</li><li>Più di 40 000 campioni al secondo</li><li>320 000 campioni al secondo</li></ol>
+    <p class="why">Servono più di 2 campioni per ogni oscillazione: più di 2 × 20 000 = 40 000 al secondo. Per questo il CD usa 44 100 Hz: copre fino a 22 050 Hz, con un po' di margine per i filtri.</p>
+  </div>
+  <aside class="notes">La A è l'errore più comune ("tanti campioni quante oscillazioni": vedresti sempre lo stesso punto dell'onda). La D moltiplica per 16 bit: confonde campioni e bit. Lo standard video usa 48 000 Hz per lo stesso motivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Valori reali</p><h2>Telefono, CD, studio</h2></div>
+  <table class="data">
+    <tr><th>Uso</th><th>Campionamento</th><th>Bit per campione</th><th>Canali</th></tr>
+    <tr><td>Telefonata tradizionale</td><td class="mono">8 000 Hz</td><td class="mono">8</td><td>1 (mono)</td></tr>
+    <tr><td>CD audio</td><td class="mono">44 100 Hz</td><td class="mono">16</td><td>2 (stereo)</td></tr>
+    <tr><td>Audio dei video</td><td class="mono">48 000 Hz</td><td class="mono">16 o 24</td><td>2 o più</td></tr>
+    <tr><td>Studio di registrazione</td><td class="mono">96 000 Hz</td><td class="mono">24</td><td>molti</td></tr>
+  </table>
+  <p class="small muted">16 bit = 65 536 livelli; 24 bit = 16 777 216 livelli, lo stesso numero dei colori a 24 bit.</p>
+  <aside class="notes">La telefonata a 8 kHz trasmette solo fino a circa 3,4 kHz: per questo al telefono "s" e "f" si confondono e la voce sembra metallica. Il telefono moderno in VoLTE o le app usano bande più larghe (voce HD). Lo studio usa campionamenti alti soprattutto per lavorare con margine durante il missaggio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Passi da 16 a 24 bit per campione. Che cosa migliora?</h2></div>
+  <div class="poll" data-id="s-bit" data-tipo="quiz" data-risposta="A">
+    <ol><li>Si possono distinguere suoni molto più deboli, con meno rumore</li><li>Si sentono frequenze più acute</li><li>Il suono diventa stereo</li><li>Il file pesa uguale ma suona meglio</li></ol>
+    <p class="why">I bit decidono quanti livelli di ampiezza ci sono: più livelli, gradini più piccoli e meno rumore di quantizzazione. Le frequenze più acute dipendono dalla frequenza di campionamento, non dai bit. E il file pesa il 50% in più.</p>
+  </div>
+  <aside class="notes">Misconcezione forte: "più bit = più acuti". Parallelo con le immagini: più bit per pixel danno più sfumature, non più pixel. Ogni bit in più raddoppia i livelli e vale circa 6 dB di gamma dinamica: 16 bit ≈ 96 dB, 24 bit ≈ 144 dB.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Campiona e quantizza un'onda in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>A1:D1: <b>t, Onda, Codice, Ricostruito</b>. In A2 scrivi 0, in A3 <code>=A2+1/16</code>; trascina fino ad A18 (t = 1).</li>
+      <li>B2 <code>=SEN(2*PI.GRECO()*A2)</code>: l'onda vera.</li>
+      <li>C2 <code>=ARROTONDA((B2+1)/2*7;0)</code>: il codice a 3 bit (da 0 a 7).</li>
+      <li>D2 <code>=C2/7*2-1</code>: il valore ricostruito. Trascina B2:D2 fino alla riga 18.</li>
+      <li>Grafico a linee di B e D. Salva come <b>campionamento.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella colonna C solo interi da 0 a 7; C = 7 per t = 0,25 e C = 0 per t = 0,75. La linea D segue l'onda «a scalini». Prova con <code>*255</code> al posto di <code>*7</code> (8 bit): gli scalini quasi spariscono.</div>
+  </div>
+  <aside class="notes">3 bit = 8 livelli: codici 0…7. Con 8 bit (255) bisogna cambiare anche D: =C2/255*2-1. Per chi finisce presto: colonna E con l'errore =B2-D2 e la funzione MAX(ASS(…)) per trovare l'errore massimo (≤ 1/7 ≈ 0,14 con 3 bit). Se il grafico non mostra gli scalini, scegliere il tipo "Linee" con linea a gradini nelle opzioni, oppure basta il confronto tra le due curve.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il peso di un audio</p><h2>Campioni × bit × canali × secondi</h2></div>
+  <div class="formula"><small>dimensione non compressa in byte</small>byte = f × <span class="hl">bit</span> × canali × secondi ÷ 8</div>
+  <div class="cols-2">
+    <div class="card"><h3>1 minuto di CD</h3><p class="mono">44 100 × 16 × 2 × 60 ÷ 8</p><p class="mono">= <b>10 584 000 byte</b></p><p class="muted">circa 10,6 MB al minuto</p></div>
+    <div class="card soft"><h3>Bitrate del CD</h3><p class="mono">44 100 × 16 × 2</p><p class="mono">= <b>1 411 200 bit/s</b></p><p class="muted">circa 1411 kbit/s; un MP3 a 128 kbit/s è 11 volte più leggero</p></div>
+  </div>
+  <aside class="notes">1 411 200 ÷ 128 000 = 11,0. Una canzone di 3 minuti e mezzo in qualità CD: 10,584 × 3,5 = circa 37 MB; in MP3 a 128 kbit/s: 128 000 × 210 ÷ 8 = 3 360 000 byte, circa 3,4 MB.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il calcolatore dei file audio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo foglio. A1:F1: <b>Uso, Hz, Bit, Canali, Secondi, Byte</b>; G1: <b>kbit/s</b>.</li>
+      <li>Righe: Telefonata 8000, 8, 1, 60 · CD 44100, 16, 2, 60 · Studio 96000, 24, 2, 60.</li>
+      <li>F2 <code>=B2*C2*D2*E2/8</code>, G2 <code>=B2*C2*D2/1000</code>.</li>
+      <li>Aggiungi una riga «Podcast in MP3» con bitrate 64 kbit/s e calcola il peso di un episodio di 30 minuti.</li>
+      <li>Salva come <b>peso-audio.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> telefonata 480 000 byte (64 kbit/s); CD 10 584 000 byte (1411,2 kbit/s); studio 34 560 000 byte (4608 kbit/s); podcast 64 000 × 1800 ÷ 8 = 14 400 000 byte.</div>
+  </div>
+  <aside class="notes">Per il podcast la formula cambia: byte = bitrate × secondi ÷ 8, perché il bitrate di un MP3 è già il risultato della compressione. Far notare: la telefonata tradizionale e il podcast hanno lo stesso bitrate (64 kbit/s), ma il podcast è compresso e suona molto meglio. Variante: colonna H con il peso in MiB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Compressione audio</p><h2>Togliere ciò che l'orecchio non sente</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Senza perdita</h3><p><b>FLAC</b>, ALAC: il file si dimezza circa e torna identico al CD.</p><p class="muted">WAV di solito non è compresso: contiene i campioni così come sono (PCM).</p></div>
+    <div class="card bad"><h3>Con perdita</h3><p><b>MP3</b>, <b>AAC</b>, <b>Opus</b>: un modello dell'udito (psicoacustica) scarta i suoni «coperti» da suoni più forti e quelli troppo acuti.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Videochiamate e note vocali usano spesso il codec <b>Opus</b>: la voce resta chiara anche a 16–32 kbit/s, quasi 50 volte meno del CD, e il ritardo è di pochi millisecondi.</p></div>
+  <aside class="notes">Storia: l'MP3 è stato sviluppato soprattutto al Fraunhofer Institut in Germania (Karlheinz Brandenburg). Brandenburg ha raccontato di aver usato più volte "Tom's Diner" di Suzanne Vega, voce sola, per mettere alla prova l'algoritmo. Il fattore "circa la metà" del FLAC dipende dalla musica. Opus è uno standard aperto (IETF, 2012).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni formato alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="s-formati">
+    <dt>WAV</dt><dd>Campioni PCM non compressi</dd>
+    <dt>FLAC</dt><dd>Compresso senza perdita, aperto</dd>
+    <dt>MP3</dt><dd>Con perdita, il più famoso, degli anni '90</dd>
+    <dt>AAC</dt><dd>Con perdita, usato negli MP4 e da molti servizi di streaming</dd>
+    <dt>MIDI</dt><dd>Non suoni ma note: quale strumento, quando, quanto forte</dd>
+  </dl>
+  <aside class="notes">MIDI è il "vettoriale" dei suoni: come l'SVG descrive forme invece di pixel, il MIDI descrive note invece di campioni. Pesa pochissimo, ma il risultato dipende dagli strumenti virtuali del dispositivo che lo suona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dalla tua voce al file: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="s-percorso">
+    <li>Le corde vocali fanno vibrare l'aria</li>
+    <li>La membrana del microfono trasforma la pressione in tensione elettrica</li>
+    <li>Un filtro elimina le frequenze troppo alte</li>
+    <li>L'ADC misura la tensione a intervalli regolari</li>
+    <li>Ogni misura viene arrotondata a un numero di n bit</li>
+    <li>Il codec comprime i numeri e li salva nel file</li>
+  </ol>
+  <aside class="notes">Il filtro (anti-aliasing) viene prima del campionamento: toglie le frequenze sopra la metà della frequenza di campionamento, che altrimenti diventerebbero frequenze fantasma. Per ascoltare si fa il percorso inverso: decodifica, DAC (convertitore digitale-analogico), amplificatore, altoparlante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Come «ascolta» un'intelligenza artificiale</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un riconoscitore vocale come Whisper, di OpenAI, ricampiona l'audio a <b>16 000 Hz</b>, poi lo trasforma in uno <b>spettrogramma</b>: una tabella con quanta energia c'è in ogni banda di frequenza, istante per istante. Per la rete neurale il suono diventa… un'immagine di numeri.</p></div>
+    <div class="stack">
+      <p>Gli stessi modelli possono anche imitare una voce da pochi secondi di registrazione.</p>
+      <div class="callout">Una telefonata con la voce di un parente che chiede soldi urgenti? Richiama tu il numero che conosci.</div>
+    </div>
+  </div>
+  <aside class="notes">Whisper (2022) usa audio a 16 kHz e uno spettrogramma log-Mel a 80 bande, come descritto nell'articolo che lo presenta. Le truffe con voce clonata sono documentate dalle forze dell'ordine di diversi paesi: il consiglio pratico è richiamare su un numero noto o concordare una parola d'ordine in famiglia. Collegamento con l'ultima lezione dell'unità (computer vision): immagini e suoni diventano tabelle di numeri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4416" data-aiuto="pensa al CD: migliaia di campioni al secondo e bit per campione">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la frequenza di campionamento del CD, in migliaia di hertz, senza decimali</li>
+      <li>3ª e 4ª cifra: quanti bit per campione usa il CD</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 44,1 kHz e 16 bit: il formato CD dal 1982.</div>
+  </div>
+  <aside class="notes">Codice: 4416. Domanda bonus per la squadra vincente: perché 44 100 e non 40 000? Margine per i filtri sopra i 20 kHz; il valore preciso viene anche dalle prime registrazioni digitali su videoregistratori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La frequenza di un suono si misura in <span class="blank" data-risposta="hertz|Hz"></span>.</p>
+    <p>Misurare l'onda a intervalli regolari si chiama <span class="blank" data-risposta="campionamento" style="--w:12ch"></span>.</p>
+    <p>Con 16 bit per campione ci sono <span class="blank" data-risposta="65536|65 536|65.536" style="--w:8ch"></span> livelli.</p>
+    <p>Per suoni fino a 10 000 Hz devo campionare a più di <span class="blank" data-risposta="20000|20 000|20.000" style="--w:8ch"></span> Hz.</p>
+    <p>Il formato audio compresso senza perdita più diffuso è il <span class="blank" data-risposta="FLAC"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: hertz (Hz), campionamento, 65 536, 20 000, FLAC.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Frequenza = altezza (Hz), ampiezza = volume</li>
+      <li>Campionamento: misure al secondo; quantizzazione: 2ⁿ livelli</li>
+      <li>Campiona a più del doppio della frequenza massima</li>
+    </ul>
+    <ul class="points">
+      <li>Byte = f × bit × canali × secondi ÷ 8</li>
+      <li>WAV non compresso, FLAC lossless, MP3/AAC/Opus lossy</li>
+      <li>MIDI: note, non suoni</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: laboratorio sui file audio con AudioMass.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dalle lettere ai numeri · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Dalle lettere<br>ai numeri</h1>
+  <p class="lead">Quando scrivi «Però costa 5 €» il computer salva solo numeri. Quali, e chi li ha decisi? ASCII, Unicode, UTF-8 ed emoji.</p>
+  <p class="meta"><span class="chip">ASCII</span><span class="chip">Unicode</span><span class="chip">UTF-8</span></p>
+  <aside class="notes">Ultima lezione dell'Unità 1. Prerequisiti: binario, esadecimale, il tipo char del laboratorio sul debugger. Obiettivi: spiegare che cos'è una codifica di caratteri; usare la tabella ASCII; distinguere Unicode (i numeri dei caratteri) e UTF-8 (come diventano byte); calcolare quanti byte occupa un testo; capire emoji e token dei modelli linguistici. Durata indicativa: 2 ore. Strumenti: console del browser, Blocco note, HexEd.it.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quante emoji mandi in un giorno, più o meno?</h2></div>
+  <div class="poll" data-id="caratteri-emoji-giorno">
+    <ol><li>Quasi nessuna</li><li>Da 1 a 20</li><li>Da 20 a 100</li><li>Più di 100</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Domanda da lasciare aperta: "per il telefono un'emoji è un'immagine o una lettera?" Risposta a metà lezione: è un carattere, come la A, con un suo numero; il disegno lo sceglie il font del telefono, per questo la stessa emoji appare diversa su Android e iPhone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea</p><h2>Una codifica è una tabella condivisa</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Testo</h3><p class="mono" style="font-size:46px">C i a o</p></div>
+    <div class="card fill"><h3>Tabella</h3><p>ogni carattere ↔ un numero</p></div>
+    <div class="card soft"><h3>Numeri</h3><p class="mono" style="font-size:40px">67 105 97 111</p></div>
+  </div>
+  <ul class="points">
+    <li>Il numero di un carattere si chiama <b>codice</b></li>
+    <li>Chi scrive e chi legge devono usare la <b>stessa tabella</b>, altrimenti escono simboli strani</li>
+    <li>L'idea è antica: il codice Morse (1838) e il codice Baudot dei telescriventi (1870)</li>
+  </ul>
+  <aside class="notes">Una codifica è una convenzione, non una legge di natura: qualcuno ha deciso che la C vale 67. Morse usa punti e linee di lunghezza variabile; Baudot usava 5 bit per carattere, con 32 combinazioni e un tasto per passare da lettere a cifre. Domanda: "con 5 bit quante lettere al massimo?" 32: troppo poche per maiuscole, minuscole e cifre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">1963</p><h2>ASCII: 7 bit, 128 caratteri</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Codici</th><th>Che cosa contengono</th><th>Esempi</th></tr>
+      <tr><td class="mono">0–31</td><td>caratteri di controllo</td><td>a capo (10), tab (9)</td></tr>
+      <tr><td class="mono">32</td><td>lo spazio</td><td>" "</td></tr>
+      <tr><td class="mono">48–57</td><td>le cifre</td><td>'0' = 48, '9' = 57</td></tr>
+      <tr><td class="mono">65–90</td><td>maiuscole</td><td>'A' = 65, 'Z' = 90</td></tr>
+      <tr><td class="mono">97–122</td><td>minuscole</td><td>'a' = 97, 'z' = 122</td></tr>
+    </table>
+    <div class="card soft"><h3>Il trucco dei 32</h3><p>'A' = <code>100 0001</code></p><p>'a' = <code>110 0001</code></p><p class="muted">Maiuscola e minuscola differiscono di 32: un solo bit.</p></div>
+  </div>
+  <div class="callout">ASCII = American Standard Code for Information Interchange. Niente accenti, niente €: era pensato per l'inglese.</div>
+  <aside class="notes">Lo standard ASCII è del 1963, rivisto nel 1967. 7 bit: 2⁷ = 128 codici. Nei byte da 8 bit il primo bit restava a 0. Collegamento con Java: (int) 'a' = 97, (char) 66 = 'B', visti nel laboratorio sul debugger. Attenzione: la cifra '7' non vale 7 ma 55; per questo Java distingue il carattere '7' dal numero 7.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il computer ordina le parole per codice. Quale viene per prima?</h2></div>
+  <div class="poll" data-id="caratteri-ordine" data-tipo="quiz" data-risposta="D">
+    <ol><li>zebra</li><li>Zebra</li><li>albero</li><li>Albero</li></ol>
+    <p class="why">Si confrontano i codici: 'A' = 65, 'Z' = 90, 'a' = 97, 'z' = 122. L'ordine è Albero, Zebra, albero, zebra: tutte le maiuscole vengono prima di tutte le minuscole.</p>
+  </div>
+  <aside class="notes">Risposta D. Il tranello: molti scelgono "albero" pensando all'ordine del dizionario. Chiedere poi: "dove finisce Zebra rispetto ad albero?" Prima, perché 90 &lt; 97. Per questo i programmi seri usano ordinamenti "linguistici" che ignorano maiuscole e accenti (in Java la classe Collator). Si vede anche nei nomi dei file ordinati da alcuni programmi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Codici ASCII nella console del browser</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Premi <b>F12</b>, scheda <b>Console</b>. Prova una riga alla volta:</p>
+      <pre class="code" style="font-size:27px"><span class="s">"A"</span>.charCodeAt(0)
+<span class="s">"TPSI"</span>.split(<span class="s">""</span>).map(c =&gt; c.charCodeAt(0))
+String.fromCharCode(66, 114, 97, 118, 105)
+<span class="s">"a"</span>.charCodeAt(0) - <span class="s">"A"</span>.charCodeAt(0)</pre>
+      <p class="small">Poi trova i codici del tuo nome e scrivi un messaggio segreto per un compagno. Salva tutto in <b>ascii-nome.txt</b>.</p>
+    </div>
+    <div class="check"><b>Controllo:</b> 65 · [84, 80, 83, 73] · "Bravi" · 32</div>
+  </div>
+  <aside class="notes">charCodeAt dà il codice del carattere nella posizione indicata; String.fromCharCode fa il contrario. Il compagno decodifica il messaggio con fromCharCode. Fallback senza console: una tabella ASCII stampata, oppure in Java System.out.println((int) 'A') in OnlineGDB. Far notare che 32 è la differenza maiuscola/minuscola vista prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il caos degli anni Ottanta e Novanta</p><h2>8 bit, mille tabelle diverse</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Con l'ottavo bit i codici da 128 a 255 diventano liberi. Ogni paese li riempie a modo suo: <b>ISO 8859-1</b> per l'Europa occidentale, Windows-1252, tabelle per il greco, il cirillico…</p>
+      <p class="muted small">In ISO 8859-1 la «è» ha codice 232. In una tabella cirillica, 232 è una lettera russa.</p>
+    </div>
+    <div class="card bad"><h3>Il mojibake</h3><p>Testo scritto con una tabella e letto con un'altra:</p><p class="mono" style="font-size:44px">caffÃ¨</p><p class="muted small">È «caffè» salvato in UTF-8 e aperto come ISO 8859-1.</p></div>
+  </div>
+  <aside class="notes">Mojibake è una parola giapponese (文字化け, "trasformazione dei caratteri"). Esempio verificato: è in UTF-8 sono i byte C3 A8; letti in ISO 8859-1, C3 = Ã e A8 = ¨. Probabilmente gli studenti lo hanno visto in qualche e-mail o sottotitolo. Domanda: "come si risolve?" Serve una tabella unica per tutto il mondo: Unicode.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una tabella per tutto il mondo</p><h2>Unicode: un numero per ogni carattere</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><p class="num">A</p><p class="mono">U+0041</p><p class="muted small">65, come in ASCII</p></div>
+    <div class="card soft"><p class="num">è</p><p class="mono">U+00E8</p><p class="muted small">232</p></div>
+    <div class="card soft"><p class="num">€</p><p class="mono">U+20AC</p><p class="muted small">8364</p></div>
+    <div class="card soft"><p class="num">ω</p><p class="mono">U+03C9</p><p class="muted small">omega greca</p></div>
+  </div>
+  <ul class="points">
+    <li>Il numero si chiama <b>code point</b> e si scrive U+ seguito dall'esadecimale</li>
+    <li>Spazio per 1 114 112 code point; oggi ne sono assegnati oltre 150 000</li>
+    <li>Più di 160 sistemi di scrittura, simboli matematici, musicali… ed emoji</li>
+  </ul>
+  <aside class="notes">Unicode è gestito dal Consorzio Unicode (fondato nel 1991); la prima versione è del 1991. I primi 128 code point coincidono con ASCII e i primi 256 con ISO 8859-1: per questo è = 232 in entrambi. 1 114 112 = 17 × 65 536 (da U+0000 a U+10FFFF). I numeri esatti di caratteri e scritture crescono a ogni versione annuale: per dati aggiornati, unicode.org. Unicode dice solo QUALE numero ha un carattere, non come salvarlo in byte: è il compito di UTF-8.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Dove nasce Unicode</h2></div>
+  <figure class="citazione">
+    <blockquote>Unicode vuole rispondere al bisogno di una codifica del testo mondiale che funzioni e sia affidabile.</blockquote>
+    <figcaption><b>Joseph D. Becker</b>, ingegnere della Xerox, nella proposta "Unicode 88", 1988</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Ogni anno il Consorzio Unicode approva nuovi caratteri: scritture antiche, simboli, e anche le emoji proposte dal pubblico. Chiunque può presentare una proposta, ma deve dimostrare che sarà usata davvero.</p></div>
+  <aside class="notes">Traduzione nostra da "Unicode is intended to address the need for a workable, reliable world text encoding" (J. Becker, Unicode 88, 29 agosto 1988). Nella stessa proposta Becker descrive Unicode come un "ASCII a corpo largo" esteso a 16 bit; poi si è visto che 16 bit non bastavano e lo spazio è arrivato fino a U+10FFFF. Le proposte di nuove emoji si inviano al Consorzio con un modulo pubblico; molte vengono respinte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da code point a byte</p><h2>UTF-8: da 1 a 4 byte, secondo il bisogno</h2></div>
+  <table class="data compact">
+    <tr><th>Code point</th><th>Byte</th><th>Schema dei bit</th><th>Esempi</th></tr>
+    <tr><td class="mono">U+0000 – U+007F</td><td>1</td><td class="mono">0xxxxxxx</td><td>A, 7, spazio: identici ad ASCII</td></tr>
+    <tr><td class="mono">U+0080 – U+07FF</td><td>2</td><td class="mono">110xxxxx 10xxxxxx</td><td>è, à, ω, lettere cirilliche</td></tr>
+    <tr><td class="mono">U+0800 – U+FFFF</td><td>3</td><td class="mono">1110xxxx 10xxxxxx 10xxxxxx</td><td>€, cinese, giapponese</td></tr>
+    <tr><td class="mono">U+10000 – U+10FFFF</td><td>4</td><td class="mono">11110xxx 10xxxxxx ×3</td><td>emoji, scritture antiche</td></tr>
+  </table>
+  <div class="callout">Il primo byte dice quanti byte seguono; quelli dopo iniziano sempre con <code>10</code>. Un testo ASCII è già un testo UTF-8 valido.</div>
+  <aside class="notes">Storia: UTF-8 fu progettato da Ken Thompson e Rob Pike (Bell Labs, gli stessi ambienti di Unix) nel settembre 1992, schizzandolo su una tovaglietta di carta in una tavola calda del New Jersey, come racconta Pike in una e-mail del 2003. Oggi circa il 98% dei siti web usa UTF-8 (statistiche W3Techs). Vantaggio chiave: compatibile con ASCII e senza ambiguità su dove inizia un carattere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">A mano</p><h2>La «è» diventa C3 A8</h2></div>
+  <ol class="steps small">
+    <li>Code point: U+00E8 = 232, sta tra U+0080 e U+07FF → servono <b>2 byte</b></li>
+    <li>In binario su 11 bit: <code>000 1110 1000</code></li>
+    <li>Dividi: i primi 5 bit <code>00011</code>, gli ultimi 6 bit <code>101000</code></li>
+    <li>Inseriscili nello schema <code>110xxxxx 10xxxxxx</code></li>
+  </ol>
+  <div class="formula" style="font-size:48px"><small>Risultato</small>110<span class="hl">00011</span> 10<span class="hl">101000</span> = 1100 0011 1010 1000 = <span class="hl">C3 A8</span></div>
+  <aside class="notes">Fare insieme anche € = U+20AC: 16 bit 0010 0000 1010 1100, 3 byte con schema 1110xxxx 10xxxxxx 10xxxxxx → 1110 0010, 10 000010, 10 101100 → E2 82 AC. Ritroveremo questi byte nel laboratorio con HexEd.it.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Guarda i byte di un file di testo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>Blocco note</b> e scrivi esattamente: <b>Però costa 5 €</b></li>
+      <li>Salva come <b>caratteri.txt</b>, codifica <b>UTF-8</b>.</li>
+      <li>Tasto destro sul file › <b>Proprietà</b>: annota la dimensione in byte.</li>
+      <li>Apri <b>hexed.it</b>, trascina il file nella pagina e cerca i byte di ò e di €.</li>
+      <li>Annota in <b>caratteri.txt</b>, sotto la frase: caratteri, byte e i codici trovati.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 14 caratteri ma <b>17 byte</b>. ò = <code>C3 B2</code>, € = <code>E2 82 AC</code>, tutti gli altri un byte solo (P = <code>50</code>).</div>
+  </div>
+  <aside class="notes">12 caratteri ASCII da 1 byte + ò da 2 + € da 3 = 17. Se il file risulta di 20 byte è stato salvato "UTF-8 con BOM": i primi tre byte EF BB BF sono un marcatore all'inizio del file. Prova in più: salvare come ANSI (Windows-1252) e confrontare: ò e € diventano un byte ciascuno (F2 e 80), totale 14 byte, ma il file non è più leggibile ovunque. HexEd.it lavora nel browser e non carica il file su un server. Fallback: nella console new TextEncoder().encode("Però costa 5 €").length restituisce 17.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quanti byte occupa in UTF-8 la parola «città»?</h2></div>
+  <div class="poll" data-id="caratteri-citta" data-tipo="quiz" data-risposta="B">
+    <ol><li>5</li><li>6</li><li>10</li><li>7</li></ol>
+    <p class="why">c, i, t, t occupano un byte ciascuno; la «à» (U+00E0) ne occupa due: 4 + 2 = 6 byte, anche se i caratteri sono 5.</p>
+  </div>
+  <aside class="notes">Risposta B. La A confonde caratteri e byte. La C pensa che ogni carattere occupi 2 byte (così era in UCS-2, l'antenato di UTF-16). La D è il conto di chi crede che la à occupi 3 byte. Byte: 63 69 74 74 C3 A0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le emoji</p><h2>Un'emoji può essere fatta di più caratteri</h2></div>
+  <table class="data compact">
+    <tr><th>Emoji</th><th>Code point</th><th>Byte UTF-8</th></tr>
+    <tr><td>pollice in su</td><td class="mono">U+1F44D</td><td class="mono">4 · F0 9F 91 8D</td></tr>
+    <tr><td>pollice in su, pelle media</td><td class="mono">U+1F44D U+1F3FD</td><td class="mono">8</td></tr>
+    <tr><td>famiglia uomo, donna, bambina</td><td class="mono">U+1F468 U+200D U+1F469 U+200D U+1F467</td><td class="mono">18</td></tr>
+  </table>
+  <ul class="points small">
+    <li>Il colore della pelle è un <b>modificatore</b>: un secondo code point subito dopo</li>
+    <li>Le famiglie sono emoji unite dal carattere invisibile <b>ZWJ</b> (U+200D, "zero width joiner")</li>
+    <li>Il disegno lo decide il font del sistema: lo stesso code point è diverso su Android e iPhone</li>
+  </ul>
+  <aside class="notes">Se un telefono vecchio non conosce la sequenza unita, mostra le singole emoji una accanto all'altra. Conto per la famiglia: 4 + 3 + 4 + 3 + 4 = 18 byte (lo ZWJ sta nella fascia da 3 byte). In Java un char è un'unità UTF-16 da 16 bit: un'emoji come il pollice occupa 2 char, quindi "stringa".length() conta 2. Lo vedremo nel laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Quanto è lunga un'emoji?</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Nella console (F12). Per scrivere un'emoji premi <b>Windows + .</b> (punto) e scegli il pollice in su.</p>
+      <pre class="code" style="font-size:27px"><span class="s">"ciao"</span>.length
+<span class="s">"👍"</span>.length
+[...<span class="s">"👍"</span>].length
+<span class="s">"👍"</span>.codePointAt(0).toString(16)
+<span class="k">new</span> TextEncoder().encode(<span class="s">"👍"</span>).length</pre>
+      <p class="small">Aggiungi i risultati a <b>caratteri.txt</b>.</p>
+    </div>
+    <div class="check"><b>Controllo:</b> 4 · <b>2</b> (unità UTF-16, come i char di Java) · 1 (un code point) · "1f44d" · 4 byte in UTF-8</div>
+  </div>
+  <aside class="notes">Tre misure diverse dello stesso testo: unità UTF-16 (length), code point (spread [...s]) e byte UTF-8 (TextEncoder). Per la famiglia: length 8, code point 5, byte 18. Morale: "quanti caratteri?" non ha una sola risposta; i programmi che contano i caratteri (per esempio i limiti dei social) devono scegliere quale misura usare. Il pannello emoji con Windows + . esiste da Windows 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni carattere al suo codice</h2></div>
+  <dl class="puzzle-abbina" data-id="caratteri-abbina">
+    <dt>A</dt><dd>65 (U+0041)</dd>
+    <dt>a</dt><dd>97 (U+0061)</dd>
+    <dt>0 (la cifra)</dt><dd>48 (U+0030)</dd>
+    <dt>spazio</dt><dd>32 (U+0020)</dd>
+    <dt>è</dt><dd>232 (U+00E8)</dd>
+    <dt>€</dt><dd>8364 (U+20AC)</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti, senza console. Il tranello è la cifra 0: molti la abbinano a "0" e non a 48. Verifica: 0x41 = 65, 0x61 = 97, 0x30 = 48, 0x20 = 32, 0xE8 = 232, 0x20AC = 2·4096 + 0·256 + 10·16 + 12 = 8364.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Come leggono il testo le intelligenze artificiali</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Token, non lettere</h3><p>Un modello linguistico non vede lettere: il testo viene trasformato in byte UTF-8 e poi diviso in <b>token</b>, pezzi di parola presi da un vocabolario.</p><p class="small">Le parole inglesi comuni sono spesso un token solo; l'italiano, gli accenti e le emoji ne richiedono di più. Ecco perché a volte un'AI sbaglia a contare le lettere di una parola.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Lettere sosia</h3><p>La «а» cirillica (U+0430) è identica alla «a» latina (U+0061). Un truffatore può registrare un sito che sembra apple.com ma usa lettere cirilliche.</p><p class="small">Per difendersi i browser possono mostrare questi indirizzi nella forma tecnica «xn--…» (Punycode).</p></div>
+  </div>
+  <aside class="notes">Tokenizzazione: dal 2019 (GPT-2) molti modelli usano il "byte-level BPE", che parte proprio dai byte UTF-8 e unisce le coppie più frequenti. Demo del docente sulla LIM con una pagina pubblica di tokenizer (per esempio quella di OpenAI, platform.openai.com/tokenizer; verificare prima che si apra senza login): confrontare "the cat" con "il gatto" e con una riga di emoji. Attacco omografo: dimostrato nel 2017 dal ricercatore Xudong Zheng con un dominio cirillico che il browser mostrava come apple.com; i browser hanno poi cambiato le regole di visualizzazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Il codice è nascosto nella tabella ASCII</h2></div>
+  <div class="puzzle-codice" data-risposta="4817" data-aiuto="la cifra 0 ha codice 48, la cifra 1 ha codice 49…">
+    <p>Un messaggio è arrivato come quattro byte in decimale:</p>
+    <p class="mono" style="font-size:52px;letter-spacing:.08em">52 &nbsp;56 &nbsp;49 &nbsp;55</p>
+    <p class="small">Sono caratteri ASCII. Decodificali: quello è il codice del lucchetto.</p>
+    <div class="premio"><b>Aperto!</b> 52 = '4', 56 = '8', 49 = '1', 55 = '7'. Le cifre come caratteri non valgono il loro numero: '0' parte da 48.</div>
+  </div>
+  <aside class="notes">Codice 4817. Il tranello è proprio questo: i caratteri cifra hanno codici da 48 a 57. Chi conosce la tabella risolve in 30 secondi; chi no può usare la console con String.fromCharCode(52,56,49,55). Squadre da 3-4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il codice ASCII usa <span class="blank" data-risposta="7|sette"></span> bit e la lettera A vale <span class="blank" data-risposta="65"></span>.</p>
+    <p>In Unicode il numero di un carattere si chiama code <span class="blank" data-risposta="point"></span>.</p>
+    <p>In UTF-8 la «è» occupa <span class="blank" data-risposta="2|due"></span> byte, l'euro ne occupa <span class="blank" data-risposta="3|tre"></span>.</p>
+    <p>I modelli linguistici dividono il testo in <span class="blank" data-risposta="token|tokens"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 7, 65; point; 2, 3; token.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Codifica = tabella condivisa carattere ↔ numero</li>
+      <li>ASCII: 7 bit, 128 caratteri, A = 65, a = 97</li>
+      <li>Tabelle diverse a 8 bit → mojibake</li>
+    </ul>
+    <ul class="points">
+      <li>Unicode: un code point per ogni carattere</li>
+      <li>UTF-8: da 1 a 4 byte, compatibile con ASCII</li>
+      <li>Caratteri, code point e byte sono tre conti diversi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Il messaggio in byte" su Novaula. Con questa lezione si chiude l'Unità 1: annunciare la simulazione della verifica, disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

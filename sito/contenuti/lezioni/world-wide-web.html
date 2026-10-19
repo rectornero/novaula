@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il World Wide Web · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Il World Wide Web</h1>
+  <p class="lead">Una proposta "vaga ma entusiasmante" scritta al CERN nel 1989 è diventata il posto dove passi metà della giornata. Come arriva davvero una pagina sul tuo schermo?</p>
+  <aside class="notes">Obiettivi: distinguere internet e web; conoscere la storia del web (Berners-Lee, CERN, 1989-1993); capire il modello client/server; leggere le parti di un URL; capire richiesta e risposta HTTP e i codici di stato principali; osservare il traffico con la scheda Network dei DevTools; sapere come funziona un motore di ricerca. Durata indicativa: 2 ore. Servono i PC del laboratorio con Chrome, Edge o Firefox (F12 deve funzionare: verificare che i DevTools non siano bloccati dalle policy della scuola).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Internet e il web, secondo te, sono…</h2></div>
+  <div class="poll" data-id="www-internet-web">
+    <ol><li>La stessa cosa con due nomi</li><li>Il web è una parte di internet</li><li>Internet è una parte del web</li><li>Due cose che non c'entrano tra loro</li></ol>
+  </div>
+  <aside class="notes">Sondaggio a caldo, senza svelare la risposta: la slide successiva la chiarisce. Di solito la classe si divide tra A e B. Chiedere a chi ha votato A: "WhatsApp è web? E la posta elettronica?". Risposta corretta: B, il web è uno dei servizi che viaggiano su internet.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due cose diverse</p><h2>Internet è la strada, il web è uno dei veicoli</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Internet</h3><ul class="points"><li>Una <b>rete di reti</b>: cavi, fibre, antenne, router</li><li>Nasce da ARPANET (1969); dal 1983 tutti parlano <b>TCP/IP</b></li><li>Trasporta pacchetti di dati, senza sapere che cosa contengono</li></ul></div>
+    <div class="card"><h3>World Wide Web</h3><ul class="points"><li>Un <b>servizio</b> che usa internet</li><li>Pagine collegate da <b>link</b>, ognuna con un indirizzo (URL)</li><li>Nasce al CERN tra il 1989 e il 1991</li></ul></div>
+  </div>
+  <div class="callout">Sulla stessa internet viaggiano anche la posta elettronica, le videochiamate, i giochi online, gli aggiornamenti del sistema operativo.</div>
+  <aside class="notes">Analogia: internet è la rete stradale, il web è il servizio di consegna di pagine (come i corrieri), la posta elettronica è un altro servizio sulla stessa strada. ARPANET: primo collegamento ottobre 1969; il passaggio di ARPANET a TCP/IP è del 1° gennaio 1983. Il web è del 1989 (proposta) e 1991 (apertura al pubblico): internet esisteva da vent'anni. Molte app (anche WhatsApp in parte) usano tecnologie del web dietro le quinte: la distinzione è concettuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Marzo 1989: una proposta al CERN</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Al CERN di Ginevra lavorano migliaia di fisici. Le informazioni si perdono: chi se ne va porta via quello che sa. <b>Tim Berners-Lee</b>, 33 anni, propone un sistema di documenti collegati tra loro con l'<b>ipertesto</b>.</p>
+      <figure class="citazione">
+        <blockquote>Vago, ma entusiasmante…</blockquote>
+        <figcaption><b>Mike Sendall</b>, capo di Berners-Lee, a matita sulla prima pagina della proposta, 1989</figcaption>
+      </figure>
+    </div>
+    <div class="card night"><p class="kicker">Il documento</p><h3>"Information Management: A Proposal"</h3><p class="muted">Non fu approvato ufficialmente. Sendall però gli lasciò il tempo per provarci su un computer NeXT.</p></div>
+  </div>
+  <aside class="notes">Fonte: la copia della proposta conservata al CERN porta l'annotazione a mano "Vague but exciting..." di Mike Sendall (traduzione nostra). Il testo della proposta è sul sito del W3C (w3.org/History/1989/proposal.html). Berners-Lee è nato nel 1955. Nel 1990 la proposta fu riscritta con Robert Cailliau. Spunto: anche le grandi idee all'inizio sembrano vaghe; serve qualcuno che dia tempo e fiducia. Domanda alla classe: "Che problema voleva risolvere? Vi sembra risolto oggi?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle a squadre</p><h2>Metti in ordine la nascita del web</h2></div>
+  <ol class="puzzle-ordina" data-id="www-storia">
+    <li>Berners-Lee scrive la proposta sulla gestione delle informazioni</li>
+    <li>Al CERN funzionano il primo server web e il primo browser, su un NeXT</li>
+    <li>Il progetto viene annunciato in pubblico su un gruppo di discussione</li>
+    <li>Il CERN rende il software del web libero per tutti, senza diritti</li>
+    <li>Nasce il W3C, il consorzio che scrive gli standard del web</li>
+    <li>Il W3C pubblica la prima versione dei CSS</li>
+  </ol>
+  <aside class="notes">Date: proposta marzo 1989; primo server e browser (chiamato WorldWideWeb) a fine 1990; annuncio sul newsgroup alt.hypertext il 6 agosto 1991; il CERN mette il software nel pubblico dominio il 30 aprile 1993 (decisione chiave: nessuno paga royalty, per questo il web si diffonde); W3C fondato nel 1994 al MIT; CSS1 raccomandazione W3C nel dicembre 1996 (lo vedremo nella lezione sui CSS). Gara a squadre: 2 minuti, vince chi controlla per primo con zero errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Client e server</p><h2>Che cosa succede quando premi Invio</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>DNS</h3><p class="small">Il browser chiede l'indirizzo IP di <code>it.wikipedia.org</code>.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Richiesta</h3><p class="small">Il <b>client</b> (il browser) manda una richiesta HTTP al server.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Risposta</h3><p class="small">Il <b>server</b> risponde con un codice e il file HTML.</p></div>
+    <div class="card soft"><p class="num">4</p><h3>Disegno</h3><p class="small">Il browser legge l'HTML, chiede immagini e stili, disegna la pagina.</p></div>
+  </div>
+  <p class="lead">Il client <b>chiede</b>, il server <b>risponde</b>. Il server non manda mai niente se nessuno glielo chiede.</p>
+  <aside class="notes">Il DNS (Domain Name System) è la rubrica di internet: trasforma il nome in un numero IP. Il passo 4 genera molte altre richieste: ogni immagine, foglio di stile e script è una richiesta separata. Lo vedremo con la scheda Network. In realtà prima di HTTP c'è anche la connessione TCP e, con HTTPS, la negoziazione TLS: dettagli che vedranno in Sistemi e reti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Prima di mandare la richiesta HTTP, il browser deve…</h2></div>
+  <div class="poll" data-id="www-dns" data-tipo="quiz" data-risposta="B">
+    <ol><li>scaricare la pagina da Google</li><li>trovare l'indirizzo IP del server con il DNS</li><li>cercare la pagina nel disco del computer</li><li>chiedere il permesso al provider internet</li></ol>
+    <p class="why">I computer in rete si trovano con un numero, l'indirizzo IP. Il nome scritto nella barra (it.wikipedia.org) va tradotto in IP dal DNS, poi il browser può contattare il server.</p>
+  </div>
+  <aside class="notes">Il distrattore A è frequente: molti pensano che tutto passi da Google perché partono sempre da una ricerca. Il motore di ricerca serve solo a trovare l'indirizzo; poi il browser parla direttamente con il server del sito. Il C ha un fondo di verità (la cache del browser), ma la pagina non c'è finché non la si è scaricata almeno una volta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Anatomia di un indirizzo</p><h2>Ogni pezzo di un URL ha un lavoro</h2></div>
+  <div class="formula"><small>URL · Uniform Resource Locator</small><span class="hl">https</span>://<span class="hl">it.wikipedia.org</span>/wiki/CERN?uselang=it#Storia</div>
+  <table class="data compact">
+    <tr><th>Parte</th><th>Esempio</th><th>A che cosa serve</th></tr>
+    <tr><td>Protocollo</td><td class="mono">https</td><td>Come parlano client e server (HTTP cifrato)</td></tr>
+    <tr><td>Host (dominio)</td><td class="mono">it.wikipedia.org</td><td>Quale server contattare</td></tr>
+    <tr><td>Percorso</td><td class="mono">/wiki/CERN</td><td>Quale risorsa chiedere a quel server</td></tr>
+    <tr><td>Query</td><td class="mono">?uselang=it</td><td>Parametri in più, coppie nome=valore</td></tr>
+    <tr><td>Frammento</td><td class="mono">#Storia</td><td>Un punto della pagina; resta nel browser</td></tr>
+  </table>
+  <aside class="notes">La porta è sottintesa: 443 per https, 80 per http. Si potrebbe scrivere https://it.wikipedia.org:443/wiki/CERN e funzionerebbe uguale. Il frammento (#Storia) non viene mai inviato al server: lo usa solo il browser per scorrere fino al punto giusto (lo useremo con i link interni nella lezione 3). Dominio: .org è il dominio di primo livello, wikipedia il secondo livello, it un sottodominio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Smonta un URL con la console del browser</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Chrome o Edge, premi <b>F12</b> e scegli la scheda <b>Console</b>.</li>
+      <li>Scrivi questa riga e premi Invio:<br><code style="font-size:26px">u = new URL("https://it.wikipedia.org/wiki/CERN?uselang=it#Storia")</code></li>
+      <li>Scrivi uno alla volta: <code>u.protocol</code>, <code>u.hostname</code>, <code>u.pathname</code>, <code>u.search</code>, <code>u.hash</code>, <code>u.port</code>.</li>
+      <li>Copia i sei risultati in un file di testo <b>url-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ottieni <code>https:</code>, <code>it.wikipedia.org</code>, <code>/wiki/CERN</code>, <code>?uselang=it</code>, <code>#Storia</code>. E <code>u.port</code>? Una stringa vuota: la porta 443 è quella predefinita di https.</div>
+  </div>
+  <aside class="notes">Se Chrome mostra l'avviso sull'incollare codice nella console, gli studenti devono scrivere a mano oppure digitare "allow pasting" (o "consenti incollamento" nella versione italiana) come indicato: è una protezione contro le truffe, vale la pena spiegarla. Variante veloce: provare un URL con :8080 e vedere che u.port restituisce "8080". Alternativa se i DevTools sono bloccati: fare l'esercizio su carta con tre URL scritti alla lavagna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il protocollo HTTP</p><h2>Una richiesta, una risposta: sono solo testo</h2></div>
+  <div class="cols-2">
+    <pre class="code"><span class="c">// richiesta del client</span>
+<span class="k">GET</span> /wiki/CERN HTTP/1.1
+Host: it.wikipedia.org
+User-Agent: Mozilla/5.0 …
+Accept: text/html</pre>
+    <pre class="code"><span class="c">// risposta del server</span>
+HTTP/1.1 <span class="hl">200 OK</span>
+Content-Type: text/html
+Content-Length: 182344
+
+<span class="s">&lt;!DOCTYPE html&gt;</span>
+<span class="s">&lt;html lang="it"&gt;…</span></pre>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche quando scrivi a un chatbot dal browser, ogni messaggio parte come una richiesta HTTP (di solito <b>POST</b>) verso un server; la risposta arriva a pezzi, parola dopo parola, sulla stessa connessione. Il protocollo è lo stesso del 1991, cambiano i dati.</p></div>
+  <aside class="notes">GET chiede una risorsa, POST invia dati (un modulo, un messaggio). Content-Length è un esempio: la dimensione reale dipende dalla pagina. Oggi i siti grandi usano HTTP/2 o HTTP/3, che trasportano le stesse informazioni in formato binario: nei DevTools comparirà "h2" o "h3" nella colonna Protocol. Lo streaming delle risposte dei chatbot usa di solito i Server-Sent Events, una risposta HTTP che resta aperta e manda il testo un po' alla volta. HTTPS = HTTP dentro una connessione cifrata con TLS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni codice di stato al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="www-codici">
+    <dt>200</dt><dd>Tutto bene, ecco la risorsa</dd>
+    <dt>301</dt><dd>La pagina si è spostata per sempre a un altro indirizzo</dd>
+    <dt>304</dt><dd>Non è cambiata: usa la copia che hai già</dd>
+    <dt>404</dt><dd>Questa risorsa non esiste sul server</dd>
+    <dt>500</dt><dd>Il server ha avuto un errore suo</dd>
+  </dl>
+  <aside class="notes">Regola della prima cifra: 2xx successo, 3xx reindirizzamento, 4xx errore del client (hai chiesto qualcosa di sbagliato), 5xx errore del server. Il 304 Not Modified si vede ricaricando una pagina già visitata: il browser chiede "è cambiata?" e il server risponde "no, usa la tua copia" senza rimandare il file. Curiosità: il codice 418 "I'm a teapot" nasce da un pesce d'aprile del 1998 (RFC 2324).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Spia il traffico con la scheda Network</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri una scheda nuova, premi <b>F12</b>, scegli <b>Network</b> (Rete) e spunta <b>Disable cache</b>.</li>
+      <li>Vai su <b>info.cern.ch</b>: in basso leggi il numero di richieste e i kB trasferiti.</li>
+      <li>Ora vai su <b>it.wikipedia.org/wiki/CERN</b> e rileggi gli stessi due numeri.</li>
+      <li>Clicca sulla prima riga: in <b>Headers</b> trova Request Method e Status Code.</li>
+      <li>Annota tutto in <b>url-cognome.txt</b>, sotto l'esercizio di prima.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il primo sito del web chiede pochissime risorse; la pagina di Wikipedia fa decine di richieste (immagini, CSS, script). La prima riga ha metodo <b>GET</b> e stato <b>200</b>.</div>
+  </div>
+  <aside class="notes">info.cern.ch è la copia ripristinata dal CERN del primo sito web. La colonna Type distingue document, stylesheet, script, img, font. Far confrontare i kB: anche una pagina di testo moderna pesa centinaia di kB o più, la pagina del 1991 pochi kB. Se compare un 301 o 307 come prima riga è un reindirizzamento da http a https: ottima occasione per ripassare i 3xx. Variante: togliere la spunta Disable cache, ricaricare e cercare i 304 o "(memory cache)". Se un sito è bloccato dal filtro della scuola, usare www.w3.org.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il lucchetto accanto all'indirizzo significa che…</h2></div>
+  <div class="poll" data-id="www-lucchetto" data-tipo="quiz" data-risposta="D">
+    <ol><li>il sito è sicuro e onesto</li><li>il sito è stato controllato da Google</li><li>il sito non contiene virus</li><li>la comunicazione tra browser e server è cifrata</li></ol>
+    <p class="why">HTTPS cifra i dati in viaggio e garantisce che stai parlando con il server di quel dominio. Non dice niente sulle intenzioni di chi lo gestisce: anche i siti truffa hanno il lucchetto.</p>
+  </div>
+  <aside class="notes">Misconcezione classica e pericolosa: la maggior parte dei siti di phishing oggi usa HTTPS, perché i certificati sono gratuiti (Let's Encrypt, dal 2015-2016). Chrome ha perfino sostituito l'icona del lucchetto con un'icona neutra nel 2023 proprio per evitare questo equivoco. Morale: controllare il dominio, non il lucchetto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Leggi il codice della prima pagina web</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>info.cern.ch/hypertext/WWW/TheProject.html</b>, la prima pagina del web.</li>
+      <li>Premi <b>Ctrl+U</b> per vedere il codice sorgente.</li>
+      <li>Con <b>Ctrl+F</b> cerca <code>HREF</code>: quanti link contiene?</li>
+      <li>Fai lo stesso con la pagina di Wikipedia di prima e confronta.</li>
+      <li>Aggiungi i due numeri a <b>url-cognome.txt</b> e salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la pagina del CERN si apre con il titolo <b>World Wide Web</b> e ha i tag scritti in maiuscolo, come <code>&lt;A HREF=…&gt;</code>. Nessun colore, nessuno stile: solo testo e link.</div>
+  </div>
+  <aside class="notes">La pagina inizia con "The WorldWideWeb (W3) is a wide-area hypermedia information retrieval initiative aiming to give universal access to a large universe of documents." Far tradurre la frase alla classe. Il conteggio esatto dei link conta poco: l'importante è vedere che il cuore del web sono i collegamenti. HTML non distingue maiuscole e minuscole nei nomi dei tag: oggi si scrive tutto in minuscolo per convenzione. Questo è il ponte verso la prossima lezione sui tag HTML.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Browser e motori di ricerca</p><h2>Come fa un motore di ricerca a "sapere" tutto?</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Scansione</h3><p class="muted small">Un programma, il <b>crawler</b>, scarica pagine e segue i loro link, all'infinito.</p></div>
+    <div class="card"><p class="num">2</p><h3>Indice</h3><p class="muted small">Le parole di ogni pagina finiscono in un enorme <b>indice</b>, come quello di un libro.</p></div>
+    <div class="card"><p class="num">3</p><h3>Classifica</h3><p class="muted small">Alla tua ricerca risponde l'indice; un algoritmo decide l'<b>ordine</b> dei risultati.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche le aziende di intelligenza artificiale mandano crawler sul web per raccogliere testi con cui addestrare i modelli. Un sito può chiedere di non essere letto con il file <b>robots.txt</b>: prova ad aprire <b>it.wikipedia.org/robots.txt</b>. È una richiesta di cortesia, non un lucchetto.</p></div>
+  <aside class="notes">Browser (Chrome, Edge, Firefox, Safari) e motore di ricerca (Google, Bing, DuckDuckGo) sono cose diverse: il primo è un programma sul tuo PC, il secondo è un sito. Molti studenti li confondono. Il PageRank di Google (1998) usava i link come "voti". Il protocollo robots.txt è stato standardizzato nella RFC 9309 (2022); esistono user-agent dichiarati dai crawler delle aziende di AI (per esempio GPTBot di OpenAI). Oggi i motori mostrano anche riassunti generati dall'AI sopra i risultati: possono sbagliare, quindi conviene aprire le fonti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Un riassunto scritto da un'AI in cima ai risultati…</h2></div>
+  <div class="poll" data-id="www-riassunto-ai">
+    <ol><li>Mi basta, non apro i siti</li><li>Lo leggo e poi controllo una fonte</li><li>Lo salto e vado ai link</li><li>Non l'ho mai notato</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione, nessuna risposta giusta. Spunti: se nessuno apre più i siti, chi li scrive non riceve visite (e pubblicità); i riassunti possono contenere errori o mescolare fonti. Collegamento con il lucchetto: verificare la fonte è un'abitudine, non un optional. Due minuti di discussione al massimo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="9443" data-aiuto="la terza cifra: conta anche le due barre dopo https:">
+    <ul class="points">
+      <li>1ª cifra: l'ultima cifra dell'anno della proposta di Berners-Lee</li>
+      <li>2ª cifra: la prima cifra del codice "risorsa non trovata"</li>
+      <li>3ª cifra: quante barre <code>/</code> ci sono in <code>https://it.wikipedia.org/wiki/CERN</code></li>
+      <li>4ª cifra: l'ultima cifra della porta predefinita di https</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1989, 404, quattro barre (// + / + /), porta 443.</div>
+  </div>
+  <aside class="notes">Codice: 9443. A squadre, la prima squadra che apre vince. Errore tipico sulla terza cifra: contare solo 2 barre. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il web è nato al <span class="blank" data-risposta="CERN"></span> da un'idea di Tim Berners-Lee.</p>
+    <p>Il browser è il <span class="blank" data-risposta="client"></span>: manda le richieste al server.</p>
+    <p>Il nome del sito viene tradotto in indirizzo IP dal <span class="blank" data-risposta="DNS"></span>.</p>
+    <p>Se la pagina non esiste, il server risponde con il codice <span class="blank" data-risposta="404"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: CERN, client, DNS, 404.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Internet è la rete; il web è un servizio che la usa</li>
+      <li>1989: proposta di Berners-Lee al CERN; 1993: web libero per tutti</li>
+      <li>Il client chiede, il server risponde</li>
+    </ul>
+    <ul class="points">
+      <li>URL: protocollo, host, percorso, query, frammento</li>
+      <li>HTTP: metodo, codice di stato, header, corpo</li>
+      <li>Network nei DevTools mostra ogni richiesta</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: gli elementi base di HTML, la lingua delle pagine che abbiamo appena visto viaggiare.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

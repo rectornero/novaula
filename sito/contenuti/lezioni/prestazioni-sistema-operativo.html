@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le prestazioni del sistema operativo · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>Le prestazioni del<br>sistema operativo</h1>
+  <p class="lead">"Il PC è lento" non è una diagnosi. Oggi impariamo a misurare: utilizzo della CPU, throughput, tempi di attesa e di risposta, con gli strumenti veri di Windows e di Linux.</p>
+  <p class="meta"><span class="chip">3E TPSI</span><span>Gestione attività, Monitoraggio risorse, top</span></p>
+  <aside class="notes">Obiettivi: conoscere i parametri con cui si misurano le prestazioni di un sistema operativo (utilizzo della CPU, throughput, tempo di completamento, di attesa e di risposta); calcolarli a mano su esempi piccoli; leggere Gestione attività e Monitoraggio risorse di Windows e i comandi uptime, top e free di Linux (in JSLinux). Durata indicativa: 2 ore, di cui almeno una in laboratorio. Prerequisiti: le lezioni precedenti dell'unità sul ruolo del sistema operativo e sul kernel. Prima della lezione: controllare che bellard.org/jslinux si apra dal laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il PC è lentissimo. Qual è la prima cosa che fai?</h2></div>
+  <div class="poll" data-id="prest-pc-lento">
+    <ol><li>Lo riavvio</li><li>Chiudo un po' di programmi a caso</li><li>Apro Gestione attività e guardo</li><li>Aspetto che passi</li><li>Chiedo a qualcuno più esperto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Il riavvio spesso funziona ma non spiega niente: se il problema torna, non sappiamo perché. Obiettivo della lezione: passare dall'impressione ("è lento") alla misura ("il disco è al 100% per colpa di questo processo"). Chiedere a chi ha scelto C che cosa guarda di solito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa si misura</p><h2>Cinque numeri per giudicare un sistema operativo</h2></div>
+  <table class="data compact">
+    <tr><th>Parametro</th><th>Che cosa misura</th><th>Lo vogliamo…</th></tr>
+    <tr><td><b>Utilizzo della CPU</b></td><td>% del tempo in cui la CPU lavora davvero</td><td>alto (ma non sempre al 100%)</td></tr>
+    <tr><td><b>Throughput</b> (produttività)</td><td>processi completati nell'unità di tempo</td><td>alto</td></tr>
+    <tr><td><b>Tempo di completamento</b></td><td>dall'arrivo del processo alla sua fine (<i>turnaround</i>)</td><td>basso</td></tr>
+    <tr><td><b>Tempo di attesa</b></td><td>tempo passato in coda, pronto ma senza CPU</td><td>basso</td></tr>
+    <tr><td><b>Tempo di risposta</b></td><td>dall'arrivo alla prima reazione visibile</td><td>basso</td></tr>
+  </table>
+  <div class="callout">Un sistema interattivo (il tuo PC) punta sul <b>tempo di risposta</b>; un server che elabora lavori in serie punta sul <b>throughput</b>.</div>
+  <aside class="notes">Termini del libro: utilizzo della CPU, throughput (produttività), tempo di completamento (turnaround time), tempo di attesa (waiting time), tempo di risposta (response time). Sottolineare che gli obiettivi sono in conflitto: dare la CPU a tutti a turno migliora il tempo di risposta ma aggiunge cambi di contesto e può peggiorare il throughput. Li ritroveremo nella lezione sugli algoritmi di scheduling.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un esempio che conosci</p><h2>La pizzeria è un sistema operativo</h2></div>
+  <p class="lead">Il forno è la CPU, le pizze sono i processi. Tocca le carte: a quale parametro corrisponde?</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>Pizze sfornate in un'ora</h3><p>Quale parametro?</p></div><div class="retro"><p><b>Throughput.</b></p><p class="muted">Lavori completati nell'unità di tempo: 60 pizze all'ora.</p></div></div>
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>Dall'ordine alla pizza in tavola</h3><p>Quale parametro?</p></div><div class="retro"><p><b>Tempo di completamento.</b></p><p class="muted">Comprende l'attesa in coda e la cottura vera e propria.</p></div></div>
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>Minuti con il forno pieno</h3><p>Quale parametro?</p></div><div class="retro"><p><b>Utilizzo della CPU.</b></p><p class="muted">Forno vuoto mentre la gente aspetta = risorsa sprecata.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare, far indovinare a coppie. Domanda in più: il cameriere che porta subito il pane mentre la pizza cuoce migliora quale parametro? Il tempo di risposta (la prima reazione arriva subito) ma non il tempo di completamento. Così fa un'app che mostra subito una schermata di caricamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcolo a mano</p><h2>Le due formule da sapere</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:50px"><small>Throughput</small>processi completati<br>÷ <span class="hl">tempo</span></div>
+    <div class="formula" style="font-size:50px"><small>Utilizzo della CPU (%)</small>tempo occupato<br>÷ <span class="hl">tempo totale</span> × 100</div>
+  </div>
+  <div class="card soft"><h3>Esempio</h3><p>In 60 secondi la CPU completa <b>12 processi</b> ed è occupata per <b>45 secondi</b>.<br>Throughput = 12 ÷ 60 = <b>0,2 processi al secondo</b> (12 al minuto). Utilizzo = 45 ÷ 60 × 100 = <b>75%</b>.</p></div>
+  <aside class="notes">Far notare l'unità di misura del throughput: va sempre scritta (al secondo, al minuto, all'ora). 0,2 al secondo e 12 al minuto sono lo stesso valore. I 15 secondi in cui la CPU non lavora si chiamano tempo inattivo (idle): in Gestione attività di Windows compaiono come "Processo inattivo del sistema" nella scheda Dettagli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In 2 minuti la CPU completa 30 processi ed è occupata per 90 secondi</h2></div>
+  <div class="poll" data-id="prest-calcolo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Throughput 15 al secondo, utilizzo 75%</li><li>Throughput 0,25 al secondo, utilizzo 75%</li><li>Throughput 0,25 al secondo, utilizzo 90%</li><li>Throughput 30 al minuto, utilizzo 75%</li></ol>
+    <p class="why">2 minuti = 120 secondi. Throughput = 30 ÷ 120 = 0,25 processi al secondo (15 al minuto). Utilizzo = 90 ÷ 120 = 75%. Il 90% nasce dal dimenticare di convertire i minuti in secondi.</p>
+  </div>
+  <aside class="notes">Errori tipici: A divide 30 per 2 e mette "al secondo" invece di "al minuto"; C usa 90 secondi su 100; D dimentica che i minuti sono 2. Lasciare 2 minuti per il calcolo sul quaderno prima di votare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La cartella clinica del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Ctrl + Maiusc + Esc</b>: si apre <b>Gestione attività</b>. Vai su <b>Prestazioni</b>, poi <b>CPU</b>.</li>
+      <li>Annota: utilizzo, velocità, numero di processi, numero di thread, tempo di attività.</li>
+      <li>Clicca <b>Memoria</b>: annota la RAM in uso e quella disponibile.</li>
+      <li>In Calc crea due colonne, <b>Parametro</b> e <b>Valore</b>, e copia i dati.</li>
+      <li>Salva come <b>prestazioni-pc.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a PC quasi fermo l'utilizzo è basso (spesso sotto il 10%), ma i processi sono comunque più di 100 e i thread più di 1000. Il sistema operativo lavora anche quando tu non fai niente.</div>
+  </div>
+  <aside class="notes">Etichette e posizione delle schede cambiano un po' tra Windows 10 e 11 (in Windows 11 le schede sono a sinistra; in Windows 10 sono in alto e serve "Più dettagli"). Valori tipici su un PC di laboratorio: 150-300 processi, 2000-4000 thread. Chiedere: "chi sta usando tutti quei processi?" Risposta: servizi di Windows, driver, antivirus, aggiornamenti. Far confrontare due postazioni vicine. Il tempo di attività serve per il quiz seguente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Ieri sera hai spento il PC. Oggi Gestione attività dice: tempo di attività 3 giorni. Perché?</h2></div>
+  <div class="poll" data-id="prest-uptime" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il PC non si è spento davvero: era in sospensione per errore</li><li>L'orologio di sistema è sbagliato</li><li>Conta il tempo dall'installazione di Windows</li><li>Con l'avvio rapido, "Arresta" salva il kernel su disco invece di chiuderlo</li></ol>
+    <p class="why">Con l'avvio rapido attivo (impostazione predefinita su molti PC), "Arresta il sistema" chiude le app e la sessione ma iberna il kernel: alla riaccensione Windows lo ricarica e il tempo di attività continua. Solo "Riavvia" fa ripartire il kernel da zero.</p>
+  </div>
+  <aside class="notes">È un bel collegamento con la lezione sul kernel: il kernel "sopravvive" allo spegnimento. Per questo il primo consiglio del supporto tecnico è "riavvia", non "spegni e riaccendi". L'impostazione si trova in Pannello di controllo, Opzioni risparmio energia, "Specifica comportamento pulsanti di alimentazione". Il distrattore A è plausibile ma la sospensione non dura per una notte a PC spento.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Metti un core sotto sforzo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Gestione attività, sul grafico della CPU fai clic destro: <b>Cambia grafico in</b>, <b>Processori logici</b>. Conta i grafici: sono <b>N</b>.</li>
+      <li>Apri il browser, premi <b>F12</b>, scheda <b>Console</b>, e scrivi:<br><code>let t=Date.now(); while(Date.now()-t&lt;15000){}</code></li>
+      <li>Premi Invio e guarda subito i grafici per 15 secondi.</li>
+      <li>Annota di quanto sale l'utilizzo totale e confrontalo con 100 ÷ N.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il ciclo è un solo thread, quindi occupa un solo processore logico alla volta. Con N = 8 il totale sale di circa 12-13 punti, non al 100%. La scheda del browser intanto non risponde.</div>
+  </div>
+  <aside class="notes">Il ciclo while tiene la CPU occupata per 15 secondi senza fare nulla di utile (attesa attiva). Windows può spostare il thread da un processore all'altro: allora si vedono più grafici "a scalini" invece di uno solo al 100%, ma la somma resta circa un processore. Chrome la prima volta può chiedere di scrivere "allow pasting" se si incolla: meglio far scrivere il codice a mano. Se la console non è disponibile, il docente lo mostra alla LIM. Domanda: "allora perché un programma lento non diventa veloce comprando una CPU con 16 core?" Perché se è scritto con un solo thread ne usa uno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Prima misura, poi ottimizza</h2></div>
+  <figure class="citazione">
+    <blockquote>L'ottimizzazione prematura è la radice di tutti i mali (o almeno della maggior parte) nella programmazione.</blockquote>
+    <figcaption><b>Donald Knuth</b>, informatico statunitense, autore di "The Art of Computer Programming", 1974</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><h3>Misura</h3><p>Prima di "velocizzare" qualcosa, scopri dove si perde davvero il tempo: spesso il colpevole non è quello che pensavi.</p></div>
+    <div class="card"><h3>Una storia vera</h3><p class="muted">Knuth offre un assegno di 2,56 dollari (256 centesimi, cioè 0x100) a chi trova un errore nei suoi libri.</p></div>
+  </div>
+  <aside class="notes">La frase è nell'articolo "Structured Programming with go to Statements" (Computing Surveys, 1974): "premature optimization is the root of all evil (or at least most of it) in programming". Traduzione nostra. Gli assegni di Knuth (2,56 dollari, "un dollaro esadecimale") sono una storia documentata da lui stesso sul suo sito; dal 2008 sono assegni simbolici di una sua "banca" immaginaria. Knuth aggiungeva che non bisogna rinunciare alle ottimizzazioni nel 3% critico del codice: il punto è trovarlo misurando. Collegamento: Gestione attività serve proprio a questo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il collo di bottiglia</p><h2>Il sistema va veloce quanto la sua risorsa più lenta</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>CPU</h3><p class="muted">Calcoli pesanti: compressione, giochi, un modello di AI senza GPU.</p></div>
+    <div class="card"><h3>Memoria</h3><p class="muted">RAM piena: il sistema sposta pagine sul disco e tutto rallenta.</p></div>
+    <div class="card"><h3>Disco</h3><p class="muted">Aggiornamenti, antivirus, indicizzazione: disco al 100%.</p></div>
+    <div class="card"><h3>Rete</h3><p class="muted">Download, backup nel cloud, videochiamate in contemporanea.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I supercomputer non si giudicano solo in velocità: la classifica <b>Green500</b> li ordina per <b>operazioni al secondo per watt</b>. Misurare le prestazioni oggi vuol dire anche misurare l'energia consumata.</p></div>
+  <aside class="notes">Il concetto di collo di bottiglia (bottleneck): se la CPU è al 10% ma il disco al 100%, comprare una CPU più veloce non serve a niente. Caso tipico nei PC con disco meccanico: disco al 100% subito dopo l'accensione. La Green500 è pubblicata due volte all'anno insieme alla TOP500 e misura i GFLOPS per watt.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia al processo con Monitoraggio risorse</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>resmon</code> e premi Invio: si apre <b>Monitoraggio risorse</b>.</li>
+      <li>Apri un video in streaming nel browser. Nella scheda <b>Rete</b> trova il processo che riceve più dati.</li>
+      <li>Nella scheda <b>Memoria</b> ordina per working set: quale processo usa più RAM?</li>
+      <li>Nella scheda <b>CPU</b> spunta quel processo: i grafici a destra mostrano solo lui.</li>
+      <li>Fai uno screenshot (Win + Maiusc + S) e salvalo come <b>resmon.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in Rete e in Memoria vince quasi sempre il browser (un processo per ogni scheda, tutti con lo stesso nome). La barra colorata della Memoria mostra RAM in uso, in standby e disponibile.</div>
+  </div>
+  <aside class="notes">Monitoraggio risorse si apre anche dal fondo della scheda Prestazioni di Gestione attività. Le etichette delle colonne possono essere in inglese anche su Windows italiano (Working set, Commit). Se lo streaming è bloccato dal filtro della scuola, basta scaricare un file grande o aprire più pagine. Far notare che il browser compare molte volte: lo capiremo nella prossima lezione sui processi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina lo strumento a quello che ti mostra</h2></div>
+  <dl class="puzzle-abbina" data-id="prest-strumenti">
+    <dt>Gestione attività</dt><dd>Processi e grafici di CPU, memoria, disco e rete in tempo reale</dd>
+    <dt>resmon</dt><dd>Dettaglio per processo: chi legge il disco, chi usa la rete</dd>
+    <dt>systeminfo</dt><dd>Caratteristiche del sistema e ora dell'ultimo avvio</dd>
+    <dt>top</dt><dd>In Linux: i processi ordinati per uso della CPU, in un terminale</dd>
+    <dt>uptime</dt><dd>In Linux: da quanto è acceso il sistema e il carico medio</dd>
+    <dt>free -h</dt><dd>In Linux: la RAM totale, usata e libera</dd>
+  </dl>
+  <aside class="notes">systeminfo si lancia dal prompt dei comandi (cmd) e richiede qualche secondo; la riga "Ora di avvio del sistema" conferma il trucco dell'avvio rapido visto nel quiz. top, uptime e free li proviamo subito in JSLinux.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le prestazioni viste da Linux, nel browser</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>bellard.org/jslinux</b> e avvia una macchina Linux con console (per esempio Alpine Linux). Non serve un account.</li>
+      <li>Scrivi <code>uptime</code>: annota da quanto è acceso e i tre numeri del <b>load average</b>.</li>
+      <li>Scrivi <code>free -h</code>: quanta RAM ha questa macchina virtuale?</li>
+      <li>Scrivi <code>top</code>, osserva per 20 secondi, poi esci con <b>q</b>.</li>
+      <li>Copia i risultati in un file di testo <b>linux-prestazioni.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il load average è il numero medio di processi che vogliono la CPU, sull'ultimo minuto, 5 minuti e 15 minuti. Su una macchina appena avviata e ferma è vicino a 0. La RAM è piccola: poche centinaia di MB.</div>
+  </div>
+  <aside class="notes">JSLinux emula un vero PC dentro il browser: il Linux che gira è vero, la macchina no. Con un solo processore, load average 1,00 significa CPU sempre occupata; 2,00 significa che in media un processo è sempre in coda. In top la riga "CPU:" mostra la percentuale di usr, sys e idle: sys è il tempo passato in modalità kernel (collegamento con la lezione sui ring). Fallback se il sito non si apre: il docente mostra top su un Linux o su un Mac (Terminale) alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Anche l'intelligenza artificiale si misura così</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La NPU in Gestione attività</h3><p>Sui PC con un processore per l'AI (NPU), Gestione attività di Windows 11 mostra un grafico in più accanto a CPU e GPU: anche la NPU è una risorsa che il sistema operativo assegna e misura.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Token al secondo</h3><p>Chi gestisce un chatbot misura il <b>tempo al primo token</b> (tempo di risposta) e i <b>token al secondo</b> serviti a tutti gli utenti (throughput). Sono gli stessi parametri di oggi, con nomi nuovi.</p></div>
+  </div>
+  <div class="callout">Hardware nuovo, domande vecchie: chi usa la risorsa, quanto la usa, quanto aspetta chi è in coda.</div>
+  <aside class="notes">Il grafico NPU compare solo con hardware e driver che lo supportano (PC "Copilot+" e simili): se in laboratorio non c'è, è normale. Un modello linguistico genera la risposta un token (pezzo di parola) alla volta: la prima parola che appare è il tempo di risposta, la velocità con cui scorre il testo è legata al throughput. Domanda: perché il chatbot mostra il testo mentre lo scrive invece di aspettare la fine? Per ridurre il tempo di risposta percepito, come il pane portato dal cameriere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il PC è lento: il metodo del tecnico, in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="prest-metodo">
+    <li>Descrivi il sintomo: quando e in che cosa è lento</li>
+    <li>Apri Gestione attività, scheda Prestazioni</li>
+    <li>Individua la risorsa satura: CPU, memoria, disco o rete</li>
+    <li>Ordina i processi per quella risorsa e trova il responsabile</li>
+    <li>Intervieni: chiudi, aggiorna o disattiva quel programma</li>
+    <li>Misura di nuovo e confronta con prima</li>
+  </ol>
+  <aside class="notes">Il passo che quasi tutti dimenticano è l'ultimo: senza una seconda misura non sappiamo se l'intervento è servito. È lo stesso metodo di Knuth: misura, intervieni, misura. Attenzione: non si chiudono a caso i processi di sistema (per esempio "Desktop Window Manager" o "Client Server Runtime"), si interviene sui programmi dell'utente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>CPU al 4%, disco al 100%, il PC si blocca a ogni clic. Che cosa conviene fare?</h2></div>
+  <div class="poll" data-id="prest-collo" data-tipo="quiz" data-risposta="A">
+    <ol><li>Cercare quale processo sta usando il disco</li><li>Chiudere i processi con la CPU più alta</li><li>Aggiungere un processore più veloce</li><li>Aumentare la priorità del browser</li></ol>
+    <p class="why">Il collo di bottiglia è il disco, non la CPU: la CPU aspetta i dati. Bisogna trovare il processo che legge o scrive (aggiornamenti, antivirus, indicizzazione) in Monitoraggio risorse, scheda Disco.</p>
+  </div>
+  <aside class="notes">La C è il tranello di chi pensa che "lento = CPU". La D non serve: dare più priorità non accelera il disco. Collegamento futuro: nell'unità 7 vedremo che con la RAM piena il disco lavora anche per la memoria virtuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il numero di processi completati nell'unità di tempo si chiama <span class="blank" data-risposta="throughput|produttività|produttivita"></span>.</p>
+    <p>Se in 50 secondi la CPU è occupata per 40 secondi, l'utilizzo è dell'<span class="blank" data-risposta="80|80%"></span>%.</p>
+    <p>Il tempo che un processo passa in coda senza CPU è il tempo di <span class="blank" data-risposta="attesa"></span>.</p>
+    <p>In Windows si apre Monitoraggio risorse con il comando <span class="blank" data-risposta="resmon"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: throughput (accettato produttività), 80 (40 ÷ 50 = 0,8), attesa, resmon.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Utilizzo CPU = tempo occupato ÷ tempo totale</li>
+      <li>Throughput = processi completati ÷ tempo</li>
+      <li>Tempi di completamento, attesa e risposta: bassi</li>
+    </ul>
+    <ul class="points">
+      <li>Gestione attività, resmon, systeminfo</li>
+      <li>In Linux: uptime, top, free</li>
+      <li>Trova il collo di bottiglia, poi misura di nuovo</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Check-up del mio PC" su Novaula. Prossima lezione: che cos'è davvero un processo e perché il browser ne apre così tanti.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La gestione della CPU: i processi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.stati svg{width:100%;height:auto;display:block}
+.stati .nodo rect{fill:var(--card);stroke:var(--ink);stroke-width:4}
+.stati .nodo.on rect{fill:var(--accent);stroke:var(--accent)}
+.stati .nodo text{font-family:var(--display);font-weight:700;font-size:38px;fill:var(--ink)}
+.stati .nodo.on text{fill:#fff}
+.stati .freccia{stroke:var(--accent);stroke-width:5;fill:none}
+.stati .etichetta{font-family:var(--body);font-size:27px;fill:var(--muted)}
+</style>
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>La gestione della CPU:<br>i processi</h1>
+  <p class="lead">Un programma è un file fermo sul disco. Quando lo avvii diventa un processo: nasce, aspetta, lavora, si ferma, muore. Oggi seguiamo la sua vita, comando per comando.</p>
+  <p class="meta"><span class="chip">3E TPSI</span><span>tasklist, ps, top, stati, PCB, thread</span></p>
+  <aside class="notes">Obiettivi: distinguere programma e processo; conoscere il modello a cinque stati e le transizioni; sapere che cosa contiene il PCB (Process Control Block); capire il cambio di contesto e la differenza tra processo e thread; osservare processi veri con tasklist in Windows e con ps, top e /proc in Linux (JSLinux). Durata indicativa: 2 ore. Prima della lezione: provare che bellard.org/jslinux si apra in laboratorio e che gli studenti possano aprire il Prompt dei comandi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo te, quanti processi sono attivi adesso sul PC del laboratorio?</h2></div>
+  <div class="poll" data-id="proc-quanti">
+    <ol><li>Meno di 20</li><li>Tra 20 e 100</li><li>Tra 100 e 300</li><li>Più di 300</li></ol>
+  </div>
+  <aside class="notes">Lasciar votare senza suggerimenti; la risposta arriva con il primo laboratorio. Su un Windows 10/11 di laboratorio sono di solito tra 150 e 300, anche con nessun programma aperto. Chi ha fatto il compito sulle prestazioni lo sa già: chiedere di non svelarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Programma e processo</p><h2>La ricetta e la torta che sta cuocendo</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Ricetta</h3><p>Il <b>programma</b>: istruzioni scritte in un file, ferme sul disco.</p></div>
+    <div class="card fill"><h3>Cucinare</h3><p>Il <b>processo</b>: il programma in esecuzione, con il suo stato.</p></div>
+    <div class="card soft"><h3>Cuoco</h3><p>La <b>CPU</b>: esegue un passo della ricetta alla volta.</p></div>
+    <div class="card soft"><h3>Ingredienti</h3><p>I <b>dati</b>: in memoria, letti e trasformati.</p></div>
+  </div>
+  <div class="callout">Un programma è <b>passivo</b>, un processo è <b>attivo</b>: ha un punto a cui è arrivato, dei dati, dei file aperti. Con una ricetta si possono cuocere tre torte insieme.</div>
+  <aside class="notes">L'analogia della torta è di Andrew S. Tanenbaum, nel libro "Modern Operating Systems" (capitolo sui processi). Nella versione completa il cuoco interrompe la torta perché il figlio è stato punto da un'ape, salva il punto della ricetta e passa al libro del pronto soccorso: è un interrupt con salvataggio dello stato, che vedremo nella lezione sugli interrupt. Si può raccontare già ora come anticipazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Apri tre finestre del Prompt dei comandi. Quanti programmi e quanti processi?</h2></div>
+  <div class="poll" data-id="proc-tre-finestre" data-tipo="quiz" data-risposta="C">
+    <ol><li>3 programmi e 3 processi</li><li>1 programma e 1 processo con tre finestre</li><li>1 programma e 3 processi</li><li>3 programmi e 1 processo</li></ol>
+    <p class="why">Il programma è uno solo, il file cmd.exe sul disco. Ogni finestra è un processo diverso, con il suo PID, la sua memoria e la sua cartella corrente: se ne chiudi uno, gli altri continuano.</p>
+  </div>
+  <aside class="notes">La B è plausibile perché alcune app moderne usano davvero un solo processo con più finestre (dipende da come sono scritte). Ma per cmd.exe ogni finestra è un processo distinto: lo verifichiamo subito con tasklist.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I processi di Windows con tasklist</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri tre finestre del <b>Prompt dei comandi</b> (cerca "cmd" nel menu Start).</li>
+      <li>In una scrivi <code>tasklist /fi "imagename eq cmd.exe"</code> e annota i PID.</li>
+      <li>Scrivi <code>tasklist &gt; processi.txt</code> e poi <code>notepad processi.txt</code>: conta le righe.</li>
+      <li>Chiudi una finestra con <code>taskkill /pid N</code>, dove N è il PID di un'<b>altra</b> finestra.</li>
+      <li>Ripeti il punto 2: quanti cmd.exe restano?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> al punto 2 compaiono 3 righe cmd.exe con 3 PID diversi; dopo taskkill ne restano 2. In processi.txt ci sono centinaia di processi, tra cui System con PID 4.</div>
+  </div>
+  <aside class="notes">Se la finestra si chiude non rispondendo a taskkill, aggiungere /f (forzato). Avvertire: non usare taskkill su processi che non si conoscono, si può chiudere qualcosa di importante. Il PID cambia a ogni avvio: è solo un numero assegnato dal sistema operativo. Ora rispondere al sondaggio iniziale contando le righe del file (in Notepad la barra di stato mostra il numero di riga; tolte le 3 righe di intestazione). Su Windows 11 il Prompt può aprirsi dentro Terminale Windows: funziona lo stesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Gli inventori di Unix e il processo</h2></div>
+  <figure class="citazione">
+    <blockquote>Un'immagine è lo stato attuale di uno pseudo-computer. Un processo è l'esecuzione di un'immagine.</blockquote>
+    <figcaption><b>Dennis Ritchie e Ken Thompson</b>, "The UNIX Time-Sharing System", 1974</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><h3>Che cosa c'è nell'immagine</h3><p>La memoria, i registri della CPU, i file aperti, la cartella corrente. Il sistema operativo la conserva in una struttura: il <mark>PCB</mark>.</p></div>
+    <div class="card"><h3>Unix, 1969</h3><p class="muted">Nato ai Bell Labs su un minicomputer PDP-7. Le sue idee vivono in Linux, Android e macOS: il comando <code>ps</code> esiste dagli anni Settanta.</p></div>
+  </div>
+  <aside class="notes">La frase è nella sezione "Processes and images" dell'articolo pubblicato su Communications of the ACM nel luglio 1974: "An image is the current state of a pseudo-computer. A process is the execution of an image." Prima l'articolo elenca che cosa contiene un'immagine: "a memory image, general register values, status of open files, current directory and the like". Traduzione nostra. Ritchie e Thompson ricevettero il premio Turing nel 1983. "Pseudo-computer": ogni processo crede di avere un computer tutto per sé.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Process Control Block</p><h2>La carta d'identità di ogni processo</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Campo del PCB</th><th>Esempio</th></tr>
+      <tr><td><b>PID</b>, identificatore</td><td class="mono">4812</td></tr>
+      <tr><td><b>Stato</b></td><td>pronto</td></tr>
+      <tr><td><b>Program counter</b></td><td>prossima istruzione da eseguire</td></tr>
+      <tr><td><b>Registri</b> della CPU</td><td>valori salvati all'ultima pausa</td></tr>
+      <tr><td><b>Memoria</b> assegnata</td><td>dove sono codice e dati</td></tr>
+      <tr><td><b>File aperti</b> e dispositivi</td><td>processi.txt</td></tr>
+      <tr><td><b>Priorità</b> e tempo di CPU usato</td><td>normale, 0,8 s</td></tr>
+    </table>
+    <div class="card soft"><h3>Perché serve</h3><p>La CPU è una sola (o poche), i processi sono centinaia. Quando un processo perde la CPU, il PCB conserva <b>il punto esatto</b> in cui era arrivato, come un segnalibro.</p></div>
+  </div>
+  <aside class="notes">Il PCB vive in memoria, nella parte riservata al kernel: un processo in modalità utente non può modificarlo (collegamento con la lezione sui ring). In Linux la struttura si chiama task_struct. Molti campi del PCB si vedono in Gestione attività, scheda Dettagli, aggiungendo colonne (PID, stato, thread, priorità di base, tempo CPU).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni campo del PCB alla domanda a cui risponde</h2></div>
+  <dl class="puzzle-abbina" data-id="proc-pcb">
+    <dt>PID</dt><dd>Chi sei, fra tutti i processi?</dd>
+    <dt>Stato</dt><dd>Stai lavorando, aspetti la CPU o aspetti un dato?</dd>
+    <dt>Program counter</dt><dd>Qual è la prossima istruzione da eseguire?</dd>
+    <dt>Registri</dt><dd>Che valori avevi nella CPU quando ti hanno fermato?</dd>
+    <dt>File aperti</dt><dd>Quali documenti e dispositivi stai usando?</dd>
+    <dt>Priorità</dt><dd>Quanto sei importante rispetto agli altri?</dd>
+  </dl>
+  <aside class="notes">Si può fare a squadre con il timer da 2 minuti. Il più confuso di solito è program counter contro registri: il program counter è un registro speciale che contiene l'indirizzo della prossima istruzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli stati di un processo</p><h2>Il modello a cinque stati</h2></div>
+  <div class="stati">
+    <svg viewBox="0 0 1664 560" role="img" aria-label="Diagramma degli stati: nuovo, pronto, in esecuzione, in attesa, terminato">
+      <defs><marker id="pt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
+      <g class="nodo"><rect x="30" y="30" width="270" height="100" rx="22"/><text x="165" y="93" text-anchor="middle">Nuovo</text></g>
+      <g class="nodo"><rect x="1360" y="30" width="270" height="100" rx="22"/><text x="1495" y="93" text-anchor="middle">Terminato</text></g>
+      <g class="nodo"><rect x="380" y="230" width="270" height="100" rx="22"/><text x="515" y="293" text-anchor="middle">Pronto</text></g>
+      <g class="nodo on"><rect x="1010" y="230" width="300" height="100" rx="22"/><text x="1160" y="293" text-anchor="middle">Esecuzione</text></g>
+      <g class="nodo"><rect x="700" y="440" width="270" height="100" rx="22"/><text x="835" y="503" text-anchor="middle">Attesa</text></g>
+      <path class="freccia" d="M200,132 L420,226" marker-end="url(#pt)"/>
+      <text class="etichetta" x="330" y="160">ammesso</text>
+      <path class="freccia" d="M652,258 Q830,200 1006,258" marker-end="url(#pt)"/>
+      <text class="etichetta" x="830" y="200" text-anchor="middle">scelto dallo scheduler</text>
+      <path class="freccia" d="M1006,304 Q830,350 654,304" marker-end="url(#pt)"/>
+      <text class="etichetta" x="830" y="378" text-anchor="middle">fine del quanto (interrupt)</text>
+      <path class="freccia" d="M1130,334 L960,438" marker-end="url(#pt)"/>
+      <text class="etichetta" x="1060" y="430">chiede I/O o un evento</text>
+      <path class="freccia" d="M706,450 L560,334" marker-end="url(#pt)"/>
+      <text class="etichetta" x="400" y="430" text-anchor="middle">I/O completato</text>
+      <path class="freccia" d="M1240,228 L1420,134" marker-end="url(#pt)"/>
+      <text class="etichetta" x="1350" y="215">uscita</text>
+    </svg>
+  </div>
+  <aside class="notes">Spiegare una freccia alla volta. Nuovo: il sistema sta creando il PCB e caricando il programma. Pronto: ha tutto tranne la CPU, aspetta in coda. Esecuzione: ha la CPU (con un solo core, un solo processo alla volta). Attesa (o bloccato): aspetta un evento esterno, per esempio un tasto, un file dal disco, un pacchetto dalla rete; anche se la CPU fosse libera non potrebbe lavorare. Terminato: ha finito, il sistema libera memoria e PCB. Domanda chiave: perché non c'è una freccia da Attesa a Esecuzione? Perché quando l'evento arriva il processo torna in coda, e sarà lo scheduler a decidere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un processo aspettava un file dal disco. Il file arriva. In che stato passa?</h2></div>
+  <div class="poll" data-id="proc-dopo-io" data-tipo="quiz" data-risposta="B">
+    <ol><li>In esecuzione, subito</li><li>Pronto</li><li>Resta in attesa finché l'utente clicca</li><li>Terminato</li></ol>
+    <p class="why">Quando l'I/O è completato il processo torna nella coda dei pronti. Sarà lo scheduler a decidere quando ridargli la CPU: in quel momento può darsi che la stia usando un altro processo.</p>
+  </div>
+  <aside class="notes">È l'errore più comune nelle verifiche. Ricordare il diagramma: da Attesa si esce solo verso Pronto. Variante da chiedere a voce: e un processo a cui scade il quanto di tempo? Anche lui torna Pronto, non in Attesa: non aspetta nulla, solo il suo turno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>La vita di Calc in un'ora di lezione: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="proc-vita">
+    <li>Fai doppio clic su Calc: il sistema crea il PCB (nuovo)</li>
+    <li>Il programma è in memoria e aspetta la CPU (pronto)</li>
+    <li>Lo scheduler gli assegna la CPU (esecuzione)</li>
+    <li>Apri un file: Calc aspetta i dati dal disco (attesa)</li>
+    <li>I dati arrivano: Calc torna in coda (pronto)</li>
+    <li>Riprende la CPU e ricalcola le formule (esecuzione)</li>
+    <li>Chiudi Calc: memoria e PCB vengono liberati (terminato)</li>
+  </ol>
+  <aside class="notes">In realtà Calc passa tra pronto, esecuzione e attesa migliaia di volte al secondo: anche aspettare che tu prema un tasto è uno stato di attesa. Per questo, a PC fermo, la CPU è quasi a zero: quasi tutti i processi sono in attesa.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Processi Linux sotto la lente, in JSLinux</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>bellard.org/jslinux</b> e avvia una console Linux. Scrivi <code>ps</code>: chi ha il PID 1?</li>
+      <li>Scrivi <code>sleep 300 &amp;</code> e poi <code>grep State /proc/$!/status</code></li>
+      <li>Scrivi <code>yes &gt; /dev/null &amp;</code>, ripeti il <code>grep</code>, poi <code>top</code> (esci con q).</li>
+      <li>Scrivi <code>kill -STOP $!</code>, ripeti il <code>grep</code>; poi <code>kill $!</code>.</li>
+      <li>Annota i tre stati in <b>stati-linux.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> sleep è <b>S</b> (sleeping, in attesa), yes è <b>R</b> (running, pronto o in esecuzione) e in top usa quasi tutta la CPU, dopo STOP è <b>T</b> (stopped). Il PID 1 è <b>init</b>, il primo processo.</div>
+  </div>
+  <aside class="notes">$! è il PID dell'ultimo processo avviato in background con &amp;. yes scrive "y" all'infinito: buttato in /dev/null diventa un processo che usa solo CPU. Linux non distingue pronto da esecuzione: R vale per entrambi. Altri stati: D (attesa non interrompibile, tipica del disco) e Z (zombie: terminato, ma il padre non ha ancora letto il suo codice di uscita). Ricordarsi alla fine di uccidere sleep (kill %1 o kill PID) oppure lasciarlo finire. Fallback: se JSLinux non si apre, il docente fa la stessa sequenza su un Linux o un Mac alla LIM (su Mac il comando grep su /proc non esiste: usare ps -o pid,stat,comm).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cambio di contesto</p><h2>Passare la CPU da un processo all'altro</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Ferma A</h3><p>Un interrupt o una richiesta di I/O interrompe il processo A.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Salva</h3><p>Il kernel copia registri e program counter nel PCB di A.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Carica</h3><p>Lo scheduler sceglie B e ricarica i valori dal PCB di B.</p></div>
+    <div class="card soft"><p class="num">4</p><h3>Riparte B</h3><p>B continua esattamente da dove si era fermato.</p></div>
+  </div>
+  <div class="callout hl">Durante il cambio di contesto la CPU <b>non fa lavoro utile</b> per nessuno: costa qualche microsecondo. Farne troppi peggiora le prestazioni.</div>
+  <aside class="notes">Il cambio di contesto (context switch) avviene in modalità kernel. Su Windows si possono vedere i cambi di contesto al secondo in Monitoraggio prestazioni (perfmon), contatore "Cambi di contesto/sec" del gruppo Sistema: di solito migliaia al secondo. Collegamento con la prossima lezione: nel Round Robin, un quanto troppo piccolo significa troppi cambi di contesto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Processi e thread</p><h2>Un processo può avere più "fili" di esecuzione</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Processo</h3><p>Ha la <b>sua memoria</b>, protetta dagli altri. Se si blocca, gli altri processi continuano.</p></div>
+    <div class="card soft"><h3>Thread</h3><p>Vive dentro un processo e ne <b>condivide la memoria</b>. Ha solo il suo program counter, i suoi registri e il suo stack.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Chrome è nato nel 2008 con un'idea nuova: <b>un processo per ogni scheda</b>, così una pagina che si blocca non fa crollare il browser. Dal 2018, contro attacchi come Spectre, separa in processi diversi anche i <b>siti</b> diversi (Site Isolation). Ecco perché in Gestione attività il browser compare tante volte.</p></div>
+  <aside class="notes">Esempio di thread: in un videogioco un thread disegna, uno gestisce l'audio, uno legge la rete, tutti sulla stessa memoria. Creare un thread costa meno che creare un processo e lo scambio tra thread dello stesso processo è più leggero. Rischio: se due thread modificano lo stesso dato insieme, nascono errori difficili da trovare. Site Isolation è attiva per impostazione predefinita su Chrome desktop dalla versione 67 (2018).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quanti processi ha il tuo browser?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser con <b>una sola scheda</b>. In cmd scrivi <code>tasklist /fi "imagename eq chrome.exe"</code> (per Edge: <code>msedge.exe</code>) e conta le righe.</li>
+      <li>Apri 5 schede su 5 siti diversi e ripeti il conteggio.</li>
+      <li>In Gestione attività, scheda <b>Dettagli</b>, fai clic destro sull'intestazione, <b>Seleziona colonne</b>, e aggiungi <b>Thread</b>.</li>
+      <li>Annota in <b>browser-processi.txt</b>: processi con 1 scheda, con 6 schede, thread del processo più grande.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> già con una scheda i processi sono più di uno (GPU, rete, estensioni…). Con siti diversi il numero cresce; ogni processo ha più thread, spesso decine.</div>
+  </div>
+  <aside class="notes">Il numero esatto dipende dalla versione, dalle estensioni e dalla RAM: con poca memoria il browser può raggruppare più siti in un processo. In Chrome, Maiusc + Esc apre il suo Task Manager interno, che mostra quale scheda corrisponde a quale processo: bella prova finale per chi finisce prima. Firefox usa firefox.exe e un'architettura simile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Chi decide quali processi sopravvivono?</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il telefono fa pulizia da solo</h3><p>Su Android, quando la RAM sta finendo, il sistema chiude i processi delle app in background meno importanti. Per questo tornando su un gioco a volte riparte dall'inizio.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un'AI che lancia processi</h3><p>Gli assistenti AI per programmare eseguono comandi nel terminale: ogni comando è un nuovo processo, con PID e stato. Per sicurezza si fanno girare in un ambiente separato, dove il sistema operativo può limitarli o fermarli.</p></div>
+  </div>
+  <aside class="notes">Su Android il meccanismo si chiama low memory killer (lmkd): assegna un punteggio di importanza ai processi (in primo piano, visibile, servizio, in cache) e chiude prima quelli in cache. Gli assistenti AI per il codice (per esempio quelli integrati negli editor) chiedono spesso il permesso prima di eseguire un comando: buona occasione per dire che è il sistema operativo, non l'AI, a garantire i limiti (permessi, sandbox, kill).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="5133" data-aiuto="le ultime due cifre: le finestre di cmd e le frecce che escono da Esecuzione">
+    <ul class="points">
+      <li>1ª cifra: quanti stati ha il modello visto oggi</li>
+      <li>2ª cifra: il PID del primo processo di Linux, init</li>
+      <li>3ª cifra: quanti processi crei aprendo tre finestre del Prompt dei comandi</li>
+      <li>4ª cifra: quante frecce escono dallo stato Esecuzione</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 5 stati, PID 1, 3 processi cmd.exe, 3 uscite da Esecuzione: verso Pronto, Attesa e Terminato.</div>
+  </div>
+  <aside class="notes">Codice 5133. A squadre: la prima squadra che apre vince. L'errore tipico è sull'ultima cifra: chi dimentica la freccia verso Terminato scrive 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un programma in esecuzione si chiama <span class="blank" data-risposta="processo"></span>.</p>
+    <p>Il numero che identifica un processo si chiama <span class="blank" data-risposta="PID"></span>.</p>
+    <p>Un processo che aspetta un dato dal disco è nello stato di <span class="blank" data-risposta="attesa|bloccato"></span>.</p>
+    <p>Salvare il PCB di un processo e caricare quello di un altro si chiama cambio di <span class="blank" data-risposta="contesto"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: processo, PID, attesa (accettato bloccato), contesto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Programma = file fermo; processo = programma in esecuzione</li>
+      <li>Stati: nuovo, pronto, esecuzione, attesa, terminato</li>
+      <li>Il PCB conserva PID, stato, registri, memoria, file</li>
+    </ul>
+    <ul class="points">
+      <li>Cambio di contesto: salva un PCB, carica l'altro</li>
+      <li>I thread condividono la memoria del processo</li>
+      <li>tasklist e taskkill; ps, top e /proc in Linux</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Il diario di un processo" su Novaula. Prossima lezione: chi sceglie quale processo pronto va in esecuzione? Gli algoritmi di scheduling.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

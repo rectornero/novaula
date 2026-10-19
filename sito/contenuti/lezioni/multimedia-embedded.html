@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audio, video e contenuti incorporati · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Siti web responsive e accessibili · Lezione 7</p>
+  <h1>Audio, video<br>e contenuti incorporati</h1>
+  <p class="lead">Mettere un video, un podcast o una mappa in una pagina è facile. Farlo in modo accessibile, leggero e rispettoso della privacy è il vero lavoro.</p>
+  <aside class="notes">Laboratorio online, 2 ore. Obiettivi: elementi audio e video con più sorgenti, sottotitoli WebVTT con track, iframe per video e mappe, accessibilità (sottotitoli, trascrizioni, title degli iframe), privacy degli embed (YouTube in modalità privacy avanzata, mappe OpenStreetMap, caricamento al clic). Materiali: il file audio esportato nel laboratorio dell'Unità 2 (AudioMass) e un breve video; in alternativa i file di esempio di MDN indicati nelle note dei laboratori. Controllare prima della lezione che CodePen, openstreetmap.org e youtube-nocookie.com non siano bloccati dal filtro della scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale contenuto incorporato trovi più spesso nei siti?</h2></div>
+  <div class="poll" data-id="mm-embed">
+    <ol><li>Un video di YouTube</li><li>Una mappa</li><li>Un post di un social</li><li>Un podcast o un audio</li></ol>
+  </div>
+  <p class="muted">Incorporato (embedded) vuol dire: un pezzo di un altro sito, che vive dentro la tua pagina.</p>
+  <aside class="notes">Sondaggio rapido. Far notare che quasi tutti gli esempi arrivano da server di terzi: è il filo che porta alla parte su privacy e sicurezza. Contenuto "nostro" (file sul nostro server, tag audio e video) e contenuto "di altri" (iframe) sono le due metà della lezione.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Dalla prima immagine al video senza plugin</h2></div>
+  <ol class="puzzle-ordina" data-id="mm-storia">
+    <li>Marc Andreessen propone il tag <b>img</b> per il browser Mosaic</li>
+    <li>Nasce Flash: per anni i video sul web passano da un plugin</li>
+    <li>Viene caricato il primo video su YouTube</li>
+    <li>Steve Jobs pubblica "Thoughts on Flash": niente Flash sull'iPhone</li>
+    <li>HTML5, con i tag audio e video, diventa raccomandazione W3C</li>
+    <li>Adobe smette di supportare Flash</li>
+  </ol>
+  <aside class="notes">Date: tag img proposto il 25 febbraio 1993 sulla mailing list www-talk; FutureSplash diventa Macromedia Flash nel 1996; primo video su YouTube aprile 2005 ("Me at the zoo"); "Thoughts on Flash" aprile 2010; HTML5 raccomandazione W3C ottobre 2014; fine del supporto a Flash 31 dicembre 2020. Morale: oggi audio e video sono elementi HTML come un paragrafo, e il browser li riproduce da solo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'elemento video</p><h2>Un video con più formati e i sottotitoli</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:24px"><span class="k">&lt;video</span> controls width=<span class="s">"640"</span> poster=<span class="s">"copertina.jpg"</span><span class="k">&gt;</span>
+  <span class="k">&lt;source</span> src=<span class="s">"clip.webm"</span> type=<span class="s">"video/webm"</span><span class="k">&gt;</span>
+  <span class="k">&lt;source</span> src=<span class="s">"clip.mp4"</span> type=<span class="s">"video/mp4"</span><span class="k">&gt;</span>
+  <span class="k">&lt;track</span> kind=<span class="s">"subtitles"</span> src=<span class="s">"clip.vtt"</span>
+         srclang=<span class="s">"it"</span> label=<span class="s">"Italiano"</span><span class="k">&gt;</span>
+  <span class="c">Il browser non riproduce il video:</span>
+  <span class="k">&lt;a</span> href=<span class="s">"clip.mp4"</span><span class="k">&gt;</span>scaricalo<span class="k">&lt;/a&gt;</span>.
+<span class="k">&lt;/video&gt;</span></pre>
+    <ul class="points">
+      <li><code>controls</code>: i pulsanti play, volume, schermo intero</li>
+      <li><code>poster</code>: l'immagine prima del play</li>
+      <li>il browser usa la <b>prima</b> <code>source</code> che sa leggere</li>
+      <li>il testo dentro compare solo nei browser che non conoscono video</li>
+    </ul>
+  </div>
+  <aside class="notes">Collegamento con l'Unità 2 (le immagini in movimento): MP4 e WebM sono contenitori; dentro ci sono codec come H.264, VP9, AV1. Attenzione ai video registrati con iPhone: spesso sono HEVC in .mov, che Chrome su Windows non sempre riproduce; meglio esportarli o convertirli in MP4 H.264. Per il responsive: video { max-width: 100%; height: auto; } come per le immagini.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il video non parte da solo. Perché?</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="poll" data-id="mm-autoplay" data-tipo="quiz" data-risposta="C">
+      <ol><li>File troppo grande</li><li>Serve JavaScript</li><li>Autoplay con audio bloccato</li><li>Manca controls</li></ol>
+      <p class="why">I browser moderni non fanno partire da soli i video con l'audio, per non disturbare. Con muted l'autoplay è permesso: per questo i video di sfondo sono sempre muti.</p>
+    </div>
+    <pre class="code" style="font-size:26px"><span class="k">&lt;video</span> src=<span class="s">"spot.mp4"</span>
+       autoplay<span class="k">&gt;</span>
+<span class="k">&lt;/video&gt;</span>
+
+<span class="c">&lt;!-- così parte --&gt;</span>
+<span class="k">&lt;video</span> src=<span class="s">"spot.mp4"</span>
+       autoplay <span class="hl">muted</span>
+       loop playsinline<span class="k">&gt;</span>
+<span class="k">&lt;/video&gt;</span></pre>
+  </div>
+  <aside class="notes">Chrome applica questa regola dal 2018 (versione 66); Safari e Firefox hanno regole simili. Il browser può permettere l'autoplay con audio su siti dove l'utente interagisce spesso (es. YouTube), per questo "a me partiva": la regola dipende dalla storia di navigazione. Accessibilità: un video che si muove da solo per più di 5 secondi deve poter essere messo in pausa (WCAG 2.2.2).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il lettore audio e video della pagina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea la cartella <b>u5-media</b> e copia dentro il tuo audio dell'Unità 2 come <b>voce.mp3</b> e un video breve come <b>clip.mp4</b>.</li>
+      <li>Crea <b>media.html</b> con un <code>&lt;audio controls&gt;</code> e un <code>&lt;video controls&gt;</code>, ognuno con il testo alternativo per i browser vecchi.</li>
+      <li>Aggiungi il CSS <code>video { max-width: 100%; height: auto; }</code>.</li>
+      <li>Prova in modalità dispositivo a 360 px e poi aggiungi <code>autoplay</code> senza e con <code>muted</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> entrambi i lettori hanno i pulsanti; a 360 px il video non esce dallo schermo; con il solo <code>autoplay</code> il video resta fermo, con <code>autoplay muted</code> parte da solo, senza audio.</div>
+  </div>
+  <aside class="notes">Se uno studente non ha file propri, usare i file di esempio con licenza CC0 di MDN, per esempio https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4 e, per l'audio, i file in /media/cc0-audio/ dello stesso sito (controllare prima che i link funzionino). Con file aperti dal disco (file://) l'autoplay muto funziona; il comportamento con audio può variare: è il bello del test.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un video senza sottotitoli esclude qualcuno</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del Web sta nella sua universalità. L'accesso da parte di tutti, indipendentemente dalla disabilità, ne è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web, lancio della Web Accessibility Initiative del W3C, 1997</figcaption>
+  </figure>
+  <p class="lead">I sottotitoli servono a chi non sente, a chi guarda in treno senza cuffie, a chi studia l'italiano. E ai motori di ricerca.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." (comunicato del W3C per il lancio della WAI, 22 ottobre 1997). Collegare alla lezione su HTML semantico e accessibilità di questa unità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accessibilità dei media</p><h2>Tre aiuti diversi: tocca le carte</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Sottotitoli</h3><p>Per chi sono?</p></div><div class="retro"><p>Il parlato e i <b>suoni importanti</b> scritti sul video, sincronizzati: "[applausi]", "[porta che sbatte]".</p><p class="muted">WCAG 1.2.2, livello A, per i video registrati.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Trascrizione</h3><p>Per chi è?</p></div><div class="retro"><p>Tutto il testo del contenuto sotto il lettore. È l'aiuto giusto per un <b>podcast</b> o un audio senza video.</p><p class="muted">WCAG 1.2.1, livello A.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Audiodescrizione</h3><p>Per chi è?</p></div><div class="retro"><p>Una voce che racconta ciò che <b>si vede</b> e non si sente: chi entra, che cosa c'è scritto. Serve a chi non vede.</p><p class="muted">WCAG 1.2.5, livello AA.</p></div></div>
+  </div>
+  <aside class="notes">Domanda prima di girare: "un podcast ha bisogno di sottotitoli?" No, non ha video: serve una trascrizione. Le audiodescrizioni ci sono anche su RaiPlay e sulle piattaforme di streaming, come traccia audio alternativa. Nell'HTML: kind="subtitles", kind="captions" (sottotitoli con i suoni, per persone sorde) e kind="descriptions".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il formato WebVTT</p><h2>I sottotitoli sono un file di testo</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:28px">WEBVTT
+
+<span class="hl">00:00:00.000 --> 00:00:02.500</span>
+Un fiore chiuso, all'alba.
+
+<span class="hl">00:00:02.500 --> 00:00:05.000</span>
+[musica dolce]
+Ora si apre al sole.</pre>
+    <ul class="points">
+      <li>Prima riga: sempre <code>WEBVTT</code></li>
+      <li>Ogni blocco: tempi di inizio e fine, poi il testo</li>
+      <li>Una <b>riga vuota</b> separa i blocchi</li>
+      <li>Tempi in ore:minuti:secondi.millesimi</li>
+    </ul>
+  </div>
+  <aside class="notes">Attenzione: Chrome non carica i file .vtt da una pagina aperta dal disco (indirizzo file://) per motivi di sicurezza: il sottotitolo non compare e non c'è nessun errore visibile. Su un server vero funziona. Per questo in laboratorio scriviamo il WebVTT in CodePen e lo trasformiamo in un file "virtuale" con due righe di JavaScript (Blob), che il browser considera dello stesso sito.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Sottotitoli fatti da te, in CodePen</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Su <b>codepen.io/pen</b>, senza account. HTML: un <code>&lt;video controls&gt;</code> con <code>src</code> del video di prova e dentro <code>&lt;track id="sub" kind="subtitles" srclang="it" label="Italiano" default&gt;</code>. Nel pannello JS:</p>
+      <pre class="code" style="font-size:23px"><span class="k">const</span> vtt = <span class="s">`WEBVTT
+
+00:00:00.000 --> 00:00:02.500
+Un fiore chiuso, all'alba.`</span>;
+document.getElementById(<span class="s">"sub"</span>).src =
+  URL.createObjectURL(<span class="k">new</span> Blob([vtt], { type: <span class="s">"text/vtt"</span> }));</pre>
+    </div>
+    <div class="check"><b>Controllo:</b> premendo play compare la tua frase in basso nel video, nei tempi giusti. Se sbagli la riga vuota o la freccia <code>--&gt;</code>, il sottotitolo sparisce senza errori: ricontrolla il formato.</div>
+  </div>
+  <aside class="notes">Video di prova: https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4 (CC0, pochi secondi; verificare il link prima della lezione). Gli apici inversi ` permettono una stringa su più righe; sulla tastiera italiana si ottengono con Alt+96 o Alt Gr+' su alcuni layout: in alternativa copiarli dalla slide. Sfida: aggiungere un secondo blocco con un suono tra parentesi quadre. Fallback senza CodePen: JSFiddle, identico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contenuti di altri siti</p><h2>L'iframe: una finestra su un'altra pagina</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:23px"><span class="k">&lt;iframe</span>
+  src=<span class="s">"https://www.youtube-nocookie.com/embed/ID"</span>
+  title=<span class="s">"Video: come funziona un pannello solare"</span>
+  loading=<span class="s">"lazy"</span> allowfullscreen<span class="k">&gt;</span>
+<span class="k">&lt;/iframe&gt;</span>
+
+<span class="k">iframe</span> { width: 100%; height: auto;
+         aspect-ratio: 16 / 9; border: 0; }</pre>
+    <ul class="points">
+      <li><code>title</code>: il nome che lo screen reader legge</li>
+      <li><code>loading="lazy"</code>: si carica solo quando ci arrivi</li>
+      <li><code>aspect-ratio</code>: resta 16:9 a ogni larghezza</li>
+      <li>alcuni siti <b>rifiutano</b> di essere incorporati</li>
+    </ul>
+  </div>
+  <aside class="notes">ID è il codice del video, quello dopo v= nell'indirizzo di YouTube; il codice esatto si ottiene con Condividi, Incorpora, spuntando "Attiva la modalità di privacy avanzata". Alcuni siti (google.com, le banche) inviano intestazioni X-Frame-Options o Content-Security-Policy frame-ancestors: l'iframe mostra "ha rifiutato di connettersi". Serve a evitare il clickjacking, cioè un sito che nasconde una pagina vera sotto pulsanti finti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il visitatore apre la pagina ma non preme play</h2></div>
+  <p>La pagina incorpora un normale video di YouTube con un iframe. Google riceve qualche dato sul visitatore?</p>
+  <div class="poll" data-id="mm-privacy" data-tipo="quiz" data-risposta="B">
+    <ol><li>No, niente finché non preme play</li><li>Sì: il browser scarica il lettore dai server di Google</li><li>Solo se il visitatore ha un account Google</li><li>No, se la pagina è su un server italiano</li></ol>
+    <p class="why">Per mostrare l'iframe il browser contatta i server di Google: invia almeno l'indirizzo IP e i dati del browser, e possono partire cookie. La modalità privacy avanzata (youtube-nocookie.com) riduce i cookie, ma la connessione c'è comunque.</p>
+  </div>
+  <aside class="notes">Caso reale: nel gennaio 2022 il Tribunale di Monaco di Baviera ha condannato il gestore di un sito a risarcire 100 euro a un visitatore perché la pagina caricava Google Fonts dai server di Google, trasmettendo il suo IP senza consenso (LG München I, 3 O 17493/20). Per il GDPR l'IP è un dato personale. Soluzioni: ospitare font e video sul proprio server, oppure il "caricamento al clic": un'immagine con scritto "Carica il video da YouTube" che crea l'iframe solo dopo il consenso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una mappa e un video incorporati bene</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>openstreetmap.org</b> cerca la scuola, premi <b>Condividi</b>, scegli <b>HTML</b> e copia il codice dell'iframe in <b>media.html</b>.</li>
+      <li>Da YouTube scegli un video per la classe: <b>Condividi</b>, <b>Incorpora</b>, attiva la <b>modalità di privacy avanzata</b>, copia il codice.</li>
+      <li>A entrambi gli iframe aggiungi un <code>title</code> chiaro e <code>loading="lazy"</code>; togli <code>width</code> e <code>height</code> e usa il CSS con <code>aspect-ratio</code>.</li>
+      <li>DevTools, scheda <b>Lighthouse</b>: analizza solo <i>Accessibilità</i>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'indirizzo del video contiene <code>youtube-nocookie.com</code>; a 360 px mappa e video occupano tutta la larghezza senza uscire; Lighthouse non segnala più iframe senza titolo.</div>
+  </div>
+  <aside class="notes">La mappa di OpenStreetMap è dati aperti con licenza ODbL: il codice di incorporamento include già il link di attribuzione, che va lasciato. Se YouTube è bloccato a scuola, saltare il punto 2 e incorporare la mappa da Google Maps (Condividi, Incorpora una mappa) per confrontare i due codici. Lighthouse funziona anche su file aperti dal disco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina l'attributo al suo scopo</h2></div>
+  <dl class="puzzle-abbina" data-id="mm-attributi">
+    <dt><code>poster</code></dt><dd>Immagine mostrata prima del play</dd>
+    <dt><code>muted</code></dt><dd>Fa partire il video senza audio</dd>
+    <dt><code>&lt;track&gt;</code></dt><dd>Collega un file di sottotitoli</dd>
+    <dt><code>title</code> sull'iframe</dt><dd>Il nome letto dallo screen reader</dd>
+    <dt><code>loading="lazy"</code></dt><dd>Carica il contenuto solo quando serve</dd>
+    <dt><code>sandbox</code></dt><dd>Limita che cosa può fare la pagina incorporata</dd>
+  </dl>
+  <aside class="notes">sandbox è nuovo per loro: senza valori blocca script, moduli e popup della pagina incorporata; si riabilitano uno per uno (allow-scripts, allow-forms...). Utile quando si incorpora qualcosa di cui non ci si fida del tutto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le macchine che ascoltano e scrivono</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Sottotitoli automatici con l'AI</h3><p>YouTube li genera dal 2009; nel 2022 OpenAI ha reso open source Whisper, un modello di riconoscimento vocale; Android e Chrome hanno la "Trascrizione istantanea" che funziona sul dispositivo. Sbagliano ancora nomi propri, termini tecnici e dialetti: vanno <b>riletti e corretti</b>.</p></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il codec <b>AV1</b>, libero da royalty, comprime meglio di H.264 a parità di qualità: YouTube e Netflix lo usano per risparmiare banda. Meno dati per ogni minuto di video.</p></div>
+  <aside class="notes">Esperimento: attivare i sottotitoli automatici su un video in italiano con termini informatici e contare gli errori in un minuto. Un sottotitolo automatico non corretto non basta per le WCAG. AV1 è sviluppato dall'Alliance for Open Media (Google, Netflix, Amazon, Mozilla e altri), specifica del 2018. Collegamento con la compressione video dell'Unità 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto dei media</h2></div>
+  <div class="puzzle-codice" data-risposta="1693" data-aiuto="i due numeri centrali sono il rapporto di un video panoramico">
+    <ul class="points">
+      <li>1ª cifra: quante <b>source</b> usa il browser, al massimo, per un video</li>
+      <li>2ª e 3ª cifra: le due cifre del rapporto di aspetto dei video di YouTube, una dopo l'altra</li>
+      <li>4ª cifra: quanti tipi di aiuto per i media abbiamo visto (sottotitoli, trascrizione…)</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> Il browser usa 1 sola source (la prima che sa leggere), il rapporto è 16:9 e gli aiuti sono 3: sottotitoli, trascrizione, audiodescrizione.</div>
+  </div>
+  <aside class="notes">Codice: 1693. Molti scrivono 2 come prima cifra pensando che il browser scarichi tutte le source: ne sceglie una sola, la prima compatibile. Gioco a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il browser fa partire da solo un video con <code>autoplay</code> solo se ha anche <span class="blank" data-risposta="muted"></span>.</p>
+    <p>La prima riga di un file di sottotitoli è <span class="blank" data-risposta="webvtt" style="--w:7ch"></span>.</p>
+    <p>Per un podcast senza video serve una <span class="blank" data-risposta="trascrizione" style="--w:10ch"></span>.</p>
+    <p>L'attributo che dà un nome a un iframe per lo screen reader è <span class="blank" data-risposta="title"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: muted, WEBVTT, trascrizione, title. Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>audio</code> e <code>video</code> con più <code>source</code> e <code>controls</code></li>
+      <li>Autoplay solo muto</li>
+      <li>Sottotitoli con <code>track</code> e WebVTT; trascrizione per l'audio</li>
+    </ul>
+    <ul class="points">
+      <li>iframe con <code>title</code>, <code>loading="lazy"</code> e <code>aspect-ratio</code></li>
+      <li>Ogni embed manda dati a un altro sito</li>
+      <li>Privacy avanzata, OpenStreetMap, caricamento al clic</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (una pagina podcast accessibile). Prossima lezione: layout responsive senza media query.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

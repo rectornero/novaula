@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio: la codifica dei numeri · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Laboratorio:<br>la codifica dei numeri</h1>
+  <p class="lead">Tre strumenti, una sola idea: la calcolatrice da programmatore, la console del browser e un convertitore scritto da te in Java.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Calcolatrice Programmatore · DevTools · Java su OnlineGDB · Java Tutor</span></div>
+  <aside class="notes">Lezione di laboratorio (2 ore), quasi tutta al computer. Prerequisiti: le lezioni "I sistemi di numerazione" (basi-di-numerazione) e "Ottale ed esadecimale al lavoro" (ottale-ed-esadecimale), e la lezione sul software (OnlineGDB, errori di compilazione). Strumenti senza account: Calcolatrice di Windows, console del browser (F12), onlinegdb.com (Java), pythontutor.com/java.html (Java Tutor). Controllare prima che i due siti siano raggiungibili e che F12 non sia bloccato sui PC della scuola. Consegna finale: il file Java della sfida conclusiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per convertire 2026 in esadecimale, quale strumento preferisci?</h2></div>
+  <div class="poll" data-id="strumento-preferito">
+    <ol><li>Carta e penna</li><li>La calcolatrice</li><li>Un foglio di calcolo</li><li>Un programma scritto da me</li></ol>
+  </div>
+  <p class="muted">Rivoteremo alla fine: vediamo se cambiate idea.</p>
+  <aside class="notes">Rifare lo stesso sondaggio alla fine della seconda ora (si può riaprire questa slide). Messaggio: ogni strumento ha un uso; scrivere il programma serve a capire l'algoritmo, poi la libreria lo fa in una riga.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il piano</p><h2>Quattro tappe, dalla più facile alla più profonda</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Calcolatrice</h3><p class="small">Vedere tutte le basi insieme e accendere i bit.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Console</h3><p class="small">Convertire con una riga e scoprire un tranello.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Java</h3><p class="small">Usare la libreria, poi scrivere l'algoritmo.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Sfida</h3><p class="small">Il convertitore al contrario, a coppie.</p></div>
+  </div>
+  <div class="callout">Lavoro a coppie: uno scrive, l'altro controlla. Ci si scambia a ogni tappa.</div>
+  <aside class="notes">Tempi indicativi: tappa 1 25 minuti, tappa 2 20 minuti, tappa 3 40 minuti, tappa 4 25 minuti, il resto per lucchetto e biglietto d'uscita. Chi finisce prima passa alla tappa successiva; la sfida finale si può completare a casa (è anche il compito).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Tappa 1: la calcolatrice mostra tutte le basi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri la <b>Calcolatrice</b>, menu ☰, modalità <b>Programmatore</b>. Clicca su <b>DEC</b> e scrivi <b>2026</b>.</li>
+      <li>Leggi le righe HEX, OCT e BIN e copiale in <b>lab-numeri-cognome.txt</b>.</li>
+      <li>Passa al tastierino dei bit (l'icona con i puntini): clicca sui bit per ottenere <b>1010 1010</b>. Che numero è in DEC e in HEX?</li>
+      <li>Ora accendi solo il bit che vale 1024: che cosa compare?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 2026 = HEX <code>7EA</code>, OCT <code>3 752</code>, BIN <code>0111 1110 1010</code>. 1010 1010 = 170 = <code>AA</code>. Il bit 10 acceso dà 1024 = <code>400</code> in esadecimale.</div>
+  </div>
+  <aside class="notes">La calcolatrice raggruppa le cifre per leggibilità: a 4 a 4 in binario e a 3 a 3 in ottale. Nel tastierino dei bit le posizioni sono numerate da 0 (a destra) a 63: il bit numero 10 vale 2¹⁰ = 1024. 170 = 128 + 32 + 8 + 2. Domanda: perché AA? Ogni gruppo 1010 vale A. Lasciare la modalità QWORD (64 bit): le altre (DWORD, WORD, BYTE) le useremo con i numeri negativi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Somme e scorrimenti in binario</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In modalità <b>BIN</b> calcola <code>1011 0110 + 0110 1011</code>. Prima prevedi il risultato su carta.</li>
+      <li>Scrivi <code>101</code>, poi usa lo scorrimento a sinistra di 1 posto (<b>&lt;&lt;</b>, nel menu degli scorrimenti di bit) e premi <b>=</b>. Ripeti 3 volte e guarda DEC.</li>
+      <li>Fai lo stesso con lo scorrimento a destra (<b>&gt;&gt;</b>) partendo da 100 (DEC).</li>
+      <li>Annota i risultati e la regola che hai scoperto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la somma è <code>1 0010 0001</code> (182 + 107 = 289). Spostare a sinistra raddoppia: 5, 10, 20, 40. A destra dimezza senza resto: 100, 50, 25, 12.</div>
+  </div>
+  <aside class="notes">Nella Calcolatrice di Windows 10/11 il pulsante "Spostamento bit" (Bit shift) apre le opzioni; il tasto &lt;&lt; chiede il numero di posizioni dopo l'operatore: scrivere 101 &lt;&lt; 1 =. La somma supera 255: servono 9 bit, primo assaggio di overflow con 8 bit. 25 &gt;&gt; 1 = 12: l'ultimo bit (1) si perde, come la divisione intera. Se la calcolatrice non c'è: la console con 0b101 &lt;&lt; 1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sullo schermo c'è 0000 0101. Sposti a sinistra di 1. Che cosa leggi?</h2></div>
+  <div class="poll" data-id="shift-sinistra" data-tipo="quiz" data-risposta="B">
+    <ol><li>0000 0010, cioè 2</li><li>0000 1010, cioè 10</li><li>1010 0000, cioè 160</li><li>0000 0110, cioè 6</li></ol>
+    <p class="why">Ogni bit si sposta di un posto verso sinistra e a destra entra uno 0: 101 diventa 1010, il valore raddoppia. Come in decimale aggiungere uno 0 moltiplica per 10.</p>
+  </div>
+  <aside class="notes">La A è lo spostamento a destra (dimezzare); la C è chi sposta di 4 posti, cioè di un'intera cifra esadecimale (moltiplica per 16); la D è chi fa "+1". Gli scorrimenti esistono anche in Java: 5 &lt;&lt; 1 vale 10.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Tappa 2: la console del browser</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Premi <b>F12</b>, scheda <b>Console</b>. Scrivi una riga alla volta e premi Invio. Prima di ogni riga, prevedi il risultato.</p>
+<pre class="code" style="font-size:26px">0b1011                   <span class="c">// binario</span>
+0o17                     <span class="c">// ottale</span>
+0xFF                     <span class="c">// esadecimale</span>
+(2026).toString(16)
+(5).toString(2).padStart(8, <span class="s">"0"</span>)
+parseInt(<span class="s">"7EA"</span>, 16)
+parseInt(<span class="s">"2"</span>, 2)</pre>
+    </div>
+    <div class="check"><b>Controllo:</b> 11, 15, 255, <code>"7ea"</code>, <code>"00000101"</code>, 2026, <code>NaN</code> (Not a Number: in base 2 la cifra 2 non esiste).</div>
+  </div>
+  <aside class="notes">I prefissi 0b, 0o, 0x sono gli stessi di molti linguaggi: in Java esistono 0b e 0x, mentre l'ottale si scrive con uno zero davanti (017), una trappola storica. padStart riempie a sinistra fino a 8 caratteri: utile per vedere sempre un byte intero. In Chrome, se si incolla del codice la prima volta, bisogna scrivere "allow pasting": meglio digitare. Se F12 è bloccato: saltare alla tappa 3 e mostrare la console alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa restituisce parseInt("102", 2)?</h2></div>
+  <div class="poll" data-id="parseint-102" data-tipo="quiz" data-risposta="D">
+    <ol><li>NaN, perché 2 non è una cifra binaria</li><li>102</li><li>Un errore scritto in rosso</li><li>2</li></ol>
+    <p class="why">parseInt legge da sinistra e si ferma alla prima cifra non valida, senza errori: legge "10" e si ferma al 2. 10 in binario vale 2. Restituisce NaN solo se già il primo carattere non è valido, come in parseInt("2", 2).</p>
+  </div>
+  <aside class="notes">Provarlo subito in console dopo il voto. È un esempio di comportamento "silenzioso" pericoloso: il programma non segnala l'errore e dà un risultato sbagliato. Nel nostro convertitore Java (sfida finale) controlleremo ogni cifra e diremo chiaramente "cifra non valida". In Java Integer.parseInt("102", 2) invece lancia una NumberFormatException: un comportamento più severo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il binario, tre secoli fa</h2></div>
+  <figure class="citazione">
+    <blockquote>Al posto della progressione di dieci in dieci, uso da diversi anni la più semplice di tutte, che va di due in due.</blockquote>
+    <figcaption><b>Gottfried Wilhelm Leibniz</b>, filosofo e matematico, "Explication de l'arithmétique binaire", 1703</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Su GitHub ogni versione salvata di un progetto ha un codice di <b>40 cifre esadecimali</b> (160 bit), di solito abbreviato alle prime 7, come <b>3f9a1c2</b>. Anche gli assistenti AI che scrivono codice lavorano dentro questi archivi di versioni: ogni loro modifica ha il suo codice e si può confrontare o annullare.</p></div>
+  <aside class="notes">Traduzione nostra dal francese: "Mais au lieu de la progression de dix en dix, j'ai employé depuis plusieurs années la progression la plus simple de toutes, qui va de deux en deux". Leibniz pubblicò l'articolo nelle memorie dell'Accademia delle Scienze di Parigi; vi collegava il binario agli esagrammi dell'I Ching, che aveva conosciuto tramite un missionario in Cina. Il ponte: Git identifica ogni commit con un hash SHA-1 di 160 bit (40 cifre esadecimali); il codice abbreviato è un esempio inventato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tappa 3 · Java</p><h2>La libreria di Java converte già</h2></div>
+  <div class="cols-2" style="grid-template-columns:2.2fr 1fr">
+<pre class="code" style="font-size:23px"><span class="k">import</span> java.util.Scanner;
+
+<span class="k">public class</span> Main {
+  <span class="k">public static void</span> main(String[] args) {
+    Scanner in = <span class="k">new</span> Scanner(System.in);
+    System.out.print(<span class="s">"Numero decimale: "</span>);
+    <span class="k">int</span> n = in.nextInt();
+    System.out.println(<span class="s">"Binario:     "</span> + Integer.toBinaryString(n));
+    System.out.println(<span class="s">"Ottale:      "</span> + Integer.toOctalString(n));
+    System.out.println(<span class="s">"Esadecimale: "</span> + Integer.toHexString(n));
+    System.out.println(<span class="s">"Base 3:      "</span> + Integer.toString(n, 3));
+    System.out.println(<span class="s">"7EA in dec:  "</span> + Integer.parseInt(<span class="s">"7EA"</span>, 16));
+  }
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h4>Da decimale</h4><p class="small mono">toBinaryString(n)<br>toOctalString(n)<br>toHexString(n)<br>toString(n, base)</p></div>
+      <div class="card soft"><h4>Verso decimale</h4><p class="small mono">parseInt(testo, base)</p></div>
+    </div>
+  </div>
+  <aside class="notes">Integer è una classe della libreria standard di Java: non serve import. Scanner invece va importato. I metodi restituiscono String: il risultato è un testo, non un numero (come le virgolette nella console). toString(n, base) funziona da base 2 a base 36 (cifre 0–9 e A–Z).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il convertitore in una manciata di righe</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>onlinegdb.com</b> e scegli <b>Java</b> in alto a destra.</li>
+      <li>Copia il programma della slide precedente e premi <b>Run</b>. Scrivi il numero nella console in basso e premi Invio.</li>
+      <li>Prova con 2026, 255, 1024, 0.</li>
+      <li>Poi prova con <b>-1</b>: annota che cosa succede al binario e all'esadecimale.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 2026: <code>11111101010</code>, <code>3752</code>, <code>7ea</code>, <code>2210001</code>, e l'ultima riga <code>2026</code>. Con -1 il binario è fatto di <b>32 uni</b> e l'esadecimale è <code>ffffffff</code>.</div>
+  </div>
+  <aside class="notes">Il risultato con -1 è voluto: è il ponte verso la prossima lezione (rappresentazione dei numeri interi relativi, complemento a due). Un int in Java ha 32 bit; -1 in complemento a due sono 32 uni. Notare che toString(-1, 3) stampa invece "-1": quel metodo mette il segno davanti, gli altri mostrano i bit. Lasciare la curiosità aperta. Fallback se OnlineGDB non va: programiz.com/java-programming/online-compiler.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ora l'algoritmo lo scriviamo noi</p><h2>Divisioni successive, in Java</h2></div>
+  <div class="cols-2" style="grid-template-columns:1.9fr 1fr">
+<pre class="code" style="font-size:24px"><span class="k">import</span> java.util.Scanner;
+<span class="k">public class</span> Main {
+  <span class="k">public static void</span> main(String[] args) {
+    Scanner in = <span class="k">new</span> Scanner(System.in);
+    <span class="k">int</span> n = in.nextInt();     <span class="c">// il numero</span>
+    <span class="k">int</span> b = in.nextInt();     <span class="c">// la base, da 2 a 16</span>
+    String cifre = <span class="s">"0123456789ABCDEF"</span>;
+    String risultato = <span class="s">""</span>;
+    <span class="k">int</span> q = n;
+    <span class="k">do</span> {
+      <span class="k">int</span> resto = q % b;
+      <span class="hl">risultato = cifre.charAt(resto) + risultato;</span>
+      q = q / b;
+    } <span class="k">while</span> (q &gt; 0);
+    System.out.println(n + <span class="s">" in base "</span> + b + <span class="s">" = "</span> + risultato);
+  }
+}</pre>
+    <ul class="points small">
+      <li><code>%</code> dà il resto, <code>/</code> tra int il quoziente.</li>
+      <li><code>charAt(resto)</code> trasforma il resto 10 in A, 15 in F.</li>
+      <li>La cifra si attacca <b>davanti</b>: così i resti escono già dal basso verso l'alto.</li>
+    </ul>
+  </div>
+  <aside class="notes">Far leggere il codice ad alta voce a uno studente, riga per riga, collegando ogni riga al metodo su carta. La riga evidenziata è il cuore: mettere la nuova cifra a sinistra equivale a "leggere i resti dal basso". Domanda: perché do-while e non while? Lo scopriremo con il caso n = 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine l'algoritmo</h2></div>
+  <ol class="puzzle-ordina" data-id="algoritmo-conversione">
+    <li>Leggi il numero n e la base b</li>
+    <li>Parti con un risultato vuoto e con q = n</li>
+    <li>Calcola il resto di q diviso b</li>
+    <li>Metti la cifra del resto davanti al risultato</li>
+    <li>Sostituisci q con il quoziente q / b</li>
+    <li>Se q è maggiore di 0 torna al resto, altrimenti stampa</li>
+  </ol>
+  <aside class="notes">A coppie, senza guardare la slide precedente. Errore tipico: aggiornare q prima di calcolare il resto (si perde la cifra delle unità). Collegare alla prossima unità sullo sviluppo del software: questo è l'algoritmo, il codice è una sua traduzione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Scrivi il tuo convertitore e mettilo alla prova</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps small">
+        <li>In OnlineGDB (Java) scrivi il programma della slide 12, senza copiarlo e incollarlo.</li>
+        <li>Premi Run e scrivi nella console i due numeri separati da uno spazio, per esempio <code>2026 8</code>.</li>
+        <li>Compila la tabella di test sul quaderno e confronta con la libreria o la console.</li>
+      </ol>
+      <table class="data compact">
+        <tr><th>Input</th><th>Atteso</th></tr>
+        <tr><td class="mono">2026 8</td><td class="mono">3752</td></tr>
+        <tr><td class="mono">2026 16</td><td class="mono">7EA</td></tr>
+        <tr><td class="mono">100 3</td><td class="mono">10201</td></tr>
+        <tr><td class="mono">0 2</td><td class="mono">0</td></tr>
+      </table>
+    </div>
+    <div class="check"><b>Controllo:</b> tutti e quattro i test passano. Poi cambia <code>do { … } while (q &gt; 0);</code> in <code>while (q &gt; 0) { … }</code> e riprova <code>0 2</code>: il risultato è vuoto. Ecco perché serve il do-while.</div>
+  </div>
+  <aside class="notes">Scrivere a mano (non incollare) aiuta a ricordare la sintassi e fa emergere i primi errori di compilazione: punto e virgola, parentesi, maiuscole (String, System). Con while il ciclo non parte mai quando n vale 0, e il risultato resta "". Altri casi limite da far provare: base 1 (ciclo infinito: q non diventa mai 0! Fermare con Stop) e base 17 (charAt fuori dalla stringa: StringIndexOutOfBoundsException). Sono gli spunti per la sfida finale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Guarda le variabili cambiare, passo per passo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>pythontutor.com/java.html</b> (Java Tutor, senza account).</li>
+      <li>Incolla il tuo programma, ma sostituisci le due righe con <code>in.nextInt()</code> con <code>int n = 13;</code> e <code>int b = 2;</code> e cancella la riga dello Scanner.</li>
+      <li>Premi <b>Visualize Execution</b>, poi <b>Next</b> una riga alla volta.</li>
+      <li>Sul quaderno fai una tabella con <b>q</b>, <b>resto</b>, <b>risultato</b> a ogni giro.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> risultato vale <code>"1"</code>, poi <code>"01"</code>, poi <code>"101"</code>, poi <code>"1101"</code>; q vale 13, 6, 3, 1, 0.</div>
+  </div>
+  <aside class="notes">Java Tutor mostra a destra le variabili e il loro valore dopo ogni riga: è un debugger visuale, lo useremo di nuovo nel laboratorio sul debugger. L'input da tastiera non è comodo in Java Tutor, per questo si fissano i valori. 13 = 8 + 4 + 1 = 1101. Se il sito è lento, alla LIM: il docente esegue e la classe prevede il valore successivo prima di ogni Next.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Programmare con l'AI</p><h2>Il codice di un assistente va messo alla prova come il tuo</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Che cosa fa bene</h3><p class="small">Scrive in pochi secondi un convertitore che funziona per i casi normali, con commenti e nomi chiari.</p></div>
+    <div class="card bad"><h3>Dove può sbagliare</h3><p class="small">Casi limite: lo 0, i numeri negativi, una base non valida, cifre non permesse. E a volte usa metodi che non esistono.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti di programmazione con l'AI sono ormai negli editor di molti programmatori. Il metodo professionale resta lo stesso di oggi in laboratorio: una <b>tabella di test</b> con i risultati attesi, scritta prima, e controllata su ogni versione del codice, tua o generata.</p></div>
+  <aside class="notes">Se possibile, demo del docente alla LIM con un assistente: chiedere "scrivi in Java un convertitore da decimale a base b" e verificare se gestisce lo 0 (molte versioni usano while e restituiscono una stringa vuota) e i negativi. Non serve che gli studenti abbiano un account: la demo basta. Messaggio: i test non dipendono da chi ha scritto il codice.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Sfida a coppie: il convertitore al contrario</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Scrivi un programma che legge un testo e una base e stampa il valore decimale. Idea (schema di Horner): per ogni cifra, da sinistra,</p>
+      <div class="formula" style="font-size:40px">valore = valore · b + cifra</div>
+      <ol class="steps small">
+        <li>Il valore di una cifra: <code>cifre.indexOf(s.charAt(i))</code>.</li>
+        <li>Se la cifra non esiste o è ≥ b, stampa <b>Cifra non valida</b> e fermati.</li>
+        <li>Consegna su Novaula <b>convertitore-cognome.java</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> <code>7EA 16</code> → 2026; <code>10201 3</code> → 100; <code>1101 2</code> → 13; <code>709 8</code> → Cifra non valida: 9. Con <code>7ea 16</code> (minuscolo) deve funzionare lo stesso.</div>
+  </div>
+  <aside class="notes">Soluzione (testata): leggere String s = in.next().toUpperCase(); int b = in.nextInt(); int valore = 0; for (int i = 0; i &lt; s.length(); i++) { int c = cifre.indexOf(s.charAt(i)); if (c &lt; 0 || c &gt;= b) { System.out.println("Cifra non valida: " + s.charAt(i)); return; } valore = valore * b + c; } poi stampare. Horner a mano: 7EA → 7; 7·16 + 14 = 126; 126·16 + 10 = 2026. toUpperCase gestisce le minuscole. Diversamente da parseInt della console, il nostro programma non si ferma in silenzio. Si completa a casa se non basta il tempo: è il compito collegato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con il tuo convertitore</h2></div>
+  <div class="puzzle-codice" data-risposta="3752" data-aiuto="usa la calcolatrice in modalità OCT, oppure il tuo programma con input 2026 8">
+    <p>Il codice è l'anno <b>2026</b> scritto in <b>base 8</b>.</p>
+    <p class="small">Bonus per la squadra: dimostrate il risultato con due strumenti diversi di oggi (calcolatrice, console, libreria Java, il vostro programma).</p>
+    <div class="premio"><b>Lucchetto aperto!</b> 2026 = 3·512 + 7·64 + 5·8 + 2 = 3752₈. Lo stesso numero è 7EA₁₆ e 11111101010₂.</div>
+  </div>
+  <aside class="notes">Codice: 3752. Volutamente facile se il laboratorio è andato bene: la sfida vera è il bonus, cioè mostrare due conferme indipendenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In Java, il metodo che converte in esadecimale si chiama Integer.<span class="blank" data-risposta="tohexstring" style="--w:10ch"></span>(n).</p>
+    <p>Nel convertitore la nuova cifra si attacca <span class="blank" data-risposta="davanti|a sinistra" style="--w:8ch"></span> al risultato.</p>
+    <p>Con un ciclo while invece del do-while, il caso n = <span class="blank" data-risposta="0|zero" style="--w:4ch"></span> dà una stringa vuota.</p>
+    <p>Spostare un numero binario di un posto a sinistra lo <span class="blank" data-risposta="raddoppia|moltiplica per 2" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: toHexString (il confronto ignora le maiuscole), davanti (accettato a sinistra), 0, raddoppia. Poi rivotare il sondaggio iniziale.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Calcolatrice Programmatore: tutte le basi, bit e scorrimenti</li>
+      <li>Console: 0b, 0o, 0x, toString(base), parseInt(testo, base)</li>
+      <li>parseInt si ferma in silenzio alla prima cifra non valida</li>
+    </ul>
+    <ul class="points">
+      <li>Java: toBinaryString, toHexString, toString(n, b)</li>
+      <li>L'algoritmo: resto, cifra davanti, quoziente, do-while</li>
+      <li>Ogni convertitore, anche scritto dall'AI, va testato sui casi limite</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: completare il convertitore universale e consegnare il file .java.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

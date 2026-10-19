@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingegneria del software · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Sviluppare software</p>
+  <h1>Ingegneria<br>del software</h1>
+  <p class="lead">Scrivere un programma che funziona sul tuo PC è facile. Costruirne uno che milioni di persone usano per anni, senza disastri, è un mestiere: vediamo quale.</p>
+  <aside class="notes">Obiettivi: capire perché serve un'ingegneria del software, conoscere la crisi del software e la conferenza NATO del 1968, imparare le caratteristiche di qualità (ISO/IEC 25010) e i tipi di manutenzione. Durata indicativa: 2 ore. Servono OnlineGDB (Java) e LibreOffice Calc o Google Fogli. Questa è la prima lezione dell'Unità 3: le altre tre (ciclo di vita, metodologie agili, gestione dei progetti) partono da qui.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un'app che usi ogni giorno si blocca. Di chi è la colpa?</h2></div>
+  <div class="poll" data-id="isw-colpa">
+    <ol><li>Del programmatore distratto</li><li>Del mio telefono, troppo vecchio</li><li>Di chi ha deciso tempi e priorità del progetto</li><li>Di nessuno: il software ha sempre dei bug</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Far argomentare una persona per opzione. Messaggio che arriva alla fine della lezione: quasi mai è colpa di una sola persona; i difetti nascono da requisiti poco chiari, fretta, test insufficienti, cambiamenti dell'ambiente. L'ingegneria del software esiste proprio per ridurre questi rischi con un metodo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è</p><h2>Programmare non basta: serve un metodo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">L'ingegneria del software è <mark>l'applicazione di un approccio sistematico, disciplinato e misurabile</mark> allo sviluppo, all'esercizio e alla manutenzione del software.</p>
+      <p class="small muted">Definizione dello standard IEEE 610.12 (1990): in breve, trattare il software come un ponte o un motore, con progetto, misure e collaudo.</p>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>Un programma</h3><p class="muted">Lo scrivi tu, per te, in un pomeriggio. Se si rompe, lo aggiusti.</p></div>
+      <div class="card soft"><h3>Un prodotto software</h3><p>Lo scrive un team, lo usano migliaia di persone, deve durare anni e cambiare spesso.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Traduzione nostra della definizione IEEE Std 610.12-1990 ("the application of a systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software"). Chiedere: che cosa cambia tra il programma della verifica di Java e WhatsApp? Persone coinvolte, durata, utenti, conseguenze di un errore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto è grande il software?</p><h2>Quante righe di codice ha oggi il kernel Linux?</h2></div>
+  <div class="poll" data-id="isw-linux" data-tipo="quiz" data-risposta="C">
+    <ol><li>Circa 300 000</li><li>Circa 3 milioni</li><li>Più di 30 milioni</li><li>Circa 3 miliardi</li></ol>
+    <p class="why">Il kernel Linux ha superato i 30 milioni di righe ed è vicino ai 40 milioni, in gran parte driver per migliaia di dispositivi. Nessuno lo conosce tutto: migliaia di sviluppatori ci lavorano insieme, con regole precise.</p>
+  </div>
+  <aside class="notes">Nel 1991 la prima versione di Linux aveva circa 10 000 righe; a inizio 2025 il sorgente del kernel ha superato i 40 milioni di righe (dati riportati da Phoronix al rilascio delle versioni 6.x). La B sembra già enorme ed è il tranello. Domanda: se stampassimo 40 milioni di righe, 60 righe per pagina, quante pagine? Circa 670 000. Collegamento: con numeri così servono metodo, strumenti e divisione del lavoro.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Garmisch, ottobre 1968</p><h2>La crisi del software</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>I computer diventano molto più potenti e i programmi molto più grandi.</li>
+      <li>I progetti arrivano in ritardo, costano più del previsto e sono pieni di errori.</li>
+      <li>La NATO riunisce in Germania circa 50 esperti per discuterne.</li>
+    </ul>
+    <div class="card"><h3>Una parola provocatoria</h3><p>Gli organizzatori scelgono il nome <b>Software Engineering</b> apposta: il software doveva essere costruito con la stessa serietà dei ponti e delle dighe.</p></div>
+  </div>
+  <aside class="notes">La conferenza NATO sull'ingegneria del software si tenne a Garmisch (Germania) dal 7 all'11 ottobre 1968; il rapporto curato da Peter Naur e Brian Randell dice esplicitamente che il titolo era "deliberatamente provocatorio". L'espressione "crisi del software" circola da quegli anni e viene resa famosa da Dijkstra nella slide successiva. Collegamento: nello stesso periodo Margaret Hamilton guidava il software di bordo delle missioni Apollo (ci torniamo più avanti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Più potenza, più problemi</h2></div>
+  <figure class="citazione">
+    <blockquote>Finché non c'erano macchine, programmare non era affatto un problema; ora che abbiamo computer giganteschi, programmare è diventato un problema altrettanto gigantesco.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, discorso "The Humble Programmer" per il premio Turing, 1972</figcaption>
+  </figure>
+  <p class="lead">Dijkstra pensava che la soluzione non fosse lavorare di più, ma scrivere programmi <b>semplici, strutturati e verificabili</b>.</p>
+  <aside class="notes">Traduzione nostra, leggermente abbreviata (abbiamo tolto la frase centrale sui "pochi computer deboli"). Originale: "as long as there were no machines, programming was no problem at all; when we had a few weak computers, programming became a mild problem, and now we have gigantic computers, programming has become an equally gigantic problem." Fonte: EWD340, Communications of the ACM, ottobre 1972. Dijkstra è anche il padre della programmazione strutturata e dell'algoritmo dei cammini minimi usato dai navigatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando il software sbaglia</p><h2>Tre errori che sono finiti sui giornali</h2></div>
+  <p class="lead">Prima di girare ogni carta, indovina: che tipo di errore è stato?</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:440px"><div class="fronte"><h3>Ariane 5, 1996</h3><p>Il razzo europeo esplode 37 secondi dopo il decollo.</p></div><div class="retro"><p><b>Un overflow.</b> Un valore a 64 bit in virgola mobile viene convertito in un intero a 16 bit, troppo piccolo per contenerlo. Il codice era stato riusato da Ariane 4, un razzo più lento.</p></div></div>
+    <div class="flip" style="--h:440px"><div class="fronte"><h3>Mars Climate Orbiter, 1999</h3><p>La sonda della NASA si perde arrivando a Marte.</p></div><div class="retro"><p><b>Unità di misura diverse.</b> Un programma del costruttore forniva i dati in libbre-forza per secondo, quello della NASA si aspettava newton per secondo.</p></div></div>
+    <div class="flip" style="--h:440px"><div class="fronte"><h3>Missile Patriot, 1991</h3><p>Il sistema di difesa non intercetta un missile Scud.</p></div><div class="retro"><p><b>Un errore di arrotondamento.</b> 0,1 in binario non è esatto: dopo 100 ore di funzionamento l'orologio interno sbagliava di circa 0,34 secondi. Morirono 28 soldati.</p></div></div>
+  </div>
+  <aside class="notes">Fonti: rapporto della commissione d'inchiesta Ariane 501 (luglio 1996); rapporto NASA sul Mars Climate Orbiter (novembre 1999); rapporto GAO/IMTEC-92-26 (1992) sul Patriot di Dhahran, 25 febbraio 1991. Collegamento con l'Unità 1: overflow degli interi e numeri reali non rappresentabili in binario (0,1 è periodico). Domanda: in quale fase si poteva scoprire ogni errore? (Ariane: requisiti e test con i dati del nuovo razzo; Mars: specifiche delle interfacce; Patriot: requisiti di funzionamento continuo.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Il bug della media</h2>
+  <div class="cols-2">
+    <pre class="code" style="font-size:26px"><span class="k">public class</span> Main {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">int</span> a = 6, b = 7, c = 7;
+    <span class="k">double</span> media = (a + b + c) / 3;
+    System.out.println(<span class="s">"Media: "</span> + media);
+  }
+}</pre>
+    <ol class="steps small">
+      <li>Apri <b>onlinegdb.com</b>, in alto a destra scegli <b>Java</b>.</li>
+      <li>Copia il programma e premi <b>Run</b>. Fai il conto a mano: è giusto?</li>
+      <li>Trova il bug e correggilo cambiando un solo carattere.</li>
+      <li>Scrivi in un commento <code>//</code> perché sbagliava.</li>
+    </ol>
+  </div>
+  <div class="check"><b>Controllo:</b> il programma sbagliato stampa <code>Media: 6.0</code>. Quello corretto stampa <code>Media: 6.666666666666667</code>.</div>
+  <aside class="notes">Soluzione: (a + b + c) / 3 è una divisione tra interi, 20 / 3 = 6, e solo dopo il 6 viene convertito in 6.0. Basta scrivere 3.0 (oppure fare un cast: (double)(a + b + c) / 3). Morale: il programma non va in crash e sembra funzionare; l'errore si vede solo confrontando con il risultato atteso. È il primo passo verso i test (lezione 2). Chi finisce prima: far leggere i tre voti con Scanner.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Qualità del software</p><h2>Che cosa vuol dire "software di qualità"?</h2></div>
+  <p class="small muted">Il modello ISO/IEC 25010 (versione 2011) elenca 8 caratteristiche.</p>
+  <div class="cols-4">
+    <div class="card soft"><h3>Idoneità funzionale</h3><p class="small">Fa quello che serve, senza errori.</p></div>
+    <div class="card soft"><h3>Efficienza</h3><p class="small">Usa poco tempo, memoria e batteria.</p></div>
+    <div class="card soft"><h3>Compatibilità</h3><p class="small">Convive e scambia dati con altri programmi.</p></div>
+    <div class="card soft"><h3>Usabilità</h3><p class="small">Si impara presto, è accessibile a tutti.</p></div>
+    <div class="card"><h3>Affidabilità</h3><p class="small">Funziona a lungo e si riprende dai guasti.</p></div>
+    <div class="card"><h3>Sicurezza</h3><p class="small">Protegge i dati da chi non ha il permesso.</p></div>
+    <div class="card"><h3>Manutenibilità</h3><p class="small">Si capisce, si corregge e si modifica facilmente.</p></div>
+    <div class="card"><h3>Portabilità</h3><p class="small">Si installa e gira su ambienti diversi.</p></div>
+  </div>
+  <aside class="notes">Le prime quattro (riquadri colorati) le vede soprattutto chi usa il programma; affidabilità e sicurezza anche; manutenibilità e portabilità soprattutto chi lo sviluppa. La revisione ISO/IEC 25010:2023 porta le caratteristiche a 9 (aggiunge la "safety", cioè non causare danni a persone e ambiente, e rinomina usabilità e portabilità): basta citarla. Chiedere un esempio di app che conoscono per ciascuna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni caratteristica al suo esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="isw-qualita">
+    <dt>Affidabilità</dt><dd>Il registro elettronico funziona per mesi senza bloccarsi</dd>
+    <dt>Usabilità</dt><dd>Tua nonna fa una videochiamata senza leggere il manuale</dd>
+    <dt>Efficienza</dt><dd>Il gioco resta fluido e consuma poca batteria</dd>
+    <dt>Manutenibilità</dt><dd>Un nuovo programmatore corregge un bug in un'ora</dd>
+    <dt>Portabilità</dt><dd>La stessa app gira su Android, su iPhone e nel browser</dd>
+    <dt>Sicurezza</dt><dd>Nessuno legge i tuoi messaggi senza permesso</dd>
+  </dl>
+  <aside class="notes">Si può fare a squadre: chi abbina tutto per primo vince. Discussione: portabilità e compatibilità si confondono spesso. Portabilità = lo stesso software in ambienti diversi; compatibilità = programmi diversi che lavorano insieme (per esempio un file .docx aperto da Writer).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un'app che nel 2020 funzionava, oggi si blocca. Perché?</h2></div>
+  <div class="poll" data-id="isw-invecchia" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il codice si consuma con l'uso, come un pneumatico</li><li>Sono cambiati il sistema operativo, le librerie e le esigenze intorno</li><li>Con gli anni i bit del programma si invertono da soli</li><li>Le app scadono per legge dopo cinque anni</li></ol>
+    <p class="why">Il software non si consuma: le stesse istruzioni danno sempre lo stesso risultato. Invecchia perché cambia il mondo intorno (nuove versioni di Android, nuove API, nuove regole) e va adattato. È la manutenzione.</p>
+  </div>
+  <aside class="notes">Tranelli: la A è l'analogia più diffusa (l'hardware si consuma, il software no); la C ha un fondo di verità per le memorie flash, ma i file hanno codici di controllo e non è la causa normale. Collegare alla slide successiva: la manutenzione adattativa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La vita di un software</p><h2>Dopo il rilascio arriva la manutenzione</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Correttiva</h3><p class="small muted">Corregge gli errori trovati dagli utenti.</p></div>
+    <div class="card"><p class="num">2</p><h3>Adattativa</h3><p class="small muted">Adegua a un nuovo sistema, una nuova legge, un nuovo dispositivo.</p></div>
+    <div class="card"><p class="num">3</p><h3>Perfettiva</h3><p class="small muted">Aggiunge funzioni e migliora le prestazioni.</p></div>
+    <div class="card"><p class="num">4</p><h3>Preventiva</h3><p class="small muted">Riordina il codice prima che crei problemi.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il 19 luglio 2024 un aggiornamento difettoso del software di sicurezza CrowdStrike Falcon bloccò circa <b>8,5 milioni</b> di PC Windows: voli cancellati, ospedali e banche in difficoltà. Anche un aggiornamento va testato.</p></div>
+  <aside class="notes">I quattro tipi sono quelli dello standard ISO/IEC 14764. Le stime dicono che la manutenzione è la parte più costosa della vita di un software (spesso si cita più della metà del costo totale; le cifre variano molto da studio a studio, quindi niente percentuali precise). Il dato di 8,5 milioni di dispositivi è la stima pubblicata da Microsoft il 20 luglio 2024. Chiedere: di che tipo era quell'aggiornamento? (Adattativo/perfettivo: nuove regole per riconoscere minacce.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Rendi manutenibile questo codice</h2>
+  <div class="cols-2">
+    <div class="stack">
+      <pre class="code" style="font-size:26px"><span class="k">int</span> a=7,b=0;
+<span class="k">for</span>(<span class="k">int</span> i=1;i&lt;=a;i++) <span class="k">if</span>(a%i==0) b++;
+System.out.println(b==2);</pre>
+      <p class="small muted">Sono le righe dentro <code>main</code>: il resto è come nel programma della media.</p>
+    </div>
+    <ol class="steps small">
+      <li>Esegui il codice in OnlineGDB: che cosa calcola?</li>
+      <li>Rinomina <code>a</code> e <code>b</code> con nomi che spiegano il loro ruolo.</li>
+      <li>Aggiungi un commento per ogni riga e vai a capo dopo il <code>for</code>.</li>
+      <li>Fai stampare una frase chiara, per esempio <code>7 è primo? true</code>.</li>
+      <li>Salva il file come <b>Primo.java</b>.</li>
+    </ol>
+  </div>
+  <div class="check"><b>Controllo:</b> il risultato non deve cambiare. Prova con 7 (true), 9 (false), 2 (true) e 1 (false).</div>
+  <aside class="notes">Il programma conta i divisori di a: un numero è primo se ne ha esattamente 2. Soluzione: int numero = 7; int divisori = 0; for (int i = 1; i &lt;= numero; i++) { if (numero % i == 0) { divisori++; } } System.out.println(numero + " è primo? " + (divisori == 2)); In OnlineGDB per salvare con nome serve il pulsante Download o copiare il testo in un file; in alternativa consegnare uno screenshot. Messaggio: il compilatore capisce anche il codice brutto, i colleghi no. Questa è manutenibilità.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Apollo 11 e l'allarme 1202</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>20 luglio 1969: il modulo lunare sta scendendo verso la Luna.</li>
+      <li>Il computer di bordo segnala più volte gli allarmi 1202 e 1201: è sovraccarico.</li>
+      <li>Il software, progettato dal gruppo di <b>Margaret Hamilton</b> al MIT, abbandona i compiti meno importanti e tiene quelli vitali.</li>
+      <li>L'allunaggio continua. Il software aveva previsto il guasto.</li>
+    </ul>
+    <div class="card"><h3>Margaret Hamilton</h3><p>Dirigeva lo sviluppo del software di volo delle missioni Apollo e usava l'espressione "ingegneria del software" per dare a questo lavoro la stessa dignità delle altre ingegnerie.</p></div>
+  </div>
+  <aside class="notes">Fonti: NASA, Apollo 11 Lunar Surface Journal; Hamilton ha ricevuto la Presidential Medal of Freedom nel 2016. Il sovraccarico era dovuto anche a un interruttore del radar di rendezvous in una posizione che generava dati inutili. Concetto chiave: affidabilità significa anche prevedere che qualcosa vada storto e reagire bene (priorità dei processi: ci torneremo nell'Unità 6 sui sistemi operativi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Lasceresti scrivere all'AI il software di un aereo?</h2></div>
+  <div class="poll" data-id="isw-ai-aereo">
+    <ol><li>Sì, se poi passa tutti i test</li><li>Solo per le parti meno critiche</li><li>Sì, ma un ingegnere deve rileggere ogni riga</li><li>No, mai</li></ol>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti di programmazione con AI (come GitHub Copilot, dal 2021) propongono codice mentre scrivi, e gli agenti più recenti modificano interi progetti. Scrivono in fretta, ma possono sbagliare con sicurezza: <b>requisiti, test e revisione</b> restano compiti dell'ingegneria del software.</p></div>
+  <aside class="notes">Discussione aperta, 5 minuti. Spunti: il software aeronautico segue norme di certificazione molto severe (per esempio DO-178C) che chiedono tracciabilità tra requisiti, codice e test, chiunque scriva il codice. L'espressione "vibe coding" (Andrej Karpathy, febbraio 2025) indica il programmare chiedendo tutto all'AI senza leggere il codice: va bene per un prototipo, non per un aereo. Nessuna risposta è giusta: conta il ragionamento.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La pagella di un'app</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scegli un'app che usi spesso. Apri Calc o Google Fogli.</li>
+      <li>In A1 <b>Caratteristica</b>, in B1 <b>Voto (1-5)</b>, in C1 <b>Perché</b>. Da A2 ad A9 le 8 caratteristiche.</li>
+      <li>Dai un voto e scrivi un motivo concreto per ognuna.</li>
+      <li>In B11 <code>=MEDIA(B2:B9)</code>, in B12 <code>=MIN(B2:B9)</code>.</li>
+      <li>In B13 <code>=SE(B11&gt;=4;"Ottima";SE(B11&gt;=3;"Buona";"Da migliorare"))</code></li>
+      <li>Salva come <b>qualita-app.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con i voti 4, 5, 3, 4, 5, 2, 4, 3 la media è 3,75, il minimo 2 e il giudizio "Buona". Il minimo ti dice dove l'app va migliorata.</div>
+  </div>
+  <aside class="notes">Somma dei voti di esempio: 30, 30/8 = 3,75. In Google Fogli il separatore è la virgola se le impostazioni sono inglesi, il punto e virgola con le impostazioni italiane. Chi finisce: inserire un grafico (in Calc tipo "Rete", cioè radar) con A2:B9. Confrontare le pagelle della stessa app fatte da due studenti: la qualità percepita dipende da chi usa il software.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto dell'ingegnere</h2></div>
+  <div class="puzzle-codice" data-risposta="6468" data-aiuto="la terza cifra è il risultato intero di 20 / 3 in Java">
+    <ul class="points">
+      <li>1ª cifra: l'ultima cifra dell'anno in cui esplose Ariane 5</li>
+      <li>2ª cifra: quanti tipi di manutenzione abbiamo visto</li>
+      <li>3ª cifra: la parte intera stampata dal programma della media sbagliato</li>
+      <li>4ª cifra: l'ultima cifra dell'anno della conferenza NATO di Garmisch</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1996, 4 tipi di manutenzione, 20 / 3 = 6 tra interi, 1968.</div>
+  </div>
+  <aside class="notes">Codice: 6468. A squadre, 3 minuti. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nel 1968 una conferenza della NATO discusse la crisi del <span class="blank" data-risposta="software"></span>.</p>
+    <p>La caratteristica di qualità che misura quanto è facile modificare il codice è la <span class="blank" style="--w:10ch" data-risposta="manutenibilità|manutenibilita"></span>.</p>
+    <p>Adeguare un'app a una nuova versione di Android è manutenzione <span class="blank" style="--w:9ch" data-risposta="adattativa|adattiva"></span>.</p>
+    <p>In Java l'espressione <code>20 / 3</code> tra interi vale <span class="blank" style="--w:3ch" data-risposta="6"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: software, manutenibilità, adattativa (accettato "adattiva"), 6.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ingegneria del software: sviluppare con metodo, misure e collaudo</li>
+      <li>1968: la crisi del software e la conferenza NATO</li>
+      <li>Errori famosi: overflow, unità di misura, arrotondamenti</li>
+    </ul>
+    <ul class="points">
+      <li>Le 8 caratteristiche di qualità ISO/IEC 25010</li>
+      <li>Il software non si consuma: invecchia e va mantenuto</li>
+      <li>L'AI scrive codice, ma requisiti, test e revisione restano nostri</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: "Autopsia di un bug famoso". Prossima lezione: il ciclo di vita del software, con i modelli e i test.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

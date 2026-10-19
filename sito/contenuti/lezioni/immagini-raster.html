@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le immagini raster · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità</p>
+  <h1>Le immagini<br>raster</h1>
+  <p class="lead">Una foto del tuo telefono è una tabella di milioni di numeri. Oggi impariamo a leggerla, a misurarla e a calcolare quanto pesa.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Pixel · risoluzione · colore · peso · compressione</span></div>
+  <aside class="notes">Obiettivi: definire pixel, risoluzione e profondità di colore; distinguere RGB e CMYK; calcolare il peso di un'immagine non compressa; capire l'idea di compressione con e senza perdita. Prerequisiti: binario ed esadecimale (deck numeri-binari ed esadecimale, già svolti). Durata indicativa: 2 ore. Servono Photopea (photopea.com, senza account) e LibreOffice Calc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti megapixel ha la fotocamera principale del tuo telefono?</h2></div>
+  <div class="poll" data-id="r-megapixel">
+    <ol><li>12 o meno</li><li>Circa 48–50</li><li>Più di 100</li><li>Non lo so</li></ol>
+  </div>
+  <p class="muted small">Se non lo sai, cercalo nelle impostazioni della fotocamera o nella scheda tecnica del modello.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Molti telefoni recenti dichiarano 48 o 50 MP ma salvano le foto a 12 MP: lo spieghiamo più avanti (pixel binning). Chiedere: "più megapixel vuol dire foto migliori?" e lasciare la domanda aperta fino alla slide sulla risoluzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il pixel</p><h2>Un'immagine raster è una griglia di numeri</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="lead">Il <b>pixel</b> (<i>picture element</i>) è il più piccolo quadratino dell'immagine. Ogni pixel ha <mark>un solo colore</mark>, scritto come numero.</p>
+      <ul class="points">
+        <li>Raster = griglia, in inglese anche <i>bitmap</i></li>
+        <li>Qui: 8 × 8 = 64 pixel, 1 bit ciascuno</li>
+        <li>1 = colorato, 0 = sfondo</li>
+      </ul>
+    </div>
+    <div class="row">
+      <svg viewBox="-0.1 -0.1 8.2 8.2" width="360" height="360" role="img" aria-label="Faccina disegnata con 64 pixel"><rect x="-0.1" y="-0.1" width="8.2" height="8.2" fill="#ffffff"/><path fill="#c8326f" d="M2 0h4v1h-4zM1 1h1v1h-1zM6 1h1v1h-1zM0 2h1v4h-1zM7 2h1v4h-1zM2 2h1v1h-1zM5 2h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM3 5h2v1h-2zM1 6h1v1h-1zM6 6h1v1h-1zM2 7h4v1h-4z"/><path stroke="#dcdfe8" stroke-width="0.04" d="M0 0V8M1 0V8M2 0V8M3 0V8M4 0V8M5 0V8M6 0V8M7 0V8M8 0V8M0 0H8M0 1H8M0 2H8M0 3H8M0 4H8M0 5H8M0 6H8M0 7H8M0 8H8"/></svg>
+      <pre class="code">0 0 1 1 1 1 0 0
+0 1 0 0 0 0 1 0
+1 0 <span class="hl">1</span> 0 0 <span class="hl">1</span> 0 1
+1 0 0 0 0 0 0 1
+1 0 1 0 0 1 0 1
+1 0 0 1 1 0 0 1
+0 1 0 0 0 0 1 0
+0 0 1 1 1 1 0 0</pre>
+    </div>
+  </div>
+  <aside class="notes">Far notare che la stessa tabella di 0 e 1 è l'immagine: il computer non "vede" la faccina, conserva solo i numeri. Gli 1 evidenziati sono gli occhi. Domanda: quanti byte servono per questa immagine? 64 bit = 8 byte. Collegare a numeri-binari.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Risoluzione</p><h2>Quanti pixel in larghezza e in altezza</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Formato</th><th>Pixel</th><th>Totale</th></tr>
+      <tr><td>Prima scansione (1957)</td><td class="mono">176 × 176</td><td class="mono">30 976</td></tr>
+      <tr><td>Full HD</td><td class="mono">1920 × 1080</td><td class="mono">≈ 2,1 MP</td></tr>
+      <tr><td>4K UHD</td><td class="mono">3840 × 2160</td><td class="mono">≈ 8,3 MP</td></tr>
+      <tr><td>Foto da telefono</td><td class="mono">4000 × 3000</td><td class="mono">12 MP</td></tr>
+    </table>
+    <div class="stack">
+      <p>1 megapixel (MP) = 1 milione di pixel.</p>
+      <p>Per la stampa conta la <b>densità</b>: pixel per pollice (<b>ppi</b> o dpi). Una buona stampa usa circa 300 ppi.</p>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti sensori da 48 o 50 MP uniscono 4 pixel vicini in uno (<b>pixel binning</b>) e salvano foto da 12 MP, più luminose e con meno rumore.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Calcoli: 1920 × 1080 = 2 073 600; 3840 × 2160 = 8 294 400; 4000 × 3000 = 12 000 000. 1 pollice = 2,54 cm. Più megapixel non significa automaticamente foto migliori: contano anche la dimensione del sensore, l'obiettivo e l'elaborazione. Il pixel binning è usato dai sensori "Quad Bayer" di molti telefoni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola, non tirare a indovinare</p><h2>Stampi una foto 4000 × 3000 a 300 ppi. Quanto è larga?</h2></div>
+  <div class="poll" data-id="r-stampa" data-tipo="quiz" data-risposta="B">
+    <ol><li>Circa 13 cm</li><li>Circa 34 cm</li><li>Circa 40 cm</li><li>Circa 1,2 m</li></ol>
+    <p class="why">4000 pixel ÷ 300 pixel per pollice = 13,3 pollici. 13,3 × 2,54 cm = circa 34 cm. Chi risponde 13 cm ha dimenticato di passare dai pollici ai centimetri.</p>
+  </div>
+  <aside class="notes">Tranello: 13 è il numero di pollici. 40 cm viene da 4000 ÷ 100. Far fare il conto alla lavagna; l'altezza è 3000 ÷ 300 = 10 pollici = 25,4 cm. Domanda extra: e a 150 ppi? Il doppio, circa 68 cm, ma con pixel più visibili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Profondità di colore</p><h2>Quanti bit servono per un pixel?</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Bit per pixel</th><th>Colori possibili</th><th>Dove</th></tr>
+      <tr><td class="mono">1</td><td class="mono">2</td><td>codici QR, fax</td></tr>
+      <tr><td class="mono">8</td><td class="mono">256</td><td>scala di grigi, GIF</td></tr>
+      <tr><td class="mono">24</td><td class="mono hl">16 777 216</td><td>foto (8 bit per R, G e B)</td></tr>
+      <tr><td class="mono">32</td><td class="mono">16 777 216 + trasparenza</td><td>PNG con canale alfa</td></tr>
+    </table>
+    <div class="formula"><small>con n bit per pixel</small>colori = 2<span class="hl">ⁿ</span><small style="margin-top:14px">2²⁴ = 256 × 256 × 256</small></div>
+  </div>
+  <aside class="notes">È la stessa regola vista in numeri-binari: con n bit si contano 2ⁿ valori. Il canale alfa a 32 bit non aggiunge colori: aggiunge 256 livelli di trasparenza. L'occhio umano distingue alcuni milioni di colori, quindi 24 bit bastano per le foto di tutti i giorni; macchine fotografiche e video HDR usano 10 o più bit per canale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello RGB</p><h2>Tre luci, un byte ciascuna: che colore esce?</h2></div>
+  <p class="lead">Sullo schermo ogni pixel è fatto di tre luci: rosso, verde, blu. Da 0 (spenta) a 255 (al massimo). Le luci si <b>sommano</b>.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:250px"><div class="fronte"><h3 class="mono">rgb(255, 255, 0)</h3><p>Che colore è?</p></div><div class="retro"><p><b>Giallo.</b></p><p class="muted">Rosso + verde al massimo, in esadecimale #FFFF00.</p></div></div>
+    <div class="flip" style="--h:250px"><div class="fronte"><h3 class="mono">rgb(0, 255, 255)</h3><p>Che colore è?</p></div><div class="retro"><p><b>Ciano.</b></p><p class="muted">Verde + blu, in esadecimale #00FFFF.</p></div></div>
+    <div class="flip" style="--h:250px"><div class="fronte"><h3 class="mono">rgb(128, 128, 128)</h3><p>Che colore è?</p></div><div class="retro"><p><b>Grigio medio.</b></p><p class="muted">Tre luci uguali danno un grigio; 128 = 80 in esadecimale, #808080.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare, far votare per alzata di mano. Il giallo sorprende sempre: con la luce rosso + verde fa giallo, con le tempere no. Ripasso esadecimale: 255 = FF, 128 = 80. Se c'è tempo: rgb(255, 255, 255) = bianco, rgb(0, 0, 0) = nero.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Leggi i numeri dentro una foto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>photopea.com</b> (gratis, senza account) e con <b>File › Apri</b> carica una tua foto o una foto libera da commons.wikimedia.org.</li>
+      <li>Con <b>Immagine › Dimensione immagine</b> annota larghezza e altezza in pixel.</li>
+      <li>Ingrandisci al massimo (Ctrl e +) finché vedi i quadratini.</li>
+      <li>Con il <b>contagocce</b> (tasto I) clicca 3 pixel diversi; poi clicca il colore di primo piano e annota R, G, B e il codice esadecimale.</li>
+      <li>Scrivi i dati in <b>pixel-letti.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> R, G e B sono tra 0 e 255 e il codice ha 6 cifre esadecimali. Esempio: R 200, G 50, B 111 → <code>#C8326F</code>. Il cielo ha B alto, una foglia G alto.</div>
+  </div>
+  <aside class="notes">Photopea si apre in italiano se il browser è in italiano; altrimenti i menu sono Image › Image Size e File › Open. Verificare la conversione di almeno un colore a mano: 200 = C8, 50 = 32, 111 = 6F. Fallback se Photopea è bloccato: Paint (Modifica colori mostra rosso, verde, blu) con lo strumento Selezione colore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Schermo e stampa</p><h2>RGB per la luce, CMYK per l'inchiostro</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>RGB · sintesi additiva</h3><p>Luci che si sommano: tutte accese = <b>bianco</b>, tutte spente = nero.</p><p class="muted">Schermi, telefoni, proiettori, fotocamere.</p></div>
+    <div class="card"><h3>CMYK · sintesi sottrattiva</h3><p>Ciano, magenta, giallo e nero (Key). Ogni inchiostro <b>toglie</b> una parte della luce riflessa dal foglio.</p><p class="muted">Stampanti e tipografie.</p></div>
+  </div>
+  <div class="callout">Perché il nero a parte? Ciano + magenta + giallo insieme danno un marrone scuro, costano tre inchiostri e bagnano la carta. Il nero puro fa testi nitidi e costa meno.</div>
+  <aside class="notes">Una foto RGB stampata spesso esce più spenta: alcuni colori brillanti dello schermo non si possono ottenere con gli inchiostri (gamut diverso). Per questo i grafici convertono in CMYK prima della tipografia. Lettera K: "key", la lastra di riferimento in tipografia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni immagine alla codifica più adatta</h2></div>
+  <dl class="puzzle-abbina" data-id="r-codifiche">
+    <dt>Codice QR</dt><dd>1 bit per pixel: bianco o nero</dd>
+    <dt>Radiografia</dt><dd>8 bit per pixel: 256 livelli di grigio</dd>
+    <dt>Foto sul telefono</dt><dd>24 bit per pixel, modello RGB</dd>
+    <dt>Logo con sfondo trasparente</dt><dd>32 bit per pixel: RGB più canale alfa</dd>
+    <dt>Volantino in tipografia</dt><dd>Quattro inchiostri, modello CMYK</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 2 minuti. Le radiografie mediche reali usano spesso 12 o 16 bit di grigio: se qualcuno lo sa, è un'ottima osservazione. Qui contano gli abbinamenti più adatti tra quelli proposti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>1957: la prima foto digitale era un bambino</h2></div>
+  <div class="cols-2 wide-left">
+    <figure class="citazione">
+      <blockquote>I quadrati erano la scelta logica. Ma non erano l'unica possibilità. Fu una cosa sciocca, di cui da allora soffre tutto il mondo.</blockquote>
+      <figcaption><b>Russell Kirsch</b>, informatico statunitense, intervista a Wired, 2010</figcaption>
+    </figure>
+    <div class="card soft"><p class="num">176 × 176</p><p>Kirsch digitalizzò la foto del figlio Walden, di tre mesi, con il computer SEAC del National Bureau of Standards. Nacque il pixel quadrato.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra, abbreviata, dall'intervista di Kirsch a Wired (giugno 2010, "Square pixel inventor tries to smooth things out"). Kirsch, a 81 anni, proponeva pixel di forma variabile per ridurre l'effetto "scalettato". La scansione del 1957 è considerata la prima immagine digitale ottenuta con uno scanner; l'originale era di circa 5 × 5 cm. Domanda: perché i quadrati sono comodi? Righe e colonne si indirizzano con due numeri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il peso di un'immagine</p><h2>Larghezza × altezza × bit per pixel</h2></div>
+  <div class="formula"><small>dimensione non compressa in byte</small>byte = L × A × <span class="hl">bit</span> ÷ 8</div>
+  <div class="cols-2">
+    <div class="card"><h3>Foto 4000 × 3000 a 24 bit</h3><p class="mono">4000 × 3000 × 24 ÷ 8</p><p class="mono">= <b>36 000 000 byte</b></p><p class="muted">36 MB, cioè circa 34,3 MiB</p></div>
+    <div class="card soft"><h3>Ma il file JPEG pesa 3–5 MB</h3><p>Perché è <b>compresso</b>: il formato elimina dettagli che l'occhio quasi non nota.</p></div>
+  </div>
+  <aside class="notes">36 000 000 ÷ 1 048 576 = 34,33 MiB. Ricordare: si divide per 8 perché i bit diventano byte. Il valore di 3–5 MB per un JPEG da 12 MP è indicativo e dipende dalla scena: una foto di un muro bianco pesa meno di una foto di foglie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>1 KB è uguale a…</h2></div>
+  <div class="poll" data-id="r-kilobyte" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sempre 1024 byte</li><li>Sempre 1000 bit</li><li>1000 byte per i dischi, 1024 byte per la RAM, per legge</li><li>1000 byte per lo standard SI; 1024 byte si chiama KiB</li></ol>
+    <p class="why">Lo standard (SI e IEC) dice: kilo = 1000, quindi 1 kB = 1000 byte; 1024 byte è 1 KiB (kibibyte). Windows però scrive "KB" intendendo 1024: per questo un disco da 1 TB appare come circa 931 GB.</p>
+  </div>
+  <aside class="notes">Il tranello più comune. Calcolo: 10¹² ÷ 1024³ = 931,3. I produttori di dischi usano la base 10, Windows la base 2 con le sigle vecchie; macOS e Linux usano spesso la base 10. In questo corso scriviamo KiB e MiB quando dividiamo per 1024.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il calcolatore del peso delle immagini</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Calc. In A1:E1 scrivi <b>Larghezza, Altezza, Bit, Byte, MiB</b>.</li>
+      <li>Riga 2: 4000, 3000, 24. Riga 3: 1920, 1080, 24. Riga 4: 800, 600, 8. Riga 5: 176, 176, 1.</li>
+      <li>In D2 scrivi <code>=A2*B2*C2/8</code>, in E2 <code>=ARROTONDA(D2/1048576;2)</code> e trascina fino alla riga 5.</li>
+      <li>Aggiungi la riga 6 con la risoluzione della tua fotocamera.</li>
+      <li>Salva come <b>peso-immagini.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> D2 = 36 000 000 (E2 = 34,33); D3 = 6 220 800 (5,93); D4 = 480 000 (0,46); D5 = 3 872 byte.</div>
+  </div>
+  <aside class="notes">Soluzioni: 1920 × 1080 × 3 = 6 220 800 byte; 800 × 600 × 1 = 480 000; 176 × 176 ÷ 8 = 3872 byte, la foto di Kirsch se fosse a 1 bit (l'originale aveva pochi livelli di grigio). Variante per i più veloci: colonna F con =D2/1000000 per i MB e confronto tra MB e MiB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Compressione</p><h2>Due modi per fare spazio</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Senza perdita · lossless</h3><p>Si torna all'immagine identica, bit per bit. Esempio: la codifica <b>RLE</b> (run-length) conta i pixel uguali di fila.</p><p class="mono">BBBBBNNNBBBB → 5B3N4B</p><p class="muted">PNG, GIF</p></div>
+    <div class="card bad"><h3>Con perdita · lossy</h3><p>Si buttano dettagli che l'occhio nota poco: piccole variazioni di colore, sfumature. Non si torna indietro.</p><p class="muted">JPEG, WebP (in genere)</p></div>
+  </div>
+  <div class="callout">La RLE funziona benissimo con un logo a tinte piatte e male con una foto, dove quasi ogni pixel è diverso dal vicino.</div>
+  <aside class="notes">12 pixel (12 simboli) diventano 6 simboli. Far comprimere a voce la riga "NNNNNNNNBB" → 8N2B. Su una foto la RLE può addirittura allungare il file: "BNBN" → 1B1N1B1N. PNG usa un algoritmo diverso (DEFLATE) ma l'idea è la stessa: sfruttare le ripetizioni. Nel laboratorio sui file immagine confronteremo i formati con Squoosh.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Pixel art 16 × 16</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Photopea: <b>File › Nuovo</b>, larghezza 16 e altezza 16 pixel, sfondo bianco.</li>
+      <li>Ingrandisci al 3200% e scegli la <b>matita</b> con dimensione 1 pixel.</li>
+      <li>Disegna un personaggio con al massimo 4 colori: inserisci i codici esadecimali nel selettore del colore.</li>
+      <li>Esporta con <b>File › Esporta come › PNG</b>: <b>sprite-cognome.png</b>.</li>
+      <li>Calcola a mano: 16 × 16 × 24 ÷ 8 = ? byte. Confronta con il peso del file.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> non compressa: 768 byte. Il PNG ha l'intestazione e i dati compressi: in genere pesa da poche centinaia di byte a circa 1 KB.</div>
+  </div>
+  <aside class="notes">Se la matita fa bordi sfumati, si sta usando il pennello: scegliere la matita (stesso gruppo del pennello, tasto B o Maiusc+B). Il PNG può pesare più di 768 byte per via dell'intestazione e dei metadati: nel laboratorio sui file immagine lo apriremo con un editor esadecimale. Raccogliere gli sprite in una cartella condivisa: diventano la galleria della classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Come «guarda» una foto un'intelligenza artificiale</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>224 × 224 × 3 = 150 528 numeri</h3><p>Molti classificatori di immagini ridimensionano la foto a 224 × 224 pixel. Per l'AI la foto è solo una tabella di 150 528 numeri da 0 a 255: tre per ogni pixel. Il resto lo impara dagli esempi.</p></div>
+    <div class="stack">
+      <p>Anche i generatori di immagini producono, alla fine, una griglia di pixel RGB.</p>
+      <p class="muted">Ci torneremo nella lezione su intelligenza artificiale e computer vision.</p>
+    </div>
+  </div>
+  <aside class="notes">224 × 224 è la dimensione d'ingresso classica delle reti addestrate su ImageNet (per esempio ResNet). Le foto vengono rimpicciolite: un'AI non lavora a 12 MP. Domanda: che cosa perde l'AI rimpicciolendo la foto? I dettagli piccoli, per esempio una scritta lontana.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4236" data-aiuto="la prima cifra: 2 alla quanto fa 16?">
+    <ul class="points">
+      <li>1ª cifra: quanti bit per pixel servono per 16 colori</li>
+      <li>2ª cifra: quanti colori ha un'immagine a 1 bit per pixel</li>
+      <li>3ª cifra: quanti byte occupa un pixel a 24 bit</li>
+      <li>4ª cifra: quante cifre esadecimali ha un colore #RRGGBB</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2⁴ = 16, 2¹ = 2, 24 ÷ 8 = 3, RR GG BB = 6.</div>
+  </div>
+  <aside class="notes">Codice: 4236. A squadre: la prima squadra che apre il lucchetto spiega il ragionamento cifra per cifra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il più piccolo elemento di un'immagine raster si chiama <span class="blank" data-risposta="pixel"></span>.</p>
+    <p>Con 8 bit per pixel si ottengono <span class="blank" data-risposta="256"></span> colori.</p>
+    <p>Gli schermi usano il modello <span class="blank" data-risposta="RGB"></span>, le stampanti il modello <span class="blank" data-risposta="CMYK"></span>.</p>
+    <p>Un'immagine 100 × 100 a 24 bit non compressa occupa <span class="blank" data-risposta="30000|30 000|30.000" style="--w:8ch"></span> byte.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: pixel, 256, RGB, CMYK, 30 000 (100 × 100 × 3).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Immagine raster = griglia di pixel, ognuno un numero</li>
+      <li>Risoluzione = larghezza × altezza in pixel</li>
+      <li>Profondità: n bit per pixel → 2ⁿ colori</li>
+    </ul>
+    <ul class="points">
+      <li>RGB per la luce, CMYK per l'inchiostro</li>
+      <li>Byte = L × A × bit ÷ 8; 1 kB = 1000 byte, 1 KiB = 1024</li>
+      <li>Compressione lossless (RLE, PNG) e lossy (JPEG)</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: laboratorio sui file immagine (JPEG, PNG, GIF, WebP).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

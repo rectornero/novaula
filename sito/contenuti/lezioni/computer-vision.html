@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intelligenza artificiale e computer vision · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità</p>
+  <h1>Intelligenza artificiale<br>e computer vision</h1>
+  <p class="lead">Per un computer una foto è una tabella di numeri. Come fa a dire «questo è un gatto»? E quando sbaglia, di chi è la colpa?</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Pixel come numeri · filtri · reti neurali · addestramento · bias · privacy</span></div>
+  <aside class="notes">Obiettivi: capire che un'immagine è un insieme di numeri; applicare a mano un filtro (convoluzione); descrivere come si addestra e si valuta un classificatore; riconoscere bias, errori ed esempi avversari; conoscere le regole su dati biometrici. Durata: 2 ore. Strumenti: Calc, Teachable Machine (teachablemachine.withgoogle.com, funziona senza account, l'addestramento avviene nel browser). Servono webcam (anche quelle dei portatili) oppure foto di oggetti da caricare. Non usare volti dei compagni per l'addestramento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come sblocchi il telefono?</h2></div>
+  <div class="poll" data-id="cv-sblocco">
+    <ol><li>Con il volto</li><li>Con l'impronta</li><li>Con codice o segno</li><li>Non lo blocco</li></ol>
+  </div>
+  <aside class="notes">Chi usa il volto usa ogni giorno un sistema di computer vision. Domande: vi è mai capitato che non vi riconoscesse? Con gli occhiali da sole, al buio, appena svegli? Perché? Tenere a mente le risposte: torneranno nella parte sui limiti. Chi "non lo blocca": breve richiamo alla sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come vede una macchina</p><h2>Una foto è un blocco di numeri</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>input tipico di un classificatore</small>224 × 224 × 3 = <span class="hl">150 528</span> numeri</div>
+      <p>Ogni numero va da 0 a 255. La macchina non vede «orecchie» o «baffi»: deve imparare da sola quali combinazioni di numeri corrispondono a un gatto.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando cerchi «cane» nella galleria del telefono, molte app trovano le foto giuste anche se non le hai mai etichettate: un modello di computer vision le ha già analizzate, spesso direttamente sul telefono, grazie al chip per l'AI (NPU).</p></div>
+  </div>
+  <aside class="notes">Ripasso dalla lezione sulle immagini raster: larghezza × altezza × 3 canali. La "computer vision" è il ramo dell'informatica che estrae informazioni da immagini e video. Elaborare sul dispositivo (on-device) significa che le foto non devono essere inviate a un server per l'analisi: utile per la privacy, ma va verificato app per app.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni compito della computer vision a un esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="cv-compiti">
+    <dt>Classificazione</dt><dd>«In questa foto c'è un cane»: una sola etichetta</dd>
+    <dt>Rilevamento</dt><dd>Un rettangolo intorno a ogni auto e pedone nella scena</dd>
+    <dt>Segmentazione</dt><dd>Lo sfondo sfocato in videochiamata, pixel per pixel</dd>
+    <dt>Riconoscimento del testo (OCR)</dt><dd>Copiare il testo da una foto della lavagna</dd>
+    <dt>Verifica del volto</dt><dd>Lo sblocco del telefono: sei proprio tu?</dd>
+  </dl>
+  <aside class="notes">Differenza chiave: classificazione = che cosa c'è; rilevamento = che cosa e dove; segmentazione = a quale oggetto appartiene ogni pixel. La verifica del volto (uno a uno) è diversa dall'identificazione (uno contro molti, cercare una persona in un archivio): la seconda solleva i problemi di privacy più gravi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo passo</p><h2>Un filtro 3 × 3 trova i bordi</h2></div>
+  <div class="cols-3">
+    <table class="data compact"><tr><th colspan="3">Pixel (grigi)</th></tr><tr><td class="mono">0</td><td class="mono">0</td><td class="mono hl">200</td></tr><tr><td class="mono">0</td><td class="mono">0</td><td class="mono hl">200</td></tr><tr><td class="mono">0</td><td class="mono">0</td><td class="mono hl">200</td></tr></table>
+    <table class="data compact"><tr><th colspan="3">Filtro</th></tr><tr><td class="mono">−1</td><td class="mono">0</td><td class="mono">1</td></tr><tr><td class="mono">−1</td><td class="mono">0</td><td class="mono">1</td></tr><tr><td class="mono">−1</td><td class="mono">0</td><td class="mono">1</td></tr></table>
+    <div class="card soft"><h3>Moltiplica e somma</h3><p class="mono">3 × (−1 × 0 + 0 × 0 + 1 × 200)</p><p class="mono">= <b>600</b> → bordo!</p><p class="muted small">Su una zona uniforme il risultato è 0.</p></div>
+  </div>
+  <p>Si fa scorrere il filtro su tutta l'immagine: è la <b>convoluzione</b>. Ne esce una nuova tabella che è grande dove il colore cambia da sinistra a destra.</p>
+  <aside class="notes">Questo filtro si chiama di Prewitt (verticale). Il filtro di Sobel è simile, con la riga centrale −2 0 2. Il "moltiplica e somma" è proprio l'operazione che le GPU e le NPU fanno miliardi di volte al secondo. Se l'immagine fosse uniforme (tutti 200), il risultato sarebbe −200 + 200 = 0 per ogni riga.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un rilevatore di bordi in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In A1:F6 scrivi un'immagine 6 × 6: in ogni riga <b>0 0 0 200 200 200</b>.</li>
+      <li>In H1:J3 scrivi il filtro: ogni riga <b>−1 0 1</b>.</li>
+      <li>In A9 scrivi <code>=SOMMA.PRODOTTO(A1:C3;$H$1:$J$3)</code> e trascina fino a D12.</li>
+      <li>Colora A1:F6 e A9:D12 con <b>Formato › Condizionale › Scala di colori</b>.</li>
+      <li>Cambia il filtro in −1 −1 −1 / 0 0 0 / 1 1 1. Salva come <b>bordi.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con il primo filtro ogni riga di A9:D12 vale <b>0 600 600 0</b>: il bordo verticale è stato trovato. Con il secondo filtro tutto vale 0: non ci sono bordi orizzontali.</div>
+  </div>
+  <aside class="notes">SOMMA.PRODOTTO moltiplica cella per cella i due intervalli e somma. I $ bloccano il filtro mentre si trascina. Per chi finisce presto: disegnare nella tabella una "L" o una diagonale e prevedere il risultato prima di guardarlo. Il risultato è 4 × 4 perché un filtro 3 × 3 non può centrarsi sui pixel del bordo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Reti neurali</p><h2>Non scriviamo i filtri: la rete li impara</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Primi strati</h3><p>Filtri che trovano bordi, colori, puntini.</p></div>
+    <div class="card soft"><h3>Strati intermedi</h3><p>Combinano i bordi: curve, occhi, ruote, trame.</p></div>
+    <div class="card fill"><h3>Ultimo strato</h3><p>Una probabilità per ogni classe: gatto 0,92, cane 0,06…</p></div>
+  </div>
+  <div class="callout">Addestrare = mostrare migliaia di esempi già etichettati, misurare l'errore e correggere un po' i numeri dei filtri (i <b>pesi</b>). Ripetuto moltissime volte.</div>
+  <aside class="notes">Si chiamano reti neurali convoluzionali (CNN). I "pesi" sono milioni di numeri: all'inizio casuali, poi aggiustati automaticamente per ridurre l'errore. Nessuno decide a mano che il terzo filtro deve riconoscere gli occhi: emerge dall'addestramento. Per questo è difficile spiegare perché una rete ha deciso qualcosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Fei-Fei Li e le immagini di ImageNet</h2></div>
+  <div class="cols-2 wide-left">
+    <figure class="citazione">
+      <blockquote>Prima insegniamo loro a vedere. Poi saranno loro ad aiutarci a vedere meglio.</blockquote>
+      <figcaption><b>Fei-Fei Li</b>, informatica, Università di Stanford, conferenza TED, 2015</figcaption>
+    </figure>
+    <div class="card soft"><p class="num">14 milioni</p><p>di immagini etichettate a mano in ImageNet (2009). Nel 2012 la rete <b>AlexNet</b> sbaglia il 15,3% delle volte nella gara ImageNet; il secondo classificato il 26,2%.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dal finale del TED talk "How we're teaching computers to understand pictures" (2015). ImageNet contiene oltre 14 milioni di immagini in circa 22 000 categorie, etichettate con l'aiuto di migliaia di lavoratori online (Amazon Mechanical Turk). La gara (ILSVRC) usava 1000 categorie; l'errore citato è "top-5": la risposta giusta non è tra le 5 più probabili. Il salto di AlexNet, ottenuto con le GPU, è considerato l'inizio dell'esplosione del deep learning.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Costruire un classificatore: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="cv-pipeline">
+    <li>Decidi le classi e raccogli le immagini</li>
+    <li>Etichetta ogni immagine con la classe giusta</li>
+    <li>Metti da parte alcune immagini per il test</li>
+    <li>Addestra il modello sulle altre</li>
+    <li>Misura l'accuratezza sulle immagini di test</li>
+    <li>Usa il modello e controlla gli errori nel tempo</li>
+  </ol>
+  <aside class="notes">Il passo 3 è il più dimenticato: se si valuta il modello sulle stesse immagini dell'addestramento, il risultato è troppo ottimista (il modello può averle "imparate a memoria", overfitting). Il passo 6 conta: il mondo cambia (nuova luce, nuove fotocamere) e le prestazioni calano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Teachable Machine: addestra il tuo classificatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>teachablemachine.withgoogle.com</b> › Inizia › <b>Progetto immagine</b> › Modello standard.</li>
+      <li>Rinomina le classi: <b>Matita</b>, <b>Gomma</b>, <b>Niente</b>.</li>
+      <li>Per ogni classe usa la <b>Webcam</b>: tieni premuto e raccogli circa 80 immagini, girando l'oggetto.</li>
+      <li>Premi <b>Addestra modello</b> e non cambiare scheda finché non finisce.</li>
+      <li>Nell'anteprima prova i tuoi oggetti e annota le percentuali in <b>tm-prove.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con l'oggetto ben visibile la classe giusta supera il 90%. Mostra un oggetto mai visto (una chiave): il modello sceglie comunque una delle tre classi.</div>
+  </div>
+  <aside class="notes">Teachable Machine addestra nel browser (trasferimento di apprendimento su una rete già addestrata): bastano poche decine di immagini. Le immagini non vengono caricate a meno di salvare il progetto su Google Drive. Senza webcam: caricare foto dal telefono con "Carica". Osservazione chiave: il modello non sa dire "non lo so", ha solo le classi che gli abbiamo dato. Non addestrare sui volti dei compagni. Se l'interfaccia appare in inglese: Get Started › Image Project › Standard image model, Train Model, Preview; più avanti Advanced › Under the hood.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il tuo modello indovina il 100% delle immagini con cui l'hai addestrato. È affidabile?</h2></div>
+  <div class="poll" data-id="cv-accuratezza" data-tipo="quiz" data-risposta="C">
+    <ol><li>Sì, il 100% è il massimo possibile</li><li>Sì, se le immagini erano almeno 100</li><li>Non si sa: va provato su immagini nuove</li><li>No, un modello al 100% è sempre rotto</li></ol>
+    <p class="why">Sulle immagini già viste un modello può essere perfetto anche se ha imparato dettagli inutili, come lo sfondo. L'affidabilità si misura su immagini nuove, mai usate per l'addestramento (il test set).</p>
+  </div>
+  <aside class="notes">Overfitting: come uno studente che impara a memoria le risposte della simulazione e poi va male alla verifica vera. La D è un'esagerazione: un modello può avere il 100% anche sul test, se il compito è facile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Sotto il cofano: accuratezza e matrice di confusione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Teachable Machine apri <b>Avanzate</b> sotto «Addestramento» e poi <b>Sotto il cofano</b>.</li>
+      <li>Annota l'accuratezza per classe e guarda la <b>matrice di confusione</b>.</li>
+      <li>Prova tu: mostra 10 volte la matita e 10 la gomma in posizioni nuove, e conta le risposte giuste.</li>
+      <li>Calcola la tua accuratezza: giuste ÷ prove × 100.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella matrice, la diagonale conta le risposte giuste; le celle fuori diagonale sono gli scambi (per esempio matita scambiata per gomma). La tua accuratezza «sul campo» è di solito più bassa di quella di Teachable Machine.</div>
+  </div>
+  <aside class="notes">Teachable Machine usa automaticamente una parte delle immagini (circa il 15%) come test per i grafici di "Sotto il cofano" (in inglese "Under the hood"). Esempio di calcolo: 17 giuste su 20 = 85%. Domanda: quale classe si confonde di più e perché? Spesso Gomma e Niente, se la gomma è piccola o bianca come il foglio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Esperimento: insegna male di proposito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo progetto con due classi: <b>Matita</b> e <b>Gomma</b>.</li>
+      <li>Fotografa la matita solo su un <b>quaderno scuro</b>, la gomma solo su un <b>foglio bianco</b>.</li>
+      <li>Addestra. Poi metti la matita sul foglio bianco: che cosa risponde?</li>
+      <li>Scrivi in <b>tm-bias.txt</b> che cosa ha imparato davvero il modello, e come correggeresti i dati.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> molto spesso la matita sul foglio bianco viene classificata «Gomma»: il modello ha imparato lo <b>sfondo</b>, non l'oggetto. Correzione: stessi sfondi e stesse luci per tutte le classi.</div>
+  </div>
+  <aside class="notes">È un esempio di "scorciatoia" (shortcut learning): il modello trova la regola più facile che separa gli esempi, anche se non è quella che volevamo. Nella realtà le scorciatoie sono più nascoste: righelli nelle foto mediche, scritte nelle radiografie di un certo ospedale, colore della pelle. Collegare alla slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Bias</p><h2>Quando i dati non rappresentano tutti</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Gender Shades, 2018</h3><p>Joy Buolamwini e Timnit Gebru hanno provato tre sistemi commerciali che indovinano il genere da un volto.</p><p>Errore fino al <b>34,7%</b> sulle donne con la pelle scura, al massimo lo <b>0,8%</b> sugli uomini con la pelle chiara.</p></div>
+    <div class="card soft"><h3>Perché succede</h3><ul class="points"><li>dati di addestramento sbilanciati</li><li>test fatti solo sui gruppi più rappresentati</li><li>nessuno controlla gli errori per gruppo</li></ul></div>
+  </div>
+  <aside class="notes">Fonte: J. Buolamwini, T. Gebru, "Gender Shades", Proceedings of Machine Learning Research, 2018 (sistemi di IBM, Microsoft e Face++). Dopo la pubblicazione le aziende hanno migliorato i sistemi: il punto è che senza misure per gruppo il problema non si vede. Collegamento con l'esperimento: lo sfondo nel nostro caso, il colore della pelle nel loro. Domanda: in quali usi un errore del genere è più grave? Controlli, sicurezza, lavoro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>A una foto di un panda si aggiunge un «rumore» invisibile all'occhio. La rete ora…</h2></div>
+  <div class="poll" data-id="cv-panda" data-tipo="quiz" data-risposta="B">
+    <ol><li>vede ancora un panda: il rumore è invisibile</li><li>può dire «gibbone» con il 99% di sicurezza</li><li>si blocca e non risponde</li><li>vede un panda, ma meno sicura</li></ol>
+    <p class="why">È un «esempio avversario»: piccolissime modifiche dei pixel, calcolate apposta, cambiano la risposta. Nell'esperimento di Goodfellow e colleghi (2014) la rete passò da «panda» al 57,7% a «gibbone» al 99,3%.</p>
+  </div>
+  <aside class="notes">Fonte: I. Goodfellow, J. Shlens, C. Szegedy, "Explaining and Harnessing Adversarial Examples", 2014. Messaggio: la rete non "vede" come noi, reagisce a schemi di numeri. Esistono anche adesivi stampati che confondono i rilevatori di oggetti. Per questo nei sistemi di sicurezza (auto, controllo accessi) servono più sensori e verifiche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Privacy e regole</p><h2>Un volto è un dato personale speciale</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>GDPR (UE, 2016)</h3><p>I dati biometrici usati per identificare una persona sono una <b>categoria particolare</b> di dati: in generale vietato trattarli, salvo eccezioni precise, come il consenso esplicito.</p></div>
+    <div class="card soft"><h3>AI Act (UE, 2024)</h3><p>Dal 2025 vietati, tra l'altro: raccogliere volti da internet o telecamere per creare archivi di riconoscimento facciale; riconoscere le emozioni a scuola e al lavoro.</p></div>
+  </div>
+  <div class="callout hl">Pubblicare la foto di un compagno o metterla in un'app di AI senza il suo permesso non è un gioco: è un suo dato personale.</div>
+  <aside class="notes">GDPR: Regolamento UE 2016/679, articolo 9. AI Act: Regolamento UE 2024/1689, articolo 5; i divieti si applicano dal 2 febbraio 2025. L'identificazione biometrica in tempo reale negli spazi pubblici da parte delle forze dell'ordine è vietata salvo eccezioni strettamente previste. Lo sblocco del telefono con il volto è una verifica che avviene sul dispositivo, con il consenso dell'utente. Collegamento con educazione civica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Un'immagine fatta a «parole»</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti modelli che descrivono le foto, compresi i chatbot multimodali, tagliano l'immagine in quadretti, per esempio di <b>16 × 16 pixel</b>, e trattano ogni quadretto come una «parola» (un token). Una foto 224 × 224 diventa così una frase di 14 × 14 = <b>196 token</b>.</p></div>
+    <div class="stack">
+      <p>È l'idea dell'articolo «An Image is Worth 16x16 Words» (2020).</p>
+      <p class="muted small">Descrivono bene le scene comuni, ma possono «vedere» cose che non ci sono: le risposte vanno verificate.</p>
+    </div>
+  </div>
+  <aside class="notes">Il Vision Transformer (Dosovitskiy e altri, Google, 2020) ha portato nella visione l'architettura dei modelli linguistici. Calcolo: 224 ÷ 16 = 14; 14 × 14 = 196. Collegamento con l'Unità 1 (testo e token Unicode). Demo facoltativa alla LIM con un chatbot del docente: far descrivere una foto della classe senza persone e cercare insieme gli errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con un filtro di Sobel</h2></div>
+  <div class="puzzle-codice" data-risposta="1020" data-aiuto="solo la terza colonna conta: 1×255 + 2×255 + 1×255">
+    <div class="cols-2">
+      <p class="mono">Pixel:<br>0 0 255<br>0 0 255<br>0 0 255</p>
+      <p class="mono">Filtro di Sobel:<br>−1 0 1<br>−2 0 2<br>−1 0 1</p>
+    </div>
+    <p>Il codice è il risultato di «moltiplica e somma».</p>
+    <div class="premio"><b>Lucchetto aperto!</b> 1 × 255 + 2 × 255 + 1 × 255 = 4 × 255 = 1020: un bordo verticale netto.</div>
+  </div>
+  <aside class="notes">Codice: 1020. Le colonne di zeri del filtro e dei pixel non contribuiscono. A squadre; chi finisce per primo spiega il conto alla lavagna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Far scorrere un filtro sull'immagine moltiplicando e sommando si chiama <span class="blank" data-risposta="convoluzione" style="--w:11ch"></span>.</p>
+    <p>I numeri che la rete corregge durante l'addestramento si chiamano <span class="blank" data-risposta="pesi"></span>.</p>
+    <p>L'affidabilità si misura su immagini di <span class="blank" data-risposta="test"></span>, mai viste in addestramento.</p>
+    <p>Un modello che impara lo sfondo invece dell'oggetto mostra un <span class="blank" data-risposta="bias|errore"></span> nei dati.</p>
+    <p>Per il GDPR il volto usato per identificare è un dato <span class="blank" data-risposta="biometrico|biometrico particolare" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: convoluzione, pesi, test, bias, biometrico.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Per la macchina un'immagine è una tabella di numeri</li>
+      <li>I filtri (convoluzione) trovano bordi; le reti imparano i filtri da sole</li>
+      <li>Si addestra su esempi etichettati, si valuta su immagini nuove</li>
+    </ul>
+    <ul class="points">
+      <li>Dati sbilanciati = errori sbilanciati (bias)</li>
+      <li>Piccoli cambi di pixel possono ingannare una rete</li>
+      <li>Volti = dati biometrici: GDPR e AI Act</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Fine dell'Unità 2: annunciare la verifica e la simulazione disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

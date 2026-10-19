@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ciclo di vita del software · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Sviluppare software</p>
+  <h1>Il ciclo di vita<br>del software</h1>
+  <p class="lead">Cascata, incrementi, spirale: modi diversi di andare dall'idea al prodotto. E poi i requisiti scritti bene e i test che scovano i bug prima degli utenti.</p>
+  <aside class="notes">Obiettivi: ripassare le fasi del ciclo di vita (già introdotte in una lezione precedente), distinguere requisiti funzionali e non funzionali e scriverli verificabili, confrontare modello a cascata, iterativo, incrementale e a spirale, conoscere i livelli di test e scrivere casi di test in Java. Durata indicativa: 2-3 ore. Servono OnlineGDB (Java), Writer o Google Documenti, Excalidraw (excalidraw.com, senza account). Progetto di esempio che attraversa tutta la lezione: "Prenota-lab", un'app per prenotare i laboratori della scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Organizzate la festa di fine anno della classe. Come procedete?</h2></div>
+  <div class="poll" data-id="cvs-festa">
+    <ol><li>Decido tutto all'inizio, poi eseguo il piano</li><li>Preparo una versione base e la miglioro un po' alla volta</li><li>Chiedo continuamente agli altri che cosa vogliono</li><li>Prima penso a che cosa può andare storto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Alla fine della lezione riprenderlo: A è il modello a cascata, B il modello incrementale e iterativo, C l'idea di coinvolgere il cliente (prototipi, metodi agili), D il modello a spirale guidato dai rischi. Ogni modello ha senso in situazioni diverse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Metti in ordine le fasi del ciclo di vita</h2></div>
+  <ol class="puzzle-ordina" data-id="cvs-fasi">
+    <li>Studio di fattibilità: conviene farlo? Con quali costi?</li>
+    <li>Analisi dei requisiti: che cosa deve fare</li>
+    <li>Progettazione: come sarà fatto</li>
+    <li>Codifica: scrittura del programma</li>
+    <li>Test: verifica e collaudo</li>
+    <li>Rilascio: installazione presso gli utenti</li>
+    <li>Manutenzione: correzioni e nuove versioni</li>
+  </ol>
+  <aside class="notes">Ripasso della lezione introduttiva sul ciclo di vita. Errore frequente: mettere la progettazione prima dell'analisi. Regola: prima si decide CHE COSA (requisiti), poi COME (progettazione). Il ciclo si chiama "di vita" perché comprende anche la manutenzione e infine il ritiro del software.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analisi dei requisiti</p><h2>Che cosa deve fare, e come deve farlo</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Requisiti funzionali</h3><p>Le <b>funzioni</b> del sistema: che cosa fa.</p><ul class="points small"><li>Il docente prenota un laboratorio per una data e un'ora.</li><li>Il docente annulla una sua prenotazione.</li><li>Il sistema invia un'email di conferma.</li></ul></div>
+    <div class="card"><h3>Requisiti non funzionali</h3><p>Le <b>qualità e i vincoli</b>: come lo fa.</p><ul class="points small"><li>La pagina si apre in meno di 2 secondi in 4G.</li><li>Funziona su Chrome, Firefox e Safari recenti.</li><li>Solo gli utenti della scuola possono accedere.</li></ul></div>
+  </div>
+  <aside class="notes">Esempio: Prenota-lab. I requisiti non funzionali corrispondono spesso alle caratteristiche di qualità della lezione precedente (efficienza, portabilità, sicurezza, usabilità). Chiedere agli studenti un requisito funzionale e uno non funzionale per l'app del registro elettronico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di questi è un requisito non funzionale?</h2></div>
+  <div class="poll" data-id="cvs-nonfunz" data-tipo="quiz" data-risposta="D">
+    <ol><li>Lo studente può vedere l'orario dei laboratori</li><li>Il sistema invia un promemoria il giorno prima</li><li>Il docente può esportare le prenotazioni in un file CSV</li><li>Con 500 utenti collegati insieme, la risposta resta sotto i 3 secondi</li></ol>
+    <p class="why">La D non aggiunge una funzione: fissa una qualità (le prestazioni) con un numero verificabile. Le altre tre descrivono che cosa fa il sistema, quindi sono funzionali, anche il promemoria automatico.</p>
+  </div>
+  <aside class="notes">Il tranello è la B: "automatico" sembra un vincolo tecnico, ma è una funzione. Anche l'esportazione CSV è funzionale, pur parlando di formati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Requisiti scritti bene</p><h2>Un buon requisito si può verificare</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Vago</h3><p>"L'app deve essere veloce e facile da usare."</p><p class="small muted">Veloce quanto? Facile per chi? Nessun test può dire se è rispettato.</p></div>
+    <div class="card ok"><h3>Verificabile</h3><p>"Un nuovo utente prenota un laboratorio in meno di 1 minuto, senza istruzioni."</p><p class="small muted">Si misura: 5 docenti, un cronometro, un risultato.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un prompt a un'AI è un requisito. "Fammi un sito bello" produce qualcosa di generico; "una pagina con l'orario dei laboratori, leggibile sul telefono, con i colori della scuola" funziona molto meglio. Scrivere requisiti chiari è diventato utile anche per parlare con le macchine.</p></div>
+  <aside class="notes">Proprietà di un buon requisito: chiaro, non ambiguo, verificabile, realizzabile, necessario. Raccontare la vignetta classica "come il cliente l'ha spiegato / come l'ha capito l'analista / che cosa voleva davvero" (l'altalena sull'albero): circola dagli anni '70 e mostra che la maggior parte dei problemi nasce dai requisiti, non dal codice.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I requisiti di Prenota-lab</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Writer o Google Documenti e inserisci una tabella di 4 colonne: <b>ID</b>, <b>Requisito</b>, <b>Tipo</b>, <b>Come lo verifico</b>.</li>
+      <li>Scrivi 5 requisiti funzionali (ID da RF1 a RF5).</li>
+      <li>Scrivi 3 requisiti non funzionali (da RNF1 a RNF3), ognuno con un numero e un'unità di misura.</li>
+      <li>Per ogni requisito descrivi in una riga la prova che dimostra che è rispettato.</li>
+      <li>Salva come <b>requisiti-prenotalab.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 8 righe; ogni RNF contiene un numero (secondi, utenti, minuti…); nessun requisito usa parole come "veloce", "bello", "facile" senza una misura.</div>
+  </div>
+  <aside class="notes">A coppie: una persona scrive, l'altra fa il "cliente pignolo" che chiede "come lo misuro?". Esempi di RNF: RNF1 la pagina principale si carica in meno di 2 s in 4G; RNF2 il sistema regge 200 utenti contemporanei; RNF3 l'accesso avviene solo con l'account della scuola. Far leggere alla classe due requisiti vaghi trovati e correggerli insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello a cascata</p><h2>Una fase alla volta, senza tornare indietro</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Requisiti</h3></div>
+    <div class="card soft"><h3>Progetto</h3></div>
+    <div class="card soft"><h3>Codifica</h3></div>
+    <div class="card soft"><h3>Test</h3></div>
+    <div class="card fill"><h3>Rilascio</h3></div>
+  </div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Pregi</h3><p class="small">Semplice da pianificare, molta documentazione, adatto se i requisiti sono chiari e stabili.</p></div>
+    <div class="card bad"><h3>Difetti</h3><p class="small">Il cliente vede il prodotto solo alla fine: un requisito sbagliato si scopre tardi e costa molto.</p></div>
+  </div>
+  <aside class="notes">Ogni fase produce documenti che sono l'ingresso della fase successiva. Si usa ancora dove i requisiti sono fissati da norme o contratti (per esempio parti di software per impianti, appalti pubblici). Chiedere: perché un errore nei requisiti scoperto durante il test costa più che scoperto in analisi? (Bisogna rifare progetto, codice e test.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una sorpresa storica</p><h2>L'articolo della "cascata" la criticava</h2></div>
+  <figure class="citazione">
+    <blockquote>Credo in questo concetto, ma l'implementazione descritta sopra è rischiosa e invita al fallimento.</blockquote>
+    <figcaption><b>Winston W. Royce</b>, ingegnere statunitense, "Managing the Development of Large Software Systems", 1970</figcaption>
+  </figure>
+  <p class="lead">Royce disegnò la sequenza di fasi e subito dopo propose di aggiungere <b>ritorni indietro</b>, prototipi e il coinvolgimento del cliente. Il nome "cascata" arrivò dopo.</p>
+  <aside class="notes">Traduzione nostra. Originale: "I believe in this concept, but the implementation described above is risky and invites failure." L'articolo fu presentato alla conferenza IEEE WESCON nel 1970; la parola "waterfall" non compare nell'articolo. Royce suggeriva perfino di costruire il programma "due volte": una prima versione pilota e poi quella definitiva. Messaggio: spesso si cita un'idea senza aver letto la fonte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Modelli iterativi e incrementali</p><h2>Un pezzo alla volta, migliorando a ogni giro</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Incrementale</h3><p>Il prodotto cresce per <b>pezzi funzionanti</b>. Prima versione di Prenota-lab: solo prenotare. Poi annullare, poi le email.</p></div>
+    <div class="card soft"><h3>Iterativo</h3><p>Si ripete il ciclo e si <b>raffina</b> ciò che c'è: prima un prototipo grezzo, poi sempre più rifinito grazie ai commenti degli utenti.</p></div>
+  </div>
+  <div class="callout">Quasi sempre si usano insieme: ogni <b>iterazione</b> rilascia un <b>incremento</b>, cioè una versione più ricca che si può già usare.</div>
+  <aside class="notes">Immagine utile da descrivere (o cercare insieme): la "Gioconda" di Jeff Patton. Incrementale = dipingere un quarto di quadro finito alla volta; iterativo = abbozzo di tutto il quadro, poi sempre più dettagli. Le app sul telefono si aggiornano ogni poche settimane: è sviluppo iterativo e incrementale sotto i nostri occhi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello a spirale</p><h2>Ogni giro parte dai rischi</h2></div>
+  <div class="cols-2">
+    <svg viewBox="0 0 600 520" width="600" height="520" aria-label="Spirale con quattro quadranti">
+      <line x1="300" y1="10" x2="300" y2="510" stroke="#596179" stroke-width="2" stroke-dasharray="8 8"/>
+      <line x1="20" y1="260" x2="580" y2="260" stroke="#596179" stroke-width="2" stroke-dasharray="8 8"/>
+      <polyline fill="none" stroke="#7e45cc" stroke-width="7" stroke-linecap="round" points="312,260 314,258 317,255 318,252 319,248 319,244 318,240 317,235 314,231 311,226 307,223 301,220 296,217 289,216 282,215 275,216 267,218 260,221 253,226 246,231 240,238 235,246 231,255 229,265 228,275 228,286 230,297 234,308 239,319 246,328 255,338 266,345 277,352 290,357 303,360 318,361 332,360 347,357 362,351 375,344 388,334 400,322 410,309 418,294 424,277 428,260 430,242 428,223 424,205 418,187 408,169 396,153 382,139 365,126 347,116 327,108 305,103 283,102 261,103 238,108 217,115 196,126 176,140 159,157 143,177 131,198 122,222 115,247 113,273 114,300 119,326 127,352 140,376 156,399 175,420 197,438 222,453 249,465 278,472 308,476 338,475 368,470 398,461 427,448 453,430 477,409 499,384 516,356 530,326 540,294 544,260"/>
+      <text x="40" y="44" font-size="26" font-weight="700" fill="#172033">1 Obiettivi</text>
+      <text x="420" y="44" font-size="26" font-weight="700" fill="#172033">2 Rischi</text>
+      <text x="380" y="500" font-size="26" font-weight="700" fill="#172033">3 Sviluppo</text>
+      <text x="40" y="500" font-size="26" font-weight="700" fill="#172033">4 Piano</text>
+    </svg>
+    <ol class="steps small">
+      <li><b>Obiettivi</b>: che cosa vogliamo ottenere in questo giro.</li>
+      <li><b>Analisi dei rischi</b>: che cosa può andare storto? Spesso si costruisce un prototipo per scoprirlo.</li>
+      <li><b>Sviluppo e test</b> della nuova versione.</li>
+      <li><b>Pianificazione</b> del giro successivo, con il cliente.</li>
+    </ol>
+  </div>
+  <aside class="notes">Modello proposto da Barry Boehm ("A Spiral Model of Software Development and Enhancement", IEEE Computer, 1988; prima versione 1986). Il raggio della spirale rappresenta i costi accumulati: più giri, più spesa. Adatto a progetti grandi e rischiosi. I quadranti si percorrono in senso antiorario a partire da quello in alto a sinistra. Collegamento con la quarta lezione dell'unità: la gestione dei rischi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Quale modello sceglieresti?</h2></div>
+  <dl class="puzzle-abbina" data-id="cvs-modelli">
+    <dt>A cascata</dt><dd>Requisiti fissati da una legge, che non cambieranno</dd>
+    <dt>Incrementale</dt><dd>Serve subito una prima versione usabile, il resto dopo</dd>
+    <dt>Iterativo con prototipi</dt><dd>Il cliente non sa ancora bene che cosa vuole</dd>
+    <dt>A spirale</dt><dd>Progetto enorme e nuovo, con molti rischi tecnici</dd>
+  </dl>
+  <aside class="notes">Discutere che nella realtà le scelte sono meno nette e spesso si mescolano i modelli. Chiedere quale modello userebbero per Prenota-lab (risposta ragionevole: incrementale e iterativo; la prossima lezione vedremo i metodi agili, che partono proprio da qui).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>A che cosa serve davvero il test?</h2></div>
+  <div class="poll" data-id="cvs-test" data-tipo="quiz" data-risposta="A">
+    <ol><li>A trovare errori, eseguendo il programma con casi scelti apposta</li><li>A dimostrare che il programma non ha errori</li><li>A controllare che il codice compili</li><li>A misurare quanto è veloce il programmatore</li></ol>
+    <p class="why">Un test che passa dice solo che quei casi funzionano. Dijkstra lo scrisse nel 1970: il test può mostrare la presenza dei bug, mai la loro assenza. Per questo i casi di test si scelgono per far fallire il programma.</p>
+  </div>
+  <aside class="notes">La B è il fraintendimento più comune. Citazione completa: "Program testing can be used to show the presence of bugs, but never to show their absence!" (E. W. Dijkstra, Notes on Structured Programming, EWD249, 1970). La C confonde test e compilazione: un programma che compila può essere sbagliato (il bug della media della lezione scorsa).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I livelli di test</p><h2>Dal mattoncino al prodotto intero</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Di unità</h3><p class="small muted">Un singolo metodo o classe, da solo.</p></div>
+    <div class="card"><p class="num">2</p><h3>Di integrazione</h3><p class="small muted">Più parti insieme: si parlano bene?</p></div>
+    <div class="card"><p class="num">3</p><h3>Di sistema</h3><p class="small muted">Tutto il prodotto, anche i requisiti non funzionali.</p></div>
+    <div class="card"><p class="num">4</p><h3>Di accettazione</h3><p class="small muted">Il cliente prova: è quello che voleva? Alfa e beta test.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Scatola nera</h3><p class="small">Scelgo i casi guardando solo i requisiti: ingressi e uscite attese.</p></div>
+    <div class="card soft"><h3>Scatola bianca</h3><p class="small">Scelgo i casi guardando il codice: ogni ramo dell'<code>if</code> almeno una volta.</p></div>
+  </div>
+  <aside class="notes">Il beta test è quello delle app in "versione beta" che alcuni studenti avranno provato. In Java i test di unità si scrivono di solito con la libreria JUnit; oggi la simuliamo con un piccolo metodo "prova" perché OnlineGDB non la include. Regola d'oro dei casi di test: provare i valori ai limiti (0, il massimo, appena sopra e appena sotto una soglia).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un metodo e i suoi test</p><h2>Un anno è bisestile?</h2></div>
+  <pre class="code" style="font-size:27px"><span class="k">public class</span> Main {
+  <span class="k">static boolean</span> bisestile(<span class="k">int</span> anno) {
+    <span class="k">return</span> anno % 4 == 0;   <span class="c">// versione con un bug</span>
+  }
+  <span class="k">static void</span> prova(<span class="k">int</span> anno, <span class="k">boolean</span> atteso) {
+    <span class="k">boolean</span> ok = bisestile(anno) == atteso;
+    System.out.println((ok ? <span class="s">"OK     "</span> : <span class="s">"ERRORE "</span>) + anno);
+  }
+  <span class="k">public static void</span> main(String[] args) {
+    prova(2024, <span class="k">true</span>);
+    prova(2023, <span class="k">false</span>);   <span class="c">// aggiungi qui i tuoi test</span>
+  }
+}</pre>
+  <p class="small"><b>La regola vera:</b> bisestile se divisibile per 4, ma gli anni secolari (1900, 2100) solo se divisibili per 400.</p>
+  <aside class="notes">Far leggere il codice prima del laboratorio. Il metodo prova confronta il risultato ottenuto con quello atteso: è l'idea di un'asserzione nei test di unità (in JUnit: assertEquals(atteso, ottenuto)). Con i due test scritti tutto sembra a posto: proprio come diceva Dijkstra.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Scrivi i test che fanno cadere il bug</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>onlinegdb.com</b>, scegli Java e copia il programma della slide precedente.</li>
+      <li>Premi <b>Run</b>: i due test passano. Il metodo è giusto?</li>
+      <li>Aggiungi almeno 3 test con gli anni "difficili": 1900, 2000, 2100.</li>
+      <li>Leggi gli ERRORE, poi correggi il metodo <code>bisestile</code>.</li>
+      <li>Riesegui finché tutti i test stampano OK. Salva come <b>Bisestile.java</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con il metodo sbagliato compaiono <code>ERRORE 1900</code> e <code>ERRORE 2100</code>. Con il metodo corretto tutte le righe iniziano con OK.</div>
+  </div>
+  <aside class="notes">Soluzione: return (anno % 4 == 0 &amp;&amp; anno % 100 != 0) || anno % 400 == 0; Casi: 2024 true, 2023 false, 1900 false, 2000 true, 2100 false. Il 2000 passa anche con la versione sbagliata: buona occasione per dire che un test che passa non prova niente da solo. Chi finisce: aggiungere un contatore di test superati e stampare "5 test superati su 5". Alternativa a OnlineGDB: Java Tutor su pythontutor.com per vedere i valori passo passo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte sul presente</p><h2>Chi controlla i test scritti dall'AI?</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI scrive anche i test, ma attenzione</h3><p>Gli assistenti di programmazione generano in pochi secondi decine di test di unità. Se però li ricavano leggendo il codice sbagliato, possono "fotografare" il bug: per il metodo con <b>anno % 4 == 0</b> scriverebbero che 1900 è bisestile, e il test passerebbe.</p><p>I test giusti nascono dai <b>requisiti</b>, non dal codice. Per questo molti team scrivono prima i test e poi chiedono all'AI di scrivere il codice che li supera.</p></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Test ricavato dal codice</h3><p class="small"><code>prova(1900, true);</code> passa, ma il requisito dice il contrario: il bug resta nascosto.</p></div>
+    <div class="card ok"><h3>Test ricavato dal requisito</h3><p class="small"><code>prova(1900, false);</code> fallisce e mostra il bug: è il test che serve.</p></div>
+  </div>
+  <aside class="notes">Il "test-driven development" (TDD, Kent Beck, fine anni '90) propone proprio di scrivere il test prima del codice. Con gli agenti di AI per il codice questo approccio è tornato di moda, perché i test danno all'agente un obiettivo verificabile. Chiedere: in quale livello di test (unità, integrazione, sistema, accettazione) serve di più il giudizio umano? (Accettazione: solo il cliente sa se è quello che voleva.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · a coppie</span></p>
+  <h2>Prenota-lab in tre incrementi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>excalidraw.com</b> (non serve un account).</li>
+      <li>Disegna 3 righe, una per incremento: in ognuna i riquadri Requisiti, Progetto, Codifica, Test e una freccia verso "Rilascio 1", "Rilascio 2", "Rilascio 3".</li>
+      <li>Accanto a ogni rilascio scrivi quali requisiti RF della tua tabella contiene.</li>
+      <li>Aggiungi una freccia di ritorno con scritto che cosa impari dagli utenti.</li>
+      <li>Esporta l'immagine come <b>incrementi-prenotalab.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il Rilascio 1 contiene già la funzione più importante (prenotare) e si può usare da solo; ogni requisito RF compare in un solo rilascio.</div>
+  </div>
+  <aside class="notes">In Excalidraw: menu in alto a sinistra, "Export image", formato PNG. Se il sito è bloccato: stesso disegno su carta e foto con il telefono, oppure con le forme di Google Documenti. Far presentare due disegni e discutere: che cosa mettereste nel Rilascio 1 di un'app di messaggistica?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>"La pagina si apre in meno di 2 secondi" è un requisito <span class="blank" style="--w:12ch" data-risposta="non funzionale|nonfunzionale"></span>.</p>
+    <p>Nel modello a <span class="blank" style="--w:8ch" data-risposta="cascata"></span> ogni fase finisce prima che inizi la successiva.</p>
+    <p>Il modello a spirale, di Barry Boehm, mette al centro l'analisi dei <span class="blank" data-risposta="rischi|rischio"></span>.</p>
+    <p>Il test che prova un singolo metodo da solo si chiama test di <span class="blank" data-risposta="unità|unita"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: non funzionale, cascata, rischi, unità.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Requisiti funzionali e non funzionali, sempre verificabili</li>
+      <li>Cascata: semplice, ma il cliente vede tutto alla fine</li>
+      <li>Iterativo e incrementale: versioni usabili e sempre migliori</li>
+    </ul>
+    <ul class="points">
+      <li>Spirale: ogni giro parte dall'analisi dei rischi</li>
+      <li>Test di unità, integrazione, sistema, accettazione</li>
+      <li>Un test trova i bug, non ne dimostra l'assenza</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: "Test a prova di bomba". Riprendere il sondaggio iniziale sulla festa e collegare ogni risposta a un modello. Prossima lezione: le metodologie agili, Scrum e Kanban.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

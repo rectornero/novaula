@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'allocazione contigua a partizioni · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>L'allocazione contigua<br>a partizioni</h1>
+  <p class="lead">Tanti processi, una sola RAM: dove li mettiamo? Tre strategie, una sfida a squadre e un nemico invisibile, la frammentazione.</p>
+  <aside class="notes">Obiettivi: distinguere partizioni fisse e variabili; riconoscere frammentazione interna ed esterna; applicare a mano first fit, best fit e worst fit; capire la compattazione. Prerequisito: lezione "La memoria fisica e virtuale" (registri base e limite). Durata: 2 ore. Preparare fogli a quadretti per la sfida a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Arrivi in un parcheggio con posti di lunghezze diverse. Dove ti metti?</h2></div>
+  <div class="poll" data-id="part-parcheggio">
+    <ol><li>Nel primo posto libero in cui entro</li><li>Nel posto più stretto in cui entro</li><li>Nel posto più largo di tutti</li><li>Giro finché non trovo quello perfetto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Svelare dopo: la A è first fit, la B best fit, la C worst fit. La D è quello che il sistema operativo NON può permettersi: cercare costa tempo. Chiedere a chi ha scelto la C perché: "così resta spazio per gli altri" è proprio l'idea del worst fit.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Allocazione contigua: ogni processo in un blocco unico</h2></div>
+  <svg viewBox="0 0 1660 170" width="1660" height="170" aria-label="RAM con sistema operativo e processi">
+    <g font-family="DM Sans, sans-serif" font-size="30" font-weight="700" text-anchor="middle">
+      <rect x="0" y="20" width="230" height="110" rx="12" fill="#172033"/><text x="115" y="86" fill="#fff">Sist. operativo</text>
+      <rect x="236" y="20" width="420" height="110" rx="12" fill="#7e45cc"/><text x="446" y="86" fill="#fff">P1</text>
+      <rect x="662" y="20" width="300" height="110" rx="12" fill="#9566d6"/><text x="812" y="86" fill="#fff">P2</text>
+      <rect x="968" y="20" width="360" height="110" rx="12" fill="#ad89e0"/><text x="1148" y="86" fill="#fff">P3</text>
+      <rect x="1334" y="20" width="326" height="110" rx="12" fill="#fff" stroke="#7e45cc" stroke-width="4" stroke-dasharray="14 10"/><text x="1497" y="86" fill="#7e45cc">libera</text>
+      <text x="0" y="165" text-anchor="start" font-size="24" font-weight="500" fill="#596179">indirizzo 0</text>
+      <text x="1660" y="165" text-anchor="end" font-size="24" font-weight="500" fill="#596179">fine della RAM</text>
+    </g>
+  </svg>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ogni processo occupa indirizzi <b>consecutivi</b></li>
+      <li>Bastano un registro base e un registro limite</li>
+    </ul>
+    <ul class="points">
+      <li>Il sistema operativo tiene la lista delle zone libere</li>
+      <li>Domanda: come divido la RAM?</li>
+    </ul>
+  </div>
+  <aside class="notes">Contiguo = tutto attaccato. È il metodo più semplice, usato nei primi sistemi multiprogrammati. Ricordare la lezione precedente: con base e limite la MMU traduce e protegge. Due risposte storiche alla domanda: partizioni fisse (decise prima) o variabili (decise al momento).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Prima soluzione</p><h2>Partizioni fisse: la RAM tagliata in anticipo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>All'avvio la RAM viene divisa in partizioni di dimensioni <b>fisse</b>. Ogni processo va in una partizione abbastanza grande.</p>
+      <table class="data compact">
+        <tr><th>Partizione</th><th>Dimensione</th><th>Processo</th><th>Sprecato</th></tr>
+        <tr><td>1</td><td class="mono">100 KB</td><td>libera</td><td class="mono">-</td></tr>
+        <tr><td>2</td><td class="mono">200 KB</td><td>P1, 130 KB</td><td class="mono hl">70 KB</td></tr>
+        <tr><td>3</td><td class="mono">400 KB</td><td>P2, 380 KB</td><td class="mono hl">20 KB</td></tr>
+      </table>
+    </div>
+    <div class="card bad"><h3>Frammentazione interna</h3><p>Lo spazio sprecato <b>dentro</b> una partizione assegnata. Nessun altro processo può usarlo.</p><p class="small">E un processo di 450 KB? Non potrà mai partire.</p></div>
+  </div>
+  <aside class="notes">Il numero di processi in memoria è al massimo il numero di partizioni (grado di multiprogrammazione fisso). Frammentazione interna: 70 + 20 = 90 KB sprecati. Un processo più grande della partizione più grande non può essere eseguito. Vantaggio: semplicissimo da gestire.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Partizioni fisse da 100, 200 e 300 KB. Arrivano tre processi da 90, 160 e 250 KB. Quanto si spreca?</h2></div>
+  <div class="poll" data-id="part-interna" data-tipo="quiz" data-risposta="D">
+    <ol><li>0 KB: entrano tutti</li><li>50 KB</li><li>500 KB</li><li>100 KB</li></ol>
+    <p class="why">Ognuno nella partizione più piccola in cui entra: 90 nella 100 (spreco 10), 160 nella 200 (40), 250 nella 300 (50). Totale 10 + 40 + 50 = 100 KB di frammentazione interna.</p>
+  </div>
+  <aside class="notes">La A è il tranello di chi pensa "entrano tutti, quindi nessuno spreco": lo spreco c'è proprio perché entrano in partizioni più grandi. La C è la somma delle partizioni meno qualcosa a caso. Chi risponde B ha considerato una sola partizione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Seconda soluzione</p><h2>Partizioni variabili: ogni processo riceve quanto chiede</h2></div>
+  <svg viewBox="0 0 1660 140" width="1660" height="140" aria-label="RAM con buchi sparsi">
+    <g font-family="DM Sans, sans-serif" font-size="28" font-weight="700" text-anchor="middle">
+      <rect x="0" y="10" width="200" height="100" rx="12" fill="#172033"/><text x="100" y="70" fill="#fff">SO</text>
+      <rect x="206" y="10" width="300" height="100" rx="12" fill="#7e45cc"/><text x="356" y="70" fill="#fff">P1</text>
+      <rect x="512" y="10" width="190" height="100" rx="12" fill="#fff" stroke="#b42318" stroke-width="4" stroke-dasharray="12 8"/><text x="607" y="70" fill="#b42318">90 KB</text>
+      <rect x="708" y="10" width="330" height="100" rx="12" fill="#9566d6"/><text x="873" y="70" fill="#fff">P3</text>
+      <rect x="1044" y="10" width="200" height="100" rx="12" fill="#fff" stroke="#b42318" stroke-width="4" stroke-dasharray="12 8"/><text x="1144" y="70" fill="#b42318">100 KB</text>
+      <rect x="1250" y="10" width="220" height="100" rx="12" fill="#ad89e0"/><text x="1360" y="70" fill="#fff">P4</text>
+      <rect x="1476" y="10" width="184" height="100" rx="12" fill="#fff" stroke="#b42318" stroke-width="4" stroke-dasharray="12 8"/><text x="1568" y="70" fill="#b42318">80 KB</text>
+    </g>
+  </svg>
+  <div class="cols-2">
+    <div class="card bad"><h3>Frammentazione esterna</h3><p>Liberi in totale 270 KB, ma in tre <b>buchi</b> separati: un processo da 200 KB non entra.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche i server che fanno girare i chatbot avevano questo problema: riservare un blocco contiguo di memoria della GPU per ogni conversazione lasciava buchi inutilizzati. Nel 2023 il progetto vLLM l'ha risolto copiando un'idea dei sistemi operativi: le pagine.</p></div>
+  </div>
+  <aside class="notes">Quando un processo termina lascia un buco; col tempo la RAM diventa un groviera. Frammentazione esterna: lo spazio libero c'è, ma spezzettato. Fonte per l'Oggi: W. Kwon e altri, "Efficient Memory Management for Large Language Model Serving with PagedAttention", SOSP 2023 (progetto vLLM, UC Berkeley). Le pagine sono l'argomento della prossima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>OS/360: partizioni fisse e variabili, e una lezione sui progetti</h2></div>
+  <figure class="citazione">
+    <blockquote>Aggiungere persone a un progetto software in ritardo lo fa ritardare ancora di più.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile dello sviluppo di OS/360 per IBM, in "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <p>Il sistema operativo OS/360 (anni '60) offriva due versioni: <b>MFT</b>, con un numero fisso di partizioni, e <b>MVT</b>, con partizioni variabili. Proprio quello che studiamo oggi.</p>
+  <aside class="notes">Originale: "Adding manpower to a late software project makes it later" (legge di Brooks, The Mythical Man-Month, 1975). Traduzione nostra. Brooks diresse lo sviluppo di OS/360 a metà degli anni '60 e ne trasse il libro. MFT = Multiprogramming with a Fixed number of Tasks, MVT = Multiprogramming with a Variable number of Tasks. Collegamento con l'Unità 3 (ingegneria del software).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le strategie</p><h2>Arriva un processo: in quale buco lo metto?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">First fit</p><h3>Il primo che va bene</h3><p>Scorri i buchi dall'inizio e prendi il primo abbastanza grande.</p><p class="small muted">Veloce: si ferma subito.</p></div>
+    <div class="card soft"><p class="num">Best fit</p><h3>Il più piccolo che va bene</h3><p>Guarda tutti i buchi e prendi quello che lascia l'avanzo minimo.</p><p class="small muted">Lascia briciole minuscole.</p></div>
+    <div class="card soft"><p class="num">Worst fit</p><h3>Il più grande di tutti</h3><p>Prendi il buco più grande, così l'avanzo resta utilizzabile.</p><p class="small muted">Consuma i buchi grandi.</p></div>
+  </div>
+  <p class="small">Regola per gli esercizi: l'avanzo resta nella stessa posizione e diventa un buco più piccolo.</p>
+  <aside class="notes">Esiste anche il next fit: come first fit, ma riparte da dove si era fermato l'ultima volta. Best e worst fit devono esaminare tutta la lista (o tenerla ordinata). Nelle simulazioni classiche (per esempio quelle riportate da Knuth in The Art of Computer Programming) first fit se la cava spesso bene quanto best fit, ed è più veloce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Esempio svolto</p><h2>Buchi A 150, B 400, C 220, D 90, E 350 (KB)</h2></div>
+  <table class="data compact">
+    <tr><th>Richiesta</th><th>First fit</th><th>Best fit</th></tr>
+    <tr><td>P1 · 200 KB</td><td>B, restano 200</td><td>C, restano 20</td></tr>
+    <tr><td>P2 · 80 KB</td><td>A, restano 70</td><td>D, restano 10</td></tr>
+    <tr><td>P3 · 300 KB</td><td>E, restano 50</td><td>E, restano 50</td></tr>
+    <tr><td>P4 · 140 KB</td><td>B, restano 60</td><td>A, restano 10</td></tr>
+    <tr><td><b>Buchi finali</b></td><td class="mono">70 · 60 · 220 · 90 · 50</td><td class="mono hl">10 · 400 · 20 · 10 · 50</td></tr>
+  </table>
+  <p class="small">Stesso spazio libero (490 KB) in entrambi i casi, ma best fit conserva un buco da 400 KB.</p>
+  <aside class="notes">Rifarlo alla lavagna passo per passo, aggiornando la lista dei buchi dopo ogni richiesta. First fit, P4: la lista è 70, 200, 220, 90, 50: il primo buco da almeno 140 è B (200), restano 60. Best fit, P4: lista 150, 400, 20, 10, 50: i candidati sono 150 e 400, il più piccolo è A, restano 10. Tenere la tabella visibile: la slide dopo chiede worst fit.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tocca a te</p><h2>Stessi buchi, stesse richieste, ma con worst fit. Chi resta fuori?</h2></div>
+  <div class="poll" data-id="part-worst" data-tipo="quiz" data-risposta="C">
+    <ol><li>Nessuno, entrano tutti</li><li>P4 da 140 KB</li><li>P3 da 300 KB</li><li>P1 da 200 KB</li></ol>
+    <p class="why">P1 va in B (400, restano 200), P2 nel buco più grande, E (350, restano 270). Per P3 il buco più grande è 270: non basta! P3 aspetta, anche se in totale ci sono 930 KB liberi. P4 va in E (restano 130).</p>
+  </div>
+  <aside class="notes">Lasciare 3 minuti per fare i conti su carta, a coppie. Frammentazione esterna in azione: 930 KB liberi, nessun buco da 300. Chi risponde A non ha aggiornato la lista dopo P2. Chi risponde B si è fermato a metà.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Calc sceglie il buco per te</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In A2:A6 scrivi 1…5 (numero del buco), in B2:B6 i KB: 150, 400, 220, 90, 350. In G1 la richiesta: 200.</li>
+      <li>In C2 <code>=SE(B2&gt;=$G$1;B2;"")</code>, in D2 <code>=SE(B2&gt;=$G$1;A2;"")</code>; copia fino alla riga 6.</li>
+      <li>First fit: in G3 <code>=MIN(D2:D6)</code>. Best fit: in G4 <code>=MIN(C2:C6)</code>. Worst fit: in G5 <code>=MAX(C2:C6)</code>.</li>
+      <li>Prova anche le richieste 80 e 500. Salva come <b>scegli-buco.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 200 leggi 2, 220, 400. Con 80: 1, 90, 400. Con 500 leggi 0: nessun buco va bene, il processo aspetta.</div>
+  </div>
+  <aside class="notes">La colonna C contiene i KB dei soli buchi adatti, la colonna D il loro numero. MIN e MAX ignorano le celle con testo vuoto. G3 dà il numero del primo buco adatto (first fit), G4 la dimensione del più piccolo adatto (best fit), G5 quella del più grande (worst fit). Chi finisce prima: aggiungere in G6 l'avanzo per best fit, =G4-G1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Il torneo degli algoritmi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Buchi: <b>A 200 · B 450 · C 100 · D 300</b> (KB)</p>
+      <p>Richieste, in ordine: <b>90 · 180 · 280 · 120 · 240</b></p>
+      <ol class="steps">
+        <li>Ogni squadra pesca un algoritmo: first, best o worst fit.</li>
+        <li>Sul foglio aggiorna la lista dei buchi dopo ogni richiesta.</li>
+        <li>Vince l'algoritmo che sistema più processi; a parità, chi lascia il buco più grande.</li>
+      </ol>
+    </div>
+    <div class="stack">
+      <div class="timer" data-min="6"></div>
+      <div class="callout hl">Attenzione: ogni squadra deve poter spiegare ogni scelta alla classe.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni. First fit: 90→A (110), 180→B (270), 280→D (20), 120→B (150), 240 aspetta. Best fit: 90→C (10), 180→A (20), 280→D (20), 120→B (330), 240→B (90): entrano tutti. Worst fit: 90→B (360), 180→B (180), 280→D (20), 120→A (80), 240 aspetta. Vince best fit. Con 6 squadre, due per algoritmo: se le due squadre dello stesso algoritmo hanno risultati diversi, una ha sbagliato. Subito dopo, la slide successiva smonta l'idea che best fit vinca sempre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Allora best fit è sempre il migliore?</h2></div>
+  <div class="poll" data-id="part-migliore" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sì, perché spreca sempre meno</li><li>No, dipende dalla sequenza di richieste</li><li>Sì, ma solo con richieste piccole</li><li>No, worst fit è sempre il migliore</li></ol>
+    <p class="why">Buchi da 100 e 150 KB, richieste 50, 90, 100. Best fit: 50 nel 100, 90 nel 150, e per il 100 restano buchi da 50 e 60: non entra. Worst fit: 50 nel 150, 90 nel 100, il 100 entra nel buco da 100 rimasto. Nessuna strategia vince sempre.</p>
+  </div>
+  <aside class="notes">Il controesempio è nella spiegazione: rifarlo alla lavagna. Best fit lascia briciole troppo piccole per essere usate; worst fit consuma i buchi grandi. In pratica i sistemi preferiscono first fit o varianti, perché sono veloci e mediamente buone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il rimedio</p><h2>Compattazione: spingere tutti i processi da una parte</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Il sistema operativo <b>sposta</b> i processi uno accanto all'altro: i buchi si uniscono in un unico grande buco.</p>
+      <ul class="points">
+        <li>Si può fare perché basta cambiare il registro <b>base</b></li>
+        <li>Costa molto: bisogna copiare tanta memoria</li>
+        <li>Durante la copia i processi sono fermi</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Lo fa anche Java</h3><p>Ogni <b>new</b> chiede memoria allo heap della JVM. Quando il garbage collector elimina gli oggetti non più usati, molti collector <b>compattano</b> lo heap: spostano gli oggetti vivi uno accanto all'altro. È la stessa idea, dentro un solo programma.</p></div>
+  </div>
+  <aside class="notes">La compattazione è possibile solo con rilocazione dinamica (indirizzi tradotti a ogni accesso). Con la RAM di oggi, copiare gigabyte richiede tempo: per questo i sistemi moderni hanno scelto la paginazione, che elimina la frammentazione esterna. Sul garbage collector: i collector Serial, Parallel e G1 della JVM compattano (in modi diversi); non serve entrare nei dettagli.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Disegna la RAM e compattala</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc, celle A1:A20: ogni cella vale <b>50 KB</b> (in tutto 1000 KB).</li>
+      <li>Colora: SO 2 celle (nero), P1 4, libere 2, P2 3, libere 3, P3 3, libere 3. Scrivi il nome in ogni blocco.</li>
+      <li>In C1 annota quanti buchi ci sono e quanto è grande il più grande. Entra un processo da 300 KB?</li>
+      <li>In colonna E ridisegna la RAM dopo la compattazione e rispondi di nuovo.</li>
+      <li>Salva come <b>mappa-memoria.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> prima: 3 buchi (100, 150, 150 KB), 400 KB liberi, il processo da 300 non entra. Dopo: un solo buco da 400 KB in fondo, e il processo entra.</div>
+  </div>
+  <aside class="notes">Per colorare: Formato celle, Sfondo, oppure il pulsante Colore di sfondo nella barra. Chi finisce prima: calcolare quanti KB sono stati copiati per compattare (P2 + P3 = 300 KB spostati) e discutere il costo. In alternativa si fa su carta a quadretti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Simulazione in Java</p><h2>First fit in 15 righe</h2></div>
+  <pre class="code" style="font-size:25px">
+<span class="k">public class</span> Allocazione {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">int</span>[] buchi = {150, 400, 220, 90, 350};
+    <span class="k">int</span>[] richieste = {200, 80, 300, 140};
+    <span class="k">for</span> (<span class="k">int</span> r : richieste) {
+      <span class="k">int</span> scelto = -1;
+      <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; buchi.length; i++) {
+<span class="hl">        if (buchi[i] &gt;= r) { scelto = i; break; }</span>   <span class="c">// first fit</span>
+      }
+      <span class="k">if</span> (scelto == -1) { System.out.println(r + <span class="s">" KB: aspetta"</span>); <span class="k">continue</span>; }
+      buchi[scelto] -= r;
+      System.out.println(r + <span class="s">" KB -&gt; "</span> + (<span class="k">char</span>) (<span class="s">'A'</span> + scelto) + <span class="s">", restano "</span> + buchi[scelto]);
+    }
+  }
+}</pre>
+  <aside class="notes">Spiegare il codice riga per riga prima del laboratorio: il ciclo esterno prende una richiesta alla volta, quello interno cerca il buco. (char)('A' + scelto) trasforma 0, 1, 2… in A, B, C. Il break ferma la ricerca al primo buco adatto: è esattamente il first fit. Il continue salta alla richiesta successiva quando nessun buco va bene.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Da first fit a best fit cambiando una riga</h2>
+  <ol class="steps">
+    <li>Su <b>onlinegdb.com</b> scegli <b>Java</b>, copia il programma della slide precedente e premi <b>Run</b>.</li>
+    <li>Sostituisci la riga evidenziata con questa ed esegui di nuovo: ora è best fit.</li>
+  </ol>
+  <pre class="code" style="font-size:27px;padding:20px 32px"><span class="k">if</span> (buchi[i] &gt;= r &amp;&amp; (scelto == -1 || buchi[i] &lt; buchi[scelto])) scelto = i;</pre>
+  <ol class="steps" start="3" style="counter-reset:s 2">
+    <li>Cambia <code>&lt;</code> in <code>&gt;</code> ed esegui. Salva come <b>Allocazione.java</b> (Download).</li>
+  </ol>
+  <div class="check"><b>Controllo:</b> first fit: B 200, A 70, E 50, B 60. Best fit: C 20, D 10, E 50, A 10. Con <code>&gt;</code> è worst fit: B 200, E 270, "300 KB: aspetta", E 130. Uguale alla tabella!</div>
+  <aside class="notes">Nella versione best fit non c'è più il break: bisogna guardare tutti i buchi. La condizione dice: "il buco è adatto e (non ho ancora scelto niente oppure è più piccolo di quello scelto)". Se OnlineGDB non è raggiungibile, usare un altro compilatore Java online o l'IDE del laboratorio. Chi finisce prima: aggiungere alla fine la stampa della somma dei buchi rimasti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="part-abbina">
+    <dt>Frammentazione interna</dt><dd>Spazio sprecato dentro una partizione assegnata</dd>
+    <dt>Frammentazione esterna</dt><dd>Spazio libero sufficiente, ma spezzato in buchi</dd>
+    <dt>Compattazione</dt><dd>Spostare i processi per unire i buchi</dd>
+    <dt>First fit</dt><dd>Il primo buco abbastanza grande</dd>
+    <dt>Best fit</dt><dd>Il buco che lascia l'avanzo più piccolo</dd>
+    <dt>Worst fit</dt><dd>Il buco più grande disponibile</dd>
+  </dl>
+  <aside class="notes">Coppie corrette come scritte. Si può fare a squadre con il cronometro del telefono: vince chi finisce per primo senza errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con l'esempio svolto</h2></div>
+  <div class="puzzle-codice" data-risposta="3431" data-aiuto="la prima cifra è il numero del processo che con worst fit aspetta">
+    <ul class="points">
+      <li>1ª cifra: con worst fit, il numero del processo che deve aspettare</li>
+      <li>2ª cifra: con best fit, la prima cifra del buco più grande rimasto</li>
+      <li>3ª cifra: quante strategie "fit" abbiamo confrontato</li>
+      <li>4ª cifra: lo spreco del quiz sulle partizioni fisse, diviso 100</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> P3 aspetta, resta un buco da 400 KB, tre strategie, 100 KB di frammentazione interna.</div>
+  </div>
+  <aside class="notes">Codice: 3431. Gioco a squadre: la prima che apre vince il punto finale del torneo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo spazio sprecato dentro una partizione si chiama frammentazione <span class="blank" data-risposta="interna"></span>.</p>
+    <p>Buchi liberi sparsi e troppo piccoli: frammentazione <span class="blank" data-risposta="esterna"></span>.</p>
+    <p>La strategia che prende il buco più piccolo adatto è il <span class="blank" data-risposta="best fit|best-fit|bestfit"></span>.</p>
+    <p>Con buchi 120, 300, 200 e richiesta 150, first fit sceglie il buco da <span class="blank" data-risposta="300"></span> KB.</p>
+    <p>Unire i buchi spostando i processi si chiama <span class="blank" data-risposta="compattazione"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: interna, esterna, best fit, 300 (il 120 non basta, il primo adatto è 300; best fit avrebbe scelto 200), compattazione.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Contigua: ogni processo in un blocco unico</li>
+      <li>Partizioni fisse → frammentazione interna</li>
+      <li>Partizioni variabili → frammentazione esterna</li>
+    </ul>
+    <ul class="points">
+      <li>First, best, worst fit: nessuno vince sempre</li>
+      <li>Compattazione: funziona, ma costa</li>
+      <li>La vera soluzione? Le pagine, la prossima volta</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: allocazione non contigua a paginazione statica.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

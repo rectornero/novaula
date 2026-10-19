@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio: i file immagine · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · La multimedialità · Laboratorio</p>
+  <h1>Laboratorio:<br>i file immagine</h1>
+  <p class="lead">JPEG, PNG, GIF, WebP: stessa immagine, pesi diversissimi. Comprimiamo, confrontiamo e apriamo i file byte per byte.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Squoosh · Photopea · HexEd.it</span></div>
+  <aside class="notes">Lezione quasi tutta in laboratorio (2 ore). Prerequisiti: lezione sulle immagini raster (pixel, profondità, peso, compressione) ed esadecimale. Strumenti online senza account: squoosh.app, photopea.com, hexed.it. Controllare prima della lezione che i tre siti non siano bloccati dal filtro della scuola. Preparare in una cartella condivisa: una foto con molti dettagli (foto.jpg) e un logo a tinte piatte (logo.png), oppure usare lo sprite-cognome.png della lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Su WhatsApp hai mai inviato una foto «come documento»?</h2></div>
+  <div class="poll" data-id="fi-whatsapp">
+    <ol><li>Sì, per non farla rovinare</li><li>No, non sapevo si potesse</li><li>Uso l'opzione HD</li><li>Non uso WhatsApp</li></ol>
+  </div>
+  <aside class="notes">WhatsApp, come molte app, ricomprime le foto inviate normalmente: risoluzione e qualità scendono per risparmiare dati. Inviata come documento, la foto arriva identica, byte per byte. Chiedere: come facciamo a dimostrarlo? Confrontando peso e risoluzione prima e dopo. È proprio quello che faremo oggi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I formati</p><h2>Quattro formati, quattro caratteri</h2></div>
+  <table class="data compact">
+    <tr><th>Formato</th><th>Anno</th><th>Compressione</th><th>Colori</th><th>Trasparenza</th><th>Animazione</th></tr>
+    <tr><td><b>GIF</b></td><td>1987</td><td>senza perdita (LZW)</td><td class="mono">max 256</td><td>sì, 1 colore</td><td>sì</td></tr>
+    <tr><td><b>JPEG</b></td><td>1992</td><td>con perdita</td><td class="mono">24 bit</td><td>no</td><td>no</td></tr>
+    <tr><td><b>PNG</b></td><td>1996</td><td>senza perdita (DEFLATE)</td><td class="mono">fino a 48 bit</td><td>sì, canale alfa</td><td>no*</td></tr>
+    <tr><td><b>WebP</b></td><td>2010</td><td>con o senza perdita</td><td class="mono">24 bit</td><td>sì, canale alfa</td><td>sì</td></tr>
+  </table>
+  <p class="small muted">* Esiste APNG, un'estensione del PNG animato, supportata dai browser moderni.</p>
+  <aside class="notes">Storia utile: il PNG nacque nel 1995-96 come alternativa libera al GIF, perché l'algoritmo LZW era coperto da un brevetto (Unisys) e si pretendevano licenze. JPEG prende il nome dal Joint Photographic Experts Group. WebP è stato presentato da Google nel 2010. PNG a 48 bit = 16 bit per canale, usato in fotografia professionale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni immagine al formato più adatto</h2></div>
+  <dl class="puzzle-abbina" data-id="fi-formati">
+    <dt>Foto delle vacanze da archiviare</dt><dd>JPEG: con perdita, ottimo per le foto</dd>
+    <dt>Screenshot di un codice Java</dt><dd>PNG: testo nitido, nessun artefatto</dd>
+    <dt>Reazione animata in chat</dt><dd>GIF: animazione, al massimo 256 colori</dd>
+    <dt>Foto leggera per un sito web</dt><dd>WebP: più piccolo del JPEG a parità di qualità</dd>
+    <dt>Logo da mettere su sfondi diversi</dt><dd>PNG con canale alfa trasparente</dd>
+  </dl>
+  <aside class="notes">Lo screenshot di codice in JPEG mostra aloni intorno alle lettere: la compressione con perdita lavora male sui bordi netti. Molti "GIF" sui social oggi sono in realtà brevi video MP4: più leggeri e con tutti i colori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Una foto di 12 MP salvata in PNG e in JPEG (qualità 85). Quale file è più piccolo?</h2></div>
+  <div class="poll" data-id="fi-png-jpeg" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il PNG, perché è il formato più moderno</li><li>Sono uguali: i pixel sono gli stessi</li><li>Il JPEG, di molte volte</li><li>Il PNG, perché non ha perdita</li></ol>
+    <p class="why">Su una foto il PNG non può buttare via niente e i pixel vicini sono quasi tutti diversi: pesa spesso 5–10 volte il JPEG. Il PNG vince sulle immagini con tinte piatte: loghi, schermate, grafici.</p>
+  </div>
+  <aside class="notes">Misconcezione classica: "il PNG è sempre migliore e più piccolo". Il PNG è più recente del JPEG ma non è "più moderno" nel senso della compressione. Il rapporto 5-10 volte è indicativo: lo verificheremo subito con Squoosh.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Squoosh: la gara della compressione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>squoosh.app</b> e trascina dentro <b>foto.jpg</b> (o una tua foto).</li>
+      <li>A destra scegli <b>MozJPEG</b> qualità 75, poi 30, poi 5. Annota ogni volta il peso in basso.</li>
+      <li>Prova <b>WebP</b> e <b>AVIF</b> a qualità 75, poi <b>OxiPNG</b>.</li>
+      <li>Trascina il cursore centrale e ingrandisci: dove compaiono i difetti?</li>
+      <li>Metti i 6 risultati in Calc: <b>squoosh.ods</b>, con un grafico a barre.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> peso in calo da qualità 75 a 5; WebP e AVIF più leggeri del JPEG a parità di qualità; OxiPNG il più pesante. A qualità 5 si vedono quadretti di 8 × 8 pixel.</div>
+  </div>
+  <aside class="notes">Squoosh lavora nel browser: la foto non viene caricata su un server. AVIF può impiegare alcuni secondi a comprimere. I quadretti 8 × 8 sono i blocchi in cui il JPEG divide l'immagine (prossima slide). Fallback se il sito è bloccato: Photopea, File › Esporta come › JPG con il cursore della qualità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dentro il JPEG</p><h2>Che cosa butta via il JPEG?</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Luce e colore</h3><p>Separa la luminosità dal colore. L'occhio nota meno i dettagli di colore: li riduce.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Blocchi 8 × 8</h3><p>Divide l'immagine in blocchi e li descrive come somma di «onde» più o meno fini.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Taglio</h3><p>Arrotonda o scarta i dettagli più fini. La <b>qualità</b> decide quanto tagliare.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I formati più recenti, come <b>AVIF</b>, nascono dai codec video: AVIF usa la compressione delle immagini singole di AV1, il codec di molti video in streaming. Gli iPhone salvano in <b>HEIC</b>, che viene dal codec video HEVC.</p></div>
+  <aside class="notes">Il passo 2 è la trasformata discreta del coseno (DCT): non serve il nome alla 3E, basta l'idea. Ogni volta che si risalva un JPEG modificato si perde un altro po' di qualità. Collegamento con la lezione sulle immagini in movimento: video e immagini usano le stesse idee.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Esattamente o in modo approssimato</h2></div>
+  <figure class="citazione">
+    <blockquote>Il problema fondamentale della comunicazione è riprodurre in un punto, esattamente o in modo approssimato, un messaggio scelto in un altro punto.</blockquote>
+    <figcaption><b>Claude Shannon</b>, «A Mathematical Theory of Communication», 1948</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card ok"><h3>«Esattamente»</h3><p>Compressione senza perdita: PNG, GIF, ZIP.</p></div>
+    <div class="card bad"><h3>«In modo approssimato»</h3><p>Compressione con perdita: JPEG, WebP, MP3.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dalla prima pagina dell'articolo di Shannon (Bell System Technical Journal, 1948), lo stesso in cui compare la parola "bit". Domanda: per quali file l'approssimazione è inaccettabile? Programmi, documenti, archivi: un solo bit sbagliato li rovina. Per foto e musica invece si accetta di perdere ciò che i sensi non notano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Logo contro foto: chi vince?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Photopea apri <b>logo.png</b> (o il tuo sprite ingrandito a 512 × 512).</li>
+      <li><b>File › Esporta come</b>: salva in <b>PNG</b>, <b>JPG</b> qualità 80 e <b>GIF</b>. Annota i pesi.</li>
+      <li>Ripeti tutto con <b>foto.jpg</b>.</li>
+      <li>Ingrandisci il logo in JPG: cosa vedi intorno ai bordi?</li>
+      <li>Scrivi i 6 pesi e il vincitore di ogni gara in <b>logo-foto.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per il logo vince il PNG (o il GIF) e il JPG mostra aloni sui bordi; per la foto vince il JPG, mentre il GIF ha colori a chiazze perché ne usa al massimo 256.</div>
+  </div>
+  <aside class="notes">Per ingrandire lo sprite senza sfocarlo: Immagine › Dimensione immagine con ricampionamento "Nearest Neighbor" (in italiano "Vicino più prossimo"). Le chiazze del GIF sulle foto si chiamano posterizzazione; il dithering le maschera con puntini. Se Photopea non mostra il peso nella finestra di esportazione, salvare e leggerlo in Esplora file.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La firma del file</p><h2>I primi byte dicono chi sei</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Formato</th><th>Primi byte (esadecimale)</th><th>In ASCII</th></tr>
+      <tr><td>PNG</td><td class="mono">89 50 4E 47 0D 0A 1A 0A</td><td class="mono">.PNG....</td></tr>
+      <tr><td>JPEG</td><td class="mono">FF D8 FF</td><td class="mono">ÿØÿ</td></tr>
+      <tr><td>GIF</td><td class="mono">47 49 46 38 39 61</td><td class="mono">GIF89a</td></tr>
+      <tr><td>WebP</td><td class="mono">52 49 46 46 … 57 45 42 50</td><td class="mono">RIFF…WEBP</td></tr>
+    </table>
+    <div class="stack">
+      <p>Questa firma si chiama <b>magic number</b>. I programmi la leggono per capire il formato.</p>
+      <div class="callout">L'estensione (.png, .jpg) è solo un'etichetta nel nome: <mark>rinominare non converte</mark>.</div>
+    </div>
+  </div>
+  <aside class="notes">Ripasso ASCII: 50 4E 47 = P N G; 47 49 46 = G I F. Il PNG inizia con 89 (non ASCII) proprio per accorgersi se un programma ha trattato il file come testo e l'ha rovinato; 0D 0A sono a capo Windows, 1A è il vecchio carattere di fine file. Il JPEG finisce con FF D9.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine le parti di un file PNG</h2></div>
+  <ol class="puzzle-ordina" data-id="fi-png">
+    <li>Firma: 89 50 4E 47 0D 0A 1A 0A</li>
+    <li>Blocco IHDR: larghezza, altezza, profondità di colore</li>
+    <li>Blocco PLTE: la tavolozza (solo per immagini a colori indicizzati)</li>
+    <li>Blocchi IDAT: i pixel compressi</li>
+    <li>Blocco IEND: fine del file</li>
+  </ol>
+  <aside class="notes">Ogni blocco (chunk) ha: lunghezza (4 byte), tipo (4 lettere ASCII), dati, controllo CRC (4 byte). Logica dell'ordine: prima bisogna sapere quanto è grande l'immagine e come sono codificati i colori, poi arrivano i dati. Tra IHDR e IDAT possono esserci altri blocchi facoltativi, per esempio quelli con i metadati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>HexEd.it: leggi la larghezza dentro il PNG</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>hexed.it</b> e con <b>Apri file</b> carica il tuo <b>sprite-cognome.png</b>.</li>
+      <li>Trova la firma 89 50 4E 47 all'indirizzo 00000000.</li>
+      <li>Cerca le lettere <b>IHDR</b> nella colonna di testo a destra.</li>
+      <li>Leggi i 4 byte subito dopo IHDR (larghezza) e i 4 seguenti (altezza). Convertili in decimale.</li>
+      <li>Annota i valori in <b>hex-png.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> IHDR inizia all'indirizzo 0C; larghezza agli indirizzi 10–13: per lo sprite <code>00 00 00 10</code> = 16, e altezza <code>00 00 00 10</code> = 16.</div>
+  </div>
+  <aside class="notes">Il PNG scrive i numeri "big-endian": il byte più significativo per primo. HexEd.it lavora nel browser e non carica il file su un server. Se uno studente non ha lo sprite, usare logo.png: la larghezza letta deve coincidere con Immagine › Dimensione immagine di Photopea. Dopo la larghezza c'è 1 byte di profondità (08 = 8 bit per canale) e 1 di tipo colore (02 = RGB, 06 = RGB con alfa).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In un file GIF la larghezza è scritta nei byte <code>2C 01</code>. Quanto è larga l'immagine?</h2></div>
+  <div class="poll" data-id="fi-gif-endian" data-tipo="quiz" data-risposta="B">
+    <ol><li>11 265 pixel</li><li>300 pixel</li><li>44 pixel</li><li>301 pixel</li></ol>
+    <p class="why">Il GIF scrive i numeri «little-endian»: prima il byte meno significativo. Si legge 01 2C = 1 × 256 + 44 = 300. Chi legge 2C01 come nel PNG ottiene 11 265.</p>
+  </div>
+  <aside class="notes">Ottimo esempio del fatto che i byte da soli non bastano: serve conoscere la regola del formato. 0x2C = 44. Molti processori (Intel, ARM in modalità usuale) memorizzano i numeri in little-endian; i protocolli di rete e il PNG usano big-endian.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Il travestimento: rinomina e smaschera</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Esplora file attiva <b>Visualizza › Estensioni nomi file</b>.</li>
+      <li>Copia lo sprite e rinomina la copia <b>sprite-finto.jpg</b>.</li>
+      <li>Aprilo nel browser: si vede? Aprilo in HexEd.it: quali sono i primi 4 byte?</li>
+      <li>Ora in Photopea esporta lo sprite davvero in JPG: <b>sprite-vero.jpg</b>. Confronta i primi byte dei due file.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> sprite-finto.jpg inizia ancora con <code>89 50 4E 47</code>: è un PNG travestito. sprite-vero.jpg inizia con <code>FF D8 FF</code>.</div>
+  </div>
+  <aside class="notes">Il browser di solito mostra lo stesso il file perché guarda la firma, non l'estensione. Collegamento con la sicurezza: alcuni malware si travestono così (fattura.pdf.exe); i filtri seri controllano i magic number. Domanda: perché Windows nasconde le estensioni per default? Per semplicità, ma è un rischio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I metadati</p><h2>Dentro la foto c'è più della foto</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>EXIF</h3><ul class="points"><li>modello del telefono</li><li>data e ora dello scatto</li><li>esposizione, ISO</li><li>spesso le <b>coordinate GPS</b></li></ul></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Lo standard <b>C2PA</b> (Content Credentials) aggiunge alle immagini una «etichetta» firmata su chi le ha create o modificate, anche con l'AI. Alcuni generatori di immagini la inseriscono già. Ma i metadati si cancellano facilmente: la loro assenza non prova niente.</p></div>
+  </div>
+  <aside class="notes">Privacy: una foto pubblicata con le coordinate GPS rivela dove si trova casa. Molti social cancellano gli EXIF al caricamento, ma non tutte le app e non l'invio come documento. Su Windows: tasto destro › Proprietà › Dettagli › "Rimuovi proprietà e informazioni personali". Il compito per casa riprende questo tema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto leggendo i byte</h2></div>
+  <div class="puzzle-codice" data-risposta="3224" data-aiuto="cerca i byte dopo IHDR: 00 00 00 20 e 00 00 00 18">
+    <p>Ecco i primi 24 byte di un file. Il codice è la sua <b>larghezza</b> seguita dalla sua <b>altezza</b>, in decimale.</p>
+    <p class="mono small">89 50 4E 47 0D 0A 1A 0A 00 00 00 0D<br>49 48 44 52 00 00 00 20 00 00 00 18</p>
+    <div class="premio"><b>Lucchetto aperto!</b> È un PNG: dopo IHDR, 0x20 = 32 pixel di larghezza e 0x18 = 24 di altezza.</div>
+  </div>
+  <aside class="notes">Codice: 3224. Passaggi: riconoscere la firma PNG, trovare 49 48 44 52 = IHDR, leggere 00 00 00 20 = 32 e 00 00 00 18 = 24. A squadre, con la calcolatrice di Windows in modalità Programmatore ammessa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per uno screenshot con del testo il formato migliore è il <span class="blank" data-risposta="PNG"></span>.</p>
+    <p>Un GIF può avere al massimo <span class="blank" data-risposta="256"></span> colori.</p>
+    <p>Un file JPEG inizia con i byte FF <span class="blank" data-risposta="D8"></span> FF.</p>
+    <p>La firma all'inizio di un file si chiama magic <span class="blank" data-risposta="number|numero"></span>.</p>
+    <p>Le coordinate GPS di una foto sono nei metadati <span class="blank" data-risposta="EXIF"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: PNG (accettare anche WebP senza perdita se motivato), 256, D8, number, EXIF.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>JPEG per le foto, PNG per testo e loghi, GIF per piccole animazioni, WebP per il web</li>
+      <li>La qualità del JPEG decide quanti dettagli tagliare</li>
+      <li>Il PNG non è sempre più piccolo del JPEG</li>
+    </ul>
+    <ul class="points">
+      <li>I primi byte (magic number) dicono il formato vero</li>
+      <li>Rinominare non converte</li>
+      <li>I metadati EXIF possono rivelare dove sei</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: le immagini vettoriali e il formato SVG.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -5,6 +5,19 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.2.0 (19 Oct 2026): the 3E TPSI course
+- 3E's Programma now follows the textbook: 60 new topics after the 5 already there (Units 1–7, two group projects,
+  three Educazione civica lessons), including the book's online lessons and labs.
+- 60 new interactive decks for 3E, each with a PDF, polls, quizzes, puzzles, at least three computer labs and the
+  "? Domande" button. Labs use free online tools with no account (OnlineGDB and Java Tutor for Java, CodePen,
+  Photopea, AudioMass, JSLinux, Teachable Machine…). The older binary, conversion and hex decks are linked to the
+  matching book topics.
+- The two projects are our own on the book's themes: "DomoDash" (a smart-home dashboard) and "Il nostro Comune a
+  raggi X" (a site on local waste and energy with real open data).
+- 60 homework sheets, hidden until their topic is marked done, then due 14 days later; the two projects are group work.
+- 7 unit tests, each with a practice test for students and the real test and answer key for the teacher.
+- SQL: `aggiornamenti/2026-10-19-corso-3e-1-programma.sql` and `2026-10-19-corso-3e-2-compiti.sql` (applied).
+
 ## 2.1.0 (19 Oct 2026): the 5G TPSI course
 - 5G's Programma now follows the textbook: 53 new topics after the 7 already done (Units 1–6, Learning by project,
   Educazione civica, Esame di Stato e orientamento), plus the Claude Code lesson.

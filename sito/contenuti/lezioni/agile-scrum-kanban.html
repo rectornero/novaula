@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agile, Scrum e Kanban · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Sviluppare software</p>
+  <h1>Agile, Scrum<br>e Kanban</h1>
+  <p class="lead">Nel 2001 diciassette sviluppatori scrissero un manifesto di poche righe che ha cambiato il modo di lavorare di milioni di team. Oggi lo proviamo anche noi.</p>
+  <aside class="notes">Obiettivi: conoscere il Manifesto agile (valori e alcuni principi), i ruoli, gli eventi e gli artefatti di Scrum, le user story, la board Kanban con i limiti WIP, il burndown chart; distinguere Scrum e Kanban. Durata indicativa: 2-3 ore. Servono post-it (3 colori se possibile) e pennarelli per la sfida a squadre, OnlineGDB (Java), Writer o Google Documenti, Calc o Google Fogli. Progetto d'esempio della lezione: "l'app della gita di classe".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nei lavori di gruppo, che cosa va storto più spesso?</h2></div>
+  <div class="poll" data-id="agl-gruppo">
+    <ol><li>Uno fa tutto, gli altri guardano</li><li>Ci riduciamo all'ultimo giorno</li><li>Non sappiamo chi fa che cosa</li><li>Cambiamo idea a metà strada</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Tenere a mente i risultati: ogni problema ha una risposta nei metodi agili. A: team auto-organizzato e lavoro visibile sulla board; B: sprint brevi con consegne frequenti; C: board Kanban e Daily Scrum; D: rispondere al cambiamento è previsto, non è un fallimento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Snowbird, Utah, febbraio 2001</p><h2>Dalla cascata all'agilità</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Anni '90: molti progetti seguono processi pesanti, con montagne di documenti e mesi prima di vedere il software.</li>
+      <li>Nel frattempo i requisiti cambiano: quando il prodotto arriva, non serve più.</li>
+      <li>17 sviluppatori si incontrano in una località sciistica dello Utah e firmano il <b>Manifesto per lo sviluppo agile del software</b>.</li>
+    </ul>
+    <div class="card soft"><p class="num">4</p><h3>valori</h3><p class="num">12</p><h3>principi</h3><p class="small muted">Tutto il testo sta in una pagina web: agilemanifesto.org</p></div>
+  </div>
+  <aside class="notes">L'incontro si tenne a Snowbird (Utah) dall'11 al 13 febbraio 2001. Tra i firmatari: Kent Beck, Martin Fowler, Ken Schwaber, Jeff Sutherland, Ward Cunningham. Collegamento con la lezione precedente: i metodi agili sono iterativi e incrementali, con iterazioni brevi e il cliente sempre coinvolto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Manifesto agile</p><h2>Quattro scelte di priorità</h2></div>
+  <table class="data">
+    <tr><th>Diamo più valore a…</th><th>…che a</th></tr>
+    <tr><td><b>Individui e interazioni</b></td><td class="muted">processi e strumenti</td></tr>
+    <tr><td><b>Software funzionante</b></td><td class="muted">documentazione esaustiva</td></tr>
+    <tr><td><b>Collaborazione con il cliente</b></td><td class="muted">negoziazione dei contratti</td></tr>
+    <tr><td><b>Rispondere al cambiamento</b></td><td class="muted">seguire un piano</td></tr>
+  </table>
+  <div class="callout">Ogni riga è una <b>scelta di priorità</b>, non un divieto: quando le due cose sono in conflitto, vince quella a sinistra.</div>
+  <aside class="notes">Traduzione nostra (sul sito agilemanifesto.org c'è anche una traduzione italiana ufficiale, con parole leggermente diverse). Originale: "Individuals and interactions over processes and tools; Working software over comprehensive documentation; Customer collaboration over contract negotiation; Responding to change over following a plan." Chiedere: per ogni riga, un esempio dalla vita di classe (per esempio: parlarsi in 5 minuti invece di scriversi 30 messaggi nel gruppo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Leggere fino in fondo</p><h2>La frase che molti dimenticano</h2></div>
+  <figure class="citazione">
+    <blockquote>Pur riconoscendo il valore delle voci a destra, diamo più valore a quelle a sinistra.</blockquote>
+    <figcaption><b>Manifesto per lo sviluppo agile del software</b>, firmato da 17 sviluppatori, Snowbird (Utah), 2001</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card"><p class="small">"La nostra massima priorità è soddisfare il cliente rilasciando software di valore, presto e con continuità."</p></div>
+    <div class="card"><p class="small">"Il software funzionante è la principale misura di progresso."</p></div>
+  </div>
+  <aside class="notes">Traduzioni nostre. Originali: "That is, while there is value in the items on the right, we value the items on the left more." Principi 1 e 7: "Our highest priority is to satisfy the customer through early and continuous delivery of valuable software." "Working software is the primary measure of progress." Prepara il quiz successivo: agile non vuol dire "senza regole".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>"Agile" vuol dire niente piani e niente documentazione?</h2></div>
+  <div class="poll" data-id="agl-mito" data-tipo="quiz" data-risposta="C">
+    <ol><li>Sì, il Manifesto dice di non scrivere documentazione</li><li>Sì: si pianifica solo il primo giorno, poi si improvvisa</li><li>No: piani e documenti servono, ma contano meno del software funzionante e del cambiamento</li><li>No, ma i documenti li deve scrivere il cliente</li></ol>
+    <p class="why">Il Manifesto riconosce il valore delle voci a destra. Scrum, per esempio, pianifica a ogni sprint e ogni giorno: si pianifica spesso e poco alla volta, invece che tutto all'inizio.</p>
+  </div>
+  <aside class="notes">È il fraintendimento più diffuso, anche nelle aziende. La B è il tranello: nei metodi agili si pianifica di più, non di meno, ma su orizzonti brevi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrum</p><h2>Una squadra di rugby che avanza insieme</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Product Owner</h3><p class="small">Rappresenta il cliente. Decide che cosa conta di più e ordina il Product Backlog.</p></div>
+    <div class="card soft"><h3>Scrum Master</h3><p class="small">Allenatore del team: fa rispettare Scrum e rimuove gli ostacoli. Non è il capo.</p></div>
+    <div class="card soft"><h3>Developers</h3><p class="small">Chi costruisce l'incremento: programmatori, grafici, tester. Si organizzano da soli.</p></div>
+  </div>
+  <p class="small muted">Un team Scrum di solito ha al massimo 10 persone. Il nome viene dalla "mischia" del rugby.</p>
+  <aside class="notes">Scrum è stato presentato da Ken Schwaber e Jeff Sutherland nel 1995 (conferenza OOPSLA); la metafora del rugby viene dall'articolo di Takeuchi e Nonaka "The New New Product Development Game" (Harvard Business Review, 1986). La versione di riferimento è la Scrum Guide 2020, gratuita su scrumguides.org, che parla di tre "responsabilità" e indica un team di 10 persone o meno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli eventi di Scrum</p><h2>Lo sprint: da 1 a 4 settimane, sempre uguale</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Sprint Planning</h3><p class="small">Che cosa facciamo e perché: nasce lo Sprint Backlog.</p></div>
+    <div class="card fill"><h3>Daily Scrum</h3><p class="small">15 minuti ogni giorno, in piedi: avanzamento e ostacoli.</p></div>
+    <div class="card soft"><h3>Sprint Review</h3><p class="small">Si mostra l'incremento al cliente.</p></div>
+    <div class="card soft"><h3>Retro&shy;spettiva</h3><p class="small">Come possiamo lavorare meglio?</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti team usano l'AI per trascrivere e riassumere le riunioni e per tenere aggiornata la board. Utile, ma le decisioni della retrospettiva restano del team: un riassunto non è un accordo.</p></div>
+  <aside class="notes">Gli artefatti: Product Backlog (tutto ciò che il prodotto potrà fare, ordinato), Sprint Backlog (quello che si fa in questo sprint), Incremento (il prodotto funzionante alla fine dello sprint, che rispetta la "Definition of Done"). Per la Scrum Guide lo sprint dura al massimo un mese. Le tre domande classiche del Daily (ieri, oggi, ostacoli) non sono più obbligatorie nella guida 2020, ma sono un buon inizio per una classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine uno sprint</h2></div>
+  <ol class="puzzle-ordina" data-id="agl-sprint">
+    <li>Il Product Owner ordina il Product Backlog</li>
+    <li>Sprint Planning: il team sceglie gli elementi dello sprint</li>
+    <li>Ogni giorno il team si allinea nel Daily Scrum</li>
+    <li>Sprint Review: l'incremento viene mostrato al cliente</li>
+    <li>Retrospettiva: il team decide che cosa migliorare</li>
+    <li>Comincia lo sprint successivo</li>
+  </ol>
+  <aside class="notes">Errore tipico: mettere la retrospettiva prima della review. Prima si guarda il prodotto (review), poi il modo di lavorare (retrospettiva). L'ordinamento del backlog in realtà è continuo, ma serve prima del planning.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Product Backlog</p><h2>La user story: un bisogno visto dall'utente</h2></div>
+  <div class="formula"><small>Lo schema</small>Come <span class="hl">&lt;ruolo&gt;</span> voglio <span class="hl">&lt;obiettivo&gt;</span> per <span class="hl">&lt;beneficio&gt;</span></div>
+  <div class="cols-2 wide-left">
+    <div class="card soft"><h3>Esempio: l'app della gita</h3><p>Come <b>organizzatore</b> voglio <b>calcolare la quota a testa</b> per <b>comunicarla subito alle famiglie</b>.</p></div>
+    <div class="card"><h3>Criteri di accettazione</h3><p class="small">900 € di pullman, 25 studenti, ingresso 12 € → quota 48 €. Con 0 partecipanti: messaggio di errore.</p></div>
+  </div>
+  <aside class="notes">I criteri di accettazione dicono quando la storia è "fatta": sono i test di accettazione della lezione precedente. Le storie si stimano in "story point" (dimensione relativa, spesso con i numeri 1, 2, 3, 5, 8, 13), non in ore. Tecnica: planning poker, tutti mostrano insieme la stima per non farsi influenzare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti · a coppie</span></p>
+  <h2>Il backlog dell'app della gita</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Writer o Google Documenti; crea una tabella: <b>N.</b>, <b>User story</b>, <b>Criteri di accettazione</b>, <b>Punti</b>.</li>
+      <li>Scrivi 6 user story con lo schema "Come… voglio… per…", da ruoli diversi: studente, genitore, docente.</li>
+      <li>Per ognuna scrivi almeno un criterio di accettazione con un esempio concreto.</li>
+      <li>Stimate insieme i punti (1, 2, 3, 5, 8) mostrando le dita nello stesso momento.</li>
+      <li>Ordinate le righe dalla più importante. Salva come <b>backlog-gita.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni storia ha un ruolo, un obiettivo e un beneficio; nessuna descrive la tecnica ("voglio un database"); la prima riga è quella senza cui l'app non serve.</div>
+  </div>
+  <aside class="notes">Esempi: come studente voglio vedere il programma ora per ora per sapere a che ora tornare; come genitore voglio firmare l'autorizzazione dal telefono per non dover stampare; come docente voglio la lista di chi ha pagato per sapere chi manca. Errore frequente: storie tecniche ("voglio un login"); riscriverle dal punto di vista dell'utente. Questo backlog serve anche per la sfida Kanban e per il laboratorio Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine di Scrum</h2></div>
+  <dl class="puzzle-abbina" data-id="agl-termini">
+    <dt>Product Owner</dt><dd>Decide l'ordine di priorità del backlog</dd>
+    <dt>Scrum Master</dt><dd>Aiuta il team a lavorare bene e toglie gli ostacoli</dd>
+    <dt>Developers</dt><dd>Costruiscono l'incremento e si organizzano da soli</dd>
+    <dt>Product Backlog</dt><dd>Elenco ordinato di tutto ciò che il prodotto potrà fare</dd>
+    <dt>Sprint Backlog</dt><dd>Gli elementi scelti per lo sprint in corso, con il piano</dd>
+    <dt>Incremento</dt><dd>Il prodotto funzionante alla fine dello sprint</dd>
+  </dl>
+  <aside class="notes">A squadre, 2 minuti. Confusione tipica: Product Backlog e Sprint Backlog; Scrum Master e capo progetto (in Scrum non c'è un capo che assegna i compiti).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Una user story diventa codice</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>onlinegdb.com</b>, scegli Java. Importa <code>java.util.Scanner</code>.</li>
+      <li>Leggi da tastiera il costo del pullman, il numero di partecipanti e il costo dell'ingresso.</li>
+      <li>Se i partecipanti sono 0 o meno, stampa <code>Numero di partecipanti non valido</code>.</li>
+      <li>Altrimenti calcola e stampa la quota: pullman diviso partecipanti, più l'ingresso.</li>
+      <li>Prova i due criteri di accettazione della storia. Salva come <b>QuotaGita.java</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 900, 25 e 12 stampa una quota di <code>48.0</code>; con 0 partecipanti stampa il messaggio di errore e non va in crash.</div>
+  </div>
+  <aside class="notes">Soluzione: Scanner in = new Scanner(System.in); double pullman = in.nextDouble(); int n = in.nextInt(); double ingresso = in.nextDouble(); if (n &lt;= 0) System.out.println("Numero di partecipanti non valido"); else System.out.println("Quota: " + (pullman / n + ingresso)); Senza il controllo, con n = 0 una divisione double dà Infinity (con int darebbe ArithmeticException): bel momento per parlare di criteri di accettazione. La storia è "fatta" solo quando entrambi i criteri passano: è la Definition of Done.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Kanban</p><h2>Il lavoro a colpo d'occhio</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Da fare</h3><p class="chip">Programma della gita</p><p class="chip">Lista di chi ha pagato</p><p class="chip">Autorizzazione online</p></div>
+    <div class="card soft"><h3>In corso · max 2</h3><p class="chip">Calcolo della quota</p><p class="chip">Grafica della home</p></div>
+    <div class="card ok"><h3>Fatto</h3><p class="chip">Login con account scuola</p></div>
+  </div>
+  <ul class="points small">
+    <li><b>Kanban</b> in giapponese vuol dire "cartellino": nasce alla Toyota negli anni '50 per la produzione di auto.</li>
+    <li>Regola chiave: il <b>limite WIP</b> (work in progress), il massimo di attività "in corso" insieme.</li>
+  </ul>
+  <aside class="notes">Il sistema Kanban fu sviluppato alla Toyota da Taiichi Ohno; nello sviluppo software è stato reso popolare da David J. Anderson (libro "Kanban", 2010). A differenza di Scrum non ci sono sprint né ruoli obbligatori: il lavoro scorre di continuo e si "tira" una nuova attività solo quando c'è posto. Slogan: "smettere di iniziare, iniziare a finire".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre · carta e post-it</p><h2>Il volantino della gita in 10 minuti</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Squadre da 4. Sul banco tracciate 3 colonne: Da fare, In corso (max 2), Fatto.</li>
+      <li>Scrivete un post-it per ogni attività: titolo, disegno, orari, costi, cosa portare, revisione finale.</li>
+      <li>Si può spostare in "In corso" solo se c'è posto. Per andare in "Fatto" un compagno deve controllare.</li>
+      <li>Allo scadere fotografate la board e il volantino.</li>
+    </ol>
+    <div class="stack">
+      <div class="timer" data-min="10"></div>
+      <div class="callout hl small">Vince la squadra con più post-it in "Fatto" e un volantino che rispetta tutto.</div>
+    </div>
+  </div>
+  <aside class="notes">Materiale: post-it e pennarelli, un foglio A4 per squadra. Il docente può "cambiare un requisito" a metà (per esempio: la gita si sposta di un'ora) per far vedere come reagisce una board agile. Debriefing di 5 minuti: dove si sono accumulati i post-it? Il controllo prima di "Fatto" è la Definition of Done. Se una squadra ha violato il limite WIP, di solito ha più lavori iniziati e meno finiti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>5 attività "In corso", nessuna finita. Che cosa suggerisce Kanban?</h2></div>
+  <div class="poll" data-id="agl-wip" data-tipo="quiz" data-risposta="B">
+    <ol><li>Iniziare altre attività, così nessuno resta fermo</li><li>Non iniziare niente di nuovo e aiutarsi a finire quelle aperte</li><li>Allungare lo sprint di una settimana</li><li>Aggiungere una colonna "Quasi fatto"</li></ol>
+    <p class="why">Il limite WIP serve proprio a questo: troppo lavoro aperto insieme rallenta tutto, perché si salta da un compito all'altro. Prima si finisce, poi si comincia altro. La C è un tranello: Kanban non ha sprint.</p>
+  </div>
+  <aside class="notes">La A sembra la risposta "efficiente" ed è il fraintendimento classico. La D nasconde il problema invece di risolverlo. Collegare alla sfida appena fatta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il burndown chart dello sprint</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Calc o Google Fogli. In A1 <b>Giorno</b>, in B1 <b>Ideale</b>, in C1 <b>Reale</b>.</li>
+      <li>Da A2 ad A12 i giorni da 0 a 10. In B2 <code>=40-4*A2</code> e trascina fino a B12.</li>
+      <li>Da C2 a C12 i punti rimasti: 40, 40, 36, 33, 33, 27, 22, 18, 11, 6, 0.</li>
+      <li>Seleziona A1:C12 e inserisci un grafico a <b>linee</b>, con la colonna A come etichette.</li>
+      <li>Sotto il grafico scrivi in una frase come è andato lo sprint. Salva come <b>burndown.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la linea ideale scende dritta da 40 a 0. Al giorno 5 l'ideale vale 20, il reale 27: il team era in ritardo, ma ha chiuso lo sprint.</div>
+  </div>
+  <aside class="notes">Il burndown mostra i punti (o le attività) che restano da fare giorno per giorno. Lettura: sopra la linea ideale si è in ritardo, sotto in anticipo; tratti piatti (giorni 0-1 e 3-4) indicano giorni senza storie completate, da discutere nel Daily. In Calc: Inserisci, Grafico, tipo Linee; nella procedura guidata spuntare "Prima colonna come etichetta". In Google Fogli: Inserisci, Grafico, tipo grafico a linee.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">A confronto</p><h2>Scrum o Kanban?</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>Scrum</th><th>Kanban</th></tr>
+    <tr><td><b>Ritmo</b></td><td>Sprint di durata fissa</td><td>Flusso continuo</td></tr>
+    <tr><td><b>Ruoli</b></td><td>Product Owner, Scrum Master, Developers</td><td>Nessun ruolo obbligatorio</td></tr>
+    <tr><td><b>Cambiamenti</b></td><td>Di solito allo sprint successivo</td><td>In qualsiasi momento</td></tr>
+    <tr><td><b>Si misura con</b></td><td>Burndown, punti per sprint</td><td>Tempo di attraversamento, limiti WIP</td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Su alcune piattaforme si può assegnare un'attività della board a un <b>agente di AI</b> per il codice (per esempio il coding agent di GitHub Copilot, dal 2025): l'agente propone le modifiche, ma una persona le rivede prima di accettarle.</p></div>
+  <aside class="notes">Molti team mescolano i due metodi ("Scrumban"). Kanban si adatta bene al lavoro che arriva di continuo (assistenza, manutenzione), Scrum allo sviluppo di nuove funzioni. Sull'AI: l'agente lavora sull'attività e propone una pull request; la revisione umana resta obbligatoria nei team seri, come per il codice di un nuovo collega.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il Manifesto agile è stato firmato nel <span class="blank" style="--w:5ch" data-risposta="2001"></span>.</p>
+    <p>In Scrum chi ordina il Product Backlog è il Product <span class="blank" data-risposta="Owner"></span>.</p>
+    <p>La riunione quotidiana di 15 minuti si chiama Daily <span class="blank" data-risposta="Scrum"></span>.</p>
+    <p>In Kanban il numero massimo di attività in corso si chiama limite <span class="blank" data-risposta="WIP"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 2001, Owner, Scrum, WIP.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Manifesto agile 2001: 4 valori, 12 principi</li>
+      <li>Agile non vuol dire senza piani: si pianifica spesso</li>
+      <li>Scrum: 3 ruoli, sprint, Daily, Review, Retrospettiva</li>
+    </ul>
+    <ul class="points">
+      <li>User story con criteri di accettazione</li>
+      <li>Kanban: lavoro visibile e limite WIP</li>
+      <li>Burndown: quanto manca, giorno per giorno</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: "La mia settimana in Kanban". Prossima lezione: la gestione dei progetti con WBS, Gantt e rischi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

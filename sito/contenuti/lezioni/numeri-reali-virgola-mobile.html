@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numeri con la virgola · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Numeri con la virgola</h1>
+  <p class="lead">Perché per un computer 0,1 + 0,2 non fa esattamente 0,3? Viaggio tra virgola fissa, virgola mobile e lo standard IEEE 754.</p>
+  <p class="meta"><span class="chip">Virgola fissa</span><span class="chip">Virgola mobile</span><span class="chip">IEEE 754</span></p>
+  <aside class="notes">Prerequisiti: binario e complemento a 2 (lezione precedente). Obiettivi: convertire numeri con la virgola tra decimale e binario, distinguere virgola fissa e mobile, leggere e scrivere un float IEEE 754 a 32 bit, capire precisione ed errori di arrotondamento. Durata indicativa: 2 ore. Strumenti: browser (console e FloatConverter), OnlineGDB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per un computer, 0,1 + 0,2 fa 0,3?</h2></div>
+  <div class="poll" data-id="reali-01-02">
+    <ol><li>Sì, sempre: i computer non sbagliano i conti</li><li>No, mai</li><li>Dipende da come il numero è memorizzato</li><li>Solo se il computer è vecchio</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta svelata: la risposta arriva nel secondo laboratorio, quando la console del browser stamperà 0.30000000000000004. Annotare alla lavagna la percentuale della A: a fine lezione la ricordiamo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dopo la virgola</p><h2>In binario i pesi continuano a dimezzarsi</h2></div>
+  <div class="bits"><span><b class="on">1</b><small>4</small></span><span><b>0</b><small>2</small></span><span><b class="on">1</b><small>1</small></span><span><b style="border:0;background:none">,</b><small>&nbsp;</small></span><span><b class="on">1</b><small>0,5</small></span><span><b>0</b><small>0,25</small></span><span><b class="on">1</b><small>0,125</small></span></div>
+  <div class="formula"><small>101,101 in base 2</small>4 + 1 + 0,5 + 0,125 = <span class="hl">5,625</span></div>
+  <p>Dopo la virgola i pesi sono 2⁻¹ = 0,5 · 2⁻² = 0,25 · 2⁻³ = 0,125 · 2⁻⁴ = 0,0625 …</p>
+  <aside class="notes">Stesso principio posizionale delle lezioni sui sistemi di numerazione: ogni posto vale la metà di quello a sinistra, anche dopo la virgola. In decimale i pesi dopo la virgola sono 0,1 0,01 0,001; in binario 0,5 0,25 0,125. Far leggere a voce 11,11₂ = 3,75.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da decimale a binario</p><h2>La parte dopo la virgola: moltiplica per 2</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>0,375</h3><p class="mono">0,375 × 2 = <b>0</b>,75</p><p class="mono">0,75 × 2 = <b>1</b>,5</p><p class="mono">0,5 × 2 = <b>1</b>,0 → fine</p><p>Leggi le cifre dall'alto: <b>0,011</b></p></div>
+    <div class="card bad"><h3>0,1</h3><p class="mono">0,1 → 0,2 → 0,4 → 0,8 → 1,6 → 1,2 → 0,4 → 0,8 → 1,6 …</p><p>Cifre: <b>0,0001100110011…</b></p><p>Non finisce mai: <b>0,1 è periodico in binario</b>, come 1/3 = 0,333… in decimale.</p></div>
+  </div>
+  <aside class="notes">Metodo delle moltiplicazioni successive: si moltiplica la sola parte frazionaria per 2, la parte intera (0 o 1) è la cifra; ci si ferma quando resta 0 o quando si hanno abbastanza cifre. È il punto chiave della lezione: un numero "tondo" in decimale può non esserlo in binario. In binario terminano solo le frazioni con denominatore potenza di 2 (1/2, 1/4, 3/8, …).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale numero si scrive in binario con un numero finito di cifre?</h2></div>
+  <div class="poll" data-id="reali-finito" data-tipo="quiz" data-risposta="C">
+    <ol><li>0,1</li><li>0,2</li><li>0,75</li><li>0,3</li></ol>
+    <p class="why">0,75 = 0,5 + 0,25 = 0,11 in binario. 0,1, 0,2 e 0,3 hanno invece infinite cifre binarie: il computer è costretto ad arrotondarli.</p>
+  </div>
+  <aside class="notes">Risposta C. Il tranello: 0,1 e 0,2 sembrano più "semplici" di 0,75. Regola da ricordare: termina in binario solo una frazione che ha al denominatore una potenza di 2. 0,75 = 3/4, sì; 0,1 = 1/10, no (c'è il fattore 5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Primo modo</p><h2>Virgola fissa: i posti sono decisi prima</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="bits"><span><b class="on">1</b><small>8</small></span><span><b>0</b><small>4</small></span><span><b class="on">1</b><small>2</small></span><span><b>0</b><small>1</small></span><span><b class="on">1</b><small>0,5</small></span><span><b class="on">1</b><small>0,25</small></span><span><b>0</b><small>0,125</small></span><span><b>0</b><small>0,0625</small></span></div>
+      <p class="small">8 bit: 4 per la parte intera, 4 dopo la virgola. <code>1010 1100</code> = 10,75</p>
+    </div>
+    <div class="stack">
+      <div class="card ok"><h3>Pro</h3><p>Semplice e veloce: si calcola come con gli interi.</p></div>
+      <div class="card bad"><h3>Contro</h3><p>Qui solo da 0 a 15,9375, a passi di 0,0625.</p></div>
+    </div>
+  </div>
+  <div class="callout">Un'idea simile si usa con il denaro: molti programmi salvano gli importi come <b>numero intero di centesimi</b> (12,50 € → 1250), così non ci sono arrotondamenti.</div>
+  <aside class="notes">Con la virgola fissa scegliamo una volta per tutte quanti bit vanno prima e dopo la virgola: più bit a sinistra = numeri più grandi, più bit a destra = più precisione, ma non si possono avere entrambe le cose. Valore massimo: 1111,1111 = 15 + 0,9375 = 15,9375. Si usa ancora in microcontrollori senza unità per la virgola mobile e nell'audio digitale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Secondo modo</p><h2>La notazione scientifica fa "galleggiare" la virgola</h2></div>
+  <div class="cols-2">
+    <div class="formula"><small>Velocità della luce (m/s)</small>2,998 × 10<sup>8</sup></div>
+    <div class="formula"><small>Massa dell'elettrone (kg)</small>9,109 × 10<sup>−31</sup></div>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Segno</h3><p>più o meno</p></div>
+    <div class="card soft"><h3>Mantissa</h3><p>le cifre significative: 2,998</p></div>
+    <div class="card soft"><h3>Esponente</h3><p>dove va la virgola: 8 posti a destra</p></div>
+  </div>
+  <aside class="notes">Con la virgola mobile (floating point) bastano poche cifre per numeri enormi e minuscoli: la virgola si sposta grazie all'esponente. Il computer fa lo stesso in base 2: numero = ± mantissa × 2^esponente. Valori: c = 299 792 458 m/s; massa dell'elettrone 9,109 × 10⁻³¹ kg (CODATA).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo standard</p><h2>IEEE 754: il float a 32 bit</h2></div>
+  <div class="bits" style="gap:8px"><span><b class="on" style="width:120px">S</b><small>1 bit</small></span><span><b style="width:520px">esponente</b><small>8 bit, si somma 127</small></span><span><b style="width:860px">mantissa</b><small>23 bit, senza l'1 iniziale</small></span></div>
+  <div class="formula"><small>Il valore</small>(−1)<sup>S</sup> × <span class="hl">1,</span>mantissa × 2<sup>esponente − 127</sup></div>
+  <table class="data compact">
+    <tr><th>Formato</th><th>Segno</th><th>Esponente</th><th>Mantissa</th><th>Cifre decimali affidabili</th><th>In Java</th></tr>
+    <tr><td>Singola precisione</td><td>1</td><td>8</td><td>23</td><td>circa 7</td><td class="mono">float</td></tr>
+    <tr><td>Doppia precisione</td><td>1</td><td>11</td><td>52</td><td>circa 15-16</td><td class="mono">double</td></tr>
+  </table>
+  <aside class="notes">IEEE 754 è lo standard del 1985 (rivisto nel 2008 e nel 2019) seguito da quasi tutti i processori. Il segno è in modulo e segno (lezione precedente). L'esponente è "con eccesso 127" (bias): si salva esponente + 127, così non serve il complemento a 2. Dato che un numero binario normalizzato inizia sempre con 1, quell'1 non si salva: è il "bit nascosto", che regala un bit di precisione. Nel double il bias è 1023.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">A mano</p><h2>−6,5 diventa C0D00000</h2></div>
+  <ol class="steps small">
+    <li>Segno: negativo → <b>S = 1</b></li>
+    <li>In binario: 6,5 = <code>110,1</code></li>
+    <li>Normalizza: <code>1,101 × 2²</code></li>
+    <li>Esponente: 2 + 127 = 129 = <code>1000 0001</code></li>
+    <li>Mantissa: i bit dopo "1," → <code>101</code> e poi 20 zeri</li>
+  </ol>
+  <div class="formula" style="font-size:44px"><small>Unisci e raggruppa a 4 bit</small><span class="hl">1</span> 10000001 101000…0 → 1100 0000 1101 0000 … → <span class="hl">C0D00000</span></div>
+  <aside class="notes">Fare l'esempio lentamente alla lavagna, poi far provare 12,75 (risultato 414C0000) a chi va più veloce. Leggere il risultato in esadecimale collega la lezione sull'esadecimale: 32 bit diventano 8 cifre. Controllo: 1100 = C, 0000 = 0, 1101 = D, 0000 = 0, poi tutti zeri.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dentro un float con il FloatConverter</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>h-schmidt.net/FloatConverter</b> (nessun account).</li>
+      <li>Scrivi <b>−6.5</b> (con il punto) e premi Invio: guarda segno, esponente e mantissa.</li>
+      <li>Prova <b>1</b>, <b>0.5</b> e <b>12.75</b>. Clicca sui bit per vedere come cambia il numero.</li>
+      <li>Scrivi <b>0.1</b> e leggi la riga "Value actually stored in float".</li>
+      <li>Annota i valori esadecimali in <b>float.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> −6.5 = <code>0xc0d00000</code>, 1 = <code>0x3f800000</code>, 12.75 = <code>0x414c0000</code>. Per 0.1 il float salva davvero <b>0.100000001490116…</b></div>
+  </div>
+  <aside class="notes">0.5 = 0x3f000000. Il valore salvato di 0.1 è 0.100000001490116119384765625: il computer non sbaglia il conto, è il numero memorizzato che è già leggermente diverso. Se il sito non è raggiungibile: in OnlineGDB System.out.println(Integer.toHexString(Float.floatToIntBits(-6.5f))) stampa c0d00000, e new java.math.BigDecimal(0.1f) mostra il valore salvato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Precisione</p><h2>Pochi bit, infiniti numeri: si arrotonda</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Tra 0 e 1 ci sono infiniti numeri reali, ma un float ha solo 2³² combinazioni</li>
+      <li>Ogni numero viene salvato come il <b>più vicino</b> rappresentabile</li>
+      <li>Gli errori piccoli si <b>sommano</b> nei calcoli lunghi</li>
+    </ul>
+    <div class="stack">
+      <div class="formula" style="font-size:38px"><small>In doppia precisione</small>0,1 + 0,2 = <span class="hl">0,30000000000000004</span></div>
+      <p class="small muted">I numeri rappresentabili sono fitti vicino allo zero e sempre più radi man mano che crescono.</p>
+    </div>
+  </div>
+  <aside class="notes">Il risultato viene dalla somma dei due valori già arrotondati, poi arrotondata di nuovo. Il double è molto più preciso del float, ma non esatto. Messaggio pratico: mai confrontare due numeri reali con ==; si controlla che la differenza sia minore di una tolleranza. Per i soldi si usano interi di centesimi o tipi decimali (in Java BigDecimal).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>La console del browser fa i conti in double</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Premi <b>F12</b>, scheda <b>Console</b>. Scrivi una riga alla volta e premi Invio:</p>
+      <pre class="code" style="font-size:28px">0.1 + 0.2
+0.1 + 0.2 === 0.3
+Math.abs(0.1 + 0.2 - 0.3) &lt; 1e-9
+9007199254740993
+1e308 * 10</pre>
+      <p class="small">Copia risultati e commenti in <b>float.txt</b>.</p>
+    </div>
+    <div class="check"><b>Controllo:</b> 0.30000000000000004 · false · true · 9007199254740992 (l'ultima cifra cambia!) · Infinity</div>
+  </div>
+  <aside class="notes">In JavaScript tutti i numeri sono double IEEE 754. 9007199254740993 = 2⁵³ + 1: oltre 2⁵³ il double non rappresenta più tutti gli interi. 1e308 * 10 supera il massimo (circa 1,8 × 10³⁰⁸) e dà Infinity: è l'overflow della virgola mobile, che a differenza degli interi non "fa il giro". Se la console è bloccata dalla scuola: stesso esercizio in OnlineGDB con System.out.println(0.1 + 0.2).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Valori speciali</p><h2>IEEE 754 ha anche numeri "strani"</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>1.0 / 0</h3><p>Che cosa stampa Java?</p></div><div class="retro"><p><b>Infinity</b></p><p class="muted small">Esponente tutto a 1, mantissa a 0. Esiste anche −Infinity.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>0.0 / 0</h3><p>E questo?</p></div><div class="retro"><p><b>NaN</b>, "Not a Number"</p><p class="muted small">Il risultato non esiste. NaN non è uguale nemmeno a se stesso.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>−0.0</h3><p>Esiste davvero?</p></div><div class="retro"><p><b>Sì</b>: bit di segno a 1, tutto il resto a 0.</p><p class="muted small">Ricordi i due zeri del modulo e segno?</p></div></div>
+  </div>
+  <aside class="notes">Girare una carta alla volta dopo aver fatto votare per alzata di mano. Attenzione: con gli interi 1 / 0 in Java lancia un'eccezione (ArithmeticException), con i double no. NaN == NaN è false: per controllare si usa Double.isNaN(x). −0.0 == 0.0 è true, ma 1/−0.0 dà −Infinity.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi per scrivere un float</h2></div>
+  <ol class="puzzle-ordina" data-id="reali-ordina-float">
+    <li>Guarda il segno e scrivi il bit S</li>
+    <li>Converti il valore assoluto in binario</li>
+    <li>Normalizza nella forma 1,… × 2<sup>e</sup></li>
+    <li>Somma 127 all'esponente e scrivilo su 8 bit</li>
+    <li>Copia i bit dopo "1," nei 23 bit di mantissa</li>
+    <li>Unisci i 32 bit e leggili in esadecimale</li>
+  </ol>
+  <aside class="notes">A coppie, 2 minuti. L'errore più comune è sommare 127 prima di normalizzare: l'esponente si conosce solo dopo aver spostato la virgola. Poi far applicare i passi a 12,75: 1100,11 = 1,10011 × 2³; esponente 130 = 1000 0010; risultato 0x414C0000.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Storia vera</p><h2>Dhahran, 25 febbraio 1991: un decimo di secondo</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Il sistema antimissile Patriot contava il tempo in decimi di secondo, salvando 0,1 in binario con 24 bit: un piccolo errore a ogni tic.</p>
+      <p>Dopo circa 100 ore accesa, l'orologio era indietro di <b>0,34 secondi</b>. Il missile in arrivo non fu intercettato: morirono 28 soldati.</p>
+    </div>
+    <figure class="citazione">
+      <blockquote>Il problema fondamentale della comunicazione è riprodurre in un punto, esattamente o approssimativamente, un messaggio scelto in un altro punto.</blockquote>
+      <figcaption><b>Claude Shannon</b>, "A Mathematical Theory of Communication", 1948</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Fonte: rapporto del GAO statunitense IMTEC-92-26 (febbraio 1992), "Patriot Missile Defense: Software Problem Led to System Failure at Dhahran". In 0,34 s uno Scud percorre più di mezzo chilometro, abbastanza per uscire dalla zona in cui il radar lo cercava. Citazione: traduzione nostra dalla prima pagina dell'articolo di Shannon ("…reproducing at one point either exactly or approximately a message selected at another point"). Collegamento: anche un numero reale nel computer è quasi sempre una copia "approssimata".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dieci volte 0,1 in Java</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:25px">public class Main {
+  public static void main(String[] args) {
+    <span class="k">double</span> s = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; 10; i++) {
+      s = s + 0.1;          <span class="c">// 10 volte</span>
+    }
+    System.out.println(s);
+    System.out.println(s == 1.0);
+    <span class="k">int</span> centesimi = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; 10; i++) {
+      centesimi = centesimi + 10;
+    }
+    System.out.println(centesimi / 100.0);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small"><li>In <b>onlinegdb.com</b> scegli Java e copia il programma.</li><li>Prevedi le tre righe, poi premi <b>Run</b>.</li><li>Salva il codice in <b>DieciDecimi.txt</b>.</li></ol>
+      <div class="check"><b>Controllo:</b> 0.9999999999999999, poi false, poi 1.0: con i centesimi interi il conto torna.</div>
+    </div>
+  </div>
+  <aside class="notes">Il ciclo for ripete 10 volte la riga dentro le graffe: basta questo, i cicli si studieranno meglio più avanti. L'errore di ogni 0,1 si accumula. La soluzione con i centesimi interi è la "virgola fissa" vista prima. Curiosità per i più veloci: float f = 0.1f + 0.2f stampa 0.3, perché con meno bit l'arrotondamento finale cade proprio sul float più vicino a 0,3; non vuol dire che il float sia più preciso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In Java, come controlli se due double sono "uguali"?</h2></div>
+  <div class="poll" data-id="reali-confronto" data-tipo="quiz" data-risposta="B">
+    <ol><li>Con <code>a == b</code>, come per gli interi</li><li>Con <code>Math.abs(a - b) &lt; 1e-9</code></li><li>Convertendoli prima in int</li><li>Usando float invece di double</li></ol>
+    <p class="why">Due calcoli "uguali" possono dare risultati che differiscono nell'ultima cifra. Si controlla che la distanza sia minore di una piccola tolleranza, scelta in base al problema.</p>
+  </div>
+  <aside class="notes">Risposta B. La C perde la parte decimale (2,9 e 2,1 diventerebbero entrambi 2). La D peggiora le cose: il float ha meno precisione. La tolleranza 1e-9 è un esempio: per misure in metri potrebbe bastare 1e-3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>La virgola mobile muove l'AI e i videogiochi</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI a mezza precisione</h3><p>Le reti neurali fanno miliardi di moltiplicazioni tra numeri reali. Per andare più veloci usano formati più corti: float a 16 bit, <b>bfloat16</b> (inventato da Google) e anche 8 bit sulle GPU più recenti.</p><p class="small">Un modello con 7 miliardi di pesi occupa 28 GB in float a 32 bit e 14 GB a 16 bit.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Mondi enormi</h3><p>Nei videogiochi le posizioni sono in float. Lontano dall'origine i numeri rappresentabili sono più radi e gli oggetti iniziano a "tremare".</p><p class="small">Per questo molti giochi spostano di continuo l'origine delle coordinate vicino al giocatore.</p></div>
+  </div>
+  <aside class="notes">bfloat16: 1 bit di segno, 8 di esponente (come il float), 7 di mantissa; stesso intervallo del float con meno precisione, che per le reti neurali di solito basta. Conto: 7 × 10⁹ pesi × 4 byte = 28 GB; × 2 byte = 14 GB. La velocità dei supercomputer e delle GPU si misura in FLOPS, operazioni in virgola mobile al secondo. Domanda: "perché all'AI basta poca precisione e alla banca no?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In binario, 0,5 + 0,25 si scrive 0,<span class="blank" data-risposta="11"></span>.</p>
+    <p>Il numero 0,1 in binario ha infinite cifre: è <span class="blank" data-risposta="periodico" style="--w:9ch"></span>.</p>
+    <p>In un float IEEE 754 l'esponente occupa <span class="blank" data-risposta="8|otto"></span> bit e si salva sommando 127.</p>
+    <p>Il risultato di 0.0 / 0 in Java è <span class="blank" data-risposta="NaN"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 11; periodico; 8; NaN. Riprendere il sondaggio iniziale: la risposta giusta era "dipende da come il numero è memorizzato".</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Dopo la virgola i pesi sono 0,5 · 0,25 · 0,125 …</li>
+      <li>0,1 è periodico in binario: va arrotondato</li>
+      <li>Virgola fissa: semplice, ma poco intervallo</li>
+    </ul>
+    <ul class="points">
+      <li>Float: 1 + 8 + 23 bit, esponente + 127, "1," nascosto</li>
+      <li>Double: 64 bit, circa 16 cifre affidabili</li>
+      <li>Mai == tra reali: usa una tolleranza</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Caccia all'arrotondamento" su Novaula. Prossima lezione: il laboratorio sul debugger, dove vedremo int, double, char e boolean "dal vivo".</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

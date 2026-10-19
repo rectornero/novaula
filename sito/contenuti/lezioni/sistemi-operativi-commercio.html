@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi operativi in commercio · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>I sistemi operativi<br>in commercio</h1>
+  <p class="lead">Un sistema nato in un laboratorio nel 1969, un hobby di uno studente finlandese, una sfida tra aziende miliardarie: la storia di famiglia di Windows, macOS, Linux, Android e iOS.</p>
+  <aside class="notes">Obiettivi: conoscere la storia di Unix e le famiglie dei sistemi operativi attuali; distinguere licenze proprietarie e open source; riconoscere kernel e caratteristiche di Windows, macOS, Linux, Android, iOS e ChromeOS; leggere versione e build del proprio sistema. Durata indicativa: 2 ore. Servono: PC Windows con Prompt dei comandi e PowerShell; bellard.org/jslinux (provarlo prima); i telefoni degli studenti per l'ultimo laboratorio (chi non lo ha o non vuole usarlo lavora sul PC o in coppia: nessun dato personale va condiviso).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Che sistema operativo vorresti sul tuo prossimo computer?</h2></div>
+  <div class="poll" data-id="com-prossimo-pc">
+    <ol><li>Windows</li><li>macOS</li><li>Linux</li><li>ChromeOS</li><li>Mi basta che funzioni</li></ol>
+  </div>
+  <aside class="notes">Far motivare almeno una scelta per opzione: giochi (Windows), design e integrazione con iPhone (macOS), gratuità e controllo (Linux), semplicità e prezzo (ChromeOS). Chi risponde "mi basta che funzioni" ha ragione più di quanto pensi: alla fine della lezione si vedrà che molti di questi sistemi sono parenti stretti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove tutto comincia</p><h2>1969: Unix, ai Bell Labs</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>I Bell Labs escono dal progetto <b>Multics</b>, troppo grande e complicato. <b>Ken Thompson</b> e <b>Dennis Ritchie</b> scrivono un sistema più semplice su un minicomputer PDP-7: lo chiamano <b>Unix</b>.</p>
+      <p>Nel 1973 lo riscrivono nel linguaggio <b>C</b>, inventato da Ritchie. Per la prima volta un sistema operativo si può portare su computer diversi ricompilandolo.</p>
+    </div>
+    <div class="card soft"><h3>Le idee che restano</h3><ul class="points"><li>Tutto è un file</li><li>Una sola radice: <code>/</code></li><li>Piccoli comandi e pipe</li><li>Multiutente e time sharing</li></ul></div>
+  </div>
+  <aside class="notes">Il nome Unix è un gioco di parole su Multics (attribuito a Brian Kernighan). Prima del C i sistemi operativi si scrivevano in linguaggio assembly, diverso per ogni processore. Thompson e Ritchie ricevettero il premio Turing nel 1983. Le idee della scheda le abbiamo già incontrate: /proc in JSLinux (tutto è un file), le pipe (lezione su kernel e shell), il time sharing (tipologie).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un sistema, una comunità</h2></div>
+  <figure class="citazione">
+    <blockquote>Volevamo preservare non solo un buon ambiente per programmare, ma un sistema intorno al quale potesse formarsi una comunità.</blockquote>
+    <figcaption><b>Dennis Ritchie</b>, coautore di Unix e inventore del linguaggio C, "The Evolution of the Unix Time-sharing System", 1979</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>La stessa scelta si ripete con l'AI: alcune aziende pubblicano i <b>pesi</b> dei loro modelli (modelli "open weight") perché chiunque li studi e li adatti, altre li tengono chiusi e li offrono solo come servizio. Aperto o proprietario: la discussione nata con Unix continua.</p></div>
+  <aside class="notes">Traduzione nostra di "What we wanted to preserve was not just a good environment in which to do programming, but a system around which a fellowship could form." (D. M. Ritchie, "The Evolution of the Unix Time-sharing System", presentato nel 1979, pubblicato nel Bell System Technical Journal nel 1984). "Fellowship" è più di "comunità": un gruppo legato da interessi comuni. È lo spirito che porterà al software libero e a Linux. Il codice di Unix circolò nelle università: a Berkeley nacque BSD (Berkeley Software Distribution), che studenti e ricercatori miglioravano e condividevano. Da BSD discendono FreeBSD (su cui si basa il sistema della PlayStation) e parte di macOS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine, dalla tappa più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="com-ordina-storia">
+    <li>Thompson e Ritchie creano Unix ai Bell Labs</li>
+    <li>Unix viene riscritto nel linguaggio C</li>
+    <li>Esce MS-DOS, il sistema del PC IBM</li>
+    <li>Richard Stallman annuncia il progetto GNU</li>
+    <li>Microsoft presenta Windows 1.0</li>
+    <li>Linus Torvalds annuncia il suo kernel, Linux</li>
+    <li>Esce il primo telefono con Android</li>
+  </ol>
+  <aside class="notes">Date: Unix 1969; riscrittura in C 1973; MS-DOS 1981; GNU, annuncio del 27 settembre 1983; Windows 1.0 novembre 1985 (era un'interfaccia grafica che girava sopra MS-DOS); Linux agosto-settembre 1991; HTC Dream (T-Mobile G1), primo telefono Android, 2008. Tranello frequente: molti pensano che Windows sia più antico di GNU, o che Linux venga prima di Windows. Sfida a squadre: chi indovina anche gli anni guadagna un punto extra per ogni anno esatto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">25 agosto 1991, gruppo Usenet comp.os.minix</p><h2>"Solo un hobby"</h2></div>
+<pre class="code" style="font-size:30px">Hello everybody out there using minix -
+I'm doing a (free) operating system (<span class="hl">just a hobby,
+won't be big and professional like gnu</span>) for 386(486)
+AT clones.                                  <span class="c">Linus Torvalds</span></pre>
+  <figure class="citazione">
+    <blockquote style="font-size:44px">Sto facendo un sistema operativo (libero): è solo un hobby, non sarà grande e professionale come GNU.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, studente di informatica all'Università di Helsinki, 21 anni</figcaption>
+  </figure>
+  <aside class="notes">Testo originale nel riquadro (inizio del messaggio), traduzione nostra. Minix era un piccolo Unix didattico scritto da Andrew Tanenbaum (1987). Nel gennaio 1992 Tanenbaum scrisse sullo stesso gruppo il messaggio "LINUX is obsolete": un kernel monolitico, secondo lui, era un passo indietro rispetto ai microkernel (ricordate la lezione su kernel e shell?). Torvalds rispose difendendo le sue scelte. Dal 1992 Linux usa la licenza GNU GPL: kernel Linux + strumenti GNU = un sistema completo e libero. Domanda: "non sarà grande e professionale"... e oggi?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Alberi genealogici</p><h2>Due grandi famiglie</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Famiglia Unix</h3><ul class="points"><li><b>BSD</b> → FreeBSD (anche nella PlayStation)</li><li><b>NeXTSTEP</b> → macOS (2001) → iOS, iPadOS</li><li><b>Unix-like</b>: Linux → Ubuntu, Debian, Fedora, Android, ChromeOS</li></ul></div>
+    <div class="card"><h3>Famiglia Microsoft</h3><ul class="points"><li><b>MS-DOS</b> (1981) → Windows 1.0 … Windows 98, ME</li><li><b>Windows NT</b> (1993), progetto nuovo → XP → 7 → 10 → 11</li><li>Windows 10 e 11 discendono da NT, non da MS-DOS</li></ul></div>
+  </div>
+  <div class="callout">Linux non contiene codice di Unix: è <b>Unix-like</b>, cioè ne riprende comandi e idee. macOS invece è un Unix certificato.</div>
+  <aside class="notes">NeXTSTEP era il sistema della NeXT, l'azienda fondata da Steve Jobs dopo aver lasciato Apple; quando Apple comprò NeXT (1997), NeXTSTEP divenne la base di Mac OS X. Il suo nucleo, Darwin, unisce il microkernel Mach e parti di BSD (kernel XNU, ibrido). macOS è certificato UNIX 03 da The Open Group. Windows NT fu progettato da un gruppo guidato da Dave Cutler, che veniva dalla Digital (sistema VMS). Il ramo MS-DOS si chiude con Windows ME (2000): con XP (2001) anche i PC di casa passano a NT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi sistemi NON usa il kernel Linux?</h2></div>
+  <div class="poll" data-id="com-quiz-kernel" data-tipo="quiz" data-risposta="C">
+    <ol><li>Android</li><li>ChromeOS</li><li>iOS</li><li>Ubuntu</li></ol>
+    <p class="why">iOS usa XNU, lo stesso kernel di macOS, della famiglia Unix ma non Linux. Android e ChromeOS di Google usano il kernel Linux, anche se l'interfaccia e le app sono diverse da un Linux per PC. Ubuntu è una distribuzione Linux.</p>
+  </div>
+  <aside class="notes">Tranello: "Android non sembra Linux". Il kernel non si vede: si vede la shell grafica. Sul telefono Android si può controllare: Impostazioni, Info sul telefono, Versione del kernel (lo facciamo nell'ultimo laboratorio). Rilancio: e la PlayStation? Usa un sistema derivato da FreeBSD, famiglia Unix ma non Linux.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dentro un sistema della famiglia Unix</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>bellard.org/jslinux</b> avvia la console <b>Alpine Linux</b>.</li>
+      <li>Chi sei e dove sei: <code>cat /etc/os-release</code>, poi <code>uname -a</code>.</li>
+      <li>La radice unica: <code>ls /</code>. Cerca <code>bin</code>, <code>etc</code>, <code>home</code>, <code>proc</code>, <code>root</code>, <code>tmp</code>.</li>
+      <li>Gli utenti del sistema: <code>head -3 /etc/passwd</code>.</li>
+      <li>In Writer, tabella "Linux / Windows": per ogni cartella di <code>ls /</code> trovata, scrivi a che cosa serve e il suo equivalente su Windows. Salva <b>unix-windows.odt</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> <code>os-release</code> contiene <b>NAME="Alpine Linux"</b>; la prima riga di <code>/etc/passwd</code> inizia con <b>root:x:0:0</b>. Su Linux non ci sono lettere di unità come C:, tutto parte da <code>/</code>.</div>
+  </div>
+  <aside class="notes">Equivalenze indicative: /bin ≈ C:\Windows\System32 (comandi); /etc ≈ configurazione (su Windows è nel Registro e in C:\ProgramData); /home ≈ C:\Users; /root = la cartella dell'amministratore; /tmp ≈ cartella Temp; /proc non ha equivalente: sono informazioni del kernel mostrate come file. In /etc/passwd ogni riga è un utente; root ha l'identificativo 0. La x indica che la password non è lì ma (cifrata) in /etc/shadow. Se JSLinux non si apre: demo alla LIM o copy.sh/v86.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Licenze</p><h2>Di chi è il codice?</h2></div>
+  <table class="data compact">
+    <tr><th>Sistema</th><th>Licenza</th><th>Posso leggere il codice?</th><th>Costo per l'utente</th></tr>
+    <tr><td><b>Windows</b></td><td>Proprietaria (Microsoft)</td><td>No</td><td>Incluso nel PC o a pagamento</td></tr>
+    <tr><td><b>macOS, iOS</b></td><td>Proprietaria (Apple); il nucleo Darwin è open source</td><td>Solo in parte</td><td>Incluso nel dispositivo Apple</td></tr>
+    <tr><td><b>Linux</b></td><td>Libera: GNU GPL versione 2</td><td>Sì, tutto</td><td>Gratuito</td></tr>
+    <tr><td><b>Android</b></td><td>Base open source (AOSP); app e servizi Google proprietari</td><td>In gran parte</td><td>Incluso nel telefono</td></tr>
+  </table>
+  <p class="muted small"><b>Libero</b> non vuol dire solo gratis: vuol dire libertà di usare, studiare, modificare e ridistribuire.</p>
+  <aside class="notes">La GPL obbliga chi distribuisce versioni modificate del kernel Linux a rendere disponibile il codice sorgente con la stessa licenza (copyleft). AOSP usa soprattutto la licenza Apache 2.0, che non ha questo obbligo: per questo i produttori di telefoni possono personalizzare Android senza pubblicare tutto. Collegamento con l'educazione civica (diritto d'autore e licenze). Le "quattro libertà" del software libero sono state definite da Richard Stallman e dalla Free Software Foundation.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni sistema alla sua carta d'identità</h2></div>
+  <dl class="puzzle-abbina" data-id="com-abbina-identita">
+    <dt>Windows 11</dt><dd>Kernel NT, licenza proprietaria, il più diffuso sui PC</dd>
+    <dt>macOS</dt><dd>Kernel XNU, Unix certificato, solo sui computer Apple</dd>
+    <dt>Ubuntu</dt><dd>Distribuzione Linux gratuita, aggiornata ogni sei mesi</dd>
+    <dt>Android</dt><dd>Kernel Linux, base open source AOSP, telefoni di molte marche</dd>
+    <dt>iOS</dt><dd>Kernel XNU, gira solo sugli iPhone</dd>
+    <dt>ChromeOS</dt><dd>Kernel Linux, pensato per il browser e le app web</dd>
+  </dl>
+  <aside class="notes">Sfida a squadre, 2 minuti. Le coppie più confuse sono macOS/iOS (stesso kernel, dispositivi diversi) e Android/ChromeOS (stesso kernel, stessa azienda). Ubuntu esce ogni sei mesi (aprile e ottobre), con una versione a supporto lungo (LTS) ogni due anni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 12 minuti</span></p>
+  <h2>Che Windows è, davvero?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel Prompt dei comandi scrivi <code>ver</code>. Poi premi <b>Win + R</b> e scrivi <code>winver</code>.</li>
+      <li>In PowerShell scrivi il comando qui sotto (una riga sola) e annota Caption, Version, BuildNumber.</li>
+      <li>Nel Prompt prova <code>wsl --status</code>: c'è un Linux dentro Windows?</li>
+      <li>Aggiungi tutto a <b>unix-windows.odt</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> anche su Windows 11 la versione inizia con <b>10.0</b>. Si riconosce dalla build: <b>22000 o più</b> è Windows 11, meno di 22000 è Windows 10.</div>
+  </div>
+  <pre class="code" style="font-size:30px;padding:20px 32px">Get-CimInstance Win32_OperatingSystem <span class="hl">|</span> Select-Object Caption, Version, BuildNumber</pre>
+  <aside class="notes">Esempio di risposta: Caption "Microsoft Windows 11 Education", Version 10.0.22631, BuildNumber 22631. Microsoft ha mantenuto il numero interno 10.0 per compatibilità con i programmi che controllano la versione. wsl --status, se il Sottosistema Windows per Linux non è installato, risponde con un messaggio che invita a installarlo: va bene, non installare nulla. WSL 2 (dal 2019) esegue un vero kernel Linux in una macchina virtuale leggera.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2><code>ver</code> risponde: Microsoft Windows [Versione 10.0.22631.4317]. Che sistema è?</h2></div>
+  <div class="poll" data-id="com-quiz-versione" data-tipo="quiz" data-risposta="B">
+    <ol><li>Windows 10, lo dice il numero</li><li>Windows 11</li><li>Windows Server 2010</li><li>Non si può dire senza aprire winver</li></ol>
+    <p class="why">Conta la build: 22631 è più di 22000, quindi è Windows 11 (versione 23H2). Windows 10 e Windows 11 dichiarano entrambi 10.0. Windows Server 2010 non è mai esistito.</p>
+  </div>
+  <aside class="notes">Tranello A: il 10 sembra decisivo. Tranello D: winver aiuta, ma il numero di build basta. L'ultimo pezzo (4317) indica il livello degli aggiornamenti mensili. Collegamento con la sicurezza: un sistema senza aggiornamenti ha un numero basso nell'ultimo pezzo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi vince dove</p><h2>Nessun sistema è il migliore ovunque</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>PC</h3><p class="muted">Windows è il più diffuso; poi macOS, Linux e ChromeOS.</p></div>
+    <div class="card"><h3>Telefoni</h3><p class="muted">Android nel mondo; iOS forte in alcuni paesi, come gli USA.</p></div>
+    <div class="card"><h3>Server</h3><p class="muted">Linux fa girare la maggior parte dei server web e del cloud.</p></div>
+    <div class="card"><h3>Supercomputer</h3><p class="muted">Dal 2017 tutti i 500 più potenti del mondo usano Linux.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I cluster che addestrano i modelli di AI e i supercomputer come <b>Leonardo</b> al Cineca di Bologna usano Linux. E contando tutti i dispositivi (PC, telefoni, tablet), il sistema più usato al mondo è <b>Android</b>, cioè un kernel Linux: l'"hobby" del 1991.</p></div>
+  <aside class="notes">Fonti: classifica TOP500 (top500.org), dal novembre 2017 il 100% dei sistemi usa Linux; StatCounter per le quote di mercato dei sistemi operativi (Android ha superato Windows considerando tutti i dispositivi nel 2017). Non citare percentuali precise a memoria: cambiano ogni mese. Se c'è tempo, aprire statcounter.com alla LIM (gs.statcounter.com) e leggere i dati del mese insieme, anche solo per l'Italia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer e al telefono <span class="time">· 15 minuti</span></p>
+  <h2>Censimento dei sistemi della classe</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>A gruppi di 4. Android: <b>Impostazioni</b>, <b>Info sul telefono</b>. iPhone: <b>Impostazioni</b>, <b>Generali</b>, <b>Info</b>.</li>
+      <li>Annota sistema, versione, versione del kernel (se c'è), patch di sicurezza.</li>
+      <li>In Calc una riga per dispositivo, PC del laboratorio compreso, e la colonna <b>famiglia</b>. Conta con <code>CONTA.SE</code>.</li>
+      <li>Salva <b>censimento-gruppo-N.ods</b> (N = numero del gruppo).</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> su Android la <b>versione del kernel</b> inizia con un numero come 5.x o 6.x: è un kernel Linux. iPhone e Mac sono famiglia Unix, il PC della scuola è Windows NT.</div>
+  </div>
+  <aside class="notes">Su alcuni Android la voce è in "Info sul telefono", poi "Informazioni software" (Samsung) o "Tutte le specifiche" (Xiaomi): lasciare che cerchino. Su iPhone la versione del kernel non è mostrata nelle Impostazioni: scrivere "XNU (non indicata)". Privacy: annotare solo modello e versioni, mai numero di telefono, IMEI o numero di serie. Discussione: chi ha la patch di sicurezza più vecchia? Un telefono che non riceve più aggiornamenti è più vulnerabile. Chi non ha o non vuole usare il telefono lavora sul PC o con il gruppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Unix nasce nel 1969 ai Bell Labs, scritto da Thompson e <span class="blank" data-risposta="Ritchie|Dennis Ritchie"></span>.</p>
+    <p>Nel 1973 Unix viene riscritto nel linguaggio <span class="blank" data-risposta="C"></span>.</p>
+    <p>Torvalds annuncia Linux nell'anno <span class="blank" data-risposta="1991"></span>.</p>
+    <p>Il kernel Linux è distribuito con la licenza GNU <span class="blank" data-risposta="GPL"></span>.</p>
+    <p>iOS e macOS usano lo stesso kernel, chiamato <span class="blank" data-risposta="XNU"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Ritchie, C, 1991, GPL, XNU.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Unix (1969, poi in C): file, radice unica, pipe</li>
+      <li>Famiglia Unix: BSD, macOS, iOS; Unix-like: Linux, Android, ChromeOS</li>
+      <li>Windows 10 e 11 discendono da Windows NT</li>
+    </ul>
+    <ul class="points">
+      <li>Licenze proprietarie e libere (GPL)</li>
+      <li>Linux: da hobby nel 1991 a server, telefoni, supercomputer</li>
+      <li>Versione e build si leggono con ver, winver, PowerShell</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "La carta d'identità di un sistema operativo" (si apre quando l'argomento viene segnato come svolto). Con questa lezione si chiude la prima parte dell'Unità 6; la seconda parte riguarda prestazioni, processi, scheduling e interrupt.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

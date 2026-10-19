@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi di numerazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>I sistemi<br>di numerazione</h1>
+  <p class="lead">Dai numeri romani a qualsiasi base: una sola regola per contare con 2, 3, 5 o 60 cifre, le somme in binario e i trucchi per fare i conti a mente.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Non posizionali · base b · conversioni · somme binarie · trucchi</span></div>
+  <aside class="notes">Prerequisiti: le lezioni "Numeri decimali e binari" (numeri-binari) e "Le conversioni con Calc" (conversioni-con-calc), già svolte: pesi in base 2, divisioni successive, funzioni di Calc. Qui si fa un passo avanti: sistemi non posizionali, la regola generale per una base b qualsiasi, la somma in colonna in binario, i trucchi veloci. Durata indicativa: 2 ore. Strumenti: la console del browser (F12) e la Calcolatrice di Windows in modalità Programmatore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come te la cavi con le conversioni in binario?</h2></div>
+  <div class="poll" data-id="autovalutazione-binario">
+    <ol><li>Le faccio a occhi chiusi</li><li>Con la tabella dei pesi davanti</li><li>Solo con Calc o la calcolatrice</li><li>Devo proprio ripassarle</li></ol>
+  </div>
+  <p class="muted">Rispondi onestamente: serve al docente per decidere quanto ripassare.</p>
+  <aside class="notes">Sondaggio di autovalutazione. Se più di un terzo sceglie C o D, fare un ripasso lampo alla lavagna: 45 in binario con le divisioni (101101) e ritorno con i pesi (32+8+4+1). Ricordare i due deck già visti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sistemi non posizionali</p><h2>MMXXVI: ogni simbolo vale sempre uguale</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Nei numeri romani il valore di un simbolo <b>non dipende dalla posizione</b>: si sommano i valori (con la piccola regola della sottrazione: IV = 5 − 1).</p>
+      <div class="formula"><small>2026 in numeri romani</small>MM XX VI = 1000+1000+10+10+5+1</div>
+    </div>
+    <div class="card soft"><h3>I limiti</h3><ul class="points small"><li>Niente zero</li><li>Numeri grandi molto lunghi</li><li>Moltiplicare MMXXVI × XLIV in colonna? Impossibile</li></ul></div>
+  </div>
+  <aside class="notes">Altri sistemi non posizionali: le tacche su un legno o sul quaderno per contare (sistema unario), i geroglifici egizi. Gli antichi romani facevano i conti con l'abaco, non con i numeri scritti. Domanda: perché la colonna funziona con le cifre arabe e non con quelle romane? Perché nelle nostre cifre la posizione dice già il peso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un pisano porta lo zero in Europa</h2></div>
+  <figure class="citazione">
+    <blockquote>Con queste nove cifre, e con questo segno 0, che in arabo si chiama zephirum, si scrive qualsiasi numero.</blockquote>
+    <figcaption><b>Leonardo Pisano, detto Fibonacci</b>, Liber Abaci, 1202</figcaption>
+  </figure>
+  <div class="poll" data-id="romani-manca" data-tipo="quiz" data-risposta="A">
+    <p class="q">Che cosa mancava davvero ai numeri romani?</p>
+    <ol><li>Lo zero</li><li>Le frazioni</li><li>I numeri oltre il mille</li><li>I numeri pari</li></ol>
+    <p class="why">Ai Romani mancava lo zero, e senza zero non c'è sistema posizionale (come distingui 25 da 205?). Le frazioni le avevano (in dodicesimi), e per i numeri grandi usavano una barra sopra il simbolo (× 1000).</p>
+  </div>
+  <aside class="notes">Domanda del quiz: "Che cosa manca davvero ai numeri romani?". Traduzione nostra dal latino; il capitolo 1 inizia con: "Novem figure indorum he sunt 9 8 7 6 5 4 3 2 1. Cum his itaque novem figuris, et cum hoc signo 0, quod arabice zephirum appellatur, scribitur quilibet numerus". Le cifre sono indiane, arrivate in Europa attraverso i matematici arabi. Da zephirum vengono le parole zero e cifra. Fibonacci aveva imparato questi numeri da ragazzo a Bugia, in Algeria, dove lavorava il padre mercante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La regola generale</p><h2>In base b ogni posto vale b volte quello a destra</h2></div>
+  <div class="formula"><small>Un numero di cifre c₃ c₂ c₁ c₀ in base b vale</small>c₃·b³ + c₂·b² + c₁·b¹ + c₀·b⁰</div>
+  <table class="data compact">
+    <tr><th>Base</th><th>Cifre</th><th>Pesi (da destra)</th></tr>
+    <tr><td class="mono">2</td><td class="mono">0 1</td><td class="mono">1 · 2 · 4 · 8 · 16</td></tr>
+    <tr><td class="mono">5</td><td class="mono">0 1 2 3 4</td><td class="mono">1 · 5 · 25 · 125 · 625</td></tr>
+    <tr><td class="mono">10</td><td class="mono">0 … 9</td><td class="mono">1 · 10 · 100 · 1000 · 10000</td></tr>
+    <tr><td class="mono">b</td><td class="mono hl">da 0 a b − 1</td><td class="mono">1 · b · b² · b³ · b⁴</td></tr>
+  </table>
+  <aside class="notes">Due conseguenze da far scoprire: in base b le cifre sono b, da 0 a b−1 (in base 5 la cifra 5 non esiste); e "10" in base b vale sempre b. Esempio guidato: 2301 in base 5 = 2·125 + 3·25 + 0·5 + 1 = 250 + 75 + 1 = 326. Scrivere sempre la base in pedice: 2301₅.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Basi strane, ma vere</p><h2>Gira le carte</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Un alieno con 8 dita dice: "Ho 20 anni"</h3><p>Quanti anni ha per noi?</p></div><div class="retro"><p><b>16 anni.</b></p><p class="muted">20₈ = 2·8 + 0 = 16. Il suo "10" è il nostro 8.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Il cronometro segna 1:30:00</h3><p>Che base usa?</p></div><div class="retro"><p><b>Base 60, dai Babilonesi.</b></p><p class="muted">1 ora e 30 minuti = 1·60 + 30 = 90 minuti.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Una dozzina di uova in base 12</h3><p>Come si scrive?</p></div><div class="retro"><p><b>10₁₂</b></p><p class="muted">In base b, "10" vale sempre b. Una grossa (144) è 100₁₂.</p></div></div>
+  </div>
+  <aside class="notes">Il sistema sessagesimale dei Babilonesi (circa 2000 a.C.) era posizionale: ce lo portiamo dietro in ore, minuti, secondi e gradi degli angoli. Il 60 piaceva perché si divide per 2, 3, 4, 5, 6, 10, 12, 15, 20, 30. Far inventare agli studenti una domanda simile per un compagno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi numeri NON può esistere?</h2></div>
+  <div class="poll" data-id="numero-impossibile" data-tipo="quiz" data-risposta="C">
+    <ol><li>1201 in base 3</li><li>4A in base 16</li><li>709 in base 8</li><li>1010 in base 2</li></ol>
+    <p class="why">In base 8 le cifre vanno da 0 a 7: il 9 non esiste. 1201₃ è valido (in base 3 le cifre sono 0, 1, 2), 4A₁₆ anche (A vale 10).</p>
+  </div>
+  <aside class="notes">La A attira chi pensa che il 2 non possa stare in base 3. Rinforzare la regola: cifre da 0 a b−1. Chiedere quanto vale 1201₃: 27 + 2·9 + 0 + 1 = 46.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da decimale a base b</p><h2>Divisioni successive, per qualsiasi base</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Lo conosci già per la base 2: ora dividi per <b>b</b>.</p>
+      <ol class="steps">
+        <li>Dividi per b, annota il resto.</li>
+        <li>Ripeti con il quoziente fino a 0.</li>
+        <li>Leggi i resti <mark>dal basso verso l'alto</mark>.</li>
+      </ol>
+    </div>
+    <table class="data compact">
+      <tr><th>Divisione</th><th>Quoziente</th><th>Resto</th></tr>
+      <tr><td class="mono">100 : 3</td><td class="mono">33</td><td class="mono hl">1</td></tr>
+      <tr><td class="mono">33 : 3</td><td class="mono">11</td><td class="mono hl">0</td></tr>
+      <tr><td class="mono">11 : 3</td><td class="mono">3</td><td class="mono hl">2</td></tr>
+      <tr><td class="mono">3 : 3</td><td class="mono">1</td><td class="mono hl">0</td></tr>
+      <tr><td class="mono">1 : 3</td><td class="mono">0</td><td class="mono hl">1</td></tr>
+    </table>
+  </div>
+  <div class="formula"><small>Resti dal basso · verifica: 81 + 0 + 18 + 0 + 1</small>100 = <span class="hl">10201₃</span></div>
+  <aside class="notes">Perché funziona: ogni resto è la cifra delle "unità" del quoziente in quella base, come nella base 10 il resto della divisione per 10 è l'ultima cifra. Il resto è sempre minore di b: per questo le cifre vanno da 0 a b−1. Con Calc (conversioni-con-calc) si usavano QUOZIENTE e RESTO: lo stesso foglio funziona cambiando 2 con 3.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La console del browser converte in ogni base</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps small">
+        <li>Su carta converti: 100 in base 3, 2026 in base 5, 1201₃ e 2301₅ in decimale.</li>
+        <li>Apri il browser, premi <b>F12</b> e scegli la scheda <b>Console</b>.</li>
+        <li>Verifica scrivendo i comandi qui sotto, uno alla volta, e premendo Invio.</li>
+        <li>Annota risultati e correzioni in <b>basi-cognome.txt</b>.</li>
+      </ol>
+<pre class="code" style="font-size:27px">(100).toString(3)       <span class="c">// decimale → base 3</span>
+(2026).toString(5)
+parseInt(<span class="s">"1201"</span>, 3)      <span class="c">// base 3 → decimale</span>
+parseInt(<span class="s">"2301"</span>, 5)</pre>
+    </div>
+    <div class="check"><b>Controllo:</b> <code>"10201"</code>, <code>"31101"</code>, <code>46</code>, <code>326</code>. Le virgolette nel risultato dicono che è un testo: le cifre in base 3 non sono un numero decimale.</div>
+  </div>
+  <aside class="notes">2026 in base 5: 2026:5 = 405 r1; 405:5 = 81 r0; 81:5 = 16 r1; 16:5 = 3 r1; 3:5 = 0 r3 → 31101. Verifica: 3·625 + 1·125 + 1·25 + 0 + 1 = 1875 + 125 + 25 + 1 = 2026. In Chrome, se si incolla del codice la prima volta compare un avviso: bisogna scrivere "allow pasting"; meglio scrivere a mano. Se F12 è bloccato sui PC della scuola: in Calc la funzione BASE(numero; base) e la funzione DECIMALE(testo; base), cercandole con la procedura guidata fx.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Somme in binario</p><h2>1 + 1 = 10: scrivo 0 e riporto 1</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact" style="width:auto">
+      <tr><th></th><th class="mono">7</th><th class="mono">6</th><th class="mono">5</th><th class="mono">4</th><th class="mono">3</th><th class="mono">2</th><th class="mono">1</th><th class="mono">0</th><th>dec</th></tr>
+      <tr><td class="muted">riporti</td><td class="mono muted">1</td><td class="mono muted">1</td><td class="mono muted">1</td><td class="mono muted">1</td><td class="mono muted">1</td><td class="mono muted">1</td><td class="mono muted"></td><td class="mono muted"></td><td></td></tr>
+      <tr><td></td><td class="mono">0</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td class="mono">91</td></tr>
+      <tr><td>+</td><td class="mono">0</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td class="mono">0</td><td class="mono">54</td></tr>
+      <tr><td>=</td><td class="mono hl">1</td><td class="mono hl">0</td><td class="mono hl">0</td><td class="mono hl">1</td><td class="mono hl">0</td><td class="mono hl">0</td><td class="mono hl">0</td><td class="mono hl">1</td><td class="mono hl">145</td></tr>
+    </table>
+    <div class="card soft"><h3>Le 4 regole</h3><p class="mono">0 + 0 = 0<br>0 + 1 = 1<br>1 + 1 = 10<br>1 + 1 + 1 = 11</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un modello linguistico come ChatGPT legge i numeri a <b>token</b>, pezzi di testo, non cifra per cifra in colonna: per questo nei conti lunghi può sbagliare. I chatbot più recenti, per i calcoli, spesso scrivono ed eseguono un piccolo programma.</p></div>
+  <aside class="notes">Fare la somma colonna per colonna da destra, ad alta voce. Colonna 0: 1+0 = 1. Colonna 1: 1+1 = 10, scrivo 0 riporto 1. Colonna 2: 0+1+1 = 10. Colonna 3: 1+0+1 = 10. Colonna 4: 1+1+1 = 11, scrivo 1 riporto 1. Colonna 5: 0+1+1 = 10. Colonna 6: 1+0+1 = 10. Colonna 7: 0+0+1 = 1. Risultato 10010001 = 128+16+1 = 145 = 91+54. Anticipo: con 8 bit, se la somma supera 255 serve un nono bit (overflow), lo vedremo nella lezione sugli interi relativi. Sul ponte AI: i tokenizzatori spezzano un numero lungo in gruppi di cifre; i chatbot recenti usano spesso uno strumento di esecuzione di codice per i conti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tocca a te</p><h2>Somme in binario, a mano</h2></div>
+  <div class="puzzle-completa">
+    <p><code>1011 + 0110</code> = <span class="blank" data-risposta="10001" style="--w:8ch"></span> (in decimale 11 + 6)</p>
+    <p><code>1111 + 0001</code> = <span class="blank" data-risposta="10000" style="--w:8ch"></span> (il riporto attraversa tutto)</p>
+    <p><code>0111 + 0111</code> = <span class="blank" data-risposta="1110|01110" style="--w:8ch"></span> (sommare un numero a se stesso…)</p>
+    <p>Sommare un numero a se stesso in binario equivale ad aggiungere uno <span class="blank" data-risposta="0|zero" style="--w:6ch"></span> a destra.</p>
+  </div>
+  <div class="timer" data-min="4"></div>
+  <aside class="notes">Soluzioni: 10001 (17), 10000 (16), 1110 (14), uno zero. L'ultima frase prepara i trucchi: raddoppiare in binario è come moltiplicare per 10 in decimale. Si può fare a squadre: la prima squadra con tutto giusto vince.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Sfida la calcolatrice da programmatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su carta calcola: <code>101101 + 11011</code>, <code>11001100 + 00110011</code>, <code>1111111 + 1</code>.</li>
+      <li>Apri la <b>Calcolatrice</b> di Windows, menu ☰, modalità <b>Programmatore</b>, clicca su <b>BIN</b>.</li>
+      <li>Scrivi la prima somma e premi <b>=</b>. Guarda anche le righe DEC e HEX.</li>
+      <li>Ripeti con le altre. Annota in <b>basi-cognome.txt</b> sotto il lavoro di prima.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>1001000</code> (45 + 27 = 72), <code>11111111</code> (255), <code>10000000</code> (128).</div>
+  </div>
+  <aside class="notes">Verifiche: 101101 = 45, 11011 = 27, somma 72 = 1001000. 11001100 + 00110011: nessun riporto, ogni colonna ha un solo 1 → 11111111 = 255 (204 + 51). 1111111 + 1 = 10000000 (127 + 1 = 128). Nella calcolatrice in modalità BIN i tasti 2–9 sono disattivati: è la regola delle cifre da 0 a b−1 in azione. Se la calcolatrice non c'è, usare la console: (0b101101 + 0b11011).toString(2).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trucchi veloci</p><h2>Fare i conti in binario a mente</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Raddoppia</h3><p class="small">Uno 0 a destra moltiplica per 2: <code>101</code> = 5, <code>1010</code> = 10. Togliere l'ultima cifra divide per 2 (senza resto).</p></div>
+    <div class="card"><h3>Pari o dispari</h3><p class="small">Guarda solo l'ultimo bit: 0 pari, 1 dispari.</p></div>
+    <div class="card"><h3>Tutti uni</h3><p class="small">n uni = 2ⁿ − 1: <code>11111111</code> = 256 − 1 = 255.</p></div>
+    <div class="card"><h3>Potenze di 2</h3><p class="small">Impara fino a 2¹⁰ = 1024. Una potenza di 2 in binario è un 1 seguito da zeri.</p></div>
+    <div class="card"><h3>Quanti bit?</h3><p class="small">Con n bit arrivi fino a 2ⁿ − 1: 8 bit → 255, 10 bit → 1023.</p></div>
+    <div class="card"><h3>Vale per ogni base</h3><p class="small">"10" in base b vale b; uno 0 a destra moltiplica per b.</p></div>
+  </div>
+  <aside class="notes">Esercizi a voce, veloci: 1100 è pari? (sì, 12). Quanto vale 111111? (2⁶ − 1 = 63). 10000000000 in binario? (2¹⁰ = 1024). Quanti valori con 4 bit? (16, da 0 a 15). Il trucco del "tutti uni" serve anche al contrario: 100000000 − 1 = 11111111.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quanti bit servono per scrivere il numero 1000?</h2></div>
+  <div class="poll" data-id="bit-per-mille" data-tipo="quiz" data-risposta="C">
+    <ol><li>4, come le cifre decimali</li><li>9</li><li>10</li><li>11</li></ol>
+    <p class="why">Con 9 bit si arriva a 2⁹ − 1 = 511, troppo poco. Con 10 bit si arriva a 1023: basta. In binario 1000 = 1111101000, dieci cifre.</p>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per far girare un modello di AI su un portatile si usa la <b>quantizzazione</b>: ogni parametro, invece di 16 bit, ne usa 8 o anche 4. Con 4 bit ci sono solo 2⁴ = 16 valori possibili: il modello occupa un quarto della memoria, in cambio di un po' di precisione.</p></div>
+  <aside class="notes">La A rivela la confusione tra cifre decimali e bit. Regola: il numero di bit è il più piccolo n con 2ⁿ > N. Ponte AI: la quantizzazione a 8 e 4 bit è molto usata per eseguire i modelli linguistici aperti su computer normali; perdere precisione peggiora un po' le risposte. Collegamento con "con n bit, 2ⁿ valori" del deck numeri-binari.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Stesse cifre, basi diverse: quanto vale 11?</h2></div>
+  <dl class="puzzle-abbina" data-id="undici-basi">
+    <dt>11 in base 2</dt><dd>3</dd>
+    <dt>11 in base 3</dt><dd>4</dd>
+    <dt>11 in base 5</dt><dd>6</dd>
+    <dt>11 in base 8</dt><dd>9</dd>
+    <dt>11 in base 16</dt><dd>17</dd>
+  </dl>
+  <aside class="notes">Regola che si scopre: 11 in base b = b + 1. Chiedere: e 111 in base b? (b² + b + 1: in base 2 vale 7, in base 10 vale 111). Messaggio: senza la base, una sequenza di cifre non ha un valore. Per questo nei programmi si scrive 0b, 0o o 0x.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il tabellone delle basi</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Nella console del browser (F12) scrivi questa riga, poi premi Invio:</p>
+<pre class="code" style="font-size:24px"><span class="k">for</span> (<span class="k">let</span> i = 0; i &lt;= 30; i++) console.log(i,
+  i.toString(2), i.toString(3), i.toString(5))</pre>
+      <ol class="steps small">
+        <li>Osserva le colonne: dove compare la prima cifra in più in ogni base?</li>
+        <li>Sottolinea su carta i numeri che in una base finiscono con 0. Che cosa hanno in comune?</li>
+        <li>Scrivi le tue due regole in fondo a <b>basi-cognome.txt</b> e consegna il file.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> la riga del 9 è <code>9 1001 100 14</code>. In base b si passa a una cifra in più alle potenze di b (2, 4, 8, 16… / 3, 9, 27 / 5, 25).</div>
+  </div>
+  <aside class="notes">Seconda regola attesa: un numero finisce con 0 in base b quando è multiplo di b (in base 2 i pari, in base 3 i multipli di 3). Il comando è JavaScript, il linguaggio del browser: è solo uno strumento per vedere i numeri, il codice del corso resta Java (lo useremo nel laboratorio sulla codifica dei numeri). Se la console è bloccata: compilare il tabellone a mano a squadre, da 0 a 20.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4762" data-aiuto="la seconda cifra: 2⁶ = 64 non basta per 100, 2⁷ = 128 sì">
+    <ul class="points">
+      <li>1ª cifra: quanto vale 10 in base 4</li>
+      <li>2ª cifra: quanti bit servono per scrivere il numero 100</li>
+      <li>3ª cifra: quanto vale 11 in base 5</li>
+      <li>4ª cifra: l'ultima cifra dell'anno del Liber Abaci</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 10₄ = 4, 100 = 1100100 (7 bit), 11₅ = 6, Fibonacci 1202.</div>
+  </div>
+  <aside class="notes">Codice: 4762. Squadre di 4; dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In base 7 le cifre vanno da 0 a <span class="blank" data-risposta="6|sei" style="--w:4ch"></span>.</p>
+    <p>Il numero 212 in base 3 vale <span class="blank" data-risposta="23|ventitre" style="--w:5ch"></span> in decimale.</p>
+    <p><code>110 + 11</code> in binario fa <span class="blank" data-risposta="1001" style="--w:6ch"></span>.</p>
+    <p>Un numero binario che finisce con 1 è <span class="blank" data-risposta="dispari" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 6; 212₃ = 2·9 + 1·3 + 2 = 23; 110 + 11 = 6 + 3 = 9 = 1001; dispari.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Non posizionali (romani): niente zero, conti difficili</li>
+      <li>Base b: cifre da 0 a b − 1, pesi 1, b, b², b³…</li>
+      <li>Da decimale a base b: divisioni, resti dal basso</li>
+    </ul>
+    <ul class="points">
+      <li>In binario 1 + 1 = 10: scrivo 0, riporto 1</li>
+      <li>n bit: fino a 2ⁿ − 1; uno 0 a destra raddoppia</li>
+      <li>Senza la base le cifre non hanno valore</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: il pianeta delle basi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Classi, id e selettori CSS · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Classi, id e<br>selettori CSS</h1>
+  <p class="lead">Come dire al browser "solo questo paragrafo", "tutti i riquadri di avviso", "il link quando ci passi sopra". E chi vince quando due regole litigano.</p>
+  <aside class="notes">Obiettivi: usare selettori di classe e di id, selettori discendenti, di gruppo e pseudo-classi; capire la cascata (importanza, specificità, ordine) ed ereditarietà; calcolare la specificità a mano. Durata indicativa: 2 ore. Si riparte dalla cartella pagina-web del laboratorio precedente: farla recuperare a inizio ora. CodePen (codepen.io/pen) serve per l'ultimo laboratorio; alternativa: un file .html sul disco.</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">Il problema</p>
+  <h2>Su venti paragrafi ne vuoi evidenziare <mark>due</mark>. Con il selettore <code>p</code> li colori tutti e venti.</h2>
+  <aside class="notes">Lasciare 30 secondi alla classe per proporre soluzioni. Qualcuno dirà "scrivo lo stile dentro il tag" (attributo style): funziona, ma mescola contenuto e aspetto e va ripetuto ovunque. Serve un modo per dare un nome ai paragrafi: le classi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Selettore di classe</p><h2>La classe: un'etichetta riutilizzabile</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:28px"><span class="c">&lt;!-- HTML --&gt;</span>
+&lt;<span class="k">p</span> class=<span class="s">"avviso"</span>&gt;Verifica lunedì&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">p</span>&gt;Testo normale&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">p</span> class=<span class="s">"avviso grande"</span>&gt;Gita!&lt;/<span class="k">p</span>&gt;
+
+<span class="c">/* CSS */</span>
+<span class="hl">.avviso</span> {
+  background-color: #fff3b0;
+  border-left: 6px solid #d0541f;
+}
+<span class="hl">.grande</span> { font-size: 1.5em; }</pre>
+    <ul class="points">
+      <li>Nel CSS la classe si scrive con il <b>punto</b>: <code>.avviso</code></li>
+      <li>La stessa classe si usa su <b>quanti elementi vuoi</b>, anche di tipi diversi</li>
+      <li>Un elemento può avere <b>più classi</b>, separate da uno spazio</li>
+      <li><code>p.avviso</code>: solo i paragrafi con classe avviso</li>
+    </ul>
+  </div>
+  <aside class="notes">Far notare che nell'HTML si scrive class="avviso" senza punto; il punto è solo nel CSS. Il terzo paragrafo riceve entrambe le regole: sfondo giallo, bordo e testo grande. 1.5em = una volta e mezza la dimensione del carattere del genitore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu come faresti?</p><h2>Che nome dai alla classe di un riquadro di avviso rosso?</h2></div>
+  <div class="poll" data-id="u4b-nomi-classi">
+    <ol><li><code>.rosso</code>: dice com'è</li><li><code>.avviso</code>: dice a che cosa serve</li><li><code>.box1</code>: corto e veloce</li><li><code>.warning</code>: in inglese, come i professionisti</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione, poi discussione. Spunto: se domani gli avvisi diventano arancioni, la classe .rosso mente; .avviso resta vera. Regola dei professionisti: il nome descrive il significato, non l'aspetto. Inglese o italiano va bene, purché coerente in tutto il sito; nomi come .box1 diventano incomprensibili dopo una settimana.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Selettore di id</p><h2>L'id: un nome unico nella pagina</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:28px"><span class="c">&lt;!-- HTML --&gt;</span>
+&lt;<span class="k">a</span> href=<span class="s">"#contatti"</span>&gt;Scrivimi&lt;/<span class="k">a</span>&gt;
+…
+&lt;<span class="k">h2</span> id=<span class="s">"contatti"</span>&gt;Contatti&lt;/<span class="k">h2</span>&gt;
+
+<span class="c">/* CSS */</span>
+<span class="hl">#contatti</span> {
+  color: #d0541f;
+  border-bottom: 3px solid;
+}</pre>
+    <table class="data compact">
+      <tr><th></th><th>class</th><th>id</th></tr>
+      <tr><td>Nel CSS</td><td class="mono">.nome</td><td class="mono">#nome</td></tr>
+      <tr><td>Quante volte</td><td>quante vuoi</td><td>una sola per pagina</td></tr>
+      <tr><td>Più nomi</td><td>sì, con spazi</td><td>no, uno solo</td></tr>
+      <tr><td>Uso tipico</td><td>stile ripetuto</td><td>àncora per i link, JavaScript</td></tr>
+    </table>
+  </div>
+  <aside class="notes">L'id serve anche come àncora: href="#contatti" fa scorrere la pagina fino all'elemento con quell'id. Se due elementi hanno lo stesso id il browser di solito applica lo stesso lo stile, ma la pagina non è valida e i link e JavaScript diventano imprevedibili. Molte guide di stile consigliano di usare le classi per lo stile e di riservare gli id ad àncore e script.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di queste righe è HTML corretto?</h2></div>
+  <div class="poll" data-id="u4b-class-valida" data-tipo="quiz" data-risposta="A">
+    <ol><li><code>&lt;p class="nota importante"&gt;</code></li><li><code>&lt;p id="nota importante"&gt;</code></li><li><code>&lt;p class=".nota"&gt;</code></li><li><code>&lt;p id="a" id="b"&gt;</code></li></ol>
+    <p class="why">A assegna due classi, nota e importante: è corretto. B: un id non può contenere spazi. C: il punto si usa solo nel CSS; questa classe si chiamerebbe ".nota" e il selettore .nota non la troverebbe. D: lo stesso attributo non si ripete in un tag.</p>
+  </div>
+  <aside class="notes">Il tranello è A: molti pensano che lo spazio sia un errore anche nelle classi, invece separa due classi. La C è l'errore più frequente nei compiti. Far correggere B, C e D a voce.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Classi e id nella tua pagina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri la cartella <b>pagina-web</b> e i file index.html e stile.css.</li>
+      <li>Dai <code>class="evidenza"</code> a <b>due</b> paragrafi e scrivi in stile.css la regola <code>.evidenza</code> con sfondo, bordo sinistro e <code>padding: 10px</code>.</li>
+      <li>Dai <code>id="passioni"</code> al titolo h2 delle passioni e uno stile <code>#passioni</code> diverso dagli altri h2.</li>
+      <li>In cima alla pagina aggiungi <code>&lt;a href="#passioni"&gt;Vai alle passioni&lt;/a&gt;</code>.</li>
+      <li>Dai la classe <code>evidenza</code> anche a una cella della tabella.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> solo i due paragrafi e la cella hanno lo sfondo, gli altri no. Cliccando il link la pagina scorre fino al titolo (se la pagina è corta, restringi la finestra per vedere lo scorrimento).</div>
+  </div>
+  <aside class="notes">Esempio di soluzione: .evidenza { background-color: #fff3b0; border-left: 6px solid #d0541f; padding: 10px; } e #passioni { color: white; background-color: #d0541f; }. Se lo stile non si applica: punto o cancelletto mancante nel CSS, oppure punto messo per errore nell'HTML. Chi finisce: dare a un elemento due classi, evidenza e grande.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Altri selettori</p><h2>Il vocabolario per scegliere gli elementi</h2></div>
+  <table class="data compact">
+    <tr><th>Selettore</th><th>Nome</th><th>Che cosa seleziona</th></tr>
+    <tr><td class="mono">h1, h2, h3</td><td>gruppo</td><td>tutti gli h1, gli h2 e gli h3</td></tr>
+    <tr><td class="mono">nav a</td><td>discendente</td><td>i link che stanno <b>dentro</b> un nav, a qualsiasi profondità</td></tr>
+    <tr><td class="mono">ul &gt; li</td><td>figlio</td><td>i li figli <b>diretti</b> di un ul</td></tr>
+    <tr><td class="mono">input[type="email"]</td><td>attributo</td><td>i campi di input di tipo email</td></tr>
+    <tr><td class="mono">a:hover</td><td>pseudo-classe</td><td>un link mentre il mouse ci passa sopra</td></tr>
+    <tr><td class="mono">tr:nth-child(even)</td><td>pseudo-classe</td><td>le righe pari di una tabella</td></tr>
+    <tr><td class="mono">*</td><td>universale</td><td>tutti gli elementi</td></tr>
+  </table>
+  <aside class="notes">Attenzione alla differenza tra "h1, h2" (virgola: gruppo, due selettori) e "h1 h2" (spazio: discendente, un h2 dentro un h1). Uno spazio in più o in meno cambia completamente il significato: è la fonte di errori più comune. even = pari, odd = dispari; nth-child(3) seleziona il terzo figlio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina il selettore agli elementi che sceglie</h2></div>
+  <dl class="puzzle-abbina" data-id="u4b-selettori">
+    <dt>.menu a</dt><dd>I link dentro un elemento con classe menu</dd>
+    <dt>a.menu</dt><dd>I link che hanno la classe menu</dd>
+    <dt>.menu, a</dt><dd>Tutti gli elementi con classe menu e tutti i link</dd>
+    <dt>#menu</dt><dd>L'unico elemento con id menu</dd>
+    <dt>li:first-child</dt><dd>Ogni li che è il primo figlio del suo genitore</dd>
+  </dl>
+  <aside class="notes">Il cuore del puzzle sono le prime tre righe: stesse lettere, significati diversi per uno spazio, nessuno spazio o una virgola. Far leggere ad alta voce i selettori "da destra a sinistra": .menu a = "un link, che sta dentro un .menu". È anche il modo in cui li legge il browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Pseudo-classi</p><h2>Lo stato di un elemento cambia il suo stile</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">a:link</span>    { color: #0b6e99; }
+<span class="k">a:visited</span> { color: #6a3d9a; }
+<span class="k">a:hover</span>   { background-color: #fbe7dc; }
+<span class="k">a:active</span>  { color: #d0541f; }
+<span class="k">input:focus</span> { outline: 3px solid #d0541f; }
+<span class="k">li:first-child</span> { font-weight: bold; }</pre>
+    <div class="stack">
+      <div class="callout small">Ordine dei link: <b>L</b>ink, <b>V</b>isited, <b>H</b>over, <b>A</b>ctive. Si ricorda con "<b>LoVe HAte</b>".</div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">Per vent'anni il CSS non sapeva scegliere un elemento in base a ciò che contiene. Dalla fine del 2023 tutti i browser principali supportano <b style="font-family:var(--mono)">:has()</b>: <b style="font-family:var(--mono)">li:has(img)</b> sono i li che contengono un'immagine.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Perché LVHA: le quattro regole hanno la stessa specificità, quindi vince l'ultima scritta; se :hover viene prima di :visited, i link già visitati non cambiano al passaggio del mouse. :focus è fondamentale per chi naviga con la tastiera (Unità 5, accessibilità): non togliere mai l'outline senza sostituirlo. :has() è supportato da Safari 15.4 (2022), Chrome 105 (2022) e Firefox 121 (dicembre 2023).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Tabella a strisce e link vivi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In stile.css scrivi <code>tr:nth-child(even) { background-color: #f3f3f3; }</code></li>
+      <li>Aggiungi <code>th { background-color: #d0541f; color: white; }</code></li>
+      <li>Scrivi le quattro regole dei link nell'ordine LVHA, con colori a tua scelta.</li>
+      <li>Fai in modo che il primo elemento di ogni elenco sia in grassetto con <code>li:first-child</code>.</li>
+      <li>Rendi diverso il link "Vai alle passioni" usando un selettore discendente o una classe, senza cambiare gli altri link.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le righe della tabella si alternano, passando sopra un link lo sfondo cambia, il primo punto di ogni elenco è in grassetto. Un link già visitato ha il colore di <code>:visited</code>.</div>
+  </div>
+  <aside class="notes">Nota: la riga di intestazione è la prima riga (dispari), quindi le righe colorate sono la 2ª, la 4ª… Per il punto 5 due soluzioni: dare class="salto" al link e scrivere a.salto { … }, oppure mettere il link in un p con una classe e usare .indice a { … }. Per vedere :visited conviene cliccare un link esterno e tornare indietro. Per ragioni di privacy i browser permettono di cambiare con :visited solo i colori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La cascata</p><h2>Due regole, una sola proprietà: chi vince?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Importanza</h3><p><code>!important</code> scavalca le regole normali. Da usare quasi mai.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Specificità</h3><p>Vince il selettore più <b>preciso</b>: id batte classe, classe batte elemento.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Ordine</h3><p>A parità di tutto, vince la regola scritta <b>per ultima</b>.</p></div>
+  </div>
+  <div class="callout"><b>Ereditarietà:</b> se un elemento non ha una regola, alcune proprietà le prende dal genitore. <code>color</code> e <code>font-family</code> si ereditano; <code>border</code>, <code>padding</code> e <code>background-color</code> no.</div>
+  <aside class="notes">Semplificazione corretta per il terzo anno: la cascata considera anche l'origine (stili del browser, dell'utente, dell'autore) e gli stili inline. È proprio l'idea della proposta di Håkon Wium Lie: lo stile della pagina e le preferenze del lettore si combinano. Esempio di ereditarietà: color sul body colora tutto il testo; un bordo sul body non compare attorno a ogni paragrafo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Specificità</p><h2>Contala come un numero a tre cifre</h2></div>
+  <div class="formula"><small>specificità = (quanti id) - (quante classi, attributi, pseudo-classi) - (quanti elementi)</small><span class="hl">#menu a</span> → 1-0-1 &nbsp; <span class="hl">.nav li a</span> → 0-1-2</div>
+  <table class="data compact">
+    <tr><th>Selettore</th><th>id</th><th>classi</th><th>elementi</th><th>Specificità</th></tr>
+    <tr><td class="mono">p</td><td>0</td><td>0</td><td>1</td><td class="mono">0-0-1</td></tr>
+    <tr><td class="mono">p.avviso</td><td>0</td><td>1</td><td>1</td><td class="mono">0-1-1</td></tr>
+    <tr><td class="mono">nav ul li a:hover</td><td>0</td><td>1</td><td>4</td><td class="mono">0-1-4</td></tr>
+    <tr><td class="mono">#menu .voce</td><td>1</td><td>1</td><td>0</td><td class="mono hl">1-1-0</td></tr>
+  </table>
+  <aside class="notes">Si confronta cifra per cifra da sinistra, come in un numero: 1-0-0 batte 0-9-9 (un id batte anche molte classi). Il selettore universale * vale 0-0-0. Lo stile inline (attributo style) batte tutti i selettori; !important batte tutto il resto. Tranello: le cifre non "riportano", 0-11-0 non diventa 1-1-0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Di che colore è il testo?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px">&lt;<span class="k">p</span> id=<span class="s">"intro"</span> class=<span class="s">"avviso"</span>&gt;Ciao&lt;/<span class="k">p</span>&gt;
+
+<span class="k">#intro</span>  { color: green; }
+<span class="k">.avviso</span> { color: red; }
+<span class="k">p</span>       { color: blue; }</pre>
+    <div class="poll" data-id="u4b-chi-vince" data-tipo="quiz" data-risposta="D">
+      <ol><li>Blu</li><li>Rosso</li><li>Nero</li><li>Verde</li></ol>
+      <p class="why">Verde: #intro ha specificità 1-0-0 e batte .avviso (0-1-0) e p (0-0-1). L'ordine conta solo a parità di specificità.</p>
+    </div>
+  </div>
+  <aside class="notes">Chi risponde blu applica "vince l'ultima regola", ma l'ordine è solo il terzo criterio. Chi risponde rosso pensa che la classe sia più specifica dell'id. Variante da proporre dopo: se aggiungo p { color: blue !important; } diventa blu.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dal meno specifico al più specifico</h2></div>
+  <ol class="puzzle-ordina" data-id="u4b-specificita">
+    <li><code>*</code></li>
+    <li><code>li</code></li>
+    <li><code>ul li</code></li>
+    <li><code>.voce</code></li>
+    <li><code>li.voce:hover</code></li>
+    <li><code>#menu</code></li>
+    <li>attributo <code>style="color: red"</code> nel tag</li>
+  </ol>
+  <aside class="notes">Specificità: * 0-0-0; li 0-0-1; ul li 0-0-2; .voce 0-1-0; li.voce:hover 0-2-1; #menu 1-0-0; lo stile inline batte qualsiasi selettore. Far calcolare le terne a squadre prima di riordinare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La sfida della specificità in CodePen</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps small">
+        <li>Apri <b>codepen.io/pen</b> (non serve l'account). Nel pannello HTML scrivi: <code>&lt;div id="box" class="scatola"&gt;&lt;p class="testo"&gt;Chi vince?&lt;/p&gt;&lt;/div&gt;</code></li>
+        <li>Su un foglio calcola la specificità di queste regole e <b>prevedi</b> il colore. Poi incollale nel pannello CSS.</li>
+        <li>Cancella la regola vincente: prevedi, poi guarda. Ripeti fino all'ultima.</li>
+      </ol>
+<pre class="code" style="font-size:26px;padding:18px 32px">div p          { color: orange; }
+p.testo        { color: blue; }
+.scatola .testo { color: red; }
+#box p         { color: green; }</pre>
+    </div>
+    <div class="check"><b>Controllo:</b> l'ordine dei colori è verde, rosso, blu, arancione. Specificità: 1-0-1, 0-2-0, 0-1-1, 0-0-2.</div>
+  </div>
+  <aside class="notes">Se CodePen è bloccato: jsfiddle.net (senza account) oppure un file sfida.html con un tag style nel head. Domanda bonus a squadre: scrivete una quinta regola che batta #box p usando solo classi ed elementi, senza id, stile inline o !important. Risposta: non si può, perché nessun numero di classi supera un id (0-5-0 perde contro 1-0-1). Si può però pareggiare la cifra degli id: #box p.testo (1-1-1) vince.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché si chiamano fogli di stile "a cascata"</h2></div>
+  <figure class="citazione">
+    <blockquote>Lo schema è progettato perché i fogli di stile possano essere messi in cascata: l'utente o il browser indica le preferenze iniziali e lascia il resto dell'influenza ai fogli di stile della pagina.</blockquote>
+    <figcaption><b>Håkon Wium Lie</b>, "Cascading HTML style sheets: a proposal", CERN, 10 ottobre 1994</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">I selettori non servono solo allo stile. I programmi che collaudano i siti (Playwright, Selenium) e gli agenti AI che usano il browser trovano il pulsante da cliccare con selettori come <b>#accedi</b> o <b>button.invia</b>; i blocchi pubblicità nascondono i banner allo stesso modo.</p></div>
+  <aside class="notes">Traduzione nostra dall'abstract originale: "The style sheet scheme is designed so that style sheets can be cascaded; the user/browser specifies initial preferences and hands the remaining influence over to the style sheets referenced in the incoming document" (w3.org/People/howcome/p/cascade.html). Lie lavorava al CERN con Tim Berners-Lee; con Bert Bos firmò la specifica CSS1 del W3C (dicembre 1996). Sugli agenti AI: alcuni usano anche screenshot e l'albero di accessibilità oltre ai selettori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con la specificità</h2></div>
+  <div class="puzzle-codice" data-risposta="2331" data-aiuto="nella seconda cifra conta anche :first-child">
+    <ul class="points">
+      <li>1ª cifra: quanti id ci sono in <b style="font-family:var(--mono);color:var(--hl)">#top #nav a</b></li>
+      <li>2ª cifra: la cifra centrale della specificità di <b style="font-family:var(--mono);color:var(--hl)">.card.evidenza p:first-child</b></li>
+      <li>3ª cifra: l'ultima cifra della specificità di <b style="font-family:var(--mono);color:var(--hl)">ul li a</b></li>
+      <li>4ª cifra: quante volte può comparire lo stesso id in una pagina</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2 id; .card .evidenza :first-child = 3; ul li a = 0-0-3; un id è unico: 1.</div>
+  </div>
+  <p class="muted">Promemoria: specificità = id - classi, attributi e pseudo-classi - elementi.</p>
+  <aside class="notes">Codice 2331. Errore tipico sulla 2ª cifra: dimenticare che la pseudo-classe conta come una classe (risultato 2 invece di 3). .card.evidenza senza spazio è un solo elemento con due classi, ma conta comunque due classi. A squadre: vince chi apre per primo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nel CSS una classe si scrive con il <span class="blank" data-risposta="punto|."></span>, un id con il cancelletto.</p>
+    <p>Un id può comparire nella pagina al massimo <span class="blank" data-risposta="una|1|una volta"></span> volta.</p>
+    <p>La pseudo-classe del passaggio del mouse è <span class="blank" data-risposta=":hover|hover"></span>.</p>
+    <p>La specificità di <code>#menu li</code> è <span class="blank" data-risposta="1-0-1|101|1,0,1"></span>.</p>
+    <p>A parità di specificità vince la regola scritta per <span class="blank" data-risposta="ultima|ultimo"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: punto, una (1), :hover, 1-0-1 (accettato 101 o 1,0,1), ultima.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>.classe</code> riutilizzabile, <code>#id</code> unico</li>
+      <li>Spazio = dentro, virgola = elenco</li>
+      <li>Pseudo-classi: :hover, :focus, :nth-child</li>
+    </ul>
+    <ul class="points">
+      <li>Cascata: importanza, specificità, ordine</li>
+      <li>Specificità id-classi-elementi</li>
+      <li>color si eredita, border no</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: il box model, cioè margin, border, padding e le dimensioni degli elementi. Assegnare il compito su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

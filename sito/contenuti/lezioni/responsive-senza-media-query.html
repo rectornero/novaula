@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Responsive senza media query · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Siti web responsive e accessibili · Lezione 8</p>
+  <h1>Responsive<br>senza media query</h1>
+  <p class="lead">E se fosse il layout a capire da solo quanto spazio ha? clamp(), auto-fit, minmax, flex-wrap e le container query: poche righe al posto di tanti breakpoint.</p>
+  <aside class="notes">Laboratorio online, 2 ore. Obiettivi: unità relative (vw, rem, ch, fr), le funzioni min(), max() e clamp() con calcoli a mano, flex-wrap con flex-basis, Grid con repeat(auto-fit, minmax()), differenza tra auto-fit e auto-fill, container query. Strumenti: Chrome o Edge con DevTools, CodePen (codepen.io/pen, senza account). Fallback se CodePen è bloccato: JSFiddle oppure file sul disco aperti nel browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quante media query servono per fare un sito responsive?</h2></div>
+  <div class="poll" data-id="smq-quante">
+    <ol><li>Almeno 3: telefono, tablet, PC</li><li>Una o due</li><li>Dipende dal sito</li><li>Anche zero</li></ol>
+  </div>
+  <aside class="notes">Lasciare votare senza commentare. Alla fine della lezione rifare la domanda: l'obiettivo è che capiscano che molti layout si adattano senza breakpoint, e che le media query restano utili per altre cose (preferenze dell'utente, cambi di struttura importanti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il web non è una pagina stampata</h2></div>
+  <figure class="citazione">
+    <blockquote>Dovremmo accettare il fatto che il web non ha gli stessi vincoli della carta, e progettare per questa flessibilità.</blockquote>
+    <figcaption><b>John Allsopp</b>, sviluppatore australiano, "A Dao of Web Design", A List Apart, 2000</figcaption>
+  </figure>
+  <p class="lead">Nel 2018 Jen Simmons lo chiama <mark>intrinsic web design</mark>: il layout dipende dal contenuto e dallo spazio disponibile, non da un elenco di dispositivi.</p>
+  <aside class="notes">Traduzione nostra, accorciata; l'originale: "We should embrace the fact that the web doesn't have the same constraints, and design for this flexibility." Dieci anni dopo, l'articolo di Ethan Marcotte sul responsive design cita proprio Allsopp. Jen Simmons, allora a Mozilla, ha presentato l'idea di intrinsic web design nel 2018.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le misure fluide</p><h2>Unità che si adattano da sole</h2></div>
+  <table class="data compact">
+    <tr><th>Unità</th><th>Rispetto a che cosa</th><th>Esempio su un telefono largo 390 px</th></tr>
+    <tr><td class="mono">%</td><td>il contenitore</td><td><code>width: 50%</code> in un box di 300 px = 150 px</td></tr>
+    <tr><td class="mono">vw</td><td>1% della larghezza del viewport</td><td><code>50vw</code> = 195 px</td></tr>
+    <tr><td class="mono">rem</td><td>la dimensione del testo della pagina (di solito 16 px)</td><td><code>1.5rem</code> = 24 px</td></tr>
+    <tr><td class="mono">ch</td><td>la larghezza del carattere "0" del font</td><td><code>max-width: 65ch</code> = righe comode da leggere</td></tr>
+    <tr><td class="mono">fr</td><td>una parte dello spazio libero in una griglia</td><td><code>1fr 2fr</code> = un terzo e due terzi</td></tr>
+  </table>
+  <aside class="notes">rem rispetta l'impostazione dell'utente: se una persona ingrandisce il testo predefinito del browser, tutto ciò che è in rem cresce con lei. I px no: per l'accessibilità il testo va in rem. Righe di testo tra 45 e 75 caratteri sono le più comode da leggere: 65ch è un buon limite.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">min(), max(), clamp()</p><h2>Un valore che cresce, ma con un pavimento e un soffitto</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula" style="font-size:40px"><small>clamp(minimo, preferito, massimo)</small>font-size: clamp(<span class="hl">1.5rem</span>, 1rem + 4vw, <span class="hl">3rem</span>);</div>
+      <p class="small">Il browser calcola il valore preferito; se scende sotto il minimo usa il minimo, se supera il massimo usa il massimo.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Viewport</th><th>1rem + 4vw</th><th>Risultato</th></tr>
+      <tr><td>300 px</td><td class="mono">16 + 12 = 28</td><td class="mono">28 px</td></tr>
+      <tr><td>400 px</td><td class="mono">16 + 16 = 32</td><td class="mono">32 px</td></tr>
+      <tr><td>800 px</td><td class="mono">16 + 32 = 48</td><td class="mono">48 px</td></tr>
+      <tr><td>1200 px</td><td class="mono">16 + 48 = 64</td><td class="mono hl">48 px</td></tr>
+    </table>
+  </div>
+  <div class="callout"><code>width: min(100% - 32px, 70ch)</code>: larga quanto lo schermo meno i margini, ma mai più di 70 caratteri.</div>
+  <aside class="notes">Con 1 rem = 16 px il minimo è 24 px e il massimo 48 px. Per avere 24 px servirebbe 1rem + 4vw = 24, cioè 4vw = 8, vw = 2 px, schermo di 200 px: sotto i telefoni reali, quindi il minimo qui non scatta mai; è comunque una rete di sicurezza. Mettere sempre una parte in rem nel valore preferito: con solo vw lo zoom del browser non ingrandisce il testo (problema di accessibilità, WCAG 1.4.4).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Viewport largo 1000 px: quanto è grande il titolo?</h2></div>
+  <pre class="code"><span class="k">h1</span> { font-size: clamp(1.5rem, 1rem + 4vw, 3rem); }   <span class="c">/* 1rem = 16px */</span></pre>
+  <div class="poll" data-id="smq-clamp" data-tipo="quiz" data-risposta="D">
+    <ol><li>56 px</li><li>40 px</li><li>24 px</li><li>48 px</li></ol>
+    <p class="why">4vw a 1000 px sono 40 px; 16 + 40 = 56 px, che supera il massimo di 3rem = 48 px. clamp() si ferma al soffitto: 48 px.</p>
+  </div>
+  <aside class="notes">Chi risponde 56 ha fatto bene il conto ma ha dimenticato il massimo; chi risponde 40 ha dimenticato la parte in rem. Domanda bonus: a che larghezza il titolo arriva al massimo? 16 + 4vw = 48, quindi 4vw = 32, 1vw = 8, viewport 800 px.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Testo fluido, misurato col righello</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>fluido.html</b> con meta viewport, un <code>&lt;main class="pagina"&gt;</code>, un <code>&lt;h1&gt;</code> e tre paragrafi lunghi.</li>
+      <li>Nello stile: h1 con <code>font-size: clamp(1.5rem, 1rem + 4vw, 3rem)</code>.</li>
+      <li><code>.pagina</code> con <code>width: min(100% - 32px, 70ch)</code> e <code>margin-inline: auto</code>.</li>
+      <li>In Chrome, modalità dispositivo a <b>400</b> px: in <b>Elementi</b> seleziona l'h1 e leggi <i>font-size</i> nella scheda <b>Calcolato</b>.</li>
+      <li>Ripeti a 800 e a 1200 px. Annota i tre valori.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 32 px a 400, 48 px a 800, ancora 48 px a 1200. Il testo dei paragrafi non supera mai circa 70 caratteri per riga, e a 400 px ha 16 px di margine per lato.</div>
+  </div>
+  <aside class="notes">Il pannello "Calcolato" (Computed) mostra il valore finale in px. Se i valori sono diversi, controllare che il body non abbia un font-size diverso da 16 px (rem si riferisce all'elemento html). Chi finisce prima: provare a zoomare al 200% con Ctrl e + e osservare che il titolo cresce, grazie alla parte in rem.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Flexbox che va a capo</p><h2>Ogni elemento chiede un minimo, poi cresce</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">.schede</span> {
+  display: flex;
+  flex-wrap: <span class="hl">wrap</span>;
+  gap: 16px;
+}
+<span class="k">.scheda</span> {
+  flex: 1 1 <span class="hl">250px</span>;
+}</pre>
+    <ul class="points">
+      <li><code>flex-basis: 250px</code>: ogni scheda parte da 250 px</li>
+      <li>se non ci stanno, la riga va a capo</li>
+      <li><code>flex-grow: 1</code>: lo spazio che avanza si divide</li>
+      <li>con 4 schede, a 600 px: 2 per riga, larghe 292 px</li>
+    </ul>
+  </div>
+  <aside class="notes">Calcolo: a 600 px stanno 2 schede (2 × 250 + 16 = 516 ≤ 600; 3 × 250 + 32 = 782 > 600). Lo spazio avanzato 600 − 516 = 84 si divide in due: 250 + 42 = 292 px. Il difetto, già visto nel laboratorio di CineTerza: con un numero dispari di schede l'ultima si allarga su tutta la riga. Per le gallerie è meglio Grid.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Grid che conta da sola le colonne</p><h2>Una riga per una galleria responsive</h2></div>
+  <pre class="code" style="font-size:30px"><span class="k">.galleria</span> { display: grid; gap: 20px;
+  grid-template-columns: <span class="hl">repeat(auto-fit, minmax(240px, 1fr))</span>; }</pre>
+  <div class="cols-3">
+    <div class="card soft"><h3>repeat(auto-fit, …)</h3><p>Il browser crea <b>tutte le colonne che ci stanno</b>.</p></div>
+    <div class="card soft"><h3>minmax(240px, 1fr)</h3><p>Ogni colonna è larga almeno 240 px; lo spazio in più si divide.</p></div>
+    <div class="card soft"><h3>Contenitore 1000 px</h3><p>4 colonne servirebbero 4 × 240 + 3 × 20 = 1020 px: troppo. Ne stanno <b>3</b>, larghe (1000 − 40) ÷ 3 = 320 px.</p></div>
+  </div>
+  <aside class="notes">Una Kravets (Google) ha chiamato questo schema RAM: Repeat, Auto, Minmax, nell'articolo "Ten modern layouts in one line of CSS" (web.dev, 2020). Variante più robusta: minmax(min(240px, 100%), 1fr), che evita lo scorrimento orizzontale quando il contenitore è più stretto di 240 px. Far rifare il conto a 700 px: 2 colonne (3 × 240 + 40 = 760 > 700), larghe (700 − 20) ÷ 2 = 340.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>auto-fill con solo due card: quanto sono larghe?</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <pre class="code" style="font-size:26px"><span class="k">.galleria</span> {
+  width: 1000px; display: grid; gap: 0;
+  grid-template-columns:
+    repeat(<span class="hl">auto-fill</span>, minmax(200px, 1fr));
+}  <span class="c">/* dentro ci sono 2 card */</span></pre>
+      <p class="small muted">Con <code>auto-fit</code> la risposta sarebbe diversa.</p>
+    </div>
+    <div class="poll" data-id="smq-fill" data-tipo="quiz" data-risposta="A">
+      <ol><li>200 px</li><li>500 px</li><li>1000 px</li><li>250 px</li></ol>
+      <p class="why">auto-fill crea comunque 5 colonne da 200 px, anche vuote: le 2 card ne occupano 2. auto-fit invece fa sparire le colonne vuote e le 2 card si allargano a 500 px.</p>
+    </div>
+  </div>
+  <aside class="notes">È la differenza più sottile della lezione. Mostrarla dal vivo nei DevTools con il badge grid: con auto-fill si vedono le linee delle colonne vuote. Quando conviene auto-fill? Quando si vuole che poche card mantengano la stessa larghezza di quando sono tante (es. risultati di una ricerca).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La galleria senza media query, in CodePen</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>codepen.io/pen</b> scrivi un <code>&lt;ul class="tag"&gt;</code> con 8 parole e un <code>&lt;div class="galleria"&gt;</code> con 9 <code>&lt;article&gt;</code>.</li>
+      <li>CSS: <code>.tag</code> con <code>display: flex; flex-wrap: wrap;</code> e un gap.</li>
+      <li>CSS: <code>.galleria</code> con la griglia RAM vista prima, usando <code>minmax(min(240px, 100%), 1fr)</code>.</li>
+      <li>Trascina il bordo dell'anteprima. Poi passa ad <code>auto-fill</code> con solo 2 article.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> trascinando, la galleria passa da 1 a 2, 3, 4 colonne e i tag vanno a capo, senza nessuna <code>@media</code> nel codice. Con 2 article, <code>auto-fill</code> le lascia strette e <code>auto-fit</code> le allarga.</div>
+  </div>
+  <aside class="notes">In CodePen la larghezza che conta è quella dell'anteprima (un iframe), non della finestra: è proprio il motivo per cui la galleria reagisce al trascinamento. Per misure precise: tasto destro sull'anteprima, Ispeziona, badge grid. Senza account il pen non si salva: far copiare il codice in un file galleria.html alla fine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la tecnica al risultato</h2></div>
+  <dl class="puzzle-abbina" data-id="smq-tecniche">
+    <dt><code>clamp(1rem, 2vw, 2rem)</code></dt><dd>Un valore fluido con un minimo e un massimo</dd>
+    <dt><code>min(100%, 70ch)</code></dt><dd>Prende il più piccolo dei due valori</dd>
+    <dt><code>flex-wrap: wrap</code></dt><dd>Gli elementi vanno a capo se non c'è posto</dd>
+    <dt><code>repeat(auto-fit, minmax(…))</code></dt><dd>Tante colonne quante ne stanno</dd>
+    <dt><code>container-type: inline-size</code></dt><dd>Rende un elemento interrogabile dalle container query</dd>
+  </dl>
+  <aside class="notes">Tranello: molti abbinano min() a "prende il più grande" perché pensano a "almeno". min(100%, 70ch) vuol dire: al massimo 70ch. Ricordare: min() fa da soffitto, max() fa da pavimento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Container query</p><h2>Il componente guarda il suo contenitore, non lo schermo</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:26px"><span class="k">.contenitore</span> {
+  container-type: inline-size;
+}
+<span class="k">@container</span> (min-width: 400px) {
+  <span class="k">.card</span> {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+  }
+}</pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Una card, mille posti</h3><p>Dal 2023 tutti i browser principali supportano le container query. La stessa card è orizzontale nella colonna larga e verticale nella barra laterale stretta, sullo stesso schermo. Con le media query era impossibile: guardano solo il viewport.</p></div>
+  </div>
+  <aside class="notes">Supporto: Chrome ed Edge 105 e Safari 16 nel 2022, Firefox 110 a febbraio 2023. È ancora una "query", ma sul contenitore: è il pezzo che mancava ai design system (librerie di componenti riutilizzabili). Esistono anche le unità cqi e cqw (1% della larghezza del contenitore).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La stessa card in due contenitori</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In un nuovo pen scrivi un <code>&lt;main class="contenitore"&gt;</code> e un <code>&lt;aside class="contenitore"&gt;</code>, affiancati con Flexbox.</li>
+      <li>Dai all'aside <code>flex: 0 0 280px</code> e al main <code>flex: 1</code>.</li>
+      <li>In entrambi metti la stessa <code>&lt;article class="card"&gt;</code>: un riquadro colorato 120 × 120 e un paragrafo.</li>
+      <li>Copia il CSS della slide precedente e allarga l'anteprima oltre i 700 px.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel main la card è orizzontale (riquadro a sinistra, testo a destra); nell'aside, largo 280 px, la stessa card è verticale. Il codice della card è uno solo.</div>
+  </div>
+  <aside class="notes">Errore tipico: mettere container-type sulla card stessa. Un elemento non può interrogare sé stesso: la proprietà va sul genitore. Se il main è più stretto di 400 px (anteprima piccola), anche lì la card è verticale: è corretto, è il comportamento voluto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Come si impaginava il web: dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="smq-storia">
+    <li>Tabelle HTML usate per impaginare</li>
+    <li>Colonne con float</li>
+    <li>Griglia fluida e media query: nasce il responsive</li>
+    <li>Flexbox supportato da tutti i browser principali</li>
+    <li>CSS Grid arriva in tutti i browser principali</li>
+    <li>Container query in tutti i browser principali</li>
+  </ol>
+  <aside class="notes">Anni indicativi: tabelle negli anni '90; float dai primi anni 2000 (dopo i CSS 2, 1998); articolo di Marcotte 2010; Flexbox con la sintassi attuale supportato ovunque verso il 2015; Grid nel 2017 (Chrome, Firefox e Safari a marzo, Edge a ottobre); container query nel 2023. Messaggio: ogni passo ha richiesto meno trucchi per ottenere più adattabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando servono ancora</p><h2>Le media query non spariscono, cambiano mestiere</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Ancora utili per</h3><ul class="points"><li>cambi di struttura grandi (menu a scomparsa)</li><li>preferenze: tema scuro, meno animazioni</li><li>stampa: <code>@media print</code></li></ul></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI per il codice imparano da milioni di pagine scritte negli anni: spesso propongono tante media query "da manuale". Chiedi esplicitamente una versione con <b>clamp</b> e <b>auto-fit</b>, poi verifica tu le larghezze nei DevTools.</p></div>
+  </div>
+  <aside class="notes">Domanda di chiusura: rifare il sondaggio iniziale. Le demo con assistenti AI le fa il docente sulla LIM. Sottolineare che l'AI non sa come si vede la pagina finché qualcuno non la prova: il collaudo resta nostro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto della galleria</h2></div>
+  <div class="puzzle-codice" data-risposta="3320" data-aiuto="prova con 4 colonne: 4 × 240 + 3 × 20 supera 1000?">
+    <p>Contenitore largo <b>1000 px</b>, <b>gap 20 px</b>, colonne <b>repeat(auto-fit, minmax(240px, 1fr))</b>.</p>
+    <ul class="points">
+      <li>1ª cifra: quante colonne crea il browser</li>
+      <li>ultime tre cifre: quanti pixel è larga ogni colonna</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 4 colonne richiederebbero 1020 px, quindi 3 colonne da (1000 − 40) ÷ 3 = 320 px.</div>
+  </div>
+  <aside class="notes">Codice: 3320. Errori tipici: 4 colonne (dimenticano i gap) oppure 333 px (dimenticano di togliere i gap prima di dividere).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Su un viewport di 600 px, <code>10vw</code> vale <span class="blank" data-risposta="60"></span> px.</p>
+    <p><code>clamp(16px, 5vw, 24px)</code> a 1000 px vale <span class="blank" data-risposta="24"></span> px.</p>
+    <p>Per avere tante colonne quante ne stanno uso <code>repeat(</code><span class="blank" data-risposta="auto-fit|auto-fill" style="--w:8ch"></span><code>, minmax(…))</code>.</p>
+    <p>Le query che guardano il contenitore si chiamano <span class="blank" data-risposta="container query|container queries|container" style="--w:13ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 60; 24 (5vw = 50 px, oltre il massimo); auto-fit (accettato auto-fill); container query. Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Unità fluide: %, vw, rem, ch, fr</li>
+      <li><code>clamp(min, preferito, max)</code>, con una parte in rem</li>
+      <li><code>flex-wrap</code> + <code>flex-basis</code> per andare a capo</li>
+    </ul>
+    <ul class="points">
+      <li><code>repeat(auto-fit, minmax())</code>: colonne automatiche</li>
+      <li>auto-fill tiene le colonne vuote, auto-fit no</li>
+      <li>Container query: il componente guarda il contenitore</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Con questa lezione si chiude l'Unità 5: annunciare la verifica e la simulazione disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

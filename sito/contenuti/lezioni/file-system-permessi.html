@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il file system · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>Il file system</h1>
+  <p class="lead">Il disco è solo una lunga fila di blocchi numerati. Chi trasforma quei blocchi in cartelle, nomi, percorsi e permessi? E perché un file da 5 GB non entra in una chiavetta mezza vuota?</p>
+  <aside class="notes">Obiettivi: capire che cos'è un file system e quali informazioni conserva su ogni file (metadati); scrivere percorsi assoluti e relativi in Windows e in Linux; leggere e impostare i permessi rwx di Linux, anche in notazione ottale con chmod; confrontare NTFS, FAT32, exFAT ed ext4. Durata indicativa: 2 ore. Servono i PC del laboratorio con Windows ed Esplora file, e il browser per JSLinux (bellard.org/jslinux): verificare prima della lezione che il sito si apra dalla rete della scuola. Utile una chiavetta USB per la prima attività.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi ritrovare la relazione di settembre. Come fai?</h2></div>
+  <div class="poll" data-id="fs-ritrovare">
+    <ol><li>È sul desktop, insieme a tutto il resto</li><li>So in quale cartella l'ho messa</li><li>La cerco per nome con la ricerca</li><li>È nel cloud, la cerco lì</li><li>Era nei Download, forse</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio senza giudizio. Qualunque risposta diano, dietro c'è sempre il file system: il desktop è una cartella (C:\Users\nome\Desktop), la ricerca usa un indice dei nomi e dei metadati, anche il cloud organizza i file in cartelle. Chiedere: "che cosa sa il computer di quel file, oltre al contenuto?" Ponte verso i metadati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è</p><h2>Il file system è il catalogo del disco</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Il disco conosce solo <b>blocchi numerati</b>. Il file system è la parte del sistema operativo che li organizza in <mark>file e cartelle</mark> con un nome.</p>
+      <ul class="points">
+        <li><b>File</b>: sequenza di byte con un nome</li>
+        <li><b>Cartella</b> (directory): un file speciale che elenca altri file</li>
+        <li>Per ogni file conserva i <b>metadati</b>: dimensione, date, proprietario, permessi, dove stanno i blocchi</li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">3</p><h3>servizi del file system</h3><ul class="points"><li>dare un nome ai dati</li><li>ritrovarli in fretta</li><li>decidere chi può usarli</li></ul></div>
+  </div>
+  <aside class="notes">Collegare all'unità 6: il sistema operativo gestisce le risorse, e il disco è una risorsa condivisa da tutti i programmi. Il programma non scrive "nel blocco 51 234": chiede "apri tema.odt" con una chiamata di sistema, e il file system traduce. Esempio di metadati: clic destro su un file, Proprietà, scheda Generale (dimensione, date di creazione, modifica, ultimo accesso). Nella lezione online successiva vedremo come il file system tiene traccia dei blocchi (FAT, i-node).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Unix, 1974: tutto parte dal file system</h2></div>
+  <figure class="citazione">
+    <blockquote>Il ruolo più importante del sistema è fornire un file system.</blockquote>
+    <figcaption><b>Dennis Ritchie e Ken Thompson</b>, creatori di Unix ai Bell Labs, nell'articolo "The UNIX Time-Sharing System", 1974</figcaption>
+  </figure>
+  <p class="lead">Le loro idee sono ancora qui: un unico albero di cartelle che parte da <code>/</code>, i percorsi con la barra, i permessi <b>rwx</b>. Linux, macOS e Android le hanno ereditate.</p>
+  <aside class="notes">La traduzione è nostra; l'originale apre la sezione III dell'articolo pubblicato su Communications of the ACM nel 1974: "The most important role of the system is to provide a file system." Il testo è sul sito di Dennis Ritchie ospitato da Nokia Bell Labs. Ritchie è anche l'autore del linguaggio C. Domanda alla classe: perché proprio il file system e non, per esempio, la grafica? (Nel 1974 non c'era grafica: il lavoro di tutti erano file di testo, programmi e dati.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Percorsi</p><h2>Lo stesso file, due sistemi, due modi di scriverlo</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Windows</h3><p><code>C:\Users\anna\Documents\tema.odt</code></p><p class="muted">Una radice per ogni unità (C:, D:, E:…), separatore <b>\</b>, maiuscole e minuscole uguali.</p></div>
+    <div class="card"><h3>Linux e macOS</h3><p><code>/home/anna/documenti/tema.odt</code></p><p class="muted">Un'unica radice <b>/</b>, separatore <b>/</b>, <code>Tema.odt</code> e <code>tema.odt</code> sono due file diversi.</p></div>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Assoluto</h3><p>parte dalla radice: vale ovunque tu sia</p></div>
+    <div class="card soft"><h3>Relativo</h3><p>parte da dove sei: <code>foto/gita.jpg</code></p></div>
+    <div class="card soft"><h3>Scorciatoie</h3><p><code>.</code> qui · <code>..</code> su di uno · <code>~</code> la tua home</p></div>
+  </div>
+  <aside class="notes">Far notare che Windows mostra "Documenti" ma la cartella vera si chiama Documents: il nome tradotto è solo un'etichetta di visualizzazione (lo vedranno nel laboratorio). La distinzione maiuscole/minuscole su macOS dipende dalla formattazione (di solito non distingue), su Linux distingue sempre. In Windows anche i percorsi relativi funzionano (nel prompt dei comandi cd .. esiste). Sul web gli URL usano la barra / come Unix: collegamento con l'unità 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sei in /home/anna/scuola. Dove ti porta <code>cd ../foto/gita</code>?</h2></div>
+  <div class="poll" data-id="fs-relativo" data-tipo="quiz" data-risposta="B">
+    <ol><li>/home/anna/scuola/foto/gita</li><li>/home/anna/foto/gita</li><li>/foto/gita</li><li>/home/foto/gita</li></ol>
+    <p class="why">Il percorso è relativo: <code>..</code> sale di un livello, da /home/anna/scuola a /home/anna; poi si scende in foto e in gita. Risultato: /home/anna/foto/gita.</p>
+  </div>
+  <aside class="notes">La A è l'errore di chi ignora i due punti; la C di chi pensa che il percorso parta dalla radice (ma non inizia con /); la D di chi sale di due livelli. Far disegnare l'albero alla lavagna e seguire il percorso con il dito.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il vero indirizzo dei tuoi file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Esplora file, in <b>Documenti</b>, crea la cartella <b>TPSI</b> e dentro la cartella <b>U7</b>.</li>
+      <li>In U7: clic destro, <b>Nuovo</b>, <b>Documento di testo</b>, chiamalo <b>percorsi.txt</b>.</li>
+      <li>Seleziona il file, tieni premuto <b>Maiusc</b> e fai clic destro: scegli <b>Copia come percorso</b>. Incollalo dentro il file.</li>
+      <li>In <b>Questo PC</b>, clic destro sul disco C:, <b>Proprietà</b>: annota nel file la voce <b>File system</b>. Se hai una chiavetta, fai lo stesso.</li>
+      <li>Scrivi il percorso <b>relativo</b> del file partendo dalla cartella Documents. Salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il percorso inizia con <code>C:\Users\</code> e finisce con <code>\TPSI\U7\percorsi.txt</code>. Sorpresa: Esplora file mostra "Documenti", ma nel percorso compare <b>Documents</b>. Il disco C: è <b>NTFS</b>.</div>
+  </div>
+  <aside class="notes">Soluzione tipica: "C:\Users\nome\Documents\TPSI\U7\percorsi.txt" (con le virgolette, che Windows aggiunge). Percorso relativo da Documents: TPSI\U7\percorsi.txt. Se il PC salva Documenti su OneDrive il percorso è del tipo C:\Users\nome\OneDrive\Documents\…; su un PC di dominio può comparire una cartella di rete: va bene lo stesso, discuterne. In Windows 11 "Copia come percorso" è anche nel menu normale (Ctrl+Maiusc+C). Le chiavette sono di solito FAT32 (fino a 32 GB) o exFAT (più grandi): tenerne a mente il risultato per la slide sui file system.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Muoversi nell'albero di Linux</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Vai su <b>bellard.org/jslinux</b> e avvia la console <b>Alpine Linux</b>. Aspetta il prompt <code>localhost:~#</code>.</li>
+      <li>Crea tre cartelle in un colpo: <code>mkdir -p scuola/tpsi/u7</code>, poi <code>cd scuola/tpsi/u7</code> e <code>pwd</code>.</li>
+      <li>Sali: <code>cd ..</code> e <code>pwd</code>. Salta con un percorso assoluto: <code>cd /etc</code> e <code>pwd</code>. Torna a casa: <code>cd ~</code>.</li>
+      <li>Guarda la radice: <code>ls /</code>. Riconosci <code>home</code>, <code>etc</code>, <code>dev</code>?</li>
+      <li>Prima di premere Invio, scrivi su <b>percorsi-linux.txt</b> (Blocco note) dove ti porterà <code>cd scuola/tpsi/../tpsi/u7</code>. Poi verifica con <code>pwd</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il primo <code>pwd</code> stampa <code>/root/scuola/tpsi/u7</code>, il secondo <code>/root/scuola/tpsi</code>. Dopo <code>cd ~</code> sei in <code>/root</code>: in JSLinux sei l'utente <b>root</b>.</div>
+  </div>
+  <aside class="notes">JSLinux (Fabrice Bellard) emula un PC completo nel browser: nessun account, nessuna installazione; ricaricando la pagina tutto si azzera. Il comando dell'ultimo punto porta in /root/scuola/tpsi/u7: ".." annulla il "tpsi" precedente. Le cartelle della radice: /home case degli utenti, /etc configurazioni, /dev periferiche (le ritroveremo nella lezione sulle periferiche), /bin programmi. Se il sito è bloccato: alternativa copy.sh/v86 (immagini Linux nel browser) oppure demo alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Permessi</p><h2>Chi può fare che cosa: leggere <code>ls -l</code></h2></div>
+  <pre class="code">-<span class="hl">rwx</span><span class="s">r-x</span><span class="k">---</span>  1 anna classe3e  512 ott 19 10:15 verifica.sh</pre>
+  <div class="cols-3">
+    <div class="card"><h3 style="color:#b8a000">rwx · proprietario</h3><p>anna può leggere, scrivere ed eseguire</p></div>
+    <div class="card"><h3 style="color:#2f9e5a">r-x · gruppo</h3><p>chi è nel gruppo classe3e legge ed esegue</p></div>
+    <div class="card"><h3 style="color:#d0541f">--- · altri</h3><p>tutti gli altri: niente</p></div>
+  </div>
+  <p class="small"><b>r</b> = leggere · <b>w</b> = scrivere (modificare, cancellare) · <b>x</b> = eseguire. Il primo carattere dice il tipo: <code>-</code> file, <code>d</code> cartella.</p>
+  <aside class="notes">Sulle cartelle il significato cambia: r = vedere l'elenco dei file, w = creare o cancellare file dentro, x = poterci entrare (cd). Il numero 1 è il conteggio dei collegamenti (link), lo riprenderemo con gli i-node. Windows usa un sistema più ricco, le ACL di NTFS (scheda Sicurezza nelle proprietà), che vedremo nella lezione sulla protezione dei dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da lettere a numeri</p><h2>Tre bit per gruppo: i permessi sono ottali</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>r = 4 · w = 2 · x = 1, si sommano per ogni gruppo</small>rwx r-x r-- = <span class="hl">7 5 4</span></div>
+      <p>Ogni gruppo è un numero binario di 3 bit: <code>r-x</code> = 101₂ = 5. Tre gruppi, tre cifre ottali: lo avete già visto con l'esadecimale.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Lettere</th><th>Bit</th><th>Ottale</th></tr>
+      <tr><td class="mono">rwx</td><td class="mono">111</td><td class="mono hl">7</td></tr>
+      <tr><td class="mono">rw-</td><td class="mono">110</td><td class="mono">6</td></tr>
+      <tr><td class="mono">r-x</td><td class="mono">101</td><td class="mono">5</td></tr>
+      <tr><td class="mono">r--</td><td class="mono">100</td><td class="mono">4</td></tr>
+      <tr><td class="mono">---</td><td class="mono">000</td><td class="mono">0</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Collegamento con l'unità 1: una cifra ottale = 3 bit, come una cifra esadecimale = 4 bit. Esempi da fare a voce: 644 = rw-r--r-- (documenti), 755 = rwxr-xr-x (programmi e cartelle), 600 = rw------- (file privati, per esempio le chiavi SSH), 777 = tutto a tutti (quasi sempre un errore). Le combinazioni 3 (-wx), 2 (-w-) e 1 (--x) esistono ma si usano poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni numero ai suoi permessi</h2></div>
+  <dl class="puzzle-abbina" data-id="fs-ottale">
+    <dt>755</dt><dd>rwxr-xr-x: tutti eseguono, solo il proprietario modifica</dd>
+    <dt>644</dt><dd>rw-r--r--: tutti leggono, solo il proprietario scrive</dd>
+    <dt>600</dt><dd>rw-------: file privato del proprietario</dd>
+    <dt>750</dt><dd>rwxr-x---: il gruppo esegue, gli altri niente</dd>
+    <dt>777</dt><dd>rwxrwxrwx: chiunque può anche cancellare</dd>
+  </dl>
+  <aside class="notes">Da fare a squadre di due: prima a mente, poi si controlla. Chiedere per 777 perché è pericoloso: qualunque utente (o programma malevolo che gira con un altro utente) può modificare o sostituire il file. Domanda bonus: che numero ha rw-rw-r--? (664)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2><code>chmod 640 voti.ods</code>: che cosa può fare il gruppo?</h2></div>
+  <div class="poll" data-id="fs-chmod640" data-tipo="quiz" data-risposta="D">
+    <ol><li>Leggere e scrivere</li><li>Niente</li><li>Leggere, scrivere ed eseguire</li><li>Solo leggere</li></ol>
+    <p class="why">640 = rw- r-- ---. La seconda cifra, 4, è del gruppo: 4 = r, solo lettura. Il proprietario (6) legge e scrive, gli altri (0) non fanno niente.</p>
+  </div>
+  <aside class="notes">Chi sceglie A ha letto la prima cifra (proprietario); chi sceglie B ha letto l'ultima (altri). Ripetere l'ordine: proprietario, gruppo, altri (in inglese user, group, other: ugo).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>chmod in azione: rendi eseguibile uno script</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In JSLinux: <code>cd ~/scuola/tpsi/u7</code> (se hai ricaricato la pagina, prima <code>mkdir -p</code>).</li>
+      <li>Crea uno script: <code>echo 'echo Ciao dal file system' &gt; saluta.sh</code></li>
+      <li><code>ls -l saluta.sh</code>: annota i permessi. Prova a eseguirlo: <code>./saluta.sh</code></li>
+      <li><code>chmod 755 saluta.sh</code>, di nuovo <code>ls -l</code> e <code>./saluta.sh</code>.</li>
+      <li>Prevedi le lettere di <code>chmod 640 saluta.sh</code>, poi verifica con <code>ls -l</code>.</li>
+      <li>Fai uno screenshot della console e salvalo come <b>chmod-cognome.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> all'inizio <code>-rw-r--r--</code> (644) e <code>Permission denied</code>. Dopo 755: <code>-rwxr-xr-x</code> e compare <b>Ciao dal file system</b>. Dopo 640: <code>-rw-r-----</code>.</div>
+  </div>
+  <aside class="notes">I file nuovi nascono con 644 perché la maschera predefinita (umask) è 022. Curiosità importante: in JSLinux siete root, e root ignora i permessi r e w (può leggere anche un file 000); però non può eseguire un file che non ha nessuna x: per questo lo script viene rifiutato anche a root. Si può dimostrare: chmod 000 saluta.sh, poi cat saluta.sh funziona lo stesso. Esiste anche la forma simbolica: chmod u+x saluta.sh, chmod go-r voti.ods. Se JSLinux non va: copy.sh/v86 oppure demo alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tocca le carte</p><h2>Tre domande da veri amministratori</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Cartella con r ma senza x</h3><p>Che cosa puoi fare?</p></div><div class="retro"><p>Vedi i <b>nomi</b> dei file con <code>ls</code>, ma non puoi entrarci con <code>cd</code> né aprire i file.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Un file 444</h3><p>Puoi cancellarlo?</p></div><div class="retro"><p>Sì, se hai <b>w sulla cartella</b>: cancellare un file vuol dire modificare la cartella che lo elenca.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>L'utente root</h3><p>Rispetta i permessi?</p></div><div class="retro"><p>Quasi mai: legge e scrive tutto. Per questo si usa root solo quando serve, con <code>sudo</code>.</p></div></div>
+  </div>
+  <aside class="notes">La seconda carta sorprende quasi tutti e mostra che una cartella è a sua volta un file con i suoi permessi. Collegamento con il principio del minimo privilegio, che riprenderemo nella lezione sulla protezione dei dati: anche voi a casa dovreste usare un account normale, non amministratore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">File system diffusi</p><h2>Quattro formati, quattro mestieri</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>Nato</th><th>Dove lo trovi</th><th>File più grande</th><th>Permessi</th><th>Journaling</th></tr>
+    <tr><td><b>FAT32</b></td><td>1996</td><td>chiavette e SD piccole, compatibile con tutto</td><td class="hl">4 GB − 1 byte</td><td>no</td><td>no</td></tr>
+    <tr><td><b>exFAT</b></td><td>2006</td><td>schede SDXC, chiavette e dischi esterni</td><td>enormi</td><td>no</td><td>no</td></tr>
+    <tr><td><b>NTFS</b></td><td>1993</td><td>dischi di Windows</td><td>enormi</td><td>sì (ACL)</td><td>sì</td></tr>
+    <tr><td><b>ext4</b></td><td>2008</td><td>Linux, molti telefoni Android</td><td>16 TB</td><td>sì (rwx)</td><td>sì</td></tr>
+  </table>
+  <p class="small"><b>Journaling</b>: prima di modificare il disco il file system annota che cosa sta per fare in un diario. Se va via la corrente, al riavvio rilegge il diario e non resta a metà.</p>
+  <aside class="notes">Date: FAT32 con Windows 95 OSR2 (1996); exFAT di Microsoft (2006), obbligatorio per le schede SDXC; NTFS con Windows NT 3.1 (1993); ext4 stabile nel kernel Linux dalla fine del 2008. Il limite di ext4 vale con blocchi da 4 KB (16 TiB). macOS usa APFS (2017). Compatibilità: Windows non legge ext4 da solo; macOS legge NTFS ma di base non lo scrive; FAT32 ed exFAT li leggono tutti. Per questo le chiavette usano FAT32 o exFAT. Ricollegarsi ai risultati del primo laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La chiavetta ha 20 GB liberi, ma il video da 5 GB non si copia. Perché?</h2></div>
+  <div class="poll" data-id="fs-fat32" data-tipo="quiz" data-risposta="A">
+    <ol><li>La chiavetta è FAT32: un file non può superare i 4 GB</li><li>Lo spazio libero indicato da Windows non è reale</li><li>Il video è danneggiato e Windows lo blocca</li><li>Va formattata in ext4, il formato per i file grandi</li></ol>
+    <p class="why">In FAT32 la dimensione di un file è scritta in 32 bit: al massimo 2³² − 1 byte, circa 4 GB. Lo spazio c'è, ma il formato non sa descrivere quel file. Soluzione: formattare in exFAT (o NTFS), dopo aver salvato i dati.</p>
+  </div>
+  <aside class="notes">Il tranello è la D: ext4 accetterebbe il file, ma poi Windows non leggerebbe la chiavetta. Il messaggio di Windows in questo caso è "Il file è troppo grande per il file system di destinazione". Calcolo: 2³² = 4 294 967 296 byte = 4 GiB. Ricordare: formattare cancella tutto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>I permessi difendono anche il tuo telefono</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Una cassaforte per ogni app</h3><p>Android è costruito su Linux e dà a ogni app installata un <b>utente Linux tutto suo</b>, con una cartella privata. I permessi rwx impediscono a un'app di leggere i file di un'altra: è la "sandbox" delle app.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Agenti AI e file</h3><p>Gli assistenti AI per programmatori possono leggere file ed eseguire comandi sul PC. Quelli seri lavorano con permessi limitati e <b>chiedono conferma</b> prima di modificare o cancellare: è lo stesso principio dei permessi di Unix.</p></div>
+  </div>
+  <aside class="notes">Android: ogni app riceve un UID (identificativo utente) Linux diverso all'installazione; la documentazione ufficiale per sviluppatori la chiama "application sandbox". Sugli agenti AI: non entrare nei dettagli di un prodotto, il punto è che un programma, anche intelligente, deve avere solo i permessi che gli servono. Domanda: dareste a un'app di torcia il permesso di leggere i contatti?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="7543" data-aiuto="le prime tre cifre sono rwx, r-x e r-- in ottale">
+    <ul class="points">
+      <li>Cifre 1, 2 e 3: i permessi <b>rwxr-xr--</b> scritti in ottale</li>
+      <li>Cifra 4: di quanti livelli sali con il comando <b>cd ../../..</b></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> rwx = 7, r-x = 5, r-- = 4; tre volte <b>..</b> = tre livelli.</div>
+  </div>
+  <aside class="notes">Codice: 7543. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un percorso che parte dalla radice <code>/</code> si dice <span class="blank" data-risposta="assoluto"></span>.</p>
+    <p>Nei percorsi, <code>..</code> indica la cartella <span class="blank" data-risposta="superiore|padre|madre|genitore" style="--w:9ch"></span>.</p>
+    <p>I permessi <code>rw-r-----</code> in ottale sono <span class="blank" data-risposta="640"></span>.</p>
+    <p>Un file da 6 GB non entra in una chiavetta formattata <span class="blank" data-risposta="FAT32|FAT"></span>.</p>
+    <p>Il diario che protegge il disco quando manca la corrente si chiama <span class="blank" data-risposta="journaling|journal" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: assoluto; superiore (accettati padre, madre, genitore); 640; FAT32; journaling (accettato journal).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il file system trasforma blocchi in file e cartelle con metadati</li>
+      <li>Percorsi assoluti dalla radice, relativi da dove sei</li>
+      <li>Windows: <code>C:\</code> e <code>\</code> · Linux: <code>/</code> e basta</li>
+    </ul>
+    <ul class="points">
+      <li>Permessi rwx per proprietario, gruppo, altri</li>
+      <li>r = 4, w = 2, x = 1: <code>chmod 755</code></li>
+      <li>FAT32 (max 4 GB), exFAT, NTFS, ext4</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione (online): come il file system sceglie e ricorda i blocchi sul disco, con FAT e i-node.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

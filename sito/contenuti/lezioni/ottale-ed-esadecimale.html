@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ottale ed esadecimale al lavoro · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Codifica delle informazioni</p>
+  <h1>Ottale ed esadecimale<br>al lavoro</h1>
+  <p class="lead">Permessi dei file su Linux, indirizzi di memoria, schede di rete, colori, l'interno di un file: dove i bit si leggono a gruppi di 3 e di 4.</p>
+  <div class="meta"><span class="chip">3E TPSI</span><span>Base 8 · base 16 · gruppi di bit · chmod · MAC · colori · HexEd.it</span></div>
+  <aside class="notes">Prerequisiti: il deck "Oltre il binario: l'esadecimale" (esadecimale), già svolto: cifre A–F, pesi, conversioni, colori #RRGGBB, cenno all'ottale. Qui si va oltre: conversioni rapide tra ottale ed esadecimale passando dal binario, i permessi Unix, gli indirizzi di memoria, i MAC e gli indirizzi casuali dei telefoni, i colori con trasparenza, le firme dei file in un editor esadecimale. Durata: 2 ore. Strumenti: JSLinux (bellard.org/jslinux), Prompt dei comandi, HexEd.it (hexed.it): tutti senza account. Controllare prima che i siti siano raggiungibili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove hai già visto numeri e lettere mescolati, come 3F A9?</h2></div>
+  <div class="poll" data-id="dove-hex">
+    <ol><li>Nei codici dei colori</li><li>Nella password del Wi-Fi di casa</li><li>In un messaggio di errore</li><li>Nell'indirizzo di un dispositivo di rete</li><li>Mai visti</li></ol>
+  </div>
+  <aside class="notes">Tutte le prime quattro sono possibili: molte password Wi-Fi stampate sotto i router sono in esadecimale, le schermate blu di Windows riportano codici come 0x0000007E, gli indirizzi MAC sono in esadecimale. Raccogliere esempi e tenerli per la fine della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso in un colpo d'occhio</p><h2>Lo stesso numero, quattro basi</h2></div>
+  <div class="formula"><small>2026 in binario, a gruppi di 3 e di 4 partendo da destra</small>11 111 101 010 &nbsp;·&nbsp; 111 1110 1010</div>
+  <div class="cols-4">
+    <div class="card"><p class="num">10</p><p class="mono">2026</p></div>
+    <div class="card"><p class="num">2</p><p class="mono small">11111101010</p></div>
+    <div class="card soft"><p class="num">8</p><p class="mono">3752</p><p class="small muted">8 = 2³: 3 bit per cifra</p></div>
+    <div class="card soft"><p class="num">16</p><p class="mono">7EA</p><p class="small muted">16 = 2⁴: 4 bit per cifra</p></div>
+  </div>
+  <aside class="notes">Ricostruire alla lavagna: gruppi di 3 da destra 010 = 2, 101 = 5, 111 = 7, 11 = 3 → 3752₈. Gruppi di 4: 1010 = A, 1110 = E, 111 = 7 → 7EA₁₆. Verifica: 3·512 + 7·64 + 5·8 + 2 = 1536 + 448 + 40 + 2 = 2026; 7·256 + 14·16 + 10 = 2026. Il motivo profondo: 8 e 16 sono potenze di 2, il 10 no. Per questo dal binario si passa all'ottale e all'esadecimale senza divisioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il bit ha un nome dal 1948</h2></div>
+  <figure class="citazione">
+    <blockquote>Se si usa la base 2, le unità risultanti si possono chiamare cifre binarie, o più brevemente bit, una parola suggerita da J. W. Tukey.</blockquote>
+    <figcaption><b>Claude Shannon</b>, ingegnere e matematico, "A Mathematical Theory of Communication", 1948</figcaption>
+  </figure>
+  <p class="lead">I bit sono perfetti per le macchine, scomodi per noi. Ottale ed esadecimale sono solo un modo <b>corto</b> di scrivere i bit.</p>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando scarichi un programma o un modello di AI, spesso il sito mostra un'impronta <b>SHA-256</b>: 256 bit scritti come 64 cifre esadecimali. Se cambia anche un solo bit del file, l'impronta cambia completamente: così controlli che il download sia integro.</p></div>
+  <aside class="notes">Traduzione nostra. Originale: "If the base 2 is used the resulting units may be called binary digits, or more briefly bits, a word suggested by J. W. Tukey." Bit = binary digit. John Tukey era uno statistico dei Bell Labs, come Shannon. Collegare: Shannon misura l'informazione in bit; noi oggi scriviamo i bit in esadecimale per comodità. Sul ponte: 256 bit / 4 = 64 cifre esadecimali. Su Windows l'impronta di un file si calcola con PowerShell: Get-FileHash nomefile (usa SHA-256 per default).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il trucco</p><h2>Da ottale a esadecimale? Passa dal binario</h2></div>
+  <div class="flow">
+    <div class="card"><p class="num">1</p><h4>Ottale</h4><p class="mono">7 5 5</p></div>
+    <div class="card"><p class="num">2</p><h4>3 bit per cifra</h4><p class="mono">111 101 101</p></div>
+    <div class="card"><p class="num">3</p><h4>Rigruppa a 4 da destra</h4><p class="mono">1 1110 1101</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h4>Esadecimale</h4><p class="mono">1ED</p></div>
+  </div>
+  <div class="callout hl">Nessuna divisione: si scompone e si ricompone. Vale anche al contrario, da esadecimale a ottale.</div>
+  <aside class="notes">Verifica in decimale: 755₈ = 7·64 + 5·8 + 5 = 493; 1ED₁₆ = 256 + 14·16 + 13 = 493. Errore tipico: rigruppare da sinistra. Esercizio a voce: 17₈ = 001 111 = 0000 1111 = F₁₆ (cioè 15). Al contrario: FF₁₆ = 1111 1111 = 11 111 111 = 377₈.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quanto vale 17₈ scritto in esadecimale?</h2></div>
+  <div class="poll" data-id="ottale-17" data-tipo="quiz" data-risposta="B">
+    <ol><li>17, le cifre restano uguali</li><li>F</li><li>11</li><li>E</li></ol>
+    <p class="why">17₈ = 1·8 + 7 = 15 = F₁₆. Dal binario: 001 111 → 0000 1111 → F. Le cifre "17" valgono quindici in base 8, diciassette in base 10, ventitré in base 16.</p>
+  </div>
+  <aside class="notes">La A è il tranello principale: chi non pensa alla base copia le cifre. La C (11) nasce da chi converte 17 decimale in esadecimale (11₁₆ = 17). La E da un errore di uno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'ottale vive in Unix e Linux</p><h2>Permessi dei file: 3 bit per 3 tipi di utenti</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>ls -l mostra · chmod usa</small>-<span class="hl">rwx</span>r-x r-- &nbsp;→&nbsp; 754</div>
+      <table class="data compact">
+        <tr><th></th><th>Proprietario</th><th>Gruppo</th><th>Altri</th></tr>
+        <tr><td>Lettere</td><td class="mono">rwx</td><td class="mono">r-x</td><td class="mono">r--</td></tr>
+        <tr><td>Bit</td><td class="mono">111</td><td class="mono">101</td><td class="mono">100</td></tr>
+        <tr><td>Ottale</td><td class="mono hl">7</td><td class="mono hl">5</td><td class="mono hl">4</td></tr>
+      </table>
+    </div>
+    <div class="card soft"><h3>I pesi</h3><p><b>r</b> = read, leggere = 4</p><p><b>w</b> = write, scrivere = 2</p><p><b>x</b> = execute, eseguire = 1</p><p class="small muted">Il trattino vuol dire bit a 0.</p></div>
+  </div>
+  <aside class="notes">Il primo carattere di ls -l indica il tipo: - file normale, d cartella. Unix nasce nel 1969 ai Bell Labs con Ken Thompson e Dennis Ritchie; i primi computer su cui girò (i PDP) usavano molto l'ottale, e i permessi a 3 bit si prestano benissimo. chmod 754 file: proprietario tutto, gruppo leggere ed eseguire, altri solo leggere. Lo rivedremo nell'Unità 7 (file system e protezione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina i permessi al numero ottale</h2></div>
+  <dl class="puzzle-abbina" data-id="permessi-ottale">
+    <dt>rwxr-xr-x</dt><dd>755</dd>
+    <dt>rw-r--r--</dt><dd>644</dd>
+    <dt>rwx------</dt><dd>700</dd>
+    <dt>rw-rw-r--</dt><dd>664</dd>
+    <dt>r--------</dt><dd>400</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. 755 è tipico dei programmi e delle cartelle, 644 dei file normali, 700 di una cartella privata, 400 di una chiave segreta (per esempio una chiave SSH): solo il proprietario la può leggere.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Permessi veri in un Linux nel browser</h2>
+  <div class="cols-2">
+<pre class="code" style="font-size:28px">echo ciao &gt; prova.txt
+ls -l prova.txt
+chmod 750 prova.txt
+ls -l prova.txt
+chmod 604 prova.txt
+ls -l prova.txt
+printf <span class="s">"%o %x\n"</span> 493 2026</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Apri <b>bellard.org/jslinux</b> e avvia una versione Linux con console (per esempio Alpine Linux).</li>
+        <li>Scrivi i comandi uno alla volta. Prima di ogni <code>ls -l</code> prevedi le lettere sul quaderno.</li>
+        <li>Fai uno screenshot finale: <b>permessi-cognome.png</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> all'inizio <code>-rw-r--r--</code> (644); dopo 750 <code>-rwxr-x---</code>; dopo 604 <code>-rw----r--</code>. L'ultima riga stampa <code>755 7ea</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">JSLinux esegue un vero Linux dentro il browser, senza installazione; l'avvio richiede qualche secondo. Si lavora come utente root nella propria cartella. Il primo ls mostra 644 perché la maschera predefinita (umask 022) toglie la scrittura a gruppo e altri. 604 è strano apposta: gli "altri" possono leggere ma il gruppo no, si vede che ogni cifra è indipendente. printf %o stampa in ottale, %x in esadecimale. Se JSLinux non si carica: il docente lo mostra alla LIM oppure si fa l'esercizio su carta con la tabella della slide precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'esadecimale e la memoria</p><h2>Indirizzi: 2 cifre esadecimali per ogni byte</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li>Ogni byte della RAM ha un <b>indirizzo</b>, un numero progressivo.</li>
+        <li>16 GiB = 2³⁴ byte: gli indirizzi vanno da <code>0x0</code> a <code>0x3FFFFFFFF</code>.</li>
+        <li>Un indirizzo a 64 bit si scrive con 16 cifre esadecimali.</li>
+        <li>I debugger, i messaggi di errore e gli strumenti di sistema mostrano gli indirizzi in esadecimale.</li>
+      </ul>
+    </div>
+    <div class="poll" data-id="java-hash" data-tipo="quiz" data-risposta="C">
+      <p class="q">In Java stampi un array e vedi <code>[I@1b6d3586</code>. Che cos'è 1b6d3586?</p>
+      <ol><li>L'indirizzo esatto in RAM</li><li>Un numero ottale</li><li>Un codice hash scritto in esadecimale</li><li>Il contenuto dell'array</li></ol>
+      <p class="why">Java stampa tipo, @ e un codice hash dell'oggetto in esadecimale. Non è garantito che sia l'indirizzo in memoria. Per vedere il contenuto si usa Arrays.toString(array).</p>
+    </div>
+  </div>
+  <aside class="notes">Conto: 16 GiB = 16 · 2³⁰ = 2⁴ · 2³⁰ = 2³⁴. L'ultimo indirizzo è 2³⁴ − 1: in binario 34 uni = 2 uni + 32 uni = 3 seguito da 8 F. Il quiz è un classico degli studenti che iniziano Java: System.out.println(new int[3]) stampa qualcosa come [I@1b6d3586 ([I vuol dire "array di int"). Il numero cambia da un'esecuzione all'altra. La A è il distrattore più forte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'esadecimale in rete</p><h2>Indirizzi MAC: 6 byte, e un bit che svela il segreto</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>Indirizzo MAC: 48 bit = 6 byte = 12 cifre esadecimali</small>3C-52-82-<span class="hl">1A-9F-04</span></div>
+      <ul class="points small">
+        <li>I primi 3 byte indicano il produttore della scheda di rete.</li>
+        <li>Per la privacy, telefoni e PC usano spesso sul Wi-Fi un <b>MAC casuale</b>.</li>
+        <li>Un MAC casuale ha come <mark>seconda cifra 2, 6, A oppure E</mark>.</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Perché?</h3><p class="small">La seconda cifra contiene i 4 bit più bassi del primo byte. Il penultimo bit a 1 vuol dire "indirizzo assegnato localmente":</p><p class="mono">2 = 0010<br>6 = 0110<br>A = 1010<br>E = 1110</p></div>
+  </div>
+  <aside class="notes">L'esempio 3C-52-82-1A-9F-04 è inventato, solo per il formato. Nel primo byte del MAC il bit meno significativo indica unicast (0) o multicast (1), il secondo bit indica se l'indirizzo è universale (0, assegnato dal produttore) o locale (1). Per un indirizzo unicast locale la seconda cifra esadecimale è quindi 2, 6, A o E. iOS dal 2020 e Android dalla versione 10 usano per default un indirizzo Wi-Fi casuale per ogni rete. Anche IPv6 si scrive in esadecimale: 2001:db8::1 (indirizzo riservato agli esempi).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia al MAC: PC e telefono</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il <b>Prompt dei comandi</b> e scrivi <code>ipconfig /all</code>.</li>
+      <li>Per ogni scheda annota la riga <b>Indirizzo fisico</b>. Quante cifre esadecimali? Quanti bit?</li>
+      <li>Scrivi in binario il primo byte di un MAC e cerchia il penultimo bit.</li>
+      <li>Sul telefono cerca nelle impostazioni Wi-Fi della rete l'<b>indirizzo MAC</b> (spesso "privato" o "casuale"). Guarda la seconda cifra.</li>
+      <li>Annota tutto in <b>mac-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 12 cifre, 48 bit. La scheda di rete del PC di solito è universale (penultimo bit 0); il MAC privato del telefono ha seconda cifra 2, 6, A o E.</div>
+  </div>
+  <aside class="notes">Esempio: primo byte 3C = 0011 1100, penultimo bit 0 → universale. Primo byte DA = 1101 1010, penultimo bit 1 → locale. Le schede virtuali (VirtualBox, Hyper-V, VPN) possono avere indirizzi locali anche sul PC: è normale. Su Android il percorso è di solito Impostazioni, Wi-Fi, ingranaggio della rete, "Indirizzo MAC" o "Tipo di indirizzo MAC"; su iPhone Impostazioni, Wi-Fi, la "i" accanto alla rete, "Indirizzo Wi-Fi". Chi non ha il telefono lavora con un compagno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Colori: oltre #RRGGBB</p><h2>Tre cifre, otto cifre, trasparenza</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:260px"><div class="fronte"><h3 class="mono">#F80</h3><p>Solo 3 cifre: che colore è?</p></div><div class="retro"><p><b>#FF8800, arancione</b></p><p class="muted small">Forma breve: ogni cifra si raddoppia.</p></div></div>
+    <div class="flip" style="--h:260px"><div class="fronte"><h3 class="mono">#00000080</h3><p>8 cifre: che cosa sono le ultime due?</p></div><div class="retro"><p><b>La trasparenza (alfa)</b></p><p class="muted small">80₁₆ = 128 su 255: nero al 50% circa.</p></div></div>
+    <div class="flip" style="--h:260px"><div class="fronte"><h3 class="mono">#7F7F7F e #808080</h3><p>Si vede la differenza?</p></div><div class="retro"><p><b>Quasi no</b></p><p class="muted small">127 e 128 per ogni luce: un passo su 256.</p></div></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per un sistema di <b>computer vision</b> una foto è solo una griglia di numeri: per ogni pixel tre byte, R, G e B, da 00 a FF. Un'immagine da 224 × 224 pixel, la misura usata da molte reti neurali classiche, sono 224 · 224 · 3 = 150 528 numeri.</p></div>
+  <aside class="notes">La forma a 8 cifre #RRGGBBAA è definita in CSS Color Level 4 ed è supportata da tutti i browser moderni. Nella computer vision i valori da 0 a 255 vengono spesso divisi per 255 per avere numeri tra 0 e 1. 224 × 224 era la dimensione d'ingresso di reti famose addestrate su ImageNet (il dataset ideato da Fei-Fei Li): lo riprenderemo nell'Unità 2. Mini attività: in DevTools, scheda Elements, cliccare su un quadratino di colore nel pannello Styles: si apre il selettore e si vede il codice esadecimale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dentro i file</p><h2>Ogni formato ha una "firma" nei primi byte</h2></div>
+  <table class="data compact">
+    <tr><th>Formato</th><th>Primi byte (esadecimale)</th><th>Come testo</th></tr>
+    <tr><td>PNG</td><td class="mono">89 50 4E 47 0D 0A 1A 0A</td><td class="mono">.PNG....</td></tr>
+    <tr><td>JPEG</td><td class="mono">FF D8 FF</td><td class="mono">ÿØÿ</td></tr>
+    <tr><td>PDF</td><td class="mono">25 50 44 46</td><td class="mono">%PDF</td></tr>
+    <tr><td>ZIP (anche .docx, .odt, .xlsx)</td><td class="mono">50 4B 03 04</td><td class="mono">PK..</td></tr>
+    <tr><td>GIF</td><td class="mono">47 49 46 38</td><td class="mono">GIF8</td></tr>
+  </table>
+  <p class="small">I programmi riconoscono il tipo di file da questi byte, i <b>magic number</b>, non solo dall'estensione.</p>
+  <aside class="notes">PK sono le iniziali di Phil Katz, l'inventore del formato ZIP (1989). I file .docx, .xlsx, .odt, .ods sono archivi ZIP che contengono file XML: rinominandoli .zip si possono aprire. 25 50 44 46 sono i codici ASCII di % P D F. Collegamento con la lezione sui caratteri: la colonna "Come testo" usa la tabella ASCII.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Rinomini foto.png in foto.jpg. Che cosa cambia nei primi byte?</h2></div>
+  <div class="poll" data-id="estensione-byte" data-tipo="quiz" data-risposta="A">
+    <ol><li>Niente: cambia solo il nome del file</li><li>Diventano FF D8 FF, la firma JPEG</li><li>Il file viene compresso con perdita</li><li>Il file si rovina e non si apre più</li></ol>
+    <p class="why">Rinominare cambia solo il nome nel file system: il contenuto resta un PNG, con la firma 89 50 4E 47. Molti programmi lo aprono lo stesso perché leggono la firma. Per convertire davvero serve un programma che riscriva i byte.</p>
+  </div>
+  <aside class="notes">La B è il distrattore di chi pensa che l'estensione "sia" il formato. La D è un timore comune: in realtà basta rinominare di nuovo. Lo verifichiamo subito con HexEd.it.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Apri i file con un editor esadecimale</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Prepara 3 file: uno screenshot salvato come <b>.png</b>, un documento Writer <b>.odt</b>, un file di Blocco note con scritto <b>Ciao</b>.</li>
+      <li>Vai su <b>hexed.it</b>, apri ogni file e leggi i primi byte (riga 00000000).</li>
+      <li>Rinomina lo screenshot in .jpg e riaprilo: la firma è cambiata?</li>
+      <li>Scrivi in <b>firme-cognome.txt</b> i primi 4 byte di ogni file e il loro significato.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> PNG → <code>89 50 4E 47</code>; ODT → <code>50 4B 03 04</code> (PK, è uno ZIP); il testo → <code>43 69 61 6F</code>, cioè C i a o. Dopo la rinomina la firma resta 89 50 4E 47.</div>
+  </div>
+  <aside class="notes">HexEd.it lavora nel browser: i file non vengono caricati su un server. Se il file di testo è salvato in UTF-8 con BOM, all'inizio compaiono EF BB BF prima di 43: è il "byte order mark", lo spiegheremo nella lezione su Unicode. Il Blocco note di Windows 11 salva per default in UTF-8 senza BOM. Sfida extra: cambiare con HexEd.it la lettera C (43) in M (4D), salvare e aprire il file: ora c'è scritto Miao. Se hexed.it non è raggiungibile: il docente lo mostra alla LIM; in alternativa PowerShell con Format-Hex nomefile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="7536" data-aiuto="la quarta cifra: 48 bit diviso 8">
+    <ul class="points">
+      <li>1ª cifra: il numero ottale dei permessi <b>rwx</b></li>
+      <li>2ª cifra: il numero ottale dei permessi <b>r-x</b></li>
+      <li>3ª cifra: quanti bit vale una cifra ottale</li>
+      <li>4ª cifra: quanti byte ha un indirizzo MAC</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> rwx = 7, r-x = 5, 8 = 2³, MAC = 48 bit = 6 byte.</div>
+  </div>
+  <aside class="notes">Codice: 7536. Squadre di 4; dopo tre tentativi compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il permesso <code>rw-r-----</code> in ottale è <span class="blank" data-risposta="640" style="--w:5ch"></span>.</p>
+    <p>Il numero ottale 777 in esadecimale è <span class="blank" data-risposta="1ff|0x1ff" style="--w:5ch"></span>.</p>
+    <p>Un file che inizia con i byte 25 50 44 46 è un <span class="blank" data-risposta="pdf" style="--w:5ch"></span>.</p>
+    <p>Il colore <code>#0F0</code> scritto con 6 cifre è #<span class="blank" data-risposta="00ff00" style="--w:7ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 640; 777₈ = 111 111 111 = 1 1111 1111 = 1FF (511); PDF; 00FF00 (verde).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ottale: 3 bit per cifra; esadecimale: 4 bit per cifra</li>
+      <li>Tra ottale ed esadecimale si passa dal binario</li>
+      <li>Permessi Unix: rwx = 4 + 2 + 1, tre cifre ottali</li>
+    </ul>
+    <ul class="points">
+      <li>Indirizzi di memoria e MAC: 2 cifre esadecimali per byte</li>
+      <li>Colori: #RGB, #RRGGBB, #RRGGBBAA</li>
+      <li>Il tipo di un file sta nei primi byte, non nel nome</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: la caccia all'esadecimale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il layout CSS Grid · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.gd{display:grid;gap:12px;font-family:var(--mono);font-size:26px}
+.gd i{font-style:normal;background:var(--accent);color:#fff;border-radius:12px;display:grid;place-items:center;padding:14px 8px;text-align:center}
+.gd i.s{background:var(--accent-soft);color:var(--ink);border:3px dashed var(--accent)}
+.linee{position:relative;padding:44px 0 0 0}
+.linee .gd{grid-template-columns:repeat(3,1fr);gap:0;border:3px solid var(--ink);border-radius:6px}
+.linee .gd i{border-radius:0;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);background:var(--card);color:var(--muted);height:110px}
+.linee .gd i.on{background:var(--accent);color:#fff}
+.linee .n{position:absolute;top:0;font-family:var(--display);font-weight:750;font-size:32px;color:var(--bad);transform:translateX(-50%)}
+.aree{display:grid;grid-template-columns:1fr 3fr;grid-template-rows:auto 1fr auto;grid-template-areas:"testa testa" "menu corpo" "piede piede";gap:12px;height:100%;font-family:var(--mono);font-size:28px}
+.aree div{border-radius:14px;padding:16px 22px;background:var(--accent-soft);border:3px solid var(--accent)}
+.aree .t{grid-area:testa;background:var(--accent);color:#fff}.aree .m{grid-area:menu}.aree .c{grid-area:corpo}.aree .p{grid-area:piede;background:var(--night);color:#fff;border-color:var(--night)}
+</style>
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Sviluppare siti web responsive e accessibili · Lezione 4</p>
+  <h1>Il layout CSS<br>Grid</h1>
+  <p class="lead">Righe e colonne insieme, come in un foglio di calcolo: il modo più potente per impaginare un sito intero. E un orto da annaffiare a colpi di CSS.</p>
+  <aside class="notes">Obiettivi: definire una griglia con grid-template-columns e grid-template-rows, usare l'unità fr e gap, calcolare a mano la larghezza delle colonne, posizionare gli elementi con le linee e con span, disegnare un layout con grid-template-areas, scegliere tra Flexbox e Grid. Prerequisiti: lezione 3 su Flexbox, lezione 1 sui tag semantici. Durata: 2-3 ore. Strumenti: Grid Garden (cssgridgarden.com, senza account), CodePen o JSFiddle senza account, DevTools.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nelle app che usi ogni giorno, dove vedi una griglia?</h2></div>
+  <div class="poll" data-id="grid-dove">
+    <ol><li>Nella galleria delle foto</li><li>Nel profilo di un social, con i post in quadrati</li><li>Nel calendario o nell'orario scolastico</li><li>Nella schermata con le icone delle app</li></ol>
+  </div>
+  <p class="lead">Tutte queste sono righe e colonne. Sul web, oggi, si fanno con CSS Grid.</p>
+  <aside class="notes">Non c'è risposta giusta. Far notare che l'orario scolastico ha celle che occupano più righe (le ore doppie): è proprio il caso di span, che vedremo. Collegamento con Calc: anche lì righe numerate, colonne e celle unite.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Flexbox o Grid?</p><h2>Una dimensione o due dimensioni</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Flexbox: una fila</h3><p class="small">Pensa per <b>riga</b> o per <b>colonna</b>. Il contenuto decide quanto spazio prende.</p><div class="gd" style="grid-template-columns:1fr 2fr 1fr"><i>logo</i><i>menu</i><i>cerca</i></div><p class="small muted">Barre, menu, pulsanti in fila.</p></div>
+    <div class="card"><h3>Grid: una scacchiera</h3><p class="small">Righe <b>e</b> colonne insieme. La griglia decide dove va il contenuto.</p><div class="gd" style="grid-template-columns:repeat(3,1fr)"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></div><p class="small muted">Layout di pagina, gallerie, calendari.</p></div>
+  </div>
+  <aside class="notes">Non sono rivali: si usano insieme. Tipico: Grid per la struttura della pagina (header, menu, contenuto, piè di pagina), Flexbox dentro l'header per allineare logo e menu. Il layout Grid è arrivato in Chrome, Firefox e Safari nello stesso mese, marzo 2017 (in Edge a ottobre 2017): un caso raro di nuova funzione disponibile quasi ovunque in poche settimane.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le basi</p><h2>Colonne, righe, <code>gap</code> e l'unità <code>fr</code></h2></div>
+  <div class="cols-2">
+<pre class="code">.galleria {
+  <span class="k">display</span>: grid;
+  <span class="k">grid-template-columns</span>:
+      200px 1fr 2fr;
+  <span class="k">grid-template-rows</span>: 100px 100px;
+  <span class="k">gap</span>: 20px;
+}</pre>
+    <div class="stack">
+      <div class="gd" style="grid-template-columns:200px 1fr 2fr;grid-template-rows:90px 90px;gap:12px"><i>200px</i><i>1fr</i><i>2fr</i><i>200px</i><i>1fr</i><i>2fr</i></div>
+      <ul class="points small">
+        <li><code>fr</code> = una <b>frazione</b> dello spazio che resta</li>
+        <li><code>repeat(4, 1fr)</code> = <code>1fr 1fr 1fr 1fr</code></li>
+        <li>I figli riempiono le celle in ordine, riga per riga</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Se ci sono più elementi che celle, il browser aggiunge righe da solo (righe implicite, alte quanto il contenuto). fr si calcola dopo aver tolto le misure fisse e i gap: è il prossimo calcolo. La demo è una vera griglia CSS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola a mano</p><h2>Quanto è larga una colonna <code>1fr</code>?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small">Contenitore <b>1140px</b>, <code>grid-template-columns: 200px 1fr 2fr</code>, <code>gap: 20px</code>.</p>
+      <ol class="steps small">
+        <li>Togli le misure fisse: 1140 − 200 = 940</li>
+        <li>Togli i gap: 3 colonne → <b>2</b> gap → 940 − 40 = 900</li>
+        <li>Dividi per le frazioni: 1 + 2 = 3 → 900 / 3 = <b>300px</b></li>
+      </ol>
+    </div>
+    <div class="stack">
+      <div class="formula" style="font-size:44px"><small>1fr</small><span class="hl">300px</span></div>
+      <div class="formula" style="font-size:44px"><small>2fr</small><span class="hl">600px</span></div>
+      <p class="small">Verifica: 200 + 300 + 600 + 2 × 20 = 1140</p>
+    </div>
+  </div>
+  <aside class="notes">L'errore più comune è dimenticare i gap, o contarne uno per colonna invece di uno in meno (con n colonne i gap sono n − 1). Stesso ragionamento di flex-grow della lezione 3: prima si toglie ciò che è fisso, poi si divide lo spazio libero in parti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>960px, <code>repeat(3, 1fr)</code>, <code>gap: 30px</code>. Una colonna?</h2></div>
+  <div class="poll" data-id="grid-calcolo" data-tipo="quiz" data-risposta="B">
+    <ol><li>320px</li><li>300px</li><li>290px</li><li>310px</li></ol>
+    <p class="why">Tre colonne hanno due gap: 960 − 60 = 900, e 900 / 3 = 300px. Chi risponde 320 ha dimenticato i gap; chi risponde 290 ne ha contati tre.</p>
+  </div>
+  <aside class="notes">Far scrivere il calcolo su un foglio prima di votare. 310 non ha un ragionamento preciso dietro: serve a non rendere la risposta riconoscibile per esclusione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Grid Garden: annaffia l'orto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>cssgridgarden.com</b> (gratis, senza account) e, se c'è, scegli l'italiano in alto a destra.</li>
+      <li>In ogni livello scrivi il CSS che porta l'acqua sulle carote e il veleno sulle erbacce.</li>
+      <li>A coppie: uno scrive, l'altro spiega; cambiate ogni 3 livelli.</li>
+      <li>Annotate le proprietà nuove: <code>grid-column</code>, <code>grid-row</code>, <code>span</code>, <code>order</code>…</li>
+      <li>Obiettivo: livello 14. I più veloci arrivano al 28.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il livello 1 si risolve con <code>grid-column-start: 3;</code> e il pulsante <i>Next</i> si attiva solo quando tutte le carote sono annaffiate e nessuna è avvelenata.</div>
+  </div>
+  <div class="timer" data-min="25"></div>
+  <aside class="notes">Grid Garden è un gioco di Codepip (lo stesso autore di Flexbox Froggy, Thomas Park), 28 livelli. Le prime soluzioni: 1 grid-column-start: 3; 2 grid-column-start: 5; 3 grid-column-end: 4; 4 grid-column-end: 2. Il progresso resta solo nel browser in uso. Se il sito è bloccato dalla rete della scuola: demo alla LIM e passare al laboratorio con grid-template-areas.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le linee</p><h2>Si conta per linee, non per colonne</h2></div>
+  <div class="cols-2">
+    <div class="linee">
+      <span class="n" style="left:0">1</span><span class="n" style="left:33.3%">2</span><span class="n" style="left:66.6%">3</span><span class="n" style="left:100%">4</span>
+      <div class="gd"><i class="on" style="grid-column:1/3">grid-column: 1 / 3</i><i>c</i><i>d</i><i class="on" style="grid-column:span 2">span 2</i></div>
+    </div>
+    <div class="stack">
+<pre class="code" style="font-size:30px">.titolo {
+  <span class="k">grid-column</span>: 1 / 3;
+}
+.foto {
+  <span class="k">grid-column</span>: span 2;
+}</pre>
+      <ul class="points small">
+        <li>3 colonne hanno <b>4 linee</b>, numerate da 1</li>
+        <li><code>1 / -1</code>: dalla prima all'ultima linea</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">grid-column: 1 / 3 è la scorciatoia per grid-column-start: 1 e grid-column-end: 3: l'elemento va dalla linea 1 alla linea 3 e occupa 2 colonne. span 2 significa "occupa due colonne a partire da dove capiti". Lo stesso vale per grid-row. I numeri negativi contano dalla fine: -1 è sempre l'ultima linea.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quante colonne occupa <code>grid-column: 2 / 5</code>?</h2></div>
+  <div class="poll" data-id="grid-linee" data-tipo="quiz" data-risposta="C">
+    <ol><li>4: dalla colonna 2 alla 5 comprese</li><li>5</li><li>3</li><li>2</li></ol>
+    <p class="why">I numeri sono linee: dalla linea 2 alla linea 5 ci sono le colonne 2, 3 e 4. Il conto è 5 − 2 = 3, come in grid-column: 2 / span 3.</p>
+  </div>
+  <aside class="notes">La A è il tranello: chi ragiona per colonne "comprese" sbaglia di uno. Analogia: per contare le ore di lezione dalle 8 alle 11 si fa 11 − 8 = 3, non 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">grid-template-areas</p><h2>Disegna il layout con le parole</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:27px">body {
+  <span class="k">display</span>: grid;
+  <span class="k">grid-template-columns</span>: 1fr 3fr;
+  <span class="k">grid-template-areas</span>:
+    <span class="s">"testa testa"</span>
+    <span class="s">"menu  corpo"</span>
+    <span class="s">"piede piede"</span>;
+}
+header { <span class="k">grid-area</span>: testa; }
+nav    { <span class="k">grid-area</span>: menu; }
+main   { <span class="k">grid-area</span>: corpo; }
+footer { <span class="k">grid-area</span>: piede; }</pre>
+    <div class="aree"><div class="t">header · testa</div><div class="m">nav · menu</div><div class="c">main · corpo</div><div class="p">footer · piede</div></div>
+  </div>
+  <aside class="notes">I nomi delle aree li scegliamo noi. Ogni stringa è una riga, ogni parola una colonna; un'area deve essere un rettangolo. Un punto (.) indica una cella vuota. Collegamento forte con la lezione 1: i tag semantici diventano le zone della griglia. E per il responsive basterà riscrivere le stringhe in una sola colonna (lo vedremo nella prossima lezione).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La pagina con le aree</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riprendi <b>semantico.html</b> della lezione 1 (o crea <code>header</code>, <code>nav</code>, <code>main</code>, <code>aside</code>, <code>footer</code>).</li>
+      <li>Sul <code>body</code>: <code>display: grid</code>, colonne <code>200px 1fr 250px</code>, <code>min-height: 100vh</code>.</li>
+      <li>Aree: <code>"testa testa testa" "menu corpo lato" "piede piede piede"</code>, e righe <code>auto 1fr auto</code>.</li>
+      <li>Assegna <code>grid-area</code> a ogni tag e dai colori diversi.</li>
+      <li>Salva come <b>grid-aree.html</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> header e footer occupano tutta la larghezza, al centro tre colonne (menu 200px, contenuto, lato 250px) e il footer resta in fondo alla finestra anche con poco testo.</div>
+  </div>
+  <aside class="notes">Il footer resta in fondo grazie a min-height: 100vh e alla riga centrale 1fr che si prende lo spazio libero. Errore tipico: nomi delle aree scritti diversamente nelle stringhe e in grid-area (per esempio "corpo" e "Corpo"), oppure un'area che non forma un rettangolo: in quel caso la dichiarazione intera viene ignorata. Mostrare alla LIM DevTools: etichetta "grid" accanto al body e opzione per mostrare i nomi delle aree.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La griglia viene dalla carta</h2></div>
+  <figure class="citazione">
+    <blockquote>La griglia è un aiuto, non una garanzia.</blockquote>
+    <figcaption><b>Josef Müller-Brockmann</b>, grafico svizzero, in "Sistemi di griglie nella grafica", 1981</figcaption>
+  </figure>
+  <p class="lead">Giornali, manifesti e libri si impaginano a griglia da decenni. Nel 2017 la stessa idea è entrata nei browser: CSS Grid è arrivato in Chrome, Firefox e Safari nello stesso mese.</p>
+  <aside class="notes">Fonte: Josef Müller-Brockmann, "Grid Systems in Graphic Design / Raster Systeme für die visuelle Gestaltung" (1981), introduzione: "The grid system is an aid, not a guarantee." Traduzione nostra; il titolo italiano qui è una traduzione descrittiva. La frase continua dicendo che la griglia permette molti usi e che usarla bene è un'arte che richiede esercizio. Date dei browser: Chrome 57 e Firefox 52 a marzo 2017, Safari 10.1 a fine marzo 2017.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la proprietà a che cosa fa</h2></div>
+  <dl class="puzzle-abbina" data-id="grid-abbina">
+    <dt>grid-template-columns</dt><dd>Decide quante colonne e quanto è larga ognuna</dd>
+    <dt>gap</dt><dd>Lo spazio tra le righe e tra le colonne</dd>
+    <dt>fr</dt><dd>Una frazione dello spazio rimasto libero</dd>
+    <dt>span 2</dt><dd>Occupa due tracce a partire da dove si trova</dd>
+    <dt>grid-template-areas</dt><dd>Disegna il layout con nomi scritti tra virgolette</dd>
+    <dt>repeat(7, 1fr)</dt><dd>Sette colonne uguali, come i giorni di un calendario</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. "Traccia" è il nome tecnico di una riga o di una colonna della griglia. L'ultima coppia anticipa il laboratorio del calendario.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il calendario di novembre 2026</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo file <b>calendario.html</b>: un <code>div.mese</code> con 7 intestazioni (Lun … Dom) e 30 <code>div</code> numerati da 1 a 30.</li>
+      <li>Sul <code>.mese</code>: <code>display: grid</code>, <code>grid-template-columns: repeat(7, 1fr)</code> e <code>gap: 6px</code>.</li>
+      <li>Il 1° novembre 2026 è <b>domenica</b>: dai al giorno 1 la classe <code>primo</code> con <code>grid-column-start: 7</code>.</li>
+      <li>Colora sabato e domenica con <code>:nth-child</code> o con una classe.</li>
+      <li>Apri DevTools, clicca l'etichetta <b>grid</b> e attiva i numeri delle linee.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il giorno 1 sta da solo nell'ultima colonna, il 2 è un lunedì e inizia la riga successiva, il 30 è un lunedì nella prima colonna: le righe dei giorni sono 6.</div>
+  </div>
+  <aside class="notes">Verifica della data: il 1° gennaio 2026 è giovedì; prima del 1° novembre ci sono 304 giorni, 304 = 43 × 7 + 3, quindi il 1° novembre cade 3 giorni dopo un giovedì: domenica. Il 30 novembre è 29 giorni dopo, 29 = 4 × 7 + 1: lunedì. Righe: 1; 2-8; 9-15; 16-22; 23-29; 30. Bonus: segnare le festività (1° novembre) e il giorno della verifica con un colore e span su due colonne per un evento di due giorni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Grid oggi</p><h2>Dallo schizzo alla griglia</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Dallo schizzo al codice</h3><p>Esistono strumenti che danno a un modello di AI multimodale la foto di uno schizzo su carta e ne ricavano una pagina HTML e CSS, spesso impaginata proprio con Grid e Flexbox. Il risultato va letto e corretto: l'AI non sa quali zone sono importanti per i tuoi utenti, né se i tag sono quelli semantici giusti.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>subgrid</h3><p>Dal 2023 tutti i browser principali supportano <b>subgrid</b>: una griglia dentro un'altra può allinearsi alle linee della griglia esterna. Così i titoli e i prezzi di card diverse restano perfettamente allineati, anche quando i testi hanno lunghezze diverse.</p></div>
+  </div>
+  <aside class="notes">Primo box: per esempio l'esperimento "Make Real" di tldraw (2023) trasforma un disegno in una pagina funzionante con un modello multimodale. Se possibile il docente può mostrarlo alla LIM; non serve che gli studenti creino account. Secondo box: subgrid è arrivato in Firefox nel 2019, in Safari nel 2022 e in Chrome ed Edge nel 2023 (Chrome 117). Sintassi: grid-template-columns: subgrid nel figlio che è anche lui un contenitore grid.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Il lucchetto si apre con un calcolo</h2></div>
+  <div class="puzzle-codice" data-risposta="735" data-aiuto="due colonne = un solo gap: 1000 − 20 = 980, poi dividi per 1 + 3 = 4 parti">
+    <p>Contenitore largo <b>1000px</b>, colonne <b>1fr 3fr</b>, gap <b>20px</b>.</p>
+    <p>Il codice è la larghezza in pixel della colonna <b>3fr</b>.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> 1000 − 20 = 980; 980 / 4 = 245px per fr; 3 × 245 = 735px. Verifica: 245 + 20 + 735 = 1000.</div>
+  </div>
+  <aside class="notes">Codice: 735. A squadre, carta e penna, la prima squadra che apre vince.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per attivare la griglia scrivo <code>display:</code> <span class="blank" data-risposta="grid"></span>.</p>
+    <p>L'unità che divide lo spazio libero in parti si chiama <span class="blank" data-risposta="fr"></span>.</p>
+    <p>Una griglia di 4 colonne ha <span class="blank" data-risposta="5|cinque"></span> linee verticali.</p>
+    <p>Per occupare 3 colonne a partire da dove si trova, un elemento usa <code>grid-column: span</code> <span class="blank" data-risposta="3|tre"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: grid, fr, 5, 3.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Grid: righe e colonne insieme; Flexbox: una fila</li>
+      <li>fr divide lo spazio dopo misure fisse e gap</li>
+      <li>n colonne hanno n + 1 linee e n − 1 gap</li>
+    </ul>
+    <ul class="points">
+      <li>grid-column: inizio / fine, oppure span</li>
+      <li>grid-template-areas: il layout scritto a parole</li>
+      <li>DevTools mostra linee, numeri e aree</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: la progettazione di un sito responsive (mobile first, viewport, media query), dove Flexbox e Grid lavorano insieme.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

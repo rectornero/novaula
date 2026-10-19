@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Un piccolo sito con layout · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web · Laboratorio</p>
+  <h1>Un piccolo sito<br>con layout</h1>
+  <p class="lead">Tre pagine, un solo foglio di stile, lo stesso menu ovunque: in coppia costruite il sito del torneo di calcetto della scuola, dal disegno su carta ai link che funzionano.</p>
+  <aside class="notes">Laboratorio di 2-3 ore, in coppia (pilota alla tastiera e navigatore che controlla, con cambio ogni 15 minuti). Mette insieme tutto ciò che si è visto nell'Unità 4: HTML, link, tabelle, elenchi, classi, box model, colonna centrata e due colonne con float. Il tema del torneo è inventato; in alternativa ogni coppia può scegliere un tema concordato con il docente, purché con tre pagine. Si riparte dalla cartella due-colonne della lezione sul box model. Strumenti: Blocco note o VS Code, browser, Excalidraw (excalidraw.com, senza account) o carta e matita.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Entri in un sito nuovo: dove cerchi il menu?</h2></div>
+  <div class="poll" data-id="u4b-dove-menu">
+    <ol><li>In alto, sotto il logo</li><li>A sinistra, in colonna</li><li>Nell'icona con le tre righe ☰</li><li>In fondo alla pagina</li></ol>
+  </div>
+  <p class="muted">Gli utenti passano la maggior parte del tempo su <b>altri</b> siti: si aspettano che il tuo funzioni come quelli che conoscono già.</p>
+  <aside class="notes">Sondaggio di opinione. Le risposte dipendono dal dispositivo: sul telefono quasi tutti cercano l'icona ☰ (menu "hamburger", che vedremo nell'Unità 5 con il responsive). La frase sotto è un principio noto di usabilità (Jakob Nielsen la chiama "Jakob's Law"): rispettare le convenzioni non è mancanza di creatività, è rispetto per chi usa il sito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto</p><h2>Il sito del torneo di calcetto</h2></div>
+  <div class="org">
+    <div class="org-box top">index.html · Home</div>
+    <div class="org-row" style="--l:25%;--r:25%">
+      <div class="org-box acc">squadre.html · Squadre</div>
+      <div class="org-box acc">regolamento.html · Regolamento</div>
+    </div>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Home</h3><p class="small">Benvenuto, date del torneo, prossime partite, una foto.</p></div>
+    <div class="card soft"><h3>Squadre</h3><p class="small">Tabella con nome, capitano e classe di almeno 4 squadre.</p></div>
+    <div class="card soft"><h3>Regolamento</h3><p class="small">Elenco numerato delle regole e un link al regolamento ufficiale del calcio a 5.</p></div>
+  </div>
+  <aside class="notes">Questa è la mappa del sito: ogni pagina è raggiungibile da tutte le altre grazie al menu. Squadre e capitani vanno inventati: niente nomi veri di compagni (privacy). Il link esterno al regolamento può puntare alla pagina della FIGC sul calcio a 5 o a Wikipedia: farlo cercare agli studenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il wireframe</p><h2>Ogni pagina ha la stessa struttura</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack" style="gap:12px">
+      <div class="card fill" style="padding:16px 24px"><p class="small"><b>header</b>: nome del torneo</p></div>
+      <div class="card soft" style="padding:14px 24px"><p class="small"><b>nav</b>: Home · Squadre · Regolamento</p></div>
+      <div class="row" style="align-items:stretch;gap:12px">
+        <div class="card" style="flex:7;padding:16px 24px;min-height:200px"><p class="small"><b>.principale</b> 70%: il contenuto della pagina</p></div>
+        <div class="card" style="flex:3;padding:16px 24px"><p class="small"><b>.laterale</b> 30%: avvisi</p></div>
+      </div>
+      <div class="card night" style="padding:16px 24px"><p class="small"><b>footer</b>: autori e anno</p></div>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">Alcuni modelli AI multimodali sanno trasformare la foto di un wireframe disegnato a mano in una pagina HTML funzionante. Il disegno resta il punto di partenza: se non sai che cosa vuoi, nessuno strumento lo sa al posto tuo.</p></div>
+  </div>
+  <aside class="notes">Il wireframe è uno schizzo a blocchi senza colori né testi definitivi: serve a decidere la struttura prima di scrivere codice. Header, nav e footer sono uguali in tutte le pagine; cambia solo il contenuto delle due colonne. Sull'AI: nel 2023 sono state mostrate pubblicamente demo di questo tipo (per esempio "Make Real" di tldraw con un modello multimodale); oggi è una funzione di vari strumenti. Non serve farla provare in classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il primo disegno si butta</h2></div>
+  <figure class="citazione">
+    <blockquote>Preparatevi a buttarne via uno: lo farete comunque.</blockquote>
+    <figcaption><b>Fred Brooks</b>, capo progetto del sistema operativo IBM OS/360, in "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con l'AI un prototipo si ottiene in pochi minuti, e il consiglio di Brooks vale ancora di più: il primo tentativo serve a <b>capire</b> che cosa vuoi. Il sito vero lo riscrivi tu, sapendo perché ogni riga è lì.</p></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Sul foglio</h3><p>Spostare il menu da sinistra in alto: <b>30 secondi</b> e una gomma.</p></div>
+    <div class="card bad"><h3>Nel codice</h3><p>La stessa modifica dopo tre pagine scritte: HTML e CSS da rifare, <b>mezz'ora</b> almeno.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra di "Plan to throw one away; you will, anyhow" (F. P. Brooks, The Mythical Man-Month, 1975, cap. 11). Brooks parlava di interi sistemi software, non di pagine web, ma l'idea vale: meglio sbagliare su un foglio di carta che dopo due ore di codice. Collegamento all'Unità 3: ciclo di vita del software e modelli iterativi, prototipazione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Disegnate il wireframe</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Aprite <b>excalidraw.com</b> (senza account) oppure prendete un foglio.</li>
+      <li>Disegnate tre riquadri, uno per pagina: header, nav, due colonne, footer.</li>
+      <li>In ogni riquadro scrivete che cosa c'è nella colonna principale e in quella laterale.</li>
+      <li>Segnate con una freccia i collegamenti del menu e il link esterno.</li>
+      <li>Esportate come <b>wireframe.png</b> (o fotografate il foglio).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nelle tre pagine header, nav e footer sono identici; la voce del menu della pagina in cui ci si trova è segnata in modo diverso; ci sono 3 link interni e almeno 1 esterno.</div>
+  </div>
+  <aside class="notes">In Excalidraw: rettangoli con il tasto R, testo con T, esportazione dal menu ☰ › Esporta immagine › PNG. Se il sito è bloccato, carta e foto con il telefono vanno benissimo. Passare tra i banchi e far correggere i wireframe con troppi elementi: tre pagine semplici e finite valgono più di una pagina complicata e a metà.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I file</p><h2>Una cartella, link relativi</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:28px">torneo/
+├─ index.html
+├─ squadre.html
+├─ regolamento.html
+├─ stile.css
+└─ immagini/
+   └─ campo.jpg</pre>
+    <ul class="points small">
+      <li>Tutte le pagine nella <b>stessa cartella</b>: il link è solo il nome del file, <code>href="squadre.html"</code></li>
+      <li>Ogni pagina ha nel head <code>&lt;link rel="stylesheet" href="stile.css"&gt;</code></li>
+      <li>Nomi minuscoli, senza spazi e senza accenti</li>
+      <li>Un link esterno ha sempre <code>https://</code></li>
+    </ul>
+  </div>
+  <aside class="notes">Un percorso relativo funziona su qualsiasi computer e su qualsiasi server, perché parte dalla posizione della pagina. Se una pagina fosse in una sottocartella, per risalire si userebbe ../ (per esempio ../stile.css). Far ripetere: perché "C:\Users\..." non va mai bene in un link? Perché sul PC del docente o sul server quella cartella non esiste.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Da regolamento.html alla home: quale link funziona ovunque?</h2></div>
+  <div class="poll" data-id="u4b-link-home" data-tipo="quiz" data-risposta="D">
+    <ol><li><code>href="C:\torneo\index.html"</code></li><li><code>href="torneo/index.html"</code></li><li><code>href="Index.html"</code></li><li><code>href="index.html"</code></li></ol>
+    <p class="why">I due file sono nella stessa cartella, quindi basta il nome. A funziona solo su un PC con quella cartella; B cerca una cartella "torneo" dentro torneo; C sbaglia la maiuscola, che su un server Linux fa fallire il link.</p>
+  </div>
+  <aside class="notes">La C è il tranello: sul PC Windows funziona, una volta pubblicato no (aggancio alla lezione di laboratorio sulla prima pagina). La A è l'errore più frequente nei compiti consegnati quando si usano editor che inseriscono percorsi assoluti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La pagina modello</p><h2>Lo scheletro comune a tutte e tre</h2></div>
+<pre class="code" style="font-size:24px;padding:24px 36px">&lt;<span class="k">body</span>&gt;
+&lt;<span class="k">div</span> class=<span class="s">"pagina"</span>&gt;
+  &lt;<span class="k">header</span>&gt;&lt;<span class="k">h1</span>&gt;Torneo di calcetto 3E&lt;/<span class="k">h1</span>&gt;&lt;/<span class="k">header</span>&gt;
+  &lt;<span class="k">nav</span>&gt;
+    &lt;<span class="k">a</span> href=<span class="s">"index.html"</span> class=<span class="s">"attivo"</span>&gt;Home&lt;/<span class="k">a</span>&gt;
+    &lt;<span class="k">a</span> href=<span class="s">"squadre.html"</span>&gt;Squadre&lt;/<span class="k">a</span>&gt;
+    &lt;<span class="k">a</span> href=<span class="s">"regolamento.html"</span>&gt;Regolamento&lt;/<span class="k">a</span>&gt;
+  &lt;/<span class="k">nav</span>&gt;
+  &lt;<span class="k">div</span> class=<span class="s">"principale"</span>&gt; <span class="c">&lt;!-- contenuto della pagina --&gt;</span> &lt;/<span class="k">div</span>&gt;
+  &lt;<span class="k">div</span> class=<span class="s">"laterale"</span>&gt; <span class="c">&lt;!-- avvisi --&gt;</span> &lt;/<span class="k">div</span>&gt;
+  &lt;<span class="k">footer</span>&gt;Sito di Rossi e Bianchi · 3E · 2026&lt;/<span class="k">footer</span>&gt;
+&lt;/<span class="k">div</span>&gt;
+&lt;/<span class="k">body</span>&gt;</pre>
+  <aside class="notes">header, nav e footer sono elementi HTML con un significato preciso (li approfondiremo nell'Unità 5, HTML semantico e accessibilità); per il browser, di base, si comportano come dei div. La classe "attivo" va sul link della pagina in cui ci si trova: nella home su Home, in squadre.html su Squadre, e così via. Il footer va sotto entrambe le colonne grazie a clear: both.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La home e il foglio di stile</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Create la cartella <b>torneo</b> e scrivete <b>index.html</b> con lo scheletro della slide precedente e lo scheletro standard (DOCTYPE, head con charset, title e link).</li>
+      <li>Nella colonna principale: un benvenuto, le date e un elenco "Prossime partite"; nella laterale: un avviso.</li>
+      <li>In <b>stile.css</b>: <code>* { box-sizing: border-box; }</code>, <code>.pagina</code> centrata con <code>max-width: 960px</code>.</li>
+      <li>Colori per header e footer, le due colonne con <code>float</code>, <code>footer { clear: both; }</code></li>
+      <li>Aggiungete un'immagine libera in <b>immagini/</b> con <code>width: 100%</code> e un alt.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la pagina è centrata, le due colonne stanno affiancate, il footer è sotto entrambe e ha lo sfondo per tutta la larghezza. Allargando la finestra la pagina non supera i 960 px.</div>
+  </div>
+  <aside class="notes">Riprendere le regole dalla cartella due-colonne. Se il footer "sale" dietro le colonne: manca clear: both. Se l'immagine sfonda la colonna: manca width: 100% (o max-width: 100%). Cambio pilota/navigatore a metà. Chi è avanti: aggiungere un margine tra le colonne e un bordo arrotondato alla laterale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il menu</p><h2>Un menu orizzontale in poche regole</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:26px"><span class="k">nav</span> {
+  background-color: #172033;
+  padding: 10px;
+}
+<span class="k">nav a</span> {
+  display: inline-block;
+  padding: 10px 18px;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+<span class="k">nav a:hover</span>  { background-color: #444c66; }
+<span class="k">nav a.attivo</span> { background-color: #d0541f; }</pre>
+    <ul class="points small">
+      <li><code>inline-block</code>: i link restano in riga ma accettano il padding, quindi diventano "pulsanti"</li>
+      <li><code>text-decoration: none</code>: via la sottolineatura</li>
+      <li><code>nav a.attivo</code>: la voce della pagina corrente</li>
+    </ul>
+  </div>
+  <aside class="notes">Specificità: nav a = 0-0-2, nav a:hover = 0-1-2, nav a.attivo = 0-1-2. Le ultime due hanno la stessa specificità: passando sopra la voce attiva vince quella scritta per ultima (resta arancione). Far provare a invertirle per vedere la differenza: aggancio alla lezione sui selettori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale selettore colora solo la voce della pagina in cui sei?</h2></div>
+  <div class="poll" data-id="u4b-attivo" data-tipo="quiz" data-risposta="C">
+    <ol><li><code>nav a:active</code></li><li><code>nav a:visited</code></li><li><code>nav a.attivo</code></li><li><code>nav a:first-child</code></li></ol>
+    <p class="why">Serve una classe messa a mano su quel link, pagina per pagina. :active vale solo nell'istante del clic, :visited colora tutti i link già visitati, :first-child sempre e solo "Home".</p>
+  </div>
+  <aside class="notes">Tranello linguistico: "active" sembra voler dire "pagina attiva", invece è lo stato del link mentre lo si sta premendo. Nei siti generati da un programma (CMS) la classe viene aggiunta automaticamente; nel nostro sito statico la scriviamo noi in ognuna delle tre pagine.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Menu e altre due pagine</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Aggiungete a stile.css le regole del menu.</li>
+      <li>Quando la home è finita, salvatela con nome come <b>squadre.html</b> e <b>regolamento.html</b>.</li>
+      <li>In ogni copia cambiate il <code>title</code>, il contenuto delle colonne e spostate la classe <code>attivo</code> sulla voce giusta.</li>
+      <li>Squadre: una tabella con riga di intestazione e 4 squadre inventate. Regolamento: un elenco numerato e un link esterno.</li>
+      <li>Provate <b>ogni</b> link del menu da <b>ogni</b> pagina.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 3 pagine × 3 link = 9 collegamenti da provare, tutti funzionanti. In ogni pagina è evidenziata una sola voce, quella giusta. Lo stile è identico ovunque perché il file CSS è uno solo.</div>
+  </div>
+  <aside class="notes">Errore tipico: modificare lo stile con un tag style dentro una sola pagina; ricordare che tutto lo stile va in stile.css. Se una pagina non ha lo stile, controllare il link nel head di quella pagina. Per la tabella si possono riusare le regole a strisce (tr:nth-child(even)) della lezione sui selettori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il lavoro di oggi</h2></div>
+  <ol class="puzzle-ordina" data-id="u4b-fasi-sito">
+    <li>Disegnare il wireframe delle pagine</li>
+    <li>Creare la cartella e la pagina modello</li>
+    <li>Scrivere il foglio di stile comune</li>
+    <li>Copiare il modello nelle altre pagine</li>
+    <li>Cambiare contenuti, title e voce attiva</li>
+    <li>Provare tutti i link da tutte le pagine</li>
+  </ol>
+  <aside class="notes">Ordine come in elenco. Discussione: perché non copiare le pagine prima di aver finito la home? Perché ogni correzione andrebbe ripetuta tre volte. È lo stesso principio che porta, nei siti grandi, ai modelli (template) generati automaticamente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Debug</p><h2>Abbina il problema alla sua causa</h2></div>
+  <dl class="puzzle-abbina" data-id="u4b-debug-sito">
+    <dt>Lo stile c'è solo nella home</dt><dd>Nelle altre pagine manca o è sbagliato il link a stile.css</dd>
+    <dt>Il footer sale accanto alle colonne</dt><dd>Manca clear: both sul footer</dd>
+    <dt>La colonna laterale scende sotto</dt><dd>Larghezze più padding superano il 100%: manca border-box</dd>
+    <dt>"File non trovato" cliccando Squadre</dt><dd>Il nome del file e l'href non coincidono</dd>
+    <dt>Le voci del menu ignorano il padding verticale</dt><dd>I link sono ancora inline: serve inline-block</dd>
+  </dl>
+  <aside class="notes">Usarlo come checklist durante il laboratorio: quando una coppia chiama il docente, prima deve controllare questa slide. I DevTools aiutano per ogni riga: la scheda Rete mostra il 404 di stile.css, lo schema del box model mostra i padding.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Collaudo incrociato</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Comprimete la cartella <b>torneo</b> in <b>torneo-cognome1-cognome2.zip</b> e scambiatela con un'altra coppia.</li>
+      <li>Estraete lo zip in una cartella nuova e aprite index.html.</li>
+      <li>Controllate: 9 link interni, link esterno, immagini, voce attiva, stile in tutte le pagine, footer sotto le colonne.</li>
+      <li>Scrivete i problemi trovati in un file <b>collaudo.txt</b> e restituitelo agli autori.</li>
+      <li>Correggete il vostro sito in base al collaudo ricevuto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> un sito che funziona solo sul PC di chi l'ha fatto non funziona. Se sul PC dei compagni un'immagine non si vede, quasi sempre è un percorso assoluto o una maiuscola.</div>
+  </div>
+  <aside class="notes">Il collaudo da parte di altri è una pratica professionale (test e revisione del codice, Unità 3). Chiedere di scrivere i problemi in modo preciso e gentile: pagina, che cosa ci si aspettava, che cosa succede. Il file zip finale va consegnato su Novaula se il docente decide di valutare il laboratorio; altrimenti diventa la base del compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo schizzo a blocchi di una pagina, senza colori, si chiama <span class="blank" data-risposta="wireframe"></span>.</p>
+    <p>Tre pagine nella stessa cartella si collegano con link <span class="blank" data-risposta="relativi|relativo"></span>.</p>
+    <p>Per avere lo stesso stile in tutte le pagine si usa un solo file <span class="blank" data-risposta="css|stile.css|.css"></span>.</p>
+    <p>Il footer va sotto le colonne con <code>clear:</code> <span class="blank" data-risposta="both"></span>.</p>
+    <p>Per dare padding ai link del menu si usa <code>display:</code> <span class="blank" data-risposta="inline-block"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: wireframe, relativi, CSS (o stile.css), both, inline-block.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Prima il wireframe, poi il codice</li>
+      <li>Una pagina modello, poi le copie</li>
+      <li>Un solo stile.css per tutto il sito</li>
+    </ul>
+    <ul class="points">
+      <li>Link relativi, nomi minuscoli</li>
+      <li>Menu: inline-block e classe attivo</li>
+      <li>Collaudo: ogni link da ogni pagina</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: gli strumenti per sviluppare pagine web (editor, ambienti online, DevTools, validatori, assistenti AI). Il sito del torneo verrà passato al validatore W3C: conservarlo.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

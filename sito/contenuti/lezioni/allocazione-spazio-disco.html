@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'allocazione dello spazio su disco · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>Dove finiscono<br>i byte sul disco</h1>
+  <p class="lead">Un disco è una fila di blocchi tutti uguali. Il file system deve decidere quali blocchi dare a ogni file e ricordarsi dove li ha messi. Quattro strategie, dalla più semplice a quella di Linux.</p>
+  <aside class="notes">Lezione online del libro ("L'allocazione dello spazio su disco"): si può svolgere in classe oppure assegnare a casa, con i laboratori fatti in autonomia (Calc e browser bastano). Obiettivi: blocchi e cluster, frammentazione interna ed esterna, allocazione contigua, concatenata e indicizzata, la FAT, l'i-node con i puntatori diretti e indiretti e il calcolo della dimensione massima. Durata indicativa: 2 ore. Prerequisito: la lezione sul file system (percorsi, permessi, FAT32 ed ext4). Collegamento forte con l'allocazione contigua e la paginazione della memoria viste all'inizio dell'unità 7: le idee sono le stesse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo te un file da 2 GB, sul disco, sta…</h2></div>
+  <div class="poll" data-id="disco-pezzi">
+    <ol><li>Tutto in un unico pezzo, sempre</li><li>Quasi sempre in un pezzo</li><li>Spesso spezzato in tanti pezzi</li><li>Non ne ho idea</li></ol>
+  </div>
+  <aside class="notes">Lasciar votare senza commentare. La risposta "giusta" dipende dal file system e da quanto è pieno il disco: è proprio il tema della lezione. Riprendere il sondaggio alla fine, dopo gli extent di ext4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Blocchi e cluster</p><h2>Il disco si affitta solo a blocchi interi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il file system divide il disco in <b>blocchi</b> (in Windows si chiamano <b>cluster</b>), di solito da <b>4 KB</b> = 4096 byte. Un file occupa sempre un numero intero di blocchi.</p>
+      <div class="formula" style="font-size:46px"><small>file da 10 000 byte, blocchi da 4096 byte</small>10 000 ÷ 4096 = 2,44 → <span class="hl">3 blocchi</span></div>
+      <p>3 × 4096 = 12 288 byte occupati, <b>2288 sprecati</b> nell'ultimo blocco: è la <mark>frammentazione interna</mark>.</p>
+    </div>
+    <div class="card soft"><h3>Blocchi grandi o piccoli?</h3><ul class="points"><li><b>Grandi</b>: meno blocchi da ricordare, più spreco</li><li><b>Piccoli</b>: poco spreco, tabelle enormi</li><li>4 KB è il compromesso più diffuso</li></ul></div>
+  </div>
+  <aside class="notes">Si arrotonda sempre per eccesso. Collegare alla paginazione della memoria: la frammentazione interna è la stessa che si ha nell'ultima pagina di un processo. In Windows: clic destro su un file, Proprietà, "Dimensione" contro "Dimensioni su disco" (lo vedremo nel laboratorio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcola, non tirare a indovinare</p><h2>10 000 file da 100 byte, blocchi da 4 KB. Quanto spazio occupano?</h2></div>
+  <div class="poll" data-id="disco-piccoli" data-tipo="quiz" data-risposta="C">
+    <ol><li>Circa 1 MB, cioè 10 000 × 100 byte</li><li>Circa 4 MB</li><li>Circa 40 MB</li><li>Circa 400 MB</li></ol>
+    <p class="why">Ogni file, anche da 100 byte, prende un blocco intero: 10 000 × 4096 = 40 960 000 byte, circa 40 MB. I dati veri sono solo 1 MB: il 97% è frammentazione interna.</p>
+  </div>
+  <aside class="notes">La A è la risposta di chi pensa che conti solo il contenuto. Morale: tanti file minuscoli sprecano molto spazio (per questo i progetti con migliaia di file piccoli si comprimono in uno .zip). Alcuni file system hanno trucchi per i file piccolissimi: NTFS li salva direttamente nella sua tabella principale, la MFT. Lo vedremo nel laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strategia 1</p><h2>Allocazione contigua: tutto in fila</h2></div>
+  <table class="data compact">
+    <tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th></tr>
+    <tr><td class="mono hl">A</td><td class="mono hl">A</td><td class="mono hl">A</td><td class="mono">B</td><td class="mono">B</td><td class="mono">B</td><td class="mono">B</td><td class="mono">B</td><td class="mono hl">C</td><td class="mono hl">C</td><td class="mono"></td><td class="mono"></td><td class="mono"></td><td class="mono"></td><td class="mono"></td><td class="mono"></td></tr>
+  </table>
+  <div class="cols-3">
+    <div class="card"><h3>Come si ricorda</h3><p>Nella cartella: nome, <b>blocco iniziale</b> e <b>lunghezza</b>. B: inizio 3, lunghezza 5.</p></div>
+    <div class="card ok"><h3>Pro</h3><p>Velocissima: il blocco n del file è inizio + n. Lettura sequenziale senza salti.</p></div>
+    <div class="card bad"><h3>Contro</h3><p>I buchi lasciati dai file cancellati: <b>frammentazione esterna</b>. E il file fa fatica a crescere.</p></div>
+  </div>
+  <aside class="notes">È la stessa idea dell'allocazione contigua a partizioni della memoria, con gli stessi problemi e le stesse strategie (first fit, best fit, worst fit). Si usa ancora dove i file non cambiano mai: i CD e i DVD (file system ISO 9660) vengono scritti una volta sola, tutto in fila. Domanda: se il file C deve crescere di 2 blocchi, ci sta? (Sì, i blocchi 10 e 11 sono liberi. Se ci fosse un altro file subito dopo, bisognerebbe spostarlo tutto.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un disco in Calc: la frammentazione esterna</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Calc. In A1:P1 scrivi i numeri dei blocchi da 0 a 15: è il disco.</li>
+      <li>Nella riga 2 alloca in modo contiguo: <b>A</b> 3 blocchi, <b>B</b> 5, <b>C</b> 2, <b>D</b> 4. Colora ogni file.</li>
+      <li>Cancella i file <b>A</b> e <b>C</b> (svuota le loro celle).</li>
+      <li>In R2 scrivi <code>=CONTA.VUOTE(A2:P2)</code>: quanti blocchi liberi ci sono?</li>
+      <li>Ora arriva il file <b>E</b> di 4 blocchi. Ci sta in modo contiguo? Scrivi la risposta in A4.</li>
+      <li>Salva come <b>disco-contiguo.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i blocchi liberi sono <b>7</b> (0-2, 8-9, 14-15), ma il buco più grande è di 3. E non entra, anche se lo spazio totale basta: questa è la frammentazione esterna.</div>
+  </div>
+  <aside class="notes">Disposizione: A in 0-2, B in 3-7, C in 8-9, D in 10-13, liberi 14-15. Dopo le cancellazioni i buchi sono 0-2 (3), 8-9 (2), 14-15 (2). Rimedi: compattare (spostare B e D all'inizio, lento) oppure non pretendere la contiguità: è la strategia successiva. Chi finisce prima: in riga 3 scriva come metterebbe E "a pezzi" (0, 1, 2, 8) e, sotto ogni blocco, il numero del blocco successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strategia 2</p><h2>Allocazione concatenata: una caccia al tesoro</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Ogni blocco contiene i dati e, in fondo, il <b>numero del blocco successivo</b>. La cartella ricorda solo il primo.</p>
+      <div class="flow">
+        <div class="card soft"><h3>blocco 0</h3><p class="small">dati… → 1</p></div>
+        <div class="card soft"><h3>blocco 1</h3><p class="small">dati… → 8</p></div>
+        <div class="card soft"><h3>blocco 8</h3><p class="small">dati… → fine</p></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card ok"><h3>Pro</h3><p>Usa ogni blocco libero: niente frammentazione esterna.</p></div>
+      <div class="card bad"><h3>Contro</h3><p>Per leggere il blocco 100 devi leggerne 99. Un puntatore rovinato perde il resto del file.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Come una caccia al tesoro: ogni biglietto dice dove si trova il successivo. L'accesso sequenziale va bene, quello diretto (saltare a metà di un video) è lentissimo, perché su un disco meccanico ogni salto costa millisecondi. Inoltre ogni blocco perde qualche byte per il puntatore. La soluzione di Microsoft: togliere i puntatori dai blocchi e raccoglierli tutti in una tabella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strategia 2 bis</p><h2>La FAT: tutti i puntatori in una tabella</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>La <b>File Allocation Table</b> ha una riga per ogni cluster: dice qual è il cluster <b>successivo</b> del file, oppure <b>FINE</b>, oppure 0 se è libero. La cartella ricorda il primo cluster.</p>
+      <ul class="points">
+        <li>La tabella sta all'inizio del disco ed è letta in RAM: seguire la catena è veloce</li>
+        <li><code>tema.odt</code> parte dal cluster <b>4</b>, <code>foto.png</code> dall'<b>8</b></li>
+        <li>FAT12, FAT16, FAT32: il numero dice quanti bit ha ogni riga</li>
+      </ul>
+    </div>
+    <table class="data compact">
+      <tr><th>Cluster</th><th>Successivo</th></tr>
+      <tr><td class="mono">2</td><td class="mono">9</td></tr>
+      <tr><td class="mono">3</td><td class="mono">5</td></tr>
+      <tr><td class="mono hl">4</td><td class="mono">7</td></tr>
+      <tr><td class="mono">5</td><td class="mono">FINE</td></tr>
+      <tr><td class="mono">6</td><td class="mono">0</td></tr>
+      <tr><td class="mono">7</td><td class="mono">2</td></tr>
+      <tr><td class="mono">8</td><td class="mono">3</td></tr>
+      <tr><td class="mono">9</td><td class="mono">11</td></tr>
+      <tr><td class="mono">10</td><td class="mono">0</td></tr>
+      <tr><td class="mono">11</td><td class="mono">FINE</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Nella FAT vera i cluster dei dati partono dal numero 2 (le prime due righe sono riservate), come in questo esempio. La FAT nasce in Microsoft alla fine degli anni Settanta ed è arrivata, in versioni sempre più grandi, fino alle chiavette di oggi. In FAT32 ogni riga usa 28 bit dei suoi 32. Catene: tema.odt 4 → 7 → 2 → 9 → 11 → FINE (5 cluster); foto.png 8 → 3 → 5 → FINE (3 cluster); liberi 6 e 10. Debolezza: se la FAT si rovina si perde tutto, per questo il disco ne tiene due copie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Segui la catena di tema.odt nella FAT</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="puzzle-ordina" data-id="disco-catena">
+      <li>Cluster 4, scritto nella cartella</li>
+      <li>Cluster 7</li>
+      <li>Cluster 2</li>
+      <li>Cluster 9</li>
+      <li>Cluster 11</li>
+      <li>FINE: il file è finito</li>
+    </ol>
+    <table class="data compact">
+      <tr><th>Cluster</th><th>Succ.</th><th>Cluster</th><th>Succ.</th></tr>
+      <tr><td class="mono">2</td><td class="mono">9</td><td class="mono">7</td><td class="mono">2</td></tr>
+      <tr><td class="mono">3</td><td class="mono">5</td><td class="mono">8</td><td class="mono">3</td></tr>
+      <tr><td class="mono">4</td><td class="mono">7</td><td class="mono">9</td><td class="mono">11</td></tr>
+      <tr><td class="mono">5</td><td class="mono">FINE</td><td class="mono">10</td><td class="mono">0</td></tr>
+      <tr><td class="mono">6</td><td class="mono">0</td><td class="mono">11</td><td class="mono">FINE</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Ordine: 4, 7, 2, 9, 11, FINE. Errore tipico: leggere la tabella in ordine di riga (2, 3, 4…) invece di seguire i puntatori. Domanda bonus: quanti byte può occupare al massimo tema.odt con cluster da 4 KB? (5 × 4096 = 20 480 byte.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una FAT che si legge da sola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo foglio di Calc. A1 <b>Cluster</b>, B1 <b>Successivo</b>; in A2:B11 copia la FAT della slide precedente (scrivi <b>FINE</b> come testo).</li>
+      <li>In D1 scrivi <b>tema.odt</b> e in D2 il primo cluster: <b>4</b>.</li>
+      <li>In D3 scrivi <code>=CERCA.VERT(D2;$A$2:$B$11;2;0)</code> e trascina in giù fino a vedere FINE.</li>
+      <li>Fai lo stesso in colonna E per <b>foto.png</b>, che parte da 8.</li>
+      <li>In G2 conta i cluster liberi: <code>=CONTA.SE(B2:B11;0)</code>. Salva come <b>fat-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> colonna D: 4, 7, 2, 9, 11, FINE. Colonna E: 8, 3, 5, FINE. Cluster liberi: <b>2</b> (il 6 e il 10).</div>
+  </div>
+  <aside class="notes">CERCA.VERT cerca il valore di D2 nella prima colonna dell'intervallo e restituisce la seconda colonna: esattamente ciò che fa il sistema operativo con la FAT. Lo 0 finale significa corrispondenza esatta. Dopo FINE la formula successiva dà #N/D: è normale, la catena è finita. Sfida: modificare B5 (cluster 5) da FINE a 6 e B6 (cluster 6) da 0 a FINE: foto.png "cresce" di un cluster. Che cosa succede alla colonna E e al conteggio dei liberi?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strategia 3</p><h2>Allocazione indicizzata: un indice per ogni file</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Ogni file ha un <b>blocco indice</b> con l'elenco di tutti i suoi blocchi, in ordine. Come l'indice di un libro: vuoi il capitolo 7? Guardi l'indice e salti alla pagina.</p>
+      <div class="formula" style="font-size:50px"><small>blocco indice di video.mp4</small>[12, 40, 41, 3, 77…]</div>
+    </div>
+    <div class="stack">
+      <div class="card ok"><h3>Pro</h3><p>Accesso diretto veloce: il blocco n del file è la voce n dell'indice. Niente frammentazione esterna.</p></div>
+      <div class="card bad"><h3>Contro</h3><p>Un blocco in più per ogni file, anche minuscolo. E se il file è enorme, l'indice non basta più.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Confronto con la paginazione: il blocco indice somiglia alla tabella delle pagine di un processo (blocco n del file → blocco fisico sul disco, come pagina → frame). Il problema dei file enormi si risolve con più livelli di indice: è l'idea dell'i-node di Unix.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Unix: il nome sta nella cartella, il file nell'i-node</h2></div>
+  <figure class="citazione">
+    <blockquote>Una voce di cartella contiene solo un nome per il file associato e un puntatore al file stesso.</blockquote>
+    <figcaption><b>Dennis Ritchie e Ken Thompson</b>, "The UNIX Time-Sharing System", 1974</figcaption>
+  </figure>
+  <p class="lead">Quel puntatore è l'<b>i-number</b> (index number): indica l'<b>i-node</b>, la scheda che descrive il file. Lo stesso file può avere due nomi.</p>
+  <aside class="notes">Traduzione nostra dall'articolo del 1974 su Communications of the ACM: "a directory entry contains only a name for the associated file and a pointer to the file itself. This pointer is an integer called the i-number (for index number) of the file." L'i-node contiene proprietario, permessi, dimensione, date, numero di collegamenti e gli indirizzi dei blocchi, ma NON il nome. Conseguenza: due voci di cartella possono puntare allo stesso i-node (hard link), e rinominare o spostare un file nella stessa partizione è istantaneo, perché si cambia solo la cartella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'i-node</p><h2>15 puntatori, file da pochi byte a terabyte</h2></div>
+  <div class="stack">
+    <table class="data compact">
+      <tr><th>Puntatori dell'i-node (ext2/ext3)</th><th>Arrivano a</th></tr>
+      <tr><td>12 <b>diretti</b>: 12 blocchi di dati</td><td class="mono">12 × 4 KB = 48 KB</td></tr>
+      <tr><td>1 <b>indiretto singolo</b>: un blocco pieno di puntatori</td><td class="mono">1024 × 4 KB = 4 MB</td></tr>
+      <tr><td>1 <b>indiretto doppio</b>: puntatori a blocchi di puntatori</td><td class="mono">1024² × 4 KB = 4 GB</td></tr>
+      <tr><td>1 <b>indiretto triplo</b></td><td class="mono">1024³ × 4 KB = 4 TB</td></tr>
+    </table>
+    <div class="callout"><b>Perché 1024?</b> Un blocco è di 4096 byte e un puntatore di 4 byte: 4096 ÷ 4 = <b>1024</b> puntatori per blocco. I file piccoli usano solo i diretti, quelli enormi pagano qualche lettura in più.</div>
+  </div>
+  <aside class="notes">Valori in potenze di 2 (KiB, MiB, GiB, TiB) arrotondati: 12 × 4 KiB = 48 KiB; 2^10 × 4 KiB = 4 MiB; 2^20 × 4 KiB = 4 GiB; 2^30 × 4 KiB = 4 TiB. Totale massimo ≈ 4 TiB (in ext2/ext3 il limite reale dipende anche da altri campi). ext4 conserva gli i-node ma di solito, al posto dei puntatori, usa gli extent: "dal blocco X, N blocchi di fila". Esercizio a voce: blocchi da 1 KB e puntatori da 4 byte → 256 puntatori per blocco; i diretti arrivano a 12 KB, l'indiretto singolo a 256 KB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Un file di 1 MB, blocchi da 4 KB: quali puntatori dell'i-node usa?</h2></div>
+  <div class="poll" data-id="disco-inode" data-tipo="quiz" data-risposta="B">
+    <ol><li>Solo i 12 diretti</li><li>I 12 diretti e l'indiretto singolo</li><li>I diretti, il singolo e il doppio</li><li>Solo l'indiretto singolo</li></ol>
+    <p class="why">1 MB = 256 blocchi da 4 KB. I diretti ne coprono 12; gli altri 244 stanno nel blocco indiretto singolo, che ne può elencare 1024. Il doppio serve solo oltre 48 KB + 4 MB.</p>
+  </div>
+  <aside class="notes">1 MiB ÷ 4 KiB = 256 blocchi. La D è la risposta di chi pensa che i puntatori si usino "in alternativa": invece si riempiono sempre in ordine, prima i diretti. Domanda di rinforzo: e un file da 40 KB? (10 blocchi, solo diretti.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un file, due nomi: gli i-node dal vivo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su <b>bellard.org/jslinux</b> apri la console Alpine Linux.</li>
+      <li><code>echo ciao &gt; a.txt</code> poi <code>ls -i a.txt</code>: annota il numero di i-node.</li>
+      <li>Crea un secondo nome: <code>ln a.txt b.txt</code>, poi <code>ls -li</code>. Guarda la prima colonna e il numero dopo i permessi.</li>
+      <li>Cancella il primo nome: <code>rm a.txt</code>. Poi <code>cat b.txt</code> e <code>ls -li</code>.</li>
+      <li>Fai una copia vera: <code>cp b.txt c.txt</code> e <code>ls -li</code>. Screenshot: <b>inode-cognome.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a.txt e b.txt hanno lo <b>stesso</b> numero di i-node e 2 collegamenti. Dopo <code>rm</code>, b.txt dice ancora <b>ciao</b>. c.txt ha un numero <b>diverso</b>.</div>
+  </div>
+  <aside class="notes">ln crea un hard link: una seconda voce di cartella verso lo stesso i-node; il contatore dei collegamenti (il numero dopo i permessi in ls -l) sale a 2. rm toglie solo un nome: il file sparisce davvero quando il contatore arriva a 0. cp invece crea un nuovo i-node e copia i dati. Si può aggiungere stat b.txt, che mostra Inode, Links, Size e Blocks. Se JSLinux non si apre: copy.sh/v86 o demo alla LIM.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dimensione e dimensione su disco in Windows</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Con Blocco note crea <b>piccolo.txt</b> con dentro solo <b>ciao</b>. Clic destro, <b>Proprietà</b>: annota "Dimensione" e "Dimensioni su disco".</li>
+      <li>Fai lo stesso con 3 file più grandi a tua scelta (una foto, un PDF, un documento) salvati sul disco C:.</li>
+      <li>In Calc: in colonna B la dimensione in byte, in C <code>=ARROTONDA.PER.ECC(B2/4096;0)*4096</code>.</li>
+      <li>Confronta la colonna C con le "Dimensioni su disco". Salva come <b>dimensioni.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per i file grandi la dimensione su disco è un multiplo di <b>4096</b> e coincide con la colonna C. Sorpresa: piccolo.txt occupa <b>0 byte</b> su disco.</div>
+  </div>
+  <aside class="notes">I file molto piccoli (qualche centinaio di byte) NTFS li salva direttamente dentro la propria scheda nella MFT (Master File Table, l'equivalente degli i-node): non serve nessun cluster, quindi "0 byte" su disco. Attenzione: i file di OneDrive non scaricati mostrano anch'essi 0 byte, e i file compressi da NTFS occupano meno: per il confronto usare file normali sul disco C:. Il cluster di NTFS è di 4 KB nei dischi comuni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni strategia alla sua idea</h2></div>
+  <dl class="puzzle-abbina" data-id="disco-strategie">
+    <dt>Contigua</dt><dd>Inizio e lunghezza: velocissima, ma lascia buchi</dd>
+    <dt>Concatenata</dt><dd>Ogni blocco dice dov'è il successivo</dd>
+    <dt>FAT</dt><dd>Tutti i "successivo" raccolti in una tabella</dd>
+    <dt>Indicizzata</dt><dd>Un blocco con l'elenco dei blocchi del file</dd>
+    <dt>i-node</dt><dd>Metadati più puntatori diretti e indiretti</dd>
+  </dl>
+  <aside class="notes">Ripasso rapido a coppie. Chiedere poi per ognuna un esempio reale: contigua → CD e DVD; FAT → chiavette e schede SD; i-node → ext4 di Linux e Android; NTFS usa la MFT, simile agli i-node.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>SSD, extent e file da 14 GB</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'SSD non va deframmentato</h3><p>In un SSD non c'è una testina che salta: un blocco "lontano" si legge in fretta come uno vicino. Il suo controller sposta i dati da solo per consumare la memoria in modo uniforme. Il sistema operativo gli segnala i blocchi liberati con il comando <b>TRIM</b>.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>I file dei modelli di AI</h3><p>Un modello linguistico con 7 miliardi di parametri a 16 bit pesa circa <b>14 GB</b>: 3,4 milioni di blocchi da 4 KB. ext4 non li elenca uno per uno: usa gli <b>extent</b> ("dal blocco X, N blocchi di fila"), e un centinaio di extent può bastare. L'idea contigua è tornata.</p></div>
+  </div>
+  <aside class="notes">SSD: Windows con "Deframmenta e ottimizza unità" sugli SSD esegue TRIM, non la deframmentazione classica; deframmentare un SSD consuma scritture senza benefici. Calcolo AI: 7 × 10^9 parametri × 2 byte = 14 × 10^9 byte; diviso 4096 ≈ 3,42 milioni di blocchi. Un extent di ext4 copre fino a 32 768 blocchi (128 MiB): 14 GB ÷ 128 MiB ≈ 105 extent, se il disco ha abbastanza spazio libero contiguo. Riprendere il sondaggio iniziale: oggi i file grandi stanno "quasi" in un pezzo, quando il disco non è troppo pieno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3122" data-aiuto="le cifre centrali sono il numero dei puntatori diretti di un i-node">
+    <ul class="points">
+      <li>Cifra 1: quanti blocchi da 4 KB occupa un file di 10 000 byte</li>
+      <li>Cifre 2 e 3: quanti puntatori diretti ha un i-node</li>
+      <li>Cifra 4: nella nostra FAT, il cluster che segue il 7</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 10 000 ÷ 4096 = 2,44 → 3 blocchi; 12 diretti; 7 → 2.</div>
+  </div>
+  <aside class="notes">Codice: 3122. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo spazio sprecato nell'ultimo blocco di un file si chiama frammentazione <span class="blank" data-risposta="interna"></span>.</p>
+    <p>I buchi tra un file e l'altro sono la frammentazione <span class="blank" data-risposta="esterna"></span>.</p>
+    <p>Nella FAT ogni riga contiene il numero del cluster <span class="blank" data-risposta="successivo|seguente" style="--w:9ch"></span>.</p>
+    <p>In Unix il nome del file non sta nell'i-node ma nella <span class="blank" data-risposta="cartella|directory" style="--w:9ch"></span>.</p>
+    <p>Con blocchi da 4096 byte e puntatori da 4 byte, un blocco contiene <span class="blank" data-risposta="1024"></span> puntatori.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: interna; esterna; successivo (accettato seguente); cartella (accettato directory); 1024.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il disco si usa a blocchi interi: frammentazione interna</li>
+      <li>Contigua: veloce ma con buchi (frammentazione esterna)</li>
+      <li>Concatenata e FAT: catene di "successivo"</li>
+    </ul>
+    <ul class="points">
+      <li>Indicizzata: un elenco di blocchi per file</li>
+      <li>i-node: metadati, 12 diretti, indiretti singolo, doppio, triplo</li>
+      <li>SSD: TRIM, niente deframmentazione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione (online): la gestione delle periferiche, con driver, buffer e DMA.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

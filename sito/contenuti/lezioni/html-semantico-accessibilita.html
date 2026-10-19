@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HTML semantico e accessibilità · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.pagina{display:grid;grid-template-columns:1fr 2.2fr 1fr;grid-template-rows:auto auto 1fr auto;gap:12px;font-family:var(--mono);font-size:28px;height:100%}
+.pagina>div{border:3px solid var(--accent);border-radius:14px;padding:12px 18px;background:var(--card);display:flex;flex-direction:column;justify-content:center}
+.pagina>div small{font-family:var(--body);font-size:22px;color:var(--muted)}
+.pagina .h,.pagina .n,.pagina .f{grid-column:1/-1}
+.pagina .h{background:var(--accent);color:#fff}.pagina .h small{color:rgba(255,255,255,.85)}
+.pagina .m{grid-column:1/3;background:var(--accent-soft)}
+</style>
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Sviluppare siti web responsive e accessibili · Lezione 1</p>
+  <h1>HTML semantico<br>e accessibilità</h1>
+  <p class="lead">Una pagina non si guarda soltanto: si ascolta, si naviga con la tastiera, la leggono i motori di ricerca e le AI. Scriviamola in modo che tutti la capiscano.</p>
+  <aside class="notes">Obiettivi: usare i tag semantici di HTML5 (header, nav, main, article, section, aside, footer), costruire una gerarchia corretta di titoli, scrivere testi alternativi adatti, provare una pagina con WAVE, con la tastiera e con uno screen reader. Prerequisiti: lezioni dell'Unità 4 su HTML e CSS. Durata: 2-3 ore. Preparare: PC del docente con il Narratore di Windows (Ctrl + tasto Windows + Invio) e casse collegate alla LIM; se possibile, cuffie per gli studenti per il terzo laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai usato il telefono senza guardare lo schermo?</h2></div>
+  <div class="poll" data-id="sem-senza-schermo">
+    <ol><li>Sì, con l'assistente vocale</li><li>Sì, dettando i messaggi</li><li>Ho provato TalkBack o VoiceOver</li><li>Mai</li></ol>
+  </div>
+  <p class="lead">Per alcune persone non è una prova: è l'unico modo di usare il web.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Chiedere a chi ha risposto "Sì" in quale situazione (in bici, cucinando, con le mani occupate). TalkBack (Android) e VoiceOver (iPhone) sono gli screen reader già installati sui telefoni: leggono a voce lo schermo e cambiano i gesti (un tocco seleziona, doppio tocco attiva). Non farli attivare ora ai ragazzi: con VoiceOver o TalkBack attivi chi non conosce i gesti fatica a disattivarli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Uguali a vedersi, diverse per il browser</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>Zuppa di div</b>: tutto è un contenitore generico.</p>
+<pre class="code" style="font-size:29px">&lt;div class="top"&gt;
+  &lt;div class="titolo"&gt;Pizzeria&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="menu"&gt;...&lt;/div&gt;
+&lt;div class="testo"&gt;...&lt;/div&gt;
+&lt;div class="fondo"&gt;...&lt;/div&gt;</pre>
+    </div>
+    <div class="stack">
+      <p class="small"><b>HTML semantico</b>: ogni tag dice che cos'è.</p>
+<pre class="code" style="font-size:29px">&lt;<span class="k">header</span>&gt;
+  &lt;<span class="k">h1</span>&gt;Pizzeria&lt;/h1&gt;
+&lt;/header&gt;
+&lt;<span class="k">nav</span>&gt;...&lt;/nav&gt;
+&lt;<span class="k">main</span>&gt;...&lt;/main&gt;
+&lt;<span class="k">footer</span>&gt;...&lt;/footer&gt;</pre>
+    </div>
+  </div>
+  <div class="callout">Con il CSS le due pagine possono apparire <b>identiche</b>. Ma uno screen reader, Google e un'AI capiscono solo la seconda.</div>
+  <aside class="notes">Domanda alla classe: "Se fossi cieco e la pagina avesse 200 link, come troveresti il menu?" Con i tag semantici lo screen reader offre una lista di "punti di riferimento" (landmark): intestazione, navigazione, contenuto principale, piè di pagina, e ci si salta sopra con un tasto. Con i div non c'è niente su cui saltare. Semantico significa "che porta un significato".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I tag semantici di HTML5</p><h2>La mappa di una pagina</h2></div>
+  <div class="cols-2 wide-left grow">
+    <div class="pagina">
+      <div class="h">&lt;header&gt;<small>logo, titolo del sito</small></div>
+      <div class="n">&lt;nav&gt;<small>il menu di navigazione</small></div>
+      <div class="m">&lt;main&gt; → &lt;article&gt; + &lt;section&gt;<small>il contenuto principale, uno per pagina</small></div>
+      <div>&lt;aside&gt;<small>contenuto a lato</small></div>
+      <div class="f">&lt;footer&gt;<small>contatti, crediti, note legali</small></div>
+    </div>
+    <ul class="points small">
+      <li><code>article</code>: un contenuto che sta in piedi da solo (una notizia, un post)</li>
+      <li><code>section</code>: una parte con il suo titolo</li>
+      <li><code>figure</code> + <code>figcaption</code>: immagine con didascalia</li>
+      <li><code>div</code> e <code>span</code> restano utili: solo per lo stile, senza significato</li>
+    </ul>
+  </div>
+  <aside class="notes">Questi tag sono arrivati con HTML5 (W3C Recommendation 2014). Regole pratiche: un solo main visibile per pagina; header e footer possono stare anche dentro un article (l'intestazione della notizia). Section senza titolo è un indizio che forse serviva un div. Far notare che il disegno è fatto con CSS Grid: lo studieremo nella lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina il contenuto al tag giusto</h2></div>
+  <dl class="puzzle-abbina" data-id="sem-tag">
+    <dt>&lt;nav&gt;</dt><dd>Home · Menu · Prenota · Contatti</dd>
+    <dt>&lt;article&gt;</dt><dd>La recensione della pizza del mese, con titolo e data</dd>
+    <dt>&lt;aside&gt;</dt><dd>Un riquadro laterale: "Ti potrebbe interessare"</dd>
+    <dt>&lt;footer&gt;</dt><dd>P. IVA, indirizzo e link alla privacy</dd>
+    <dt>&lt;figcaption&gt;</dt><dd>"La pizza margherita appena sfornata"</dd>
+    <dt>&lt;main&gt;</dt><dd>Tutto il contenuto principale, uno per pagina</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 2 minuti, poi una coppia viene alla LIM. Discussione: un riquadro "Ti potrebbe interessare" dentro un articolo resta aside; la didascalia va dentro figure insieme all'immagine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Ti serve un pulsante "Invia". Che tag usi?</h2></div>
+  <div class="poll" data-id="sem-bottone" data-tipo="quiz" data-risposta="C">
+    <ol><li><code>&lt;div class="btn" onclick="invia()"&gt;</code></li><li><code>&lt;span class="button"&gt;</code></li><li><code>&lt;button type="submit"&gt;</code></li><li><code>&lt;a href="#"&gt;</code></li></ol>
+    <p class="why">Solo &lt;button&gt; si raggiunge con il tasto Tab, si attiva con Invio e con la barra spaziatrice e viene annunciato come "pulsante". Un div cliccabile funziona solo col mouse; un link porta altrove, non invia.</p>
+  </div>
+  <aside class="notes">Tranello: molti siti usano davvero div cliccabili e "sembrano" funzionare, perché chi li prova usa il mouse. Per rendere accessibile un div servirebbero tabindex, role="button" e la gestione dei tasti in JavaScript: tre cose per rifare male quello che button fa già. Prima regola di ARIA (W3C): se esiste un elemento HTML nativo con il comportamento giusto, usa quello.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Dalla zuppa di div all'HTML semantico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri il Blocco note e crea la pagina della <b>Pizzeria da Gino</b>: <code>header</code> con <code>h1</code>, <code>nav</code> con 3 link, <code>main</code> con 2 <code>article</code> (ognuno con <code>h2</code> e un paragrafo), <code>footer</code>.</li>
+      <li>Nella prima riga <code>&lt;!DOCTYPE html&gt;</code>, poi <code>&lt;html lang="it"&gt;</code>; nella head <code>&lt;meta charset="utf-8"&gt;</code> e un <code>&lt;title&gt;</code>.</li>
+      <li>Salva come <b>semantico.html</b> (codifica UTF-8) e aprila nel browser.</li>
+      <li>Vai su <b>validator.w3.org</b>, scheda <i>Validate by Direct Input</i>, incolla il codice, spunta <i>outline</i> e premi <i>Check</i>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il validatore scrive "Document checking completed. No errors or warnings to show." Nell'outline vedi Pizzeria da Gino al livello 1 e i due titoli degli articoli al livello 2.</div>
+  </div>
+  <aside class="notes">Chi preferisce può usare CodePen o JSFiddle senza account (incollando solo il contenuto del body nel riquadro HTML), ma per il validatore serve la pagina completa. Errori tipici: manca il title (errore), manca lang (avviso), h3 senza h2 prima. Se validator.w3.org non risponde, usare la convalida integrata di un editor o rimandare la convalida a casa. Conservare semantico.html: serve per il terzo laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Struttura del documento</p><h2>I titoli sono l'indice della pagina</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un solo <code>h1</code>: il titolo della pagina</li>
+      <li>Poi <code>h2</code>, <code>h3</code>… <b>senza saltare livelli</b></li>
+      <li>Mai scegliere un titolo per la sua grandezza: la grandezza si decide con il CSS</li>
+      <li><code>lang="it"</code>: la voce sintetica legge in italiano e non in inglese</li>
+      <li>Ogni campo di un modulo ha la sua <code>&lt;label&gt;</code></li>
+    </ul>
+<pre class="code" style="font-size:28px">&lt;h1&gt;Pizzeria da Gino&lt;/h1&gt;
+  &lt;h2&gt;Il menu&lt;/h2&gt;
+    &lt;h3&gt;Pizze rosse&lt;/h3&gt;
+    &lt;h3&gt;Pizze bianche&lt;/h3&gt;
+  &lt;h2&gt;Dove siamo&lt;/h2&gt;
+
+&lt;<span class="k">label</span> for="mail"&gt;E-mail&lt;/label&gt;
+&lt;input id="mail" type="email"&gt;</pre>
+  </div>
+  <aside class="notes">Nelle indagini di WebAIM sugli utenti di screen reader (WebAIM Screen Reader User Survey, webaim.org/projects) la navigazione per titoli risulta il modo più usato per trovare informazioni in una pagina lunga. Senza lang="it" un testo italiano può essere letto con pronuncia inglese: farlo sentire nella demo, se possibile. La label collegata con for e id fa anche sì che cliccando sulla scritta il cursore vada nel campo: comodo per tutti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il web è nato per tutti</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del Web sta nella sua universalità. L'accesso da parte di tutti, indipendentemente dalla disabilità, ne è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web e direttore del W3C, al lancio della Web Accessibility Initiative, 1997</figcaption>
+  </figure>
+  <p class="lead">Nel 2012, alla cerimonia di apertura delle Olimpiadi di Londra, scrisse in diretta davanti al mondo: <i>"This is for everyone"</i>.</p>
+  <aside class="notes">Fonte: comunicato stampa del W3C del 22 ottobre 1997 sul lancio della WAI (Web Accessibility Initiative). Originale: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." Traduzione nostra. La WAI pubblica le linee guida WCAG: oggi la versione 2.2 (2023). In Europa l'European Accessibility Act si applica dal 28 giugno 2025 anche a molti servizi privati (e-commerce, banche, trasporti); in Italia la Legge Stanca (L. 4/2004) vale per la pubblica amministrazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accessibilità</p><h2>Per chi la facciamo? Per tutti, prima o poi</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">∞</p><h3>Permanente</h3><p class="muted">Una persona cieca, sorda, con una sola mano, dislessica.</p></div>
+    <div class="card"><p class="num">⌛</p><h3>Temporanea</h3><p class="muted">Un braccio ingessato, un'infezione agli occhi, l'età che avanza.</p></div>
+    <div class="card"><p class="num">☀</p><h3>Situazionale</h3><p class="muted">Sole sullo schermo, treno rumoroso, un neonato in braccio.</p></div>
+  </div>
+  <div class="callout">Le WCAG chiedono che un sito sia <b>percepibile</b>, <b>utilizzabile</b>, <b>comprensibile</b> e <b>robusto</b>: quattro principi. Contrasto minimo per il testo normale: <b>4,5 : 1</b>.</div>
+  <aside class="notes">Lo schema permanente/temporanea/situazionale viene dal "Persona Spectrum" del toolkit Inclusive Design di Microsoft. I quattro principi delle WCAG in inglese formano la sigla POUR (Perceivable, Operable, Understandable, Robust). Il rapporto 4,5:1 è il livello AA per il testo normale (3:1 per il testo grande). Dato reale: il rapporto annuale WebAIM Million, che analizza le home page del milione di siti più visitati, trova errori WCAG rilevabili automaticamente in circa il 95% delle pagine (2024: 95,9%; 2025: 94,8%); i più frequenti sono il contrasto basso e le immagini senza testo alternativo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il testo alternativo</p><h2>L'attributo alt: tre casi, tre regole</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Informativa</h3><p class="small">Descrivi ciò che serve sapere, in breve.</p><p class="tiny"><code>alt="Margherita appena sfornata"</code></p></div>
+    <div class="card soft"><h3>Decorativa</h3><p class="small">Alt <b>vuoto</b>: lo screen reader la salta.</p><p class="tiny"><code>alt=""</code></p></div>
+    <div class="card soft"><h3>Funzionale</h3><p class="small">In un link o un pulsante: scrivi <b>dove porta</b> o <b>cosa fa</b>.</p><p class="tiny"><code>alt="Cerca"</code></p></div>
+  </div>
+  <ul class="points small">
+    <li>Non scrivere "immagine di…": lo screen reader dice già che è un'immagine</li>
+    <li>Senza attributo alt molti screen reader leggono il <b>nome del file</b>: "IMG underscore 2041 punto jpg"</li>
+  </ul>
+  <aside class="notes">Il buon alt dipende dal contesto: la stessa foto della pizza in un menu ("Margherita, 7 euro") e in un articolo sul forno a legna ha alt diversi. Alt vuoto e alt mancante sono cose diverse: alt="" è una scelta consapevole (decorativa), l'attributo mancante è un errore. Per immagini complesse (grafici) si usa un alt breve più una descrizione nel testo o in figcaption.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il logo in alto è un link alla home. Il suo alt?</h2></div>
+  <div class="poll" data-id="sem-alt-logo" data-tipo="quiz" data-risposta="B">
+    <ol><li>alt="logo.png"</li><li>alt="Pizzeria da Gino, pagina iniziale"</li><li>alt="Immagine del logo rosso e verde"</li><li>alt="" (vuoto), tanto è decorativo</li></ol>
+    <p class="why">Un'immagine dentro un link è funzionale: l'alt diventa il nome del link. Deve dire dove porta. Con alt vuoto il link resterebbe senza nome e lo screen reader leggerebbe l'indirizzo.</p>
+  </div>
+  <aside class="notes">La D è il tranello più forte: il logo "sembra" decorativo. Ma se è l'unico contenuto del link, alt vuoto produce un link muto. La C descrive l'aspetto, che a chi naviga non serve. La A è ciò che succede quando si copia il nome del file.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Che alt scriveresti? Pensa, poi gira</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Lente d'ingrandimento</h3><p>Unico contenuto del pulsante di ricerca</p></div><div class="retro"><p><code>alt="Cerca"</code></p><p class="muted small">È funzionale: conta l'azione, non la forma della lente.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Riga ondulata</h3><p>Separa due sezioni della pagina</p></div><div class="retro"><p><code>alt=""</code></p><p class="muted small">Decorativa: meglio ancora metterla nel CSS come sfondo.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Grafico a barre</h3><p>Vendite di pizze per mese in una notizia</p></div><div class="retro"><p class="small"><code>alt="Vendite mensili: picco ad agosto"</code></p><p class="muted small">Più i dati completi in una tabella o nella didascalia.</p></div></div>
+  </div>
+  <aside class="notes">Far scrivere le proposte su un foglio prima di girare. Accettare formulazioni diverse: l'importante è il criterio (funzione, decorazione, informazione principale). Per il grafico, il dettaglio dei numeri va nel testo vicino o in una table, che lo screen reader legge cella per cella.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>WAVE: la radiografia di un sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Vai su <b>wave.webaim.org</b> (gratis, senza account).</li>
+      <li>Nel campo in alto scrivi l'indirizzo del sito della scuola o di un sito che usi e premi Invio.</li>
+      <li>Leggi il riquadro <i>Summary</i>: annota Errors, Contrast Errors e Alerts.</li>
+      <li>Clicca su un'icona rossa nella pagina e leggi la spiegazione con <i>Reference</i>.</li>
+      <li>Apri la scheda <i>Structure</i>: ci sono header, nav, main, footer? I titoli saltano livelli?</li>
+      <li>Scrivi i risultati in <b>wave-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per ogni sito hai tre numeri e almeno un errore spiegato con parole tue, per esempio "Missing alternative text: un'immagine senza alt".</div>
+  </div>
+  <aside class="notes">WAVE online analizza solo pagine pubblicate su internet, non i file sul disco (per quelli esiste l'estensione WAVE per Chrome e Firefox, che però va installata). Confrontare in classe i risultati di siti diversi. Ricordare che zero errori in WAVE non vuol dire sito accessibile: lo strumento non sa se un alt è sensato o se la pagina si usa con la tastiera. Alternativa se il sito è bloccato: Lighthouse in Chrome (F12, scheda Lighthouse, categoria Accessibility).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Ascolta la tua pagina: tastiera e Narratore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>semantico.html</b>. Senza mouse, premi <b>Tab</b> più volte: vedi sempre dove sei?</li>
+      <li>Metti le cuffie e avvia il Narratore: <b>Ctrl + Windows + Invio</b>.</li>
+      <li>Premi <b>H</b> per saltare da un titolo all'altro e <b>D</b> per passare tra le zone della pagina.</li>
+      <li>Aggiungi un'immagine con un buon alt e una senza alt: ascolta la differenza.</li>
+      <li>Spegni il Narratore con la stessa combinazione di tasti.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il Narratore legge "Pizzeria da Gino" dicendo che è un titolo di livello 1, annuncia la navigazione e il contenuto principale, e per l'immagine senza alt legge il nome del file.</div>
+  </div>
+  <aside class="notes">Fare prima una demo alla LIM con le casse: il docente naviga la propria pagina e un sito vero solo con il Narratore. Nel browser il Narratore usa la modalità di analisi (Caps Lock + Barra spaziatrice la attiva o disattiva), in cui H va al titolo successivo e D al punto di riferimento successivo. Se le cuffie mancano, lavorare a turno o solo con la tastiera (Tab, Maiusc + Tab, Invio). Chi ha un telefono può provare a casa TalkBack o VoiceOver dalle impostazioni di Accessibilità. Il nome esatto delle voci può cambiare con la versione di Windows.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">AI e accessibilità</p><h2>Le macchine che leggono le pagine</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI che descrive le immagini</h3><p>Dal 2023 l'app Be My Eyes ha "Be My AI": un modello multimodale descrive a voce le foto per chi non vede. Anche Word e PowerPoint propongono un alt automatico. Utile, ma può sbagliare e non conosce il <b>perché</b> dell'immagine nella tua pagina: l'alt finale lo decidi tu.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Gli agenti che navigano</h3><p>Molti strumenti che fanno usare il web a un'AI non "guardano" i pixel: leggono la struttura della pagina, cioè tag, titoli, etichette e nomi dei pulsanti, come uno screen reader. Una pagina semantica è più chiara per le persone, per Google e per le AI.</p></div>
+  </div>
+  <aside class="notes">Be My AI usa un modello di OpenAI ed è stato annunciato da Be My Eyes nel 2023. Per il secondo box: per esempio gli strumenti di automazione come Playwright offrono all'AI una "istantanea di accessibilità" della pagina invece dello screenshot. Domanda: "Se il vostro pulsante è un div senza nome, che cosa capisce l'agente?" Niente hype: questi strumenti sbagliano ancora spesso e chi progetta resta responsabile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="1604" data-aiuto="la terza cifra è il numero di caratteri tra le virgolette di alt per un'immagine decorativa">
+    <ul class="points">
+      <li>1ª cifra: quanti h1 conviene avere in una pagina</li>
+      <li>2ª cifra: quanti livelli di titolo esistono in HTML</li>
+      <li>3ª cifra: quanti caratteri ha l'alt di un'immagine decorativa</li>
+      <li>4ª cifra: quanti principi hanno le WCAG</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Un h1, sei livelli da h1 a h6, alt="" vuoto, quattro principi: percepibile, utilizzabile, comprensibile, robusto.</div>
+  </div>
+  <aside class="notes">Codice: 1604. A squadre, la prima che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il contenuto principale della pagina va nel tag <span class="blank" data-risposta="main|&lt;main&gt;"></span>.</p>
+    <p>Il menu di navigazione va nel tag <span class="blank" data-risposta="nav|&lt;nav&gt;"></span>.</p>
+    <p>Un'immagine solo decorativa ha l'attributo alt <span class="blank" data-risposta="vuoto"></span>.</p>
+    <p>Per far leggere la pagina in italiano scrivo <code>&lt;html lang="..."&gt;</code> con il valore <span class="blank" data-risposta="it"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: main, nav, vuoto, it.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Tag semantici: header, nav, main, article, section, aside, footer</li>
+      <li>Un h1, poi titoli in ordine senza salti</li>
+      <li>Pulsanti veri, label per i campi, lang="it"</li>
+    </ul>
+    <ul class="points">
+      <li>Alt: informativo, vuoto se decorativo, funzionale nei link</li>
+      <li>Prove: validatore W3C, WAVE, tastiera, screen reader</li>
+      <li>Accessibile per chi ha una disabilità, utile a tutti</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: il posizionamento degli elementi con position.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

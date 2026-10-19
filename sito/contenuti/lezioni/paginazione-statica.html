@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La paginazione statica · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>L'allocazione non contigua<br>a paginazione statica</h1>
+  <p class="lead">Basta buchi: tagliamo i programmi a fette tutte uguali e le mettiamo dove capita. Una tabella e due conti ci dicono sempre dove sono.</p>
+  <aside class="notes">Obiettivi: definire pagina, frame e tabella delle pagine; tradurre a mano un indirizzo logico in fisico, in decimale e in esadecimale; capire perché la paginazione elimina la frammentazione esterna; stimare la dimensione di una tabella delle pagine. Prerequisiti: lezioni precedenti (base e limite, frammentazione) e il deck "Oltre il binario: l'esadecimale". Durata: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dopo la lezione sui buchi: quale idea ti convince di più?</h2></div>
+  <div class="poll" data-id="pag-idea">
+    <ol><li>Compattare la RAM più spesso</li><li>Comprare più RAM e non pensarci</li><li>Tagliare i programmi in pezzi tutti uguali</li><li>Fare tante partizioni piccole e fisse</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione. Riprendere ogni scelta: compattare costa tempo; più RAM rimanda il problema; partizioni piccole e fisse non bastano per un processo grande... a meno che un processo possa usare più partizioni non attaccate! È proprio l'idea della C: la paginazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea</p><h2>Pagine del processo, frame della RAM</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 900 600" width="900" height="600" aria-label="Pagine del processo collegate ai frame della RAM">
+      <g font-family="DM Sans, sans-serif" font-size="28" font-weight="700" text-anchor="middle">
+        <text x="120" y="40" fill="#596179" font-size="26">Processo</text>
+        <text x="740" y="40" fill="#596179" font-size="26">RAM</text>
+        <rect x="40" y="60" width="160" height="80" rx="10" fill="#7e45cc"/><text x="120" y="110" fill="#fff">Pagina 0</text>
+        <rect x="40" y="150" width="160" height="80" rx="10" fill="#7e45cc"/><text x="120" y="200" fill="#fff">Pagina 1</text>
+        <rect x="40" y="240" width="160" height="80" rx="10" fill="#7e45cc"/><text x="120" y="290" fill="#fff">Pagina 2</text>
+        <rect x="40" y="330" width="160" height="80" rx="10" fill="#7e45cc"/><text x="120" y="380" fill="#fff">Pagina 3</text>
+        <g font-size="24" font-weight="600">
+          <rect x="660" y="60" width="160" height="62" rx="8" fill="#fff" stroke="#c9ced9" stroke-width="3"/><text x="740" y="100" fill="#596179">frame 0</text>
+          <rect x="660" y="126" width="160" height="62" rx="8" fill="#e2d4f5" stroke="#7e45cc" stroke-width="3"/><text x="740" y="166" fill="#172033">frame 1 · p3</text>
+          <rect x="660" y="192" width="160" height="62" rx="8" fill="#fff" stroke="#c9ced9" stroke-width="3"/><text x="740" y="232" fill="#596179">frame 2</text>
+          <rect x="660" y="258" width="160" height="62" rx="8" fill="#e2d4f5" stroke="#7e45cc" stroke-width="3"/><text x="740" y="298" fill="#172033">frame 3 · p0</text>
+          <rect x="660" y="324" width="160" height="62" rx="8" fill="#fff" stroke="#c9ced9" stroke-width="3"/><text x="740" y="364" fill="#596179">frame 4</text>
+          <rect x="660" y="390" width="160" height="62" rx="8" fill="#e2d4f5" stroke="#7e45cc" stroke-width="3"/><text x="740" y="430" fill="#172033">frame 5 · p2</text>
+          <rect x="660" y="456" width="160" height="62" rx="8" fill="#fff" stroke="#c9ced9" stroke-width="3"/><text x="740" y="496" fill="#596179">frame 6</text>
+          <rect x="660" y="522" width="160" height="62" rx="8" fill="#e2d4f5" stroke="#7e45cc" stroke-width="3"/><text x="740" y="562" fill="#172033">frame 7 · p1</text>
+        </g>
+      </g>
+      <g stroke="#7e45cc" stroke-width="4" fill="none">
+        <path d="M200 100 C430 100 430 289 656 289"/>
+        <path d="M200 190 C430 190 430 553 656 553"/>
+        <path d="M200 280 C430 280 430 421 656 421"/>
+        <path d="M200 370 C430 370 430 157 656 157"/>
+      </g>
+    </svg>
+    <div class="stack">
+      <p>Il processo è diviso in <b>pagine</b>, la RAM in <b>frame</b>: stessa dimensione (per esempio 4 KB).</p>
+      <p>Ogni pagina va in un frame libero <mark>qualsiasi</mark>, anche non vicino agli altri.</p>
+      <p class="small muted">Statica: all'avvio tutte le pagine vengono caricate in RAM.</p>
+    </div>
+  </div>
+  <aside class="notes">Paginazione = allocazione non contigua. Non esistono più buchi "troppo piccoli": ogni frame libero va bene per qualunque pagina. In questo esempio la tabella delle pagine è 0→3, 1→7, 2→5, 3→1: la useremo per tutti gli esercizi. "Statica" (come la chiama il libro) significa che il programma viene caricato tutto prima di partire; nella prossima lezione le pagine verranno caricate solo quando servono (paginazione dinamica, o su richiesta).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La traduzione</p><h2>Due conti e una tabella</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula" style="font-size:44px"><small>numero di pagina e offset (spiazzamento)</small>p = logico <span class="hl">DIV</span> dim<br>d = logico <span class="hl">MOD</span> dim</div>
+      <div class="formula" style="font-size:44px"><small>indirizzo fisico</small>fisico = frame(p) × dim + d</div>
+    </div>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Pagina</th><th>Frame</th></tr>
+        <tr><td class="mono">0</td><td class="mono">3</td></tr>
+        <tr><td class="mono">1</td><td class="mono">7</td></tr>
+        <tr><td class="mono">2</td><td class="mono">5</td></tr>
+        <tr><td class="mono">3</td><td class="mono">1</td></tr>
+      </table>
+      <p class="small">La <b>tabella delle pagine</b>: una per ogni processo, la consulta la MMU.</p>
+    </div>
+  </div>
+  <aside class="notes">DIV = divisione intera (in Java l'operatore / tra int, in Calc QUOZIENTE), MOD = resto (in Java %, in Calc RESTO). L'offset non cambia mai nella traduzione: cambia solo il numero di pagina, sostituito dal numero di frame. Il sistema operativo tiene la tabella in RAM e la MMU la consulta a ogni accesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Esempio svolto</p><h2>Pagine da 1024 byte, indirizzo logico 3000</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Pagina</h3><p class="mono">3000 DIV 1024 = <b>2</b></p></div>
+    <div class="card soft"><p class="num">2</p><h3>Offset</h3><p class="mono">3000 − 2048 = <b>952</b></p></div>
+    <div class="card soft"><p class="num">3</p><h3>Tabella</h3><p class="mono">pagina 2 → frame <b>5</b></p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Fisico</h3><p class="mono">5 × 1024 + 952 = <b>6072</b></p></div>
+  </div>
+  <div class="callout">Controllo veloce: l'offset deve essere sempre minore di 1024, e il fisico deve cadere dentro il frame 5, cioè tra 5120 e 6143.</div>
+  <aside class="notes">Rifare alla lavagna con 0 (pagina 0, offset 0, frame 3: 3072) e con 4095 (pagina 3, offset 1023, frame 1: 2047). Far notare che 4095 è l'ultimo indirizzo valido del processo (4 pagine × 1024 − 1): 4096 darebbe una pagina 4 che non esiste, cioè un errore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Stessa tabella, pagine da 1024 byte. Indirizzo logico 1500: qual è il fisico?</h2></div>
+  <div class="poll" data-id="pag-1500" data-tipo="quiz" data-risposta="D">
+    <ol><li>8668</li><li>3548</li><li>7000</li><li>7644</li></ol>
+    <p class="why">1500 DIV 1024 = 1, offset 1500 − 1024 = 476. La pagina 1 sta nel frame 7: 7 × 1024 + 476 = 7168 + 476 = 7644.</p>
+  </div>
+  <aside class="notes">Tranelli: A = 7 × 1024 + 1500, chi dimentica di togliere la pagina dall'offset; B = 3 × 1024 + 476, chi guarda la riga sbagliata della tabella (frame della pagina 0); C = 7 × 1000, chi usa pagine "decimali". Lasciare 2 minuti, a coppie.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una MMU a pagine in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In F2:F5 scrivi le pagine 0, 1, 2, 3 e in G2:G5 i frame 3, 7, 5, 1.</li>
+      <li>In A2:A6 gli indirizzi logici 0, 1500, 3000, 4095, 2048.</li>
+      <li>B2 <code>=QUOZIENTE(A2;1024)</code>, C2 <code>=RESTO(A2;1024)</code>, D2 <code>=CERCA.VERT(B2;$F$2:$G$5;2;0)</code>, E2 <code>=D2*1024+C2</code>. Copia in basso.</li>
+      <li>Prova anche 5000. Salva come <b>mmu-pagine.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in E2:E6 leggi 3072, 7644, 6072, 2047, 5120. Con 5000 compare un errore (#N/D): la pagina 4 non esiste nella tabella.</div>
+  </div>
+  <aside class="notes">CERCA.VERT cerca il numero di pagina nella prima colonna della tabella e restituisce la seconda colonna (il frame); lo 0 finale chiede una corrispondenza esatta. L'errore #N/D con 5000 è proprio quello che farebbe la MMU: indirizzo fuori dallo spazio del processo. Chi finisce prima: usare =SE.ERRORE(...;"ERRORE") per un messaggio più chiaro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il trucco dell'informatico</p><h2>Con pagine da 2<sup>k</sup> byte non serve dividere</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Pagine da 4 KB = 2<sup>12</sup> byte: gli ultimi <b>12 bit</b> sono l'offset, gli altri il numero di pagina.</p>
+      <p>12 bit = <mark>3 cifre esadecimali</mark>. Basta guardare l'indirizzo!</p>
+      <p class="small muted">Tabella: pagina 2 → frame 5.</p>
+    </div>
+    <div class="stack">
+      <div class="formula" style="font-size:50px"><small>logico</small>0x<span class="hl">2</span>ABC</div>
+      <div class="formula" style="font-size:50px"><small>fisico: cambia solo la pagina</small>0x<span class="hl">5</span>ABC</div>
+    </div>
+  </div>
+  <aside class="notes">Perché funziona: dividere per 2^12 significa togliere 12 bit a destra; il resto sono proprio quei 12 bit. Ogni cifra esadecimale vale 4 bit (deck sull'esadecimale), quindi 12 bit = 3 cifre. È per questo che le dimensioni delle pagine sono sempre potenze di 2: la MMU non fa divisioni, separa i bit. Verifica in decimale: 0x2ABC = 10940 = 2 × 4096 + 2748; 0x5ABC = 5 × 4096 + 2748 = 23228.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Pagine da 4 KB. La tabella dice: pagina 0x1F → frame 0x8. Indirizzo logico 0x1F3A4?</h2></div>
+  <div class="poll" data-id="pag-hex" data-tipo="quiz" data-risposta="C">
+    <ol><li>0x8F3A4</li><li>0x3A48</li><li>0x83A4</li><li>0x1F8</li></ol>
+    <p class="why">Le ultime 3 cifre esadecimali sono l'offset: 3A4. Il numero di pagina è tutto il resto: 1F, non solo la F! Si sostituisce 1F con 8: 0x83A4.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: chi prende come pagina solo la cifra F lascia l'1 e scrive 0x8F3A4. La B mette il frame in fondo, la D confonde pagina e frame. In decimale: 0x1F3A4 = 127908; pagina 31, offset 932; frame 8: 8 × 4096 + 932 = 33700 = 0x83A4.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>La MMU nella console del browser</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Premi <b>F12</b>, scheda <b>Console</b>. Scrivi una riga alla volta e premi Invio:</p>
+      <pre class="code" style="font-size:28px"><span class="c">// pagina: sposta di 12 bit a destra</span>
+0x2ABC &gt;&gt; 12
+<span class="c">// offset: tieni gli ultimi 12 bit</span>
+(0x2ABC &amp; 0xFFF).toString(16)
+<span class="c">// fisico: frame 5 al posto della pagina</span>
+((5 &lt;&lt; 12) | 0xABC).toString(16)</pre>
+      <p class="small">Poi rifai il quiz: <code>((8 &lt;&lt; 12) | (0x1F3A4 &amp; 0xFFF)).toString(16)</code></p>
+    </div>
+    <div class="check"><b>Controllo:</b> le tre righe danno <b>2</b>, <b>"abc"</b> e <b>"5abc"</b>. L'ultima dà <b>"83a4"</b>. Copia i risultati in un file <b>console-pagine.txt</b>.</div>
+  </div>
+  <aside class="notes">&gt;&gt; sposta i bit a destra (come dividere per 2^12), &amp; con 0xFFF tiene gli ultimi 12 bit (come il resto), &lt;&lt; sposta a sinistra e | "incolla" i bit. Sono le stesse operazioni che la MMU fa in hardware. Se Chrome chiede di scrivere "consenti incolla" prima di incollare, è una protezione normale: meglio far digitare le righe a mano. In alternativa la Calcolatrice di Windows in modalità Programmatore (Lsh, Rsh, AND, OR).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un hobby che aveva bisogno delle pagine</h2></div>
+  <figure class="citazione">
+    <blockquote style="font-size:48px">Sto facendo un sistema operativo (libero) (solo un hobby, non sarà grande e professionale come gnu) per cloni AT 386(486).</blockquote>
+    <figcaption><b>Linus Torvalds</b>, studente all'Università di Helsinki, messaggio sul newsgroup comp.os.minix, 25 agosto 1991</figcaption>
+  </figure>
+  <p>Perché proprio il 386? Fu il primo processore x86 con la <b>paginazione</b> in hardware, a pagine da 4 KB. L'idea però era nata nel 1962 a Manchester, sul computer <b>Atlas</b>.</p>
+  <aside class="notes">Originale: "I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu) for 386(486) AT clones." Traduzione nostra. Il primo Linux sfruttava la gestione della memoria del 386 (1985), che aggiungeva la paginazione alla segmentazione. Atlas (Università di Manchester e Ferranti, 1962, gruppo di Tom Kilburn) è il primo computer con memoria a pagine e memoria virtuale: pagine da 512 parole. Domanda: "oggi Linux è un hobby?" Gira su quasi tutti i server e, con Android, su miliardi di telefoni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto costa?</p><h2>Anche la tabella delle pagine occupa memoria</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:40px"><small>indirizzi a 32 bit, pagine da 4 KB (12 bit di offset)</small>2<sup>32−12</sup> = 2<sup>20</sup> pagine<br>2<sup>20</sup> × 4 byte = <span class="hl">4 MB</span><br><small style="margin:10px 0 0">per ogni processo, se la tabella fosse un'unica lista</small></div>
+    <div class="stack">
+      <ul class="points">
+        <li>Per questo si usano tabelle <b>a più livelli</b>: si crea solo la parte che serve</li>
+        <li>La <b>TLB</b> è una piccola cache dentro la MMU con le traduzioni recenti</li>
+      </ul>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Android 15 supporta pagine da <b>16 KB</b>, come i Mac con chip Apple: tabelle più piccole e meno lavoro per la MMU, in cambio di un po' più di frammentazione interna.</p></div>
+    </div>
+  </div>
+  <aside class="notes">2^20 = 1 048 576 righe da 4 byte = 4 MiB. Con 100 processi sarebbero 400 MB solo di tabelle: per questo x86 usa tabelle a 2 livelli (32 bit) o 4-5 livelli (64 bit). La TLB (Translation Lookaside Buffer) evita di leggere la tabella in RAM a ogni accesso: torna l'idea della gerarchia. Fonte per l'Oggi: Android Developers Blog, agosto 2024, "Adding 16 KB page size to Android"; i Mac con Apple Silicon usano pagine da 16 KB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Frammentazione</p><h2>Niente buchi fuori, un po' di spreco dentro</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Esterna: sparita</h3><p>Ogni frame libero va bene per qualunque pagina. Se ci sono N frame liberi, entra qualunque processo di N pagine.</p></div>
+    <div class="card bad"><h3>Interna: solo nell'ultima pagina</h3><p>Processo di 10 000 byte, pagine da 4096: servono <b>3 pagine</b> (12 288 byte), si sprecano <b>2288 byte</b>.</p></div>
+  </div>
+  <div class="callout">Limite della paginazione <b>statica</b>: tutto il processo deve stare in RAM. Un programma più grande della RAM non parte. Alla prossima lezione lo risolviamo.</div>
+  <aside class="notes">Conto: 10 000 / 4096 = 2,44 → 3 pagine (si arrotonda per eccesso); 3 × 4096 = 12 288; 12 288 − 10 000 = 2288 byte sprecati. In media si spreca mezza pagina per processo. Pagine più grandi: tabelle più piccole ma più spreco interno; pagine più piccole: il contrario. È un compromesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine la traduzione di un indirizzo</h2></div>
+  <ol class="puzzle-ordina" data-id="pag-ordine">
+    <li>La CPU genera un indirizzo logico</li>
+    <li>La MMU lo divide in numero di pagina e offset</li>
+    <li>Cerca la pagina nella TLB o nella tabella delle pagine</li>
+    <li>Ottiene il numero di frame</li>
+    <li>Unisce frame e offset: indirizzo fisico</li>
+    <li>La RAM restituisce il dato</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Se la pagina non è nella tabella (indirizzo fuori dal processo), al punto 3 scatta un errore e il sistema operativo interviene. Collegare: nella prossima lezione la pagina potrà essere valida ma non in RAM, e scatterà un page fault.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Simulazione in Java</p><h2>Il traduttore di indirizzi</h2></div>
+  <pre class="code" style="font-size:26px">
+<span class="k">import</span> java.util.Scanner;
+<span class="k">public class</span> Traduttore {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">final int</span> DIM = 1024;
+    <span class="k">int</span>[] tabella = {3, 7, 5, 1};            <span class="c">// pagina -&gt; frame</span>
+    Scanner in = <span class="k">new</span> Scanner(System.in);
+    System.out.print(<span class="s">"Indirizzo logico: "</span>);
+    <span class="k">int</span> logico = in.nextInt();
+<span class="hl">    int pagina = logico / DIM;</span>
+<span class="hl">    int offset = logico % DIM;</span>
+    <span class="k">if</span> (pagina &gt;= tabella.length) { System.out.println(<span class="s">"Errore: pagina inesistente"</span>); <span class="k">return</span>; }
+    <span class="k">int</span> fisico = tabella[pagina] * DIM + offset;
+    System.out.println(<span class="s">"p="</span> + pagina + <span class="s">" d="</span> + offset + <span class="s">" fisico="</span> + fisico);
+  }
+}</pre>
+  <aside class="notes">Spiegare riga per riga: / tra interi è la divisione intera (DIV), % è il resto (MOD). L'array tabella è la tabella delle pagine: l'indice è il numero di pagina, il valore il frame. Il controllo pagina &gt;= tabella.length fa ciò che fa la MMU con un indirizzo fuori dal processo. (Un indirizzo negativo non è gestito: domanda per i più bravi.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prova il traduttore su OnlineGDB</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>onlinegdb.com</b> scegli <b>Java</b>, copia il programma e premi <b>Run</b>.</li>
+      <li>Prova 3000, 1500, 0 e 4096. Confronta con il foglio Calc.</li>
+      <li>Cambia DIM in 4096 e prova 10940 (è 0x2ABC): ritrovi il risultato della console?</li>
+      <li>Aggiungi una quinta pagina nel frame 0 e prova di nuovo 4096.</li>
+      <li>Scarica il file come <b>Traduttore.java</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 3000 → p=2 d=952 fisico=6072; 1500 → 7644; 0 → 3072; 4096 → errore. Con DIM 4096, 10940 → p=2 d=2748 fisico=23228, cioè 0x5ABC. Con la quinta pagina, 4096 → fisico=0.</div>
+  </div>
+  <aside class="notes">10940 = 0x2ABC; 23228 = 0x5ABC (5 × 4096 + 2748). Con tabella {3, 7, 5, 1, 0} l'indirizzo 4096 è pagina 4, offset 0, frame 0: fisico 0. Se OnlineGDB non è raggiungibile, usare un altro compilatore Java online o l'IDE del laboratorio; in alternativa Java Tutor (pythontutor.com) per vedere le variabili passo per passo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Intelligenza artificiale e pagine</p><h2>La stessa idea, cinquant'anni dopo, dentro i chatbot</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Mentre risponde, un modello linguistico tiene in memoria della GPU i calcoli già fatti su ogni conversazione.</p>
+      <p>Riservare un blocco unico per conversazione creava frammentazione. La soluzione è stata dividere quella memoria in <b>blocchi</b> uguali, con una <b>tabella dei blocchi</b>.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>PagedAttention</h3><p>Il nome scelto dai ricercatori di Berkeley nel 2023 (progetto vLLM) dice tutto: hanno preso la paginazione dei sistemi operativi e l'hanno applicata alla memoria delle GPU. Così un server serve più conversazioni insieme.</p></div>
+  </div>
+  <aside class="notes">Fonte: W. Kwon e altri, "Efficient Memory Management for Large Language Model Serving with PagedAttention", SOSP 2023. La memoria in questione è la "KV cache" (risultati intermedi dell'attenzione per i token già letti); non serve il termine tecnico. Il messaggio: le idee dei sistemi operativi tornano ovunque ci sia una risorsa da dividere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Caccia all'indirizzo: apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="3532" data-aiuto="tabella 0→3, 1→7, 2→5, 3→1, pagine da 1024 byte">
+    <ul class="points">
+      <li>1ª cifra: il numero di pagina dell'indirizzo logico 3500 (pagine da 1024)</li>
+      <li>2ª cifra: il frame che contiene l'indirizzo logico 2100</li>
+      <li>3ª cifra: quante cifre esadecimali di offset con pagine da 4 KB</li>
+      <li>4ª cifra: l'ultima cifra dell'indirizzo fisico del logico 3000</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3500 è nella pagina 3; 2100 nella pagina 2, frame 5; 12 bit = 3 cifre; 3000 → 6072.</div>
+  </div>
+  <aside class="notes">Codice: 3532. Le squadre lavorano su carta; la prima che apre il lucchetto alla LIM vince. Dopo tre errori compare l'aiuto con la tabella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="pag-abbina">
+    <dt>Pagina</dt><dd>Fetta di dimensione fissa del processo</dd>
+    <dt>Frame</dt><dd>Fetta della RAM grande quanto una pagina</dd>
+    <dt>Tabella delle pagine</dt><dd>Dice in quale frame sta ogni pagina</dd>
+    <dt>Offset</dt><dd>Posizione del byte dentro la pagina</dd>
+    <dt>TLB</dt><dd>Cache delle traduzioni più recenti</dd>
+  </dl>
+  <aside class="notes">Coppie corrette come scritte. Domanda bonus: che cosa NON cambia mai durante la traduzione? L'offset.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Le fette della RAM grandi quanto una pagina si chiamano <span class="blank" data-risposta="frame"></span>.</p>
+    <p>Con pagine da 1024 byte, l'indirizzo logico 2050 è nella pagina <span class="blank" data-risposta="2"></span> con offset <span class="blank" data-risposta="2"></span>.</p>
+    <p>Con pagine da 4 KB l'offset occupa <span class="blank" data-risposta="12"></span> bit.</p>
+    <p>La paginazione elimina la frammentazione <span class="blank" data-risposta="esterna"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: frame; 2050 = 2 × 1024 + 2, quindi pagina 2 e offset 2; 12 bit; esterna (resta un po' di frammentazione interna nell'ultima pagina).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Pagine del processo in frame qualsiasi</li>
+      <li>p = logico DIV dim, d = logico MOD dim</li>
+      <li>fisico = frame × dim + d</li>
+    </ul>
+    <ul class="points">
+      <li>Pagine da 2<sup>k</sup>: l'offset sono gli ultimi k bit</li>
+      <li>Niente frammentazione esterna</li>
+      <li>Statica: tutto il processo in RAM</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: la memoria virtuale a paginazione dinamica (page fault e algoritmi di sostituzione).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

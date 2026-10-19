@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lo stile della pagina web: i CSS · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Il WWW e le pagine web</p>
+  <h1>Lo stile della<br>pagina web: i CSS</h1>
+  <p class="lead">Stesso HTML, mille vestiti diversi. Colori in esadecimale, caratteri, bordi ed elenchi: oggi la tua pagina smette di sembrare quella del 1991.</p>
+  <aside class="notes">Obiettivi: capire la separazione tra contenuto (HTML) e presentazione (CSS); scrivere regole con selettore, proprietà e valore; collegare i CSS in tre modi e preferire il file esterno; usare i selettori di tipo e il raggruppamento; esprimere i colori con nomi, esadecimale e rgb(); usare le proprietà per testo, font, sfondi, bordi, elenchi e tabelle; validare con il CSS Validator del W3C. Classi, id, pseudo-classi e specificità arrivano nella lezione successiva. Durata: 2 ore. Serve la cartella web-cognome delle lezioni precedenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanto conta l'aspetto di un sito per decidere se fidarti?</h2></div>
+  <div class="poll" data-id="css-fiducia">
+    <ol><li>Moltissimo: se è brutto, esco</li><li>Abbastanza, ma conta di più il contenuto</li><li>Poco: guardo chi l'ha scritto</li><li>Per niente</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione. Collegare al quiz sul lucchetto della prima lezione: anche un sito truffa può essere bellissimo, perché i CSS sono gratis per tutti. L'aspetto aiuta a leggere e a usare, ma non è una prova di affidabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contenuto e presentazione</p><h2>HTML dice che cosa è, CSS dice come appare</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>HTML</h3><p>"Questo è un titolo, questo è un elenco, questa è un'immagine."</p><p class="muted small">Struttura e significato.</p></div>
+    <div class="card fill"><h3>CSS · Cascading Style Sheets</h3><p>"I titoli sono arancioni, il testo è grigio scuro, l'elenco non ha pallini."</p><p class="small" style="opacity:.85">Aspetto: colori, caratteri, spazi, bordi.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un modello di AI che legge immagini può trasformare lo schizzo di una pagina, fatto a mano su un foglio, in HTML e CSS funzionanti. La divisione dei compiti però resta la stessa: per correggere quel codice bisogna sapere che cosa fa ogni regola.</p></div>
+  <aside class="notes">Esempio storico: il CSS Zen Garden (csszengarden.com, Dave Shea, 2003) usa un unico file HTML e centinaia di fogli di stile diversi creati da designer di tutto il mondo: far vedere due o tre design alla LIM. Separare porta vantaggi concreti: un solo file CSS cambia l'aspetto di tutte le pagine del sito; lo stesso HTML si adatta a telefono, stampa, schermo grande. La generazione di codice da uno schizzo è stata mostrata pubblicamente nel 2023 con i modelli multimodali: il risultato va sempre controllato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>1994: un foglio di stile "a cascata"</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il 10 ottobre 1994 <b>Håkon Wium Lie</b>, un ricercatore norvegese che lavorava al CERN con Berners-Lee, pubblica la proposta <i>Cascading HTML style sheets</i>. Con Bert Bos la trasforma nello standard <b>CSS1</b>, raccomandazione del W3C nel dicembre 1996.</p>
+      <p class="muted small">"A cascata" perché più fogli di stile (dell'autore, del browser, del lettore) si sommano uno sull'altro.</p>
+    </div>
+    <figure class="citazione">
+      <blockquote>This is for everyone.</blockquote>
+      <figcaption><b>Tim Berners-Lee</b>, scritto in luci nello stadio alla cerimonia di apertura delle Olimpiadi di Londra, 2012</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Traduzione: "Questo è per tutti". Berners-Lee comparve alla cerimonia del 27 luglio 2012 a un computer NeXT e la frase, pubblicata anche come suo tweet, venne scritta con le luci sulle tribune. Collegamento con i CSS: separare lo stile permette a ognuno di adattare la pagina (ingrandire il testo, alto contrasto, modalità scura) senza toccare il contenuto. Prima dei CSS i designer usavano tag come &lt;font&gt; e tabelle per impaginare, mescolando contenuto e aspetto. Lie divenne poi CTO di Opera Software.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La sintassi</p><h2>Anatomia di una regola CSS</h2></div>
+  <div class="formula"><small>una regola</small><span class="hl">h1</span> { color: <span class="hl">#d0541f</span>; font-size: 48px; }</div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Selettore</h3><p class="small"><code>h1</code>: a quali elementi si applica</p></div>
+    <div class="card soft"><h3>Proprietà</h3><p class="small"><code>color</code>: che cosa cambio</p></div>
+    <div class="card soft"><h3>Valore</h3><p class="small"><code>#d0541f</code>: come lo cambio</p></div>
+    <div class="card soft"><h3>Dichiarazione</h3><p class="small">proprietà<b>:</b> valore<b>;</b> dentro le graffe</p></div>
+  </div>
+  <p class="small muted">Più selettori insieme con la virgola: <code>h1, h2, h3 { font-family: Georgia, serif; }</code>. Commenti: <code>/* così */</code>.</p>
+  <aside class="notes">Errori tipici: dimenticare il punto e virgola (la dichiarazione successiva si rompe), usare = al posto dei due punti, scrivere i valori tra virgolette (color: "red" non funziona). Il raggruppamento con la virgola evita di ripetere le stesse regole. Le graffe si scrivono con AltGr+Shift+è e AltGr+Shift++ sulla tastiera italiana (o AltGr+7 e AltGr+0 su alcune tastiere): mostrarlo, perché blocca molti studenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni pezzo di <code>p { color: navy; }</code></h2></div>
+  <dl class="puzzle-abbina" data-id="css-sintassi">
+    <dt><code>p</code></dt><dd>Selettore: tutti i paragrafi</dd>
+    <dt><code>color</code></dt><dd>Proprietà: il colore del testo</dd>
+    <dt><code>navy</code></dt><dd>Valore: un colore con il suo nome</dd>
+    <dt><code>color: navy;</code></dt><dd>Una dichiarazione completa</dd>
+    <dt><code>{ … }</code></dt><dd>Il blocco delle dichiarazioni</dd>
+  </dl>
+  <aside class="notes">Ripasso veloce. Far notare che color cambia il colore del TESTO; per lo sfondo serve background-color. È una confusione frequentissima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove si scrivono</p><h2>Tre modi per collegare i CSS</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>In linea</h3><pre class="code" style="font-size:22px;padding:18px 20px">&lt;p style="color:red"&gt;</pre><p class="small muted">Vale per un solo elemento. Da evitare: stile e contenuto di nuovo mescolati.</p></div>
+    <div class="card"><h3>Interno</h3><pre class="code" style="font-size:22px;padding:18px 20px">&lt;style&gt;
+  p { color: red; }
+&lt;/style&gt;</pre><p class="small muted">Nel head. Vale per una sola pagina.</p></div>
+    <div class="card fill"><h3>Esterno</h3><pre class="code" style="font-size:22px;padding:18px 20px">&lt;link rel="stylesheet"
+  href="stile.css"&gt;</pre><p class="small" style="opacity:.9">Nel head. Un file per tutto il sito, scaricato una volta e tenuto in cache.</p></div>
+  </div>
+  <aside class="notes">Il foglio esterno è la scelta giusta per un sito: si cambia un file e cambiano tutte le pagine; il browser lo scarica una volta (si vede nella scheda Network: tipo "stylesheet", e al secondo caricamento dalla cache). Lo stile in linea vince sulle altre regole: ne parleremo con la specificità nella prossima lezione. Il file .css contiene solo regole, senza tag HTML e senza &lt;style&gt;: errore frequente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prime regole dal vivo su CodePen</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>codepen.io/pen</b> (senza account). Nel riquadro HTML incolla il body della tua <b>hobby.html</b>.</li>
+      <li>Nel riquadro <b>CSS</b> scrivi una regola per <code>body</code>: <code>font-family</code>, <code>background-color</code> chiaro, <code>color</code> scuro.</li>
+      <li>Aggiungi una regola per <code>h1</code> con un colore e <code>text-align: center</code>.</li>
+      <li>Aggiungi <code>p { line-height: 1.6; }</code> e guarda come respira il testo.</li>
+      <li>Cambia un valore alla volta e osserva l'anteprima.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'anteprima cambia mentre scrivi; il titolo è centrato e colorato; tutto il testo usa il nuovo carattere perché lo eredita dal body. Copia le regole nel Blocco note: serviranno tra poco.</div>
+  </div>
+  <aside class="notes">Ereditarietà: color, font-family e line-height passano dal body a tutti i figli; bordi e sfondi no. Le immagini con percorso relativo non si vedranno in CodePen (non c'è la cartella img): è normale. Se CodePen è bloccato, jsfiddle.net ha i riquadri HTML e CSS allo stesso modo. Soluzione di esempio: body { font-family: Verdana, Arial, sans-serif; background-color: #fdf6ee; color: #222; } h1 { color: #d0541f; text-align: center; }</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I colori</p><h2>Tre modi di scrivere lo stesso arancione</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data">
+      <tr><th>Modo</th><th>Esempio</th></tr>
+      <tr><td>Nome</td><td class="mono">orangered, navy, white…</td></tr>
+      <tr><td>Esadecimale #RRGGBB</td><td class="mono hl">#d0541f</td></tr>
+      <tr><td>Esadecimale corto #RGB</td><td class="mono">#f00 = #ff0000</td></tr>
+      <tr><td>Funzione rgb()</td><td class="mono hl">rgb(208, 84, 31)</td></tr>
+    </table>
+    <div class="stack">
+      <div class="formula" style="font-size:44px;padding:28px 36px"><small>conto a mano</small>d0 = 13·16 + 0 = <span class="hl">208</span><br>54 = 5·16 + 4 = <span class="hl">84</span><br>1f = 1·16 + 15 = <span class="hl">31</span></div>
+    </div>
+  </div>
+  <p class="small muted">È il colore di questa lezione. Ripassa la conversione con la lezione sull'<b>esadecimale</b>: ogni coppia è una luce da 0 a 255.</p>
+  <aside class="notes">Collegamento diretto alla lezione esadecimale già svolta dalla 3E. Ogni canale ha 256 valori (1 byte): 256³ = 16 777 216 colori. Nel formato corto ogni cifra viene raddoppiata: #f80 = #ff8800. Il selettore di colore dei DevTools (clic sul quadratino accanto a un colore nella scheda Styles) converte tra i formati: farlo vedere. Esistono anche hsl() e i colori con trasparenza (rgb(208 84 31 / 50%)), non necessari ora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi NON è rosso puro?</h2></div>
+  <div class="poll" data-id="css-rosso" data-tipo="quiz" data-risposta="D">
+    <ol><li><code>red</code></li><li><code>#f00</code></li><li><code>rgb(255, 0, 0)</code></li><li><code>#ff000</code></li></ol>
+    <p class="why">#ff000 ha cinque cifre: non è un colore valido e il browser ignora la dichiarazione. #f00 invece è la forma corta di #ff0000, quindi è rosso puro come red e rgb(255, 0, 0).</p>
+  </div>
+  <aside class="notes">La B è il tranello: sembra "incompleto" ma è valido. Il CSS accetta 3, 4, 6 oppure 8 cifre esadecimali (4 e 8 includono la trasparenza). Con 5 cifre la dichiarazione è scartata e il testo resta del colore ereditato: nessun messaggio d'errore, si vede solo nei DevTools (dichiarazione barrata con un'icona di avviso) o nel validatore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Testo e caratteri</p><h2>Le proprietà che userai di più</h2></div>
+  <table class="data compact">
+    <tr><th>Proprietà</th><th>Esempio</th><th>Effetto</th></tr>
+    <tr><td class="mono">font-family</td><td class="mono">Georgia, "Times New Roman", serif</td><td>Il carattere, con alternative in ordine</td></tr>
+    <tr><td class="mono">font-size</td><td class="mono">18px · 1.5em · 2rem</td><td>La dimensione</td></tr>
+    <tr><td class="mono">font-weight / font-style</td><td class="mono">bold · italic</td><td>Grassetto, corsivo</td></tr>
+    <tr><td class="mono">text-align</td><td class="mono">left · center · justify</td><td>L'allineamento</td></tr>
+    <tr><td class="mono">line-height</td><td class="mono">1.5</td><td>L'interlinea, senza unità</td></tr>
+    <tr><td class="mono">text-decoration</td><td class="mono">none · underline</td><td>Sottolineato (i link lo hanno già)</td></tr>
+  </table>
+  <aside class="notes">font-family: il browser usa il primo carattere che trova installato; l'ultima voce è sempre una famiglia generica (serif, sans-serif, monospace) come rete di sicurezza. I nomi con spazi vanno tra virgolette. Unità: px assoluti; em relativi alla dimensione del genitore; rem relativi all'elemento radice html (di solito 16px, quindi 2rem = 32px). rem rispetta l'ingrandimento scelto dall'utente nelle impostazioni del browser. Togliere la sottolineatura ai link è legittimo solo se restano riconoscibili in altro modo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un foglio di stile per tutto il sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella cartella <b>web-cognome</b> crea con il Blocco note il file <b>stile.css</b> (tipo Tutti i file, UTF-8) e incolla le regole di CodePen.</li>
+      <li>Nel head di <b>index.html</b> e di <b>hobby.html</b> aggiungi <code>&lt;link rel="stylesheet" href="stile.css"&gt;</code>.</li>
+      <li>Aggiungi regole per <code>h2</code> e per <code>a</code> (colore a tua scelta, in esadecimale).</li>
+      <li>Apri le due pagine nel browser, poi cambia il colore di h1 in stile.css, salva e ricarica.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> una sola modifica in stile.css cambia <b>entrambe</b> le pagine. Se una pagina resta senza stile, controlla il nome del file e il percorso nel link (in pagine/orario.html serve <code>../stile.css</code>).</div>
+  </div>
+  <aside class="notes">Errori tipici: file salvato come stile.css.txt; tag &lt;style&gt; scritto dentro il file .css; link messo nel body invece che nel head (funziona, ma non è corretto). Con F12 › Network si vede la richiesta di stile.css: se è rossa con 404 (o "failed" per i file locali) il percorso è sbagliato. Chi finisce prima collega stile.css anche a pagine/orario.html.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfondi, bordi, elenchi, tabelle</p><h2>Dare forma ai blocchi</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:27px"><span class="k">ul</span> { list-style-type: square; }
+<span class="k">ol</span> { list-style-type: upper-roman; }
+
+<span class="k">table</span> { border-collapse: collapse; }
+<span class="k">th, td</span> {
+  border: 2px solid #172033;
+  padding: 8px 16px;
+}
+<span class="k">th</span> { background-color: #fbe7dc; }</pre>
+    <div class="stack">
+      <table style="border-collapse:collapse;font-size:30px;background:#fff"><caption style="text-align:left;font-weight:700;padding-bottom:8px">Il risultato</caption><tr><th style="border:2px solid #172033;padding:8px 16px;background:#fbe7dc">Ora</th><th style="border:2px solid #172033;padding:8px 16px;background:#fbe7dc">Lunedì</th></tr><tr><td style="border:2px solid #172033;padding:8px 16px">1ª</td><td style="border:2px solid #172033;padding:8px 16px">TPSI</td></tr></table>
+      <ul class="points small"><li><code>border</code>: spessore, stile (solid, dashed, dotted), colore</li><li><code>border-collapse: collapse</code> unisce i bordi doppi</li><li><code>list-style-type: none</code> toglie i pallini</li></ul>
+    </div>
+  </div>
+  <aside class="notes">Senza border-collapse ogni cella ha il suo bordo e tra due celle se ne vedono due, separati. padding è lo spazio dentro la cella: il box model completo (margin, border, padding) è una lezione dell'unità. list-style-type ha molti valori: disc, circle, square, decimal, lower-alpha, upper-roman, none. Lo stile in linea della tabella a destra serve solo a mostrare il risultato nella slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Nel CSS scrivi <code>p { colour: red; }</code>. Che cosa succede?</h2></div>
+  <div class="poll" data-id="css-colour" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il testo diventa rosso lo stesso</li><li>Il browser blocca tutto il foglio di stile</li><li>Il browser ignora solo quella dichiarazione</li><li>La pagina compare bianca</li></ol>
+    <p class="why">colour (all'inglese britannico) non è una proprietà CSS: il browser salta la dichiarazione che non capisce e applica tutte le altre. Nessun avviso a schermo: l'errore si trova con i DevTools o con il validatore.</p>
+  </div>
+  <aside class="notes">Come per l'HTML, anche i CSS sono tolleranti: è una scelta di progetto, così un browser vecchio ignora le proprietà nuove che non conosce senza rompere la pagina. Il rovescio: gli errori di battitura passano inosservati. Nei DevTools la dichiarazione compare barrata con un triangolo giallo "Unknown property name".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'orario con stile, poi il validatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>pagine/orario.html</b> togli <code>border="1"</code> e collega <code>../stile.css</code>.</li>
+      <li>In stile.css scrivi le regole per table, th e td della slide precedente.</li>
+      <li>Premi F12, scheda <b>Elements</b>, seleziona un th: in <b>Styles</b> cambia il colore di sfondo dal vivo.</li>
+      <li>Apri <b>jigsaw.w3.org/css-validator</b>, scheda <b>By direct input</b>, incolla stile.css e premi Check.</li>
+      <li>Aggiungi apposta <code>colour: red;</code>, ricontrolla e leggi l'errore. Poi toglilo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> bordi singoli e intestazioni colorate; la modifica nei DevTools sparisce quando ricarichi (è solo una prova); il validatore dice "Congratulations! No Error Found" e con colour segnala "Property colour doesn't exist".</div>
+  </div>
+  <aside class="notes">Il messaggio esatto del validatore CSS può variare leggermente; il senso è "la proprietà colour non esiste". Ora anche il validatore HTML non segnala più border come obsoleto. I DevTools sono il laboratorio migliore per sperimentare: si copia nel file solo ciò che funziona. Se jigsaw è lento o bloccato, basta il controllo nei DevTools (dichiarazione barrata).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo stesso contenuto, più vestiti</p><h2>La modalità scura è un foglio di stile</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:29px"><span class="k">body</span> { background-color: #ffffff;
+       color: #172033; }
+
+<span class="c">/* se il telefono è in modalità scura */</span>
+<span class="k">@media</span> (prefers-color-scheme: dark) {
+  <span class="k">body</span> { background-color: #141c30;
+         color: #eef1f8; }
+}</pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando metti il telefono in modalità scura, molti siti cambiano colore da soli: non hanno un secondo HTML, hanno qualche regola CSS in più che legge la tua preferenza. È la promessa del 1994 ancora al lavoro: il contenuto resta, l'aspetto si adatta a chi legge.</p></div>
+  </div>
+  <aside class="notes">La media query prefers-color-scheme è supportata da tutti i browser principali dal 2019-2020, quando iOS 13 e Android 10 hanno introdotto la modalità scura di sistema. Le media query le vedranno meglio nell'Unità 5 (responsive). Prova facoltativa: nei DevTools, menu Rendering, "Emulate CSS media feature prefers-color-scheme". Domanda: "Che cosa deve restare uguale in modalità scura?" Il contrasto tra testo e sfondo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3426" data-aiuto="la terza cifra: conta i punti e virgola">
+    <ul class="points">
+      <li>1ª cifra: in quanti modi si collegano i CSS a una pagina</li>
+      <li>2ª cifra: l'ultima cifra dell'anno della proposta di Håkon Wium Lie</li>
+      <li>3ª cifra: quante dichiarazioni ci sono in <code>a { color: #d0541f; text-decoration: none; }</code></li>
+      <li>4ª cifra: l'ultima cifra dell'anno di CSS1</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> In linea, interno, esterno; 1994; due dichiarazioni; dicembre 1996.</div>
+  </div>
+  <aside class="notes">Codice: 3426. A squadre. Variante più difficile per chi finisce subito: convertire a mano #1f in decimale (31).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In <code>h1 { color: red; }</code>, la parte <code>h1</code> si chiama <span class="blank" style="--w:9ch" data-risposta="selettore"></span>.</p>
+    <p>Il colore dello sfondo si cambia con la proprietà <span class="blank" style="--w:16ch" data-risposta="background-color|background"></span>.</p>
+    <p>In decimale, il rosso di <code>#ff8000</code> vale <span class="blank" data-risposta="255"></span>.</p>
+    <p>Il foglio di stile esterno si collega con l'elemento <span class="blank" data-risposta="link|&lt;link&gt;"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: selettore, background-color (accettato background), 255, link.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>HTML = contenuto, CSS = presentazione</li>
+      <li>Regola: selettore { proprietà: valore; }</li>
+      <li>In linea, interno, esterno: per un sito, il file esterno</li>
+    </ul>
+    <ul class="points">
+      <li>Colori: nomi, #RRGGBB, #RGB, rgb()</li>
+      <li>font-family, font-size, text-align, line-height</li>
+      <li>border, background-color, list-style-type, border-collapse</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito su Novaula. Prossime lezioni dell'unità: il laboratorio della prima pagina web completa, poi classi, id e altri selettori (come colorare un solo paragrafo invece di tutti).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

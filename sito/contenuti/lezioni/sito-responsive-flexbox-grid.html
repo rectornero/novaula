@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Un sito responsive con Flexbox e Grid · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Siti web responsive e accessibili · Lezione 6</p>
+  <h1>Laboratorio:<br>CineTerza responsive</h1>
+  <p class="lead">Costruiamo da zero il sito del cineforum di classe: Flexbox per i pezzi piccoli, Grid per l'impaginazione, mobile first dall'inizio alla fine.</p>
+  <aside class="notes">Laboratorio di 2 ore (anche 3 se la classe è lenta). Obiettivi: scegliere tra Flexbox e Grid, costruire un layout con grid-template-areas, rendere responsive una galleria, collaudare il sito con la modalità dispositivo, la tastiera e i validatori. Ogni studente lavora nella cartella cineforum con index.html e stile.css; a fine ora si salva su chiavetta o su Drive. Nessuna immagine da scaricare: le locandine sono riquadri colorati con il titolo, così non ci sono problemi di diritti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Flexbox o Grid: quale vi è sembrato più facile?</h2></div>
+  <div class="poll" data-id="lab-flexgrid">
+    <ol><li>Flexbox</li><li>Grid</li><li>Uguali</li><li>Non ancora nessuno dei due</li></ol>
+  </div>
+  <p class="muted">Oggi li usiamo insieme: non sono rivali, fanno mestieri diversi.</p>
+  <aside class="notes">Sondaggio per capire il livello. Se molti scelgono la D, ripassare in 5 minuti Flexbox Froggy (flexboxfroggy.com) e Grid Garden (cssgridgarden.com), entrambi in italiano e senza account.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il giorno in cui il web entrò in tasca</h2></div>
+  <figure class="citazione">
+    <blockquote>Un iPod, un telefono e un comunicatore internet. Non sono tre dispositivi separati: è un solo dispositivo.</blockquote>
+    <figcaption><b>Steve Jobs</b>, cofondatore di Apple, presentazione del primo iPhone, Macworld, 9 gennaio 2007</figcaption>
+  </figure>
+  <p class="lead">Da quel giorno ogni sito deve funzionare anche su uno schermo di pochi centimetri, toccato con un dito.</p>
+  <aside class="notes">Traduzione nostra e leggermente accorciata; l'originale: "An iPod, a phone, and an Internet communicator... These are not three separate devices, this is one device, and we are calling it iPhone." Il video della presentazione è facile da trovare: i primi 2 minuti sono un bel momento di storia. Collegamento con la lezione precedente: i 980 pixel finti di Safari nascono proprio su quel telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto</p><h2>CineTerza in tre misure</h2></div>
+  <svg viewBox="0 0 1660 520" width="1660" height="520" role="img" aria-label="Wireframe del sito su telefono, tablet e computer">
+    <g font-family="DM Sans, sans-serif" font-size="22" fill="#172033">
+      <rect x="0" y="0" width="260" height="500" rx="20" fill="#fff" stroke="#172033" stroke-width="5"/>
+      <rect x="20" y="20" width="220" height="60" rx="8" fill="#11845f"/><text x="130" y="58" text-anchor="middle" fill="#fff">testa</text>
+      <rect x="20" y="92" width="220" height="100" rx="8" fill="#daf2e8"/><text x="130" y="148" text-anchor="middle">film 1</text>
+      <rect x="20" y="202" width="220" height="100" rx="8" fill="#daf2e8"/><text x="130" y="258" text-anchor="middle">film 2</text>
+      <rect x="20" y="312" width="220" height="90" rx="8" fill="#ffe45c"/><text x="130" y="363" text-anchor="middle">orari</text>
+      <rect x="20" y="414" width="220" height="66" rx="8" fill="#596179"/><text x="130" y="453" text-anchor="middle" fill="#fff">piede</text>
+      <rect x="330" y="0" width="480" height="500" rx="20" fill="#fff" stroke="#172033" stroke-width="5"/>
+      <rect x="350" y="20" width="440" height="60" rx="8" fill="#11845f"/><text x="570" y="58" text-anchor="middle" fill="#fff">testa con menu</text>
+      <rect x="350" y="92" width="215" height="140" rx="8" fill="#daf2e8"/><text x="457" y="168" text-anchor="middle">film 1</text>
+      <rect x="575" y="92" width="215" height="140" rx="8" fill="#daf2e8"/><text x="682" y="168" text-anchor="middle">film 2</text>
+      <rect x="350" y="242" width="215" height="140" rx="8" fill="#daf2e8"/><text x="457" y="318" text-anchor="middle">film 3</text>
+      <rect x="575" y="242" width="215" height="140" rx="8" fill="#daf2e8"/><text x="682" y="318" text-anchor="middle">film 4</text>
+      <rect x="350" y="392" width="440" height="40" rx="8" fill="#ffe45c"/><text x="570" y="420" text-anchor="middle">orari</text>
+      <rect x="350" y="442" width="440" height="40" rx="8" fill="#596179"/><text x="570" y="470" text-anchor="middle" fill="#fff">piede</text>
+      <rect x="880" y="0" width="780" height="500" rx="20" fill="#fff" stroke="#172033" stroke-width="5"/>
+      <rect x="900" y="20" width="740" height="60" rx="8" fill="#11845f"/><text x="1270" y="58" text-anchor="middle" fill="#fff">testa: logo a sinistra, menu a destra</text>
+      <rect x="900" y="92" width="170" height="160" rx="8" fill="#daf2e8"/><text x="985" y="178" text-anchor="middle">film 1</text>
+      <rect x="1080" y="92" width="170" height="160" rx="8" fill="#daf2e8"/><text x="1165" y="178" text-anchor="middle">film 2</text>
+      <rect x="1260" y="92" width="170" height="160" rx="8" fill="#daf2e8"/><text x="1345" y="178" text-anchor="middle">film 3</text>
+      <rect x="900" y="262" width="170" height="160" rx="8" fill="#daf2e8"/><text x="985" y="348" text-anchor="middle">film 4</text>
+      <rect x="1080" y="262" width="170" height="160" rx="8" fill="#daf2e8"/><text x="1165" y="348" text-anchor="middle">film 5</text>
+      <rect x="1260" y="262" width="170" height="160" rx="8" fill="#daf2e8"/><text x="1345" y="348" text-anchor="middle">film 6</text>
+      <rect x="1440" y="92" width="200" height="330" rx="8" fill="#ffe45c"/><text x="1540" y="262" text-anchor="middle">orari</text>
+      <rect x="900" y="432" width="740" height="48" rx="8" fill="#596179"/><text x="1270" y="463" text-anchor="middle" fill="#fff">piede</text>
+    </g>
+  </svg>
+  <p class="small muted">Telefono: una colonna · da 600 px: galleria su 2 colonne · da 960 px: orari a destra e galleria su 3 colonne</p>
+  <aside class="notes">Mostrare il wireframe prima di scrivere codice: è il "contratto" del laboratorio. Far notare che gli orari sul telefono stanno dopo i film: nell'HTML vengono dopo, e così anche lo screen reader e il tasto Tab li incontrano dopo. Chi finisce prima può aggiungere una sezione "Prenota il posto".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento giusto</p><h2>Flexbox in una dimensione, Grid in due</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Flexbox</h3><p>Allinea elementi lungo <b>una riga o una colonna</b>. Le dimensioni partono dal contenuto.</p><div class="chips"><span class="chip">menu</span><span class="chip">intestazione</span><span class="chip">pulsanti</span><span class="chip">dentro una card</span></div></div>
+    <div class="card soft"><h3>Grid</h3><p>Disegna <b>righe e colonne insieme</b>. Le dimensioni partono dal contenitore.</p><div class="chips"><span class="chip">impaginazione</span><span class="chip">galleria</span><span class="chip">tabella di card</span><span class="chip">modulo</span></div></div>
+  </div>
+  <div class="callout">Regola pratica: se ti interessa che gli elementi siano allineati <b>anche in verticale</b>, tra una riga e l'altra, usa Grid.</div>
+  <aside class="notes">Non è una legge: con entrambi si può fare quasi tutto, ma con fatica diversa. Nel nostro sito: header e menu con Flexbox, pagina e galleria con Grid. Domanda: e il contenuto di una singola locandina (titolo in alto, durata in basso)? Flexbox in colonna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sette locandine in colonne allineate, anche nell'ultima riga</h2></div>
+  <div class="poll" data-id="lab-scelta" data-tipo="quiz" data-risposta="D">
+    <ol><li>Flexbox con <code>flex-wrap: wrap</code> e <code>flex: 1</code></li><li><code>position: absolute</code> per ogni locandina</li><li><code>float: left</code> come una volta</li><li>Grid con tre colonne <code>1fr</code></li></ol>
+    <p class="why">Con flex-wrap e flex: 1 l'ultima riga ha una sola locandina che si allarga fino a riempire tutta la riga. Grid invece crea vere colonne: la settima locandina resta larga come le altre, nella prima colonna.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: funziona quasi, ma 7 elementi su 3 colonne lasciano 1 elemento nell'ultima riga, che con flex: 1 diventa largo tre volte. Si può mostrare dal vivo in CodePen. position: absolute toglie gli elementi dal flusso (lezione sul posizionamento) e non si adatta allo schermo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Passo 1: l'HTML semantico</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:23px"><span class="k">&lt;header</span> class=<span class="s">"testa"</span><span class="k">&gt;</span>
+  <span class="k">&lt;h1&gt;</span>CineTerza<span class="k">&lt;/h1&gt;</span>
+  <span class="k">&lt;nav&gt;&lt;ul&gt;</span> 3 link: Film, Orari, Contatti <span class="k">&lt;/ul&gt;&lt;/nav&gt;</span>
+<span class="k">&lt;/header&gt;</span>
+<span class="k">&lt;main</span> class=<span class="s">"film"</span><span class="k">&gt;</span>
+  <span class="k">&lt;h2&gt;</span>In programma<span class="k">&lt;/h2&gt;</span>
+  <span class="k">&lt;div</span> class=<span class="s">"galleria"</span><span class="k">&gt;</span>
+    <span class="k">&lt;article</span> class=<span class="s">"locandina"</span><span class="k">&gt;</span>
+      <span class="k">&lt;div</span> class=<span class="s">"poster"</span><span class="k">&gt;</span>Titolo<span class="k">&lt;/div&gt;</span>
+      <span class="k">&lt;h3&gt;</span>Titolo<span class="k">&lt;/h3&gt;&lt;p&gt;</span>Anno, durata<span class="k">&lt;/p&gt;</span>
+    <span class="k">&lt;/article&gt;</span> <span class="c">&lt;!-- 6 in tutto --&gt;</span>
+  <span class="k">&lt;/div&gt;</span>
+<span class="k">&lt;/main&gt;</span>
+<span class="k">&lt;aside</span> class=<span class="s">"orari"</span><span class="k">&gt;</span>…<span class="k">&lt;/aside&gt;</span>
+<span class="k">&lt;footer</span> class=<span class="s">"piede"</span><span class="k">&gt;</span>…<span class="k">&lt;/footer&gt;</span></pre>
+    <div class="stack">
+      <p class="small">Nella cartella <b>cineforum</b> crea <b>index.html</b> (con meta viewport e il link a <b>stile.css</b>) e scrivi questo corpo con 6 film veri che ti piacciono.</p>
+      <div class="check"><b>Controllo:</b> su validator.w3.org, scheda <i>Validate by File Upload</i>, nessun errore. Senza CSS la pagina è una colonna leggibile, nell'ordine testa, film, orari, piede.</div>
+    </div>
+  </div>
+  <aside class="notes">Gli elementi semantici (header, nav, main, article, aside, footer) sono quelli della lezione 1 dell'unità: aiutano screen reader e motori di ricerca. Il div.poster è un segnaposto colorato al posto della locandina vera. Chi vuole usare immagini vere deve usare locandine con licenza libera e un alt adeguato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il CSS base</p><h2>Prima il telefono, senza media query</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:24px"><span class="k">*</span> { box-sizing: border-box; }
+<span class="k">body</span> { margin: 0; font-family: system-ui, sans-serif; }
+<span class="k">.testa</span> { display: flex; flex-wrap: wrap;
+  justify-content: space-between; align-items: center;
+  gap: 8px 24px; padding: 16px; }
+<span class="k">.testa ul</span> { display: flex; gap: 16px;
+  list-style: none; margin: 0; padding: 0; }
+<span class="k">.film, .orari, .piede</span> { padding: 16px; }
+<span class="k">.galleria</span> { display: grid; gap: 16px; }
+<span class="k">.poster</span> { aspect-ratio: 2 / 3; display: grid;
+  place-items: center; background: #11845f; color: #fff; }</pre>
+    <ul class="points">
+      <li><code>flex-wrap</code>: se lo spazio non basta, il menu va sotto il titolo da solo</li>
+      <li><code>space-between</code>: titolo a sinistra, menu a destra</li>
+      <li><code>aspect-ratio</code>: la locandina resta 2:3 a ogni larghezza</li>
+    </ul>
+  </div>
+  <aside class="notes">Far notare che la galleria è già una griglia, ma con una sola colonna implicita. Nessun width in pixel: è la ragione per cui a 360 px non c'è scorrimento orizzontale. box-sizing: border-box fa entrare padding e bordo nella larghezza (box model, Unità 4).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Passo 2: intestazione e locandine</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>stile.css</b> e copia il CSS base della slide precedente.</li>
+      <li>Apri index.html in Chrome o Edge, <b>F12</b>, <b>Ctrl+Shift+M</b>, larghezza <b>360</b>.</li>
+      <li>Allarga piano fino a 600 px e guarda quando il menu sale accanto al titolo.</li>
+      <li>Nel pannello <b>Elementi</b> clicca il badge <b>flex</b> accanto a <code>&lt;header&gt;</code>: compare la sovrapposizione colorata.</li>
+      <li>Rendi la locandina una colonna flex: titolo in alto, anno e durata in basso.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a 360 px il menu sta sotto il titolo, più largo sale sulla stessa riga, a destra. In nessuna larghezza compare la barra di scorrimento orizzontale.</div>
+  </div>
+  <aside class="notes">Il punto in cui il menu sale dipende dalla lunghezza del titolo e dei link: è un esempio di layout che si adatta al contenuto senza media query (ne parleremo nell'ultima lezione dell'unità). Il badge flex/grid nel pannello Elementi esiste in Chrome ed Edge recenti; in Firefox c'è un'icona simile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'impaginazione</p><h2>Da 960 px: la pagina disegnata con i nomi</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:24px"><span class="k">@media</span> (min-width: 960px) {
+  <span class="k">body</span> {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-areas:
+      <span class="s">"testa testa"</span>
+      <span class="s">"film  orari"</span>
+      <span class="s">"piede piede"</span>;
+    column-gap: 24px;
+  }
+  <span class="k">.testa</span> { grid-area: testa; }
+  <span class="k">.film</span>  { grid-area: film; }
+  <span class="k">.orari</span> { grid-area: orari; }
+  <span class="k">.piede</span> { grid-area: piede; }
+}</pre>
+    <div class="stack">
+      <p>Le stringhe di <code>grid-template-areas</code> sono una <b>mappa</b> della pagina: una stringa per riga, un nome per colonna.</p>
+      <p>Un nome ripetuto fa occupare più celle: <code>"testa testa"</code> prende tutta la larghezza.</p>
+      <p class="muted small">La galleria, dentro <code>.film</code>, avrà le sue colonne: una griglia dentro un'altra.</p>
+    </div>
+  </div>
+  <aside class="notes">Le aree devono essere rettangolari: una forma a L non è valida e la proprietà viene ignorata. I nomi sono sensibili alle maiuscole. Senza la media query il body resta in colonna, cioè il layout del telefono: mobile first.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcolo veloce</p><h2>Body largo 1200 px: quanto è larga la colonna dei film?</h2></div>
+  <p>Con il CSS della slide precedente: <code>grid-template-columns: 1fr 280px</code> e <code>column-gap: 24px</code>.</p>
+  <div class="poll" data-id="lab-fr" data-tipo="quiz" data-risposta="A">
+    <ol><li>896 px</li><li>920 px</li><li>600 px</li><li>1176 px</li></ol>
+    <p class="why">1fr prende lo spazio che resta: 1200 − 280 − 24 = 896 px. Chi risponde 920 dimentica lo spazio tra le colonne; 600 è la metà, ma 1fr non vuol dire "metà".</p>
+  </div>
+  <aside class="notes">Errore tipico: pensare che fr sia una percentuale. fr divide lo spazio libero dopo aver tolto le colonne fisse e i gap. Variante a voce: e se fossero 2fr 1fr senza colonne fisse? (1200 − 24) ÷ 3 = 392, quindi 784 e 392.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Passo 3: la griglia della pagina e della galleria</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Aggiungi in fondo a stile.css la media query da 960 px della slide precedente.</li>
+      <li>Prima di quella, aggiungi <code>@media (min-width: 600px)</code> con <code>.galleria { grid-template-columns: repeat(2, 1fr); }</code>.</li>
+      <li>Dentro la media query da 960 px aggiungi <code>.galleria { grid-template-columns: repeat(3, 1fr); }</code>.</li>
+      <li>Prova a 360, 768 e 1280 px; nel pannello Elementi attiva il badge <b>grid</b> del body.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 360 px: tutto in colonna, una locandina per riga. 768 px: due locandine per riga, orari sotto. 1280 px: tre locandine per riga e orari in una colonna di 280 px a destra.</div>
+  </div>
+  <aside class="notes">L'ordine conta: la media query da 600 px va prima di quella da 960 (lezione precedente, quiz sull'ordine). Se a 1280 gli orari finiscono sotto, c'è un errore nei nomi delle aree o un punto e virgola mancante dopo l'ultima stringa. Chi finisce prima: aggiungere position: sticky e top: 0 alla testa (lezione sul posizionamento) e verificare che non copra i titoli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la proprietà a quello che fa nel nostro sito</h2></div>
+  <dl class="puzzle-abbina" data-id="lab-proprieta">
+    <dt><code>grid-template-areas</code></dt><dd>Disegna la mappa della pagina con i nomi</dd>
+    <dt><code>grid-area</code></dt><dd>Mette un elemento in una zona della mappa</dd>
+    <dt><code>justify-content: space-between</code></dt><dd>Spinge titolo e menu ai due lati</dd>
+    <dt><code>flex-wrap: wrap</code></dt><dd>Manda il menu a capo se non c'è posto</dd>
+    <dt><code>aspect-ratio: 2 / 3</code></dt><dd>Tiene la locandina sempre nelle stesse proporzioni</dd>
+  </dl>
+  <aside class="notes">Gara a coppie, un minuto. Domanda extra: quale proprietà useresti per lasciare spazio tra le locandine? gap, che vale sia in Grid sia in Flexbox.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trova l'errore</p><h2>Tre siti che non si adattano: perché?</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>A 360 px compare la barra orizzontale.</h3><p style="font-family:var(--mono)">.galleria { width: 1200px; }</p></div><div class="retro"><p>Una <b>larghezza fissa</b> più grande dello schermo. Si toglie la width o si usa <code>max-width</code>.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Gli orari non vanno a destra.</h3><p style="font-family:var(--mono)">.orari { grid-area: Orari; }</p></div><div class="retro"><p>I nomi delle aree distinguono <b>maiuscole e minuscole</b>: Orari non è orari, e l'elemento viene messo in una cella libera.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Sul telefono si vede il layout da PC, minuscolo.</h3><p>Il CSS è perfetto.</p></div><div class="retro"><p>Manca il <b>meta viewport</b>: il telefono finge 980 px, quindi vale la media query da 960 px.</p></div></div>
+  </div>
+  <aside class="notes">Far ipotizzare la causa a squadre prima di girare ogni carta. La terza è la più istruttiva: il codice CSS non c'entra, il problema è nell'HTML. Collega la lezione precedente con il laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Passo 4: il collaudo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Trascina la larghezza da 320 a 1920 px: nessun salto strano, nessuna scritta tagliata.</li>
+      <li>Se compare la barra orizzontale, aggiungi per un attimo <code>* { outline: 1px solid red; }</code> e cerca il riquadro che esce.</li>
+      <li>Chiudi la modalità dispositivo e scorri il sito solo con <b>Tab</b>: i link del menu si vedono quando hanno il focus?</li>
+      <li>Valida il CSS su <b>jigsaw.w3.org/css-validator</b>, caricando stile.css.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nessuno scorrimento orizzontale da 320 px in su, menu raggiungibile con Tab nell'ordine testa, film, orari, piede, validatore CSS con zero errori.</div>
+  </div>
+  <aside class="notes">outline, a differenza di border, non occupa spazio: non cambia il layout mentre si cerca il colpevole. Ricordare di toglierlo alla fine. Se qualcuno ha spostato visivamente gli orari prima dei film con Grid, far notare che con Tab l'ordine resta quello dell'HTML: l'ordine visivo e quello del codice devono coincidere (criterio WCAG 1.3.2 e 2.4.3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le griglie continuano a crescere</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>subgrid</h3><p>Dal 2023 tutti i browser principali supportano <b>grid-template-rows: subgrid</b>: le card di una galleria possono condividere le righe della griglia madre, così titoli e date restano allineati anche quando un titolo va a capo.</p></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nei DevTools di Chrome c'è un assistente AI che spiega perché un elemento sta in un certo punto o esce dallo schermo. Serve un account e ci sono limiti di età: lo vediamo in demo. Le sovrapposizioni flex e grid, invece, sono per tutti.</p></div>
+  <aside class="notes">subgrid: Firefox dal 2019, Safari 16 nel 2022, Chrome ed Edge 117 a settembre 2023. L'assistente AI dei DevTools di Chrome richiede l'accesso con un account Google e la maggiore età: il docente può mostrarlo sulla LIM con un elemento del sito di uno studente. Sottolineare che l'AI spiega, ma il collaudo con la modalità dispositivo resta compito nostro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto di CineTerza</h2></div>
+  <div class="puzzle-codice" data-risposta="4321" data-aiuto="la prima cifra conta le aree con nomi diversi nella mappa della pagina">
+    <ul class="points">
+      <li>1ª cifra: quanti nomi diversi hai usato in <b>grid-template-areas</b></li>
+      <li>2ª cifra: locandine per riga a 1280 px</li>
+      <li>3ª cifra: locandine per riga a 768 px</li>
+      <li>4ª cifra: locandine per riga a 360 px</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 4 aree (testa, film, orari, piede), poi 3, 2 e 1 colonne: il sito si stringe come un cannocchiale.</div>
+  </div>
+  <aside class="notes">Codice: 4321. Chi ha sbagliato la prima cifra di solito conta 6 nomi, cioè anche le ripetizioni di testa e piede.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per allineare elementi in una sola riga uso <span class="blank" data-risposta="flexbox|flex" style="--w:8ch"></span>.</p>
+    <p>Con <code>1fr 280px</code> e gap 24 px, in 1000 px la prima colonna è larga <span class="blank" data-risposta="696"></span> px.</p>
+    <p>La proprietà che mette un elemento in una zona della mappa è <span class="blank" data-risposta="grid-area" style="--w:9ch"></span>.</p>
+    <p>Il tasto per collaudare il sito senza mouse è <span class="blank" data-risposta="tab"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: Flexbox (accettato flex), 696 (1000 − 280 − 24), grid-area, Tab. Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Prima il wireframe, poi l'HTML semantico</li>
+      <li>Flexbox per i componenti, Grid per la pagina</li>
+      <li><code>grid-template-areas</code> disegna la mappa</li>
+    </ul>
+    <ul class="points">
+      <li>1fr = spazio che resta dopo colonne fisse e gap</li>
+      <li>Media query in ordine crescente di larghezza</li>
+      <li>Collaudo: larghezze, tastiera, validatori</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: completare CineTerza con una pagina in più. Raccogliere le cartelle cineforum: serviranno nella lezione sui contenuti multimediali per aggiungere un trailer e una mappa.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

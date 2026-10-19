@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il debugger e le variabili · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Laboratorio</p>
+  <h1>Il debugger<br>e le variabili</h1>
+  <p class="lead">Fermiamo un programma Java riga per riga e guardiamo dentro le sue variabili: int, double, char e boolean, con tutti i loro limiti.</p>
+  <p class="meta"><span class="chip">Java Tutor</span><span class="chip">OnlineGDB</span><span class="chip">Casting</span></p>
+  <aside class="notes">Lezione di laboratorio, 2 ore. Prerequisiti: complemento a 2 e IEEE 754 (le due lezioni precedenti). Obiettivi: dichiarare variabili dei tipi primitivi, eseguire un programma passo passo con Java Tutor e con il debugger di OnlineGDB, riconoscere divisione intera, overflow di int, errori di arrotondamento e casting. Prima della lezione: provare che pythontutor.com e onlinegdb.com siano raggiungibili dalla rete della scuola. Fallback: programiz.com/java-programming/online-compiler per eseguire; per il passo passo, il docente proietta il proprio debugger.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il tuo programma non funziona. Che cosa fai per primo?</h2></div>
+  <div class="poll" data-id="debug-prima-mossa">
+    <ol><li>Rileggo il codice riga per riga</li><li>Aggiungo println per vedere i valori</li><li>Cambio cose a caso finché va</li><li>Chiedo a un compagno o al docente</li><li>Lo incollo in un chatbot</li></ol>
+  </div>
+  <aside class="notes">Sondaggio sincero, nessuna risposta sbagliata (tranne forse la C). Oggi aggiungiamo uno strumento: il debugger, che mostra i valori senza modificare il codice. Riprendere il risultato nella slide sugli assistenti AI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le variabili</p><h2>Una variabile è una scatola con nome, tipo e valore</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Che cosa contiene</th><th>Bit</th><th>Come è codificato</th><th>Esempio</th></tr>
+    <tr><td class="mono">int</td><td>numero intero</td><td>32</td><td>complemento a 2: ±2,1 miliardi</td><td class="mono">int n = 16;</td></tr>
+    <tr><td class="mono">double</td><td>numero reale</td><td>64</td><td>IEEE 754 doppia precisione</td><td class="mono">double m = 7.5;</td></tr>
+    <tr><td class="mono">char</td><td>un carattere</td><td>16</td><td>codice Unicode (UTF-16)</td><td class="mono">char c = 'J';</td></tr>
+    <tr><td class="mono">boolean</td><td>vero o falso</td><td>–</td><td>solo <code>true</code> o <code>false</code></td><td class="mono">boolean ok = true;</td></tr>
+  </table>
+  <div class="callout">Java è <b>tipizzato</b>: il tipo si decide quando dichiari la variabile e non cambia più. Il tipo dice quanti bit usare e come leggerli.</div>
+  <aside class="notes">Collegare ogni riga alle lezioni precedenti: int = complemento a 2 su 32 bit; double = IEEE 754 a 64 bit; char = codice del carattere (lo approfondiremo nella prossima lezione). Esistono anche byte (8 bit), short (16), long (64) e float (32). La dimensione di boolean non è fissata dalla specifica del linguaggio: per questo il trattino. Il punto e virgola chiude ogni istruzione; il punto, non la virgola, separa i decimali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il programma di oggi</p><h2>Che cosa stamperà? Prevedi prima di eseguire</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px">public class Main {
+  public static void main(String[] args) {
+    <span class="k">int</span> a = 7;
+    <span class="k">int</span> b = 6;
+    <span class="k">int</span> somma = a + b;
+    <span class="k">double</span> media = somma / 2;
+    <span class="k">char</span> iniziale = <span class="s">'J'</span>;
+    <span class="k">boolean</span> sufficiente = media &gt;= 6;
+    System.out.println(media);
+    System.out.println(sufficiente);
+  }
+}</pre>
+    <div class="card soft"><h3>Scommessa</h3><p>Scrivi su un foglietto le due righe che ti aspetti.</p><p class="muted">Tra poco le verifichiamo eseguendo una riga alla volta.</p></div>
+  </div>
+  <aside class="notes">Far scrivere la previsione a tutti: la maggior parte dirà 6.5 e true. Il programma stampa invece 6.0 e true, perché somma / 2 è una divisione tra interi (13 / 2 = 6) e solo dopo il risultato viene convertito in double. Non svelarlo: lo scopriranno nel laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Passo passo con Java Tutor</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>pythontutor.com</b>, scegli <b>Java</b> nel menu del linguaggio (nessun account).</li>
+      <li>Copia il programma della slide precedente e premi <b>Visualize Execution</b>.</li>
+      <li>Premi <b>Next</b> una riga alla volta: a destra compare ogni variabile con il suo valore.</li>
+      <li>Fermati dopo la riga di <code>media</code>. Che valore vedi?</li>
+      <li>Correggi con <code>somma / 2.0</code> e riesegui. Salva il codice in <b>Media.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> prima <code>media</code> vale <b>6.0</b>; dopo la correzione <b>6.5</b>. La freccia rossa indica la riga che sta per essere eseguita.</div>
+  </div>
+  <aside class="notes">Java Tutor esegue tutto il programma sul server e poi permette di andare avanti e indietro (Prev/Next): è perfetto per capire, ma non accetta input da tastiera, quindi niente Scanner qui. Altre correzioni valide: (double) somma / 2, oppure dichiarare somma come double. Far notare che iniziale compare con gli apici: 'J'.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2><code>int x = 13; double m = x / 2;</code> Quanto vale m?</h2></div>
+  <div class="poll" data-id="debug-divisione-intera" data-tipo="quiz" data-risposta="D">
+    <ol><li>6.5</li><li>7.0</li><li>Errore di compilazione</li><li>6.0</li></ol>
+    <p class="why">x e 2 sono int: Java fa la divisione intera (13 / 2 = 6, si butta il resto) e solo dopo mette 6 in un double, che diventa 6.0. Per avere 6.5 serve almeno un operando reale: x / 2.0.</p>
+  </div>
+  <aside class="notes">Risposta D. La B è l'errore di chi pensa che Java arrotondi: la divisione intera tronca. La C è l'errore di chi pensa che Java vieti di mettere un int in un double: è una conversione permessa, perché non perde informazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>Il debugger: metti in pausa e guarda dentro</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Breakpoint</h3><p>Un punto di stop: il programma si ferma prima di quella riga.</p></div>
+    <div class="card soft"><h3>Step over</h3><p>Esegue la riga corrente e si ferma alla successiva.</p></div>
+    <div class="card soft"><h3>Step into</h3><p>Entra dentro il metodo chiamato in quella riga.</p></div>
+    <div class="card soft"><h3>Continue</h3><p>Riparte fino al prossimo breakpoint.</p></div>
+  </div>
+  <div class="callout">Mentre il programma è in pausa, il pannello delle <b>variabili locali</b> mostra il valore attuale di ogni variabile. Niente println da aggiungere e poi togliere.</div>
+  <aside class="notes">In OnlineGDB: si clicca a sinistra del numero di riga per mettere un breakpoint (pallino), poi si preme Debug invece di Run. In basso compaiono i pulsanti (start, continue, step over, step into, step out) e i pannelli "Local Variables" e "Call Stack". I nomi esatti possono cambiare con gli aggiornamenti del sito: provarlo prima della lezione. Lo stesso modello (breakpoint, step, variabili) vale in VS Code, IntelliJ, Eclipse e NetBeans.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Trova il bug con OnlineGDB</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:24px">import java.util.Scanner;
+public class Main {
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    System.out.print(<span class="s">"Fino a che numero? "</span>);
+    <span class="k">int</span> n = in.nextInt();
+    <span class="k">int</span> somma = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt; n; i++) {
+      somma = somma + i;     <span class="c">// breakpoint qui</span>
+    }
+    System.out.println(<span class="s">"Somma: "</span> + somma);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small"><li>Su <b>onlinegdb.com</b> scegli Java e copia il codice.</li><li>Metti un breakpoint sulla riga di <code>somma</code> e premi <b>Debug</b>.</li><li>Inserisci 10, poi <b>Continue</b> più volte: guarda <code>i</code> e <code>somma</code>.</li><li>Correggi e salva in <b>SommaFinoAN.txt</b>.</li></ol>
+      <div class="check"><b>Controllo:</b> con 10 il programma stampa 45 invece di 55: l'ultimo giro ha i = 9. Correzione: <code>i &lt;= n</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Il ciclo for ripete il corpo per i = 1, 2, … finché la condizione è vera. È il classico errore "di uno" (off-by-one). Somma da 1 a 10 = 55 (formula di Gauss n(n+1)/2). Durante il debug l'input si scrive nella console in basso. Chi finisce prima: provare con n = 100 000 e vedere che succede (5 000 050 000 non sta in un int: overflow, vedi slide seguente).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I limiti di int</p><h2>Oltre 2 147 483 647 si torna ai negativi</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:28px"><span class="k">int</span> x = Integer.MAX_VALUE;
+System.out.println(x);
+x = x + 1;
+System.out.println(x);</pre>
+    <div class="stack">
+      <div class="formula" style="font-size:40px"><small>Output</small>2147483647<br><span class="hl">-2147483648</span></div>
+    </div>
+  </div>
+  <div class="callout">È lo stesso overflow del complemento a 2, solo su 32 bit: <code>0111…1</code> + 1 = <code>1000…0</code>. Java non segnala niente. Se servono numeri più grandi si usa <code>long</code> (64 bit).</div>
+  <aside class="notes">Integer.MAX_VALUE = 2³¹ − 1. È il limite del contatore di YouTube visto nella lezione sugli interi. In Java esiste Math.addExact(a, b), che lancia un'eccezione in caso di overflow invece di fare il giro: utile da citare ai più curiosi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>A quale numero il fattoriale impazzisce?</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px">public class Main {
+  public static void main(String[] args) {
+    <span class="k">int</span> f = 1;
+    <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt;= 15; i++) {
+      f = f * i;
+      System.out.println(i + <span class="s">"! = "</span> + f);
+    }
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small"><li>Esegui con <b>Run</b> in OnlineGDB.</li><li>Trova la prima riga sbagliata (n! = 1 · 2 · 3 · … · n).</li><li>Cambia <code>int f</code> in <code>long f</code> e riesegui. Salva in <b>Fattoriale.txt</b>.</li></ol>
+      <div class="check"><b>Controllo:</b> 12! = 479001600 è giusto; 13! stampa 1932053504, ma vale 6227020800. Con long è corretto.</div>
+    </div>
+  </div>
+  <aside class="notes">Il controllo si fa a mano: 13! = 12! × 13 = 6 227 020 800, più del massimo di int. Java tiene solo i 32 bit bassi: 6 227 020 800 − 4 294 967 296 = 1 932 053 504. Si può anche usare il debugger con un breakpoint su f = f * i per vedere il momento esatto. Con long si arriva fino a 20!; 21! va di nuovo in overflow.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Dopo <code>int x = Integer.MAX_VALUE; x++;</code> che cosa succede?</h2></div>
+  <div class="poll" data-id="debug-overflow-int" data-tipo="quiz" data-risposta="A">
+    <ol><li>x vale −2147483648</li><li>Java lancia un errore e si ferma</li><li>x vale 2147483648</li><li>x resta 2147483647</li></ol>
+    <p class="why">Gli int di Java vanno in overflow senza avvisare: 0111…1 + 1 = 1000…0, il valore più negativo. La C è impossibile: 2147483648 non è rappresentabile in un int.</p>
+  </div>
+  <aside class="notes">Risposta A. La B è vera per la divisione intera per zero (ArithmeticException), non per l'overflow: confusione frequente. La D è l'idea della "saturazione", che esiste in alcuni processori grafici e audio ma non negli int di Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I limiti di double</p><h2>0.1 + 0.2 visto dal debugger</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:28px"><span class="k">double</span> z = 0.1 + 0.2;
+<span class="k">boolean</span> uguale = (z == 0.3);
+<span class="k">boolean</span> vicino =
+    Math.abs(z - 0.3) &lt; 1e-9;</pre>
+    <div class="card"><h3>In Java Tutor vedi</h3><p class="mono">z 0.30000000000000004</p><p class="mono">uguale false</p><p class="mono">vicino true</p></div>
+  </div>
+  <div class="callout">È la lezione sui numeri reali, dal vivo: il double salva il valore binario più vicino, non 0,3 esatto. Per i confronti usa una tolleranza.</div>
+  <aside class="notes">Far incollare queste righe in Java Tutor dentro il main del programma precedente e guardare i valori. Collegamento: per i soldi si usano interi in centesimi o la classe BigDecimal. Domanda: "perché vicino è true?" La differenza è circa 5,5 × 10⁻¹⁷, molto meno di 10⁻⁹.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Casting</p><h2>Cambiare tipo: a volte da solo, a volte con le parentesi</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Allargamento: automatico</h3><p><code>int</code> → <code>long</code> → <code>double</code></p><p class="mono small">double d = 5;  // 5.0</p><p class="muted small">Non si perde niente: Java lo fa da solo.</p></div>
+    <div class="card bad"><h3>Restringimento: esplicito</h3><p>Il tipo tra parentesi: <code>(int)</code></p><p class="mono small">int t = (int) 6.9;  // 6</p><p class="muted small">Si può perdere qualcosa: Java vuole la tua firma.</p></div>
+  </div>
+  <table class="data compact">
+    <tr><th>Espressione</th><th>Risultato</th><th>Perché</th></tr>
+    <tr><td class="mono">(int) -6.9</td><td class="mono">-6</td><td>tronca verso lo zero, non arrotonda</td></tr>
+    <tr><td class="mono">Math.round(6.7)</td><td class="mono">7</td><td>per arrotondare c'è un metodo apposito</td></tr>
+    <tr><td class="mono">(byte) 200</td><td class="mono">-56</td><td>tiene solo 8 bit, letti in complemento a 2</td></tr>
+  </table>
+  <aside class="notes">Casting = conversione di tipo. Implicito quando il tipo di arrivo contiene tutti i valori di quello di partenza; esplicito quando potrebbe perdere informazione. Attenzione: Math.round restituisce un long se riceve un double. (byte) 200 lo abbiamo visto nella lezione sugli interi relativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni espressione Java al risultato</h2></div>
+  <dl class="puzzle-abbina" data-id="debug-abbina-cast">
+    <dt><code>7 / 2</code></dt><dd>3</dd>
+    <dt><code>7 / 2.0</code></dt><dd>3.5</dd>
+    <dt><code>(int) 9.99</code></dt><dd>9</dd>
+    <dt><code>(char) 66</code></dt><dd>B</dd>
+    <dt><code>'A' + 1</code></dt><dd>66</dd>
+    <dt><code>(int) 'a'</code></dt><dd>97</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti, senza computer; poi verificare in OnlineGDB con System.out.println. Tranelli: 'A' + 1 dà 66 e non 'B', perché char + int diventa int; per avere 'B' serve (char) ('A' + 1). I codici 65 e 97 di 'A' e 'a' anticipano la prossima lezione sulla codifica dei caratteri.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il voto, tagliato e arrotondato</h2>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:23px">import java.util.Scanner;
+public class Main {
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    System.out.print(<span class="s">"Voto con decimali: "</span>);
+    <span class="k">double</span> voto = in.nextDouble();
+    <span class="k">int</span> troncato = (<span class="k">int</span>) voto;
+    <span class="k">long</span> arrotondato = Math.round(voto);
+    <span class="k">char</span> lettera = (<span class="k">char</span>) (<span class="s">'A'</span> + troncato);
+    <span class="k">boolean</span> promosso = arrotondato &gt;= 6;
+    System.out.println(troncato + <span class="s">" "</span> + arrotondato
+        + <span class="s">" "</span> + lettera + <span class="s">" "</span> + promosso);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small"><li>In OnlineGDB metti un breakpoint sulla riga di <code>troncato</code> e premi <b>Debug</b>.</li><li>Inserisci <b>6.7</b> (con il punto) e avanza con <b>Step over</b>.</li><li>Riprova con <b>5.5</b>. Salva in <b>Voto.txt</b>.</li></ol>
+      <div class="check"><b>Controllo:</b> con 6.7 stampa <b>6 7 G true</b>; con 5.5 stampa <b>5 6 F true</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Math.round arrotonda la metà verso l'alto: 5.5 → 6. 'A' + 6 = 71 = 'G'; 'A' + 5 = 70 = 'F'. Se Scanner dà InputMismatchException con il punto, il sistema è impostato in italiano: provare 6,7. Su OnlineGDB di solito funziona il punto. Nel pannello delle variabili il char può essere mostrato anche con il suo codice numerico (71 'G'): ottimo spunto per la prossima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Da quando esistono i programmi, esistono i bug</h2></div>
+  <div class="cols-2">
+    <figure class="citazione">
+      <blockquote>Ricordo il momento esatto in cui capii che gran parte della mia vita sarebbe stata spesa a trovare errori nei miei programmi.</blockquote>
+      <figcaption><b>Maurice Wilkes</b>, costruttore dell'EDSAC, "Memoirs of a Computer Pioneer", 1985</figcaption>
+    </figure>
+    <div class="card soft"><h3>La falena del 1947</h3><p>Il 9 settembre 1947 il gruppo di Grace Hopper trovò una falena incastrata in un relè del computer Harvard Mark II. Nel registro la incollarono con la nota: <i>"First actual case of bug being found"</i>.</p><p class="muted small">La parola "bug" per un guasto si usava già prima: la falena la rese famosa.</p></div>
+  </div>
+  <aside class="notes">Wilkes si riferisce al 1949, quando programmava l'EDSAC a Cambridge. Traduzione nostra dall'inglese ("I can remember the exact instant when I realized that a large part of my life from then on was going to be spent in finding mistakes in my own programs"). La pagina del registro con la falena è conservata allo Smithsonian National Museum of American History. Già Edison, nel 1878, chiamava "bugs" i difetti delle sue invenzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Debugger e AI: chi trova il bug?</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Assistenti AI per il codice</h3><p>Strumenti come GitHub Copilot o i chatbot leggono il tuo codice e propongono una causa dell'errore. Spesso hanno ragione, a volte inventano.</p><p class="small">Il debugger invece non indovina: mostra che cosa succede davvero. Usa l'AI per farti venire un'idea, il debugger per verificarla.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Tornare indietro nel tempo</h3><p>Java Tutor registra tutta l'esecuzione e ti fa premere <b>Prev</b>. Anche i debugger professionali lo fanno: si chiama <b>time-travel debugging</b>.</p><p class="small">Esempi: rr su Linux e la funzione Time Travel Debugging di WinDbg su Windows.</p></div>
+  </div>
+  <aside class="notes">Riprendere il sondaggio iniziale (chi ha votato "lo incollo in un chatbot"). Gli assistenti di codice usano modelli linguistici: generano la spiegazione più probabile, che va controllata. Regola di classe: se l'AI propone una correzione, spiega perché funziona e provala con il debugger. Ricordare i limiti di età e le regole della scuola per i chatbot; in classe le demo le fa il docente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con Java</h2></div>
+  <div class="puzzle-codice" data-risposta="3948" data-aiuto="la terza e la quarta cifra sono byte: 32 bit e 64 bit">
+    <ul class="points small">
+      <li>1ª cifra: il risultato di 7 / 2 in Java</li>
+      <li>2ª cifra: il risultato di (int) 9.99</li>
+      <li>3ª cifra: quanti byte occupa un int</li>
+      <li>4ª cifra: quanti byte occupa un double</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 7 / 2 = 3 (divisione intera), (int) 9.99 = 9 (troncamento), int = 32 bit = 4 byte, double = 64 bit = 8 byte.</div>
+  </div>
+  <aside class="notes">Codice 3948. Squadre da 3-4. Errori tipici: 4 come prima cifra (arrotondamento invece di troncamento), 10 come seconda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il punto in cui il debugger mette in pausa il programma si chiama <span class="blank" data-risposta="breakpoint|punto di interruzione" style="--w:10ch"></span>.</p>
+    <p>In Java, 13 / 2 vale <span class="blank" data-risposta="6|sei"></span>.</p>
+    <p>Il valore massimo di un int è 2 147 483 <span class="blank" data-risposta="647"></span>.</p>
+    <p>Per trasformare 6.9 in 6 si scrive <span class="blank" data-risposta="(int)|int" style="--w:6ch"></span> 6.9.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: breakpoint; 6; 647; (int).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>int, double, char, boolean: tipo = bit + codifica</li>
+      <li>Java Tutor: vedi ogni variabile, avanti e indietro</li>
+      <li>Debugger: breakpoint, step over, continue</li>
+    </ul>
+    <ul class="points">
+      <li>int / int è una divisione intera</li>
+      <li>int va in overflow in silenzio: usa long</li>
+      <li>(int) tronca, Math.round arrotonda</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito "Caccia ai tre bug" su Novaula. Prossima lezione: come diventano numeri le lettere, gli accenti e le emoji.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

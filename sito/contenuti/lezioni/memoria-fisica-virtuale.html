@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La memoria fisica e virtuale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 7 · Il sistema operativo come gestore di risorse</p>
+  <h1>La memoria fisica<br>e virtuale</h1>
+  <p class="lead">Ogni programma crede di avere tutta la memoria per sé. Chi gli racconta questa bugia, e perché è una bugia utilissima?</p>
+  <aside class="notes">Obiettivi: descrivere la gerarchia delle memorie con ordini di grandezza reali; distinguere indirizzo logico e fisico; tradurre un indirizzo con registro base e registro limite; spiegare l'idea di memoria virtuale (RAM + disco). Prerequisiti: binario ed esadecimale (deck già svolti), il sistema operativo e i processi (Unità 6). Durata: 2 ore. È la prima lezione di una serie: partizioni, paginazione statica, paginazione dinamica, segmentazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quante schede del browser tieni aperte, di solito?</h2></div>
+  <div class="poll" data-id="mem-schede">
+    <ol><li>Da 1 a 5</li><li>Da 6 a 15</li><li>Da 16 a 40</li><li>Più di 40, non le chiudo mai</li></ol>
+  </div>
+  <p class="lead">Ogni scheda è un processo con la sua memoria. Eppure il PC non si blocca quasi mai: oggi scopriamo come fa.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Nei browser moderni (Chrome, Edge) molte schede hanno un processo separato: si vede nel Task Manager. Chiedere: "che cosa succede quando la RAM finisce?" Raccogliere ipotesi (si blocca, rallenta, chiude qualcosa) e tenerle per la slide sulla memoria virtuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gerarchia delle memorie</p><h2>Veloce, piccola e cara oppure lenta, grande ed economica</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 900 560" width="900" height="560" aria-label="Piramide delle memorie">
+      <polygon points="450,10 530,110 370,110" fill="#7e45cc"/>
+      <polygon points="368,116 532,116 612,216 288,216" fill="#9566d6"/>
+      <polygon points="286,222 614,222 694,322 206,322" fill="#ad89e0"/>
+      <polygon points="204,328 696,328 776,428 124,428" fill="#c7aeea"/>
+      <polygon points="122,434 778,434 858,534 42,534" fill="#e2d4f5"/>
+      <g font-family="DM Sans, sans-serif" font-size="30" font-weight="700" text-anchor="middle">
+        <text x="450" y="98" fill="#fff" font-size="24">Registri</text>
+        <text x="450" y="178" fill="#fff">Cache L1, L2, L3</text>
+        <text x="450" y="284" fill="#fff">RAM</text>
+        <text x="450" y="390" fill="#172033">SSD</text>
+        <text x="450" y="496" fill="#172033">Disco rigido, cloud</text>
+      </g>
+    </svg>
+    <div class="stack">
+      <div class="card soft"><h3>Verso l'alto</h3><p>più veloce, più piccola, più cara per byte, vicina alla CPU</p></div>
+      <div class="card"><h3>Verso il basso</h3><p>più lenta, più grande, più economica, <b>non volatile</b></p></div>
+      <p class="small muted">Registri, cache e RAM sono <b>volatili</b>: spegni e i dati spariscono.</p>
+    </div>
+  </div>
+  <aside class="notes">Capacità tipiche di un PC di oggi: registri, qualche centinaio di byte in tutto; cache L1 decine di KB per core, L3 da alcuni MB a qualche decina di MB; RAM 8-32 GB; SSD 256 GB-2 TB. Il trucco della gerarchia: i dati usati adesso stanno in alto, gli altri in basso; il sistema operativo e l'hardware li spostano continuamente. Chiedere: "perché non facciamo tutta la memoria come la cache?" (costo, consumo, calore).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Numeri veri</p><h2>Se un nanosecondo durasse un secondo</h2></div>
+  <table class="data">
+    <tr><th>Accesso a…</th><th>Tempo tipico</th><th>In "tempo umano" (1 ns = 1 s)</th></tr>
+    <tr><td>Registro</td><td class="mono">~0,3 ns</td><td>un battito di ciglia</td></tr>
+    <tr><td>Cache L1</td><td class="mono">~1 ns</td><td>1 secondo</td></tr>
+    <tr><td>RAM</td><td class="mono">~100 ns</td><td>quasi 2 minuti</td></tr>
+    <tr><td>SSD</td><td class="mono">~100 µs</td><td class="hl">più di un giorno (28 ore)</td></tr>
+    <tr><td>Disco rigido</td><td class="mono">~10 ms</td><td class="hl">circa 4 mesi</td></tr>
+  </table>
+  <p class="small muted">Ordini di grandezza indicativi: cambiano da un computer all'altro, ma le proporzioni restano queste.</p>
+  <aside class="notes">Conti da far fare alla lavagna: 100 ns diventano 100 s = 1 min 40 s; 100 µs = 100 000 ns, cioè 100 000 s = 27,8 ore; 10 ms = 10 000 000 ns, cioè 10 000 000 s = 115 giorni circa. Un registro a 3 GHz si legge in un ciclo, circa 0,33 ns. Messaggio: andare sul disco costa migliaia o milioni di volte più che restare in RAM. Ricordarlo quando parleremo di page fault.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Qual è la memoria più veloce del computer?</h2></div>
+  <div class="poll" data-id="mem-veloce" data-tipo="quiz" data-risposta="B">
+    <ol><li>La cache L1</li><li>I registri della CPU</li><li>La RAM DDR5</li><li>L'SSD NVMe</li></ol>
+    <p class="why">I registri sono dentro il cuore della CPU e si leggono in un ciclo di clock. La cache L1 è velocissima, ma è un gradino sotto: serve proprio a tenere vicini i dati che finiranno nei registri.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono cache L1, perché è "la memoria veloce" per eccellenza. Far notare che i registri sono pochissimi (il programmatore Java non li vede: ci pensa il compilatore). Chi sceglie SSD NVMe confonde "veloce per un disco" con "veloce in assoluto".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La gerarchia era già prevista nel 1946</h2></div>
+  <figure class="citazione">
+    <blockquote style="font-size:50px">Siamo costretti a riconoscere la possibilità di costruire una gerarchia di memorie, ciascuna con capacità maggiore della precedente ma accessibile meno rapidamente.</blockquote>
+    <figcaption><b>Arthur Burks, Herman Goldstine e John von Neumann</b>, progetto del calcolatore dell'IAS di Princeton, 1946</figcaption>
+  </figure>
+  <div class="callout">Grace Hopper regalava pezzi di filo lunghi circa 30 cm: è la strada che la luce percorre in <b>un nanosecondo</b>. Per questo la memoria veloce deve stare vicinissima alla CPU.</div>
+  <aside class="notes">Fonte: "Preliminary Discussion of the Logical Design of an Electronic Computing Instrument" (Burks, Goldstine, von Neumann, 1946). Originale: "We are therefore forced to recognize the possibility of constructing a hierarchy of memories, each of which has greater capacity than the preceding but which is less quickly accessible." Traduzione nostra. Il testo dice anche che "idealmente" si vorrebbe una memoria infinita e istantanea: è impossibile, da qui la gerarchia. L'aneddoto dei fili di Grace Hopper è documentato in molte sue conferenze (si trovano video degli anni '80): 11,8 pollici, circa 30 cm.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La memoria del tuo PC nel Task Manager</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Ctrl+Maiusc+Esc</b>, apri <b>Prestazioni</b> e poi <b>Memoria</b>.</li>
+      <li>Annota la RAM totale (in alto a destra), <b>In uso</b>, <b>Disponibile</b>, <b>Velocità</b> e <b>Slot utilizzati</b>.</li>
+      <li>Trova la voce con due numeri separati da una barra (per esempio 9,1/18,6 GB): è la memoria <b>allocata</b> rispetto al limite.</li>
+      <li>Apri 10 schede pesanti nel browser e guarda come cambia <b>In uso</b>.</li>
+      <li>Scrivi tutto in Calc e salva come <b>memoria-pc.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il secondo numero della memoria allocata è <b>più grande</b> della RAM installata. La differenza è lo spazio su disco che Windows usa come memoria: il file di paging. Fra poco scopriamo a cosa serve.</div>
+  </div>
+  <aside class="notes">Il nome esatto delle voci può cambiare tra Windows 10 e 11 ("Allocata", in inglese "Committed"). La memoria "compressa" tra parentesi è RAM che Windows comprime invece di mandarla su disco. Se il Task Manager è bloccato dalle policy della scuola, fare la dimostrazione dal PC del docente e far annotare i valori alla LIM. Confrontare due postazioni: chi ha più RAM? Quanta è "riservata per l'hardware" (scheda video integrata)?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La memoria fisica</p><h2>Una lunghissima fila di caselle numerate</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>La RAM è una sequenza di celle da <b>1 byte</b>. Ogni cella ha un numero: il suo <mark>indirizzo fisico</mark>.</p>
+      <p>Con indirizzi da <b>n</b> bit si contano 2<sup>n</sup> celle diverse.</p>
+      <div class="callout">Per questo Windows a 32 bit non poteva usare più di 4 GB di RAM.</div>
+    </div>
+    <div class="stack">
+      <div class="formula"><small>indirizzi a 32 bit</small>2<sup>32</sup> = <span class="hl">4 294 967 296</span> byte = 4 GiB</div>
+      <div class="formula"><small>indirizzi a 64 bit (in teoria)</small>2<sup>64</sup> byte = <span class="hl">16 EiB</span></div>
+    </div>
+  </div>
+  <aside class="notes">2^32 = 4 294 967 296 byte = 4 GiB (4 × 1024^3). Ricordare GB contro GiB (1000 contro 1024), già visto nell'Unità 1. I processori x86-64 di oggi in realtà usano 48 bit (o 57) per gli indirizzi virtuali: 2^48 = 256 TiB, più che sufficienti. Domanda: "quanti indirizzi con 16 bit?" (65 536, la memoria dei primi home computer a 8 bit).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Indirizzi logici e fisici</p><h2>Il programma conta da zero, la RAM no</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il programma usa <mark>indirizzi logici</mark>: per lui la sua memoria comincia sempre da 0.</p>
+      <p>La <b>MMU</b> (Memory Management Unit, dentro la CPU) li trasforma in <b>indirizzi fisici</b> con due registri:</p>
+      <ul class="points">
+        <li><b>base</b>: dove inizia il processo in RAM</li>
+        <li><b>limite</b>: quanto è grande la sua zona</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <div class="formula" style="font-size:44px"><small>se logico &lt; limite</small>fisico = <span class="hl">base + logico</span></div>
+      <div class="card bad"><h3>Altrimenti: errore</h3><p>Il processo sta uscendo dalla sua zona. Il sistema operativo lo blocca.</p></div>
+      <p class="small">Esempio: base 30 000, limite 12 000. Logico 4500 → fisico <b>34 500</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Questo è il meccanismo più semplice (rilocazione dinamica con registri base e limite). Il controllo sul limite è ciò che impedisce a un programma di leggere la memoria di un altro: protezione. Altri esempi alla lavagna: logico 0 → 30 000; logico 11 999 → 41 999; logico 12 000 → errore (il limite è escluso!). Nelle prossime lezioni la MMU diventerà più furba: pagine e segmenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il programma legge una variabile: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="mem-ordine-accesso">
+    <li>Il programma chiede il dato all'indirizzo logico 4500</li>
+    <li>La MMU confronta 4500 con il registro limite</li>
+    <li>La MMU somma il registro base: 34 500</li>
+    <li>L'indirizzo fisico viaggia sul bus verso la RAM</li>
+    <li>La RAM restituisce il byte alla CPU</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Errore tipico: sommare la base prima del controllo. Il controllo si fa sull'indirizzo logico (confronto con il limite, che è una dimensione), oppure, in alcune architetture, sull'indirizzo fisico confrontato con base + limite: il risultato è lo stesso. Se una cache contiene già il dato, la RAM non viene nemmeno interpellata: collegare alla gerarchia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Base 25 000, limite 8000. Il programma chiede l'indirizzo logico 7999.</h2></div>
+  <div class="poll" data-id="mem-base-limite" data-tipo="quiz" data-risposta="C">
+    <ol><li>Errore: indirizzo fuori limite</li><li>33 000</li><li>32 999</li><li>17 001</li></ol>
+    <p class="why">7999 è minore del limite 8000, quindi è valido: 25 000 + 7999 = 32 999. L'ultimo indirizzo valido è sempre limite − 1; con 8000 sarebbe scattato l'errore.</p>
+  </div>
+  <aside class="notes">Tranelli: A per chi pensa che 7999 "tocchi" il limite; B per chi somma il limite invece del logico o arrotonda; D per chi sottrae (25 000 − 7999). Far giustificare la risposta prima di rivelare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una MMU fatta con Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo foglio Calc. In A1 <b>Logico</b>, in B1 <b>Base</b>, in C1 <b>Limite</b>, in D1 <b>Fisico</b>.</li>
+      <li>In A2:A6 scrivi 0, 4500, 11999, 12000, 15000. In B2:B6 30000, in C2:C6 12000.</li>
+      <li>In D2 scrivi <code>=SE(A2&lt;C2;A2+B2;"ERRORE")</code> e copiala fino a D6.</li>
+      <li>Aggiungi due righe tue e cambia la base: che cosa succede?</li>
+      <li>Salva come <b>mmu-base-limite.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in D2:D6 devi leggere 30000, 34500, 41999, ERRORE, ERRORE. Se cambi solo la base, cambiano gli indirizzi fisici ma non quelli che danno errore.</div>
+  </div>
+  <aside class="notes">Il punto e virgola è il separatore degli argomenti in Calc italiano. Domanda finale: "se il sistema operativo sposta il processo in un'altra zona della RAM, che cosa deve cambiare?" Solo il registro base: il programma non se ne accorge (rilocazione dinamica). Variante veloce: formattare D in rosso quando c'è ERRORE con la formattazione condizionata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La memoria virtuale</p><h2>Una memoria più grande della RAM che hai</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Ogni processo</h3><p>vede il suo spazio di indirizzi, tutto per sé, che parte da 0</p></div>
+    <div class="card fill"><h3>MMU e sistema operativo</h3><p>decidono dove sta davvero ogni pezzo</p></div>
+    <div class="card"><h3>RAM + disco</h3><p>i pezzi usati ora in RAM, gli altri nel <b>file di paging</b> (Windows) o nello <b>swap</b> (Linux)</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti telefoni Android offrono la "RAM virtuale" (Samsung la chiama RAM Plus): una parte della memoria di archiviazione fa da estensione della RAM. È memoria virtuale, ed è molto più lenta della RAM vera.</p></div>
+  <aside class="notes">Memoria virtuale: lo spazio di indirizzi logici può essere più grande della RAM fisica; il sistema operativo tiene in RAM solo ciò che serve e il resto su disco. Su Windows il file è C:\pagefile.sys (nascosto), su Linux una partizione o un file di swap. Windows e Android usano anche la compressione della RAM prima di ricorrere al disco. Riprendere le ipotesi del sondaggio iniziale: quando la RAM è piena il PC non si blocca, ma rallenta, perché va sul disco (ricordare i "4 mesi" della tabella). Il come (pagine, page fault) lo vediamo nelle prossime lezioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Intelligenza artificiale e memoria</p><h2>Perché un'AI "grande" non entra nel telefono?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Un modello linguistico è fatto di <b>parametri</b>: numeri che devono stare in memoria mentre il modello risponde.</p>
+      <div class="formula" style="font-size:44px"><small>7 miliardi di parametri da 16 bit (2 byte)</small>7 × 10<sup>9</sup> × 2 = <span class="hl">14 GB</span></div>
+      <p class="small">Con 4 bit per parametro: 3,5 GB. Si perde un po' di precisione, ma il modello entra in un telefono.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>RAM, la risorsa più contesa</h3><p>Le AI che girano sul dispositivo, senza mandare i dati su internet, hanno spinto i produttori di telefoni e PC a montare più RAM. Nei data center i modelli stanno nella memoria delle GPU, velocissima e costosa.</p></div>
+  </div>
+  <aside class="notes">Conto da rifare con la classe: 7 000 000 000 × 2 byte = 14 000 000 000 byte = 14 GB (circa 13 GiB). Con 4 bit = mezzo byte: 3,5 GB. Questa tecnica si chiama quantizzazione. Le cifre sono calcoli, non statistiche: valgono per qualunque modello da 7 miliardi di parametri. Collegamento: se il modello non entra in RAM, il sistema deve continuamente pescare dal disco e diventa lentissimo (lo vedremo con il thrashing).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="mem-abbina">
+    <dt>Registro</dt><dd>Dentro la CPU, la memoria più veloce in assoluto</dd>
+    <dt>Cache</dt><dd>Copia vicina alla CPU dei dati usati spesso</dd>
+    <dt>RAM</dt><dd>Memoria principale, volatile, dove girano i programmi</dd>
+    <dt>MMU</dt><dd>Traduce gli indirizzi logici in fisici</dd>
+    <dt>File di paging</dt><dd>Spazio su disco usato come estensione della RAM</dd>
+  </dl>
+  <aside class="notes">Si può fare a squadre: la prima squadra che abbina tutto senza errori vince un punto. Coppie corrette come scritte. Discussione: la cache è gestita dall'hardware, il file di paging dal sistema operativo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Memoria fisica e virtuale dal prompt dei comandi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>Win+R</b>, scrivi <code>cmd</code> e premi Invio.</li>
+      <li>Scrivi <code>systeminfo | findstr /i "memoria paging"</code></li>
+      <li>In <b>memoria-pc.ods</b> annota memoria fisica totale, virtuale massima e file di paging; calcola la differenza.</li>
+      <li>Extra: su <b>bellard.org/jslinux</b> scrivi <code>free -m</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la virtuale massima supera la fisica di circa la dimensione del file di paging, di solito <code>C:\pagefile.sys</code>. In JSLinux la riga <b>Mem</b> mostra pochi MB: la RAM della macchina emulata.</div>
+  </div>
+  <aside class="notes">Su Windows in italiano le righe sono del tipo "Memoria fisica totale", "Memoria virtuale: dimensione massima", "Percorso/i file di paging". Se il PC è in inglese: findstr /i "memory page". systeminfo può impiegare 10-20 secondi. JSLinux è facoltativo: controllare prima che il sito sia raggiungibile dalla rete della scuola; in alternativa dimostrazione del docente. In JSLinux la riga Swap di solito è 0: quella macchina non ha file di swap.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4561" data-aiuto="la terza cifra viene dall'anno della citazione: 1946">
+    <ul class="points">
+      <li>1ª cifra: quanti GiB si indirizzano al massimo con 32 bit</li>
+      <li>2ª cifra: quanti livelli ha la nostra piramide delle memorie</li>
+      <li>3ª cifra: l'ultima cifra dell'anno di Burks, Goldstine e von Neumann</li>
+      <li>4ª cifra: se 1 ns fosse 1 s, quanti minuti interi durerebbe un accesso alla RAM</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 4 GiB, 5 livelli, 1946, 100 secondi = 1 minuto e 40.</div>
+  </div>
+  <aside class="notes">Codice: 4561. Le squadre scrivono il codice su un foglio; la prima che lo apre alla LIM vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La RAM perde i dati quando spegni: è una memoria <span class="blank" data-risposta="volatile"></span>.</p>
+    <p>Il programma usa indirizzi logici; la RAM usa indirizzi <span class="blank" data-risposta="fisici|fisico"></span>.</p>
+    <p>La traduzione la fa la <span class="blank" data-risposta="MMU"></span>, dentro la CPU.</p>
+    <p>Con base 1000 e limite 500, l'indirizzo logico 200 diventa <span class="blank" data-risposta="1200"></span>.</p>
+    <p>Su Windows la memoria virtuale usa il file di <span class="blank" data-risposta="paging|swap"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: volatile, fisici, MMU, 1200, paging (accettato anche swap).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Gerarchia: registri, cache, RAM, SSD, disco</li>
+      <li>Salendo: più veloce, più piccola, più cara</li>
+      <li>n bit di indirizzo: 2<sup>n</sup> byte</li>
+    </ul>
+    <ul class="points">
+      <li>Logico + base = fisico, se logico &lt; limite</li>
+      <li>La MMU traduce e protegge</li>
+      <li>Memoria virtuale = RAM + disco, con un'illusione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: come si divide la RAM tra tanti processi (allocazione a partizioni, first fit, best fit, worst fit).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

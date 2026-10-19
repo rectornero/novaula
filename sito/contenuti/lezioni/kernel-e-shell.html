@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kernel e shell · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Introduzione ai sistemi operativi</p>
+  <h1>Kernel e shell</h1>
+  <p class="lead">Il nocciolo che comanda l'hardware e il guscio con cui gli parli. Oggi apriamo la finestra nera dei comandi, su Windows e su un Linux che gira nel browser.</p>
+  <aside class="notes">Obiettivi: distinguere kernel e shell; conoscere i tipi di kernel (monolitico, microkernel, ibrido); capire che cos'è una chiamata di sistema; usare i comandi di base di cmd, PowerShell e della shell Linux; confrontare interfacce a riga di comando e grafiche; conoscere le pipe. Durata indicativa: 2 ore. Servono: PC Windows con Prompt dei comandi e PowerShell non bloccati dalle policy della scuola; accesso a bellard.org/jslinux (provarlo prima dalla rete della scuola; alternativa copy.sh/v86 o demo alla LIM).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rispondi d'istinto</p><h2>Hai mai scritto comandi in una finestra nera?</h2></div>
+  <div class="poll" data-id="ks-finestra-nera">
+    <ol><li>Mai</li><li>Sì, copiando comandi trovati online</li><li>Qualche volta, sapendo cosa facevo</li><li>Spesso: server di gioco, Linux, programmazione</li></ol>
+  </div>
+  <p class="muted">Alla fine dell'ora tutti potranno scegliere almeno la terza risposta.</p>
+  <aside class="notes">Rompighiaccio. Chi ha copiato comandi online: occasione per una regola di sicurezza che torna più avanti, "mai eseguire un comando che non si capisce", soprattutto se chiede privilegi di amministratore. Chi ha avviato un server di Minecraft ha usato la shell (java -jar server.jar).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due parole da una noce</p><h2>Il nocciolo e il guscio</h2></div>
+  <div class="cols-2">
+    <div class="card night"><p class="num" style="color:#9fbdf5">kernel</p><h3>Il nocciolo</h3><p>La parte del sistema operativo che <b>parla direttamente con l'hardware</b>: gestisce processi, memoria, file system, driver. Resta in memoria dall'accensione allo spegnimento.</p></div>
+    <div class="card soft"><p class="num">shell</p><h3>Il guscio</h3><p>Il programma che fa da <b>interfaccia tra te e il kernel</b>: legge i tuoi comandi, li interpreta, chiede al kernel di eseguirli e ti mostra il risultato. Può essere a riga di comando o grafica.</p></div>
+  </div>
+  <div class="callout">La shell è un programma come gli altri: si può chiudere e sostituire. Il kernel no: se si ferma lui, si ferma tutto.</div>
+  <aside class="notes">Il termine "shell" nasce negli anni '60 nel progetto Multics: lo usò Louis Pouzin per il programma che interpretava i comandi. Esempi di shell: cmd.exe, PowerShell, bash e zsh (Linux, macOS), sh di BusyBox (Alpine); anche Esplora risorsi di Windows (explorer.exe) è la shell grafica. Prova pratica alla LIM: chiudere explorer.exe da Gestione attività fa sparire barra e desktop, ma i programmi aperti continuano a funzionare; si riavvia con File, Esegui nuova attività, explorer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il kernel</p><h2>Tutto dentro o quasi niente dentro?</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Idea</th><th>Esempi</th></tr>
+    <tr><td><b>Monolitico</b></td><td>Tutti i servizi (driver, file system, rete) nel kernel: veloce, ma un errore in un driver può bloccare tutto</td><td>Linux (con moduli caricabili), i primi Unix</td></tr>
+    <tr><td><b>Microkernel</b></td><td>Nel kernel solo l'essenziale; driver e file system sono processi separati: più robusto, un po' più lento</td><td>Minix 3, QNX (auto, macchinari)</td></tr>
+    <tr><td><b>Ibrido</b></td><td>Struttura a moduli ispirata al microkernel, ma molti servizi restano nel kernel per velocità</td><td>Windows (NT), macOS e iOS (XNU)</td></tr>
+  </table>
+  <aside class="notes">Nel 1992 Andrew Tanenbaum (autore di Minix) e Linus Torvalds discussero pubblicamente su Usenet proprio di questo: "Linux è obsoleto" perché monolitico, scriveva Tanenbaum. Ne riparleremo nella lezione sui sistemi in commercio. I "moduli" di Linux sono pezzi di kernel (spesso driver) caricati quando servono: restano però dentro il kernel. QNX è usato nei sistemi di bordo di molte automobili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chiamate di sistema</p><h2>Un programma non scrive sul disco: lo chiede</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="c">// Java: scrivo una riga in un file</span>
+<span class="k">FileWriter</span> f = <span class="k">new</span> FileWriter(<span class="s">"nota.txt"</span>);
+f.write(<span class="s">"ciao kernel"</span>);
+f.close();
+
+<span class="c">// sotto, la JVM chiede al kernel:</span>
+<span class="hl">open</span>("nota.txt") → <span class="hl">write</span>(…) → <span class="hl">close</span>()</pre>
+    <div class="stack">
+      <p>Una <b>chiamata di sistema</b> (system call) è la richiesta formale di un programma al kernel: aprire un file, creare un processo, chiedere memoria, usare la rete.</p>
+      <p class="muted small">Linux ne ha alcune centinaia; Windows le nasconde dietro le sue API (per esempio WriteFile).</p>
+    </div>
+  </div>
+  <aside class="notes">Su Linux i nomi reali sono proprio open (o openat), write, close; su Windows la catena è WriteFile (API Win32) → NtWriteFile (ntdll) → kernel. Il programmatore Java non le vede: le usa la JVM. Domanda: perché non lasciare che i programmi scrivano direttamente sul disco? Perché due programmi potrebbero scrivere sugli stessi blocchi e distruggere i file, e un programma malevolo potrebbe leggere tutto. Lo approfondiamo nella lezione su user mode e kernel mode.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Scrivi <code>dir</code> e premi Invio: che cosa succede, in ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="ks-ordina-dir">
+    <li>La shell legge la riga che hai scritto</li>
+    <li>La shell riconosce il comando dir</li>
+    <li>La shell fa una chiamata di sistema per leggere la cartella</li>
+    <li>Il kernel, con il file system e il driver del disco, trova i nomi dei file</li>
+    <li>Il kernel restituisce l'elenco alla shell</li>
+    <li>La shell scrive l'elenco nella finestra</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Molti mettono il kernel prima della shell: ricordare che è la shell a ricevere i tasti (tramite il kernel e il driver della tastiera, a voler essere precisi) e a decidere che cosa chiedere. Anche l'ultima fase, scrivere sullo schermo, passa dal sistema operativo. dir in cmd è un comando interno della shell; in Linux ls è invece un programma separato, in /bin.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Esplora file di Windows (explorer.exe) è…</h2></div>
+  <div class="poll" data-id="ks-quiz-explorer" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il kernel di Windows</li><li>Una shell, cioè un'interfaccia grafica</li><li>Il driver del disco</li><li>Una parte del firmware UEFI</li></ol>
+    <p class="why">explorer.exe è la shell grafica di Windows: disegna desktop, barra delle applicazioni e finestre delle cartelle, e chiede al kernel di leggere e spostare i file. Il kernel (ntoskrnl.exe) non ha finestre. Se chiudi explorer.exe, i programmi aperti continuano a funzionare.</p>
+  </div>
+  <aside class="notes">Tranello: "shell" fa pensare solo alla finestra nera. Ogni interfaccia che traduce le azioni dell'utente in richieste al kernel è una shell, anche quella grafica. Se il tempo lo permette, mostrare alla LIM la prova di chiudere e riavviare explorer.exe (vedi note della slide 3).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Primi comandi nel Prompt</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Win + R</b>, scrivi <code>cmd</code>, Invio. Prova uno alla volta: <code>ver</code>, <code>hostname</code>, <code>whoami</code>.</li>
+      <li>Scrivi <code>cd %USERPROFILE%\Documents</code>, poi <code>mkdir prova-shell</code> e <code>cd prova-shell</code>.</li>
+      <li>Crea un file: <code>echo ciao kernel &gt; nota.txt</code>, poi <code>type nota.txt</code> e <code>dir</code>.</li>
+      <li>Scrivi <code>tasklist</code>, poi <code>tasklist | find /i "explorer"</code>.</li>
+      <li>Copia i comandi con le risposte in Writer: <b>prompt-cognome.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>whoami</code> risponde nel formato <b>computer\utente</b>; <code>dir</code> mostra nota.txt da 14 byte (12 caratteri più a capo); l'ultimo comando mostra una sola riga con explorer.exe e il suo PID.</div>
+  </div>
+  <aside class="notes">ver risponde "Microsoft Windows [Versione 10.0.xxxxx]": anche Windows 11 dice 10.0 (si distingue dal numero di build, 22000 o più): lo usiamo nella lezione sui sistemi in commercio. echo ciao kernel > nota.txt scrive "ciao kernel" più lo spazio prima di > più CR LF: 11 + 1 + 2 = 14 byte. Se scrivono echo ciao kernel>nota.txt (senza spazio) sono 13 byte: buona occasione per osservare che ogni carattere conta. Per selezionare il testo nella console: trascinare con il mouse e premere Invio o Ctrl+C. Se cmd è bloccato, usare PowerShell: tutti questi comandi funzionano anche lì tranne find, che si sostituisce con findstr.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due interfacce</p><h2>Mouse o tastiera?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Interfaccia grafica (GUI)</h3><ul class="points"><li>Facile da imparare: vedi le opzioni</li><li>Comoda per immagini, layout, navigazione</li><li>Lenta da ripetere 100 volte</li><li>Difficile da automatizzare</li></ul></div>
+    <div class="card"><h3>Riga di comando (CLI)</h3><ul class="points"><li>Devi conoscere i comandi</li><li>Veloce e precisa: un comando, mille file</li><li>Si salva in uno script e si ripete</li><li>Funziona anche a distanza, sui server senza schermo</li></ul></div>
+  </div>
+  <p class="muted small">Le prime GUI: Xerox Alto (1973), Apple Macintosh (1984), Windows 1.0 (1985). Prima c'era solo la riga di comando.</p>
+  <aside class="notes">Esempio concreto: rinominare 300 foto della gita aggiungendo la data. Con la GUI una alla volta; con PowerShell una riga sola. Quasi tutti i server di internet (Linux) non hanno interfaccia grafica e si amministrano via SSH dalla shell. Il Macintosh si ispirò all'interfaccia sviluppata allo Xerox PARC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Stesso lavoro, due shell: abbina cmd e Linux</h2></div>
+  <dl class="puzzle-abbina" data-id="ks-abbina-comandi">
+    <dt>dir</dt><dd>ls (elenca i file della cartella)</dd>
+    <dt>type nota.txt</dt><dd>cat nota.txt (mostra il contenuto)</dd>
+    <dt>cls</dt><dd>clear (pulisce lo schermo)</dd>
+    <dt>tasklist</dt><dd>ps (elenca i processi)</dd>
+    <dt>copy a.txt b.txt</dt><dd>cp a.txt b.txt (copia un file)</dd>
+    <dt>del a.txt</dt><dd>rm a.txt (cancella senza Cestino)</dd>
+  </dl>
+  <aside class="notes">Sfida a squadre: 90 secondi, poi verifica. Curiosità: cd e mkdir hanno lo stesso nome in entrambe. In PowerShell funzionano sia dir sia ls, sia type sia cat: sono alias di Get-ChildItem e Get-Content, aggiunti apposta per chi viene da cmd o da Linux. Attenzione a del e rm: i file non vanno nel Cestino.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>PowerShell: i processi come oggetti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Windows PowerShell</b> dal menu Start (non serve l'amministratore).</li>
+      <li>Conta i processi: <code>(Get-Process).Count</code></li>
+      <li>I 5 che usano più memoria: scrivi su <b>una sola riga</b> il comando qui sotto.</li>
+      <li>Prova anche <code>ls</code> e <code>Get-Alias ls</code>: chi c'è dietro?</li>
+      <li>Aggiungi comandi e risultati al file <b>prompt-cognome.odt</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> il conteggio è simile a quello di Gestione attività (centinaia). WS è la memoria in <b>byte</b>: 524 288 000 sono 500 MB. <code>Get-Alias ls</code> risponde <b>Get-ChildItem</b>.</div>
+  </div>
+  <pre class="code" style="font-size:30px;padding:20px 32px">Get-Process <span class="hl">|</span> Sort-Object WS -Descending <span class="hl">|</span> Select-Object -First 5 Name, Id, WS</pre>
+  <aside class="notes">WS = Working Set, la memoria fisica usata dal processo, in byte: per avere MB dividere per 1024 × 1024 (1 048 576); 524 288 000 / 1 048 576 = 500. Il simbolo | è la pipe: l'uscita di un comando diventa l'ingresso del successivo (slide seguente). Differenza chiave: cmd e la shell Linux passano testo, PowerShell passa oggetti con proprietà (Name, Id, WS), per questo si può ordinare per WS senza tagliare colonne di testo. Per digitare | sulla tastiera italiana: Maiusc + il tasto \ a sinistra dell'1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Piccoli comandi, uniti da una pipe</h2></div>
+  <figure class="citazione">
+    <blockquote>Fai in modo che ogni programma faccia una cosa sola, e la faccia bene.</blockquote>
+    <figcaption><b>Doug McIlroy</b>, Bell Labs, con E. N. Pinson e B. A. Tague, prefazione al numero del Bell System Technical Journal dedicato a Unix, 1978</figcaption>
+  </figure>
+  <div class="formula"><small>La pipe | collega l'uscita di un comando all'ingresso del successivo</small>ls /bin <span class="hl">|</span> wc -l</div>
+  <aside class="notes">Traduzione nostra di "Make each program do one thing well", primo punto delle massime della filosofia Unix nella prefazione "UNIX Time-Sharing System: Foreword" (BSTJ, vol. 57, n. 6, 1978). Fu McIlroy a proporre le pipe, aggiunte a Unix nel 1973. Il comando del riquadro: ls elenca i file di /bin, wc -l conta le righe: in tutto, quanti comandi ci sono in /bin. Lo proviamo nel prossimo laboratorio. Esempio Windows già visto: tasklist | find /i "explorer".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un Linux vero, dentro il browser</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Vai su <b>bellard.org/jslinux</b> e avvia la console <b>Alpine Linux</b> (x86). Aspetta il prompt <code>localhost:~#</code>.</li>
+      <li>Il kernel: <code>uname -r</code> e <code>cat /proc/version</code>.</li>
+      <li>La shell: <code>echo $0</code>. I processi: <code>ps</code>.</li>
+      <li>Le pipe: <code>ls /bin | wc -l</code>, poi <code>ps | wc -l</code>.</li>
+      <li>Annota comandi e risposte in <b>prompt-cognome.odt</b>, con uno screenshot.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>/proc/version</code> inizia con <b>Linux version</b>; <code>ps</code> mostra <b>pochi</b> processi (meno di 20), tra cui il PID 1. Confronta con le centinaia di Windows: è un sistema minimo.</div>
+  </div>
+  <aside class="notes">JSLinux (Fabrice Bellard) emula un PC dentro il browser: nessun account, nessuna installazione, ricaricando la pagina tutto si azzera. Alpine usa BusyBox: molti comandi (ls, ps, wc) sono un unico programma con tanti nomi; echo $0 risponde -sh (la shell ash di BusyBox). /proc non è una cartella vera sul disco: è il kernel che mostra le sue informazioni come se fossero file (astrazione!). ps | wc -l conta anche la riga di intestazione. Se il sito è bloccato o lento: demo alla LIM, oppure copy.sh/v86 con un'immagine Linux.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il programma Java scrive "nota.txt". Chi tocca davvero il disco?</h2></div>
+  <div class="poll" data-id="ks-quiz-disco" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il programma Java, con l'istruzione write</li><li>La Java Virtual Machine</li><li>La shell da cui hai avviato il programma</li><li>Il kernel, tramite il file system e il driver del disco</li></ol>
+    <p class="why">Programma e JVM girano in modalità utente e possono solo chiedere, con una chiamata di sistema. La shell ha solo avviato il programma e non c'entra più. È il kernel, con il file system e il driver, a decidere i blocchi e a dare i comandi al controller del disco.</p>
+  </div>
+  <aside class="notes">Tranello A: "write" sembra scrivere davvero. Tranello B: la JVM sembra il "sistema" del programma Java, ma è anch'essa un processo utente. Tranello C: molti pensano che la shell resti "in mezzo" a tutto. Ponte verso la prossima lezione: modalità utente e modalità kernel.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Kernel e shell oggi</p><h2>Due novità di questi anni</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI nella shell</h3><p>Gli assistenti di programmazione basati su modelli linguistici lavorano anche nel terminale: leggono i file del progetto, propongono comandi e chiedono il permesso prima di eseguirli. La regola resta la tua: <b>non approvare un comando che non capisci</b>.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un nuovo linguaggio nel kernel</h3><p>Il kernel Linux è scritto quasi tutto in C. Dalla versione 6.1 (dicembre 2022) accetta anche codice in <b>Rust</b>, un linguaggio che impedisce molti errori di memoria: in un kernel, un errore così può bloccare tutto o aprire una falla.</p></div>
+  </div>
+  <aside class="notes">Esempi di assistenti nel terminale: Claude Code, GitHub Copilot CLI, Gemini CLI; tutti richiedono un account e sono pensati per professionisti: eventuale demo solo del docente alla LIM. Domanda: un comando come rm -rf o del /s proposto da un'AI va eseguito "a fiducia"? No: la shell esegue con i permessi dell'utente, chi approva ne è responsabile. Sul Rust: il supporto iniziale è stato unito nella versione 6.1; oggi alcuni driver sono scritti in Rust.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La parte del SO che comanda direttamente l'hardware si chiama <span class="blank" data-risposta="kernel|nucleo"></span>.</p>
+    <p>Il programma che interpreta i comandi dell'utente si chiama <span class="blank" data-risposta="shell"></span>.</p>
+    <p>La richiesta di un programma al kernel è una chiamata di <span class="blank" data-risposta="sistema"></span>.</p>
+    <p>Il simbolo | che collega due comandi si chiama <span class="blank" data-risposta="pipe"></span>.</p>
+    <p>Il comando Linux che corrisponde a <code>dir</code> è <span class="blank" data-risposta="ls"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: kernel (accettato nucleo), shell, sistema, pipe, ls.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Kernel = nocciolo che comanda l'hardware</li>
+      <li>Shell = guscio: grafica o a riga di comando</li>
+      <li>Kernel monolitici, microkernel, ibridi</li>
+    </ul>
+    <ul class="points">
+      <li>I programmi chiedono con le chiamate di sistema</li>
+      <li>cmd, PowerShell, sh: dir/ls, type/cat, tasklist/ps</li>
+      <li>La pipe | unisce piccoli comandi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "La mia guida tascabile alla shell" (si apre quando l'argomento viene segnato come svolto). Il file prompt-cognome.odt dei laboratori può essere la base del compito.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
