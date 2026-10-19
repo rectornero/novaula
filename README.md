@@ -7,3 +7,5 @@ Sito statico (cartella `sito/`) + Supabase. Ogni push su `main` viene pubblicato
 - `setup.sql` — schema iniziale del database
 - `aggiornamenti/` — aggiornamenti del database da eseguire nel SQL Editor di Supabase
 - `SETUP.md` — guida all'installazione
+
+Storico delle versioni: [CHANGELOG.md](CHANGELOG.md). Ogni modifica aumenta `VERSION` in `sito/app.js` e aggiunge una voce lì.

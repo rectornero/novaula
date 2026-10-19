@@ -50,3 +50,23 @@ in the note: Nero has the final word. Uploading again replaces the earlier corre
 
 Report to Nero in the thread with one line per student (name, proposed grade) and the pointer to Area docente.
 Delete the scratch folder afterwards, because student work does not belong in the shared folder or the repo.
+
+## Proposed marks (since the student profiles update)
+
+When a correction is uploaded, the database creates a **proposed mark** (`marks.status = 'proposto'`,
+`source = 'claude'`) for every student linked to the submission (the whole group for group work).
+It is computed from `voto` (e.g. "7+" = 7.25, "6½" = 6.5) and stays hidden from students. Nero accepts it,
+replaces it with his own mark, or sets "Da rifare" from Area docente or "Consegne ricevute". So write `voto`
+in a format the parser understands: `7`, `7+`, `7-`, `6½`, `6,5`. Submissions made with the old form have no
+profile: Nero links them to a student first, then the proposal appears.
+
+## Sending a personal material to a student
+
+Nero can do it from the class page ("Studenti e voti", then the student). Claude can add one with the
+Supabase connector, for a file already on the site or any link:
+
+```sql
+insert into student_materials (student_id, title, description, url)
+select id, 'Slide sui database', 'Per la lezione che hai perso.', 'contenuti/lezioni/database.pdf'
+from students where class_id = '5g' and name_key = 'mario rossi';
+```

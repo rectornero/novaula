@@ -207,3 +207,4 @@ label.check-row input{width:20px;height:20px;flex:none;accent-color:var(--accent
 .card.waiting h3{margin:0;font-size:1.02rem}
 .test.is-done .cal{opacity:.6}
 @media (max-width:380px){.tabs a span{font-size:.66rem}.tabs{gap:2px;padding:4px}}
+.version{color:var(--muted);font-size:.78rem;text-align:center;opacity:.8}

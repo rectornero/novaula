@@ -1,0 +1,47 @@
+# Novaula changelog
+
+Every change to the app gets a new version here, newest first, and the same number goes in
+`VERSION` at the top of `sito/app.js`, where it shows at the bottom of the home page and of Area docente.
+Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
+MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
+
+## 2.0.0 (19 Oct 2026): student profiles and marks
+- Students create their own profile per class («Il mio profilo»), with an optional 4-digit PIN that protects
+  the private part. PINs are stored hashed, and 5 wrong tries lock the profile for 10 minutes. The teacher can reset a PIN.
+- The profile shows marks by type with averages, every submission (including "Da rifare" attempts),
+  personal materials and requests for material.
+- Work is handed in under the profile. Group assignments let students add teammates.
+- Marks by type (homework, classwork, test, oral, project, other), entered per student or for a whole class.
+- Claude's grades from corrections become hidden proposals. The teacher accepts them, replaces them or sets "Da rifare".
+- "Controlli di coerenza e copiature": identical files, the same device for different students, late work,
+  homework far above in-class work, and marks far from a student's average.
+- Assignments have a type and an optional "group work" flag.
+- SQL: `aggiornamenti/2026-10-19-profili.sql` (applied).
+
+## 1.7.0 (19 Oct 2026): corrections by Claude
+- Claude marks submitted PDFs (green = right, red = wrong) with a proposed grade, shown only to the
+  teacher in Area docente → "Correzioni da controllare". SQL: `2026-10-19-correzioni.sql`.
+
+## 1.6.0 (19 Oct 2026): live timetable
+- Area docente shows the lesson in progress and the next one. SQL: `2026-10-19-orario.sql`.
+
+## 1.5.0 (19 Oct 2026): "Aiuto" help desk
+- Quick in-class questions with photos and screenshots, classmates' comments and an FAQ board. SQL: `2026-10-19-helpdesk.sql`.
+
+## 1.4.0 (19 Oct 2026): 1D/1E course
+- 53 interactive decks, 53 homework sheets released when a topic is marked done, and 10 tests in the new
+  Verifiche tab. Also questions on slides and phone voting (/vota.html). 3G renamed 3E TPSI. SQL: `2026-10-19-corso.sql`.
+- Published from GitHub: pushes to `main` deploy novaula.netlify.app.
+
+## 1.3.0 (16 Oct 2026): textbook programme
+- Programma rebuilt on the textbook's units. SQL: `2026-10-16-programma-libro.sql`.
+
+## 1.2.0 (13 Oct 2026): PDF viewer
+- PDFs open inside the site (pdf.html) with a Close button, which fixes opening files on Android.
+
+## 1.1.0 (12 Oct 2026): Programma tab
+- Timeline of topics with linked materials, new lesson decks with PDF downloads, and a "Scarica" button.
+  SQL: `2026-10-12-programma.sql`, `2026-10-12-pdf-presentazioni.sql`.
+
+## 1.0.0 (12 Oct 2026): launch
+- Per-class materials, homework hand-in without accounts, class chat, teacher login. Installable as an app on phones.

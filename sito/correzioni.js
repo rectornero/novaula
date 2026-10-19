@@ -57,7 +57,8 @@
       c.summary && h("p", { class: "corr-sum", text: c.summary }),
       h("div", { class: "row" },
         h("button", { class: "btn", type: "button", text: "Apri la correzione", onclick: function () { openPdf(x, c, "Correzione · " + student + " · " + title); } }),
-        seen));
+        seen),
+      x.extra && x.extra(c));
     paint();
     return el;
   }
@@ -71,7 +72,7 @@
       (res.data || []).forEach(function (c) { map[c.submission_id] = c; });
       return function (s, title) {
         var c = map[s.id];
-        return c ? card(x, c, s.student_name, title || "", null) : null;
+        return c ? card(Object.assign({}, x, { extra: null }), c, s.student_name, title || "", null) : null;
       };
     },
 
