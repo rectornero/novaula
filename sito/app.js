@@ -366,8 +366,16 @@
   function loading() { app.appendChild(h("p", { class: "empty", text: "Caricamento…" })); }
   function findClass(id) { return classes.filter(function (c) { return c.id === id; })[0]; }
 
+  function nowBoard() {
+    if (!api.isTeacher() || !window.NovaulaOrario) return;
+    var box = h("div");
+    app.appendChild(box);
+    stopChat = window.NovaulaOrario(box, { h: h, sb: api.client, findClass: findClass, classParts: classParts, classColor: classColor });
+  }
+
   function homePage() {
     setPage("");
+    nowBoard();
     var today = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
     var last = store("last-class");
     app.appendChild(h("section", { class: "hello" },
@@ -910,6 +918,7 @@
     app.appendChild(h("a", { class: "back", href: "#/", text: "← Tutte le classi" }));
     app.appendChild(h("h1", { text: "Area docente" }));
     if (api.isTeacher()) {
+      nowBoard();
       app.appendChild(h("div", { class: "card" },
         h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat." }),
         h("div", { class: "row" },

@@ -1,0 +1,38 @@
+/* Novaula · Orario: riquadro "Adesso / Dopo" nella home del docente */
+.now-board{display:flex;flex-direction:column;gap:12px}
+.now-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+@media (max-width:640px){.now-grid{grid-template-columns:1fr}}
+.now-card{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px 22px 20px 28px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);text-decoration:none;overflow:hidden;min-width:0;
+  transition:transform .15s ease,border-color .15s ease}
+.now-card::before{content:"";position:absolute;inset:0 auto 0 0;width:10px;background:var(--cc,var(--line))}
+a.now-card:hover{border-color:var(--cc);transform:translateY(-2px)}
+.now-card.now{border:2px solid var(--cc);background:color-mix(in srgb,var(--cc) 9%,var(--card));padding-block:24px}
+.now-label{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.now-card.now .now-label{color:var(--cc)}
+.now-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);box-shadow:0 0 0 0 color-mix(in srgb,var(--danger) 60%,transparent);animation:now-pulse 1.8s infinite}
+@keyframes now-pulse{70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.now-dot{animation:none}}
+.now-code{font-family:var(--display);font-weight:800;line-height:.95;letter-spacing:-.04em;color:var(--cc);font-size:clamp(3rem,10vw,4.2rem)}
+.now-card.now .now-code{font-size:clamp(4.4rem,16vw,7rem)}
+.now-subject{font-weight:700;font-size:1.15rem}
+.now-card.now .now-subject{font-size:clamp(1.25rem,4vw,1.6rem)}
+.now-place{display:flex;flex-wrap:wrap;gap:6px}
+.now-room,.now-note{font-size:.9rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.now-room{background:var(--hl);color:var(--hl-ink)}
+.now-bar{display:block;height:12px;border-radius:999px;background:color-mix(in srgb,var(--cc) 18%,var(--card));overflow:hidden;margin-top:8px}
+.now-bar span{display:block;height:100%;background:var(--cc);border-radius:inherit;transition:width .6s ease}
+.now-time{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;font-size:1rem;color:var(--muted)}
+.now-time b{color:var(--ink)}
+.now-card.now .now-time span{font-weight:700;color:var(--cc);font-size:1.1rem}
+.now-go{margin-top:6px;align-self:flex-start;font-weight:700;padding:10px 18px;border-radius:999px;background:var(--cc);color:#fff}
+.now-card.free{justify-content:center;background:color-mix(in srgb,var(--card) 70%,transparent);border-style:dashed}
+.now-free{font-family:var(--display);font-weight:800;font-size:clamp(2rem,7vw,2.8rem);line-height:1;letter-spacing:-.03em}
+.now-strip{list-style:none;margin:0;padding:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin}
+.now-strip li{flex:none}
+.now-strip a{display:flex;align-items:baseline;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-size:.9rem}
+.now-strip b{color:var(--cc);font-family:var(--display)}
+.now-strip .t,.now-strip .r{color:var(--muted)}
+.now-strip .done a{opacity:.5}
+.now-strip .on a{border-color:var(--cc);background:var(--cc);color:#fff}
+.now-strip .on b,.now-strip .on .t,.now-strip .on .r{color:#fff}
