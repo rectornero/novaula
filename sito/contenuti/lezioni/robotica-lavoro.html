@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La robotica e il mondo del lavoro · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Educazione civica · Lavoro e tecnologia</p>
+  <h1>La robotica e<br>il mondo del lavoro</h1>
+  <p class="lead">Robot in fabbrica, algoritmi che scelgono i candidati, assistenti AI che scrivono codice: quali lavori cambiano davvero, che cosa dicono i dati e quali regole ci proteggono.</p>
+  <aside class="notes">Obiettivi: distinguere robotica, automazione e AI; leggere dati reali sull'automazione (IFR, OCSE, WEF, FMI) capendo come sono stati misurati; conoscere i rischi degli algoritmi che decidono sulle persone; conoscere l'AI Act e le regole italiane sul lavoro. Durata indicativa: 2-3 ore. Tono: niente catastrofismo e niente entusiasmo a scatola chiusa, solo dati con la loro fonte (tutte nelle note).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il lavoro che vorresti fare, nel 2035, con l'AI…</h2></div>
+  <div class="poll" data-id="rob-futuro">
+    <ol><li>…non esisterà più: lo farà una macchina</li><li>…esisterà, ma cambierà molto</li><li>…resterà quasi uguale</li><li>…ancora non esiste: nascerà con l'AI</li></ol>
+  </div>
+  <aside class="notes">Far dire a voce alta quale lavoro ciascuno ha in mente (sviluppatore, sistemista, tecnico di rete, docente, infermiere…). Tenere i risultati: alla fine della lezione si può rifare la domanda e vedere se le idee sono cambiate.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="rob-storia">
+    <li>Karel Čapek usa la parola "robot" nel dramma R.U.R.</li>
+    <li>Isaac Asimov scrive le tre leggi della robotica</li>
+    <li>Unimate, il primo robot industriale, lavora alla General Motors</li>
+    <li>Deep Blue di IBM batte il campione di scacchi Garry Kasparov</li>
+    <li>AlphaGo di DeepMind batte Lee Sedol a Go</li>
+    <li>ChatGPT viene aperto al pubblico</li>
+  </ol>
+  <aside class="notes">Date: R.U.R. scritto nel 1920 e rappresentato nel 1921; la parola fu suggerita dal fratello Josef e viene dal ceco "robota", lavoro forzato. Asimov: racconto "Runaround", 1942. Unimate (George Devol e Joseph Engelberger) entra in funzione nel 1961 in uno stabilimento GM nel New Jersey, per maneggiare pezzi pressofusi roventi. Deep Blue: 1997. AlphaGo: 2016. ChatGPT: novembre 2022. Far notare: il primo robot industriale fa un lavoro pericoloso, non "intelligente".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una paura antica</p><h2>Una "nuova malattia" del 1930</h2></div>
+  <figure class="citazione">
+    <blockquote>Disoccupazione tecnologica: troviamo modi per risparmiare lavoro più in fretta di quanto troviamo nuovi usi per il lavoro.</blockquote>
+    <figcaption><b>John Maynard Keynes</b>, economista inglese, "Possibilità economiche per i nostri nipoti", 1930</figcaption>
+  </figure>
+  <div class="callout">Keynes la considerava una fase di passaggio: prevedeva che entro cent'anni, grazie alla tecnologia, potesse bastare una <b>settimana lavorativa di 15 ore</b>.</div>
+  <aside class="notes">Traduzione nostra e leggermente abbreviata dall'originale: "technological unemployment. This means unemployment due to our discovery of means of economising the use of labour outrunning the pace at which we can find new uses for labour" (Economic Possibilities for our Grandchildren, 1930). Nello stesso saggio parla di "three-hour shifts or a fifteen-hour week". Domanda alla classe: siamo quasi al 2030, la previsione si è avverata? La produttività è cresciuta enormemente, l'orario molto meno: perché?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Parole chiare</p><h2>Robot, automazione, intelligenza artificiale</h2></div>
+  <div class="cols-4">
+    <div class="card"><h4>Robot industriale</h4><p class="small">Manipolatore riprogrammabile, multiuso, con tre o più assi (ISO 8373).</p></div>
+    <div class="card soft"><h4>Cobot</h4><p class="small">Robot collaborativo: lavora accanto alle persone con limiti di forza e velocità (ISO/TS 15066).</p></div>
+    <div class="card"><h4>RPA</h4><p class="small">"Robot" solo software: automatizza clic e copia-incolla tra programmi d'ufficio.</p></div>
+    <div class="card fill"><h4>AI</h4><p class="small">Software che impara dai dati: riconosce, prevede, genera. Può guidare un robot o stare in un'app.</p></div>
+  </div>
+  <p class="lead">Il robot è il <b>corpo</b>, l'AI è una parte del <b>software</b>. Molti robot in fabbrica non usano AI; molte AI non hanno un corpo.</p>
+  <aside class="notes">ISO 8373 è la norma sul vocabolario della robotica, usata anche dall'International Federation of Robotics (IFR) per contare i robot. ISO/TS 15066 (2016) fissa i requisiti di sicurezza dei robot collaborativi. RPA = Robotic Process Automation. Dal 20 gennaio 2027 si applicherà il nuovo Regolamento macchine (UE) 2023/1230, che tiene conto anche delle macchine con comportamento che evolve grazie all'AI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I numeri · IFR</p><h2>Robot ogni 10 000 addetti nell'industria manifatturiera</h2></div>
+  <table class="data compact">
+    <tr><th>Paese</th><th>Robot / 10 000 addetti</th><th style="width:48%"></th></tr>
+    <tr><td>Corea del Sud</td><td class="mono">1012</td><td><div style="height:22px;width:100%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr><td>Singapore</td><td class="mono">770</td><td><div style="height:22px;width:76%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr><td>Cina</td><td class="mono">470</td><td><div style="height:22px;width:46%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr><td>Germania</td><td class="mono">429</td><td><div style="height:22px;width:42%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr><td>Giappone</td><td class="mono">419</td><td><div style="height:22px;width:41%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr><td>Stati Uniti</td><td class="mono">295</td><td><div style="height:22px;width:29%;background:var(--accent);border-radius:6px"></div></td></tr>
+    <tr class="hl"><td><b>Media mondiale</b></td><td class="mono"><b>162</b></td><td><div style="height:22px;width:16%;background:var(--ink);border-radius:6px"></div></td></tr>
+  </table>
+  <p class="small muted">Dati 2023. Nel 2023 nel mondo sono stati installati circa 541 000 robot industriali; in funzione erano circa 4,3 milioni. Fonte: IFR, World Robotics 2024.</p>
+  <aside class="notes">Fonte: International Federation of Robotics, World Robotics 2024 e comunicato "Global robot density in factories doubled in seven years" (novembre 2024): media mondiale 162 robot ogni 10 000 addetti nel manifatturiero nel 2023; installazioni 2023 circa 541 000; stock operativo circa 4,28 milioni. Nell'UE l'Italia è il secondo mercato di robot industriali dopo la Germania. Prima della lezione controllare su ifr.org se è uscito un World Robotics più recente e aggiornare. Domanda: perché la Corea del Sud? (elettronica e auto, poca manodopera giovane, scelta industriale).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I robot in un grafico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc copia la tabella IFR della slide precedente in A1:B8 (Paese, Densità).</li>
+      <li>In C1 scrivi <b>Volte la media</b>; in C2 <code>=B2/$B$8</code> e trascina fino a C7, con 1 decimale.</li>
+      <li>In D2 calcola ogni quanti addetti c'è un robot: <code>=10000/B2</code>.</li>
+      <li>Inserisci un grafico a barre orizzontali di Paese e Densità, con titolo e fonte.</li>
+      <li>Salva come <b>densita-robot.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Corea 6,2 volte la media, Cina 2,9, Germania 2,6, Stati Uniti 1,8. In Corea c'è circa un robot ogni 10 addetti, nella media mondiale uno ogni 62.</div>
+  </div>
+  <aside class="notes">Calcoli: 1012/162 = 6,25 (6,2 con un decimale arrotondato da Calc: 6,2 o 6,3 a seconda del formato; accettare entrambi); 470/162 = 2,90; 429/162 = 2,65 (2,6 o 2,7); 295/162 = 1,82. 10000/1012 = 9,9; 10000/162 = 61,7. Far scrivere la fonte nel titolo del grafico: un grafico senza fonte non vale come argomento in un dibattito o all'esame.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Per un robot, quale compito è il più difficile?</h2></div>
+  <div class="poll" data-id="rob-moravec" data-tipo="quiz" data-risposta="C">
+    <ol><li>Battere il campione del mondo di scacchi</li><li>Leggere le targhe delle auto in autostrada</li><li>Piegare un mucchio di vestiti tutti diversi</li><li>Saldare la scocca di un'auto 24 ore su 24</li></ol>
+    <p class="why">È il paradosso di Moravec: ciò che per noi è difficile (scacchi, calcolo) è facile per le macchine, mentre ciò che sembra banale (afferrare oggetti morbidi e irregolari) è difficilissimo. Gli scacchi sono risolti dal 1997, le targhe e la saldatura sono automatizzate da anni.</p>
+  </div>
+  <aside class="notes">Hans Moravec, robotico, descrisse il paradosso nel libro "Mind Children" (1988). Molti scelgono A perché "gli scacchi sono la cosa più intelligente". Conseguenza per il lavoro: molti mestieri manuali di cura, manutenzione e artigianato sono più difficili da automatizzare di molti lavori d'ufficio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa dicono gli studi</p><h2>Stesso problema, numeri molto diversi</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">47%</p><h3>Frey e Osborne, 2013</h3><p class="small">Quota di occupati negli Stati Uniti in professioni ad alto rischio di automazione.</p></div>
+    <div class="card"><p class="num">9% · 14%</p><h3>OCSE, 2016 e 2018</h3><p class="small">Quota di lavori ad alto rischio nei paesi OCSE. Il 32% potrebbe però cambiare in modo significativo.</p></div>
+  </div>
+  <div class="poll" data-id="rob-studi" data-tipo="quiz" data-risposta="A">
+    <p class="q">Perché i due risultati sono così diversi?</p>
+    <ol><li>Uno valuta interi mestieri, l'altro le singole mansioni</li><li>L'OCSE ha usato dati più vecchi</li></ol>
+    <p class="why">Frey e Osborne stimano il rischio per professione; l'OCSE guarda le mansioni che ogni persona svolge davvero, e quasi ogni lavoro ha compiti difficili da automatizzare. Il metodo cambia il risultato.</p>
+  </div>
+  <aside class="notes">Fonti: C. B. Frey, M. A. Osborne, "The Future of Employment" (working paper 2013, pubblicato nel 2017 su Technological Forecasting and Social Change): 47% dell'occupazione USA ad alto rischio. M. Arntz, T. Gregory, U. Zierahn, OECD Working Paper n. 189 (2016): in media 9% nei paesi OCSE. L. Nedelkoska, G. Quintini, OECD Working Paper n. 202 (2018), ripreso nell'OECD Employment Outlook 2019: 14% ad alto rischio, 32% con cambiamenti significativi. Messaggio: davanti a un numero chiedersi sempre "che cosa ha misurato, e come?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Distruzione e creazione</p><h2>I robot tolgono lavoro, le nuove tecnologie ne creano</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">−0,2</p><p class="small">punti di tasso di occupazione per ogni robot in più ogni 1000 lavoratori, nelle zone USA più esposte (1990-2007).</p><p class="tiny muted">Acemoglu e Restrepo, 2020</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">170 / 92</p><p class="small">milioni di posti creati e cancellati nel mondo entro il 2030, secondo le aziende intervistate.</p><p class="tiny">World Economic Forum, 2025</p></div>
+    <div class="card"><p class="num">40%</p><p class="small">degli occupati nel mondo è "esposto" all'AI, il 60% nelle economie avanzate. Esposto non vuol dire sostituito.</p><p class="tiny muted">Fondo Monetario Internazionale, 2024</p></div>
+  </div>
+  <div class="callout">Gli effetti non sono uguali per tutti: cambiano per mansione, territorio, età e livello di formazione.</div>
+  <aside class="notes">Fonti: D. Acemoglu, P. Restrepo, "Robots and Jobs: Evidence from US Labor Markets", Journal of Political Economy, 2020: un robot in più ogni mille lavoratori riduce il rapporto occupati/popolazione di circa 0,2 punti percentuali e i salari di circa 0,42%. WEF, Future of Jobs Report 2025 (gennaio 2025): 170 milioni di posti creati e 92 milioni cancellati tra 2025 e 2030, saldo +78 milioni; sono previsioni delle imprese intervistate, non misure. FMI, M. Cazzaniga et al., "Gen-AI: Artificial Intelligence and the Future of Work", Staff Discussion Note SDN/2024/001: quasi il 40% dell'occupazione mondiale esposto, circa metà dei lavori esposti potrebbe trarne beneficio. Far distinguere: dato misurato (Acemoglu) contro previsione (WEF).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'AI generativa al lavoro</p><h2>Che cosa è stato misurato davvero</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h4>Assistenza clienti, 2023</h4><p class="small">Con un assistente AI gli operatori risolvono il <b>14%</b> di richieste in più all'ora; i <b>neoassunti</b> il 34% in più.</p></div>
+    <div class="card soft"><h4>GitHub Copilot, 2023</h4><p class="small">In un esperimento, chi usava Copilot ha scritto un piccolo server HTTP in JavaScript il <b>55,8%</b> più in fretta.</p></div>
+  </div>
+  <div class="poll" data-id="rob-metr" data-tipo="quiz" data-risposta="D">
+    <p class="q">METR, 2025: sviluppatori esperti sui loro progetti, con l'AI, erano…</p>
+    <ol><li>…il 20% più veloci</li><li>…il 55% più veloci, come con Copilot</li><li>…veloci uguali</li><li>…il 19% più lenti, convinti di essere più veloci</li></ol>
+    <p class="why">Nello studio METR del 2025, 16 sviluppatori esperti su progetti open source che conoscevano bene hanno impiegato il 19% di tempo in più con gli strumenti AI, convinti di aver guadagnato circa il 20%. Il contesto conta: compito semplice e nuovo o codice grande e già noto.</p>
+  </div>
+  <aside class="notes">Domanda da leggere prima del quiz: "Nel 2025 sviluppatori esperti hanno lavorato su repository open source che conoscevano bene, con e senza AI. Risultato?". Fonti: E. Brynjolfsson, D. Li, L. Raymond, "Generative AI at Work" (NBER 2023, Quarterly Journal of Economics 2025), su oltre 5000 operatori. S. Peng et al., "The Impact of AI on Developer Productivity: Evidence from GitHub Copilot" (arXiv 2023). METR, "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity" (luglio 2025): 246 compiti, i partecipanti si aspettavano un +24% e a posteriori stimavano +20%. Collegare al deck "claude-code": verificare sempre il codice generato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Smonta un mestiere in mansioni</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>esco.ec.europa.eu</b>, scegli l'italiano e cerca una professione tra le occupazioni (es. "sviluppatore software").</li>
+      <li>Copia in Calc 10 abilità o compiti essenziali, uno per riga in colonna A.</li>
+      <li>In colonna B scrivi per ognuno: <b>Automatizzabile</b>, <b>Potenziata</b> (l'AI aiuta) o <b>Umana</b>, e in C il motivo.</li>
+      <li>Conta le tre categorie con <code>=CONTA.SE(B2:B11;"Umana")</code> e simili.</li>
+      <li>Salva come <b>mansioni-ai.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le tre somme danno 10. Quasi nessuna professione ha tutte le mansioni "Automatizzabile": è il ragionamento dell'OCSE.</div>
+  </div>
+  <aside class="notes">ESCO è la classificazione europea di abilità, competenze e occupazioni, consultabile senza account in 28 lingue. In alternativa: Atlante del lavoro e delle qualificazioni dell'INAPP (atlantelavoro.inapp.gov.it). Esempio per sviluppatore software: "scrivere codice ripetitivo" potenziata; "documentare il codice" potenziata; "raccogliere i requisiti dal cliente" umana; "eseguire test di regressione" automatizzabile; "progettare l'architettura" umana con supporto. Discussione: le mansioni "umane" sono quelle con persone, responsabilità, contesto. Questo è anche il materiale di partenza del compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando l'algoritmo sceglie le persone</p><h2>Due storie vere</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Il selezionatore di CV</h3><p class="small">Amazon sperimentò un'AI addestrata su dieci anni di curriculum, in gran parte di uomini. Il sistema penalizzava i CV con la parola "women's" (per esempio "capitana della squadra femminile di scacchi"). Il progetto fu abbandonato.</p><p class="tiny muted">Reuters, 2018</p></div>
+    <div class="card"><h3>Il ranking dei rider</h3><p class="small">A Bologna un tribunale ha giudicato discriminatorio l'algoritmo di Deliveroo che abbassava il punteggio di chi non si presentava a un turno prenotato, senza distinguere tra malattia, sciopero o disinteresse.</p><p class="tiny muted">Tribunale di Bologna, 31 dicembre 2020</p></div>
+  </div>
+  <div class="callout">GDPR, art. 22: hai il diritto di non essere sottoposto a una decisione <b>basata unicamente</b> su un trattamento automatizzato che ti riguarda in modo significativo.</div>
+  <aside class="notes">Amazon: J. Dastin, Reuters, 10 ottobre 2018 ("Amazon scraps secret AI recruiting tool that showed bias against women"). Deliveroo: ordinanza del Tribunale di Bologna del 31/12/2020, ricorso dei sindacati CGIL; l'azienda dichiarò che quel sistema non era più in uso. Direttiva (UE) 2024/2831 sul lavoro mediante piattaforme digitali: limiti alla gestione algoritmica, supervisione umana, recepimento entro il 2 dicembre 2026. Nessuna delle due storie richiede "cattiveria" del programmatore: il problema nasce dai dati e dalle regole scelte.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Simula uno screening automatico</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <table class="sheet">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+        <tr><th>1</th><td>Candidato</td><td>Anni esp.</td><td>Certif.</td><td>Mesi pausa</td></tr>
+        <tr><th>2</th><td>Anna</td><td>5</td><td>2</td><td>0</td></tr>
+        <tr><th>3</th><td>Bruno</td><td>6</td><td>3</td><td>14</td></tr>
+        <tr><th>4</th><td>Carla</td><td>4</td><td>1</td><td>0</td></tr>
+        <tr><th>5</th><td>Davide</td><td>3</td><td>2</td><td>2</td></tr>
+        <tr><th>6</th><td>Elena</td><td>6</td><td>1</td><td>18</td></tr>
+      </table>
+      <p class="small">In E1 scrivi <b>Punteggio</b>; in E2: <code>=B2*10+C2*5-SE(D2&gt;12;40;0)</code>, trascina fino a E6. Poi <b>Dati › Ordina</b> per E decrescente.</p>
+    </div>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> passano i primi due: Anna (60) e Carla (45). Bruno, in congedo parentale, e Elena, dopo una malattia, scendono a 35 e 25.</div>
+      <p class="small">Togli la penalità (<code>=B2*10+C2*5</code>) e riordina: chi passa ora? Scrivi in F1 una regola più giusta. Salva come <b>screening.ods</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Senza penalità: Bruno 75, Elena 65, Anna 60, Carla 45, Davide 40: passano Bruno ed Elena, i due più esperti. Messaggio: una regola che sembra neutra ("chi ha buchi nel CV vale meno") colpisce di fatto chi ha avuto figli, malattie o cura di familiari: è una discriminazione indiretta, ed è il motivo per cui l'AI Act considera ad alto rischio i sistemi di selezione del personale. Proposta di regola più giusta: ignorare le pause motivate, oppure revisione umana obbligatoria per gli esclusi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole · Regolamento (UE) 2024/1689</p><h2>L'AI Act e il lavoro</h2></div>
+  <div class="cols-3">
+    <div class="card bad"><h3>Vietato</h3><p class="small">Dal 2 febbraio 2025: riconoscere le <b>emozioni</b> di lavoratori e studenti (salvo motivi medici o di sicurezza).</p></div>
+    <div class="card soft"><h3>Alto rischio</h3><p class="small">AI per selezionare candidati, decidere promozioni o licenziamenti, assegnare compiti, monitorare e valutare i lavoratori.</p></div>
+    <div class="card ok"><h3>Obblighi per tutti</h3><p class="small">Dal 2025 chi usa l'AI deve curare l'<b>alfabetizzazione</b> sull'AI del personale; i chatbot devono dire che sono AI.</p></div>
+  </div>
+  <ul class="points small">
+    <li>Prima di usare un sistema ad alto rischio, il datore deve <b>informare i lavoratori</b> e i loro rappresentanti.</li>
+    <li>In Italia la legge 132/2025 chiede che l'AI al lavoro rispetti dignità e trasparenza, e che il lavoratore ne sia informato.</li>
+  </ul>
+  <aside class="notes">AI Act: Regolamento (UE) 2024/1689, in vigore dal 1° agosto 2024. Art. 5(1)(f): divieto di riconoscimento delle emozioni sul luogo di lavoro e negli istituti di istruzione, dal 2 febbraio 2025. Art. 4: alfabetizzazione in materia di AI, dal 2 febbraio 2025. Art. 50: obblighi di trasparenza. Allegato III, punto 4: occupazione e gestione dei lavoratori. Art. 26(7): informazione ai lavoratori. Calendario: nel testo originale gli obblighi per l'alto rischio dell'Allegato III si applicano dal 2 agosto 2026; nel novembre 2025 la Commissione ha proposto (pacchetto "Digital Omnibus") di posticiparli: verificare lo stato attuale prima della lezione. Legge 23 settembre 2025, n. 132, art. 11 (lavoro) e art. 12 (Osservatorio presso il Ministero del Lavoro). All'esame: saper classificare un sistema AI secondo i livelli di rischio è un ottimo collegamento tra informatica ed educazione civica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni sistema al livello di rischio dell'AI Act</h2></div>
+  <dl class="puzzle-abbina" data-id="rob-aiact">
+    <dt>Webcam che legge le emozioni degli operatori di un call center</dt><dd>Pratica vietata</dd>
+    <dt>Software che filtra e ordina i CV dei candidati</dt><dd>Alto rischio</dd>
+    <dt>Chatbot che risponde ai clienti sul sito</dt><dd>Obbligo di trasparenza: dire che è un'AI</dd>
+    <dt>Filtro antispam della posta aziendale</dt><dd>Rischio minimo, nessun obbligo specifico</dd>
+  </dl>
+  <aside class="notes">Si può fare a squadre con 2 minuti di tempo. Il filtro antispam è l'esempio di rischio minimo usato anche dalla Commissione europea. Per approfondire senza account: il testo ufficiale su EUR-Lex (cercare "2024/1689") o l'AI Act Explorer su artificialintelligenceact.eu (sito non ufficiale, curato dal Future of Life Institute).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Competenze</p><h2>Che cosa conviene imparare</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Le competenze che le aziende del WEF prevedono in maggiore crescita entro il 2030:</p>
+      <div class="chips"><span class="chip">AI e big data</span><span class="chip">Reti e cybersicurezza</span><span class="chip">Alfabetizzazione tecnologica</span><span class="chip">Pensiero creativo</span><span class="chip">Resilienza e flessibilità</span><span class="chip">Curiosità e apprendimento continuo</span></div>
+      <p class="small muted">Fonte: World Economic Forum, Future of Jobs Report 2025.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli agenti AI di programmazione scrivono e provano codice da soli. Il valore di uno sviluppatore si sposta verso <b>capire il problema</b>, progettare, scrivere test e <b>verificare</b> ciò che l'AI produce.</p></div>
+  </div>
+  <aside class="notes">WEF Future of Jobs Report 2025: in cima alla classifica delle competenze in crescita ci sono AI e big data, reti e cybersicurezza, alfabetizzazione tecnologica; poi pensiero creativo, resilienza, flessibilità e agilità, curiosità e apprendimento continuo. Il rapporto stima anche che circa il 39% delle competenze chiave cambierà entro il 2030. Collegamento con il deck "claude-code" e "lavorare-a-progetti". Domanda: "quali di queste state allenando a scuola, e come?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Robot di nuova generazione</p><h2>Dai bracci in gabbia ai robot che capiscono le istruzioni</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I modelli <b>visione-linguaggio-azione</b> (per esempio RT-2 di Google DeepMind, 2023, e Gemini Robotics, 2025) traducono un'istruzione a parole e un'immagine in movimenti del robot. I robot umanoidi sono in sperimentazione in alcuni magazzini, ma non sono ancora diffusi.</p></div>
+  <div class="poll" data-id="rob-tassa">
+    <p class="q">Sei d'accordo con una tassa sui robot?</p>
+    <ol><li>Sì, per finanziare formazione e welfare</li><li>No, frenerebbe l'innovazione</li><li>Solo per le aziende che licenziano</li></ol>
+  </div>
+  <aside class="notes">RT-2 (luglio 2023) e Gemini Robotics (marzo 2025) sono modelli di Google DeepMind che controllano bracci robotici a partire da linguaggio e immagini; restano sistemi di ricerca o in sperimentazione. Evitare l'hype sugli umanoidi: dimostrazioni e progetti pilota, costi alti, affidabilità ancora da provare. Tassa sui robot: Bill Gates la propose in un'intervista a Quartz nel febbraio 2017; nello stesso mese il Parlamento europeo approvò una risoluzione sulle norme di diritto civile sulla robotica respingendo però la proposta di tassare i robot. Far argomentare: che cos'è "un robot" ai fini fiscali? Anche un software?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La parola robot viene dal dramma R.U.R. di Karel <span class="blank" data-risposta="Čapek|Capek" style="--w:7ch"></span>.</p>
+    <p>Un robot progettato per lavorare accanto alle persone si chiama <span class="blank" data-risposta="cobot|robot collaborativo" style="--w:7ch"></span>.</p>
+    <p>Secondo il paradosso di <span class="blank" data-risposta="Moravec" style="--w:8ch"></span>, afferrare oggetti è più difficile che giocare a scacchi.</p>
+    <p>Nell'AI Act, un software che seleziona i CV è un sistema ad alto <span class="blank" data-risposta="rischio"></span>.</p>
+    <p>Riconoscere le emozioni dei lavoratori con l'AI è <span class="blank" data-risposta="vietato" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Čapek (accettato Capek), cobot (o robot collaborativo), Moravec, rischio, vietato. Se c'è tempo, rifare il sondaggio iniziale e confrontare i risultati.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Robot = corpo, AI = software: non sempre insieme</li>
+      <li>I numeri dipendono da come si misura: mestieri o mansioni</li>
+      <li>La tecnologia toglie e crea lavoro, non in modo uguale per tutti</li>
+    </ul>
+    <ul class="points">
+      <li>Gli algoritmi che scelgono persone possono discriminare</li>
+      <li>GDPR art. 22, AI Act, L. 132/2025 proteggono chi lavora</li>
+      <li>Conta saper capire, progettare e verificare</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: "Il mio lavoro nel 2035". Prossima lezione di educazione civica: il rapporto con la Pubblica Amministrazione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

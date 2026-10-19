@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TextView e ImageView · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.albero{display:flex;flex-direction:column;gap:12px;font-family:var(--mono);font-size:28px}
+.albero div{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 20px}
+.albero .g{background:var(--accent);border-color:var(--accent);color:#fff}
+.albero .i1{margin-left:60px}
+</style>
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 5</p>
+  <h1>La modifica del layout: TextView e ImageView</h1>
+  <p class="lead">QuizTPSI prende forma: un titolo, una domanda, un'immagine. Impariamo a disporre le View in XML, a usare le risorse e a cambiarle dal codice Kotlin.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Layout, risorse, TextView e ImageView</span></p>
+  <aside class="notes">Obiettivi: capire la gerarchia di View e ViewGroup, usare LinearLayout e gli attributi di dimensione (match_parent, wrap_content, dp, sp, padding, margin), spostare testi e colori nelle risorse, inserire un'immagine con ImageView e contentDescription, modificare testi e immagini da Kotlin con findViewById (e conoscere View Binding). Durata: 2-3 ore. Si riparte dal progetto QuizTPSI della lezione 4. Chi non ce l'ha lo ricrea in 5 minuti (modello Empty Views Activity). Piano B se gli emulatori sono lenti: l'anteprima Design/Split dell'editor di layout non richiede di eseguire l'app; per il codice Kotlin usare il telefono via USB o la dimostrazione sulla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che cosa ti fa disinstallare un'app più in fretta?</h2></div>
+  <div class="poll" data-id="lay-disinstalla">
+    <ol><li>Un'interfaccia confusa</li><li>Troppa pubblicità</li><li>È lenta o si blocca</li><li>Chiede troppi permessi</li><li>Testi piccoli o illeggibili</li></ol>
+  </div>
+  <aside class="notes">Tre opzioni su cinque riguardano il layout e l'esperienza d'uso, non la logica. Oggi lavoriamo proprio lì. Domanda: chi ha mai ingrandito i caratteri del telefono, o conosce qualcuno che lo fa? (Nonni, ipovedenti: ecco perché useremo sp.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come è fatta una schermata</p><h2>Un albero di View</h2></div>
+  <div class="cols-2">
+    <div class="albero">
+      <div class="g">LinearLayout (verticale) · id main</div>
+      <div class="i1">TextView · tvTitolo</div>
+      <div class="i1">ImageView · ivDomanda</div>
+      <div class="i1">TextView · tvDomanda</div>
+      <div class="i1 muted">Button · lezione 6</div>
+    </div>
+    <div class="stack">
+      <ul class="points small">
+        <li>Una <b>View</b> disegna qualcosa: testo, immagine, pulsante.</li>
+        <li>Un <b>ViewGroup</b> contiene altre View e decide dove metterle.</li>
+      </ul>
+      <figure class="citazione" style="padding-left:96px">
+        <blockquote style="font-size:42px">Il design non è solo come una cosa appare e come la senti. Il design è come funziona.</blockquote>
+        <figcaption><b>Steve Jobs</b>, intervista al New York Times Magazine, 2003</figcaption>
+      </figure>
+    </div>
+  </div>
+  <aside class="notes">Il file XML del layout descrive proprio questo albero; setContentView lo "gonfia" (inflate) creando gli oggetti Kotlin corrispondenti. Citazione: traduzione nostra da "Design is not just what it looks like and feels like. Design is how it works.", dall'articolo di Rob Walker "The Guts of a New Machine", New York Times Magazine, 30 novembre 2003. Collegamento: è lo stesso principio del DOM nelle pagine web, che conoscete da HTML e JavaScript.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I contenitori</p><h2>Tre ViewGroup che incontrerai subito</h2></div>
+  <div class="cols-3">
+    <div class="card fill"><h3>LinearLayout</h3><p class="small">Mette i figli in fila, in verticale o in orizzontale. Semplice: lo usiamo oggi.</p></div>
+    <div class="card"><h3>ConstraintLayout</h3><p class="small">Ogni View è "legata" ai bordi o alle altre con vincoli. È il contenitore del modello di progetto.</p></div>
+    <div class="card"><h3>FrameLayout</h3><p class="small">Sovrappone i figli uno sull'altro: utile per un'immagine con un testo sopra.</p></div>
+  </div>
+  <table class="data compact">
+    <tr><th>Attributo</th><th>Che cosa fa</th></tr>
+    <tr><td class="mono">match_parent</td><td>Grande quanto il contenitore</td></tr>
+    <tr><td class="mono">wrap_content</td><td>Grande quanto il contenuto</td></tr>
+    <tr><td class="mono">padding / layout_margin</td><td>Spazio dentro il bordo / spazio fuori dal bordo</td></tr>
+  </table>
+  <aside class="notes">Nel ConstraintLayout una dimensione 0dp significa "quanto permettono i vincoli" (match constraints). LinearLayout ha anche layout_weight, per dividere lo spazio in proporzione: lo useremo nella lezione 6 per due pulsanti affiancati. Annidare molti LinearLayout rallenta il disegno: per schermate complesse si preferisce ConstraintLayout. All'esame: saper giustificare la scelta del contenitore è un buon segno di progettazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un TextView ha uno sfondo arancione. Aumenti <code>android:padding</code>: che cosa succede?</h2></div>
+  <div class="poll" data-id="lay-padding" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il TextView si allontana dagli altri, lo sfondo resta uguale</li><li>Il testo diventa più grande</li><li>Il testo si allontana dal bordo e l'area arancione si allarga</li><li>Niente, se la larghezza è wrap_content</li></ol>
+    <p class="why">Il padding è spazio interno: fa parte della View, quindi lo sfondo lo copre. Il margin è spazio esterno: allontana la View dalle altre e resta trasparente.</p>
+  </div>
+  <aside class="notes">La A descrive il margin: è la confusione più comune, identica a quella del box model CSS che gli studenti conoscono. Con wrap_content (D) il padding si somma al contenuto: la View cresce. Far provare subito nel laboratorio successivo con android:background="#FBE7DC".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il layout in XML</p><h2>activity_main.xml con un LinearLayout</h2></div>
+  <div class="cols-2" style="grid-template-columns:1.7fr 1fr">
+<pre class="code" style="font-size:24px">&lt;<span class="k">LinearLayout</span> xmlns:android=<span class="s">"…/apk/res/android"</span>
+    <span class="hl">android:id="@+id/main"</span>
+    android:layout_width=<span class="s">"match_parent"</span>
+    android:layout_height=<span class="s">"match_parent"</span>
+    android:orientation=<span class="s">"vertical"</span>
+    android:padding=<span class="s">"24dp"</span>&gt;
+
+    &lt;<span class="k">TextView</span>
+        android:id=<span class="s">"@+id/tvTitolo"</span>
+        android:layout_width=<span class="s">"match_parent"</span>
+        android:layout_height=<span class="s">"wrap_content"</span>
+        android:text=<span class="s">"QuizTPSI"</span>
+        android:textSize=<span class="s">"28sp"</span>
+        android:textStyle=<span class="s">"bold"</span> /&gt;
+&lt;/<span class="k">LinearLayout</span>&gt;</pre>
+    <ul class="points small">
+      <li><code>@+id/…</code> crea un id nuovo nella classe R.</li>
+      <li>L'id <code>main</code> serve al codice generato in MainActivity: <b>non toglierlo</b>.</li>
+      <li>Testi in <b>sp</b>, distanze in <b>dp</b>.</li>
+      <li>Il secondo TextView, <code>tvDomanda</code>, è uguale con 20sp e <code>layout_marginTop="16dp"</code>.</li>
+    </ul>
+  </div>
+  <aside class="notes">Lo spazio dei nomi completo è xmlns:android="http://schemas.android.com/apk/res/android": Android Studio lo scrive da solo. Il testo "QuizTPSI" scritto direttamente nel layout funziona ma fa comparire un avviso di Lint (hardcoded string): lo sistemiamo nel laboratorio 2. Se si preferisce mantenere ConstraintLayout, bisogna aggiungere i vincoli (app:layout_constraintTop_toTopOf ecc.); per questa unità LinearLayout è più semplice da leggere.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La schermata della domanda</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>activity_main.xml</b> in vista <b>Code</b> o <b>Split</b>.</li>
+      <li>Sostituisci il ConstraintLayout con un <b>LinearLayout</b> verticale, mantenendo <code>android:id="@+id/main"</code>.</li>
+      <li>Togli il TextView "Hello World!" e aggiungi <b>tvTitolo</b> e <b>tvDomanda</b> come nella slide.</li>
+      <li>In tvDomanda scrivi: <i>Android usa un kernel Linux.</i></li>
+      <li>Prova un <code>android:background</code> e un padding su tvDomanda.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'anteprima mostra il titolo in grassetto in alto e la domanda sotto. Se compare <i>Unresolved reference: main</i>, hai tolto l'id dal LinearLayout.</div>
+  </div>
+  <aside class="notes">Il cambio di contenitore si può fare anche dall'editor visuale (tasto destro sul contenitore nel Component Tree, Convert view), ma scrivere l'XML è più istruttivo. Gli attributi app:layout_constraint… rimasti sui figli vanno tolti: in un LinearLayout non servono. L'anteprima non richiede l'emulatore: utile sui PC lenti. Le altre due domande del quiz, che useremo dalla lezione 6: "ART esegue i file .class come la JVM" (falso) e "In Kotlin una variabile val si può riassegnare" (falso).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le risorse</p><h2>Niente testi scritti nel layout</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:24px"><span class="c">&lt;!-- res/values/strings.xml --&gt;</span>
+&lt;<span class="k">resources</span>&gt;
+  &lt;<span class="k">string</span> name=<span class="s">"app_name"</span>&gt;QuizTPSI&lt;/<span class="k">string</span>&gt;
+  &lt;<span class="k">string</span> name=<span class="s">"titolo"</span>&gt;QuizTPSI · Android&lt;/<span class="k">string</span>&gt;
+  &lt;<span class="k">string</span> name=<span class="s">"domanda_1"</span>&gt;Android usa un
+      kernel Linux.&lt;/<span class="k">string</span>&gt;
+  &lt;<span class="k">string</span> name=<span class="s">"contatore"</span>&gt;Domanda %1$d
+      di %2$d&lt;/<span class="k">string</span>&gt;
+&lt;/<span class="k">resources</span>&gt;
+
+<span class="c">&lt;!-- nel layout --&gt;</span>
+android:text=<span class="s">"@string/titolo"</span></pre>
+    <ul class="points small">
+      <li>Tradurre l'app: si aggiunge <code>values-en/strings.xml</code>, il codice non cambia.</li>
+      <li>Colori in <code>colors.xml</code>, stili in <code>themes.xml</code>.</li>
+      <li>Nel codice: <code>getString(R.string.titolo)</code>.</li>
+      <li>Attenzione all'apostrofo: in strings.xml si scrive <code>L\'app</code>.</li>
+    </ul>
+  </div>
+  <aside class="notes">Android sceglie da solo la cartella di risorse giusta in base alla lingua del telefono (values-en, values-fr…), alla densità (drawable-xxhdpi), all'orientamento (layout-land), al tema scuro (values-night). È lo stesso meccanismo che, nella lezione 2, rende necessario ricreare l'Activity quando si ruota il telefono. %1$d e %2$d sono segnaposto numerati per interi, come in String.format di Java. L'apostrofo non preceduto da barra rovescia provoca un errore di build: in italiano capita spesso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Sposta i testi nelle risorse</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>strings.xml</b> aggiungi <code>titolo</code>, <code>domanda_1</code> e <code>contatore</code> come nella slide.</li>
+      <li>Nel layout usa <code>@string/titolo</code> e <code>@string/domanda_1</code>.</li>
+      <li>In <b>colors.xml</b> crea <code>arancio</code> = <code>#D0541F</code> e usalo come colore del titolo (<code>android:textColor</code>).</li>
+      <li>Aggiungi una stringa con un apostrofo, per esempio <i>L'app è pronta</i>, e fai Build.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> gli avvisi gialli <i>Hardcoded string</i> spariscono. Con l'apostrofo senza <code>\'</code> la build fallisce: correggilo e riprova.</div>
+  </div>
+  <aside class="notes">Scorciatoia: con il cursore su un testo scritto nel layout, Alt+Invio, "Extract string resource" crea la risorsa da solo. Per i più veloci: tasto destro su res, New, Android Resource File, qualificatore Locale "en", e traduzione in inglese; poi cambiare la lingua dell'emulatore e vedere il titolo cambiare senza toccare il codice. Si può usare anche il Translations Editor (apertura da strings.xml, Open editor).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le immagini</p><h2>ImageView e la cartella drawable</h2></div>
+  <div class="cols-2" style="grid-template-columns:1.5fr 1fr">
+<pre class="code" style="font-size:24px">&lt;<span class="k">ImageView</span>
+    android:id=<span class="s">"@+id/ivDomanda"</span>
+    android:layout_width=<span class="s">"match_parent"</span>
+    android:layout_height=<span class="s">"200dp"</span>
+    android:layout_marginTop=<span class="s">"16dp"</span>
+    android:scaleType=<span class="s">"fitCenter"</span>
+    android:src=<span class="s">"@drawable/img_domanda1"</span>
+    <span class="hl">android:contentDescription=</span>
+        <span class="s">"@string/desc_domanda1"</span> /&gt;</pre>
+    <ul class="points small">
+      <li>Formati: PNG, JPG, WebP, oppure <b>vettoriali</b> XML, nitidi a ogni densità.</li>
+      <li><code>fitCenter</code> mostra tutta l'immagine; <code>centerCrop</code> riempie e ritaglia.</li>
+      <li><code>contentDescription</code> è il testo che <b>TalkBack</b> legge a chi non vede.</li>
+    </ul>
+  </div>
+  <aside class="notes">Un'immagine solo decorativa può avere contentDescription="@null", così TalkBack la salta; un'immagine che porta informazione deve avere una descrizione. Le icone vettoriali (Vector Drawable) si creano da res, New, Vector Asset, Clip Art, scegliendo tra le icone Material. Un PNG grande in drawable/ senza qualificatore viene considerato mdpi e scalato: per le foto meglio dimensioni ragionevoli. Collegamento: accessibilità e WCAG torneranno nell'Unità 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale nome di file è valido nella cartella <code>res/drawable</code>?</h2></div>
+  <div class="poll" data-id="lay-nome" data-tipo="quiz" data-risposta="A">
+    <ol><li>logo_scuola.png</li><li>Logo-Scuola.png</li><li>logo scuola.png</li><li>2logo.png</li></ol>
+    <p class="why">I nomi delle risorse diventano campi della classe R: R.drawable.logo_scuola. Possono contenere solo lettere minuscole, cifre e trattino basso, e devono iniziare con una lettera.</p>
+  </div>
+  <aside class="notes">La D è il tranello: le cifre sono ammesse, ma non all'inizio, perché il nome deve essere un identificatore valido. Maiuscole e trattini (B) danno errore in build. L'estensione non fa parte del nome: logo_scuola.png e logo_scuola.xml nella stessa cartella vanno in conflitto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Aggiungi l'immagine della domanda</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Tasto destro su <b>res/drawable</b>, <b>New</b>, <b>Vector Asset</b>: scegli un'icona da Clip Art e chiamala <b>img_domanda1</b>.</li>
+      <li>In alternativa copia un tuo PNG in drawable, con un nome valido.</li>
+      <li>Aggiungi l'ImageView tra tvTitolo e tvDomanda, come nella slide.</li>
+      <li>Crea la stringa <code>desc_domanda1</code> con una descrizione vera dell'immagine.</li>
+      <li>Esegui sul dispositivo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'immagine compare sotto il titolo, alta 200 dp. L'avviso giallo sulla <code>contentDescription</code> mancante non c'è più.</div>
+  </div>
+  <aside class="notes">Le icone vettoriali di Clip Art sono nere di default: si può cambiare il colore nel wizard. Per immagini proprie: usare solo immagini create dagli studenti o con licenza libera (ad esempio da Wikimedia Commons, citando l'autore). Domande successive: img_domanda2 e img_domanda3, che useremo nella lezione 6. Se c'è tempo, attivare TalkBack sull'emulatore o sul telefono e far ascoltare la descrizione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal codice</p><h2>Cambiare testi e immagini in Kotlin</h2></div>
+  <div class="cols-2">
+    <div class="stack"><p class="kicker">findViewById</p>
+<pre class="code" style="font-size:24px"><span class="k">val</span> tvDomanda =
+    findViewById&lt;TextView&gt;(R.id.tvDomanda)
+<span class="k">val</span> ivDomanda =
+    findViewById&lt;ImageView&gt;(R.id.ivDomanda)
+
+tvDomanda.text = getString(R.string.domanda_1)
+ivDomanda.setImageResource(R.drawable.img_domanda1)</pre></div>
+    <div class="stack"><p class="kicker">View Binding</p>
+<pre class="code" style="font-size:24px"><span class="c">// build.gradle.kts (:app)</span>
+android { buildFeatures { viewBinding = <span class="k">true</span> } }
+
+<span class="c">// MainActivity</span>
+<span class="k">val</span> b = ActivityMainBinding.inflate(layoutInflater)
+setContentView(b.root)
+b.tvDomanda.text = getString(R.string.domanda_1)</pre></div>
+  </div>
+  <div class="callout small">Va fatto <b>dopo</b> <code>setContentView</code>. Nei vecchi tutorial troverai <code>kotlin-android-extensions</code>: è stato ritirato, non usarlo.</div>
+  <aside class="notes">findViewById cerca la View nell'albero caricato: chiamata prima di setContentView restituisce null e l'app va in crash. View Binding genera una classe per ogni layout (activity_main.xml → ActivityMainBinding) con un campo tipizzato per ogni View con id: niente cast, niente id sbagliati. Nel progetto con View Binding il listener degli insets può usare b.main. Il libro usa findViewById: nei laboratori va benissimo; View Binding è facoltativo per chi vuole. Il plugin kotlin-android-extensions (synthetics) è deprecato da Kotlin 1.4.20 e rimosso nelle versioni successive.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il contatore delle domande</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Aggiungi in cima al layout un TextView <b>tvContatore</b>, 16sp.</li>
+      <li>In <code>onCreate</code>, dopo setContentView, trova le tre View con <code>findViewById</code>.</li>
+      <li>Scrivi in tvContatore <code>getString(R.string.contatore, 1, 3)</code>.</li>
+      <li>Imposta da codice testo e immagine della domanda 1.</li>
+      <li>Esegui, poi prova a chiamare findViewById prima di setContentView e guarda Logcat.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in alto compare <b>Domanda 1 di 3</b>. Con l'ordine sbagliato l'app si chiude e Logcat mostra una <i>NullPointerException</i>: rimetti l'ordine giusto.</div>
+  </div>
+  <aside class="notes">Soluzione: val tvContatore = findViewById&lt;TextView&gt;(R.id.tvContatore); tvContatore.text = getString(R.string.contatore, 1, 3). In Logcat cercare la riga FATAL EXCEPTION: insegna a leggere uno stack trace Android (la riga con MainActivity.kt e il numero di riga). In Kotlin findViewById è dichiarato con tipo di piattaforma: il null arriva da Java e la NullPointerException esplode quando si usa il risultato. Queste tre View saranno pilotate dai pulsanti nella prossima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="lay-termini">
+    <dt>wrap_content</dt><dd>Grande quanto ciò che contiene</dd>
+    <dt>match_parent</dt><dd>Riempie il contenitore</dd>
+    <dt>dp</dt><dd>Misura indipendente dalla densità dello schermo</dd>
+    <dt>sp</dt><dd>Come dp, ma segue la dimensione del testo scelta dall'utente</dd>
+    <dt>@string/titolo</dt><dd>Testo preso da strings.xml</dd>
+    <dt>contentDescription</dt><dd>Descrizione letta da TalkBack</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Ripasso anche della lezione 1 (dp e sp). Domanda: che cosa succede a un titolo di 28dp quando l'utente ingrandisce il testo? (Niente, ed è proprio il problema: va usato sp.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le interfacce oggi</p><h2>Lo stesso titolo, in un altro modo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Jetpack Compose</h3>
+<pre class="code" style="font-size:20px;background:rgba(0,0,0,.25);padding:20px 26px">@Composable
+<span class="k">fun</span> Titolo() {
+    Column(Modifier.padding(24.dp)) {
+        Text(<span class="s">"QuizTPSI"</span>, fontSize = 28.sp)
+        Image(
+          painterResource(R.drawable.img_domanda1),
+          contentDescription = <span class="s">"Logo"</span>)
+    }
+}</pre>
+    <p class="small">Niente XML: l'interfaccia è una funzione Kotlin. Lo citiamo, non lo studiamo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>AI e accessibilità</h3><p>Su alcuni telefoni Android, TalkBack usa un modello di AI per descrivere le immagini che non hanno una descrizione. È un aiuto, non una scusa: solo tu sai che cosa l'immagine deve comunicare in quella schermata.</p></div>
+  </div>
+  <aside class="notes">Compose: le funzioni annotate con @Composable descrivono l'interfaccia in base allo stato; quando lo stato cambia, Compose ridisegna solo ciò che serve. Column fa il lavoro del LinearLayout verticale. Le descrizioni delle immagini con Gemini in TalkBack sono state annunciate da Google nel 2024 per alcuni dispositivi: presentarle come funzione non disponibile ovunque. Discussione: un'AI può sapere che l'immagine della domanda 1 deve far pensare al kernel Linux? (No: descrive ciò che vede, non lo scopo.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo spazio interno, coperto dallo sfondo, è il <span class="blank" data-risposta="padding"></span>; quello esterno è il margin.</p>
+    <p>Per le dimensioni dei caratteri si usa l'unità <span class="blank" data-risposta="sp"></span>.</p>
+    <p>I testi dell'app stanno nel file <span class="blank" data-risposta="strings.xml|strings" style="--w:10ch"></span>.</p>
+    <p>La descrizione di un'immagine per TalkBack è l'attributo <span class="blank" data-risposta="contentdescription" style="--w:14ch"></span>.</p>
+    <p>Una View si trova dal codice con <span class="blank" data-risposta="findviewbyid" style="--w:11ch"></span>, dopo setContentView.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: padding, sp, strings.xml, contentDescription, findViewById.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Una schermata è un albero di View e ViewGroup</li>
+      <li>LinearLayout verticale, id main da non togliere</li>
+      <li>padding dentro, margin fuori; dp e sp</li>
+    </ul>
+    <ul class="points">
+      <li>Testi, colori e immagini nelle risorse</li>
+      <li>ImageView sempre con contentDescription</li>
+      <li>findViewById o View Binding, dopo setContentView</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: i pulsanti Vero e Falso, i Toast e il bug della rotazione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

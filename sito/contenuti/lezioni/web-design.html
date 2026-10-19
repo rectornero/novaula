@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Problematiche di web design · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Realizzare un sito web</p>
+  <h1>Problematiche<br>di web design</h1>
+  <p class="lead">Usabilità, layout responsive, colori, tipografia e prestazioni: le scelte che decidono se un sito si usa o si abbandona.</p>
+  <aside class="notes">Obiettivi: applicare alcune euristiche di usabilità, costruire un layout responsive mobile first con viewport, media query, Flexbox e Grid, scegliere colori con contrasto sufficiente e una tipografia leggibile, misurare e migliorare le prestazioni con Lighthouse e le Core Web Vitals. Serve un editor (VS Code) e Chrome o Edge. Le squadre partono dai wireframe della lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Da quale dispositivo apri più spesso un sito?</h2></div>
+  <div class="poll" data-id="u5-design-dispositivo">
+    <ol><li>Telefono</li><li>PC o portatile</li><li>Tablet</li><li>Dipende: telefono fuori, PC a casa</li></ol>
+  </div>
+  <aside class="notes">Quasi certamente vince il telefono. Ricordare che Google indicizza i siti usando la versione mobile (mobile-first indexing): se un contenuto c'è solo nella versione desktop, per il motore di ricerca non esiste. Chiedere: "qual è l'ultimo sito che avete abbandonato dal telefono e perché?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Usabilità</p><h2>Sei euristiche di Jakob Nielsen (1994)</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Stato visibile</h3><p class="small muted">Dopo "Invia" il sito dice che cosa è successo.</p></div>
+    <div class="card"><h3>Linguaggio dell'utente</h3><p class="small muted">"Iscriviti", non "Procedura di adesione".</p></div>
+    <div class="card"><h3>Coerenza</h3><p class="small muted">Stesso menu, stessi pulsanti, nello stesso posto.</p></div>
+    <div class="card"><h3>Prevenire gli errori</h3><p class="small muted">Campo data con un selettore, non testo libero.</p></div>
+    <div class="card"><h3>Riconoscere, non ricordare</h3><p class="small muted">Le opzioni sono visibili, non da memorizzare.</p></div>
+    <div class="card"><h3>Messaggi d'errore utili</h3><p class="small muted">"Manca la @ nell'email", non "Errore 0x13".</p></div>
+  </div>
+  <aside class="notes">Le euristiche sono 10 (Nielsen, 1994, aggiornate nel testo nel 2020); qui ne mostriamo 6. Le altre: controllo e libertà dell'utente (annulla), flessibilità ed efficienza, design estetico e minimalista, aiuto e documentazione. Esercizio veloce: ogni squadra trova sul proprio wireframe un punto che viola una euristica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Design non è decorazione</h2></div>
+  <figure class="citazione">
+    <blockquote>Il design non è solo come una cosa appare e come la si percepisce. Il design è come funziona.</blockquote>
+    <figcaption><b>Steve Jobs</b>, cofondatore di Apple, intervista al New York Times Magazine, novembre 2003</figcaption>
+  </figure>
+  <div class="callout">Un sito elegante che su telefono nasconde il pulsante "Iscriviti" è un sito progettato male.</div>
+  <aside class="notes">Originale: "Design is not just what it looks like and feels like. Design is how it works." Dall'articolo di Rob Walker "The Guts of a New Machine", New York Times Magazine, 30 novembre 2003. Traduzione nostra. Discussione: un esempio di oggetto bello ma scomodo, e uno brutto ma comodissimo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Responsive design</p><h2>Una pagina, tutte le larghezze</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:26px"><span class="c">&lt;!-- nel &lt;head&gt;: senza questo niente funziona --&gt;</span>
+&lt;meta name=<span class="s">"viewport"</span>
+      content=<span class="s">"width=device-width, initial-scale=1"</span>&gt;
+
+<span class="c">/* mobile first: prima lo schermo stretto */</span>
+.eventi { <span class="k">display</span>: grid; <span class="k">gap</span>: 1rem; }
+
+<span class="hl">@media (min-width: 48em)</span> {   <span class="c">/* da 768px */</span>
+  .eventi { <span class="k">grid-template-columns</span>: 1fr 1fr 1fr; }
+}</pre>
+    <ul class="points">
+      <li><b>Viewport</b>: la pagina usa la larghezza vera</li>
+      <li><b>Griglia fluida</b> in <code>fr</code>, <code>%</code>, <code>rem</code></li>
+      <li><b>Media query</b> con <code>min-width</code></li>
+      <li><b>Immagini flessibili</b>: <code>max-width: 100%</code></li>
+    </ul>
+  </div>
+  <aside class="notes">Il termine "responsive web design" è di Ethan Marcotte (A List Apart, 2010): griglia fluida, immagini flessibili, media query. Usare em nelle media query segue lo zoom del testo dell'utente. Mobile first vuol dire che lo stile di base è per lo schermo stretto e le media query con min-width aggiungono colonne.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Togli il meta viewport. Che cosa succede sul telefono?</h2></div>
+  <div class="poll" data-id="u5-design-viewport" data-tipo="quiz" data-risposta="B">
+    <ol><li>Niente: le media query funzionano lo stesso</li><li>Il browser simula uno schermo largo circa 980px e rimpicciolisce tutto</li><li>La pagina non si carica</li><li>Il browser passa da solo alla versione mobile</li></ol>
+    <p class="why">Senza viewport i browser mobili usano un "viewport di layout" largo circa 980px, come un vecchio desktop, e poi riducono la pagina: testo minuscolo e media query per schermi stretti che non scattano mai. Il problema non si vede ridimensionando la finestra del PC: va provato in modalità dispositivo o sul telefono.</p>
+  </div>
+  <aside class="notes">Tranello classico: chi prova solo allargando e stringendo la finestra del browser desktop non si accorge del problema. Il valore di 980px è quello storico di Safari su iPhone, adottato in modo simile dagli altri browser mobili.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La home responsive in modalità dispositivo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>index.html</b> e <b>stile.css</b>: header, sezione <code>.eventi</code> con 3 card, footer.</li>
+      <li>Aprilo in Chrome o Edge, premi <code>F12</code> e poi <code>Ctrl+Shift+M</code> (modalità dispositivo).</li>
+      <li>Prova 360px, 768px e 1280px di larghezza.</li>
+      <li>Togli il meta viewport, ricarica a 360px e guarda il testo. Poi rimettilo.</li>
+      <li>Salva tre screenshot con il menu <b>⋮ › Acquisisci screenshot</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a 360px le card sono una sotto l'altra, a 768px e oltre sono tre affiancate. Nessuna barra di scorrimento orizzontale a nessuna larghezza.</div>
+  </div>
+  <aside class="notes">Soluzione minima: il codice della slide precedente più .card{padding:1rem;border:1px solid #ccc} e img{max-width:100%;height:auto}. Una barra orizzontale di solito nasce da un'immagine o da una tabella troppo larghe, o da width in pixel. In DevTools il comando "Capture screenshot" è anche nel menu dei comandi (Ctrl+Shift+P, scrivere "screenshot").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">CSS moderno</p><h2>Abbina ogni strumento a che cosa risolve</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-design-css">
+    <dt><code>repeat(auto-fit, minmax(16rem, 1fr))</code></dt><dd>Colonne che si adattano da sole, senza media query</dd>
+    <dt><code>clamp(1.5rem, 4vw, 3rem)</code></dt><dd>Titolo che cresce con lo schermo, entro un minimo e un massimo</dd>
+    <dt><code>srcset</code> e <code>sizes</code></dt><dd>Il browser scarica l'immagine della dimensione giusta</dd>
+    <dt><code>loading="lazy"</code></dt><dd>Le immagini fuori schermo si caricano solo quando servono</dd>
+    <dt><code>prefers-color-scheme</code></dt><dd>Tema scuro se l'utente l'ha scelto nel sistema</dd>
+  </dl>
+  <aside class="notes">Mostrare dal vivo la griglia auto-fit: è il modo più semplice per avere card responsive. Attenzione: loading="lazy" non va messo sull'immagine principale in alto (quella che determina l'LCP), altrimenti la si rallenta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Colori</p><h2>Il colore deve farsi leggere, non solo guardare</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Contrasto</b> testo/sfondo almeno <b>4,5:1</b> (3:1 per testi grandi): WCAG livello AA</li>
+      <li>Mai il <b>solo colore</b> per un'informazione: "i campi in rosso sono obbligatori" non basta</li>
+      <li>Circa <b>1 uomo su 12</b> ha un'alterazione della visione dei colori</li>
+      <li>Palette piccola: un colore principale, uno d'accento, neutri</li>
+    </ul>
+    <div class="stack">
+      <div class="card" style="color:#999999"><h3>Grigio #999 su bianco</h3><p class="small">Si legge male: contrasto 2,8:1.</p></div>
+      <div class="card" style="color:#595959"><h3>Grigio #595959 su bianco</h3><p class="small">Si legge bene: contrasto 7:1.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il rapporto di contrasto WCAG va da 1:1 (stesso colore) a 21:1 (nero su bianco) e si calcola dalla luminanza relativa dei due colori. Il grigio più chiaro che passa 4,5:1 su bianco è circa #767676. Il dato "1 uomo su 12, 1 donna su 200" è quello comunemente riportato per le popolazioni di origine nord-europea (es. Colour Blind Awareness). Sul colore solo: aggiungere un asterisco o la parola "obbligatorio".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale coppia passa le WCAG AA per un testo normale?</h2></div>
+  <div class="poll" data-id="u5-design-contrasto" data-tipo="quiz" data-risposta="C">
+    <ol><li>Bianco su giallo #FFD700 (1,4:1)</li><li>Grigio #999 su bianco (2,8:1)</li><li>Bianco su viola #7E45CC (5,8:1)</li><li>Blu #0000FF su nero (2,4:1)</li></ol>
+    <p class="why">Per il testo normale servono almeno 4,5:1: passa solo la C. Il blu puro su nero sembra "acceso" ma è scurissimo: il blu pesa poco nella luminanza percepita. Bianco su giallo e grigio chiaro sono tra gli errori più diffusi sui siti.</p>
+  </div>
+  <aside class="notes">Rapporti calcolati con la formula WCAG (luminanza relativa); verificarli dal vivo con il WebAIM Contrast Checker. La D è il tranello: nella formula della luminanza il verde pesa circa 0,72, il rosso 0,21 e il blu solo 0,07, quindi il blu puro su nero ha un contrasto bassissimo. Il viola #7E45CC è proprio il colore di questa unità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipografia</p><h2>Regole per un testo che si legge sullo schermo</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Corpo del testo almeno <b>16px</b>, espresso in <code>rem</code></li>
+      <li>Interlinea circa <b>1,5</b> per i paragrafi</li>
+      <li>Righe di <b>45-75 caratteri</b>: <code>max-width: 65ch</code></li>
+      <li>Al massimo <b>due famiglie</b> di font</li>
+      <li>Gerarchia chiara: un solo <code>h1</code>, poi <code>h2</code>, <code>h3</code></li>
+    </ul>
+    <div class="card soft"><h3>Font e velocità</h3><p class="small">Ogni web font è un file da scaricare. Usa pochi pesi, il formato <b>WOFF2</b> e <code>font-display: swap</code>: il testo appare subito con un font di sistema.</p></div>
+  </div>
+  <aside class="notes">La fascia 45-75 caratteri per riga è di Robert Bringhurst ("The Elements of Typographic Style"), che considera 66 l'ideale per la stampa; sullo schermo è un buon punto di partenza. L'unità ch corrisponde circa alla larghezza della cifra 0. Usare rem rispetta la dimensione del testo scelta dall'utente nel browser.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>La guida di stile in variabili CSS</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In cima a <b>stile.css</b> definisci in <code>:root</code> le variabili <code>--colore-testo</code>, <code>--colore-sfondo</code>, <code>--colore-accento</code>, <code>--font-testo</code>.</li>
+      <li>Usale ovunque con <code>var(--colore-accento)</code>.</li>
+      <li>Apri <b>webaim.org/resources/contrastchecker</b> e prova ogni coppia testo/sfondo.</li>
+      <li>Annota i rapporti in un commento CSS sopra le variabili.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni coppia usata per il testo ha "Pass" sotto <b>WCAG AA</b> per il testo normale. Cambiando solo <code>--colore-accento</code> cambia il colore di tutto il sito.</div>
+  </div>
+  <aside class="notes">Le variabili rendono la manutenzione facilissima e preparano il tema scuro (si ridefiniscono dentro @media (prefers-color-scheme: dark)). Se il colore del logo del cliente non ha contrasto sufficiente, usarlo per elementi grandi e decorativi e scurirlo per i testi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Prestazioni</p><h2>Le Core Web Vitals di Google</h2></div>
+  <table class="data">
+    <tr><th>Metrica</th><th>Che cosa misura</th><th>Buono se</th></tr>
+    <tr><td><b>LCP</b> Largest Contentful Paint</td><td>Quando appare il contenuto principale</td><td class="mono">≤ 2,5 s</td></tr>
+    <tr><td><b>INP</b> Interaction to Next Paint</td><td>Quanto la pagina risponde a clic e tocchi</td><td class="mono">≤ 200 ms</td></tr>
+    <tr><td><b>CLS</b> Cumulative Layout Shift</td><td>Quanto "salta" la pagina mentre carica</td><td class="mono">≤ 0,1</td></tr>
+  </table>
+  <p class="small muted">Valutate sul 75° percentile delle visite reali. Il peso maggiore di solito sono le immagini: usa WebP o AVIF e indica sempre <code>width</code> e <code>height</code>.</p>
+  <aside class="notes">INP ha sostituito FID come Core Web Vital nel marzo 2024. Le soglie sono quelle pubblicate su web.dev. Il CLS si evita dichiarando width e height delle immagini (il browser riserva lo spazio prima che arrivino) e non inserendo banner sopra il contenuto già visibile. Collegamento SEO: le Core Web Vitals sono uno dei segnali di esperienza della pagina usati da Google, ma la pertinenza del contenuto conta di più.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Lighthouse: misura, correggi, rimisura</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Aggiungi alla home una foto grande (almeno 3000px di lato) senza <code>width</code> e <code>height</code>.</li>
+      <li>DevTools › scheda <b>Lighthouse</b> › modalità Mobile › <b>Analizza</b>. Annota prestazioni, LCP e CLS.</li>
+      <li>Ridimensiona e converti la foto in WebP con <b>squoosh.app</b> (larghezza 1200px).</li>
+      <li>Aggiungi <code>width</code> e <code>height</code> all'<code>&lt;img&gt;</code> e rilancia l'analisi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il file della foto passa da qualche MB a poche centinaia di KB, il CLS scende verso 0 e il punteggio Prestazioni sale. Annota prima e dopo in <b>lighthouse.md</b>.</div>
+  </div>
+  <aside class="notes">Con un file locale aperto da file:// Lighthouse a volte non parte: usare l'estensione Live Server di VS Code o, da terminale nella cartella, "python -m http.server 8000" e aprire http://localhost:8000. I numeri cambiano tra un'analisi e l'altra: farne due e prendere la media. Squoosh funziona nel browser, senza account e senza caricare la foto su un server.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che cosa fa il browser per mostrare la pagina?</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-design-rendering">
+    <li>Risolve il nome di dominio con il DNS</li>
+    <li>Apre la connessione TCP e la negoziazione TLS</li>
+    <li>Riceve l'HTML e costruisce il DOM</li>
+    <li>Scarica il CSS e costruisce il CSSOM</li>
+    <li>Calcola il layout: posizione e dimensione di ogni elemento</li>
+    <li>Disegna i pixel sullo schermo (paint)</li>
+  </ol>
+  <aside class="notes">È il "critical rendering path". Il CSS blocca il rendering: un foglio di stile enorme ritarda tutto, per questo conviene CSS piccolo. Uno script senza defer o async nel head blocca la costruzione del DOM. Chi ha fatto reti in quarta riconosce DNS, TCP e TLS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il design che cambia</p><h2>Nuovi strumenti, stessi principi</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Interfacce generate dall'AI</h3><p>Alcuni strumenti scrivono HTML e CSS da una descrizione o da uno screenshot. Il risultato va controllato: contrasti, ordine dei titoli, peso delle immagini e testi alternativi spesso non sono quelli che servono.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Container query</h3><p>Dal 2023 tutti i browser principali supportano le regole <b>@container</b>: una card si adatta allo spazio del suo contenitore, non solo alla larghezza dello schermo.</p></div>
+  </div>
+  <div class="callout">I principi non cambiano: <b>usabilità, contrasto, leggibilità, leggerezza</b>. Gli strumenti nuovi vanno giudicati con gli stessi criteri, Lighthouse alla mano.</div>
+  <aside class="notes">Esempio di container query: .lista{container-type:inline-size} poi @container (min-width: 30rem){ .card{display:flex} }. Proposta alla LIM: chiedere a un assistente AI una home per il club e poi passarla in Lighthouse e nel Contrast Checker: discutere che cosa ha sbagliato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il contrasto minimo AA per il testo normale è <span class="blank" data-risposta="4,5:1|4.5:1|4,5|4.5"></span>.</p>
+    <p>La metrica che misura quanto "salta" la pagina si chiama <span class="blank" data-risposta="CLS"></span>.</p>
+    <p>Lo stile di base per lo schermo stretto, poi <code>min-width</code>: si dice mobile <span class="blank" data-risposta="first"></span>.</p>
+    <p>Per evitare il salto del layout, all'immagine si danno gli attributi width e <span class="blank" data-risposta="height"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 4,5:1 (accettati 4.5:1, 4,5), CLS, first, height.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Euristiche: stato visibile, coerenza, errori chiari</li>
+      <li>Responsive: viewport, griglia fluida, media query</li>
+      <li>Colore: contrasto 4,5:1, mai il solo colore</li>
+    </ul>
+    <ul class="points">
+      <li>Tipografia: 16px, interlinea 1,5, 45-75 caratteri</li>
+      <li>Core Web Vitals: LCP, INP, CLS</li>
+      <li>Immagini leggere, con width e height</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Compito di squadra: la home responsive vera del sito, con guida di stile in variabili CSS e il report Lighthouse prima e dopo.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

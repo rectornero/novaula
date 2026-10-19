@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test, pubblicazione e aggiornamento · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Realizzare un sito web</p>
+  <h1>Test, pubblicazione<br>e aggiornamento</h1>
+  <p class="lead">L'ultimo miglio: provare il sito sul serio, metterlo online con un indirizzo e HTTPS, e tenerlo vivo dopo il giorno del lancio.</p>
+  <aside class="notes">Obiettivi: scrivere un piano di test, usare validatori e link checker, conoscere hosting, dominio, DNS e HTTPS, pubblicare su un hosting statico gratuito, gestire gli aggiornamenti senza rompere link e posizionamento, scrivere un piano di manutenzione. Servono: il repository GitHub di squadra della prima lezione, il prompt dei comandi di Windows (nslookup e curl sono già installati).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove pubblicheresti il sito del club?</h2></div>
+  <div class="poll" data-id="u5-pubblica-dove">
+    <ol><li>GitHub Pages, gratis</li><li>Netlify o Cloudflare Pages, gratis</li><li>Hosting a pagamento con un dominio .it</li><li>Su un PC della scuola acceso sempre</li></ol>
+  </div>
+  <aside class="notes">Discussione sulla D: si può, ma serve IP pubblico, apertura delle porte, aggiornamenti di sicurezza, corrente e rete garantite: è il motivo per cui esiste l'hosting. Le prime due sono ottime per un sito statico; la C serve se il club vuole un dominio suo (che si può collegare anche alle opzioni gratuite) o un CMS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Che cosa può dimostrare un test</h2></div>
+  <figure class="citazione">
+    <blockquote>Il test di un programma può mostrare la presenza di bug, mai la loro assenza.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, "Notes on Structured Programming", 1970</figcaption>
+  </figure>
+  <div class="callout">Per questo i test si <b>pianificano</b>: si sceglie che cosa provare, come, e che cosa ci si aspetta, prima di guardare il risultato.</div>
+  <aside class="notes">Originale: "Program testing can be used to show the presence of bugs, but never to show their absence!" (EWD249). Traduzione nostra. Chiedere: allora perché testiamo? Perché ogni bug trovato prima del lancio costa meno di uno trovato dagli utenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il piano di test</p><h2>Sette famiglie di test per un sito</h2></div>
+  <table class="data compact">
+    <tr><th>Test</th><th>Che cosa verifica</th><th>Strumento</th></tr>
+    <tr><td><b>Validazione</b></td><td>HTML e CSS corretti</td><td>validator.w3.org, validatore CSS</td></tr>
+    <tr><td><b>Funzionale</b></td><td>Link, moduli, menu fanno ciò che devono</td><td>Lista di casi di test, link checker</td></tr>
+    <tr><td><b>Compatibilità</b></td><td>Chrome, Firefox, Safari su iPhone, telefono e PC</td><td>DevTools, dispositivi veri</td></tr>
+    <tr><td><b>Prestazioni</b></td><td>LCP, INP, CLS, peso della pagina</td><td>Lighthouse</td></tr>
+    <tr><td><b>Accessibilità</b></td><td>WCAG 2.2 AA</td><td>WAVE, tastiera, screen reader</td></tr>
+    <tr><td><b>Usabilità</b></td><td>Persone vere completano i compiti</td><td>5 utenti, osservazione</td></tr>
+    <tr><td><b>Sicurezza</b></td><td>HTTPS, nessun dato esposto</td><td>Browser, curl</td></tr>
+  </table>
+  <aside class="notes">Ogni caso di test ha: ID, che cosa si fa, risultato atteso, risultato ottenuto, esito. Esempio: T05 · invio il modulo senza email · atteso: messaggio "Inserisci l'email" vicino al campo · ottenuto: … · OK/KO. Safari su iPhone usa il motore WebKit, diverso da Chrome e Firefox su PC: alcuni bug di layout si vedono solo lì.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>Validatori e link rotti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>validator.w3.org/nu</b>, scheda <b>File upload</b>, e carica ogni pagina HTML del sito.</li>
+      <li>Correggi gli errori dal primo: spesso un errore ne genera altri.</li>
+      <li>Fai lo stesso per il CSS su <b>jigsaw.w3.org/css-validator</b>.</li>
+      <li>Crea <b>piano-test.md</b> con una tabella: ID, azione, atteso, ottenuto, esito. Scrivi almeno 10 casi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il validatore HTML risponde "Document checking completed. No errors or warnings to show." per ogni pagina. Nel piano di test ci sono almeno 3 casi sul modulo, inclusi dati sbagliati.</div>
+  </div>
+  <aside class="notes">Errori tipici: tag non chiusi, id duplicati, attributi inventati, img senza alt (il validatore lo segnala come errore), elementi nel posto sbagliato (un div dentro un p). Dopo la pubblicazione si può usare il W3C Link Checker (validator.w3.org/checklink) sull'indirizzo pubblico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il validatore W3C non trova errori. Quindi il sito…</h2></div>
+  <div class="poll" data-id="u5-pubblica-validatore" data-tipo="quiz" data-risposta="D">
+    <ol><li>è accessibile</li><li>è ottimizzato per i motori di ricerca</li><li>funziona su tutti i browser</li><li>ha HTML sintatticamente corretto, e niente di più garantito</li></ol>
+    <p class="why">Il validatore controlla la grammatica dell'HTML. Un sito valido può avere testi illeggibili, link che portano alla pagina sbagliata, contrasti bassi o una pagina da 10 MB. Validazione, accessibilità, SEO e compatibilità sono test diversi.</p>
+  </div>
+  <aside class="notes">È lo stesso ragionamento di Lighthouse 100 nella lezione sull'accessibilità e della compilazione in Java: "compila" non vuol dire "funziona". HTML valido aiuta comunque i browser e le tecnologie assistive a interpretare la pagina in modo prevedibile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettere online</p><h2>Hosting, dominio, DNS, HTTPS</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Hosting</h3><p class="small muted">Il server che conserva i file e risponde alle richieste. Statico, condiviso, VPS, cloud.</p></div>
+    <div class="card"><h3>Dominio</h3><p class="small muted">Il nome, come clubalfiere.it. I .it sono gestiti dal Registro .it del CNR di Pisa.</p></div>
+    <div class="card"><h3>DNS</h3><p class="small muted">Collega il nome all'indirizzo IP del server con record A, AAAA, CNAME.</p></div>
+    <div class="card"><h3>HTTPS</h3><p class="small muted">Certificato TLS: cifra il traffico e prova l'identità del sito. Gratuito con Let's Encrypt.</p></div>
+  </div>
+  <div class="callout">Un sito <b>statico</b> (solo HTML, CSS, immagini) si pubblica gratis e regge molto traffico; un modulo che salva dati richiede un servizio esterno o un server.</div>
+  <aside class="notes">Il dominio si registra tramite un registrar (a pagamento, di solito annuale). Collegare un dominio a GitHub Pages: record CNAME per www verso utente.github.io e record A per il dominio nudo verso gli IP indicati da GitHub. Il modulo di iscrizione su un sito statico: servizi di form esterni o un Google Form incorporato (attenzione all'informativa privacy). Collegare all'unità 1: HTTPS protegge il traffico, non rende sicuro il server.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Pubblicare con GitHub Pages: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-pubblica-pages">
+    <li>Crei il repository pubblico sito-squadra</li>
+    <li>Metti index.html nella radice del repository</li>
+    <li>Fai commit e push sul branch main</li>
+    <li>Settings › Pages: sorgente "Deploy from a branch", main, /(root)</li>
+    <li>Aspetti che il deploy compaia completato in Actions</li>
+    <li>Apri https://utente.github.io/sito-squadra/</li>
+  </ol>
+  <aside class="notes">La pagina iniziale deve chiamarsi index.html (minuscolo). Il deploy richiede di solito meno di un minuto e si vede nella scheda Actions ("pages build and deployment"). GitHub Pages è gratuito per i repository pubblici con l'account gratuito. Attenzione: i file del repository pubblico li vede chiunque, quindi niente password o dati personali nel codice.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti · in squadra</span></p>
+  <h2>Il vostro sito è online</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel repository <b>sito-squadra</b> carica le pagine, il CSS e le immagini (pulsante <b>Add file</b> o con Git).</li>
+      <li>Vai su <b>Settings › Pages</b> e scegli il branch <b>main</b>, cartella <b>/(root)</b>, poi Save.</li>
+      <li>Apri l'indirizzo che compare in cima alla pagina, da PC e da telefono.</li>
+      <li>Aggiorna nella sitemap gli indirizzi con quello definitivo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'indirizzo inizia con <b>https://</b>, il browser mostra il lucchetto, le immagini compaiono anche da telefono. Se vedi un 404, controlla il nome <b>index.html</b> e le maiuscole nei percorsi.</div>
+  </div>
+  <aside class="notes">GitHub Pages gira su Linux: i percorsi distinguono le maiuscole. "Foto.JPG" in HTML e "foto.jpg" nel repository funziona su Windows in locale ma non online: errore frequentissimo. Alternativa senza Git: Netlify (con account gratuito) permette di trascinare la cartella del sito nella pagina di deploy. Ricordare che sui siti di progetto github.io il robots.txt non è nella radice dell'host (lezione SEO).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina record DNS e codici HTTP</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-pubblica-codici">
+    <dt>Record A</dt><dd>Nome di dominio → indirizzo IPv4</dd>
+    <dt>Record AAAA</dt><dd>Nome di dominio → indirizzo IPv6</dd>
+    <dt>Record CNAME</dt><dd>Un nome è un alias di un altro nome</dd>
+    <dt>HTTP 301</dt><dd>Risorsa spostata definitivamente</dd>
+    <dt>HTTP 404</dt><dd>La risorsa non esiste a questo indirizzo</dd>
+    <dt>HTTP 503</dt><dd>Server momentaneamente non disponibile</dd>
+  </dl>
+  <aside class="notes">Ripasso di reti dalla quarta: il DNS lavora a livello applicativo, su UDP porta 53 (TCP per risposte grandi). Domanda aggiuntiva: che codice restituisce un server quando la pagina c'è? 200. E se chiedi di accedere a una pagina riservata senza essere autenticato? 401.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Guarda il tuo sito come lo vede la rete</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il Prompt dei comandi e scrivi <code>nslookup utente.github.io</code> (con il nome della squadra).</li>
+      <li>Annota gli indirizzi IPv4 della risposta.</li>
+      <li>Scrivi <code>curl -I https://utente.github.io/sito-squadra/</code></li>
+      <li>Prova anche una pagina che non esiste e confronta la prima riga.</li>
+      <li>Salva l'output in <b>rete.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nslookup restituisce indirizzi che iniziano con <b>185.199.</b> (i server di GitHub Pages). curl mostra un codice <b>200</b> e una riga <code>server: GitHub.com</code>; la pagina inesistente risponde <b>404</b>.</div>
+  </div>
+  <aside class="notes">curl -I chiede solo le intestazioni (metodo HEAD). Nell'output si vedono anche content-type, last-modified, cache-control, age e x-cache: GitHub Pages serve i file attraverso una rete di distribuzione (CDN). curl è incluso in Windows 10 dalla versione 1803 e in Windows 11. Collegamento con l'unità 2: è la stessa analisi di una risposta HTTP fatta per le API REST.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Rinomini eventi.html in calendario.html. Che cosa fai?</h2></div>
+  <div class="poll" data-id="u5-pubblica-redirect" data-tipo="quiz" data-risposta="B">
+    <ol><li>Niente: Google se ne accorge da solo</li><li>Un redirect 301 dal vecchio al nuovo indirizzo, e aggiorni link e sitemap</li><li>Lasci online la vecchia pagina, uguale alla nuova</li><li>Un redirect 302, così è più veloce</li></ol>
+    <p class="why">Il vecchio indirizzo è nei preferiti, nei link di altri siti e nell'indice dei motori. Il 301 dice "spostato per sempre": utenti e motori arrivano alla nuova pagina e il posizionamento si trasferisce. Il 302 è per gli spostamenti temporanei; due pagine uguali creano contenuti duplicati.</p>
+  </div>
+  <aside class="notes">Approfondimento: GitHub Pages non permette di configurare redirect 301 lato server. Soluzioni: tenere la vecchia pagina con un meta refresh e un link canonical verso la nuova (ripiego accettato), oppure usare un host che supporta i redirect, come Netlify con un file _redirects (riga: /eventi.html /calendario.html 301). La regola migliore resta: scegliere bene gli indirizzi all'inizio e cambiarli il meno possibile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Aggiornamento</p><h2>Il giorno dopo il lancio comincia il lavoro vero</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Contenuti</h3><p class="small">Chi aggiorna che cosa e quando: calendario mensile, notizie, foto. Niente "Ultime notizie" del 2023.</p></div>
+    <div class="card"><p class="num">2</p><h3>Versioni e backup</h3><p class="small">Ogni modifica è un commit: si torna indietro in un minuto. Una copia anche fuori da GitHub.</p></div>
+    <div class="card"><p class="num">3</p><h3>Controlli periodici</h3><p class="small">Link rotti, Lighthouse, scadenza del dominio, statistiche rispettose della privacy.</p></div>
+  </div>
+  <div class="callout">Con un CMS si aggiungono gli <b>aggiornamenti di sicurezza</b> di software e plugin: un sito abbandonato è un bersaglio.</div>
+  <aside class="notes">Statistiche: uno strumento di analytics che usa cookie di profilazione richiede il consenso (linee guida cookie del Garante, 2021); esistono soluzioni senza cookie o con dati anonimizzati. Nel 2022 il Garante italiano ha ritenuto illecito l'uso di Google Analytics da parte di un sito per il trasferimento dei dati negli USA, prima dell'accordo UE-USA del 2023: buon esempio di come le regole cambiano e vanno seguite. Collegare all'unità 1 (CMS e vulnerabilità web).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>19 luglio 2024: un aggiornamento senza prova graduale</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un file di configurazione difettoso del software di sicurezza CrowdStrike arriva a tutti i clienti insieme. Circa <b>8,5 milioni</b> di computer Windows vanno in crash: aeroporti, ospedali, banche.</p>
+      <p class="small muted">Lezione per chiunque pubblichi: prova in un ambiente di test, rilascia a pochi, poi a tutti, e prepara il modo per tornare indietro.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli agenti AI per il codice possono eseguire validatori, test e Lighthouse a ogni modifica, per esempio con GitHub Actions. Ma decidere se pubblicare, e controllare che cosa hanno cambiato, resta compito vostro.</p></div>
+  </div>
+  <aside class="notes">Il numero di 8,5 milioni è la stima di Microsoft. Il problema era un aggiornamento di contenuti (non del programma) distribuito senza rilascio graduale; CrowdStrike ha poi introdotto rilasci a scaglioni ("canary"). Collegare al deck "Claude Code": un agente può aprire una pull request con le correzioni del validatore, la squadra la rivede prima del merge. Per un sito di squadra il "test environment" può essere un branch o un'anteprima di Netlify.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Web che consegna</p><h2>Dove vivono oggi i siti statici</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Reti di distribuzione</h3><p>GitHub Pages, Netlify e Cloudflare Pages servono i file da server sparsi nel mondo (CDN): chi apre il sito da Bari o da Tokyo riceve la copia più vicina.</p></div>
+    <div class="card soft"><h3>All'esame</h3><p class="small">Descrivi come pubblicheresti il sito della traccia: tipo di hosting e motivazione, dominio e DNS, HTTPS, piano di test prima del rilascio, chi aggiorna i contenuti e come si fanno i backup.</p></div>
+  </div>
+  <aside class="notes">Il primo sito web, al CERN, girava su un solo computer NeXT con un'etichetta che diceva di non spegnerlo. Oggi un sito statico è copiato in decine di data center. All'esame la parte di pubblicazione e manutenzione è spesso trascurata: dedicare un paragrafo motivato fa la differenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il record DNS che associa un nome a un indirizzo IPv4 è il record <span class="blank" data-risposta="A"></span>.</p>
+    <p>Per spostare per sempre una pagina si usa un redirect <span class="blank" data-risposta="301"></span>.</p>
+    <p>La pagina iniziale di un sito su GitHub Pages si chiama <span class="blank" data-risposta="index.html|index"></span>.</p>
+    <p>I certificati HTTPS gratuiti si ottengono per esempio da Let's <span class="blank" data-risposta="Encrypt"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: A, 301, index.html (accettato index), Encrypt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>I test mostrano bug, non la loro assenza: pianificali</li>
+      <li>Validatori, link, compatibilità, Lighthouse, utenti</li>
+      <li>Hosting, dominio, DNS e HTTPS</li>
+    </ul>
+    <ul class="points">
+      <li>GitHub Pages: repository, branch, index.html</li>
+      <li>Indirizzi stabili; se cambiano, redirect 301</li>
+      <li>Manutenzione: contenuti, versioni, controlli</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Compito di squadra finale: sito pubblicato, report di test e piano di manutenzione consegnato al cliente. Proporre una breve presentazione finale dei siti alla classe e, se possibile, al cliente.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

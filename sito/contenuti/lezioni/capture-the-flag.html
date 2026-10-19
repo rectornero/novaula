@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cyberchallenge: Capture the Flag · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Cybersecurity · Lezione 6</p>
+  <h1>Cyberchallenge:<br>Capture the Flag</h1>
+  <p class="lead">Gare in cui si attacca e si difende per davvero, ma solo dove è permesso. Il modo più divertente, e legale, di diventare bravi in sicurezza.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Formati, categorie, CyberChallenge.IT, allenamento etico</span></p>
+  <aside class="notes">Obiettivi: conoscere i formati e le categorie delle CTF, i percorsi italiani (CyberChallenge.IT, OliCyber.IT) e le regole etiche e legali; risolvere le prime sfide su piattaforme legali (CyberChef, OverTheWire Bandit, picoCTF) e con un programma Java. Preparazione: verificare che la rete della scuola consenta SSH in uscita verso bandit.labs.overthewire.org sulla porta 2220 e l'accesso a picoctf.org; per picoCTF serve un account gratuito (si può usare un indirizzo della scuola). Durata indicativa: 3-4 ore; funziona bene come mini-gara a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai partecipato a una gara di informatica?</h2></div>
+  <div class="poll" data-id="ctf-gara">
+    <ol><li>Mai</li><li>Olimpiadi di informatica o gare simili</li><li>Una gara di sicurezza o una CTF</li><li>Un hackathon</li></ol>
+  </div>
+  <aside class="notes">Se qualcuno ha partecipato a una CTF o a OliCyber, chiedergli di raccontare in un minuto com'era. Far notare che le competenze che servono sono quelle del corso: reti, Linux, programmazione, web, crittografia. La differenza è la mentalità: cercare il punto in cui un sistema fa qualcosa che il suo autore non aveva previsto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il gioco</p><h2>Trova la bandiera, consegnala, prendi i punti</h2></div>
+  <p>Una <b>flag</b> è una stringa segreta nascosta nella sfida, come <code>picoCTF{...}</code>: se la trovi, hai risolto.</p>
+  <div class="cols-3">
+    <div class="card fill"><h3>Jeopardy</h3><p class="small">Una griglia di sfide indipendenti, per categoria e punteggio. Il formato più comune.</p></div>
+    <div class="card"><h3>Attack-Defense</h3><p class="small">Ogni squadra ha gli stessi servizi vulnerabili: li corregge e attacca quelli degli altri.</p></div>
+    <div class="card"><h3>King of the Hill</h3><p class="small">Si conquista un sistema e lo si tiene il più a lungo possibile.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI sanno spiegare un comando o un codice sospetto. Molte gare ora scrivono nel regolamento se e come si possono usare: leggilo sempre, e usa l'AI per capire, non per farti dare la flag.</p></div>
+  <aside class="notes">Il nome viene dal gioco all'aperto "ruba bandiera". Una delle CTF più famose si gioca ogni anno alla conferenza DEF CON di Las Vegas dalla metà degli anni Novanta. Sull'AI: le regole cambiano da gara a gara (alcune la vietano, altre la ammettono, altre hanno categorie dedicate); in allenamento il valore sta nel capire il perché, che servirà alla prossima sfida e in un colloquio di lavoro. In una Jeopardy le sfide con meno soluzioni valgono più punti; in molte gare il punteggio di una sfida scende man mano che altre squadre la risolvono ("punteggio dinamico"). L'Attack-Defense è il formato più vicino al lavoro reale di red e blue team della lezione 4: si difende e si attacca insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le categorie</p><h2>Sei famiglie di sfide</h2></div>
+  <table class="data compact">
+    <tr><th>Categoria</th><th>Che cosa si fa</th><th>Che cosa ti serve</th></tr>
+    <tr><td><b>Web</b></td><td>Trovare falle in applicazioni web</td><td>HTTP, JavaScript, SQL: la lezione 5</td></tr>
+    <tr><td><b>Crypto</b></td><td>Rompere cifrari deboli o usati male</td><td>Codifiche, hash, un po' di matematica</td></tr>
+    <tr><td><b>Forensics</b></td><td>Analizzare file, immagini, catture di rete</td><td>Formati dei file, Wireshark</td></tr>
+    <tr><td><b>Reverse</b></td><td>Capire che cosa fa un programma senza sorgente</td><td>Java, C, un po' di assembly</td></tr>
+    <tr><td><b>Pwn</b></td><td>Sfruttare errori di memoria in programmi binari</td><td>C, puntatori, stack</td></tr>
+    <tr><td><b>OSINT</b> e <b>Misc</b></td><td>Fonti aperte, logica, Linux, giochi di ingegno</td><td>Riga di comando e curiosità</td></tr>
+  </table>
+  <aside class="notes">Pwn viene dal gergo dei videogiochi ("owned"): significa prendere il controllo. La categoria forensics comprende spesso la steganografia (dati nascosti in un'immagine o in un audio). L'OSINT nelle CTF si fa su bersagli preparati dagli organizzatori: cercare informazioni su persone reali non coinvolte è scorretto e può violare la privacy. Domanda: in quale categoria ti senti più forte oggi?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Curiosità sì, ma con regole</p><h2>Il confine tra gioco e reato</h2></div>
+  <figure class="citazione">
+    <blockquote>Il mio crimine è la curiosità.</blockquote>
+    <figcaption><b>The Mentor</b> (Loyd Blankenship), dal "Manifesto dell'hacker", rivista <i>Phrack</i>, 1986</figcaption>
+  </figure>
+  <div class="cols-3">
+    <div class="card ok"><h3>Sì</h3><p class="small">Piattaforme di gara, laboratori volutamente vulnerabili, macchine tue.</p></div>
+    <div class="card ok"><h3>Sì, con permesso</h3><p class="small">Bug bounty e test con regole scritte che indicano il perimetro.</p></div>
+    <div class="card bad"><h3>No</h3><p class="small">Il sito della scuola, il Wi-Fi del vicino, l'account di un amico "per scherzo".</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra da "My crime is that of curiosity", testo scritto poco dopo l'arresto dell'autore e pubblicato su Phrack (volume 1, numero 7, gennaio 1986). È un documento storico della cultura hacker; usarlo per discutere, non come modello: la curiosità è la qualità più importante in sicurezza, ma oggi esistono tanti modi legali di soddisfarla. Ricordare l'art. 615-ter c.p. (lezione 3): l'accesso senza autorizzazione è reato anche senza danni. Anche nelle CTF ci sono regole: non attaccare l'infrastruttura della gara, non condividere le flag con altre squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz etico</p><h2>Durante una CTF scopri una falla nel sito che ospita la gara, non in una sfida. Che cosa fai?</h2></div>
+  <div class="poll" data-id="ctf-etica" data-tipo="quiz" data-risposta="C">
+    <ol><li>La sfrutti: è una gara di hacking, vale tutto</li><li>La usi solo per vedere le flag, senza toccare i punteggi</li><li>La segnali agli organizzatori, senza sfruttarla</li><li>La pubblichi sui social per avvisare tutti</li></ol>
+    <p class="why">L'infrastruttura della gara non è nel perimetro: attaccarla viola il regolamento e, fuori dalle regole, è un accesso abusivo. Si segnala in privato agli organizzatori: è la divulgazione responsabile.</p>
+  </div>
+  <aside class="notes">La B è il distrattore insidioso: "guardo e basta" è comunque accesso non autorizzato e scorrettezza verso le altre squadre. La D sembra altruista, ma pubblicare una falla prima che sia corretta aiuta solo chi vuole sfruttarla: è il motivo per cui esiste la divulgazione coordinata (si avvisa il proprietario, si concorda un tempo per la correzione, poi si pubblica). Molte gare prevedono anche premi o riconoscimenti per chi segnala falle dell'infrastruttura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">In Italia</p><h2>CyberChallenge.IT e i percorsi per giovani</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p><b>CyberChallenge.IT</b> è un programma gratuito di addestramento in cybersecurity per ragazze e ragazzi tra i <b>16 e i 24 anni</b>, organizzato dal Laboratorio Nazionale di Cybersecurity del <b>CINI</b> con università e enti in tutta Italia.</p>
+      <ul class="points small">
+        <li>Si entra con un test di ammissione: logica, programmazione, problem solving.</li>
+        <li>Seguono lezioni e laboratori in una sede vicina, per alcuni mesi.</li>
+        <li>Si chiude con gare CTF, fino a una finale nazionale a squadre.</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Altri percorsi</h3><p class="small"><b>OliCyber.IT</b>: le Olimpiadi Italiane di Cybersicurezza, per studenti delle superiori.</p><p class="small"><b>TeamItaly</b>: la nazionale giovanile che partecipa alla European Cybersecurity Challenge di ENISA.</p><p class="small muted">Requisiti, date e sedi cambiano ogni anno: controlla sui siti ufficiali.</p></div>
+  </div>
+  <aside class="notes">Informazioni da verificare ogni anno su cyberchallenge.it e olicyber.it prima di presentarle: fasce d'età, scadenze di iscrizione (di solito nella prima parte dell'anno solare), elenco delle sedi, struttura delle prove. CyberChallenge.IT è attivo dal 2017; il CINI è il Consorzio Interuniversitario Nazionale per l'Informatica. Nelle ultime edizioni la finale nazionale si è svolta in formato Attack-Defense, ma il formato può cambiare: per questo in slide si dice solo "gare CTF". La European Cybersecurity Challenge (ECSC) è organizzata ogni anno con il sostegno di ENISA, con squadre nazionali di giovani. Per gli studenti di quinta, l'età è compatibile con CyberChallenge.IT: chi è interessato verifichi subito il bando dell'anno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il percorso tipico di chi partecipa: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="ctf-percorso">
+    <li>Ti iscrivi online entro la scadenza del bando</li>
+    <li>Superi il test di ammissione</li>
+    <li>Segui le lezioni e i laboratori nella tua sede</li>
+    <li>Gareggi nella CTF locale con i compagni della sede</li>
+    <li>La squadra della sede partecipa alla finale nazionale</li>
+    <li>I migliori possono essere selezionati per allenarsi con TeamItaly</li>
+  </ol>
+  <aside class="notes">Ordine generale di un programma di questo tipo; i dettagli (numero di prove, selezioni intermedie, criteri per TeamItaly) cambiano tra le edizioni e vanno verificati sul bando. Approfittarne per dire che anche senza essere selezionati si può partecipare a tantissime CTF online aperte a tutti, elencate per esempio sul sito CTFtime.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prima flag: CyberChef</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Questa stringa nasconde una flag sotto due strati di codifica:</p>
+<pre class="code" style="font-size:24px;white-space:pre-wrap;word-break:break-all">NmU2Zjc2NjE3NTZjNjE3YjYyMzYzNDVmNmU2ZjZlNWY2MzY5NjY3MjYxN2Q=</pre>
+      <ol class="steps small">
+        <li>Apri <b>gchq.github.io/CyberChef</b> e incolla la stringa.</li>
+        <li>Riconosci il primo strato dal finale <code>=</code> e applica l'operazione giusta.</li>
+        <li>Guarda il risultato: solo cifre e lettere da a a f. Applica il secondo passo.</li>
+        <li>Scrivi la flag e la ricetta in <b>flag1-cognome.txt</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> la flag inizia con <code>novaula{</code> e finisce con <code>}</code>. Il suo testo ti dice che cosa NON è Base64.</div>
+  </div>
+  <aside class="notes">Soluzione: From Base64, poi From Hex. Flag: novaula{b64_non_cifra}. Il segno = finale è il riempimento (padding) tipico di Base64; il risultato intermedio 6e6f7661… contiene solo cifre esadecimali, e 6e è il codice ASCII di "n". Nelle CTF CyberChef ha anche la funzione "Magic" che prova a indovinare le codifiche: farla provare dopo, per mostrare che conviene comunque capire. Il messaggio della flag prepara il quiz successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di queste trasformazioni protegge davvero un segreto?</h2></div>
+  <div class="poll" data-id="ctf-b64" data-tipo="quiz" data-risposta="D">
+    <ol><li>Codifica Base64</li><li>Conversione in esadecimale</li><li>ROT13</li><li>AES con una chiave segreta</li></ol>
+    <p class="why">Base64 ed esadecimale sono codifiche: chiunque le inverte senza chiave. ROT13 è un cifrario di Cesare con chiave fissa e nota. Solo AES con una chiave segreta è cifratura: senza la chiave il testo resta illeggibile.</p>
+  </div>
+  <aside class="notes">Errore classico, anche nel software reale: credenziali "nascoste" in Base64 in un file di configurazione o in un'app. Distinguere: codifica (cambia la rappresentazione, nessun segreto), cifratura (serve una chiave), hash (non si inverte, serve a verificare). Collegare alla lezione principi-sicurezza (hash) e alla categoria Crypto delle CTF.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>OverTheWire Bandit: i primi livelli</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Dal Prompt dei comandi: <code>ssh bandit0@bandit.labs.overthewire.org -p 2220</code>, password <code>bandit0</code>.</li>
+      <li>Esegui <code>ls</code> e <code>cat readme</code>: trovi la password del livello 1.</li>
+      <li>Esci con <code>exit</code> ed entra come <code>bandit1</code>. Il file si chiama <code>-</code>: come lo leggi?</li>
+      <li>Leggi su <b>overthewire.org/wargames/bandit</b> il testo di ogni livello e vai avanti finché puoi.</li>
+      <li>In <b>bandit-cognome.md</b> annota per ogni livello comando e idea, <b>non</b> le password.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> ogni password è una stringa di 32 caratteri. Per il file <code>-</code> funziona <code>cat ./-</code>.</div>
+  </div>
+  <aside class="notes">Bandit è un "wargame" gratuito, senza account, pensato per imparare la riga di comando Linux; è legale perché i server sono messi a disposizione apposta. Nel livello 1 il file chiamato "-" non si legge con cat - perché il trattino indica lo standard input: serve il percorso ./- (oppure cat &lt; -). OpenSSH è incluso in Windows 10 e 11; se manca, si può usare PuTTY. Se la rete della scuola blocca la porta 2220 in uscita, il docente mostra i primi livelli da un hotspot. OverTheWire chiede di non pubblicare le soluzioni online: per questo nel file non si scrivono le password. I server sono condivisi con persone di tutto il mondo: lavorare solo nella propria cartella temporanea quando i livelli lo richiedono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si affronta una sfida</p><h2>Il metodo vale più del trucco</h2></div>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li><b>Leggi</b> tutto il testo: titolo e descrizione sono indizi.</li>
+      <li><b>Osserva</b>: tipo di file, codifiche, porte, sorgente della pagina.</li>
+      <li><b>Fai un'ipotesi</b> e provala con lo strumento più semplice.</li>
+      <li><b>Cerca</b> documentazione: man, RFC, manuali, write-up di gare passate.</li>
+      <li><b>Scrivi</b> la tua write-up: che cosa hai provato e perché ha funzionato.</li>
+    </ol>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Gare tra macchine</h3><p>Nel 2016 la DARPA organizzò la <b>Cyber Grand Challenge</b>, una CTF tra sistemi completamente automatici. Nel 2025 la sua <b>AI Cyber Challenge</b> ha premiato sistemi basati su AI capaci di trovare e correggere vulnerabilità in software open source reale.</p></div>
+  </div>
+  <aside class="notes">In squadra conviene dividersi per categoria e tenere un documento comune con gli appunti. La write-up è il modo in cui la comunità impara: dopo la gara molte squadre pubblicano le soluzioni, una fonte di studio enorme. DARPA Cyber Grand Challenge: finale a DEF CON 2016, vinta dal sistema Mayhem di ForAllSecure. AI Cyber Challenge (AIxCC): finale a DEF CON nell'agosto 2025; secondo l'annuncio della DARPA, il primo posto è andato al Team Atlanta. Messaggio: l'automazione cresce, ma chi capisce come funzionano i sistemi resta indispensabile per progettarla e verificarla.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Sfida crypto: forza bruta su Cesare, in Java</h2>
+  <div class="cols-2" style="grid-template-columns:1.8fr 1fr">
+<pre class="code" style="font-size:22px"><span class="k">static</span> String sposta(String testo, <span class="k">int</span> k) {
+  StringBuilder sb = <span class="k">new</span> StringBuilder();
+  <span class="k">for</span> (<span class="k">char</span> c : testo.toCharArray())
+    sb.append(Character.isLowerCase(c)
+        ? (<span class="k">char</span>) (<span class="s">'a'</span> + (c - <span class="s">'a'</span> + k) % 26) : c);
+  <span class="k">return</span> sb.toString();
+}
+<span class="c">// nel main</span>
+String cifrato = <span class="s">"yzglfwl{npdlcp_lgpgl_dzwz_25_nstlgt}"</span>;
+<span class="k">for</span> (<span class="k">int</span> k = 1; k &lt; 26; k++) {
+  String prova = sposta(cifrato, k);
+  <span class="k">if</span> (prova.startsWith(<span class="s">"novaula{"</span>))
+    System.out.println(<span class="s">"chiave "</span> + k + <span class="s">": "</span> + prova);
+}</pre>
+    <div class="stack">
+      <p class="small">Salva in <b>Cesare.java</b> dentro una classe <code>Cesare</code> ed esegui <code>java Cesare.java</code>.</p>
+      <div class="check small"><b>Controllo:</b> il programma stampa una sola riga, con la chiave <b>15</b> e una flag che spiega perché Cesare è debole.</div>
+      <p class="small muted">Bonus: senza sapere che la flag inizia con <code>novaula{</code>, come sceglieresti la riga giusta?</p>
+    </div>
+  </div>
+  <aside class="notes">Output testato: "chiave 15: novaula{cesare_aveva_solo_25_chiavi}". Il messaggio era stato cifrato con spostamento 11; per decifrare si sposta di 26 - 11 = 15. Le cifre, le parentesi graffe e il trattino basso restano uguali perché il codice sposta solo le minuscole. Bonus: si può contare quante parole italiane compaiono in ogni prova, oppure confrontare le frequenze delle lettere con quelle tipiche dell'italiano (analisi delle frequenze, già nota agli studiosi arabi del IX secolo, al-Kindi). Collegare: 25 chiavi si provano in un millisecondo; AES-128 ha 2^128 chiavi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>picoGym: la palestra di picoCTF</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Vai su <b>play.picoctf.org</b> e accedi con l'account creato con l'indirizzo della scuola.</li>
+      <li>Apri <b>Practice</b>, filtra la categoria <b>General Skills</b> e ordina per numero di soluzioni.</li>
+      <li>Risolvi almeno due sfide, partendo da <i>Obedient Cat</i> se è disponibile.</li>
+      <li>Per ognuna scrivi in <b>pico-cognome.md</b>: nome, categoria, idea, comandi usati.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> le flag hanno il formato <code>picoCTF{...}</code> e la piattaforma segna la sfida come risolta quando la invii.</div>
+  </div>
+  <aside class="notes">picoCTF è una competizione e una piattaforma di allenamento gratuita della Carnegie Mellon University, pensata per studenti delle superiori. Serve un account: il docente può far registrare gli studenti con l'indirizzo della scuola, oppure creare una classe dalla sezione per insegnanti (verificare la funzione al momento della lezione). Obedient Cat (picoCTF 2021, General Skills) chiede di scaricare un file e leggerlo con cat: è la sfida introduttiva più risolta. Se non è più presente, va bene qualunque sfida General Skills con molte soluzioni. Le sfide con istanza (un server dedicato) possono richiedere qualche minuto per avviarsi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mini CTF a squadre</p><h2>Apri il lucchetto con le flag di oggi</h2></div>
+  <div class="puzzle-codice" data-risposta="1531" data-aiuto="le prime due cifre sono la chiave che ha stampato il programma Java">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la chiave che decifra il messaggio di Cesare</li>
+      <li>3ª cifra: quanti formati di CTF abbiamo visto</li>
+      <li>4ª cifra: il livello di Bandit a cui si accede con la password del readme</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Chiave 15, tre formati (Jeopardy, Attack-Defense, King of the Hill), livello 1. Siete pronti per una CTF vera.</div>
+  </div>
+  <aside class="notes">Codice: 1531. Variante gara: punti alla prima squadra che apre il lucchetto e altri punti a chi spiega la differenza tra codifica e cifratura. Si può proporre alla classe di iscriversi insieme a una CTF online per principianti (CTFtime ne elenca molte) o a OliCyber, se i tempi lo permettono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il formato CTF con una griglia di sfide indipendenti si chiama <span class="blank" data-risposta="Jeopardy" style="--w:9ch"></span>.</p>
+    <p>Base64 è una <span class="blank" data-risposta="codifica" style="--w:8ch"></span>, non una cifratura.</p>
+    <p>Per leggere in Bandit un file chiamato - si scrive cat <span class="blank" data-risposta="./-" style="--w:4ch"></span>.</p>
+    <p>Il programma italiano di addestramento per giovani tra 16 e 24 anni si chiama <span class="blank" data-risposta="CyberChallenge.IT|CyberChallenge|Cyber Challenge" style="--w:14ch"></span>.</p>
+    <p>Segnalare una falla al proprietario senza sfruttarla si chiama divulgazione <span class="blank" data-risposta="responsabile|coordinata" style="--w:11ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: Jeopardy; codifica; ./- ; CyberChallenge.IT (accettato anche CyberChallenge); responsabile (accettato coordinata).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Jeopardy, Attack-Defense, King of the Hill</li>
+      <li>Web, crypto, forensics, reverse, pwn, OSINT</li>
+      <li>Solo bersagli autorizzati, segnalazioni responsabili</li>
+    </ul>
+    <ul class="points">
+      <li>CyberChallenge.IT, OliCyber.IT, TeamItaly</li>
+      <li>Allenamento: CyberChef, Bandit, picoGym, Juice Shop</li>
+      <li>Codifica non è cifratura</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula ("La mia prima write-up"). Con questa lezione si chiude l'Unità 1: annunciare la simulazione della verifica, disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WebSocket nel browser · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Applicazioni Java per la comunicazione in rete</p>
+  <h1>WebSocket:<br>la chat nel browser</h1>
+  <p class="lead">HTTP sa solo rispondere. Con una richiesta speciale la connessione cambia protocollo e diventa un canale sempre aperto, in cui anche il server può parlare per primo.</p>
+  <aside class="notes">Lezione di laboratorio, 3-4 ore. Obiettivi: capire il limite di HTTP (richiesta-risposta) e le alternative (polling, long polling, Server-Sent Events, WebSocket); leggere l'handshake di RFC 6455 e calcolare Sec-WebSocket-Accept; conoscere i frame; usare l'API WebSocket del browser; scrivere un endpoint con jakarta.websocket su Tomcat 10.1. Preparare prima: Apache Tomcat 10.1 (zip, nessuna installazione), JDK 21 con JAVA_HOME impostata, browser con DevTools. Se Tomcat non si può usare, c'è un server alternativo solo JDK (vedi note del secondo laboratorio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale app "in tempo reale" usi di più?</h2></div>
+  <div class="poll" data-id="ws-app">
+    <ol><li>Un gioco multiplayer</li><li>Un documento condiviso con i compagni</li><li>Una chat o Discord</li><li>Risultati sportivi in diretta</li><li>Un chatbot che scrive la risposta poco alla volta</li></ol>
+  </div>
+  <aside class="notes">Tutte e cinque hanno lo stesso bisogno: il server deve mandare dati al browser SENZA che il browser li abbia appena chiesti. Chiedere: come fa Google Docs a mostrarti il cursore del compagno che scrive? La lezione risponde a questa domanda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>In HTTP parla sempre prima il browser</h2></div>
+  <table class="data compact">
+    <tr><th>Tecnica</th><th>Come funziona</th><th>Direzione</th><th>Quando usarla</th></tr>
+    <tr><td><b>Polling</b></td><td>Il browser chiede "novità?" ogni N secondi</td><td>browser → server</td><td>Aggiornamenti rari, semplicità</td></tr>
+    <tr><td><b>Long polling</b></td><td>Il server tiene la richiesta aperta finché ha una novità</td><td>browser → server</td><td>Vecchi sistemi, compatibilità</td></tr>
+    <tr><td><b>Server-Sent Events</b></td><td>Una risposta HTTP che non finisce mai: <code>text/event-stream</code></td><td>solo server → browser</td><td>Notifiche, streaming di testo</td></tr>
+    <tr class="hl"><td><b>WebSocket</b></td><td>La connessione TCP cambia protocollo e resta aperta</td><td>nei due sensi</td><td>Chat, giochi, collaborazione</td></tr>
+  </table>
+  <aside class="notes">Con il polling ogni 2 secondi, 1000 utenti fanno 500 richieste al secondo anche quando non succede nulla, e un messaggio arriva in media con 1 secondo di ritardo. SSE è più semplice di WebSocket (è HTTP normale, si riconnette da solo) ma va in una sola direzione: il browser per scrivere fa normali richieste POST. WebSocket è bidirezionale con un overhead minimo per messaggio (pochi byte di intestazione invece di centinaia di header HTTP).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>HTTP/1.1 classico: il server ha un messaggio nuovo per te. Come te lo manda?</h2></div>
+  <div class="poll" data-id="ws-http" data-tipo="quiz" data-risposta="C">
+    <ol><li>Invia una risposta HTTP anche senza richiesta</li><li>Lo scrive in un cookie</li><li>Non può: deve aspettare che il browser chieda</li><li>Con un redirect 302 verso la pagina nuova</li></ol>
+    <p class="why">In HTTP una risposta esiste solo come risposta a una richiesta. Cookie e redirect viaggiano anch'essi dentro risposte. Per questo servono polling, long polling, SSE o WebSocket.</p>
+  </div>
+  <aside class="notes">La A è il tranello: tecnicamente il server ha un socket aperto (con keep-alive) e potrebbe scriverci, ma il browser scarterebbe dati che non corrispondono a una richiesta. HTTP/2 aveva il "server push", ma serviva a inviare in anticipo file (CSS, JS), non messaggi all'applicazione, e i browser principali l'hanno poi disattivato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">RFC 6455 · L'handshake</p><h2>Una richiesta HTTP che chiede di cambiare protocollo</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:22px;flex:none"><span class="c">browser → server</span>
+GET /chat/ws HTTP/1.1
+Host: localhost:8080
+<span class="hl">Upgrade: websocket</span>
+<span class="hl">Connection: Upgrade</span>
+Sec-WebSocket-Key:
+  <span class="s">dGhlIHNhbXBsZSBub25jZQ==</span>
+Sec-WebSocket-Version: 13
+Origin: http://localhost:8080</pre>
+    <pre class="code" style="font-size:22px;flex:none"><span class="c">server → browser</span>
+<span class="hl">HTTP/1.1 101 Switching Protocols</span>
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept:
+  <span class="s">s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</span>
+
+<span class="c">da qui in poi: frame WebSocket</span>
+<span class="c">sulla stessa connessione TCP</span></pre>
+  </div>
+  <p class="small">Il server dimostra di aver capito la richiesta: <b>Accept = Base64( SHA-1( Key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )</b></p>
+  <aside class="notes">La chiave e la risposta sono l'esempio ufficiale della RFC 6455 (dicembre 2011, sezione 1.3). La chiave sono 16 byte casuali in Base64, nuovi a ogni connessione. La stringa fissa (un GUID) è scritta nella RFC. Lo scopo NON è la sicurezza: è impedire che un server HTTP qualunque, o una cache, accetti per errore una connessione WebSocket. 101 è un codice informativo (1xx). L'header Origin permette al server di rifiutare pagine di altri siti: un controllo che un server vero deve fare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Calcola Sec-WebSocket-Accept</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Crea <b>AcceptKey.java</b> nella cartella <b>u3-websocket</b>:</p>
+      <pre class="code" style="font-size:21px;flex:none"><span class="k">static</span> String accept(String key) <span class="k">throws</span> Exception {
+    String guid = <span class="s">"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"</span>;
+    <span class="k">byte</span>[] sha1 = MessageDigest.getInstance(<span class="s">"SHA-1"</span>)
+        .digest((key + guid).getBytes(UTF_8));
+    <span class="k">return</span> Base64.getEncoder().encodeToString(sha1);
+}</pre>
+      <p class="small">Nel <code>main</code> stampa <code>accept("dGhlIHNhbXBsZSBub25jZQ==")</code>, poi prova una chiave a tua scelta.</p>
+    </div>
+    <div class="check"><b>Controllo:</b> deve uscire esattamente <code>s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</code>, la risposta dell'esempio della RFC 6455. Un solo carattere diverso nella stringa fissa cambia tutto il risultato.</div>
+  </div>
+  <aside class="notes">Import: java.security.MessageDigest, java.util.Base64, static java.nio.charset.StandardCharsets.UTF_8. Si esegue con java AcceptKey.java. Far notare che SHA-1 non è più considerato sicuro per le firme digitali, ma qui non serve sicurezza: serve solo una trasformazione che un server "per caso" non farebbe. Errore tipico: fare la Base64 della stringa esadecimale dell'hash invece che dei 20 byte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dopo il 101</p><h2>Niente più header: piccoli frame nei due sensi</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>2-14 byte di intestazione</h3><p class="small">FIN, un <b>opcode</b> (che tipo di frame è), la lunghezza e, dal browser, una maschera di 4 byte.</p></div>
+    <div class="card soft"><h3>Testo o binario</h3><p class="small">Un messaggio può essere testo UTF-8 (per esempio JSON) o dati binari (immagini, audio, stato di un gioco).</p></div>
+    <div class="card soft"><h3>Controllo</h3><p class="small">Close per chiudere con un codice, <b>ping e pong</b> per controllare che l'altro capo sia ancora vivo.</p></div>
+  </div>
+  <div class="callout"><code>ws://</code> usa la porta 80 ed è in chiaro; <code>wss://</code> usa la 443 dentro <b>TLS</b>. Fuori dal laboratorio si usa sempre <code>wss://</code>.</div>
+  <aside class="notes">Il ping e pong di WebSocket è un parente del ping ICMP della prima lezione dell'unità: risolve lo stesso problema visto nella chat TCP (accorgersi che l'altro capo è sparito senza chiudere). I browser rispondono da soli ai ping del server; l'API JavaScript non permette di mandarli. La maschera, obbligatoria da client a server, si vede nel quiz. Codici di chiusura comuni: 1000 normale, 1001 pagina chiusa, 1006 connessione persa senza frame di chiusura (non viene mai inviato davvero, lo riporta l'API).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni opcode al suo frame</h2></div>
+  <dl class="puzzle-abbina" data-id="ws-opcode">
+    <dt>0x1</dt><dd>Frame di testo UTF-8</dd>
+    <dt>0x2</dt><dd>Frame binario</dd>
+    <dt>0x8</dt><dd>Chiusura, con un codice come 1000</dd>
+    <dt>0x9</dt><dd>Ping: "ci sei ancora?"</dd>
+    <dt>0xA</dt><dd>Pong: la risposta al ping</dd>
+  </dl>
+  <aside class="notes">Opcode da RFC 6455, sezione 5.2. Esiste anche 0x0, "continuazione", per un messaggio spezzato in più frame (FIN = 0 su tutti tranne l'ultimo). Il primo byte di un frame di testo completo è 0x81: bit FIN a 1 e opcode 1. Lo si vede nel server alternativo solo JDK delle note.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · browser</p><h2>L'API WebSocket in JavaScript</h2></div>
+  <pre class="code" style="font-size:23px;flex:none"><span class="c">// stesso host e cartella della pagina: ws://localhost:8080/chat/ws</span>
+<span class="k">const</span> base = location.pathname.replace(<span class="s">/[^/]*$/</span>, <span class="s">""</span>);
+<span class="k">const</span> ws = <span class="k">new</span> <span class="hl">WebSocket</span>((location.protocol === <span class="s">"https:"</span> ? <span class="s">"wss://"</span> : <span class="s">"ws://"</span>) + location.host + base + <span class="s">"ws"</span>);
+
+ws.onopen = () =&gt; stato.textContent = <span class="s">"Connesso"</span>;
+ws.onclose = (e) =&gt; stato.textContent = <span class="s">"Disconnesso (codice "</span> + e.code + <span class="s">")"</span>;
+ws.onmessage = (e) =&gt; {
+  <span class="k">const</span> li = document.createElement(<span class="s">"li"</span>);
+  li.<span class="hl">textContent</span> = e.data;                   <span class="c">// mai innerHTML: niente XSS</span>
+  lista.append(li);
+};
+modulo.onsubmit = (ev) =&gt; {
+  ev.preventDefault();
+  ws.<span class="hl">send</span>(nick.value + <span class="s">": "</span> + testo.value);
+  testo.value = <span class="s">""</span>;
+};</pre>
+  <aside class="notes">Pagina completa index.html (nel compito c'è la stessa struttura): h1, p#stato, ul#lista, form#modulo con input#nick, input#testo e un button; lo script in fondo al body, con const stato = document.getElementById("stato") ecc. Quattro eventi da ricordare: open, message, close, error; un metodo per inviare (send) e uno per chiudere (close). L'URL è costruito dalla pagina stessa, così funziona sia su Tomcat (/chat/ws) sia con il server alternativo (/ws). textContent: se un utente manda &lt;img src=x onerror=alert(1)&gt; deve comparire come testo, non essere eseguito (XSS, Unità 1). Le connessioni sono bloccate se la pagina è in https e il server in ws:// (contenuto misto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · server</p><h2>Un endpoint <code>jakarta.websocket</code> su Tomcat</h2></div>
+  <pre class="code" style="font-size:22px;flex:none"><span class="hl">@ServerEndpoint("/ws")</span>
+<span class="k">public class</span> ChatEndpoint {
+    <span class="k">private static final</span> Set&lt;Session&gt; sessioni = ConcurrentHashMap.newKeySet();
+
+    <span class="hl">@OnOpen</span>  <span class="k">public void</span> apri(Session s)   { sessioni.add(s); }
+    <span class="hl">@OnClose</span> <span class="k">public void</span> chiudi(Session s) { sessioni.remove(s); }
+    <span class="hl">@OnError</span> <span class="k">public void</span> errore(Session s, Throwable t) { sessioni.remove(s); }
+
+    <span class="hl">@OnMessage</span>
+    <span class="k">public void</span> messaggio(String testo, Session da) {
+        <span class="k">for</span> (Session s : sessioni) {
+            <span class="k">if</span> (!s.isOpen()) <span class="k">continue</span>;
+            <span class="k">try</span> {
+                <span class="k">synchronized</span> (s) { s.getBasicRemote().sendText(testo); }   <span class="c">// un invio alla volta</span>
+            } <span class="k">catch</span> (IOException e) { sessioni.remove(s); }
+        }
+    }
+}</pre>
+  <aside class="notes">Import: jakarta.websocket.*, jakarta.websocket.server.ServerEndpoint, java.io.IOException, java.util.Set, java.util.concurrent.ConcurrentHashMap. Confronto con la chat TCP: Tomcat fa da solo handshake, frame, maschera e thread; noi scriviamo solo che cosa fare quando si apre, arriva un messaggio, si chiude. Session ha lo stesso ruolo del nostro GestoreClient. Il Set è static perché Tomcat crea un'istanza di ChatEndpoint per ogni connessione. synchronized(s): l'API non permette due invii contemporanei sulla stessa sessione (Tomcat lancia IllegalStateException), e due messaggi possono arrivare insieme da due utenti diversi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettere in linea</p><h2>Dove vanno i file in Tomcat 10.1</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:24px;flex:none">tomcat/
+├─ bin/startup.bat   <span class="c">(.sh su Linux)</span>
+├─ lib/              <span class="c">websocket-api.jar…</span>
+└─ webapps/
+   └─ <span class="hl">chat/</span>
+      ├─ index.html
+      └─ WEB-INF/
+         └─ classes/
+            └─ ChatEndpoint.class</pre>
+    <ol class="steps small">
+      <li>Compila contro le librerie di Tomcat (un solo comando, su una riga):<pre class="code" style="font-size:20px;padding:16px 22px;margin-top:10px;white-space:pre-wrap">javac -cp "tomcat/lib/*"
+  -d tomcat/webapps/chat/WEB-INF/classes
+  ChatEndpoint.java</pre></li>
+      <li>Avvia (o riavvia) Tomcat con <code>startup</code>.</li>
+      <li>Apri <code>localhost:8080/chat/</code>: la pagina si collega a <code>ws://…/chat/ws</code>.</li>
+    </ol>
+  </div>
+  <div class="callout">Non serve <code>web.xml</code>: all'avvio Tomcat trova da solo le classi annotate con <code>@ServerEndpoint</code>. Attenzione alla versione: Tomcat 10.1 usa i pacchetti <code>jakarta.*</code>, Tomcat 9 i vecchi <code>javax.*</code>.</div>
+  <aside class="notes">Tomcat 10.1 usa i pacchetti jakarta.* (Jakarta EE 10): con Tomcat 9 servirebbe javax.websocket. Non serve web.xml: all'avvio Tomcat cerca le classi annotate con @ServerEndpoint in WEB-INF/classes. Sotto Windows: javac -cp "C:\tomcat\lib\*" -d C:\tomcat\webapps\chat\WEB-INF\classes ChatEndpoint.java (le virgolette servono per l'asterisco). Serve la variabile JAVA_HOME. Il contesto "/chat" viene dal nome della cartella; il percorso dell'endpoint ("/ws") è relativo al contesto. Dopo aver ricompilato la classe bisogna riavviare Tomcat (shutdown e startup).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>La chat WebSocket</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Scompatta Tomcat 10.1 e crea la cartella <b>webapps/chat/WEB-INF/classes</b>.</li>
+      <li>Scrivi <b>index.html</b> in <b>webapps/chat</b> e <b>ChatEndpoint.java</b> nella tua cartella di lavoro.</li>
+      <li>Compila con il comando della slide precedente e avvia Tomcat.</li>
+      <li>Apri <code>http://localhost:8080/chat/</code> in <b>due schede</b> e scrivi da entrambe.</li>
+      <li>Fai uno screenshot con le due schede affiancate: <b>chat-ws.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> lo stato diventa "Connesso" e ogni messaggio compare in tutte e due le schede, anche in quella che l'ha inviato. Se fermi Tomcat, la pagina mostra "Disconnesso" con un codice (di solito 1001 o 1006).</div>
+  </div>
+  <aside class="notes">Il mittente vede il proprio messaggio perché il server lo rimanda a TUTTE le sessioni (diverso dalla chat TCP, dove inoltra() saltava il mittente). Errori tipici: 404 sulla pagina (cartella sbagliata), stato fermo su "Connessione in corso" e 404 sull'handshake nella console (classe non trovata: controllare il package e WEB-INF/classes, riavviare Tomcat), porta 8080 occupata. FALLBACK senza Tomcat: il file MiniWebSocket.java (solo JDK, circa 80 righe: ServerSocket, lettura degli header, risposta 101 con AcceptKey.accept, lettura dei frame di testo con la maschera, broadcast con il primo byte 0x81) è allegato al compito per casa; si avvia con java MiniWebSocket.java nella cartella di index.html e si apre http://localhost:8081/. In alternativa: demo del docente sulla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>I frame dal browser al server sono "mascherati" con 4 byte casuali. Perché?</h2></div>
+  <div class="poll" data-id="ws-maschera" data-tipo="quiz" data-risposta="B">
+    <ol><li>Per cifrare i messaggi</li><li>Perché proxy e cache lungo la strada non li scambino per richieste HTTP</li><li>Per comprimerli</li><li>Per dimostrare l'identità dell'utente</li></ol>
+    <p class="why">La maschera è un semplice XOR con una chiave scritta nel frame stesso: chiunque la toglie. Serve contro attacchi di "cache poisoning": senza, una pagina malevola potrebbe scrivere byte che un vecchio proxy interpreta come una richiesta HTTP. La riservatezza la dà solo <code>wss://</code>.</p>
+  </div>
+  <aside class="notes">È il malinteso più diffuso: "mascherato" non vuol dire "cifrato". RFC 6455, sezione 10.3, spiega la motivazione (attacchi alle infrastrutture intermedie, dimostrati da ricercatori mentre lo standard era in preparazione). Il server NON maschera i suoi frame verso il browser. Se in DevTools vedi i messaggi in chiaro è perché il browser li mostra già decodificati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Guarda dentro la connessione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Con la chat aperta premi <b>F12</b>, scheda <b>Rete</b> (Network), filtro <b>WS</b>, e ricarica la pagina.</li>
+      <li>Clicca sulla richiesta <code>ws</code>: annota lo stato e gli header <code>Upgrade</code>, <code>Sec-WebSocket-Key</code> e <code>Sec-WebSocket-Accept</code>.</li>
+      <li>Verifica la coppia chiave-risposta con il tuo <b>AcceptKey.java</b>.</li>
+      <li>Nella scheda <b>Messaggi</b> guarda i frame; poi invia <code>&lt;b&gt;ciao&lt;/b&gt;</code>.</li>
+      <li>Scrivi tutto in <b>ispezione.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> lo stato è <code>101 Switching Protocols</code>; AcceptKey applicato alla tua chiave dà esattamente l'Accept del server. Il messaggio <code>&lt;b&gt;ciao&lt;/b&gt;</code> compare con i simboli, non in grassetto.</div>
+  </div>
+  <aside class="notes">I nomi delle schede cambiano un po' tra Chrome, Edge e Firefox (in Firefox: Rete, poi la richiesta, scheda Risposta o Messaggi). Nei messaggi le frecce indicano la direzione (inviato/ricevuto). Se il messaggio compare in grassetto, lo script usa innerHTML: è una vulnerabilità XSS, da correggere con textContent. Estensione: mandare dal server, ogni 10 secondi, un messaggio "ora: hh:mm:ss" a tutti (in ChatEndpoint con un ScheduledExecutorService statico) e osservarlo arrivare senza che il browser abbia chiesto nulla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il Web non era nato per il tempo reale</h2></div>
+  <div class="cols-2 wide-left">
+    <figure class="citazione">
+      <blockquote>Il modo migliore per prevedere il futuro è inventarlo.</blockquote>
+      <figcaption><b>Alan Kay</b>, informatico, a una riunione allo Xerox PARC nel 1971</figcaption>
+    </figure>
+    <div class="card soft"><h3>2008 → 2011</h3><p class="small">Il Web era fatto per documenti. Gli sviluppatori inventarono trucchi come il long polling; nel 2008 Ian Hickson e Michael Carter proposero il nome <b>WebSocket</b>; nel 2011 l'IETF pubblicò la <b>RFC 6455</b>.</p></div>
+  </div>
+  <aside class="notes">Originale: "The best way to predict the future is to invent it." Alan Kay la racconta come risposta data nel 1971 in una riunione al PARC con i dirigenti Xerox che chiedevano previsioni sul futuro; traduzione nostra. Kay è uno dei padri della programmazione a oggetti (Smalltalk) e delle interfacce grafiche. La RFC 6455 è di dicembre 2011 (autori Ian Fette e Alexey Melnikov); l'API JavaScript è standardizzata dal WHATWG. Messaggio: molte tecnologie nascono da sviluppatori che "aggirano" i limiti di quelle esistenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tempo reale oggi</p><h2>Dalla chat all'intelligenza artificiale</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Le risposte che "si scrivono da sole"</h3><p>Quando un chatbot mostra la risposta parola per parola, il server del modello la manda in <b>streaming</b>: le API dei grandi modelli linguistici usano di solito i <b>Server-Sent Events</b>, perché il flusso va solo dal server al client. Le API vocali in tempo reale usano invece WebSocket o WebRTC, perché l'audio va nei due sensi.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Collaborare e giocare</h3><p>Negli editor condivisi come Figma o Google Docs ogni cursore, ogni lettera e ogni forma spostata è un piccolo messaggio inviato al server e inoltrato agli altri, proprio come nel nostro <b>ChatEndpoint</b>. Lo stesso vale per i giochi multiplayer nel browser.</p></div>
+  </div>
+  <aside class="notes">Esempio concreto: con le API di Anthropic o OpenAI, impostando "stream": true la risposta arriva come text/event-stream, con eventi che contengono pezzi di testo (token). Anche il Model Context Protocol (MCP), con cui gli assistenti AI si collegano a strumenti esterni, prevede un trasporto via HTTP che può usare SSE per i messaggi dal server. Figma ha descritto pubblicamente (2019) che i client del suo "multiplayer" si collegano ai server con WebSocket. Domanda: per un chatbot testuale, SSE o WebSocket? SSE basta: la domanda parte con una normale POST, la risposta arriva in streaming.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine la vita di una connessione WebSocket</h2></div>
+  <ol class="puzzle-ordina" data-id="ws-vita">
+    <li>Il browser scarica la pagina con una normale richiesta HTTP</li>
+    <li>Lo script esegue <code>new WebSocket(url)</code></li>
+    <li>Parte una GET con <code>Upgrade: websocket</code> e la chiave</li>
+    <li>Il server risponde <code>101</code> con <code>Sec-WebSocket-Accept</code></li>
+    <li>Client e server si scambiano frame nei due sensi</li>
+    <li>Uno dei due manda un frame di chiusura con il codice 1000</li>
+  </ol>
+  <aside class="notes">Domanda: dove avviene l'handshake TCP (SYN, SYN-ACK, ACK)? Prima del passo 3, perché la GET viaggia su una connessione TCP già aperta. Dopo il frame di chiusura l'altro capo risponde con il suo frame di chiusura e poi si chiude la connessione TCP. Far disegnare la stessa sequenza come diagramma: è un ottimo esercizio da esame.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Scegliere e giustificare la tecnologia</h2></div>
+  <table class="data compact">
+    <tr><th>Requisito del progetto</th><th>Scelta</th><th>Perché</th></tr>
+    <tr><td>Bacheca che si aggiorna ogni ora</td><td>Polling (o ricarica)</td><td>Rari aggiornamenti: la soluzione più semplice basta</td></tr>
+    <tr><td>Notifiche e stato di un ordine</td><td>Server-Sent Events</td><td>Solo dal server al client, HTTP normale, riconnessione automatica</td></tr>
+    <tr><td>Chat, gioco, lavagna condivisa</td><td>WebSocket</td><td>Messaggi frequenti nei due sensi, overhead minimo</td></tr>
+    <tr><td>Videochiamata</td><td>WebRTC</td><td>Audio e video diretti tra i browser, su UDP</td></tr>
+  </table>
+  <div class="callout">In una prova di progetto la risposta "uso WebSocket" vale poco da sola: vale il <b>perché</b>, confrontato con almeno un'alternativa.</div>
+  <aside class="notes">Ricordare anche gli aspetti di sicurezza da citare: wss:// (TLS), controllo dell'header Origin, autenticazione (per esempio un token verificato all'apertura), validazione dei messaggi ricevuti, textContent lato browser. E di scalabilità: con più server, i messaggi vanno distribuiti tra le istanze (per esempio con un broker come Redis), perché ogni server conosce solo le proprie sessioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il server accetta il cambio di protocollo con il codice di stato <span class="blank" data-risposta="101" style="--w:4ch"></span>.</p>
+    <p>L'header che chiede il cambio di protocollo si chiama <span class="blank" data-risposta="Upgrade"></span>.</p>
+    <p>WebSocket cifrato con TLS usa lo schema <span class="blank" data-risposta="wss|wss://"></span>.</p>
+    <p>Nel browser il messaggio ricevuto arriva nell'evento <span class="blank" data-risposta="onmessage|message" style="--w:9ch"></span>.</p>
+    <p>Su Tomcat la classe dell'endpoint si annota con <span class="blank" data-risposta="@ServerEndpoint|ServerEndpoint" style="--w:14ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 101; Upgrade; wss; onmessage (accettato message); @ServerEndpoint.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>HTTP: parla prima il browser. Polling, SSE e WebSocket aggirano il limite</li>
+      <li>Handshake: GET con Upgrade, risposta 101, Accept da SHA-1 e Base64</li>
+      <li>Poi frame piccoli: testo, binario, close, ping e pong</li>
+    </ul>
+    <ul class="points">
+      <li>Browser: <code>new WebSocket</code>, <code>onmessage</code>, <code>send</code>, sempre textContent</li>
+      <li>Tomcat: @ServerEndpoint, @OnOpen, @OnMessage, @OnClose</li>
+      <li>Maschera ≠ cifratura: fuori dal lab sempre wss://</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'Unità 3. Assegnare il compito "Il sondaggio in diretta" (lavoro di gruppo facoltativo). Per la verifica: c'è la simulazione su Novaula con le soluzioni.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kotlin per chi sa Java · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 3</p>
+  <h1>Kotlin per chi sa Java</h1>
+  <p class="lead">Stessa JVM nel cuore, molto meno codice da scrivere e un compilatore che ti impedisce di dimenticare il null. Il linguaggio ufficiale per le app Android.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>val e var, null safety, funzioni, data class, lambda</span></p>
+  <aside class="notes">Obiettivi: scrivere e leggere codice Kotlin di base confrontandolo con Java: val/var e inferenza dei tipi, template di stringa, null safety (?, ?., ?:, !!), funzioni con argomenti di default, when, classi e data class, lambda sulle collezioni. Durata: 2-3 ore. Ambiente: Kotlin Playground nel browser (play.kotlinlang.org, nessun account), oppure IntelliJ IDEA Community o un file Scratch di Android Studio. Il Playground basta per tutta la lezione: è la soluzione per i PC del laboratorio dove Android Studio è lento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che cosa di Java ti fa perdere più tempo?</h2></div>
+  <div class="poll" data-id="kt-java">
+    <ol><li>NullPointerException a sorpresa</li><li>Getter, setter, equals e toString da scrivere</li><li>La lunghezza del codice per cose semplici</li><li>I cast e le classi anonime</li></ol>
+  </div>
+  <aside class="notes">Ogni opzione corrisponde a una risposta di Kotlin che vedremo: null safety, data class, inferenza e funzioni concise, smart cast e lambda. Tenere il risultato in vista e tornarci alla fine della lezione: quale di questi problemi Kotlin ha risolto meglio?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Da un'isola russa al linguaggio di Android</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>2011</h3><p class="small">JetBrains, l'azienda di IntelliJ, presenta Kotlin. Il nome viene da un'isola vicino a San Pietroburgo, come Java è un'isola.</p></div>
+    <div class="card soft"><h3>2016</h3><p class="small">Esce Kotlin 1.0, compatibile con Java: le due lingue convivono nello stesso progetto.</p></div>
+    <div class="card soft"><h3>2017</h3><p class="small">Al Google I/O Kotlin diventa linguaggio ufficiale per Android.</p></div>
+    <div class="card fill"><h3>2019</h3><p class="small">Google annuncia lo sviluppo Android "Kotlin-first": documentazione ed esempi prima in Kotlin.</p></div>
+  </div>
+  <div class="callout">Kotlin si compila in bytecode JVM: può usare <b>tutte le librerie Java</b>, e Java può chiamare il codice Kotlin.</div>
+  <aside class="notes">Il progettista principale delle prime versioni è stato Andrey Breslav. Kotlin 2.0 (2024) ha introdotto il nuovo compilatore K2. Kotlin si compila anche in JavaScript, in codice nativo e in WebAssembly, ma per Android conta la strada JVM → DEX vista nella lezione 2. L'interoperabilità è stata la chiave del successo: le aziende hanno potuto aggiungere file Kotlin a progetti Java esistenti senza riscriverli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ciao, Kotlin</p><h2>Lo stesso programma, due lingue</h2></div>
+  <div class="cols-2">
+    <div class="stack"><p class="kicker">Java</p>
+<pre class="code" style="font-size:28px"><span class="k">public class</span> Main {
+  <span class="k">public static void</span> main(String[] args) {
+    <span class="k">final</span> String nome = <span class="s">"5G"</span>;
+    <span class="k">int</span> anni = 18;
+    System.out.println(<span class="s">"Ciao "</span> + nome
+        + <span class="s">", hai "</span> + anni + <span class="s">" anni"</span>);
+  }
+}</pre></div>
+    <div class="stack"><p class="kicker">Kotlin</p>
+<pre class="code" style="font-size:28px"><span class="k">fun</span> main() {
+    <span class="k">val</span> nome = <span class="s">"5G"</span>
+    <span class="k">var</span> anni = 18
+    println(<span class="s">"Ciao <span class="hl">$nome</span>, hai <span class="hl">$anni</span> anni"</span>)
+}</pre>
+    <ul class="points small"><li>Niente classe obbligatoria, niente punto e virgola.</li><li>I tipi si deducono: <code>nome</code> è String, <code>anni</code> è Int.</li></ul></div>
+  </div>
+  <aside class="notes">Template di stringa: $nome per una variabile, ${espressione} per un'espressione, per esempio ${anni + 1}. In Kotlin non ci sono tipi primitivi visibili: Int, Double, Boolean sono classi, ma il compilatore usa i primitivi della JVM quando può. Far notare che la funzione main può stare fuori da qualunque classe (funzione top-level).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">val e var</p><h2>Prima chiediti: questo valore cambierà?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px"><span class="k">val</span> pi = 3.14      <span class="c">// Double, fisso</span>
+<span class="k">var</span> punti = 0      <span class="c">// Int, riassegnabile</span>
+punti += 10
+<span class="k">val</span> classe: String = <span class="s">"5G"</span>
+pi = 3.0           <span class="c">// errore di compilazione</span>
+<span class="k">val</span> msg = <span class="s">"Punti: ${punti * 2}"</span>
+<span class="k">val</span> esito = <span class="k">if</span> (punti &gt;= 6) <span class="s">"ok"</span>
+            <span class="k">else</span> <span class="s">"no"</span></pre>
+    <div class="card soft"><h3>Regola pratica</h3><p>Usa <b>val</b> sempre, e passa a <b>var</b> solo quando serve davvero.</p><p class="small"><code>val</code> è come <code>final</code> in Java. E <code>if</code> è un'espressione: restituisce un valore, al posto dell'operatore ternario.</p><p class="small muted">msg vale "Punti: 20"; l'errore dice <i>Val cannot be reassigned</i>.</p></div>
+  </div>
+  <aside class="notes">Kotlin non ha l'operatore ternario ? : di Java, perché if, when e try sono espressioni. Il compilatore e Android Studio segnalano le var che non vengono mai riassegnate. Domanda: perché preferire val? (Meno stati che cambiano, codice più facile da seguire e più sicuro con i thread.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Questo codice compila?</h2></div>
+<pre class="code"><span class="k">val</span> lista = mutableListOf(1, 2)
+lista.add(3)
+println(lista)</pre>
+    <div class="poll" data-id="kt-val" data-tipo="quiz" data-risposta="B">
+      <ol><li>No: lista è val</li><li>Sì, stampa [1, 2, 3]</li><li>Sì, ma add viene ignorato</li><li>Compila, ma lancia un'eccezione</li></ol>
+      <p class="why">val blocca il riferimento, non l'oggetto: non puoi scrivere lista = altraLista, ma puoi modificare la lista mutabile. Come final in Java.</p>
+    </div>
+  <aside class="notes">Classico malinteso: val = immutabile. In realtà val = riferimento non riassegnabile. Per una lista davvero non modificabile si usa listOf(1, 2), che restituisce una List senza metodo add: lì sì che lista.add(3) non compila. Far provare entrambe le versioni nel Playground.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La media dei voti nel Kotlin Playground</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Apri <b>play.kotlinlang.org</b>: non serve un account.</li>
+      <li>Scrivi il programma a destra e premi <b>Run</b>.</li>
+      <li>Aggiungi un voto 4 alla lista ed esegui di nuovo.</li>
+      <li>Prova a riassegnare <code>media</code>: leggi l'errore.</li>
+      <li>Copia il codice finale in <b>media.kt</b>.</li>
+    </ol>
+    <div class="stack">
+<pre class="code" style="font-size:24px"><span class="k">fun</span> main() {
+    <span class="k">val</span> voti = listOf(7, 8, 6, 9)
+    <span class="k">var</span> somma = 0
+    <span class="k">for</span> (v <span class="k">in</span> voti) somma += v
+    <span class="k">val</span> media = somma.toDouble() / voti.size
+    <span class="k">val</span> esito = <span class="k">if</span> (media &gt;= 6) <span class="s">"promosso"</span>
+                <span class="k">else</span> <span class="s">"da recuperare"</span>
+    println(<span class="s">"Media: $media, $esito"</span>)
+}</pre>
+      <div class="check"><b>Controllo:</b> <code>Media: 7.5, promosso</code>. Con il 4: <code>Media: 6.8, promosso</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Errore atteso al punto 4: "Val cannot be reassigned". Se si toglie toDouble() la media diventa una divisione intera (7 invece di 7.5): stesso comportamento di Java. Versione idiomatica da mostrare alla fine: val media = voti.average(). Fallback: se il Playground è bloccato dalla rete della scuola, IntelliJ IDEA Community con un progetto Kotlin, oppure in Android Studio File, New, Scratch File, Kotlin.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Null safety</p><h2>L'errore da un miliardo di dollari</h2></div>
+  <figure class="citazione">
+    <blockquote>Lo chiamo il mio errore da un miliardo di dollari: è stata l'invenzione del riferimento nullo, nel 1965.</blockquote>
+    <figcaption><b>Tony Hoare</b>, informatico britannico, inventore del Quicksort, conferenza QCon a Londra, 2009</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card"><h3>In Java</h3><p>Ogni riferimento può essere null. Lo scopri a runtime, con una NullPointerException.</p></div>
+    <div class="card fill"><h3>In Kotlin</h3><p><b>String</b> non può mai essere null. Se serve, scrivi <b>String?</b> e il compilatore ti obbliga a gestirlo.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'originale inglese: "I call it my billion-dollar mistake. It was the invention of the null reference in 1965." Hoare introdusse il riferimento nullo nel linguaggio ALGOL W "perché era così facile da implementare". La cifra è la sua stima, retorica, dei danni causati in quarant'anni. Domanda: quante NullPointerException avete visto negli esercizi di Java di quest'anno?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori del null</p><h2>Quattro simboli da conoscere</h2></div>
+  <pre class="code" style="font-size:29px"><span class="k">var</span> nome: String = <span class="s">"Ada"</span>
+nome = <span class="k">null</span>                 <span class="c">// errore di compilazione</span>
+<span class="k">var</span> nick: String? = <span class="k">null</span>    <span class="c">// può essere null</span>
+println(nick?.length)        <span class="c">// null</span>
+println(nick?.length ?: 0)   <span class="c">// 0</span>
+<span class="k">if</span> (nick != <span class="k">null</span>) println(nick.length)   <span class="c">// smart cast</span>
+println(nick!!.length)       <span class="c">// NullPointerException</span></pre>
+  <div class="cols-4">
+    <div class="card soft"><h3><code>?</code></h3><p class="small">Dopo il tipo: può essere null.</p></div>
+    <div class="card soft"><h3><code>?.</code></h3><p class="small">Chiamata sicura: se è null, dà null.</p></div>
+    <div class="card soft"><h3><code>?:</code></h3><p class="small">Elvis: il valore di riserva.</p></div>
+    <div class="card bad"><h3><code>!!</code></h3><p class="small">"Fidati di me": se è null, esplode.</p></div>
+  </div>
+  <aside class="notes">Lo smart cast: dopo il controllo nick != null il compilatore tratta nick come String (non String?) dentro l'if, purché sia una variabile locale che non può cambiare nel frattempo. L'operatore Elvis si chiama così perché ?: ricorda il ciuffo di Elvis Presley visto di lato. Regola: un !! nel codice è un piccolo debito; nelle app Android si usa quasi solo quando si è certi, per esempio dopo un controllo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa stampa questa riga?</h2></div>
+  <pre class="code">println(<span class="s">"42a"</span>.toIntOrNull() ?: 0)</pre>
+  <div class="poll" data-id="kt-elvis" data-tipo="quiz" data-risposta="B">
+    <ol><li>42</li><li>0</li><li>null</li><li>NumberFormatException</li></ol>
+    <p class="why">toIntOrNull() non lancia eccezioni: se la stringa non è un intero valido restituisce null, e l'operatore Elvis lo sostituisce con 0.</p>
+  </div>
+  <aside class="notes">Chi viene da Java pensa a Integer.parseInt, che lancia NumberFormatException (D): in Kotlin c'è anche toInt(), che si comporta così. La A è per chi pensa che la conversione "si fermi" alla prima lettera, come atoi in C. In Android, toIntOrNull() è il modo pulito per leggere un numero scritto dall'utente in un campo di testo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Funzioni e when</p><h2>Meno cerimonie, più chiarezza</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:25px"><span class="k">fun</span> area(base: Double, h: Double = 1.0): Double {
+    <span class="k">return</span> base * h
+}
+<span class="k">fun</span> doppio(x: Int) = x * 2  <span class="c">// a espressione</span>
+
+<span class="k">fun</span> giudizio(voto: Int) = <span class="k">when</span> {
+    voto &gt;= 9 <span class="k">-&gt;</span> <span class="s">"ottimo"</span>
+    voto &gt;= 6 <span class="k">-&gt;</span> <span class="s">"sufficiente"</span>
+    <span class="k">else</span> <span class="k">-&gt;</span> <span class="s">"insufficiente"</span>
+}
+area(4.0)                   <span class="c">// 4.0</span>
+area(h = 3.0, base = 2.0)   <span class="c">// 6.0</span></pre>
+    <ul class="points">
+      <li>Il tipo sta dopo il nome: <code>x: Int</code>.</li>
+      <li>Argomenti con valore di default e con nome: niente overload.</li>
+      <li><code>when</code> sostituisce <code>switch</code> ed è un'espressione.</li>
+      <li>Una funzione che non restituisce nulla restituisce <code>Unit</code>.</li>
+    </ul>
+  </div>
+  <aside class="notes">Unit corrisponde a void, ma è un vero tipo con un solo valore. when può anche confrontare con valori (when (x) { 1 -&gt; ...; in 2..5 -&gt; ...; else -&gt; ... }) e con tipi (is String -&gt;). Gli argomenti con nome rendono leggibili chiamate con molti parametri: in Android li vedrete spesso, per esempio nelle API di Compose.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Ripulire i dati scritti dagli utenti</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Nel Playground crea la lista <code>input</code> con <code style="white-space:normal">listOf("8", "sette", "10", "", "6", null)</code>: è una <code>List&lt;String?&gt;</code>.</li>
+      <li>Ottieni gli interi validi con <code style="white-space:normal">input.mapNotNull { it?.toIntOrNull() }</code>.</li>
+      <li>Stampa quanti sono e la loro media con <code>average()</code>.</li>
+      <li>Scrivi <code>fun giudizio(voto: Int)</code> con <code>when</code> e stampala per ogni voto valido.</li>
+      <li>Salva in <b>pulizia.kt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>Validi: 3, media: 8.0</code>, poi <code>8 sufficiente</code>, <code>10 ottimo</code>, <code>6 sufficiente</code>. Senza il <code>?.</code> il codice non compila: perché?</div>
+  </div>
+  <aside class="notes">Soluzione: val numeri = input.mapNotNull { it?.toIntOrNull() }; println("Validi: ${numeri.size}, media: ${numeri.average()}"); for (n in numeri) println("$n ${giudizio(n)}"). Senza ?. il compilatore segnala che it è String? e non si può chiamare toIntOrNull() su un valore che può essere null. La stringa vuota "" dà null come "sette". È esattamente il problema delle app: l'utente scrive di tutto in un campo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Classi</p><h2>Venti righe di Java, una di Kotlin</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:22px"><span class="k">public class</span> Studente {
+  <span class="k">private final</span> String nome;
+  <span class="k">private final int</span> voto;
+  <span class="k">public</span> Studente(String nome, <span class="k">int</span> voto) {
+    <span class="k">this</span>.nome = nome; <span class="k">this</span>.voto = voto;
+  }
+  <span class="k">public</span> String getNome() { <span class="k">return</span> nome; }
+  <span class="k">public int</span> getVoto() { <span class="k">return</span> voto; }
+  <span class="c">// + equals(), hashCode(), toString()...</span>
+}</pre>
+    <div class="stack">
+<pre class="code" style="font-size:26px"><span class="k">data class</span> Studente(
+    <span class="k">val</span> nome: String,
+    <span class="k">val</span> voto: Int
+)
+<span class="k">val</span> s = Studente(<span class="s">"Ada"</span>, 9)   <span class="c">// niente new</span>
+println(s)        <span class="c">// Studente(nome=Ada, voto=9)</span>
+<span class="k">val</span> t = s.copy(voto = 10)</pre>
+      <p class="small">Il costruttore primario dichiara le proprietà. <code>data</code> genera <code>equals</code>, <code>hashCode</code>, <code>toString</code> e <code>copy</code>.</p>
+    </div>
+  </div>
+  <aside class="notes">In Kotlin le classi sono final per default: per estenderle si scrive open class. Con == Kotlin chiama equals (confronto di contenuto); il confronto di riferimento è ===. Il record di Java 16 (usato nella lezione 1) è il parente più stretto della data class, ma è sempre immutabile e non ha copy. Le proprietà si leggono come campi (s.nome) ma dietro ci sono getter, compatibili con Java (getNome()).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Traduttore</p><h2>Abbina il Java alla sua versione Kotlin</h2></div>
+  <dl class="puzzle-abbina" data-id="kt-traduci">
+    <dt><code>final String s = "a";</code></dt><dd><code>val s = "a"</code></dd>
+    <dt><code>String s = null;</code></dt><dd><code>var s: String? = null</code></dd>
+    <dt><code>s != null ? s.length() : 0</code></dt><dd><code>s?.length ?: 0</code></dd>
+    <dt><code>switch (x) { … }</code></dt><dd><code>when (x) { … }</code></dd>
+    <dt><code>record P(String n, int v)</code></dt><dd><code>data class P(val n: String, val v: Int)</code></dd>
+    <dt><code>x -&gt; x * 2</code></dt><dd><code>{ it * 2 }</code></dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. it è il nome implicito del parametro di una lambda con un solo argomento. Far notare che in Kotlin la lambda sta sempre tra graffe, anche quando è corta. Chiedere di leggere ad alta voce ogni riga Kotlin "in italiano": "s chiamata sicura length, altrimenti zero".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lambda e collezioni</p><h2>Il pezzo che userai di più in Android</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px"><span class="k">val</span> classe = listOf(Studente(<span class="s">"Ada"</span>, 9),
+    Studente(<span class="s">"Linus"</span>, 6), Studente(<span class="s">"Grace"</span>, 8))
+
+<span class="k">val</span> bravi = classe.filter { it.voto &gt;= 8 }
+                  .map { it.nome }
+println(bravi)                 <span class="c">// [Ada, Grace]</span>
+println(classe.maxBy { it.voto }.nome)  <span class="c">// Ada</span>
+
+<span class="c">// in un'app Android, lezione 6:</span>
+bottone.setOnClickListener { mostraToast() }</pre>
+    <ul class="points">
+      <li>Una lambda è un blocco di codice tra graffe, passato come valore.</li>
+      <li>Se è l'ultimo argomento, va <b>fuori dalle parentesi</b>.</li>
+      <li>È la stessa sintassi dei listener dei pulsanti.</li>
+    </ul>
+  </div>
+  <aside class="notes">Trailing lambda: f(x) { ... } equivale a f(x, { ... }); se la lambda è l'unico argomento le parentesi si omettono del tutto. setOnClickListener accetta un'interfaccia Java con un solo metodo (OnClickListener): Kotlin permette di passare una lambda al suo posto (SAM conversion). In Java sarebbe una classe anonima o una lambda Java. maxBy esiste da Kotlin 1.7 nella forma che lancia eccezione se la lista è vuota; maxByOrNull restituisce null.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Data class e lambda: il registro di classe</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Dichiara <code style="white-space:normal">data class Studente(val nome: String, val voto: Int)</code>.</li>
+      <li>Crea la lista: Ada 9, Linus 6, Grace 8, Alan 5.</li>
+      <li>Stampa i nomi ordinati per voto decrescente (<code>sortedByDescending</code>, <code>map</code>).</li>
+      <li>Stampa quanti sono sufficienti (<code>count</code>) e la media dei voti.</li>
+      <li>Crea una copia di Grace con voto 10, stampala; poi salva in <b>registro.kt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>[Ada, Grace, Linus, Alan]</code>, poi <code>3</code> e <code>7.0</code>, infine <code>Studente(nome=Grace, voto=10)</code>. E <code style="white-space:normal">Studente("Ada", 9) == Studente("Ada", 9)</code> stampa <code>true</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: val c = listOf(Studente("Ada", 9), Studente("Linus", 6), Studente("Grace", 8), Studente("Alan", 5)); println(c.sortedByDescending { it.voto }.map { it.nome }); println(c.count { it.voto &gt;= 6 }); println(c.map { it.voto }.average()); println(c[2].copy(voto = 10)). Media: 28 / 4 = 7.0. Il true finale dipende da data: con una class normale == confronterebbe i riferimenti (tramite equals ereditato) e stamperebbe false. Far togliere data per vederlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dal file .kt al telefono: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="kt-build">
+    <li>Scrivi MainActivity.kt in Android Studio</li>
+    <li>Il compilatore Kotlin produce bytecode JVM (.class)</li>
+    <li>D8 converte i .class in classes.dex</li>
+    <li>Gradle impacchetta DEX e risorse in un APK firmato</li>
+    <li>L'APK viene installato sul telefono</li>
+    <li>ART esegue il DEX, compilandolo in parte in codice macchina</li>
+  </ol>
+  <aside class="notes">Ripasso della lezione 2 con il nuovo linguaggio. Kotlin e Java seguono la stessa strada fino al DEX: per questo possono convivere nella stessa app. Nella build di rilascio prima di D8 interviene di solito R8, che riduce e offusca il codice (minificazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il linguaggio oggi</p><h2>Kotlin, interfacce e assistenti AI</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Interfacce scritte in Kotlin</h3><p>Il toolkit moderno di Android, <b>Jetpack Compose</b>, descrive le schermate con funzioni Kotlin e lambda, senza XML. Noi useremo le View XML del libro, ma la sintassi di oggi ti servirà per leggerlo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Codice scritto con l'AI</h3><p>Gli assistenti di programmazione, come Gemini in Android Studio, generano Kotlin in pochi secondi. La null safety blocca alcuni errori già in compilazione, ma la logica la devi controllare tu: leggere il codice resta il tuo mestiere.</p></div>
+  </div>
+  <aside class="notes">Compose: Google lo raccomanda per le nuove app ed è il modello predefinito di Android Studio per i nuovi progetti; lo citiamo senza insegnarlo. Sugli assistenti AI: richiedono di solito l'accesso con un account; a scuola meglio una dimostrazione del docente. Collegamento con il deck claude-code già visto in 5G. Domanda: un codice generato che compila è un codice corretto? (No: compila anche un if con la condizione sbagliata.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una variabile che non si può riassegnare si dichiara con <span class="blank" data-risposta="val"></span>.</p>
+    <p>Un tipo che può contenere null si scrive con un <span class="blank" data-risposta="?|punto interrogativo"></span> dopo il nome.</p>
+    <p>L'operatore <code>?:</code> si chiama operatore <span class="blank" data-risposta="elvis"></span>.</p>
+    <p>Una classe che genera da sola equals, toString e copy si dichiara con la parola <span class="blank" data-risposta="data"></span>.</p>
+    <p>In una lambda con un solo parametro il suo nome implicito è <span class="blank" data-risposta="it"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: val, ?, Elvis, data, it.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>val prima di tutto, var se serve</li>
+      <li>String non è mai null; String? sì</li>
+      <li>?. chiamata sicura, ?: Elvis, !! con cautela</li>
+    </ul>
+    <ul class="points">
+      <li>fun con default, when come espressione</li>
+      <li>data class al posto dei POJO</li>
+      <li>Lambda tra graffe: { it * 2 }</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: Android Studio e il progetto QuizTPSI. Chiedere a chi ha un PC a casa di installare Android Studio prima della lezione (download di alcuni GB).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

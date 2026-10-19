@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La comunicazione con RPC · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 2</p>
+  <h1>La comunicazione<br>con RPC</h1>
+  <p class="lead">Chiamare un metodo che vive su un altro computer come se fosse qui. Un'idea semplice e potente, con qualche trappola nascosta.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Stub, marshalling, Java RMI, gRPC, JSON-RPC</span></p>
+  <aside class="notes">Obiettivi: spiegare il meccanismo di una Remote Procedure Call (stub, skeleton, marshalling, binding), distinguere chiamate sincrone e asincrone, conoscere le semantiche di invocazione e l'idempotenza, scrivere un servizio Java RMI, riconoscere gRPC e JSON-RPC come RPC moderni. Durata indicativa: 3 ore. Prerequisiti: lezione 1 (sistemi distribuiti), interfacce ed eccezioni in Java. Servono due finestre di terminale per studente (o due studenti in coppia sulla stessa rete).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Due programmi su due computer devono collaborare. Tu come li faresti parlare?</h2></div>
+  <div class="poll" data-id="rpc-come">
+    <ol><li>Socket e un formato di messaggi inventato da me</li><li>Chiamando i metodi dell'altro come se fossero locali</li><li>Scrivendo e leggendo un file condiviso</li><li>Mettendo messaggi in una coda che l'altro legge</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione: tutte le risposte sono usate davvero. A: è quello che fanno le chat dell'Unità 3, ma ogni volta bisogna reinventare formato, errori e timeout. B: è l'idea dell'RPC, oggetto di oggi. C: funziona (tante integrazioni tra aziende passano ancora da file CSV su server FTP), ma è lenta e fragile. D: è il middleware a messaggi (RabbitMQ, Kafka), che citeremo con la SOA. Chiedere a chi sceglie B: cosa succede se l'altro computer è spento?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Xerox PARC, 1984</h2></div>
+  <figure class="citazione">
+    <blockquote>L'idea delle chiamate di procedura remota è piuttosto semplice.</blockquote>
+    <figcaption><b>Andrew Birrell</b> e <b>Bruce Nelson</b>, ricercatori di Xerox PARC, in <i>Implementing Remote Procedure Calls</i>, 1984</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><h3>L'osservazione</h3><p class="small">Tutti i programmatori sanno usare una chiamata di procedura. Allora facciamo sembrare una chiamata anche la comunicazione in rete.</p></div>
+    <div class="card soft"><h3>La difficoltà</h3><p class="small">Il resto dell'articolo, decine di pagine, spiega perché realizzarla bene non è semplice per niente: guasti, nomi, prestazioni.</p></div>
+  </div>
+  <aside class="notes">Originale: "The idea of remote procedure calls (hereinafter called RPC) is quite simple." È l'inizio della sezione introduttiva dell'articolo pubblicato su ACM Transactions on Computer Systems nel febbraio 1984. Traduzione nostra. L'ironia è voluta dagli autori: l'idea è semplice, l'implementazione no. Lo stesso decennio vede la Sun RPC (ONC RPC), usata ancora oggi dal file system di rete NFS. Domanda: quali problemi esistono in rete e non in una chiamata locale? Far emergere: la rete può perdere messaggi, il server può essere spento, i dati vanno convertiti, il tempo di risposta è mille o un milione di volte più alto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona</p><h2>Il trucco: due sostituti, uno per parte</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Client</h3><p class="small">chiama <code>somma(2, 3)</code> come un metodo qualunque</p></div>
+    <div class="card soft"><h3>Stub client</h3><p class="small">impacchetta nome e parametri in byte (<b>marshalling</b>)</p></div>
+    <div class="card night"><h3>Rete</h3><p class="small">il messaggio viaggia su TCP o UDP</p></div>
+    <div class="card soft"><h3>Skeleton</h3><p class="small">spacchetta (<b>unmarshalling</b>) e chiama il metodo vero</p></div>
+    <div class="card"><h3>Server</h3><p class="small">esegue <code>somma</code> e restituisce 5</p></div>
+  </div>
+  <p>La risposta fa il percorso al contrario: il client non vede né socket né byte.</p>
+  <div class="callout hl">All'esame: questo schema si disegna come <b>diagramma di sequenza</b>, con una colonna per client, stub, rete, skeleton e server.</div>
+  <aside class="notes">Lo stub client (detto anche proxy) ha la stessa interfaccia del servizio remoto: per il client è indistinguibile dall'oggetto vero. Lo skeleton (o stub server) riceve i messaggi, li decodifica e chiama l'implementazione. In molti sistemi stub e skeleton sono generati automaticamente da una descrizione dell'interfaccia scritta in un IDL (Interface Definition Language): file .x per Sun RPC, interfacce Java per RMI, file .proto per gRPC, WSDL per SOAP. Far disegnare alla lavagna il diagramma di sequenza: è un esercizio d'esame classico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Marshalling</p><h2>Trasformare i parametri in byte, e ritorno</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li>Client e server devono essere d'accordo sul <b>formato</b>: quanti byte per un int, come si scrive una stringa.</li>
+        <li><b>Ordine dei byte</b>: le CPU Intel e ARM lavorano in little-endian, in rete si usa per tradizione il big-endian.</li>
+        <li>I <b>puntatori</b> e i riferimenti non hanno senso su un'altra macchina: si passa una <b>copia</b> del dato.</li>
+        <li>Formati <b>binari</b> (compatti, veloci) o <b>testuali</b> (XML, JSON: leggibili, più grandi).</li>
+      </ul>
+    </div>
+    <div class="card night">
+      <h3>Passaggio per copia</h3>
+      <p class="small">In locale, se il metodo modifica l'oggetto ricevuto, il chiamante vede la modifica.</p>
+      <p class="small">In remoto il server lavora su una <b>copia</b>: il chiamante non vede nulla, a meno che il valore non torni nella risposta.</p>
+      <p class="small muted">Una delle differenze che la "trasparenza" non può nascondere.</p>
+    </div>
+  </div>
+  <aside class="notes">Il termine marshalling viene dall'idea di "schierare in ordine" i dati per il trasporto. Sinonimi frequenti: serializzazione, codifica. Big-endian è detto anche network byte order (RFC 1700); Java scrive sempre in big-endian con DataOutputStream, qualunque sia la CPU. Domanda: se il client Java invia un int a un server C su un PC Intel che lo legge così com'è, che cosa succede? (Legge il numero con i byte invertiti: 2 diventa 33 554 432.) Il prossimo laboratorio mostra i byte veri.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Guarda i byte di una chiamata</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)">
+<pre class="code" style="font-size:21px"><span class="k">import</span> java.io.*;
+
+<span class="k">public class</span> Marshal {
+  <span class="k">public static void</span> main(String[] a) <span class="k">throws</span> IOException {
+    <span class="k">var</span> buf = <span class="k">new</span> ByteArrayOutputStream();
+    <span class="k">var</span> out = <span class="k">new</span> DataOutputStream(buf);
+    out.writeUTF(<span class="s">"somma"</span>);   <span class="c">// nome del metodo</span>
+    out.writeInt(2);         <span class="c">// primo parametro</span>
+    out.writeInt(300);       <span class="c">// secondo parametro</span>
+    <span class="k">for</span> (<span class="k">byte</span> b : buf.toByteArray())
+      System.out.printf(<span class="s">"%02X "</span>, b);
+    System.out.println(<span class="s">"\n"</span> + buf.size() + <span class="s">" byte"</span>);
+    <span class="k">var</span> in = <span class="k">new</span> DataInputStream(
+        <span class="k">new</span> ByteArrayInputStream(buf.toByteArray()));
+    System.out.println(in.readUTF() + <span class="s">"("</span> + in.readInt()
+        + <span class="s">", "</span> + in.readInt() + <span class="s">")"</span>);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Scrivi <b>Marshal.java</b> ed eseguilo con <code>java Marshal.java</code>.</li>
+        <li>Trova nei byte la lunghezza della stringa, le lettere e i due int.</li>
+        <li>Cambia 300 in -1: che byte ottieni?</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> <code style="white-space:normal">00 05 73 6F 6D 6D 61 00 00 00 02 00 00 01 2C</code>, 15 byte, poi <code style="white-space:normal">somma(2, 300)</code>. Con -1 ottieni <code style="white-space:normal">FF FF FF FF</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Lettura dei byte: 00 05 è la lunghezza della stringa (writeUTF scrive prima due byte di lunghezza), 73 6F 6D 6D 61 sono s o m m a in ASCII, 00 00 00 02 è il 2 su 4 byte in big-endian, 00 00 01 2C è 300 (0x12C = 256 + 44). -1 in complemento a due è FF FF FF FF. Il lato "server" è simulato dalla DataInputStream: deve leggere nello stesso ordine in cui il client ha scritto, altrimenti ottiene numeri senza senso. Esperimento: invertire le due readInt con readUTF e osservare l'eccezione o i valori sbagliati. Questo è esattamente il lavoro che stub e skeleton fanno per noi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine una chiamata remota</h2></div>
+  <ol class="puzzle-ordina" data-id="rpc-ordine">
+    <li>Il client chiama il metodo sullo stub locale</li>
+    <li>Lo stub fa il marshalling di nome e parametri</li>
+    <li>Il messaggio viaggia in rete fino al server</li>
+    <li>Lo skeleton fa l'unmarshalling e chiama il metodo vero</li>
+    <li>Il server esegue e restituisce il risultato allo skeleton</li>
+    <li>La risposta torna in rete e lo stub la decodifica</li>
+    <li>Il client riceve il valore di ritorno e riprende</li>
+  </ol>
+  <aside class="notes">Errore frequente: mettere l'esecuzione prima dell'unmarshalling, o dimenticare che anche la risposta richiede marshalling. Far notare che il client, in una chiamata sincrona, resta bloccato dal passo 1 al passo 7: per tutto quel tempo non fa altro. Domanda: in quale passo può guastarsi qualcosa? (In tutti: è il motivo della prossima slide.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il client chiama <code>versa(conto, 100)</code> e dopo 5 secondi scatta il timeout. Che cosa sa?</h2></div>
+  <div class="poll" data-id="rpc-timeout" data-tipo="quiz" data-risposta="D">
+    <ol><li>Che il server non ha eseguito il versamento</li><li>Che il server ha eseguito, ma la risposta si è persa</li><li>Che la rete gli manderà un'eccezione con la causa precisa</li><li>Niente di certo: richiesta persa, server lento o risposta persa</li></ol>
+    <p class="why">Da fuori i tre casi sono identici: il client non riceve niente. Il server potrebbe aver versato i 100 euro oppure no. Per questo una chiamata remota non sarà mai uguale a una locale, e bisogna progettare cosa fare quando si riprova.</p>
+  </div>
+  <aside class="notes">È il cuore della lezione. Molti scelgono A (pensano che il timeout significhi "non fatto") o C (pensano che l'eccezione dica la causa). In realtà il client sa solo che non ha ricevuto risposta in tempo. Collegamento con il saggio "A Note on Distributed Computing" (Waldo, Wyant, Wollrath, Kendall, Sun Microsystems, 1994): latenza, accesso alla memoria, guasto parziale e concorrenza rendono impossibile trattare in modo identico oggetti locali e remoti. Ann Wollrath è anche tra i principali autori di Java RMI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Semantiche di invocazione</p><h2>Se riprovo, quante volte viene eseguito?</h2></div>
+  <table class="data compact">
+    <tr><th>Semantica</th><th>Come si ottiene</th><th>Rischio</th></tr>
+    <tr><td><b>Almeno una volta</b></td><td>Il client ritrasmette finché non riceve risposta</td><td>Esecuzioni doppie</td></tr>
+    <tr><td><b>Al più una volta</b></td><td>Il server ricorda gli ID già visti e scarta i duplicati</td><td>Può non essere eseguita mai</td></tr>
+    <tr><td><b>Esattamente una volta</b></td><td>Ritrasmissione + ID + memoria persistente sul server</td><td>Costosa, difficile da garantire</td></tr>
+  </table>
+  <div class="cols-2">
+    <div class="card ok"><h3>Idempotente</h3><p class="small">Eseguirla due volte dà lo stesso effetto di una: <code>leggiSaldo()</code>, <code>impostaEmail(x)</code>. Si può riprovare senza paura.</p></div>
+    <div class="card bad"><h3>Non idempotente</h3><p class="small"><code>versa(100)</code> eseguita due volte versa 200. Si protegge con un <b>ID univoco</b> della richiesta.</p></div>
+  </div>
+  <aside class="notes">Java RMI offre la semantica "al più una volta": se c'è un errore di rete il client riceve una RemoteException e decide lui. Esempio reale di ID di richiesta: molte API di pagamento, come Stripe, accettano un header Idempotency-Key; se la stessa chiave arriva due volte, il server restituisce il risultato della prima esecuzione invece di addebitare di nuovo. Lo ritroveremo con HTTP: GET, PUT e DELETE sono idempotenti per specifica, POST no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>La risposta si è persa. Quale chiamata puoi ripetere senza danni?</h2></div>
+  <div class="poll" data-id="rpc-idem" data-tipo="quiz" data-risposta="B">
+    <ol><li><code style="white-space:normal">creaOrdine(carrello)</code></li><li><code style="white-space:normal">impostaIndirizzo(utente, "Via Roma 1")</code></li><li><code style="white-space:normal">aggiungiPunti(utente, 10)</code></li><li><code style="white-space:normal">inviaNotifica(utente, "Spedito")</code></li></ol>
+    <p class="why">Impostare l'indirizzo a "Via Roma 1" due volte lascia lo stesso stato: è idempotente. Le altre, ripetute, creano due ordini, aggiungono 20 punti o mandano due notifiche.</p>
+  </div>
+  <aside class="notes">La D è il tranello: "tanto è solo una notifica". Due notifiche uguali sono un fastidio, ma il principio vale: l'effetto non è lo stesso. Chiedere come rendere idempotente aggiungiPunti: trasformarla in aggiungiPunti(utente, 10, idOperazione) e far ricordare al server gli ID già applicati, oppure in impostaPunti(utente, totale) se il client conosce il totale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sincrona o asincrona</p><h2>Aspettare la risposta, oppure no</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Sincrona</h3><p class="small">Il client si blocca finché arriva la risposta. Semplice da scrivere, ma un server lento blocca anche il client.</p><p class="muted small">Java RMI, una chiamata HTTP classica</p></div>
+    <div class="card soft"><h3>Asincrona</h3><p class="small">Il client riceve subito un <b>future</b> o registra una <b>callback</b> e continua a lavorare.</p><p class="muted small"><code>sendAsync</code> di HttpClient, gli stub asincroni di gRPC</p></div>
+    <div class="card"><h3>Senza risposta</h3><p class="small">Il client invia e non aspetta nulla (<i>one-way</i>). Utile per log e notifiche.</p><p class="muted small">Non sa mai se è arrivata</p></div>
+  </div>
+<pre class="code" style="font-size:24px"><span class="k">var</span> futuro = client.sendAsync(req, BodyHandlers.ofString());   <span class="c">// non si blocca</span>
+<span class="c">// ... intanto il programma fa altro ...</span>
+futuro.thenAccept(r -> System.out.println(r.body()));            <span class="c">// callback</span></pre>
+  <aside class="notes">Le app con interfaccia grafica, Android compreso (Unità 4), non possono fare chiamate di rete sincrone sul thread principale: l'interfaccia si bloccherebbe. Su Android una chiamata di rete sul thread principale provoca NetworkOnMainThreadException. sendAsync restituisce un CompletableFuture&lt;HttpResponse&lt;String&gt;&gt;. Domanda: in un'app di chat, l'invio di un messaggio è meglio sincrono o asincrono? (Asincrono, con un indicatore "inviato" che compare quando arriva la conferma.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Java RMI</p><h2>RPC a oggetti, già dentro il JDK</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>L'interfaccia remota estende <code>java.rmi.Remote</code>; ogni metodo dichiara <code>throws RemoteException</code>.</li>
+      <li>Il server <b>esporta</b> l'oggetto: Java crea lo stub e apre una porta.</li>
+      <li>Il <b>registro RMI</b> (porta 1099) associa un nome allo stub: è il servizio di <b>binding</b>.</li>
+      <li>Il client fa <code>lookup("calc")</code>, riceve lo stub e chiama i metodi.</li>
+      <li>Parametri e risultati devono essere <code>Serializable</code> o a loro volta remoti.</li>
+    </ul>
+    <div class="card night">
+      <h3>Pregi e limiti</h3>
+      <p class="small"><b>+</b> nessuna libreria esterna, tipi Java veri, eccezioni.</p>
+      <p class="small"><b>−</b> solo Java con Java: niente interoperabilità con altri linguaggi.</p>
+      <p class="small"><b>−</b> passa male i firewall: porte dinamiche, protocollo proprietario.</p>
+      <p class="small muted">Per questo sul Web hanno vinto i web service.</p>
+    </div>
+  </div>
+  <aside class="notes">RMI è nel JDK dalla versione 1.1 (1997) ed è ancora presente in Java 21 (modulo java.rmi); è stata rimossa nel JDK 17 solo la parte di "attivazione". La RemoteException obbligatoria è una scelta voluta: costringe il programmatore a ricordare che la chiamata è remota e può fallire. È la lezione di Waldo e colleghi messa nel linguaggio. Nei due laboratori seguenti si scrive un servizio RMI completo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un servizio RMI: interfaccia e server</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)">
+<pre class="code" style="font-size:19px"><span class="c">// ServerRmi.java</span>
+<span class="k">import</span> java.rmi.registry.*;
+<span class="k">import</span> java.rmi.server.UnicastRemoteObject;
+<span class="k">public class</span> ServerRmi <span class="k">implements</span> Calcolatrice {
+  <span class="k">static</span> Registry registro;      <span class="c">// da tenere vivo</span>
+  <span class="k">public int</span> somma(<span class="k">int</span> a, <span class="k">int</span> b) {
+    System.out.println(<span class="s">"Chiamata remota: somma("</span> + a + <span class="s">", "</span> + b + <span class="s">")"</span>);
+    <span class="k">return</span> a + b;
+  }
+  <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> Exception {
+    Calcolatrice stub = (Calcolatrice)
+        UnicastRemoteObject.exportObject(<span class="k">new</span> ServerRmi(), 0);
+    registro = LocateRegistry.createRegistry(<span class="hl">1099</span>);
+    registro.rebind(<span class="s">"calc"</span>, stub);
+    System.out.println(<span class="s">"Server RMI pronto sulla porta 1099"</span>);
+  }
+}</pre>
+    <div class="stack">
+<pre class="code" style="font-size:18px;padding:22px 28px"><span class="c">// Calcolatrice.java</span>
+<span class="k">import</span> java.rmi.*;
+<span class="k">public interface</span> Calcolatrice
+    <span class="k">extends</span> Remote {
+  <span class="k">int</span> somma(<span class="k">int</span> a, <span class="k">int</span> b)
+      <span class="k">throws</span> RemoteException;
+}</pre>
+      <ol class="steps small">
+        <li>Cartella <b>rmi</b> con i due file, poi <code>javac *.java</code></li>
+        <li>Avvia <code>java ServerRmi</code> e lascia aperta la finestra.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> compare <b>Server RMI pronto</b> e il programma resta in attesa di chiamate.</div>
+    </div>
+  </div>
+  <aside class="notes">exportObject con porta 0 lascia scegliere al sistema una porta libera per l'oggetto: il registro sulla 1099 serve solo a trovarlo. Il campo statico registro evita che il registro venga eliminato dal garbage collector. Se Windows chiede di consentire l'accesso alla rete a Java, per una prova in locale basta "Reti private"; in coppia su due PC serve che il firewall della scuola lasci passare le porte (spesso non è così: in quel caso restare su localhost). Errore tipico: "port already in use" se un compagno o un'esecuzione precedente occupa la 1099; chiudere l'altra finestra.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il client RMI, e che cosa succede quando il server cade</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)">
+<pre class="code" style="font-size:19px"><span class="c">// ClientRmi.java</span>
+<span class="k">import</span> java.rmi.registry.*;
+<span class="k">public class</span> ClientRmi {
+  <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> Exception {
+    String host = args.length > 0 ? args[0] : <span class="s">"localhost"</span>;
+    Registry registro = LocateRegistry.getRegistry(host, 1099);
+    Calcolatrice calc = (Calcolatrice) registro.lookup(<span class="s">"calc"</span>);
+    System.out.println(<span class="s">"Ho in mano: "</span> + calc.getClass().getName());
+    System.out.println(<span class="s">"2 + 3 = "</span> + calc.somma(2, 3));
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>In un secondo terminale: <code>javac ClientRmi.java</code> e <code>java ClientRmi</code></li>
+        <li>Guarda anche la finestra del server.</li>
+        <li>Ferma il server con Ctrl+C e rilancia il client.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> il client stampa una classe come <code style="white-space:normal">jdk.proxy1.$Proxy0</code> (lo stub!) e <b>2 + 3 = 5</b>. A server spento: <code style="white-space:normal">ConnectException</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Il nome della classe stampato dimostra che il client non ha in mano l'oggetto ServerRmi, ma un proxy dinamico generato dal JDK: lo stub. Il nome esatto può variare (jdk.proxy1.$Proxy0, jdk.proxy2.$Proxy1). La ConnectException a server spento è la "trasparenza che si rompe": la chiamata sembra locale finché la rete funziona. Variante in coppia, se la rete lo permette: il server su un PC, il client su un altro con "java ClientRmi 192.168.x.y". Estensione: aggiungere all'interfaccia un metodo dividi(double, double) che lancia un'eccezione se b è zero, e vedere come arriva al client.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">gRPC</p><h2>L'RPC moderno: un contratto, tanti linguaggi</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:25px"><span class="c">// calcolatrice.proto</span>
+syntax = <span class="s">"proto3"</span>;
+<span class="k">service</span> Calcolatrice {
+  <span class="k">rpc</span> Somma (Operandi) <span class="k">returns</span> (Risultato);
+}
+<span class="k">message</span> Operandi  { int32 a = 1; int32 b = 2; }
+<span class="k">message</span> Risultato { int32 valore = 1; }</pre>
+    <ul class="points small">
+      <li>Creato da Google, open source dal 2015.</li>
+      <li>Il file <b>.proto</b> è l'IDL: da qui si generano stub per Java, Python, Go, C#, Kotlin…</li>
+      <li>Dati in <b>Protocol Buffers</b>, binario e compatto: <code>Operandi{a=2, b=300}</code> diventa <code>08 02 10 AC 02</code>, 5 byte.</li>
+      <li>Viaggia su <b>HTTP/2</b>: più chiamate sulla stessa connessione, streaming nei due sensi.</li>
+    </ul>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>gRPC è ovunque nell'infrastruttura del cloud: Kubernetes lo usa per parlare con i runtime dei container, il database etcd che regge Kubernetes espone un'API gRPC. Tra microservizi interni è spesso preferito a JSON perché è più veloce da codificare e più piccolo.</p></div>
+  <aside class="notes">Codifica Protocol Buffers dei 5 byte: 08 = campo 1 di tipo varint, 02 = valore 2; 10 = campo 2 varint; AC 02 = 300 in varint (7 bit per byte, il bit alto dice "continua": 300 = 0101100 + 10, quindi 0xAC poi 0x02). Con DataOutputStream gli stessi due int occupavano 8 byte. I numeri dopo l'uguale nel .proto non sono valori ma numeri di campo: identificano il campo nei byte, per questo non vanno mai cambiati quando si aggiorna il servizio. Curiosità: secondo il progetto la "g" cambia significato a ogni versione; nella 1.0 stava per "gRPC" stesso, un acronimo ricorsivo. In un browser gRPC non si usa direttamente: serve gRPC-Web o un gateway, uno dei motivi per cui le API pubbliche restano spesso REST con JSON.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni tecnologia RPC alla sua carta d'identità</h2></div>
+  <dl class="puzzle-abbina" data-id="rpc-famiglia">
+    <dt>Sun RPC</dt><dd>Anni '80, IDL in file .x, la usa ancora NFS</dd>
+    <dt>Java RMI</dt><dd>Solo tra programmi Java, registro sulla porta 1099</dd>
+    <dt>SOAP</dt><dd>Messaggi XML descritti da un WSDL</dd>
+    <dt>gRPC</dt><dd>File .proto, Protocol Buffers su HTTP/2</dd>
+    <dt>JSON-RPC 2.0</dt><dd>Messaggi JSON con method, params e id</dd>
+  </dl>
+  <aside class="notes">SOAP sarà l'argomento delle lezioni 6 e 7: anche SOAP nasce come RPC in XML ("Simple Object Access Protocol"). JSON-RPC 2.0 è una specifica di poche pagine (2010): una richiesta ha jsonrpc, method, params e id; la risposta ha result oppure error, con lo stesso id. È piccola, ma oggi è importantissima: la usa il Model Context Protocol, nella prossima slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Come un'AI chiama uno strumento</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:22px"><span class="c">// l'app AI chiede al server MCP</span>
+{ <span class="s">"jsonrpc"</span>: <span class="s">"2.0"</span>, <span class="s">"id"</span>: 7,
+  <span class="s">"method"</span>: <span class="s">"tools/call"</span>,
+  <span class="s">"params"</span>: { <span class="s">"name"</span>: <span class="s">"meteo"</span>,
+     <span class="s">"arguments"</span>: { <span class="s">"citta"</span>: <span class="s">"Milano"</span> } } }
+
+<span class="c">// il server MCP risponde</span>
+{ <span class="s">"jsonrpc"</span>: <span class="s">"2.0"</span>, <span class="s">"id"</span>: 7,
+  <span class="s">"result"</span>: { <span class="s">"content"</span>: [
+     { <span class="s">"type"</span>: <span class="s">"text"</span>, <span class="s">"text"</span>: <span class="s">"14 °C, nuvoloso"</span> } ] } }</pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Model Context Protocol</h3><p>Presentato da Anthropic nel 2024 e adottato da molti strumenti di AI, MCP collega un modello linguistico a strumenti e dati esterni. I messaggi sono <b>JSON-RPC 2.0</b>: con <b>tools/list</b> l'app scopre gli strumenti, con <b>tools/call</b> li chiama. Il modello sceglie lo strumento; la chiamata vera la fa il programma, come uno stub.</p></div>
+  </div>
+  <aside class="notes">Precisione importante: il modello linguistico non apre connessioni. Produce una richiesta strutturata ("voglio usare lo strumento meteo con citta=Milano"); è l'applicazione client che invia il messaggio JSON-RPC al server MCP e poi passa il risultato al modello. I trasporti previsti dalla specifica sono stdio (processo locale) e HTTP. Tutto ciò che abbiamo detto su RPC vale anche qui: timeout, errori, idempotenza (uno strumento che invia email non va ripetuto alla leggera), sicurezza (chi autorizza la chiamata?). Gli studenti hanno già visto agenti AI nella lezione claude-code. Il prossimo laboratorio costruisce un mini server JSON-RPC.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Un mini server JSON-RPC, provato con curl</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)">
+<pre class="code" style="font-size:18px"><span class="k">var</span> srv = HttpServer.create(<span class="k">new</span> InetSocketAddress(<span class="hl">8090</span>), 0);
+srv.createContext(<span class="s">"/rpc"</span>, ex -> {
+  String q = <span class="k">new</span> String(ex.getRequestBody().readAllBytes());
+  Matcher p = Pattern.compile(<span class="s">"\\[(-?\\d+),\\s*(-?\\d+)\\]"</span>).matcher(q);
+  Matcher id = Pattern.compile(<span class="s">"\"id\":\\s*(\\d+)"</span>).matcher(q);
+  String n = id.find() ? id.group(1) : <span class="s">"null"</span>;
+  String r = q.contains(<span class="s">"\"somma\""</span>) &amp;&amp; p.find()
+    ? <span class="s">"\"result\":"</span> + (Integer.parseInt(p.group(1)) + Integer.parseInt(p.group(2)))
+    : <span class="s">"\"error\":{\"code\":-32601,\"message\":\"Method not found\"}"</span>;
+  <span class="k">byte</span>[] out = (<span class="s">"{\"jsonrpc\":\"2.0\","</span> + r + <span class="s">",\"id\":"</span> + n + <span class="s">"}"</span>).getBytes();
+  ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"application/json"</span>);
+  ex.sendResponseHeaders(200, out.length);
+  ex.getResponseBody().write(out);
+  ex.close();
+});
+srv.start();</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li><b>JsonRpc.java</b>: codice nel <code>main</code>; import di HttpServer, InetSocketAddress e java.util.regex.</li>
+        <li><b>richiesta.json</b>: chiama <b>somma</b> con params [2, 40] e id 1.</li>
+        <li><code style="white-space:normal">curl -d @richiesta.json http://localhost:8090/rpc</code></li>
+        <li>Prova un metodo che non esiste.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="check"><b>Controllo:</b> <code style="white-space:normal">{"jsonrpc":"2.0","result":42,"id":1}</code>. Con un metodo sconosciuto: <code style="white-space:normal">"error":{"code":-32601,…}</code>, il codice che JSON-RPC 2.0 riserva a "Method not found".</div>
+  <aside class="notes">Contenuto di richiesta.json: {"jsonrpc": "2.0", "method": "somma", "params": [2, 40], "id": 1}. Mettere la richiesta in un file evita i problemi con le virgolette nel Prompt dei comandi; in PowerShell usare curl.exe. Il server è volutamente rudimentale: usa espressioni regolari invece di un vero parser JSON (in un progetto vero si userebbe una libreria come Jackson o Gson). Far notare che anche con un errore il codice HTTP è 200: in JSON-RPC l'errore sta nel corpo del messaggio, non nel protocollo di trasporto; con REST (lezioni successive) sarà il contrario. Estensione: aggiungere il metodo "moltiplica"; rispondere con il codice -32602 "Invalid params" se i parametri mancano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il componente che, sul client, finge di essere l'oggetto remoto si chiama <span class="blank" data-risposta="stub|proxy"></span>.</p>
+    <p>Trasformare nome e parametri in byte da spedire si dice <span class="blank" data-risposta="marshalling|serializzazione"></span>.</p>
+    <p>Un'operazione che ripetuta due volte ha lo stesso effetto di una è <span class="blank" data-risposta="idempotente"></span>.</p>
+    <p>In Java RMI il registro ascolta di solito sulla porta <span class="blank" data-risposta="1099"></span>.</p>
+    <p>Il Model Context Protocol usa messaggi <span class="blank" data-risposta="JSON-RPC|JSON RPC|JSONRPC"></span> 2.0.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: stub (accettato proxy), marshalling (accettato serializzazione), idempotente, 1099, JSON-RPC.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>RPC: una chiamata remota travestita da locale</li>
+      <li>Stub e skeleton fanno marshalling e unmarshalling</li>
+      <li>Timeout: il client non sa se il server ha eseguito</li>
+    </ul>
+    <ul class="points">
+      <li>Idempotenza e ID di richiesta per riprovare in sicurezza</li>
+      <li>Java RMI: solo Java; gRPC: .proto, HTTP/2, multi-linguaggio</li>
+      <li>JSON-RPC 2.0, il formato dei messaggi di MCP</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (registro dei voti remoto con RMI). Prossima lezione: le architetture orientate ai servizi, cioè che cosa succede quando i servizi remoti diventano decine o centinaia.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

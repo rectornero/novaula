@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il rapporto con la Pubblica Amministrazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Educazione civica · Cittadinanza digitale</p>
+  <h1>Il rapporto con la<br>Pubblica Amministrazione</h1>
+  <p class="lead">Iscriverti all'università, pagare le tasse, scaricare un certificato, ricevere una multa: tra pochi mesi lo farai da solo. SPID, CIE, app IO, PagoPA e i tuoi diritti digitali.</p>
+  <aside class="notes">Obiettivi: conoscere i diritti del Codice dell'Amministrazione Digitale (D.Lgs. 82/2005); distinguere SPID e CIE; sapere a che cosa servono app IO, PagoPA, ANPR, Fascicolo sanitario elettronico, domicilio digitale e INAD; riconoscere le truffe che usano il nome della PA. Durata: 2-3 ore. REGOLA DEL LABORATORIO: in classe si esplorano solo pagine pubbliche, senza login; nessuno studente usa le proprie credenziali SPID/CIE né inserisce dati personali. I siti istituzionali cambiano spesso: controllarne i percorsi il giorno prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai già un'identità digitale?</h2></div>
+  <div class="poll" data-id="pa-identita">
+    <ol><li>Sì, SPID</li><li>Sì, la CIE con il PIN</li><li>Sì, entrambe</li><li>Non ancora</li></ol>
+  </div>
+  <aside class="notes">Sondaggio anonimo. Chiedere poi (a voce, senza obbligo): per che cosa l'avete già usata? Risposte tipiche: registro elettronico, iscrizioni scolastiche, Carta della cultura o del merito, prenotazioni sanitarie. Ricordare: chi non l'ha ancora la otterrà presto per iscriversi all'università o ai concorsi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La legge · D.Lgs. 82/2005</p><h2>Il Codice dell'Amministrazione Digitale: i tuoi diritti</h2></div>
+  <div class="cols-3">
+    <div class="card"><h4>Usare le tecnologie</h4><p class="small">Hai diritto di usare strumenti digitali accessibili ed efficaci con la PA (art. 3).</p></div>
+    <div class="card"><h4>Identità digitale</h4><p class="small">Accedi ai servizi online con SPID e CIE (art. 64), anche da un unico punto: l'app IO (art. 64-bis).</p></div>
+    <div class="card"><h4>Pagare online</h4><p class="small">Puoi pagare la PA con sistemi elettronici tramite la piattaforma PagoPA (art. 5).</p></div>
+    <div class="card"><h4>Domicilio digitale</h4><p class="small">Puoi scegliere un indirizzo PEC dove ricevere le comunicazioni con valore legale (art. 3-bis).</p></div>
+    <div class="card"><h4>Dati aperti</h4><p class="small">I dati pubblici sono aperti per impostazione predefinita, salvo eccezioni (art. 52).</p></div>
+    <div class="card fill"><h4>Chi ti tutela</h4><p class="small">Il Difensore civico per il digitale presso AgID raccoglie le segnalazioni se un tuo diritto digitale non è rispettato.</p></div>
+  </div>
+  <aside class="notes">Codice dell'Amministrazione Digitale, D.Lgs. 7 marzo 2005, n. 82, modificato molte volte (testo aggiornato su normattiva.it o su docs.italia.it). AgID = Agenzia per l'Italia Digitale. Il Difensore civico per il digitale è previsto dall'art. 17, c. 1-quater; le segnalazioni si fanno online dal sito di AgID. Ogni PA ha anche un Responsabile per la transizione al digitale. Domanda: "quale di questi diritti vi sembra più utile tra un anno?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'identità digitale</p><h2>SPID e CIE: due chiavi per la stessa porta</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>SPID</h3><ul class="points small"><li>Rilasciata da <b>gestori privati</b> accreditati da AgID</li><li>Ti identificano di persona, via webcam o con un documento elettronico</li><li>Livello 1 password, livello 2 password + codice temporaneo, livello 3 dispositivo sicuro</li><li>Non è un documento di riconoscimento</li></ul></div>
+    <div class="card soft"><h3>CIE</h3><ul class="points small"><li>Rilasciata dal <b>Comune</b>, prodotta dal Poligrafico dello Stato</li><li>Carta con chip NFC; si usa con lo smartphone e l'app CieID</li><li>PIN di 8 cifre: metà alla richiesta, metà con la carta</li><li>È un documento d'identità e vale per l'espatrio in UE</li></ul></div>
+  </div>
+  <div class="callout">Con SPID e CIE accedi anche a servizi di altri paesi UE, grazie al regolamento europeo <b>eIDAS</b>. Dal 2021 le PA non possono più rilasciare credenziali proprie: si entra con SPID, CIE o CNS.</div>
+  <aside class="notes">SPID: Sistema Pubblico di Identità Digitale; l'elenco dei gestori è su spid.gov.it; alcuni sono gratuiti, altri a pagamento o lo diventano dopo il primo anno: far controllare. CIE: le prime 4 cifre del PIN si ricevono alla richiesta, le ultime 4 con la consegna della carta; c'è anche un PUK. Validità della CIE: 10 anni per i maggiorenni. DL 76/2020, art. 24: dal 28 febbraio 2021 le PA non rilasciano più credenziali proprie per l'accesso ai servizi. CNS = Carta Nazionale dei Servizi (per esempio la tessera sanitaria con chip attivato). Per l'informatico: il login con SPID e CIE usa protocolli standard (SAML 2.0 e OpenID Connect).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>SPID o CIE? Confrontali sui siti ufficiali</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>spid.gov.it</b> e <b>cartaidentita.interno.it</b>. Non fare login: leggi solo le pagine informative.</li>
+      <li>In Writer crea una tabella: righe <b>Chi la rilascia</b>, <b>Come si ottiene</b>, <b>Costo</b>, <b>Livelli di sicurezza</b>, <b>Vale come documento?</b>, <b>Serve lo smartphone?</b>.</li>
+      <li>Compila una colonna per SPID e una per CIE.</li>
+      <li>Concludi con 3 righe: quale consiglieresti a un nonno e quale a un compagno, e perché.</li>
+      <li>Salva come <b>spid-cie.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> SPID: gestori privati, più livelli, non è un documento. CIE: Comune, costo di circa 22 euro (varia per Comune), è un documento, PIN di 8 cifre, lettura NFC.</div>
+  </div>
+  <aside class="notes">Regola: nessuno inserisce le proprie credenziali in classe. Costo CIE: 16,79 euro allo Stato più diritti comunali (in molti Comuni 22,21 euro in totale; più alto se rilasciata per smarrimento). Su spid.gov.it c'è la pagina "Richiedi SPID" con l'elenco dei gestori e le modalità di identificazione. Risposta ragionata tipica: al nonno la CIE (un solo oggetto, già documento) con un familiare che lo aiuta; al compagno SPID o CIE con app CieID, entrambe pratiche. Accettare risposte motivate diverse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale messaggio è con ogni probabilità autentico?</h2></div>
+  <div class="poll" data-id="pa-phishing" data-tipo="quiz" data-risposta="C">
+    <ol><li>SMS da "PagoPA": multa non pagata, salda entro 24 ore da questo link</li><li>Email da "INPS": aggiorna il tuo IBAN per ricevere un rimborso</li><li>Messaggio letto aprendo tu l'app IO: avviso di pagamento della tassa rifiuti del Comune</li><li>WhatsApp da "AgID": il tuo SPID scade oggi, rinnovalo qui</li></ol>
+    <p class="why">Le PA non chiedono dati o pagamenti con link in SMS, email o WhatsApp urgenti. Un messaggio letto dentro l'app ufficiale che hai aperto tu è il canale affidabile. Nel dubbio, vai al sito ufficiale scrivendo l'indirizzo a mano.</p>
+  </div>
+  <aside class="notes">Campagne di phishing che usano il nome di PagoPA, INPS, Agenzia delle Entrate, SPID e falsi gestori sono segnalate regolarmente dal CERT-AgID (cert-agid.gov.it). Tranelli: l'urgenza ("entro 24 ore"), il rimborso (B, molto credibile), il logo istituzionale. AgID non gestisce i rinnovi SPID: lo fanno i gestori. Collegare al deck "attacchi-informatici" (social engineering).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">App IO e PagoPA</p><h2>La PA nel telefono, i pagamenti in un codice</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points">
+        <li><b>App IO</b>: messaggi dalle PA, scadenze, avvisi di pagamento, documenti digitali. Si entra con SPID o CIE.</li>
+        <li><b>PagoPA</b>: il sistema per pagare la PA (tasse universitarie, multe, bollo auto) da app, home banking, banche, tabaccherie, uffici postali.</li>
+      </ul>
+      <div class="callout">Le ricevute PagoPA hanno valore liberatorio: conservale.</div>
+    </div>
+    <div class="card"><h4>Avviso di pagamento (esempio inventato)</h4>
+      <p class="small">Ente creditore: <b>Università di Esempio</b></p>
+      <p class="small">Codice fiscale ente: <code>80012345678</code> <span class="muted">(11 cifre)</span></p>
+      <p class="small">Codice avviso: <code>3012 3456 7890 1234 56</code> <span class="muted">(18 cifre)</span></p>
+      <p class="small">Importo: <b>156,00 €</b> · Scadenza: <b>30/09</b></p>
+      <p class="small muted">+ codice QR da inquadrare con l'app</p>
+    </div>
+  </div>
+  <aside class="notes">App IO (io.italia.it) è gestita da PagoPA S.p.A. ed è il punto di accesso telematico previsto dall'art. 64-bis CAD. PagoPA (pagopa.gov.it): l'art. 5 CAD obbliga le PA ad accettare pagamenti elettronici tramite la piattaforma. Per pagare servono il codice avviso (18 cifre) e il codice fiscale dell'ente creditore (11 cifre), oppure il QR code. L'avviso nella slide è inventato. Per molti studenti il primo pagamento PagoPA sarà la tassa d'iscrizione all'università o la tassa regionale per il diritto allo studio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dati che la PA ha già</p><h2>ANPR e il principio "una volta sola"</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>ANPR</h3><p class="small">L'Anagrafe Nazionale della Popolazione Residente raccoglie in un'unica banca dati le anagrafi di tutti i Comuni.</p><ul class="points small"><li>Certificati anagrafici online gratuiti</li><li>Autocertificazione precompilata</li><li>Richiesta di cambio di residenza online</li></ul></div>
+    <div class="card"><h3>Una volta sola</h3><p class="small">Una PA non può chiederti dati e documenti che una PA ha già: basta un'<b>autocertificazione</b>, poi i controlli li fa lei.</p><p class="small">I certificati servono solo con i <b>privati</b> (una banca, un datore di lavoro privato).</p></div>
+  </div>
+  <aside class="notes">ANPR: anagrafenazionale.interno.it; tutti i Comuni sono subentrati entro gennaio 2022. Dal 15 novembre 2021 si possono scaricare online, con SPID/CIE/CNS, i certificati anagrafici (14 tipi) senza pagare il bollo; verificare sul portale l'elenco aggiornato. Principio "once only": DPR 445/2000 (artt. 43 e 46, autocertificazione e acquisizione d'ufficio) e L. 183/2011, art. 15: dal 2012 i certificati riportano la dicitura che non possono essere prodotti alle PA o ai gestori di pubblici servizi. Il CAD (art. 50 e seguenti) chiede alle PA di scambiarsi i dati invece di farli portare ai cittadini.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>L'ufficio del Comune ti chiede un certificato di residenza per una pratica. Che cosa fai?</h2></div>
+  <div class="poll" data-id="pa-certificato" data-tipo="quiz" data-risposta="B">
+    <ol><li>Lo scarichi da ANPR e paghi il bollo</li><li>Presenti un'autocertificazione: la PA verifica da sola</li><li>Vai all'anagrafe di un altro Comune a ritirarlo</li><li>Chiedi al gestore SPID di inviarlo</li></ol>
+    <p class="why">Tra PA i certificati non si possono più usare: per legge bastano le dichiarazioni sostitutive (autocertificazioni) e i controlli si fanno d'ufficio. Il certificato ti serve con un privato, e online da ANPR è anche gratuito.</p>
+  </div>
+  <aside class="notes">Il tranello è A: sembra la risposta "digitale" e moderna, ma è sbagliata due volte (alla PA non serve il certificato e online da ANPR non si paga il bollo). L. 183/2011, art. 15; DPR 445/2000, art. 46. Attenzione: dichiarare il falso in un'autocertificazione è un reato (DPR 445/2000, art. 76).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La salute in digitale</p><h2>Il Fascicolo sanitario elettronico</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points">
+        <li>Raccoglie <b>referti</b>, ricette, vaccinazioni, verbali di pronto soccorso e il profilo sanitario sintetico del medico.</li>
+        <li>Si consulta dal portale della propria <b>Regione</b> o dall'app, con SPID o CIE.</li>
+        <li>Puoi decidere se i medici possono <b>consultarlo</b> e puoi oscurare singoli documenti.</li>
+        <li>In molte regioni, dallo stesso portale si sceglie o si cambia il medico di base.</li>
+      </ul>
+    </div>
+    <div class="card bad"><h3>Dati particolari</h3><p class="small">I dati sanitari sono tra i più delicati per il GDPR: mai fotografare un referto e inviarlo in un gruppo, mai dare le credenziali a un'app sconosciuta.</p></div>
+  </div>
+  <aside class="notes">FSE: previsto dal DL 179/2012, art. 12; con il PNRR si sta passando al "FSE 2.0" (DM 7 settembre 2023). Punto di accesso nazionale informativo: fascicolosanitario.gov.it, che rimanda ai portali regionali. Dal DL 34/2020 il fascicolo viene alimentato automaticamente; resta il consenso per la consultazione da parte dei professionisti sanitari. Caso pratico: uno studente fuori sede che va dal medico in un'altra città può mostrare i propri referti dal telefono. Dati relativi alla salute: art. 9 GDPR.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Comunicazioni con valore legale</p><h2>Domicilio digitale, INAD e SEND</h2></div>
+  <div class="cols-3">
+    <div class="card"><h4>PEC</h4><p class="small">Posta elettronica certificata: ricevute di accettazione e consegna, valore legale come una raccomandata con ricevuta di ritorno.</p></div>
+    <div class="card soft"><h4>INAD</h4><p class="small">L'Indice nazionale dei domicili digitali: registri gratis la tua PEC su inad.gov.it e le PA ti scrivono lì.</p></div>
+    <div class="card"><h4>SEND</h4><p class="small">Il servizio notifiche digitali: atti come le multe arrivano sul domicilio digitale o come avviso in app IO.</p></div>
+  </div>
+  <div class="callout hl">Se scegli un domicilio digitale, quello che ti arriva lì <b>conta come consegnato</b>: controllalo davvero, o rischi di saltare una scadenza.</div>
+  <aside class="notes">Domicilio digitale delle persone fisiche: art. 3-bis CAD; INAD: art. 6-quater CAD, operativo dal 2023 (inad.gov.it); si accede con SPID/CIE/CNS, si inserisce una PEC personale, la si conferma e la si può modificare o cancellare. Professionisti e imprese hanno invece l'obbligo del domicilio digitale (INI-PEC). SEND (notifichedigitali.it) è gestita da PagoPA S.p.A. (DL 76/2020, art. 26): se non hai un domicilio digitale, ricevi un avviso di cortesia (app IO, email) e, se non leggi la notifica online, una raccomandata cartacea. Leggere la notifica su app IO la perfeziona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Eleggere il domicilio digitale: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="pa-inad">
+    <li>Attivi una casella PEC personale presso un gestore</li>
+    <li>Vai sul sito ufficiale inad.gov.it, scrivendo l'indirizzo a mano</li>
+    <li>Accedi con SPID, CIE o CNS</li>
+    <li>Inserisci l'indirizzo PEC da usare come domicilio digitale</li>
+    <li>Confermi con il codice di verifica ricevuto sulla PEC</li>
+    <li>Da quel momento le PA ti inviano lì le comunicazioni con valore legale</li>
+  </ol>
+  <aside class="notes">Procedura di INAD da verificare sul sito il giorno della lezione (i passaggi possono cambiare leggermente). Il tranello: molti mettono "accedi con SPID" prima di avere la PEC; in realtà la PEC deve esistere prima. Discussione: conviene a uno studente di 19 anni? Pro: niente raccomandate perse quando si cambia città per l'università. Contro: va controllata con regolarità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tuo primo anno da adulto</p><h2>Abbina ogni situazione al servizio giusto</h2></div>
+  <dl class="puzzle-abbina" data-id="pa-eventi">
+    <dt>Pagare la tassa d'iscrizione all'università</dt><dd>Avviso PagoPA, anche dall'app IO</dd>
+    <dt>Ottenere l'ISEE per le agevolazioni</dt><dd>DSU precompilata sul portale INPS</dd>
+    <dt>Dichiarare i redditi del primo lavoro</dt><dd>730 precompilato dell'Agenzia delle Entrate</dd>
+    <dt>Cercare un concorso pubblico</dt><dd>Portale inPA</dd>
+    <dt>Scaricare un certificato per un privato</dt><dd>ANPR, gratis online</dd>
+    <dt>Rivedere il referto delle analisi</dt><dd>Fascicolo sanitario elettronico</dd>
+  </dl>
+  <aside class="notes">Tutti questi servizi si usano con SPID o CIE. ISEE: dichiarazione sostitutiva unica (DSU) precompilata su inps.it. 730 precompilato: Agenzia delle Entrate, disponibile ogni anno in primavera. inPA (inpa.gov.it): il portale del reclutamento della PA, dove vengono pubblicati i bandi di concorso. Ricordare anche Carta della cultura Giovani e Carta del merito (per chi si diploma con 100), che si richiedono con SPID o CIE sul sito del Ministero della Cultura: requisiti e scadenze da verificare ogni anno.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il carattere di controllo del codice fiscale</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps">
+        <li>Crea <b>CodiceFiscale.java</b> con il metodo <code>static char controllo(String cf15)</code>.</li>
+        <li>Valore di un carattere: cifre 0-9 → 0-9, lettere A-Z → 0-25.</li>
+        <li>Nelle posizioni <b>dispari</b> (1ª, 3ª … 15ª) usa la tabella qui sotto; nelle <b>pari</b> il valore stesso.</li>
+        <li>Somma tutto: il resto della divisione per 26 dà la lettera (0 = A … 25 = Z).</li>
+      </ol>
+      <pre class="code" style="font-size:24px"><span class="k">int</span>[] DISPARI = {1,0,5,7,9,13,15,17,19,21,2,4,18,20,
+  11,3,6,8,12,14,16,10,22,25,24,23}; <span class="c">// indice = valore</span></pre>
+    </div>
+    <div class="check"><b>Controllo:</b> <code>RSSMRA85T10A562</code> → somma 122 → <b>S</b>. <code>BNCLRA07M52L219</code> → somma 111 → <b>H</b>. Usa solo questi codici inventati, mai quelli dei compagni.</div>
+  </div>
+  <aside class="notes">Il codice fiscale è assegnato dall'Agenzia delle Entrate; l'algoritmo del carattere di controllo è fissato dal DM 23 dicembre 1976. Il codice fiscale è un dato personale: niente codici reali in classe. Soluzione:
+  static int valore(char c){ return Character.isDigit(c) ? c - '0' : c - 'A'; }
+  static char controllo(String cf15){ int s = 0; for (int i = 0; i &lt; 15; i++){ int v = valore(cf15.charAt(i)); s += (i % 2 == 0) ? DISPARI[v] : v; } return (char)('A' + s % 26); }
+  Attenzione all'indice: la 1ª posizione è l'indice 0. La tabella funziona sia per le cifre sia per le lettere perché nelle posizioni dispari 0 e A valgono 1, 1 e B valgono 0, ecc. Estensioni: validare la lunghezza e i caratteri; decodificare mese (A, B, C, D, E, H, L, M, P, R, S, T) e sesso (giorno + 40 per le donne). Fallback senza Java: stessa logica in Calc con CERCA.VERT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accessibile a tutti?</p><h2>Il digitale deve includere, non escludere</h2></div>
+  <figure class="citazione">
+    <blockquote>La forza del Web sta nella sua universalità. L'accesso per tutti, indipendentemente dalla disabilità, ne è un aspetto essenziale.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web, al lancio della Web Accessibility Initiative del W3C, 1997</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><p class="small">In Italia circa il <b>46%</b> delle persone tra 16 e 74 anni ha almeno competenze digitali di base; la media UE è circa il <b>56%</b> (Eurostat, 2023).</p></div>
+    <div class="card soft"><p class="small">I siti delle PA devono essere accessibili per legge (legge Stanca, 4/2004). I <b>Punti Digitale Facile</b> aiutano chi è in difficoltà.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'inglese: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect" (comunicato W3C per il lancio della WAI, 1997). Dati: Eurostat, indicatore "persone con competenze digitali almeno di base", 2023: Italia 45,8%, UE 55,6% (obiettivo UE 2030: 80%). Collegamento con la lezione sull'accessibilità (WCAG, unità sui siti web). Punti Digitale Facile: rete di facilitazione digitale finanziata dal PNRR.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dibattito</p><h2>Servizi pubblici solo online, chiudendo gli sportelli?</h2></div>
+  <div class="poll" data-id="pa-sportelli">
+    <ol><li>Sì: più veloce ed economico per tutti</li><li>Sì, ma con assistenza per chi è in difficoltà</li><li>No: lo sportello deve restare sempre</li><li>Dipende dal servizio</li></ol>
+  </div>
+  <div class="timer" data-min="4"></div>
+  <aside class="notes">Dopo il voto, 4 minuti di discussione a coppie e poi interventi. Spunti: anziani, persone con disabilità, stranieri, zone senza buona connessione; costi di gestione; sicurezza (furto di identità digitale); diritto di usare le tecnologie (art. 3 CAD) contro diritto a non restare esclusi. Collegarsi ai dati della slide precedente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>A caccia di dati aperti su dati.gov.it</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>dati.gov.it</b> (nessun account) e cerca un dataset sul tuo Comune, sulla tua Regione o sulle scuole.</li>
+      <li>Annota: ente titolare, data di aggiornamento, <b>licenza</b>, formati disponibili.</li>
+      <li>Scarica la versione CSV e aprila in Calc (controlla il separatore: <code>;</code> o <code>,</code>).</li>
+      <li>Conta le righe con <code>=CONTA.VALORI(A:A)-1</code> e scrivi due domande a cui quei dati rispondono.</li>
+      <li>Salva come <b>open-data-pa.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la licenza è di solito CC BY 4.0 o IODL 2.0 (puoi riusare i dati citando la fonte). Se un dataset è fermo da anni, annotalo: anche questo è un dato.</div>
+  </div>
+  <aside class="notes">dati.gov.it è il catalogo nazionale dei dati aperti, gestito da AgID e basato su CKAN: è lo stesso software di cui gli studenti useranno le API nel progetto AB-Green (unità 7); chi finisce prima può provare le API CKAN dal browser (azione package_search) seguendo la documentazione del portale. Formula: CONTA.VALORI conta anche l'intestazione, da cui il -1. Se il CSV ha caratteri strani, riaprire scegliendo la codifica UTF-8 nella finestra di importazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il futuro prossimo</p><h2>Portafogli digitali e PA che si parlano con le API</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>IT-Wallet</h3><p>Nell'app IO la sezione Documenti offre versioni digitali di patente, tessera sanitaria e Carta europea della disabilità. Il regolamento europeo eIDAS 2 chiede a ogni Stato UE un <b>portafoglio di identità digitale europeo</b>.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>API pubbliche</h3><p>Le PA si scambiano dati con <b>API REST</b> tramite la Piattaforma Digitale Nazionale Dati (PDND). Il codice dell'app IO è <b>open source</b> su GitHub: puoi leggerlo come un qualsiasi progetto.</p></div>
+  </div>
+  <aside class="notes">IT-Wallet: avviato in app IO a fine 2024 e poi esteso; per attivarlo serve in genere la CIE. Regolamento (UE) 2024/1183 (eIDAS 2): gli Stati membri devono offrire almeno un EU Digital Identity Wallet, con scadenze legate agli atti di esecuzione (in pratica a partire dalla fine del 2026). PDND: gestita da PagoPA S.p.A., segue il Modello di Interoperabilità di AgID (API REST, autenticazione con voucher). Codice dell'app IO: repository pagopa/io-app (React Native). Software della PA da riusare: developers.italia.it (CAD, artt. 68-69). All'esame: un progetto che integra "Entra con SPID/CIE" o i pagamenti PagoPA è un ottimo esempio di architettura con servizi esterni e API.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il Codice dell'Amministrazione Digitale è il D.Lgs. <span class="blank" data-risposta="82/2005|82" style="--w:8ch"></span>.</p>
+    <p>La carta d'identità con chip, che si legge via NFC, si chiama <span class="blank" data-risposta="CIE"></span>.</p>
+    <p>Per pagare la PA si usa la piattaforma <span class="blank" data-risposta="PagoPA" style="--w:8ch"></span>.</p>
+    <p>L'anagrafe unica di tutti i Comuni italiani si chiama <span class="blank" data-risposta="ANPR"></span>.</p>
+    <p>Il domicilio digitale delle persone fisiche si registra su <span class="blank" data-risposta="INAD" style="--w:7ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 82/2005 (accettato 82), CIE, PagoPA, ANPR, INAD.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il CAD dà diritti digitali e il Difensore civico li tutela</li>
+      <li>SPID e CIE: identità digitale; la CIE è anche un documento</li>
+      <li>App IO, PagoPA, ANPR, FSE: i servizi di tutti i giorni</li>
+    </ul>
+    <ul class="points">
+      <li>Con la PA basta l'autocertificazione</li>
+      <li>Domicilio digitale: ciò che arriva lì conta come consegnato</li>
+      <li>Credenziali solo su siti e app ufficiali, mai da un link</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: "La guida PA per neodiplomati". Chiudere ricordando che gli stessi servizi saranno utili subito dopo l'esame: iscrizione all'università, ISEE, Carta del merito, primo contratto.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

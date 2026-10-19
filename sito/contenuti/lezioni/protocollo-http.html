@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I web service e il protocollo HTTP · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 5</p>
+  <h1>I web service<br>e il protocollo HTTP</h1>
+  <p class="lead">Ogni web service, SOAP o REST, viaggia dentro HTTP. Oggi apriamo la busta e leggiamo riga per riga che cosa si dicono client e server.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Richieste, risposte, metodi, codici di stato, header, MIME</span></p>
+  <aside class="notes">Obiettivi: leggere e scrivere una richiesta e una risposta HTTP/1.1; conoscere i metodi e le proprietà safe e idempotente; classificare i codici di stato e scegliere quello giusto; usare gli header principali e i tipi MIME; osservare il traffico con DevTools e curl; scrivere un piccolo server Java che risponde con codici e header corretti. Durata indicativa: 3 ore. Prerequisiti: HTTP di base da Sistemi e reti, lezione 4. Riferimento normativo: RFC 9110 (semantica di HTTP, 2022).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale di questi codici di errore hai visto con i tuoi occhi?</h2></div>
+  <div class="poll" data-id="http-visti">
+    <ol><li>404</li><li>403</li><li>500</li><li>503</li><li>429</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di riscaldamento. Quasi tutti hanno visto il 404; il 503 si vede quando un sito è sovraccarico (biglietti dei concerti, iscrizioni), il 429 quando si fanno troppe richieste (per esempio con un'app di AI o un'API). Chiedere a chi ha visto il 403 in quale situazione. Alla fine della lezione saranno in grado di dire chi ha sbagliato in ciascun caso: il client (4xx) o il server (5xx).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Dal CERN al tuo telefono</h2></div>
+  <figure class="citazione">
+    <blockquote>Il potere del Web sta nella sua universalità.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del Web e direttore del W3C, al lancio della Web Accessibility Initiative, 1997</figcaption>
+  </figure>
+  <div class="cols-4">
+    <div class="card soft"><h3>1991</h3><p class="small">HTTP/0.9: una sola riga, <code>GET /pagina</code>, e torna l'HTML.</p></div>
+    <div class="card soft"><h3>1996-97</h3><p class="small">HTTP/1.0 e 1.1: header, codici di stato, metodi, <code>Host</code>.</p></div>
+    <div class="card soft"><h3>2015</h3><p class="small">HTTP/2: binario, più richieste insieme sulla stessa connessione.</p></div>
+    <div class="card soft"><h3>2022</h3><p class="small">HTTP/3: viaggia su QUIC, sopra UDP invece che TCP.</p></div>
+  </div>
+  <aside class="notes">Originale: "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." (comunicato del W3C, 22 ottobre 1997). Traduzione nostra della prima frase; la seconda tornerà nell'Unità 5 sull'accessibilità. Universalità vale anche per i programmi: qualunque client che parli HTTP può usare qualunque servizio. Riferimenti: HTTP/1.0 è la RFC 1945 (1996), HTTP/1.1 la RFC 2068 (1997) poi 2616 (1999), oggi RFC 9110 e 9112 (2022); HTTP/2 RFC 7540 (2015); HTTP/3 RFC 9114 (2022). Il significato di metodi, codici e header è lo stesso in tutte le versioni: cambia solo il modo di trasportarli. Per questo studiamo il formato testuale di HTTP/1.1, che curl e DevTools mostrano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Anatomia</p><h2>Una richiesta e la sua risposta</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:22px"><span class="hl">POST /api/voti HTTP/1.1</span>
+<span class="k">Host:</span> registro.example.org
+<span class="k">Content-Type:</span> application/json
+<span class="k">Content-Length:</span> 40
+<span class="k">Authorization:</span> Bearer eyJhbGci…
+
+<span class="s">{"studente":7,"materia":"TPSI","voto":9}</span></pre>
+<pre class="code" style="font-size:22px"><span class="hl">HTTP/1.1 201 Created</span>
+<span class="k">Content-Type:</span> application/json
+<span class="k">Location:</span> /api/voti/42
+<span class="k">Content-Length:</span> 48
+
+<span class="s">{"id":42,"studente":7,"materia":"TPSI",</span>
+<span class="s"> "voto":9}</span></pre>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>1 · Prima riga</h3><p class="small">Richiesta: metodo, percorso, versione. Risposta: versione, codice, frase.</p></div>
+    <div class="card soft"><h3>2 · Header</h3><p class="small">Righe <code>Nome: valore</code>, poi una <b>riga vuota</b>.</p></div>
+    <div class="card soft"><h3>3 · Corpo</h3><p class="small">Facoltativo. Content-Length dice quanti byte.</p></div>
+  </div>
+  <aside class="notes">Ogni riga termina con CR LF (\r\n); la riga vuota separa header e corpo. Content-Length 40 è contato davvero: {"studente":7,"materia":"TPSI","voto":9} sono 40 byte; la risposta ne ha 48 (il corpo va a capo qui solo per stare nella slide). Host è obbligatorio in HTTP/1.1: permette a un solo server (un solo indirizzo IP) di ospitare molti siti. All'esame capita di dover leggere uno scambio HTTP catturato e spiegare ogni riga, o di dover scrivere la richiesta per un'operazione: questo schema in tre parti è la chiave. Chiedere: perché 201 e non 200? (È stata creata una nuova risorsa; Location dice dove.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I metodi</p><h2>Che cosa chiede il client</h2></div>
+  <table class="data compact">
+    <tr><th>Metodo</th><th>Uso tipico</th><th>Corpo</th><th>Sicuro</th><th>Idempotente</th></tr>
+    <tr><td class="mono">GET</td><td>Leggere una risorsa</td><td>No</td><td>Sì</td><td>Sì</td></tr>
+    <tr><td class="mono">HEAD</td><td>Come GET, ma solo gli header</td><td>No</td><td>Sì</td><td>Sì</td></tr>
+    <tr><td class="mono">POST</td><td>Creare, inviare un modulo, eseguire un'azione</td><td>Sì</td><td>No</td><td class="hl">No</td></tr>
+    <tr><td class="mono">PUT</td><td>Sostituire per intero una risorsa</td><td>Sì</td><td>No</td><td>Sì</td></tr>
+    <tr><td class="mono">PATCH</td><td>Modificare una parte</td><td>Sì</td><td>No</td><td>Non garantito</td></tr>
+    <tr><td class="mono">DELETE</td><td>Cancellare</td><td>Di solito no</td><td>No</td><td>Sì</td></tr>
+    <tr><td class="mono">OPTIONS</td><td>Chiedere che cosa è permesso</td><td>No</td><td>Sì</td><td>Sì</td></tr>
+  </table>
+  <p class="small"><b>Sicuro</b>: non modifica lo stato del server. <b>Idempotente</b>: ripetuto più volte, lascia il server come una volta sola. È quello che serve per <b>riprovare</b> (lezione 2).</p>
+  <aside class="notes">Definizioni della RFC 9110. Sicuro implica idempotente, non il contrario. Un GET che cancella dati (link "elimina" fatto con GET) è un grave errore: i crawler dei motori di ricerca e le anteprime dei link seguono i GET da soli. PATCH non è idempotente per definizione (dipende dal contenuto: "aggiungi 1 al contatore" non lo è). Browser e proxy riprovano automaticamente solo le richieste idempotenti, ed è per questo che il browser chiede "Vuoi inviare di nuovo il modulo?" quando ricarichi dopo un POST. Questi metodi saranno il centro delle lezioni REST.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2><code>DELETE /api/voti/42</code> inviato due volte: la prima risponde 204, la seconda 404. È idempotente?</h2></div>
+  <div class="poll" data-id="http-idem" data-tipo="quiz" data-risposta="C">
+    <ol><li>No: le due risposte sono diverse</li><li>No: DELETE non è mai idempotente</li><li>Sì: conta l'effetto sul server, non la risposta</li><li>Solo se la connessione è HTTPS</li></ol>
+    <p class="why">Dopo una o dieci DELETE il voto 42 non esiste più: lo stato del server è lo stesso. L'idempotenza riguarda l'effetto, non il codice ricevuto. Il 404 dice solo che non c'era più niente da cancellare.</p>
+  </div>
+  <aside class="notes">Quasi tutti scelgono A. È la distinzione più importante della lezione: le risposte possono essere diverse, lo stato finale no. Contro-esempio: POST /api/voti due volte crea due voti diversi (id 42 e 43). Domanda: perché la seconda risposta è 404 e non 204? (Molti server rispondono 404 perché la risorsa non esiste; alcuni preferiscono 204 anche la seconda volta. Entrambe le scelte rispettano l'idempotenza.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I codici di stato</p><h2>Cinque famiglie, una regola: la prima cifra</h2></div>
+  <div class="cols-4">
+    <div class="card ok"><p class="num">2xx</p><h3>Successo</h3><p class="small"><b>200</b> OK · <b>201</b> Created · <b>204</b> No Content</p></div>
+    <div class="card soft"><p class="num">3xx</p><h3>Vai altrove</h3><p class="small"><b>301</b> spostata per sempre · <b>302</b> temporaneamente · <b>304</b> Not Modified, usa la cache</p></div>
+    <div class="card bad"><p class="num">4xx</p><h3>Errore del client</h3><p class="small"><b>400</b> richiesta malformata · <b>401</b> chi sei? · <b>403</b> non puoi · <b>404</b> non c'è · <b>405</b> metodo no · <b>429</b> troppe</p></div>
+    <div class="card night"><p class="num" style="color:#fff">5xx</p><h3>Errore del server</h3><p class="small"><b>500</b> errore interno · <b>502</b> il gateway non riceve risposta valida · <b>503</b> non disponibile</p></div>
+  </div>
+  <p class="small muted">La famiglia 1xx (informazioni, per esempio <b>101</b> Switching Protocols per i WebSocket) si vede raramente.</p>
+  <aside class="notes">Regola pratica per un client: 2xx procedi, 3xx segui la Location, 4xx non riprovare uguale (correggi la richiesta), 5xx puoi riprovare più tardi se l'operazione è idempotente. 429 è un caso speciale: puoi riprovare, ma dopo il tempo indicato dall'header Retry-After. Curiosità: 418 "I'm a teapot" nasce da uno scherzo del primo aprile 1998 (RFC 2324, protocollo per controllare le caffettiere); non è un codice HTTP standard, ma molti server lo riconoscono. Il 101 si rivedrà nell'Unità 3 con i WebSocket.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che codice risponde il server?</h2></div>
+  <dl class="puzzle-abbina" data-id="http-codici">
+    <dt>201</dt><dd>Hai inviato un nuovo voto ed è stato salvato</dd>
+    <dt>304</dt><dd>La pagina non è cambiata dalla tua ultima visita</dd>
+    <dt>400</dt><dd>Hai mandato un JSON con una parentesi in meno</dd>
+    <dt>405</dt><dd>Hai fatto DELETE su un percorso che accetta solo GET</dd>
+    <dt>429</dt><dd>Hai fatto 100 richieste in un secondo</dd>
+    <dt>503</dt><dd>Il server è in manutenzione programmata</dd>
+  </dl>
+  <aside class="notes">A squadre, 3 minuti. Discutere i casi limite: un JSON sintatticamente corretto ma con un voto 15 su 10 è 400 oppure 422 (Unprocessable Content), a seconda delle scelte dell'API. Il 304 lo vedranno nel laboratorio con DevTools ricaricando una pagina. Con il 405 il server dovrebbe mandare l'header Allow con i metodi permessi: lo faremo nel server Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sei entrato nel registro come studente e apri la pagina riservata ai docenti. Che codice è corretto?</h2></div>
+  <div class="poll" data-id="http-403" data-tipo="quiz" data-risposta="B">
+    <ol><li>401 Unauthorized</li><li>403 Forbidden</li><li>400 Bad Request</li><li>500 Internal Server Error</li></ol>
+    <p class="why">Il server sa chi sei (sei autenticato) ma non hai il permesso: 403. Il 401, nonostante il nome, significa "non autenticato": mancano credenziali valide. Alcuni server rispondono 404 per non rivelare che la pagina esiste.</p>
+  </div>
+  <aside class="notes">Il nome "Unauthorized" del 401 è storicamente infelice: è il codice dell'autenticazione mancante o non valida, e va accompagnato dall'header WWW-Authenticate. 403 è l'autorizzazione negata. Collegamento con l'Unità 1 (autenticazione e autorizzazione nella triade dei controlli di accesso). Il trucco del 404 al posto del 403 lo usa per esempio GitHub per i repository privati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli header</p><h2>Le informazioni che accompagnano il messaggio</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Nella richiesta</th><th>A che cosa serve</th></tr>
+      <tr><td class="mono">Host</td><td>Quale sito, sullo stesso server</td></tr>
+      <tr><td class="mono">Accept</td><td>Che formati accetto</td></tr>
+      <tr><td class="mono">Authorization</td><td>Chi sono: token, credenziali</td></tr>
+      <tr><td class="mono">User-Agent</td><td>Quale programma chiede</td></tr>
+      <tr><td class="mono">Cookie</td><td>Dati ricordati per questo sito</td></tr>
+    </table>
+    <table class="data compact">
+      <tr><th>Nella risposta</th><th>A che cosa serve</th></tr>
+      <tr><td class="mono">Content-Type</td><td>Che cosa c'è nel corpo</td></tr>
+      <tr><td class="mono">Location</td><td>Dove andare o dov'è il nuovo</td></tr>
+      <tr><td class="mono">Cache-Control</td><td>Per quanto tenerlo in cache</td></tr>
+      <tr><td class="mono">Set-Cookie</td><td>Ricordati questo dato</td></tr>
+      <tr><td class="mono">Retry-After</td><td>Quando riprovare</td></tr>
+    </table>
+  </div>
+  <div class="callout">HTTP è <b>senza stato</b> (stateless): ogni richiesta è indipendente. Se il server deve ricordarsi di te, la "memoria" viaggia in ogni richiesta: un <b>cookie</b> di sessione o un <b>token</b> nell'header Authorization.</div>
+  <aside class="notes">Content-Type e Content-Length possono stare in entrambe le direzioni (in una richiesta POST con corpo, per esempio). I nomi degli header non distinguono maiuscole e minuscole: Content-Type e content-type sono lo stesso header, e in HTTP/2 si scrivono sempre in minuscolo (lo vedranno in DevTools). L'assenza di stato è ciò che permette di scalare in orizzontale (lezione 1): qualunque server dietro il bilanciatore può rispondere a qualunque richiesta. Sarà uno dei vincoli di REST secondo Fielding.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I tipi MIME</p><h2><code>tipo/sottotipo</code>: che cosa c'è nel corpo</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Tipo MIME</th><th>Contenuto</th></tr>
+      <tr><td class="mono">text/html; charset=utf-8</td><td>Pagina web</td></tr>
+      <tr><td class="mono">application/json</td><td>Dati JSON di un'API</td></tr>
+      <tr><td class="mono">application/xml, text/xml</td><td>Dati XML, SOAP 1.1</td></tr>
+      <tr><td class="mono">application/soap+xml</td><td>Messaggi SOAP 1.2</td></tr>
+      <tr><td class="mono">image/png, image/jpeg</td><td>Immagini</td></tr>
+      <tr><td class="mono">application/x-www-form-urlencoded</td><td>Modulo HTML inviato</td></tr>
+      <tr><td class="mono">multipart/form-data</td><td>Modulo con file allegati</td></tr>
+    </table>
+    <div class="stack">
+      <p>Il nome viene dalla posta elettronica: <b>MIME</b> = Multipurpose Internet Mail Extensions.</p>
+      <div class="card soft"><h3>Negoziazione</h3><p class="small">Il client chiede con <code>Accept: application/json</code>, il server sceglie e dichiara con <code>Content-Type</code>. Se non sa accontentarlo: <b>406</b>.</p></div>
+      <p class="small muted">Se il client manda un tipo che il server non sa leggere: <b>415</b> Unsupported Media Type.</p>
+    </div>
+  </div>
+  <aside class="notes">I tipi sono registrati presso IANA. Il parametro charset dice la codifica del testo: senza, un client può leggere male le lettere accentate. Il 415 lo vedremo davvero nella lezione 7: un servizio SOAP 1.1 risponde 415 se gli mandi il messaggio con Content-Type application/json. Esempio di negoziazione reale: molti servizi pubblici restituiscono JSON o XML a seconda dell'header Accept.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>HTTP dal vivo con i DevTools</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>it.wikipedia.org</b>, premi F12, scheda <b>Network</b>, ricarica.</li>
+      <li>Clicca la prima richiesta (il documento). In <b>Headers</b> annota metodo, codice di stato, versione del protocollo e Content-Type.</li>
+      <li>Trova un file CSS, uno JavaScript e un'immagine: che Content-Type hanno?</li>
+      <li>Ricarica <b>senza</b> svuotare la cache: cerca un <b>304</b> o la dicitura "memory cache"/"disk cache".</li>
+      <li>Nella barra degli indirizzi scrivi <code>http://it.wikipedia.org</code> (senza s): che codice vedi come prima richiesta?</li>
+      <li>Annota tutto in <b>http-devtools-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> documento <b>GET</b>, <b>200</b>, <code>text/html; charset=utf-8</code>; CSS <code>text/css</code>, JS <code>text/javascript</code> o <code>application/javascript</code>. Con http:// trovi un redirect <b>3xx</b> con Location verso https://. Il protocollo è spesso h2 o h3.</div>
+  </div>
+  <aside class="notes">Per vedere la colonna del protocollo: tasto destro sulle intestazioni della tabella, Protocol. Molti browser con HTTPS-First o HSTS non fanno nemmeno la richiesta in chiaro e mostrano un redirect interno (307 Internal Redirect in Chrome): è corretto, va spiegato. HSTS è un header (Strict-Transport-Security) con cui il sito chiede al browser di usare sempre HTTPS. I nomi degli header in h2 e h3 compaiono in minuscolo. Se la rete della scuola usa un proxy con ispezione TLS, alcuni dettagli cambiano: altra occasione per parlare della fallacia "la topologia non cambia".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>HTTP riga per riga con curl</h2>
+  <div class="stack">
+<pre class="code" style="font-size:24px">curl -v http://www.wikipedia.org -o NUL
+curl -I https://www.wikipedia.org
+curl -i https://it.wikipedia.org/wiki/Pagina_che_non_esiste_5G -o NUL -w "%{http_code}\n"
+curl -I -H "Accept-Language: en" https://www.wikipedia.org</pre>
+    <div class="cols-2 wide-left">
+      <ol class="steps small">
+        <li>Esegui i comandi nel Prompt dei comandi (PowerShell: <code>curl.exe</code>). Con <code>-v</code> le righe con <b>&gt;</b> sono la richiesta, quelle con <b>&lt;</b> la risposta.</li>
+        <li>Per ogni comando annota la prima riga della risposta e due header che ti sembrano utili.</li>
+        <li>Spiega in una frase che cosa fanno <code>-v</code>, <code>-I</code>, <code>-i</code>, <code>-H</code>.</li>
+        <li>Salva in <b>http-curl-cognome.txt</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> la richiesta contiene <code>GET / HTTP/1.1</code>, <code>Host</code>, <code>User-Agent: curl/…</code>, <code>Accept: */*</code>. Il primo comando riceve un redirect <b>3xx</b> con Location https; il secondo <b>200</b>; il terzo <b>404</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">-v (verbose) mostra la richiesta e la risposta complete, più i dettagli della connessione e di TLS (righe con *); -I manda una richiesta HEAD e mostra solo gli header; -i mostra gli header della risposta insieme al corpo; -H aggiunge un header alla richiesta; -o NUL butta il corpo (su Linux -o /dev/null); -w stampa informazioni scelte, qui il codice di stato. Con HTTPS curl può usare HTTP/2: in quel caso la prima riga è "HTTP/2 200". Quarto comando: confrontare con il secondo l'header Vary o Content-Language, se presenti; serve a discutere la negoziazione. Se Wikipedia fosse irraggiungibile dalla rete della scuola, usare un qualunque sito pubblico, o il server Java del laboratorio successivo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il tuo server risponde con codici e header giusti</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)">
+<pre class="code" style="font-size:18px"><span class="k">var</span> srv = HttpServer.create(<span class="k">new</span> InetSocketAddress(<span class="hl">8081</span>), 0);
+srv.createContext(<span class="s">"/orario"</span>, ex -> {
+  System.out.println(ex.getRequestMethod() + <span class="s">" "</span> + ex.getRequestURI()
+      + <span class="s">"  Accept: "</span> + ex.getRequestHeaders().getFirst(<span class="s">"Accept"</span>));
+  <span class="k">if</span> (!ex.getRequestMethod().equals(<span class="s">"GET"</span>)) {
+    ex.getResponseHeaders().set(<span class="s">"Allow"</span>, <span class="s">"GET"</span>);
+    ex.sendResponseHeaders(<span class="hl">405</span>, -1);        <span class="c">// -1 = nessun corpo</span>
+  } <span class="k">else</span> {
+    <span class="k">byte</span>[] b = <span class="s">"{\"classe\":\"5G\",\"prima_ora\":\"TPSI\"}"</span>.getBytes();
+    ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"application/json"</span>);
+    ex.sendResponseHeaders(<span class="hl">200</span>, b.length);
+    ex.getResponseBody().write(b);
+  }
+  ex.close();
+});
+srv.createContext(<span class="s">"/vecchio"</span>, ex -> {
+  ex.getResponseHeaders().set(<span class="s">"Location"</span>, <span class="s">"/orario"</span>);
+  ex.sendResponseHeaders(<span class="hl">301</span>, -1);
+  ex.close();
+});
+srv.start();</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li><b>ServerHttp.java</b>: codice nel <code>main</code>, import di <code>com.sun.net.httpserver.*</code> e <code>java.net.InetSocketAddress</code>.</li>
+        <li>Prova con <code>curl -i</code> su <code>/orario</code>, poi <code>-X DELETE</code>, <code>-I</code>, <code>/vecchio</code> con e senza <code>-L</code>, e <code>/nulla</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> GET <b>200</b> con il JSON; DELETE <b>405</b> e <code>Allow: GET</code>; /vecchio <b>301</b> con Location (con -L arriva il JSON); /nulla <b>404</b>. E <code>-I</code>?</div>
+    </div>
+  </div>
+  <aside class="notes">Risultato di curl -I (richiesta HEAD): 405 Method Not Allowed, perché il codice accetta solo GET. È un piccolo errore di progetto: la RFC 9110 chiede che un server che supporta GET supporti anche HEAD. Far correggere: accettare GET e HEAD, e per HEAD mandare gli header senza corpo. Il 404 su /nulla lo genera da solo HttpServer, perché nessun contesto corrisponde. Nella console del server compare una riga per ogni richiesta con l'header Accept: con curl è */*, con il browser (aprendo http://localhost:8081/orario) è una lista lunga che inizia con text/html. Estensione: se Accept contiene application/xml, rispondere con lo stesso dato in XML e Content-Type application/xml (negoziazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>HTTP sotto le app di intelligenza artificiale</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il testo che compare un pezzo alla volta</h3><p>Quando una chat AI scrive la risposta parola per parola, spesso il server usa i <b>Server-Sent Events</b>: una sola risposta HTTP con <b>Content-Type: text/event-stream</b> che resta aperta e invia un evento per ogni pezzo di testo generato.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>429 e Retry-After</h3><p>Le API dei modelli linguistici limitano richieste e token al minuto. Chi supera il limite riceve <b>429 Too Many Requests</b>, spesso con l'header <b>Retry-After</b>. Un client ben scritto aspetta e riprova con backoff, come il programma della lezione 1.</p></div>
+  </div>
+  <aside class="notes">SSE è uno standard del W3C/WHATWG (EventSource nel browser). Il formato è testuale: righe "event: ..." e "data: ..." separate da una riga vuota. Le API di OpenAI e Anthropic usano SSE per lo streaming quando si chiede stream: true. Esempio di codice non standard: l'API di Anthropic documenta anche un codice 529 "overloaded" per i momenti di sovraccarico; non fa parte della RFC 9110, ed è un buon esempio del fatto che i codici sono una convenzione e il client deve gestire anche quelli che non conosce, trattandoli secondo la loro famiglia (5xx).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Il lucchetto di HTTP</h2></div>
+  <div class="puzzle-codice" data-risposta="3349" data-aiuto="idempotenti tra GET, POST, PUT e DELETE: tutti tranne POST">
+    <ul class="points">
+      <li>1ª cifra: la prima cifra dei codici di redirect</li>
+      <li>2ª cifra: quanti tra GET, POST, PUT e DELETE sono idempotenti</li>
+      <li>3ª cifra: l'ultima cifra del codice "Not Found"</li>
+      <li>4ª cifra: l'ultima cifra del codice "Too Many Requests"</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 3xx, tre metodi idempotenti (GET, PUT, DELETE), 404, 429.</div>
+  </div>
+  <aside class="notes">Codice: 3349. Chi prova 3449 ha messo POST tra gli idempotenti: ripassare il quiz su DELETE. A squadre, vince la prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Tra gli header e il corpo di un messaggio HTTP c'è una riga <span class="blank" data-risposta="vuota"></span>.</p>
+    <p>Il codice per una risorsa appena creata è <span class="blank" data-risposta="201"></span>.</p>
+    <p>Credenziali mancanti o non valide: <span class="blank" data-risposta="401"></span>. Autenticato ma senza permesso: <span class="blank" data-risposta="403"></span>.</p>
+    <p>L'header che dice il formato del corpo si chiama <span class="blank" data-risposta="Content-Type|ContentType" style="--w:9ch"></span>.</p>
+    <p>HTTP non ricorda le richieste precedenti: è senza <span class="blank" data-risposta="stato"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: vuota, 201, 401, 403, Content-Type, stato (stateless).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Messaggio: prima riga, header, riga vuota, corpo</li>
+      <li>GET, PUT, DELETE idempotenti; POST no</li>
+      <li>2xx ok, 3xx altrove, 4xx colpa del client, 5xx del server</li>
+    </ul>
+    <ul class="points">
+      <li>401 non autenticato, 403 non autorizzato</li>
+      <li>Content-Type e Accept: tipi MIME e negoziazione</li>
+      <li>Stateless: cookie e token portano la memoria</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (detective HTTP). Prossima lezione: SOAP, un protocollo che usa HTTP come semplice trasporto e mette tutto dentro una busta XML.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

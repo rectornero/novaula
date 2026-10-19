@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il processo di ricerca · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Selezionare un prodotto informatico</p>
+  <h1>Il processo<br>di ricerca</h1>
+  <p class="lead">Dove cercare prodotti e fornitori, come riconoscere una fonte affidabile e come fare ai fornitori le domande giuste.</p>
+  <div class="meta"><span class="chip">Lezione 2 di 4</span><span>Long list · fonti · RFI e RFP · MePA</span></div>
+  <aside class="notes">Obiettivi: costruire una long list e ridurla a una short list, valutare l'affidabilità delle fonti, distinguere RFI, RFP e RFQ, scrivere una richiesta di informazioni, conoscere i canali di acquisto della pubblica amministrazione. Si riparte dal file requisiti-lumen.ods della lezione 1 e dalle celle rosse (criteri che non sapevamo verificare): diventano domande per i fornitori. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Prima di comprare qualcosa di tecnologico, di chi ti fidi di più?</h2></div>
+  <div class="poll" data-id="u6l2-fiducia">
+    <ol><li>Recensioni degli utenti sui negozi online</li><li>Video di un creator che seguo</li><li>Sito ufficiale del produttore</li><li>Test di una rivista o di un laboratorio</li><li>Amici, forum, community</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta: ogni fonte ha un pregio e un rischio, ed è proprio il tema della lezione. Chiedere a chi ha scelto il creator: "come guadagna?" (sponsorizzazioni, link di affiliazione). A chi ha scelto il produttore: "ti dirà mai che cosa non sa fare il suo prodotto?". Tenere a mente i risultati per la slide sulle fonti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Dal mercato alla short list: un imbuto</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">∞</p><h3>Mercato</h3><p class="small">Tutte le soluzioni possibili, di ogni tipo.</p></div>
+    <div class="card soft"><p class="num">8-15</p><h3>Long list</h3><p class="small">Candidati plausibili, trovati con fonti diverse.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3-5</p><h3>Short list</h3><p class="small">Solo chi soddisfa tutti i Must.</p></div>
+    <div class="card soft"><p class="num">1-2</p><h3>Prova</h3><p class="small">Demo guidata, periodo di prova, proof of concept.</p></div>
+  </div>
+  <div class="callout">Per Lumen la long list deve contenere <b>tipi diversi</b> di soluzione: servizio cloud in abbonamento (SaaS), NAS da tenere in negozio, software open source ospitato da un provider.</div>
+  <aside class="notes">Errore tipico: la long list fatta di cinque prodotti quasi uguali, tutti trovati con la stessa ricerca. Mescolare i tipi di soluzione evita di decidere in anticipo "cloud sì o no". Il passaggio long list → short list usa i Must della lezione 1 come filtro sì/no; il passaggio short list → scelta usa la matrice pesata della lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove cercare</p><h2>Ogni fonte ha un pregio e un rischio</h2></div>
+  <table class="data compact">
+    <tr><th>Fonte</th><th>Pregio</th><th>Attenzione a</th></tr>
+    <tr><td><b>Documentazione tecnica e contratti</b> del fornitore</td><td>Dettagli precisi e impegni scritti</td><td>Il marketing della home page non è un impegno</td></tr>
+    <tr><td><b>Recensioni degli utenti</b> su portali di software</td><td>Esperienze d'uso reali e numerose</td><td>Recensioni false o pagate, campioni non rappresentativi</td></tr>
+    <tr><td><b>Report di analisti</b> di mercato</td><td>Visione d'insieme del settore</td><td>A pagamento; le copie gratuite le distribuisce chi ne esce bene</td></tr>
+    <tr><td><b>Test indipendenti</b> di laboratori e riviste</td><td>Metodo pubblicato e ripetibile</td><td>Possono essere datati o misurare altro</td></tr>
+    <tr><td><b>Community</b>: forum, issue su GitHub</td><td>Problemi veri, raccontati da tecnici</td><td>Non verificabili, a volte vecchi di anni</td></tr>
+    <tr><td><b>Referenze</b>: clienti dello stesso settore</td><td>Esperienza in un contesto simile</td><td>Il fornitore indica solo i clienti soddisfatti</td></tr>
+  </table>
+  <aside class="notes">Regola d'oro: incrociare almeno due fonti di tipo diverso per ogni affermazione importante. Esempi di test indipendenti reali: per gli antivirus AV-TEST e AV-Comparatives pubblicano metodo e risultati. Per i portali di recensioni (G2, Capterra, Trustpilot) far notare che molte recensioni sono sollecitate dai fornitori, a volte con un buono regalo: sono vere, ma il campione è distorto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Vuoi verificare che i dati di Lumen restino nell'UE. Dove guardi?</h2></div>
+  <div class="poll" data-id="u6l2-fonte" data-tipo="quiz" data-risposta="D">
+    <ol><li>Nella home page: "i tuoi dati sono al sicuro in Europa"</li><li>Nelle recensioni: tanti utenti italiani soddisfatti</li><li>In un video di confronto tra servizi cloud</li><li>Nel contratto sul trattamento dei dati, con l'elenco dei data center e dei sub-fornitori</li></ol>
+    <p class="why">Solo il contratto (in inglese DPA, Data Processing Agreement) impegna il fornitore: elenca dove sono i dati e quali altre aziende li trattano per suo conto. La home page è marketing, le recensioni non sanno dove sono i server, il video può essere vecchio o sponsorizzato.</p>
+  </div>
+  <aside class="notes">A è il tranello: viene dal fornitore, quindi sembra "ufficiale". Ma una frase promozionale non è un impegno contrattuale e non dice nulla sui backup o sull'assistenza, che possono stare altrove. Nel GDPR il contratto con il responsabile del trattamento è previsto dall'art. 28: lo vedremo nella lezione 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Valutare una fonte</p><h2>Il test CRAAP: cinque domande per ogni fonte</h2></div>
+  <div class="cols-4" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+    <div class="card soft"><p class="num">C</p><h4>Attualità</h4><p class="small">Quando è stata scritta? Il prodotto è cambiato da allora?</p></div>
+    <div class="card soft"><p class="num">R</p><h4>Rilevanza</h4><p class="small">Parla di un caso come il nostro?</p></div>
+    <div class="card soft"><p class="num">A</p><h4>Autorevolezza</h4><p class="small">Chi scrive? Che competenze ha?</p></div>
+    <div class="card soft"><p class="num">A</p><h4>Accuratezza</h4><p class="small">Ci sono dati, prove, fonti verificabili?</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">P</p><h4>Scopo</h4><p class="small">Informa o vende? Chi ci guadagna?</p></div>
+  </div>
+  <p class="muted small">Dalle iniziali inglesi Currency, Relevance, Authority, Accuracy, Purpose. Ogni lettera si valuta da 1 a 5: lo userai nel terzo laboratorio.</p>
+  <aside class="notes">Il test CRAAP è stato proposto da Sarah Blakeslee, bibliotecaria della California State University di Chico, nel 2004, ed è usato in molte università. Ha dei limiti: valuta la singola fonte ma non insegna a confrontarla con altre (per questo c'è chi propone la "lettura laterale", cioè aprire altre schede per capire chi è l'autore). Usarlo come check-list, non come formula magica.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Troppa informazione, poca attenzione</h2></div>
+  <figure class="citazione">
+    <blockquote>Una ricchezza di informazione crea una povertà di attenzione.</blockquote>
+    <figcaption><b>Herbert A. Simon</b>, economista e informatico, premio Turing 1975 e Nobel per l'economia 1978, "Designing Organizations for an Information-Rich World", 1971</figcaption>
+  </figure>
+  <p class="lead">Nel 1971 non c'erano motori di ricerca. Oggi una ricerca su "cloud backup" restituisce milioni di pagine: il problema non è trovare, è <b>scegliere a che cosa dare attenzione</b>.</p>
+  <aside class="notes">Originale: "a wealth of information creates a poverty of attention and a need to allocate that attention efficiently among the overabundance of information sources that might consume it." Traduzione nostra della prima parte. Simon studiò la "razionalità limitata": chi decide non può valutare tutte le alternative e si accontenta della prima che supera una soglia ("satisficing"). Ecco perché servono i Must come filtro e un tempo massimo per la ricerca.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La long list di Lumen</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Calc e crea <b>ricerca-lumen.ods</b> con le colonne: Prodotto, Fornitore, Tipo (SaaS, NAS, open source), Data center UE?, Fonte (indirizzo), Data di consultazione.</li>
+      <li>Cerca almeno 6 candidati, almeno uno per tipo. Usa almeno una volta <code>site:</code>, <code>filetype:pdf</code> e le virgolette.</li>
+      <li>Esempio: <code>"data processing agreement" filetype:pdf backup</code></li>
+      <li>In "Data center UE?" scrivi sì, no oppure <b>non trovato</b>.</li>
+      <li>Salva nella cartella lumen.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 6 righe, ognuna con indirizzo e data. C'è almeno un SaaS, un NAS e un open source. "Non trovato" è un'informazione utile: diventa una domanda per il fornitore.</div>
+  </div>
+  <aside class="notes">Candidati reali che gli studenti troveranno facilmente: Nextcloud (open source, si può ospitare su un provider), NAS Synology o QNAP, OneDrive/SharePoint in Microsoft 365, Google Drive in Google Workspace, Dropbox, servizi europei come Tresorit, pCloud, Proton Drive o Infomaniak kDrive. Non diamo noi la risposta sulla localizzazione: che la trovino nelle pagine ufficiali. Operatori: site: limita a un dominio, filetype: a un tipo di file, le virgolette cercano la frase esatta, il trattino esclude una parola. Funzionano su Google e in gran parte su Bing.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la fonte al suo rischio</h2></div>
+  <dl class="puzzle-abbina" data-id="u6l2-rischi">
+    <dt>Report di analisti ripubblicato dal fornitore</dt><dd>Lo diffonde gratis solo chi ne esce bene</dd>
+    <dt>Recensione con link al negozio</dt><dd>L'autore può guadagnare una commissione se compri</dd>
+    <dt>Pagina "casi di successo"</dt><dd>Racconta solo i clienti soddisfatti</dd>
+    <dt>Discussione su un forum di sistemisti</dt><dd>Esperienza reale, ma forse vecchia di anni</dd>
+    <dt>Classifica "i 10 migliori" senza metodo</dt><dd>Non si sa come è stata fatta né chi l'ha pagata</dd>
+  </dl>
+  <aside class="notes">Coppie come scritte. Domanda di discussione: "quale di queste fonti useresti comunque?" Tutte, ma sapendo che cosa possono dire e che cosa no. I link di affiliazione sono legali; in Italia l'AGCM chiede di rendere riconoscibile la pubblicità occulta. Per le recensioni online la direttiva europea Omnibus (2019/2161) obbliga chi le pubblica a dire se e come verifica che vengano da veri acquirenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Parlare con i fornitori</p><h2>RFI, RFP, RFQ: tre richieste diverse</h2></div>
+  <table class="data">
+    <tr><th>Sigla</th><th>Che cosa chiedi</th><th>Quando</th></tr>
+    <tr><td class="mono"><b>RFI</b></td><td>Request for Information: <b>informazioni</b> su prodotto, azienda, condizioni</td><td>All'inizio, per capire il mercato e fare la short list</td></tr>
+    <tr><td class="mono"><b>RFP</b></td><td>Request for Proposal: una <b>proposta</b> completa (soluzione, tempi, prezzo) sui tuoi requisiti</td><td>Con la short list, quando sai che cosa ti serve ma non come</td></tr>
+    <tr><td class="mono"><b>RFQ</b></td><td>Request for Quotation: un <b>prezzo</b> per qualcosa di già definito</td><td>Alla fine, quando hai scelto il prodotto e cerchi l'offerta migliore</td></tr>
+  </table>
+  <p class="small">Le tre richieste si fanno per iscritto, con le <b>stesse domande per tutti</b> e una scadenza: così le risposte si possono confrontare.</p>
+  <aside class="notes">In italiano si usano spesso le sigle inglesi; nella pubblica amministrazione si parla di "richiesta di offerta" (RdO). Far notare la sequenza RFI → RFP → RFQ, ma non è obbligatorio usarle tutte: una piccola azienda come Lumen spesso fa una RFI leggera via email e poi chiede direttamente le offerte. Spesso prima di condividere dettagli si firma un accordo di riservatezza (NDA).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere una RFI</p><h2>Domande chiuse per confrontare, aperte per capire</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="card">
+      <h3>La struttura</h3>
+      <ol class="steps small">
+        <li>Contesto: chi siamo, che problema abbiamo</li>
+        <li>Requisiti Must e vincoli</li>
+        <li>Domande numerate, uguali per tutti</li>
+        <li>Scadenza e formato della risposta</li>
+        <li>Contatti e riservatezza</li>
+      </ol>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Chiusa</h4><p class="small">"In quali Paesi si trovano i data center che conservano dati e backup?"</p></div>
+      <div class="card soft"><h4>Aperta</h4><p class="small">"Come si esportano tutti i file e le cartelle se decidiamo di cambiare fornitore?"</p></div>
+    </div>
+  </div>
+  <aside class="notes">Le domande chiuse permettono di compilare direttamente la matrice; quelle aperte rivelano la qualità del fornitore (una risposta vaga sull'uscita è un campanello d'allarme di lock-in, lezione 3). Evitare domande la cui risposta si trova già sul sito: fanno perdere tempo e credibilità.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La RFI di Lumen</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Writer e crea <b>rfi-lumen.odt</b>.</li>
+      <li>Scrivi un paragrafo di contesto su Lumen, senza nomi di clienti.</li>
+      <li>Elenca i 4 requisiti Must e i vincoli di budget e tempi.</li>
+      <li>Scrivi 10 domande numerate: almeno 6 chiuse e 2 aperte. Parti dalle celle rosse di <b>requisiti-lumen.ods</b>.</li>
+      <li>Chiudi con scadenza, formato della risposta e contatto. Esporta anche in PDF.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni Must ha almeno una domanda che lo verifica. Ci sono domande su localizzazione dei dati, SLA, assistenza, prezzo per utente e uscita dal contratto.</div>
+  </div>
+  <aside class="notes">Domande di esempio: 1. In quali Paesi sono i data center di dati e backup? 2. Fornite un contratto per il trattamento dei dati ai sensi dell'art. 28 GDPR? 3. Quale disponibilità garantisce lo SLA e con quali penali? 4. Ogni quanto si esegue il backup e per quanti giorni si conservano le versioni? 5. Il secondo fattore di autenticazione si può rendere obbligatorio per tutti? 6. Orari e lingua dell'assistenza, tempi di risposta per un guasto bloccante? 7. Prezzo per utente al mese e aumenti previsti? 8. Avete certificazioni come ISO/IEC 27001? Aperte: procedura di esportazione completa dei dati; referenze di clienti con dati sanitari.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Lumen ha già scelto il prodotto X e vuole il prezzo migliore da tre rivenditori. Che cosa manda?</h2></div>
+  <div class="poll" data-id="u6l2-rfq" data-tipo="quiz" data-risposta="C">
+    <ol><li>Una RFI</li><li>Una RFP</li><li>Una RFQ</li><li>Un NDA</li></ol>
+    <p class="why">Il prodotto è già definito: serve solo un prezzo confrontabile, cioè una Request for Quotation. La RFP serve quando chiedi ai fornitori di proporre una soluzione; la RFI quando stai ancora esplorando. L'NDA è un accordo di riservatezza, non una richiesta.</p>
+  </div>
+  <aside class="notes">Tranello: B, perché "proposta" e "prezzo" sembrano simili. Domanda di rilancio: "ha senso mandare una RFQ a tre rivenditori se il prezzo di listino è uguale per tutti?" Sì: cambiano sconti, servizi inclusi (installazione, formazione) e tempi di consegna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E se a comprare fosse la scuola?</p><h2>Nella pubblica amministrazione la ricerca ha regole sue</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Gli acquisti pubblici seguono il <b>Codice dei contratti pubblici</b> (D.Lgs. 36/2023).</li>
+      <li><b>Consip</b>, società del Ministero dell'Economia, è la centrale di acquisto nazionale: stipula convenzioni e accordi quadro.</li>
+      <li>Il <b>MePA</b> (Mercato elettronico della PA) è un catalogo online di fornitori abilitati, sul portale acquistinretepa.it.</li>
+    </ul>
+    <div class="card soft">
+      <h3>Sul MePA la scuola può</h3>
+      <ul class="points small"><li>fare un ordine diretto da catalogo</li><li>avviare una trattativa diretta con un fornitore</li><li>fare una richiesta di offerta (RdO) a più fornitori</li></ul>
+      <p class="small muted">Per il cloud, la PA deve usare servizi qualificati dall'Agenzia per la cybersicurezza nazionale (ACN).</p>
+    </div>
+  </div>
+  <aside class="notes">Tenersi su ciò che è sicuro: il Codice dei contratti pubblici in vigore è il D.Lgs. 36/2023; Consip è controllata dal MEF; il MePA è gestito da Consip; gli strumenti di negoziazione sul MePA comprendono ordine diretto, trattativa diretta e RdO. Le soglie di importo e gli obblighi precisi cambiano con gli aggiornamenti normativi: se qualcuno chiede, rimandare al DSGA della scuola, che usa il MePA davvero. La qualificazione dei servizi cloud per la PA, prima affidata ad AgID, dal 2023 è gestita da ACN.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Provare prima di comprare</p><h2>Demo, prova gratuita, proof of concept</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Demo guidata</h3><p class="small">Il fornitore mostra il prodotto. Decidi tu lo scenario: "fammi vedere come recupero un file cancellato ieri".</p></div>
+    <div class="card"><h3>Prova gratuita</h3><p class="small">Usi il prodotto per 14 o 30 giorni. Con <b>dati di prova</b>, mai con le schede vere dei clienti.</p></div>
+    <div class="card fill"><h3>Proof of concept</h3><p class="small">Un piccolo test misurato su un requisito critico: per esempio, quanto tempo ci vuole a caricare 20 GB dal negozio?</p></div>
+  </div>
+  <div class="callout">La prova serve a <b>verificare i criteri di accettazione</b> scritti nella lezione 1, non a farsi un'impressione.</div>
+  <aside class="notes">Demo "a copione": se lascia scegliere al fornitore, vedrai solo le funzioni migliori. Il PoC sul caricamento è importante per Lumen: con 30 Mbit/s, 20 GB richiedono almeno 20 × 8 000 / 30 ≈ 5 300 secondi, cioè circa un'ora e mezza nel caso ideale. Se il risultato reale è di molte ore, la migrazione va pianificata (di notte, a lotti, o spedendo un disco se il fornitore lo prevede).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Quanto ti fidi di questa fonte?</h2>
+  <div class="stack">
+    <ol class="steps">
+      <li>In <b>ricerca-lumen.ods</b> aggiungi un foglio <b>Fonti</b> con le colonne A-H: Fonte, C, R, A, A, P, Totale, Giudizio.</li>
+      <li>Valuta 3 fonti diverse della tua long list (sito del fornitore, recensione, forum) dando da 1 a 5 a ogni lettera.</li>
+      <li>In G2: <code>=SOMMA(B2:F2)</code>.</li>
+      <li>In H2: <code>=SE(G2&gt;=18;"affidabile";SE(G2&gt;=12;"da incrociare";"scartare"))</code>. Trascina giù.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 5, 4, 4, 3, 1 il totale è 17 e il giudizio "da incrociare". La pagina del fornitore di solito prende un voto basso in P (scopo): vende.</div>
+  </div>
+  <aside class="notes">Discutere i risultati: una stessa fonte valutata da due studenti può avere totali diversi, perché i voti sono soggettivi. È un'anticipazione della lezione 4: per ridurre la soggettività si usano descrittori scritti ("5 = aggiornata negli ultimi 6 mesi") e la media di più valutatori. Le soglie 18 e 12 sono una nostra scelta didattica, non uno standard.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con oggi</p><h2>Cercare con l'AI, cercare un'AI</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Motori di risposta</h3><p>Gli assistenti con ricerca web leggono decine di pagine e scrivono un riassunto con le fonti. Comodo per la long list, ma a volte attribuiscono a una fonte cose che non dice. Apri sempre il link e controlla la frase.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Classifiche di modelli</h3><p>Per scegliere un modello di AI si guardano benchmark e classifiche basate sui voti degli utenti. Misurano risposte a domande generiche, non il tuo caso: per Lumen conta come risponde a 50 domande vere dei clienti.</p></div>
+  </div>
+  <aside class="notes">Il secondo box applica il test CRAAP alle classifiche: la Rilevanza è bassa se il benchmark non somiglia al nostro uso. Un problema noto dei benchmark pubblici è la "contaminazione": le domande del test possono essere finite nei dati di addestramento, gonfiando i risultati. La soluzione professionale è un piccolo insieme di prove proprie (in inglese "eval"), cioè un proof of concept come quello della slide precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'elenco dei soli candidati che soddisfano tutti i Must si chiama <span class="blank" data-risposta="short list|shortlist|lista corta" style="--w:10ch"></span>.</p>
+    <p>Per chiedere ai fornitori una soluzione completa con prezzo invii una <span class="blank" data-risposta="RFP"></span>.</p>
+    <p>Nel test CRAAP la lettera P chiede lo <span class="blank" data-risposta="scopo|purpose"></span> della fonte.</p>
+    <p>Il catalogo online da cui comprano le scuole si chiama <span class="blank" data-risposta="MePA|mepa|mercato elettronico"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: short list, RFP, scopo (accettato purpose), MePA.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Long list varia, poi i Must la riducono a una short list</li>
+      <li>Ogni fonte ha un pregio e un rischio: incrocia sempre</li>
+      <li>Test CRAAP: attualità, rilevanza, autorevolezza, accuratezza, scopo</li>
+    </ul>
+    <ul class="points">
+      <li>RFI per capire, RFP per una proposta, RFQ per un prezzo</li>
+      <li>La PA compra con Consip e MePA</li>
+      <li><b>All'esame</b>: cita le fonti usate e come le hai verificate</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: valutazione dei prodotti e dei fornitori, con costo totale di possesso, licenze, SLA e protezione dei dati.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

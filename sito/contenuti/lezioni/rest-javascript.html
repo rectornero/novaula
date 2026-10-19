@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Usare REST da JavaScript · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Web service · Lezione 12</p>
+  <h1>Usare REST<br>da JavaScript</h1>
+  <p class="lead">L'ultimo client di BiblioAPI è il più diffuso del mondo: il browser. fetch, JSON, una pagina che si aggiorna da sola, e il misterioso errore CORS.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>fetch, async/await, DOM, CORS e preflight, sicurezza delle chiavi</span></p>
+  <aside class="notes">Obiettivi: usare fetch con async/await per GET, POST e DELETE; controllare response.ok; trasformare un JSON in elementi della pagina in modo sicuro (textContent); capire la same-origin policy e il CORS, compreso il preflight, e configurarlo sul server Java; sapere perché una chiave di un'API non va mai nel codice del browser. Durata indicativa: 4 ore. Software: un editor (VS Code, con l'estensione Live Server se disponibile), un browser con gli Strumenti per sviluppatori, il BiblioServer delle lezioni 9-11. Rete: api.open-meteo.com per il primo laboratorio (verificare che sia raggiungibile).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai fatto una richiesta HTTP da JavaScript? Con che cosa?</h2></div>
+  <div class="poll" data-id="rj-js">
+    <ol><li>fetch</li><li>XMLHttpRequest</li><li>Una libreria, come axios o jQuery</li><li>Me l'ha scritto un'AI</li><li>Mai fatto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. fetch è nativa in tutti i browser moderni e anche in Node.js dalla versione 18: non serve installare niente. axios è ancora molto usata nei progetti esistenti. XMLHttpRequest funziona ancora ma ha un'interfaccia a eventi più scomoda. Chi ha risposto D: oggi guardiamo con attenzione due errori che anche il codice generato fa spesso, cioè non controllare response.ok e usare innerHTML con dati esterni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Dalle pagine che si ricaricano alle pagine che chiedono dati</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>1999 · XMLHttpRequest</h3><p class="small">Microsoft lo crea per la webmail di Outlook in Internet Explorer 5. Poi lo copiano tutti i browser.</p></div>
+    <div class="card"><h3>2005 · "Ajax"</h3><p class="small">Jesse James Garrett dà un nome alla tecnica che fa funzionare Gmail e Google Maps.</p></div>
+    <div class="card fill"><h3>2015 · fetch</h3><p class="small">Un'interfaccia moderna, basata sulle Promise, arriva nei browser principali.</p></div>
+  </div>
+  <figure class="citazione">
+    <blockquote style="font-size:46px">Non dichiaro di aver inventato JSON. L'ho scoperto: esisteva già in natura.</blockquote>
+    <figcaption><b>Douglas Crockford</b>, che diede il nome a JSON e ne scrisse la specifica, nel suo intervento <i>The JSON Saga</i></figcaption>
+  </figure>
+  <aside class="notes">Crockford intendeva che la sintassi degli oggetti letterali di JavaScript esisteva già: lui la riconobbe come formato di scambio, le diede un nome e un sito (json.org, 2002 circa); poi divenne la RFC 4627 nel 2006 e lo standard ECMA-404. La frase viene dal talk "The JSON Saga" tenuto a Yahoo e diffuso in video intorno al 2011; traduzione nostra, leggermente condensata ("I do not claim to have invented JSON... I discovered it. It existed in nature."). Il termine Ajax nasce nell'articolo di Garrett "Ajax: A New Approach to Web Applications" (febbraio 2005). fetch è stato standardizzato dal WHATWG; Chrome e Firefox lo supportano dal 2015, Safari dal 2017.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">fetch in sei righe</p><h2>Chiedi, aspetta, controlla, leggi</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:25px;line-height:1.45"><span class="k">const</span> BASE = <span class="s">"http://localhost:8000/api/libri"</span>;
+
+<span class="k">async function</span> carica() {
+  <span class="k">const</span> r = <span class="k">await</span> fetch(BASE);
+  <span class="k">if</span> (!r.ok) <span class="k">throw new</span> Error(<span class="s">"HTTP "</span> + r.status);
+  <span class="k">const</span> libri = <span class="k">await</span> r.json();
+  console.log(libri[0].titolo);
+}
+
+carica().catch(err =&gt; console.error(err));</pre>
+    <ul class="points small">
+      <li><code>fetch</code> restituisce subito una <b>Promise</b> della risposta.</li>
+      <li><code>await</code> aspetta senza bloccare la pagina.</li>
+      <li><code>r.ok</code> è vero per i codici da 200 a 299.</li>
+      <li><code>r.json()</code> legge il corpo e lo trasforma in oggetti: è anch'essa asincrona.</li>
+    </ul>
+  </div>
+  <aside class="notes">Paragone con Java: fetch corrisponde a sendAsync, la Promise al CompletableFuture, await a join (ma senza bloccare il thread: JavaScript nel browser ha un solo thread principale, e bloccarlo congelerebbe la pagina). r.json() è asincrona perché il corpo può arrivare dopo gli header. Se il corpo non è JSON valido, r.json() lancia un SyntaxError. Il JSON dell'API diventa un array di oggetti JavaScript: libri[0].titolo, senza nessuna libreria. È il vantaggio di JSON nel browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>fetch su <code>/api/libri/9999</code>, che risponde 404. Che cosa succede alla Promise?</h2></div>
+  <div class="poll" data-id="rj-404" data-tipo="quiz" data-risposta="C">
+    <ol><li>Viene rifiutata e si finisce nel catch</li><li>Resta in attesa per sempre</li><li>Si risolve: r.ok è falso e r.status vale 404</li><li>Si risolve con <code>null</code></li></ol>
+    <p class="why">Per fetch un 404 è una risposta HTTP riuscita: il server ha risposto. La Promise viene rifiutata solo per errori di rete, o quando il CORS blocca la risposta. Per questo bisogna sempre controllare r.ok.</p>
+  </div>
+  <aside class="notes">È lo stesso comportamento di HttpClient in Java (lezione 10): 404 e 500 sono risposte, il server spento è un'eccezione. La A è la risposta più scelta, perché axios invece rifiuta la Promise per i codici fuori da 2xx: due librerie, due scelte diverse. Senza il controllo su r.ok, il codice prova a leggere libro.titolo da {"errore": "..."} e mostra "undefined" nella pagina, un bug molto comune.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il meteo della tua città in una pagina</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px;line-height:1.45;padding:22px 28px"><span class="k">const</span> url = <span class="s">"https://api.open-meteo.com/v1/forecast"</span> +
+  <span class="s">"?latitude=41.90&amp;longitude=12.50&amp;current=temperature_2m,wind_speed_10m"</span>;
+<span class="k">async function</span> meteo() {
+  <span class="k">const</span> r = <span class="k">await</span> fetch(url);
+  <span class="k">if</span> (!r.ok) <span class="k">throw new</span> Error(<span class="s">"HTTP "</span> + r.status);
+  <span class="k">const</span> d = <span class="k">await</span> r.json();
+  document.getElementById(<span class="s">"t"</span>).textContent =
+    d.current.temperature_2m + <span class="s">" "</span> + d.current_units.temperature_2m;
+}
+meteo().catch(e =&gt; document.getElementById(<span class="s">"t"</span>).textContent = e.message);</pre>
+      <ol class="steps small">
+        <li>Crea <b>meteo.html</b> con un <code>&lt;p id="t"&gt;</code> e questo script; aprilo nel browser.</li>
+        <li>Metti le coordinate della tua città e mostra anche il vento.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> la pagina mostra un numero seguito da <code>°C</code>, per esempio <code>17.4 °C</code>, e il vento in <code>km/h</code>. Nella scheda Rete compare una richiesta con stato 200 verso <code>api.open-meteo.com</code>.</div>
+  </div>
+  <aside class="notes">Lo script va in fondo al body, dentro &lt;script&gt;. Funziona anche aprendo il file con doppio clic (file://), perché Open-Meteo risponde con Access-Control-Allow-Origin: * e quindi permette le chiamate da qualunque pagina: un ottimo esempio da riprendere quando spieghiamo il CORS. Le unità sono in d.current_units (wind_speed_10m in km/h per default). Verificare prima che il dominio sia raggiungibile dalla rete della scuola. Per i più veloci: aggiungere &amp;daily=temperature_2m_max&amp;timezone=Europe/Rome e mostrare le massime dei prossimi giorni in una lista.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal JSON alla pagina</p><h2>textContent, non innerHTML</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Così sì</h3>
+<pre class="code" style="font-size:22px;line-height:1.45">for (const l of libri) {
+  const li = document.createElement("li");
+  li.textContent = `${l.titolo} (${l.anno})`;
+  ul.append(li);
+}</pre>
+      <p class="small">Il titolo resta testo, qualunque carattere contenga.</p></div>
+    <div class="card bad"><h3>Così no</h3>
+<pre class="code" style="font-size:22px;line-height:1.45">for (const l of libri) {
+  ul.innerHTML +=
+    `&lt;li&gt;${l.titolo}&lt;/li&gt;`;
+}</pre>
+      <p class="small">Un titolo con <code>&lt;img src=x onerror=…&gt;</code> esegue codice nel browser di chi guarda.</p></div>
+  </div>
+  <aside class="notes">È lo stesso Cross-Site Scripting della JSP (lezione 10), ma lato browser: in quel caso serviva l'escape sul server, qui basta non far interpretare il testo come HTML. Curiosità: un &lt;script&gt; inserito con innerHTML non viene eseguito, ma un &lt;img onerror&gt; sì; per questo l'esempio usa l'immagine. Oltre alla sicurezza, innerHTML += in un ciclo è lento: a ogni giro il browser rianalizza tutto il contenuto della lista. ul.replaceChildren() svuota la lista prima di ridisegnarla.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>BiblioAPI nel browser… e il primo errore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Avvia BiblioServer della lezione 9 così com'è.</li>
+      <li>Crea <b>libri.html</b> con un <code>&lt;ul id="elenco"&gt;</code>, un <code>&lt;p id="msg"&gt;</code> e la funzione <code>carica()</code> che riempie la lista con <code>textContent</code>.</li>
+      <li>Apri la pagina con Live Server (o con doppio clic).</li>
+      <li>Apri la Console (F12) e leggi l'errore. Poi guarda la scheda Rete: la richiesta è partita?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la lista resta vuota e la Console dice che l'accesso è stato <b>bloccato dalla CORS policy</b>: manca l'header <code>Access-Control-Allow-Origin</code>. Il messaggio d'errore in pagina è <code>Failed to fetch</code> (in Firefox: <code>NetworkError…</code>).</div>
+  </div>
+  <aside class="notes">È un errore voluto. Verificato con Chromium: la pagina su http://localhost:5500 chiama http://localhost:8000 e la Console mostra "Access to fetch at 'http://localhost:8000/api/libri' from origin 'http://localhost:5500' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource." Nella scheda Rete la GET compare: è arrivata al server, che l'ha anche eseguita, ma il browser non passa la risposta a JavaScript. Con doppio clic l'origine è "null" (file://), con lo stesso risultato. Domanda prima di andare avanti: curl e il client Java della lezione 10 funzionavano con lo stesso server. Perché il browser no?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Same-origin policy e CORS</p><h2>Il browser protegge l'utente, non il server</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Origine = <b>schema + host + porta</b>. Una pagina può leggere liberamente solo le risposte della propria origine.</p>
+      <table class="data compact">
+        <tr><th>Pagina su <code>http://localhost:5500</code> chiama…</th><th>Stessa origine?</th></tr>
+        <tr><td class="mono">http://localhost:5500/api</td><td>sì</td></tr>
+        <tr><td class="mono">http://localhost:8000/api</td><td class="hl">no: porta diversa</td></tr>
+        <tr><td class="mono">https://localhost:5500/api</td><td class="hl">no: schema diverso</td></tr>
+        <tr><td class="mono">http://127.0.0.1:5500/api</td><td class="hl">no: host diverso</td></tr>
+      </table>
+    </div>
+    <div class="card soft"><h3>CORS</h3><p class="small">Cross-Origin Resource Sharing: il <b>server</b> dichiara con degli header quali altre origini possono leggere le sue risposte. Il <b>browser</b> controlla e decide.</p><p class="small muted">curl e Java non sono browser: il CORS non li riguarda.</p></div>
+  </div>
+  <aside class="notes">Perché esiste: senza same-origin policy, una pagina malevola aperta in un'altra scheda potrebbe chiamare con fetch il sito della tua banca o il registro elettronico, dove sei già autenticato con i cookie, e leggere le risposte. La policy impedisce la lettura. CORS è il modo controllato per allentarla. Il caso 127.0.0.1 sorprende sempre: per il browser localhost e 127.0.0.1 sono nomi diversi, quindi origini diverse. Il CORS non è una protezione del server: chiunque può chiamare l'API con curl. Per proteggere l'API servono autenticazione e autorizzazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>La GET bloccata dal CORS: il server l'ha eseguita?</h2></div>
+  <div class="poll" data-id="rj-cors-chi" data-tipo="quiz" data-risposta="A">
+    <ol><li>Sì: la richiesta è arrivata e il server ha risposto, ma il browser non passa la risposta allo script</li><li>No: il browser non l'ha mai inviata</li><li>No: il server l'ha rifiutata con 403</li><li>Sì, e lo script riceve una risposta vuota con stato 0</li></ol>
+    <p class="why">Per una richiesta "semplice", come una GET senza header particolari, il browser la invia e poi controlla gli header CORS della risposta. Se mancano, la blocca prima che arrivi a JavaScript. Per questo il CORS non protegge da GET che cambiano dati: le operazioni con effetti non vanno mai fatte con GET.</p>
+  </div>
+  <aside class="notes">La B è vera solo per le richieste che richiedono il preflight (prossima slide): un POST con Content-Type application/json, una PUT, una DELETE. Lì il browser chiede prima il permesso con OPTIONS e, se non lo ottiene, la richiesta vera non parte. La C confonde il CORS con l'autorizzazione: il server non sa nemmeno di "violare" il CORS, risponde 200. La D descrive in parte le risposte "opache" che si ottengono con mode: "no-cors", che non si possono leggere: un dettaglio per i curiosi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il server dà il permesso</p><h2>Quattro header e una risposta a OPTIONS</h2></div>
+<pre class="code" style="font-size:24px;line-height:1.45"><span class="k">static void</span> cors(HttpExchange ex) {
+  Headers h = ex.getResponseHeaders();
+  h.set(<span class="s">"Access-Control-Allow-Origin"</span>, <span class="s">"*"</span>);   <span class="c">// in produzione: l'origine precisa</span>
+  h.set(<span class="s">"Access-Control-Allow-Methods"</span>, <span class="s">"GET, POST, PUT, DELETE"</span>);
+  h.set(<span class="s">"Access-Control-Allow-Headers"</span>, <span class="s">"Content-Type"</span>);
+  h.set(<span class="s">"Access-Control-Expose-Headers"</span>, <span class="s">"Location"</span>);
+}
+
+<span class="c">// all'inizio di gestisci(), prima di tutto il resto:</span>
+cors(ex);
+<span class="k">if</span> (ex.getRequestMethod().equals(<span class="s">"OPTIONS"</span>)) {   <span class="c">// la richiesta di preflight</span>
+  ex.sendResponseHeaders(204, -1); ex.close(); <span class="k">return</span>;
+}</pre>
+  <aside class="notes">Gli header vanno su tutte le risposte, anche su quelle d'errore: altrimenti un 404 arriva a JavaScript come "Failed to fetch" e non si capisce più che cosa è successo. Con * qualsiasi sito può leggere le risposte: va bene per un'API pubblica senza dati personali o in sviluppo; per un'API con login si mette l'origine esatta (per esempio https://biblioteca.scuola.it) e, se si usano i cookie, anche Access-Control-Allow-Credentials: true, che non è ammesso insieme a *. Expose-Headers serve per leggere Location da JavaScript (quiz più avanti). Codice provato con Chromium contro il BiblioServer modificato. Dopo la modifica, rieseguire la collezione di test della lezione 11: deve restare tutta verde.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Un POST con JSON da un'altra origine: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="rj-preflight">
+    <li>Lo script chiama fetch con POST e Content-Type application/json</li>
+    <li>Il browser invia prima una richiesta OPTIONS con l'header Origin</li>
+    <li>Il server risponde 204 con gli header Access-Control-Allow-*</li>
+    <li>Il browser controlla che origine, metodo e header siano ammessi</li>
+    <li>Il browser invia il vero POST con il JSON</li>
+    <li>Il server risponde 201 e il browser passa la risposta allo script</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Il preflight scatta per i metodi diversi da GET, HEAD e POST, e anche per un POST quando il Content-Type non è uno dei tre "semplici" (text/plain, multipart/form-data, application/x-www-form-urlencoded), o quando ci sono header personalizzati come Authorization. Nella scheda Rete degli strumenti per sviluppatori si vedono entrambe le richieste: OPTIONS e POST. Il browser può ricordare il permesso per un po' se il server invia Access-Control-Max-Age.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni header al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="rj-header">
+    <dt>Origin</dt><dd>Il browser dice da quale origine viene la pagina che chiama</dd>
+    <dt>Access-Control-Allow-Origin</dt><dd>Il server dice quale origine può leggere la risposta</dd>
+    <dt>Access-Control-Allow-Methods</dt><dd>I metodi ammessi, nella risposta al preflight</dd>
+    <dt>Access-Control-Allow-Headers</dt><dd>Gli header che lo script può inviare, come Content-Type</dd>
+    <dt>Access-Control-Expose-Headers</dt><dd>Gli header della risposta che lo script può leggere</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti. Domanda: quale di questi header lo scrive il browser e quale il server? (Origin lo aggiunge il browser, e lo script non può falsificarlo; tutti gli Access-Control-Allow-* li manda il server.) Con curl invece Origin si può scrivere a mano: un'altra prova che il CORS è una regola dei browser, non una difesa del server.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 35 minuti</span></p>
+  <h2>La biblioteca nel browser: leggi, aggiungi, elimina</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px;line-height:1.45;padding:22px 28px"><span class="k">const</span> r = <span class="k">await</span> fetch(BASE, {
+  method: <span class="s">"POST"</span>,
+  headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+  body: JSON.stringify({ titolo: d.get(<span class="s">"titolo"</span>),
+    autore: d.get(<span class="s">"autore"</span>), anno: Number(d.get(<span class="s">"anno"</span>)) })
+});
+msg.textContent = r.ok ? <span class="s">"Aggiunto: "</span> + r.headers.get(<span class="s">"Location"</span>)
+                       : <span class="s">"Errore "</span> + r.status;</pre>
+      <ol class="steps small">
+        <li>Aggiungi <code>cors()</code> e il ramo OPTIONS al server e riavvialo.</li>
+        <li>In libri.html: un form con titolo, autore e anno che invia il POST; poi richiama <code>carica()</code>.</li>
+        <li>Accanto a ogni libro un pulsante <b>Elimina</b> con <code>method: "DELETE"</code>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> la lista mostra i 3 libri. Aggiungendo Lessico famigliare compare <code>Aggiunto: /api/libri/4</code> e il libro in lista. Nella scheda Rete il POST è preceduto da un <b>OPTIONS</b> con stato 204. Elimina toglie il libro senza ricaricare la pagina.</div>
+  </div>
+  <aside class="notes">d è new FormData(e.target) nel gestore dell'evento submit, con e.preventDefault() per non ricaricare la pagina. Number() serve perché i campi di un form sono sempre stringhe: senza, il server riceverebbe "anno":"1963" e la nostra espressione regolare per i numeri non lo troverebbe (risposta 400). Il pulsante: x.onclick = async () =&gt; { await fetch(`${BASE}/${l.id}`, { method: "DELETE" }); carica(); }. Soluzione completa provata con Chromium (pagina su localhost:5500, server su 8000). Se compare "Aggiunto: null", manca Access-Control-Expose-Headers: è il quiz successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz per chi ha finito il laboratorio</p><h2>Il POST risponde 201 con Location, ma <code>r.headers.get("Location")</code> dà <code>null</code>. Perché?</h2></div>
+  <div class="poll" data-id="rj-expose" data-tipo="quiz" data-risposta="D">
+    <ol><li>fetch non legge mai gli header della risposta</li><li>Bisogna scrivere "location" in minuscolo</li><li>Il server ha risposto 201 senza Location</li><li>Da un'altra origine lo script legge solo pochi header, se il server non ne espone altri</li></ol>
+    <p class="why">Con il CORS lo script vede solo gli header "sicuri", come Content-Type. Location è arrivato al browser (si vede nella scheda Rete), ma per leggerlo il server deve aggiungere Access-Control-Expose-Headers: Location.</p>
+  </div>
+  <aside class="notes">Provato con Chromium: senza Expose-Headers la pagina mostra "Aggiunto: null", con l'header mostra "Aggiunto: /api/libri/4". La B è sbagliata: headers.get non distingue maiuscole e minuscole. Gli header leggibili per default (CORS-safelisted response headers) sono Cache-Control, Content-Language, Content-Length, Content-Type, Expires, Last-Modified e Pragma. Con la pagina servita dalla stessa origine dell'API il problema non esiste: un buon motivo, nei progetti, per servire front-end e API dallo stesso dominio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponti verso oggi</p><h2>Un chatbot nella tua pagina, senza regalare la chiave</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Browser</h3><p class="small">fetch verso <code>/api/chat</code> del tuo server, senza chiavi.</p></div>
+    <div class="card fill"><h3>Il tuo server</h3><p class="small">Aggiunge la chiave presa da una variabile d'ambiente e controlla i limiti.</p></div>
+    <div class="card soft"><h3>API del modello</h3><p class="small">Riceve il POST con JSON e risponde.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Tutto ciò che sta nel JavaScript di una pagina è visibile a chiunque. Una chiave di un'API di AI messa lì viene trovata e usata a tue spese: passa sempre da un tuo server.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le risposte dei chatbot arrivano a pezzi con i Server-Sent Events visti nella lezione 5. Con fetch li leggi man mano da <b>response.body</b>: la pagina scrive il testo mentre il modello lo genera.</p></div>
+  </div>
+  <aside class="notes">Lo schema si chiama spesso "backend for frontend" o proxy: è la stessa architettura della JSP della lezione 10, con il server che custodisce il segreto. Il server può anche limitare quante richieste fa ogni utente, per non spendere troppo. Lo streaming: le API dei principali fornitori di modelli supportano il formato Server-Sent Events (Content-Type text/event-stream); in JavaScript si legge con response.body.getReader() oppure, per GET, con EventSource. Non serve mostrare il codice: basta far vedere nella scheda Rete di un chatbot che la risposta arriva in molti pezzi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per fetch un 404 non è un errore: bisogna controllare la proprietà <span class="blank" data-risposta="ok|r.ok|response.ok"></span>.</p>
+    <p>Un'origine è formata da schema, host e <span class="blank" data-risposta="porta"></span>.</p>
+    <p>Prima di un PUT verso un'altra origine il browser invia una richiesta <span class="blank" data-risposta="OPTIONS" style="--w:8ch"></span>.</p>
+    <p>L'header che permette a una pagina di leggere le risposte è Access-Control-Allow-<span class="blank" data-risposta="Origin"></span>.</p>
+    <p>Per inserire un titolo nella pagina in modo sicuro si usa <span class="blank" data-risposta="textContent" style="--w:11ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: ok (accettato r.ok, response.ok), porta, OPTIONS, Origin, textContent.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>fetch + await, controlla sempre r.ok</li>
+      <li>JSON diventa oggetti JavaScript con r.json()</li>
+      <li>Dati esterni nella pagina con textContent</li>
+    </ul>
+    <ul class="points">
+      <li>Origine = schema + host + porta</li>
+      <li>CORS: il server permette, il browser controlla</li>
+      <li>Le chiavi delle API restano sul server</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: BiblioAPI è un'architettura completa da raccontare all'orale: un servizio REST in Java, tre client diversi (Java, JSP, browser), una collezione di test e le scelte di sicurezza.</div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Con questa lezione si chiude l'Unità 2: annunciare la verifica e indicare la simulazione su Novaula. L'Unità 3 riprende la comunicazione in rete in Java, fino ai WebSocket tra browser e server.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

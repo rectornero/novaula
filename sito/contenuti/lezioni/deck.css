@@ -350,3 +350,6 @@ body.print .flip>.fronte::after{content:"(risposta in classe)"}
 .ia-qr p{margin:0}
 .ia-qr .ia-x{position:absolute;top:6px;right:6px;width:28px;height:28px;font-size:13px}
 body.print .ia-tools{display:none}
+.ia-notes{font-size:15px;line-height:1.5}
+.ia-notes p,.ia-notes ul,.ia-notes ol{margin:0 0 .6em}
+.bar .badge[hidden]{display:none!important}

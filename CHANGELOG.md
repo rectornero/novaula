@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.1.0 (19 Oct 2026): the 5G TPSI course
+- 5G's Programma now follows the textbook: 53 new topics after the 7 already done (Units 1–6, Learning by project,
+  Educazione civica, Esame di Stato e orientamento), plus the Claude Code lesson.
+- 42 new interactive decks for 5G (Units 1–6 and the three civic education lessons), each with a PDF, polls, quizzes,
+  puzzles, three computer labs and the "? Domande" button. The older cybersecurity decks are linked to the matching book topics.
+- 42 homework sheets, hidden until their topic is marked done, then due 14 days later. Unit 5 and the two chat labs
+  are group work, as are two Learning by project assignments (no sheet).
+- 6 unit tests in Verifiche: practice test public, real test and answer key under secret file names until the test is ticked.
+- Teacher notes in every deck open with the N key, only for the logged-in teacher (deck engine update that had not been deployed yet).
+- SQL: `aggiornamenti/2026-10-19-corso-5g-1-programma.sql` and `2026-10-19-corso-5g-2-compiti.sql` (applied).
+
 ## 2.0.0 (19 Oct 2026): student profiles and marks
 - Students create their own profile per class («Il mio profilo»), with an optional 4-digit PIN that protects
   the private part. PINs are stored hashed, and 5 wrong tries lock the profile for 10 minutes. The teacher can reset a PIN.

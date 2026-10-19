@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ping in Java · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Applicazioni Java per la comunicazione in rete</p>
+  <h1>Il ping:<br>misurare la rete in Java</h1>
+  <p class="lead">Un pacchetto parte, torna indietro, e un numero in millisecondi ci racconta quanto è veloce, stabile e affidabile la comunicazione.</p>
+  <aside class="notes">Lezione di laboratorio, 2-3 ore. Obiettivi: capire ICMP Echo, leggere l'output di ping, misurare latenza, jitter e perdita; usare InetAddress.isReachable conoscendone i limiti; lanciare il ping di sistema con ProcessBuilder e analizzarne l'output. Prerequisiti: Java (classi, eccezioni, collezioni), TCP/IP di base. Prima della lezione verificare quali destinazioni la rete della scuola lascia "pingare" (gateway del laboratorio, un server interno, eventualmente un DNS pubblico come 8.8.8.8 o 1.1.1.1): molte reti scolastiche bloccano ICMP verso Internet.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il gioco online "lagga". Di chi è la colpa, secondo te?</h2></div>
+  <div class="poll" data-id="ping-lag">
+    <ol><li>Del Wi-Fi di casa</li><li>Del server del gioco</li><li>Del PC o della console</li><li>Del provider Internet</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio: non c'è una risposta giusta, perché può essere ognuna delle quattro. Messaggio della lezione: per smettere di tirare a indovinare bisogna MISURARE. Chiedere a chi gioca che cosa indica il numero "ping" in alto nell'angolo dello schermo, e se lo ha mai visto salire all'improvviso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia del 1983</p><h2>Un guasto, un sonar e un programma che usiamo ancora</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Dicembre 1983, Ballistic Research Laboratory dell'esercito degli Stati Uniti. <b>Mike Muuss</b> deve capire perché la rete si comporta in modo strano.</p>
+      <p>Scrive un piccolo programma in C che manda un pacchetto e aspetta l'eco. Lo chiama <b>PING</b>.</p>
+      <p class="muted small">Più di quarant'anni dopo è in ogni sistema operativo: Windows, Linux, macOS, Android, i router.</p>
+    </div>
+    <figure class="citazione">
+      <blockquote>L'ho chiamato come il suono che fa un sonar, ispirandomi al principio dell'ecolocalizzazione.</blockquote>
+      <figcaption><b>Mike Muuss</b>, autore di ping, nella sua pagina "The Story of the PING Program"</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Fonte: la pagina personale di Mike Muuss "The Story of the PING Program" (sito del Ballistic Research Laboratory / Army Research Laboratory). Testo originale: "I named it after the sound that a sonar makes, inspired by the whole principle of echo-location." Traduzione nostra. Nella stessa pagina Muuss precisa che PING per lui non è un acronimo: lo scioglimento "Packet InterNet Groper" è stato inventato da altri. Muuss morì nel 2000 in un incidente stradale. Curiosità: il libro per bambini "The Story About Ping" (un'anatra sul fiume Yangtze) è finito per scherzo tra le recensioni dei sistemisti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona</p><h2>ICMP Echo: domanda e risposta</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Il tuo PC</h3><p>Invia un <b>Echo Request</b> (ICMP tipo 8) con un numero di sequenza.</p></div>
+    <div class="card fill"><h3>La rete</h3><p>Ogni router abbassa il <b>TTL</b> di 1. Se arriva a 0, il pacchetto viene scartato.</p></div>
+    <div class="card soft"><h3>L'host</h3><p>Risponde con un <b>Echo Reply</b> (tipo 0) con gli stessi dati.</p></div>
+  </div>
+  <ul class="points">
+    <li>ICMP viaggia dentro IP (numero di protocollo 1): <mark>non ha porte</mark>, non è TCP né UDP.</li>
+    <li>Il tempo tra invio e risposta è il <b>RTT</b> (Round Trip Time): andata e ritorno.</li>
+  </ul>
+  <aside class="notes">ICMP è definito nella RFC 792 (1981). Domanda alla classe: "se ICMP non ha porte, un firewall come fa a bloccarlo?" Risposta: filtra per protocollo e per tipo di messaggio ICMP. Anticipare che traceroute sfrutta proprio il TTL e il messaggio ICMP tipo 11 (Time Exceeded) che i router mandano quando il TTL arriva a 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Leggere l'output</p><h2>Che cosa ci dice il ping di Windows</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:23px"><span class="c">C:\&gt;</span> ping -n 4 192.168.1.1
+
+Risposta da 192.168.1.1: byte=32 <span class="hl">durata=3ms</span> <span class="k">TTL=64</span>
+Risposta da 192.168.1.1: byte=32 <span class="hl">durata=2ms</span> <span class="k">TTL=64</span>
+Richiesta scaduta.
+Risposta da 192.168.1.1: byte=32 <span class="hl">durata=7ms</span> <span class="k">TTL=64</span>
+
+<span class="s">Pacchetti: Trasmessi = 4, Ricevuti = 3,
+Persi = 1 (25% persi)</span>
+Minimo = 2ms, Massimo = 7ms, Medio = 4ms</pre>
+    <ul class="points small">
+      <li><b>durata</b>: il RTT di quel pacchetto</li>
+      <li><b>TTL</b>: quanti salti restavano all'arrivo</li>
+      <li><b>Richiesta scaduta</b>: nessuna risposta entro il timeout</li>
+      <li>In fondo: <b>perdita</b> e statistiche</li>
+      <li>Linux e macOS: <code>ping -c 4</code> e <code>time=3.1 ms</code></li>
+    </ul>
+  </div>
+  <aside class="notes">Output di esempio (non una cattura reale), con il formato del ping di Windows in italiano; i dettagli possono cambiare tra versioni. Su Windows ping manda 4 pacchetti e si ferma; su Linux continua finché non si preme Ctrl+C, per questo si usa -c. Il TTL iniziale dipende dal sistema che risponde (spesso 64 per Linux e router, 128 per Windows): da TTL=117 si può stimare che il server parte da 128 e ci sono 11 salti. Il valore medio 4 ms è (3+2+7)/3 = 4.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Tre ping, tre distanze</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il terminale e scrivi <code>ipconfig</code> (su Linux <code>ip route</code>): trova il <b>gateway predefinito</b>.</li>
+      <li>Esegui <code>ping -n 10</code> verso <code>127.0.0.1</code>, verso il gateway e verso l'indirizzo che indica il docente.</li>
+      <li>Per ognuno annota minimo, medio, massimo e percentuale di persi.</li>
+      <li>Prova anche a fare ping al PC del compagno.</li>
+      <li>Salva i risultati in <b>ping-terminale.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 127.0.0.1 risponde in meno di 1 ms con 0% di persi; il gateway in pochi ms; Internet in decine di ms. Se il PC del compagno non risponde, non è per forza spento: leggi la prossima slide.</div>
+  </div>
+  <aside class="notes">127.0.0.1 è il loopback: il pacchetto non esce dalla scheda di rete. Il firewall di Windows di solito blocca in ingresso gli Echo Request (regola "Condivisione file e stampanti (Richiesta echo - ICMPv4 in ingresso)" disattivata): ecco perché il ping al compagno spesso fallisce anche con il PC acceso. Non chiedere agli studenti di cambiare le regole del firewall dei PC della scuola. Ordini di grandezza tipici: loopback &lt;1 ms, LAN cablata 1 ms o meno, Wi-Fi qualche ms, server europei 10-40 ms.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole giuste</p><h2>Quattro misure, quattro problemi diversi</h2></div>
+  <div class="cols-4">
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Latenza</h3><p>Che cosa misura?</p></div><div class="retro"><p><b>Il tempo di andata e ritorno (RTT).</b></p><p class="muted">Dipende da distanza, numero di router e code nei router.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Jitter</h3><p>Che cosa misura?</p></div><div class="retro"><p><b>Quanto varia la latenza</b> da un pacchetto all'altro.</p><p class="muted">Rovina chiamate e videogiochi più di una latenza alta ma stabile.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Perdita</h3><p>Che cosa misura?</p></div><div class="retro"><p><b>La percentuale di pacchetti senza risposta.</b></p><p class="muted">Rete congestionata, Wi-Fi disturbato, oppure un filtro.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Banda</h3><p>Che cosa misura?</p></div><div class="retro"><p><b>Quanti bit al secondo</b> passano.</p><p class="muted">Non è la velocità di risposta: è la larghezza del tubo.</p></div></div>
+  </div>
+  <aside class="notes">Far indovinare prima di girare. Analogia dell'autostrada: la banda è il numero di corsie, la latenza è il tempo per arrivare a destinazione, il jitter è quanto varia quel tempo da un'auto all'altra, la perdita sono le auto che non arrivano. Insistere: più banda NON abbassa la latenza (prepara il quiz successivo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Ping da Milano a un server di New York: 95 ms. Che cosa lo abbassa davvero?</h2></div>
+  <div class="poll" data-id="ping-newyork" data-tipo="quiz" data-risposta="B">
+    <ol><li>Passare da 100 Mbit/s a 1 Gbit/s di fibra</li><li>Usare un server in Europa</li><li>Un PC con una CPU più veloce</li><li>Mandare pacchetti più grandi</li></ol>
+    <p class="why">Il limite è fisico: nella fibra la luce viaggia a circa 200 000 km/s. Milano-New York sono circa 6 500 km in linea d'aria: solo l'andata e ritorno costa almeno 65 ms. Più banda non accorcia la strada; un server vicino sì.</p>
+  </div>
+  <aside class="notes">Conto alla lavagna: 2 × 6 500 km / 200 000 km/s = 0,065 s = 65 ms come limite teorico; i cavi non seguono la linea d'aria e i router aggiungono ritardi, quindi valori reali di 90-100 ms sono normali. Per questo i servizi usano CDN e data center in più regioni. La A è il tranello classico: la banda conta per scaricare file grandi, non per il ping. La D peggiora le cose (più tempo di trasmissione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ping in Java</p><h2><code>InetAddress.isReachable</code>: che cosa fa davvero</h2></div>
+  <div class="cols-3">
+    <div class="card ok"><h3>Con privilegi</h3><p>Manda un vero <b>ICMP Echo Request</b>, come il comando ping.</p></div>
+    <div class="card soft"><h3>Senza privilegi</h3><p>Prova una <b>connessione TCP alla porta 7</b> (il vecchio servizio Echo).</p></div>
+    <div class="card bad"><h3>Con un firewall</h3><p>Può restituire <b>false</b> anche se l'host è acceso e funziona.</p></div>
+  </div>
+  <div class="callout">La documentazione dice: "un'implementazione tipica usa ICMP se può ottenere il privilegio, altrimenti prova una connessione TCP sulla porta 7". Il risultato <mark>cambia con sistema operativo, permessi e firewall</mark>.</div>
+  <aside class="notes">Testo originale della Javadoc di InetAddress.isReachable(int timeout): "A typical implementation will use ICMP ECHO REQUESTs if the privilege can be obtained, otherwise it will try to establish a TCP connection on port 7 (Echo) of the destination host." Su Linux il privilegio è essere root (o avere la capability CAP_NET_RAW); i JDK recenti per Windows usano le API ICMP del sistema, quindi in genere funzionano senza essere amministratore (da verificare in laboratorio con la versione installata). Dettaglio poco noto: nel tentativo TCP anche un rifiuto della connessione (RST, "connection refused") conta come raggiungibile, perché qualcuno ha risposto. La porta 7 oggi è quasi sempre chiusa o filtrata. Esiste anche la variante isReachable(NetworkInterface, ttl, timeout).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice</p><h2>Ping.java: quattro tentativi, con il cronometro</h2></div>
+  <pre class="code" style="font-size:25px"><span class="k">import</span> java.net.InetAddress;
+
+<span class="k">public class</span> Ping {
+    <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> Exception {
+        String host = args.length &gt; 0 ? args[0] : <span class="s">"127.0.0.1"</span>;
+        InetAddress ip = InetAddress.getByName(host);     <span class="c">// risoluzione DNS</span>
+        <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt;= 4; i++) {
+            <span class="k">long</span> t0 = System.nanoTime();
+            <span class="k">boolean</span> ok = ip.<span class="hl">isReachable(1000)</span>;             <span class="c">// timeout in ms</span>
+            <span class="k">long</span> ms = (System.nanoTime() - t0) / 1_000_000;
+            System.out.println(ip.getHostAddress() + <span class="s">" #"</span> + i
+                    + (ok ? <span class="s">" risponde in "</span> + ms + <span class="s">" ms"</span> : <span class="s">" nessuna risposta"</span>));
+            Thread.sleep(1000);
+        }
+    }
+}</pre>
+  <aside class="notes">Punti da commentare: getByName fa la risoluzione DNS e può lanciare UnknownHostException; nanoTime è il cronometro giusto per misurare intervalli (currentTimeMillis è l'ora del giorno e può saltare se l'orologio viene corretto); il tempo misurato include il lavoro della JVM, quindi è un po' più alto di quello del ping di sistema. Con Java 21 non serve compilare a parte: java Ping.java 8.8.8.8 compila ed esegue il file in un colpo solo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il tuo primo ping in Java</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea la cartella <b>u3-ping</b> e dentro il file <b>Ping.java</b> con il codice della slide precedente.</li>
+      <li>Eseguilo senza compilare a parte: <code>java Ping.java 127.0.0.1</code></li>
+      <li>Ripeti con il gateway, con l'indirizzo del docente e con <code>192.0.2.1</code>.</li>
+      <li>Confronta i tempi con quelli del comando ping del primo esercizio.</li>
+      <li>Scrivi in <b>confronto.txt</b> due righe: dove coincidono e dove no, e perché.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 127.0.0.1 risponde in 0-1 ms. <code>192.0.2.1</code> è un indirizzo riservato alla documentazione (RFC 5737): devi vedere "nessuna risposta" dopo circa 1 secondo per ogni tentativo.</div>
+  </div>
+  <aside class="notes">Il lancio di un singolo file sorgente (java File.java) esiste da Java 11. Se i tempi di Java sono molto diversi da quelli del ping di sistema, chiedere perché: su Linux senza root Java sta misurando un tentativo di connessione TCP alla porta 7, non un Echo ICMP. Su alcune reti un apparato risponde al posto degli host con un RST e isReachable restituisce true anche per indirizzi inesistenti: se succede, è un ottimo spunto di discussione. 192.0.2.0/24 (TEST-NET-1) non è instradato su Internet, quindi va in timeout.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2><code>isReachable(1000)</code> restituisce <code>false</code>. Che cosa puoi concludere?</h2></div>
+  <div class="poll" data-id="ping-false" data-tipo="quiz" data-risposta="C">
+    <ol><li>Che l'host è spento</li><li>Che l'indirizzo IP non esiste</li><li>Solo che non è arrivata una risposta entro 1 secondo</li><li>Che il cavo di rete del tuo PC è scollegato</li></ol>
+    <p class="why">false significa soltanto "nessuna risposta utile entro il timeout". L'host può essere acceso dietro un firewall che scarta ICMP e la porta 7, oppure lento. Le altre sono possibili cause, non conclusioni.</p>
+  </div>
+  <aside class="notes">È la differenza tra osservazione e diagnosi: un buon tecnico scrive "non risponde al ping", non "è spento". Domanda bonus: e se restituisce true? Anche lì attenzione: senza privilegi basta che qualcuno risponda con un rifiuto TCP sulla porta 7. Collegamento con la cybersecurity (Unità 1): molti amministratori bloccano ICMP proprio per non farsi "mappare" la rete.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ping del sistema operativo</p><h2>Lanciare <code>ping</code> da Java con ProcessBuilder</h2></div>
+  <pre class="code" style="font-size:22px;padding:24px 36px;flex:none"><span class="k">boolean</span> win = System.getProperty(<span class="s">"os.name"</span>).startsWith(<span class="s">"Windows"</span>);
+List&lt;String&gt; cmd = win ? List.of(<span class="s">"ping"</span>, <span class="s">"-n"</span>, <span class="s">"10"</span>, host)
+                       : List.of(<span class="s">"ping"</span>, <span class="s">"-c"</span>, <span class="s">"10"</span>, host);
+Process p = <span class="k">new</span> ProcessBuilder(cmd).redirectErrorStream(<span class="k">true</span>).start();
+Pattern tempo = Pattern.compile(<span class="s">"(?:time|durata|tempo)[=&lt;]\\s?([\\d.,]+)\\s?ms"</span>);
+List&lt;Double&gt; tempi = <span class="k">new</span> ArrayList&lt;&gt;();
+<span class="k">try</span> (<span class="k">var</span> in = <span class="k">new</span> BufferedReader(<span class="k">new</span> InputStreamReader(p.getInputStream()))) {
+    String riga;
+    <span class="k">while</span> ((riga = in.readLine()) != <span class="k">null</span>) {
+        Matcher m = tempo.matcher(riga);
+        <span class="k">if</span> (m.find()) tempi.add(Double.parseDouble(m.group(1).replace(<span class="s">','</span>, <span class="s">'.'</span>)));
+    }
+}
+p.waitFor();</pre>
+  <div class="callout hl small">Argomenti in una <b>lista</b>, senza shell: un "host" come <code>8.8.8.8 &amp; del *.*</code> non diventa un comando. Difesa contro la <b>command injection</b>.</div>
+  <aside class="notes">Il ping di sistema usa ICMP vero anche senza essere root (su Linux è installato con i permessi necessari), quindi misura quello che misura il comando. In cambio dipende dal sistema operativo e dalla lingua: per questo l'espressione regolare accetta time, durata e tempo e sia il punto sia la virgola. "durata&lt;1ms" viene letto come 1: va bene per il laboratorio. Collegamento con l'Unità 1: command injection è nella categoria Injection della OWASP Top 10; mai costruire un comando concatenando stringhe scritte dall'utente con cmd /c o sh -c. Il codice completo (PingSistema.java) è nel compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dai tempi alle statistiche</p><h2>5 pacchetti inviati, 4 risposte: 20, 24, —, 22, 30 ms</h2></div>
+  <div class="cols-3">
+    <div class="formula" style="font-size:46px"><small>Perdita</small>(5−4)/5 = <span class="hl">20%</span></div>
+    <div class="formula" style="font-size:46px"><small>RTT medio</small>96/4 = <span class="hl">24</span> ms</div>
+    <div class="formula" style="font-size:46px"><small>Jitter</small>(4+2+8)/3 ≈ <span class="hl">4,7</span></div>
+  </div>
+  <ul class="points">
+    <li><b>Jitter</b> (versione semplice): media delle differenze, in valore assoluto, tra due RTT consecutivi ricevuti.</li>
+    <li>Il pacchetto perso non entra nella media: conta solo nella perdita.</li>
+  </ul>
+  <div class="callout small">Linux chiude con <code>rtt min/avg/max/mdev = 20.0/24.0/30.0/3.7 ms</code>: <b>mdev</b> è un'altra misura di quanto i tempi si allontanano dalla media.</div>
+  <aside class="notes">Conti: media (20+24+22+30)/4 = 96/4 = 24 ms; differenze |24−20| = 4, |22−24| = 2, |30−22| = 8, somma 14, diviso 3 = 4,67 ms. È la definizione semplice che usiamo in laboratorio; la RFC 3550 (RTP, usato nelle chiamate VoIP) usa una media mobile che pesa di più i valori recenti. Linux nel riepilogo mostra anche "mdev", la deviazione media: un'altra misura della variabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con le statistiche</h2></div>
+  <div class="puzzle-codice" data-risposta="20278" data-aiuto="la media è 108 diviso 4">
+    <p>Il ping manda 5 pacchetti. Arrivano 4 risposte, in ordine: <b>20, 28, 24, 36 ms</b>.</p>
+    <ul class="points">
+      <li>Cifre 1-2: la percentuale di pacchetti persi</li>
+      <li>Cifre 3-4: il RTT medio in ms</li>
+      <li>Cifra 5: il jitter in ms (media delle differenze consecutive)</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> Persi 1 su 5 = 20%, media 108/4 = 27 ms, jitter (8+4+12)/3 = 8 ms.</div>
+  </div>
+  <aside class="notes">Codice: 20278. Squadre da 3-4, la prima che apre vince; dopo tre errori compare l'aiuto. Errore tipico: dividere la somma per 5 (i pacchetti inviati) invece che per 4 (le risposte), ottenendo 21,6.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Le statistiche di una connessione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>Statistiche.java</b> con i metodi <code>media</code>, <code>jitter</code> e <code>persi(inviati, ricevuti)</code>.</li>
+      <li>Nel <code>main</code> provalo con i dati della slide: 20, 24, 22, 30 su 5 inviati.</li>
+      <li>Crea <b>PingSistema.java</b> con il codice di ProcessBuilder e passa i tempi a Statistiche.</li>
+      <li>Misura 10 ping verso 127.0.0.1, il gateway e il server del docente.</li>
+      <li>Copia i tre riepiloghi in <b>statistiche.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con i dati della slide il riepilogo contiene <code>media 24,0</code>, <code>jitter 4,7 ms</code> e <code>persi 20%</code> (punto o virgola dipende dalla lingua del PC). Verso 127.0.0.1: 0% di persi e jitter sotto 1 ms.</div>
+  </div>
+  <aside class="notes">Soluzione di Statistiche:
+  static double media(List&lt;Double&gt; t) { return t.stream().mapToDouble(Double::doubleValue).average().orElse(Double.NaN); }
+  static double jitter(List&lt;Double&gt; t) { double s = 0; for (int i = 1; i &lt; t.size(); i++) s += Math.abs(t.get(i) - t.get(i - 1)); return t.size() &gt; 1 ? s / (t.size() - 1) : 0; }
+  static double persi(int inviati, int ricevuti) { return 100.0 * (inviati - ricevuti) / inviati; }
+  Stampa: String.format("min %.1f media %.1f max %.1f jitter %.1f ms persi %.0f%%", ...). Con il Locale italiano String.format usa la virgola decimale. Nel main di PingSistema: List&lt;Double&gt; t = ping(host, 10); e poi il riepilogo con inviati = 10, ricevuti = t.size(). Se il ping di sistema non è raggiungibile (rete bloccata), usare almeno 127.0.0.1 e il gateway. Estensione: ripetere la misura con il Wi-Fi e con il cavo e confrontare il jitter.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché i millisecondi contano</p><h2>Latenza: dai videogiochi all'intelligenza artificiale</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Giochi e cloud gaming</h3><p>A 60 fotogrammi al secondo un fotogramma dura 16,7 ms. Nel cloud gaming il gioco gira in un data center: ogni tasto premuto fa un viaggio di andata e ritorno, quindi latenza e jitter si vedono subito sullo schermo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Assistenti AI</h3><p>Quando chiedi qualcosa a un chatbot, la domanda va al server del modello e la risposta torna in streaming. Per gli assistenti vocali conta il tempo prima della prima parola: per questo cresce l'<b>AI sul dispositivo</b>, che evita del tutto il viaggio in rete.</p></div>
+  </div>
+  <aside class="notes">16,7 ms = 1000/60. Messaggio: la latenza percepita è la somma di rete + elaborazione. Per un modello linguistico il tempo di elaborazione (generazione dei token) di solito pesa più della rete, ma nelle conversazioni vocali anche decine di ms in più si sentono. Gli smartphone recenti hanno una NPU che esegue modelli piccoli in locale (per esempio trascrizione e traduzione). Domanda: quale dei due casi soffre di più per il jitter? (il gioco, che manda input continui).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni messaggio ICMP al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="ping-icmp">
+    <dt>Tipo 8 · Echo Request</dt><dd>"Ci sei?": lo manda il comando ping</dd>
+    <dt>Tipo 0 · Echo Reply</dt><dd>"Ci sono": la risposta dell'host</dd>
+    <dt>Tipo 3 · Destination Unreachable</dt><dd>Un router non sa come arrivare alla destinazione</dd>
+    <dt>Tipo 11 · Time Exceeded</dt><dd>Il TTL è arrivato a 0 lungo il percorso: lo usa traceroute</dd>
+    <dt>Richiesta scaduta</dt><dd>Non è un messaggio: è il ping che smette di aspettare</dd>
+  </dl>
+  <aside class="notes">La quinta coppia è il tranello: "Richiesta scaduta" (Request timed out) non arriva dalla rete, la scrive il programma quando scade il timeout. Mostrare tracert (Windows) o traceroute (Linux) verso un server: ogni riga è un router che ha mandato un Time Exceeded. Il tipo 3 ha dei codici: per esempio codice 3 = porta non raggiungibile, usato con UDP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come si usa il ping in una prova di progetto</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Nel progetto di una rete, il ping è il primo <b>test di collaudo</b>: dal client al gateway, al server, a Internet.</li>
+      <li>Nella relazione: indica latenza media, jitter e perdita e confrontali con il servizio (una videochiamata tollera meno jitter di un download).</li>
+      <li>Se proponi un monitor in Java, <b>giustifica la scelta</b>: isReachable (semplice, dipende dai permessi) o ping di sistema (ICMP vero, dipende dal sistema operativo).</li>
+    </ul>
+    <div class="card soft"><h3>Da saper dire all'orale</h3><p>"Il ping misura il RTT con ICMP Echo, che è un protocollo del livello di rete senza porte. Un host che non risponde non è per forza spento: può esserci un firewall."</p></div>
+  </div>
+  <aside class="notes">Collegamenti per l'orale: Sistemi e reti (ICMP, livello 3, traceroute), cybersecurity (filtri ICMP, scansioni), fisica (velocità della luce nella fibra). Non fare affermazioni su tracce specifiche dell'esame: il ping è uno strumento di diagnosi che compare naturalmente nei progetti di rete.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il ping usa il protocollo <span class="blank" data-risposta="ICMP"></span>, che non ha porte.</p>
+    <p>Il tempo di andata e ritorno di un pacchetto si chiama <span class="blank" data-risposta="RTT|round trip time|latenza"></span>.</p>
+    <p>La variazione della latenza tra pacchetti consecutivi si chiama <span class="blank" data-risposta="jitter"></span>.</p>
+    <p>Senza privilegi, <code>isReachable</code> prova una connessione TCP sulla porta <span class="blank" data-risposta="7|sette" style="--w:3ch"></span>.</p>
+    <p>Per lanciare il ping del sistema da Java si usa la classe <span class="blank" data-risposta="ProcessBuilder|Process" style="--w:12ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: ICMP; RTT (accettati anche round trip time e latenza); jitter; 7; ProcessBuilder (accettato anche Process). Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ping = ICMP Echo Request e Echo Reply, livello di rete, niente porte</li>
+      <li>Latenza, jitter, perdita e banda sono misure diverse</li>
+      <li>La distanza fisica mette un limite al ping</li>
+    </ul>
+    <ul class="points">
+      <li><code>isReachable</code>: ICMP con privilegi, altrimenti TCP porta 7</li>
+      <li>ProcessBuilder con argomenti in lista: niente shell, niente injection</li>
+      <li>"Non risponde" non vuol dire "è spento"</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: il ping multiplo, cioè controllare decine di host in parallelo con i thread. Assegnare il compito "Il diario della latenza" su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

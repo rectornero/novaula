@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le architetture orientate ai servizi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 3</p>
+  <h1>Le architetture<br>orientate ai servizi</h1>
+  <p class="lead">Dal grande programma unico a decine di servizi che collaborano: come si progettano i sistemi delle grandi aziende, e quando non conviene imitarle.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Monolite, SOA, ESB, microservizi, API gateway</span></p>
+  <aside class="notes">Obiettivi: distinguere architettura monolitica, SOA e microservizi; conoscere i principi di un servizio (contratto, accoppiamento debole, autonomia, riusabilità); capire ruolo e limiti dell'ESB; descrivere un API gateway; saper giustificare una scelta architetturale. Durata indicativa: 3 ore. Prerequisiti: lezioni 1 e 2 dell'unità. Il laboratorio usa solo il JDK (HttpServer e HttpClient) e diagrams.net senza account.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi costruire un'app per le consegne a domicilio. Come la organizzi?</h2></div>
+  <div class="poll" data-id="soa-app">
+    <ol><li>Un unico programma, ben scritto</li><li>Tre o quattro grandi servizi</li><li>Decine di piccoli servizi indipendenti</li><li>Dipende da quante persone ci lavorano</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta sbagliata. Chi sceglie C ha spesso in mente Netflix o Uber; chi sceglie D ha già intuito la legge di Conway, che arriva tra poco. Tornare su questo sondaggio a fine lezione: una startup di 4 persone e un'azienda con 400 sviluppatori dovrebbero fare scelte diverse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di partenza</p><h2>Il monolite: tutto in un solo programma</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Interfaccia, logica e accesso ai dati in un'unica applicazione, che si compila, si installa e si avvia tutta insieme, con un solo database.</p>
+      <div class="cols-2">
+        <div class="card ok"><h3>Pregi</h3><ul class="points small"><li>Semplice da sviluppare e testare</li><li>Chiamate tra moduli velocissime</li><li>Una sola cosa da installare</li></ul></div>
+        <div class="card bad"><h3>Difetti, crescendo</h3><ul class="points small"><li>Ogni modifica richiede di ripubblicare tutto</li><li>Un errore può fermare tutto</li><li>Scala solo per intero</li></ul></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card fill"><h3>Applicazione unica</h3><p class="small">Catalogo · Carrello · Ordini · Pagamenti · Utenti</p></div>
+      <div class="card night"><h3>Un database</h3><p class="small muted">tutte le tabelle insieme</p></div>
+      <p class="small muted">Monolite non è un insulto: molti servizi famosi sono partiti così, e alcuni lo sono ancora.</p>
+    </div>
+  </div>
+  <aside class="notes">Esempio da raccontare: un monolite ben strutturato in moduli (il "monolite modulare") è una scelta più che dignitosa per una squadra piccola. I problemi arrivano con la crescita: se il catalogo riceve cento volte più richieste dei pagamenti, devo comunque replicare tutta l'applicazione; se cinquanta sviluppatori lavorano sullo stesso codice, ogni rilascio diventa una trattativa. Domanda: il registro elettronico della scuola è più probabilmente un monolite o un insieme di servizi? (Discussione aperta; molti gestionali nascono monolitici.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">SOA · Service-Oriented Architecture</p><h2>Il sistema come insieme di servizi</h2></div>
+  <p class="lead">Un <b>servizio</b> è una funzione di business (pagare, spedire, autenticare) offerta in rete attraverso un <mark>contratto</mark> pubblico. Chi lo usa conosce il contratto, non il codice.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Contratto</h3><p class="small">Operazioni, formati dei dati ed errori descritti in modo formale (per esempio un WSDL).</p></div>
+    <div class="card soft"><h3>Accoppiamento debole</h3><p class="small">Posso riscrivere un servizio senza cambiare gli altri, se il contratto resta uguale.</p></div>
+    <div class="card soft"><h3>Riusabilità</h3><p class="small">Lo stesso servizio "Pagamenti" serve il sito, l'app e il negozio fisico.</p></div>
+  </div>
+  <aside class="notes">La SOA si diffonde nei primi anni 2000 nelle grandi aziende (banche, assicurazioni, pubblica amministrazione), quasi sempre con web service SOAP e un ESB. I principi più citati sono quelli raccolti da Thomas Erl: contratto standardizzato, accoppiamento debole, astrazione, riusabilità, autonomia, assenza di stato, scopribilità, componibilità. Il prossimo puzzle li fa riconoscere in situazioni concrete. Domanda: perché il contratto è la cosa più importante? (Perché è l'unica cosa che gli altri vedono: cambiarlo rompe tutti i client.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Quale principio sta rispettando?</h2></div>
+  <dl class="puzzle-abbina" data-id="soa-principi">
+    <dt>Accoppiamento debole</dt><dd>Il servizio Spedizioni passa da Java a Go e nessuno se ne accorge</dd>
+    <dt>Astrazione</dt><dd>Il client non sa che dietro c'è un database Oracle</dd>
+    <dt>Autonomia</dt><dd>Il servizio Catalogo funziona anche se Pagamenti è giù</dd>
+    <dt>Componibilità</dt><dd>"Checkout" chiama in sequenza Carrello, Pagamenti e Spedizioni</dd>
+    <dt>Scopribilità</dt><dd>Un catalogo interno elenca tutti i servizi con i loro contratti</dd>
+  </dl>
+  <aside class="notes">Accoppiamento debole e astrazione si somigliano: l'astrazione riguarda che cosa il servizio nasconde (implementazione, dati), l'accoppiamento debole riguarda quanto un cambiamento in un servizio costringe a cambiare gli altri. A coppie, 4 minuti. Chiedere un esempio di accoppiamento forte: due servizi che leggono e scrivono direttamente le stesse tabelle del database.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera, raccontata da un ex dipendente</p><h2>Amazon, circa 2002: "solo interfacce di servizio"</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Secondo il racconto dell'ingegnere <b>Steve Yegge</b> (2011), Jeff Bezos impose a tutti i team regole semplici e brutali:</p>
+      <ol class="steps small">
+        <li>Ogni team espone dati e funzioni solo tramite <b>interfacce di servizio</b>.</li>
+        <li>I team comunicano tra loro solo attraverso queste interfacce: niente accessi diretti ai database degli altri.</li>
+        <li>Ogni interfaccia va progettata come se dovesse essere usata da <b>clienti esterni</b>.</li>
+      </ol>
+    </div>
+    <div class="card night"><h3>Il risultato</h3><p class="small">Se un servizio interno è già pronto per l'esterno, lo si può vendere. Nel 2006 nascono Amazon S3 ed EC2: l'inizio di <b>Amazon Web Services</b>, oggi il più grande fornitore di cloud.</p></div>
+  </div>
+  <aside class="notes">Fonte: il cosiddetto "Platform Rant" di Steve Yegge, un post interno di Google pubblicato per errore nel 2011, in cui racconta il suo periodo in Amazon. Il testo del "mandato" circola da allora; non esiste un documento ufficiale di Amazon che lo confermi parola per parola, per questo lo presentiamo come racconto. Nella versione di Yegge c'è anche una regola finale: "chi non lo fa sarà licenziato". Il collegamento con AWS è un'interpretazione diffusa, coerente con la storia: i servizi che Amazon usava per sé sono diventati prodotti. Domanda: perché "progettare per clienti esterni" migliora anche l'uso interno? (Contratti chiari, documentazione, sicurezza, nessuna scorciatoia.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">ESB · Enterprise Service Bus</p><h2>Il bus che collega tutti i servizi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Nella SOA classica i servizi non si chiamano direttamente: passano da un <b>bus</b> centrale che</p>
+      <ul class="points small">
+        <li>instrada i messaggi al servizio giusto</li>
+        <li>trasforma i formati (un XML vecchio in uno nuovo)</li>
+        <li>coordina processi lunghi (orchestrazione)</li>
+        <li>applica sicurezza e registra il traffico</li>
+      </ul>
+      <p class="small muted">Rischio: il bus diventa intelligente, enorme e indispensabile. Un nuovo monolite, nel mezzo.</p>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h3>Orchestrazione</h3><p class="small">Un direttore d'orchestra (il servizio Checkout o l'ESB) dice a ciascuno cosa fare e in che ordine.</p></div>
+      <div class="card"><h3>Coreografia</h3><p class="small">Nessun direttore: ogni servizio reagisce a eventi ("ordine pagato") e pubblica i suoi ("pacco spedito").</p></div>
+    </div>
+  </div>
+  <aside class="notes">Prodotti ESB storici: IBM WebSphere ESB, Oracle Service Bus, MuleSoft, Apache ServiceMix. La critica dei microservizi all'ESB si riassume nello slogan di Lewis e Fowler "smart endpoints and dumb pipes": l'intelligenza sta nei servizi, il canale di comunicazione deve solo trasportare. La coreografia si realizza con un broker di messaggi (Kafka, RabbitMQ): è più flessibile ma più difficile da seguire, perché nessuno ha in mano il processo intero. Domanda d'esame: disegna il processo di un ordine in versione orchestrata e in versione coreografata.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti · a coppie</span></p>
+  <h2>Scomponi la mensa della scuola in servizi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b>, scegli "Decide later" o "Dispositivo": non serve un account.</li>
+      <li>Requisiti: menu del giorno, prenotazione del pasto, pagamento con borsellino, avvisi ad allergici, statistiche per il cuoco.</li>
+      <li>Disegna da 4 a 6 servizi: per ognuno nome, 2 operazioni e i <b>dati che possiede</b>.</li>
+      <li>Collega con frecce chi chiama chi, scrivendo l'operazione sulla freccia.</li>
+      <li>Esporta come <b>mensa-soa-cognome.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni dato ha un solo proprietario (per esempio il saldo sta solo in Pagamenti) e nessun servizio legge il database di un altro. Se il servizio Statistiche cade, si può ancora prenotare.</div>
+  </div>
+  <aside class="notes">Soluzione possibile: Menu (piatti, ingredienti, allergeni; operazioni menuDelGiorno, aggiornaMenu), Prenotazioni (prenotazioni; prenota, annulla), Pagamenti (borsellino, movimenti; addebita, ricarica), Utenti (studenti, allergie; profilo, verificaAllergie), Notifiche (avvisaAllergico, promemoria), Statistiche (riceve eventi, contaPasti). Prenotazioni chiama Pagamenti.addebita e Utenti.verificaAllergie. Discussione: le allergie stanno in Utenti o in Menu? (Gli allergeni del piatto in Menu, le allergie della persona in Utenti: Prenotazioni li confronta.) Se diagrams.net non è raggiungibile va bene anche un disegno su carta fotografato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Microservizi</p><h2>SOA, in piccolo e senza bus</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nel 2014 James Lewis e Martin Fowler descrivono uno stile che molte aziende già usavano: un'applicazione come <mark>insieme di piccoli servizi</mark>, ognuno nel suo processo, che comunicano con meccanismi leggeri, spesso API HTTP.</p>
+      <ul class="points small">
+        <li>Ogni servizio ha <b>il suo database</b>.</li>
+        <li>Si rilascia da solo, anche più volte al giorno.</li>
+        <li>Lo possiede un team piccolo, dall'inizio alla produzione.</li>
+        <li>Ogni team sceglie linguaggio e tecnologia.</li>
+      </ul>
+    </div>
+    <div class="card night"><h3>Il conto da pagare</h3><ul class="points small"><li>Tante chiamate di rete: latenza e guasti (lezione 1)</li><li>Niente transazioni tra servizi diversi</li><li>Monitoraggio e log distribuiti</li><li>Serve automazione: container, Kubernetes, CI/CD</li></ul></div>
+  </div>
+  <aside class="notes">L'articolo "Microservices" di James Lewis e Martin Fowler (martinfowler.com, marzo 2014) è la descrizione più citata. Definizione originale: "an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API". Senza transazioni distribuite, la coerenza tra servizi si gestisce con processi a compensazione (pattern Saga): se la spedizione fallisce, si annulla il pagamento con un'operazione inversa. Netflix, Uber e Zalando sono gli esempi classici di aziende a microservizi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La legge di Conway</h2></div>
+  <figure class="citazione">
+    <blockquote>Le organizzazioni che progettano sistemi sono costrette a produrre progetti che copiano la loro struttura di comunicazione.</blockquote>
+    <figcaption><b>Melvin Conway</b>, informatico statunitense, in <i>How Do Committees Invent?</i>, Datamation, 1968</figcaption>
+  </figure>
+  <p class="lead">L'esempio di Conway: cinque persone sul compilatore COBOL e tre su quello ALGOL. Risultato: un compilatore in cinque fasi e uno in tre. Un'azienda con un team per ogni servizio produce microservizi.</p>
+  <aside class="notes">Originale: "Organizations which design systems (in the broad sense used here) are constrained to produce designs which are copies of the communication structures of these organizations." Traduzione nostra, abbreviata. L'esempio del compilatore è nello stesso articolo (con otto persone: cinque al COBOL e tre all'ALGOL, ottenendo un compilatore COBOL in cinque fasi e uno ALGOL in tre). Il nome "legge di Conway" lo ha dato Fred Brooks nel Mythical Man-Month. Molte aziende oggi fanno il contrario: organizzano i team come vorrebbero l'architettura ("manovra di Conway inversa"). Collegamento con la lezione lavorare-a-progetti già vista.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Confronto</p><h2>Tre architetture a confronto</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>Monolite</th><th>SOA classica</th><th>Microservizi</th></tr>
+    <tr><td><b>Unità</b></td><td>Un'applicazione</td><td>Servizi di business grandi</td><td>Servizi piccoli, uno per capacità</td></tr>
+    <tr><td><b>Comunicazione</b></td><td>Chiamate di metodo</td><td>ESB, spesso SOAP</td><td>HTTP/REST, gRPC, eventi</td></tr>
+    <tr><td><b>Dati</b></td><td>Un database</td><td>Spesso condivisi</td><td>Un database per servizio</td></tr>
+    <tr><td><b>Rilascio</b></td><td>Tutto insieme</td><td>Per servizio, coordinato</td><td>Indipendente, frequente</td></tr>
+    <tr><td><b>Quando</b></td><td>Team piccolo, dominio nuovo</td><td>Integrare sistemi aziendali esistenti</td><td>Molti team, carichi molto diversi</td></tr>
+  </table>
+  <div class="callout hl">All'esame: non basta dire "uso i microservizi". Scrivi <b>perché</b> (carico, team, rilasci) e <b>che cosa paghi</b> (rete, coerenza, complessità).</div>
+  <aside class="notes">La riga "Quando" è quella che fa la differenza in una prova scritta. Martin Fowler stesso consiglia di partire spesso da un monolite ben modulare ("MonolithFirst", 2015) e di estrarre servizi quando i confini sono chiari. Chiedere: per il progetto d'esame di una piccola web app di prenotazioni, quale architettura sceglieresti? (Monolite a tre livelli o pochi servizi: è una risposta ottima se giustificata.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale affermazione sui microservizi è corretta?</h2></div>
+  <div class="poll" data-id="soa-micro" data-tipo="quiz" data-risposta="C">
+    <ol><li>Sono sempre più veloci di un monolite</li><li>Condividono un unico database per restare coerenti</li><li>Ogni servizio dovrebbe possedere i propri dati</li><li>Vanno scritti tutti nello stesso linguaggio</li></ol>
+    <p class="why">Un database per servizio è la regola che garantisce l'indipendenza: se due servizi condividono le tabelle, non puoi cambiarne uno senza rompere l'altro. Non sono più veloci per natura: aggiungono chiamate di rete. E ogni team può scegliere il suo linguaggio.</p>
+  </div>
+  <aside class="notes">La B è il tranello: sembra la soluzione sensata per la coerenza, ma crea un accoppiamento fortissimo (il cosiddetto "monolite distribuito": tutti i difetti dei microservizi e nessun vantaggio). La A è il mito più diffuso: una chiamata di rete costa millisecondi, una chiamata di metodo nanosecondi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Prime Video, 2023: uno strumento di monitoraggio passa da servizi distribuiti a un unico processo. Che cosa succede?</h2></div>
+  <div class="poll" data-id="soa-prime" data-tipo="quiz" data-risposta="B">
+    <ol><li>Più affidabile, ma con costi molto più alti</li><li>Costi di infrastruttura ridotti di oltre il 90%</li><li>Nessuna differenza misurabile</li><li>Tornano ai servizi distribuiti dopo un mese</li></ol>
+    <p class="why">Il team ha raccontato sul blog tecnico di Prime Video che il servizio, che analizzava la qualità dei video, spendeva soprattutto per spostare dati tra componenti. Riunendoli in un processo ha tagliato i costi di oltre il 90% e ha retto più carico.</p>
+  </div>
+  <aside class="notes">Fonte: articolo del blog tecnico di Prime Video, marzo 2023, "Scaling up the Prime Video audio/video monitoring service and reducing costs by 90%". La prima versione usava componenti serverless (AWS Step Functions e Lambda) e un archivio S3 per passare i fotogrammi tra un passo e l'altro; la seconda mette tutto nello stesso processo, in container. Attenzione a non esagerare: riguarda un singolo strumento, non tutta Prime Video, che resta fatta di molti servizi. Morale: la granularità giusta dipende da quanti dati si scambiano i componenti. La fallacia "il costo del trasporto è zero" (lezione 1) in versione reale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">API gateway</p><h2>Una sola porta d'ingresso per tanti servizi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="org">
+      <div class="org-box top">App, browser, partner</div>
+      <div class="org-row" style="--l:50%;--r:50%"><div class="org-box acc">API gateway</div></div>
+      <div class="org-row" style="--l:16%;--r:16%"><div class="org-box">Catalogo</div><div class="org-box">Ordini</div><div class="org-box">Pagamenti</div><div class="org-box">Utenti</div></div>
+    </div>
+    <ul class="points small">
+      <li><b>Instradamento</b>: <code>/ordini</code> va al servizio Ordini</li>
+      <li><b>Autenticazione</b>: controlla chiavi e token una volta sola</li>
+      <li><b>Limiti</b>: troppe richieste? <code>429</code></li>
+      <li><b>TLS</b>, log, statistiche, versioni dell'API</li>
+      <li><b>Aggregazione</b>: una chiamata del client, più servizi dietro</li>
+    </ul>
+  </div>
+  <p class="small muted">Esempi: Amazon API Gateway, Azure API Management, Google Apigee, Kong, NGINX.</p>
+  <aside class="notes">Il gateway è un caso particolare di reverse proxy, specializzato per le API. Nasconde ai client la struttura interna: si possono dividere o spostare i servizi senza cambiare le app. Rischi: diventa un singolo punto di guasto (si replica) e, se ci si mette troppa logica, il nuovo ESB. Amazon API Gateway è il servizio gestito di AWS, presentato nel 2015: si configurano le rotte e il servizio scala da solo. Pattern collegato: "Backend for Frontend", un gateway diverso per l'app mobile e per il sito, perché hanno bisogno di dati diversi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il viaggio di una richiesta attraverso il gateway</h2></div>
+  <ol class="puzzle-ordina" data-id="soa-viaggio">
+    <li>L'app invia <code>GET /ordini/7</code> con la sua chiave API</li>
+    <li>Il gateway termina la connessione TLS</li>
+    <li>Il gateway verifica la chiave: valida</li>
+    <li>Il gateway controlla il limite di richieste: sotto la soglia</li>
+    <li>La richiesta viene inoltrata al servizio Ordini</li>
+    <li>Ordini risponde e il gateway registra la chiamata nei log</li>
+  </ol>
+  <aside class="notes">Discussione sull'ordine tra autenticazione e limite: alcuni gateway applicano un limite grezzo anche prima dell'autenticazione, per difendersi dagli attacchi DoS, e poi un limite per cliente dopo. Domande: che codice riceve l'app se la chiave è sbagliata? (401.) E se ha fatto troppe richieste? (429 Too Many Requests.) E se il servizio Ordini è spento? (502 o 503 dal gateway.) Li studieremo nella lezione su HTTP.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Gateway, parte 1: due microservizi</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)">
+<pre class="code" style="font-size:20px"><span class="k">import</span> com.sun.net.httpserver.*;
+<span class="k">import</span> java.net.*;
+<span class="k">import</span> java.net.http.*;
+
+<span class="k">public class</span> Gateway {
+  <span class="k">static void</span> rispondi(HttpExchange ex, <span class="k">int</span> code, <span class="k">byte</span>[] b)
+      <span class="k">throws</span> java.io.IOException {
+    ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"application/json"</span>);
+    ex.sendResponseHeaders(code, b.length);
+    ex.getResponseBody().write(b);
+    ex.close();
+  }
+  <span class="k">static void</span> servizio(<span class="k">int</span> porta, String json) <span class="k">throws</span> Exception {
+    <span class="k">var</span> s = HttpServer.create(<span class="k">new</span> InetSocketAddress(porta), 0);
+    s.createContext(<span class="s">"/"</span>, ex -> rispondi(ex, 200, json.getBytes()));
+    s.start();
+  }
+  <span class="c">// main nella parte 2</span>
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Crea <b>Gateway.java</b> con questi due metodi.</li>
+        <li>Il metodo <code>servizio</code> avvia un microservizio finto su una porta.</li>
+        <li>Nel <code>main</code> (parte 2) ne avvieremo due: <b>menu</b> sulla 9001 e <b>ordini</b> sulla 9002.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> per ora il file deve solo compilare: <code>javac Gateway.java</code> senza errori (manca il main, quindi non si avvia ancora).</div>
+    </div>
+  </div>
+  <aside class="notes">Tre processi in uno: per semplicità i due microservizi e il gateway stanno nello stesso programma, su porte diverse. In un sistema vero sarebbero tre programmi su tre container. HttpServer è nel modulo jdk.httpserver, incluso nel JDK. Se javac segnala "cannot find symbol HttpExchange", controllare l'import com.sun.net.httpserver.*.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Gateway, parte 2: instradare e proteggere</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)">
+<pre class="code" style="font-size:16px;padding:26px 34px"><span class="k">public static void</span> main(String[] a) <span class="k">throws</span> Exception {
+  servizio(9001, <span class="s">"[{\"id\":1,\"piatto\":\"Lasagne\",\"prezzo\":6.5}]"</span>);
+  servizio(9002, <span class="s">"[{\"id\":7,\"stato\":\"in preparazione\"}]"</span>);
+  <span class="k">var</span> http = HttpClient.newHttpClient();
+  <span class="k">var</span> gw = HttpServer.create(<span class="k">new</span> InetSocketAddress(<span class="hl">9000</span>), 0);
+  gw.createContext(<span class="s">"/"</span>, ex -> {
+    String path = ex.getRequestURI().getPath();
+    <span class="k">int</span> porta = path.startsWith(<span class="s">"/menu"</span>) ? 9001
+              : path.startsWith(<span class="s">"/ordini"</span>) ? 9002 : 0;
+    <span class="k">if</span> (!<span class="s">"5G"</span>.equals(ex.getRequestHeaders().getFirst(<span class="s">"X-Api-Key"</span>)))
+      rispondi(ex, <span class="hl">401</span>, <span class="s">"{\"errore\":\"chiave mancante\"}"</span>.getBytes());
+    <span class="k">else if</span> (porta == 0)
+      rispondi(ex, <span class="hl">404</span>, <span class="s">"{\"errore\":\"servizio sconosciuto\"}"</span>.getBytes());
+    <span class="k">else try</span> {
+      <span class="k">var</span> r = http.send(HttpRequest.newBuilder(URI.create(
+          <span class="s">"http://localhost:"</span> + porta + path)).build(),
+          HttpResponse.BodyHandlers.ofByteArray());
+      rispondi(ex, r.statusCode(), r.body());
+    } <span class="k">catch</span> (Exception e) {
+      rispondi(ex, <span class="hl">502</span>, <span class="s">"{\"errore\":\"servizio giu\"}"</span>.getBytes());
+    }
+  });
+  gw.start();
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Aggiungi il <code>main</code> e avvia: <code>java Gateway.java</code></li>
+        <li>In un altro terminale:<br><code>curl -i localhost:9000/menu</code></li>
+        <li><code style="white-space:normal">curl -H "X-Api-Key: 5G" localhost:9000/menu</code></li>
+        <li>Prova anche <code>/ordini</code> e <code>/pagamenti</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> senza chiave <b>401 Unauthorized</b>; con la chiave il JSON delle lasagne; <code>/pagamenti</code> dà <b>404</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Il client parla solo con la porta 9000 e non sa che dietro ci sono 9001 e 9002: è la trasparenza di posizione della lezione 1. Prova extra: curl diretto su localhost:9001 funziona senza chiave. In un sistema vero le porte dei servizi non sono raggiungibili dall'esterno: solo il gateway è esposto (firewall, rete privata). Sfida per i più veloci: contare le richieste per chiave con una Map&lt;String,Integer&gt; e rispondere 429 dopo la quinta richiesta in un minuto. In PowerShell usare curl.exe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Servizi, gateway e intelligenza artificiale</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Gli AI gateway</h3><p>Le aziende che usano modelli linguistici mettono spesso un gateway davanti alle API dei fornitori di AI: custodisce le chiavi, limita richieste e <b>token</b> per team, registra le chiamate e permette di cambiare modello senza toccare le app. È lo stesso schema di questa lezione, con un costo per ogni chiamata.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un assistente AI è fatto di servizi</h3><p>Dietro una chat con l'AI ci sono di solito servizi separati: il server del modello su GPU, un database vettoriale per i documenti, i filtri di sicurezza, gli strumenti collegati con MCP. Scalano in modo diverso: le GPU costano molto più delle CPU.</p></div>
+  </div>
+  <aside class="notes">Esempi reali di AI gateway: Cloudflare AI Gateway, Kong AI Gateway, oltre a funzioni simili nei servizi cloud. Il conteggio dei token è importante perché le API dei modelli si pagano a token di input e output. Il database vettoriale serve per la ricerca per significato nei documenti (RAG, retrieval-augmented generation). Domanda: perché ha senso separare il server del modello dal resto? (Le GPU sono costose: si vogliono usare al massimo, mentre l'interfaccia e i filtri girano su macchine economiche.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nella SOA ciò che un servizio offre agli altri è descritto da un <span class="blank" data-risposta="contratto|contract"></span>.</p>
+    <p>Il bus centrale della SOA classica si chiama <span class="blank" data-risposta="ESB|enterprise service bus"></span>.</p>
+    <p>Nei microservizi ogni servizio possiede il proprio <span class="blank" data-risposta="database|db"></span>.</p>
+    <p>Il punto unico d'ingresso che instrada le richieste ai servizi è l'API <span class="blank" data-risposta="gateway"></span>.</p>
+    <p>Secondo la legge di <span class="blank" data-risposta="Conway"></span>, i sistemi copiano la struttura di comunicazione di chi li progetta.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: contratto, ESB, database, gateway, Conway.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Monolite: semplice, ma cresce male</li>
+      <li>SOA: servizi con contratto, accoppiamento debole, ESB</li>
+      <li>Microservizi: piccoli, un database ciascuno, rilasci indipendenti</li>
+    </ul>
+    <ul class="points">
+      <li>Più servizi = più rete, più guasti, più automazione</li>
+      <li>API gateway: instrada, autentica, limita, registra</li>
+      <li>La scelta giusta dipende da carico, team e dati</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (progetto dell'architettura di un cinema multisala). Tornare al sondaggio iniziale: la risposta D ("dipende da quante persone ci lavorano") era la più saggia. Prossima lezione: i web service, cioè il modo standard per far parlare questi servizi tra linguaggi e aziende diverse.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

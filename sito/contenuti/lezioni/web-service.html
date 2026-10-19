@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I web service · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 4</p>
+  <h1>I web service</h1>
+  <p class="lead">Programmi che parlano con altri programmi attraverso il Web, in qualunque linguaggio e su qualunque sistema. Il linguaggio comune: XML o JSON.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Interoperabilità, XML, JSON, descrizione dei servizi</span></p>
+  <aside class="notes">Obiettivi: definire un web service, spiegare l'interoperabilità, leggere e scrivere documenti XML e JSON corretti, conoscere XSD e JSON Schema, sapere come si descrive e si trova un servizio (WSDL, OpenAPI, UDDI), usare un web service pubblico da curl e da Java. Durata indicativa: 3 ore. Prerequisiti: lezioni 1-3. I laboratori 2 e 3 richiedono accesso a Internet verso api.open-meteo.com e www.ecb.europa.eu (nessun account).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Ordini una pizza con un'app e paghi con la carta. Quante aziende diverse si parlano?</h2></div>
+  <div class="poll" data-id="ws-pizza">
+    <ol><li>Una sola: quella dell'app</li><li>Due o tre</li><li>Da quattro a sei</li><li>Più di sei</li></ol>
+  </div>
+  <aside class="notes">Ricostruire insieme alla lavagna: l'app di consegne, la pizzeria (o il suo gestionale), il servizio di mappe, il fornitore dei pagamenti, il circuito della carta, la banca del cliente, la banca della pizzeria, il servizio di notifiche push del sistema operativo, spesso un servizio di SMS. Facilmente più di sei. Nessuna di queste aziende usa lo stesso linguaggio di programmazione o lo stesso database: comunicano con web service. È il problema dell'interoperabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Che cos'è un web service</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un sistema software progettato per l'<mark>interazione tra macchine</mark> in rete, con un'interfaccia descritta in un formato leggibile da un programma.</p>
+      <p class="small muted">Dalla definizione del W3C, <i>Web Services Architecture</i>, 2004 (riassunta)</p>
+      <ul class="points">
+        <li>Usa i protocolli del Web, soprattutto <b>HTTP</b>.</li>
+        <li>I dati viaggiano come <b>testo strutturato</b>: XML o JSON.</li>
+        <li>Chi lo usa conosce solo l'interfaccia, non il linguaggio di chi lo offre.</li>
+      </ul>
+    </div>
+    <div class="card night"><h3>Pagina web o web service?</h3><p class="small"><b>Pagina web</b>: HTML per occhi umani, con colori e impaginazione.</p><p class="small"><b>Web service</b>: dati puri per un programma, che li elabora e li mostra a modo suo.</p><p class="small muted">La stessa previsione del tempo: una pagina per te, un JSON per l'app.</p></div>
+  </div>
+  <aside class="notes">La definizione originale del W3C (Web Services Architecture, W3C Working Group Note, febbraio 2004) cita esplicitamente WSDL e SOAP: "A Web service is a software system designed to support interoperable machine-to-machine interaction over a network. It has an interface described in a machine-processable format (specifically WSDL)...". Oggi il termine si usa in senso più ampio e comprende anche i servizi REST con JSON. Rispetto a RMI della lezione 2: un web service non lega client e server allo stesso linguaggio e usa porte e protocolli che le reti aziendali lasciano passare (80 e 443).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Interoperabilità</p><h2>Linguaggi diversi, un solo modo di parlarsi</h2></div>
+  <div class="flow">
+    <div class="card"><h3>App Android</h3><p class="small">Kotlin</p></div>
+    <div class="card soft"><h3>Server dell'app</h3><p class="small">Java su Linux</p></div>
+    <div class="card"><h3>Pagamenti</h3><p class="small">Python nel cloud</p></div>
+    <div class="card night"><h3>Banca</h3><p class="small">C# e mainframe</p></div>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Formato comune</h3><p class="small">XML o JSON: testo che ogni linguaggio sa leggere e scrivere.</p></div>
+    <div class="card soft"><h3>Trasporto comune</h3><p class="small">HTTP sopra TCP/IP, su porte che i firewall lasciano passare.</p></div>
+    <div class="card soft"><h3>Contratto comune</h3><p class="small">Una descrizione formale delle operazioni: WSDL o OpenAPI.</p></div>
+  </div>
+  <aside class="notes">Far notare che nessuno dei quattro sistemi deve conoscere come sono fatti gli altri: basta rispettare formato, trasporto e contratto. È la fallacia numero 8 ("la rete è omogenea") risolta con gli standard. Domanda: che cosa succede se la banca cambia il formato di una data senza avvisare? (Si rompono tutti i client: per questo i contratti si versionano.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Standard, al plurale</h2></div>
+  <figure class="citazione">
+    <blockquote>Il bello degli standard è che ce ne sono così tanti tra cui scegliere.</blockquote>
+    <figcaption><b>Andrew S. Tanenbaum</b>, informatico, autore del sistema operativo MINIX, in <i>Computer Networks</i>, 1981</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card"><h3>SOAP</h3><p class="small">Protocollo standard del W3C: messaggi XML in una busta, contratto WSDL, molte estensioni per sicurezza e affidabilità. Lezioni 6 e 7.</p></div>
+    <div class="card"><h3>REST</h3><p class="small">Uno stile architetturale, non un protocollo: risorse con un URI, metodi HTTP, quasi sempre JSON. Lezioni dalla 8 in poi.</p></div>
+  </div>
+  <aside class="notes">Originale: "The nice thing about standards is that you have so many to choose from." Traduzione nostra. La frase compare nella prima edizione di Computer Networks (1981) di Tanenbaum, lo stesso autore del manuale sui sistemi distribuiti citato nella lezione 1. Linus Torvalds scrisse Linux partendo da MINIX. Ironia vera: per i web service esistono SOAP, REST, gRPC, GraphQL, JSON-RPC, e ognuno ha i suoi formati. Oggi le API pubbliche sono quasi tutte REST con JSON, ma SOAP resiste in banche, assicurazioni e pubblica amministrazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due formati, lo stesso dato</p><h2>XML e JSON a confronto</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:23px">&lt;?xml version=<span class="s">"1.0"</span> encoding=<span class="s">"UTF-8"</span>?&gt;
+&lt;<span class="k">studente</span> id=<span class="s">"7"</span>&gt;
+  &lt;<span class="k">nome</span>&gt;Ada Lovelace&lt;/<span class="k">nome</span>&gt;
+  &lt;<span class="k">classe</span>&gt;5G&lt;/<span class="k">classe</span>&gt;
+  &lt;<span class="k">voti</span>&gt;
+    &lt;<span class="k">voto</span> materia=<span class="s">"TPSI"</span>&gt;9&lt;/<span class="k">voto</span>&gt;
+    &lt;<span class="k">voto</span> materia=<span class="s">"Sistemi"</span>&gt;8.5&lt;/<span class="k">voto</span>&gt;
+  &lt;/<span class="k">voti</span>&gt;
+  &lt;<span class="k">rappresentante</span>&gt;true&lt;/<span class="k">rappresentante</span>&gt;
+&lt;/<span class="k">studente</span>&gt;</pre>
+<pre class="code" style="font-size:23px">{
+  <span class="s">"id"</span>: 7,
+  <span class="s">"nome"</span>: <span class="s">"Ada Lovelace"</span>,
+  <span class="s">"classe"</span>: <span class="s">"5G"</span>,
+  <span class="s">"voti"</span>: [
+    { <span class="s">"materia"</span>: <span class="s">"TPSI"</span>, <span class="s">"voto"</span>: 9 },
+    { <span class="s">"materia"</span>: <span class="s">"Sistemi"</span>, <span class="s">"voto"</span>: 8.5 }
+  ],
+  <span class="s">"rappresentante"</span>: <span class="k">true</span>
+}</pre>
+  </div>
+  <div class="cols-2">
+    <p class="small"><b>XML</b>: elementi con tag di apertura e chiusura, attributi, un solo elemento radice. Tutto è testo: il tipo lo dice uno schema.</p>
+    <p class="small"><b>JSON</b>: oggetti <code>{}</code>, array <code>[]</code>, stringhe, numeri, <code>true</code>, <code>false</code>, <code>null</code>. Più corto, ed è JavaScript.</p>
+  </div>
+  <aside class="notes">Contare i caratteri: la versione XML è circa una volta e mezza quella JSON, per via dei tag di chiusura. In XML "9" e "true" sono testo: è lo schema XSD a dire che sono un intero e un booleano. In JSON il tipo è scritto nel dato, ma i tipi sono pochi: non esistono date, interi e decimali distinti, caratteri. JSON (JavaScript Object Notation) è stato reso popolare da Douglas Crockford all'inizio degli anni 2000; oggi è definito dalla RFC 8259 (2017) e dallo standard ECMA-404. XML è una raccomandazione W3C del 1998, figlio di SGML come l'HTML.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole</p><h2>Ben formato, valido, con il suo schema</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>XML ben formato</h3><ul class="points small"><li>Un solo elemento radice</li><li>Ogni tag aperto viene chiuso, nell'ordine giusto</li><li>Maiuscole e minuscole contano: <code>&lt;Nome&gt;</code> non chiude <code>&lt;nome&gt;</code></li><li>Valori degli attributi tra virgolette</li><li><code>&amp;</code> e <code>&lt;</code> nel testo si scrivono <code>&amp;amp;</code> e <code>&amp;lt;</code></li></ul></div>
+    <div class="card"><h3>JSON corretto</h3><ul class="points small"><li>Chiavi e stringhe tra virgolette <b>doppie</b></li><li>Nessuna virgola dopo l'ultimo elemento</li><li>Niente commenti</li><li>Numeri senza zeri iniziali: <code>17</code>, non <code>017</code></li><li><code>true</code>, <code>false</code>, <code>null</code> in minuscolo</li></ul></div>
+  </div>
+  <div class="callout"><b>Valido</b> significa di più: il documento rispetta uno <b>schema</b> che dice quali elementi, in che ordine e di che tipo. Per XML si usa <b>XSD</b>, per JSON <b>JSON Schema</b>.</div>
+  <aside class="notes">Un documento XML può essere ben formato ma non valido (per esempio un voto con il testo "nove" quando lo schema vuole un decimale). Un parser rifiuta sempre un documento mal formato; la validazione rispetto a uno schema è invece un passo in più, facoltativo. Il WSDL della lezione 6 contiene proprio uno schema XSD dei messaggi. JSON Schema è usato anche per descrivere gli strumenti dei modelli AI: lo vedremo nel box Oggi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Trova l'errore: abbina ogni frammento al suo problema</h2></div>
+  <dl class="puzzle-abbina" data-id="ws-errori">
+    <dt><code>&lt;voto&gt;9&lt;/Voto&gt;</code></dt><dd>Maiuscole diverse tra apertura e chiusura</dd>
+    <dt><code>&lt;a&gt;&lt;b&gt;&lt;/a&gt;&lt;/b&gt;</code></dt><dd>Tag chiusi nell'ordine sbagliato</dd>
+    <dt><code>&lt;voto valore=9/&gt;</code></dt><dd>Valore dell'attributo senza virgolette</dd>
+    <dt><code>{'nome': 'Ada'}</code></dt><dd>Virgolette singole, JSON vuole le doppie</dd>
+    <dt><code>[1, 2, 3,]</code></dt><dd>Virgola dopo l'ultimo elemento</dd>
+  </dl>
+  <aside class="notes">Tutti errori che i parser segnalano subito. Il terzo e il quarto sono quelli che fa chi viene dall'HTML (che tollera attributi senza virgolette) o da Python (che accetta le virgolette singole nei dizionari). La virgola finale è permessa in JavaScript e in Python ma non in JSON. Chiedere: come si correggono? (&lt;voto&gt;9&lt;/voto&gt;, &lt;a&gt;&lt;b&gt;&lt;/b&gt;&lt;/a&gt;, &lt;voto valore="9"/&gt;, {"nome": "Ada"}, [1, 2, 3].)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Devi mandare in JSON la data di una verifica. Come la scrivi?</h2></div>
+  <div class="poll" data-id="ws-data" data-tipo="quiz" data-risposta="B">
+    <ol><li>Con il tipo <code>date</code> di JSON</li><li>Come stringa ISO 8601, per esempio <code>"2026-10-19"</code></li><li>Come numero, per esempio <code>19102026</code></li><li>Non si può: JSON non contiene date</li></ol>
+    <p class="why">JSON non ha un tipo data: si usa una stringa, e per convenzione il formato ISO 8601 (anno-mese-giorno, con l'ora e il fuso se servono). Si ordina bene, non è ambiguo tra formato italiano e americano e ogni linguaggio lo sa leggere.</p>
+  </div>
+  <aside class="notes">La A è l'errore classico di chi pensa a SQL o a XSD (che hanno xs:date). La D è quasi vera: il tipo non c'è, ma le date si rappresentano benissimo. La C è pericolosa: 19102026 è ambiguo e non si ordina. Esempio con l'ora: "2026-10-19T08:00:00+02:00". In Java: LocalDate.parse("2026-10-19") e LocalDate.toString() usano proprio ISO 8601.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La tua classe in XML e in JSON</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Con un editor (VS Code, Notepad++, Blocco note) crea <b>classe.xml</b>: radice <code>&lt;classe nome="5G"&gt;</code>, tre <code>&lt;studente&gt;</code> con id, nome e almeno due voti.</li>
+      <li>Aprilo nel browser (trascinalo nella finestra): vedi l'albero del documento.</li>
+      <li>Cancella un tag di chiusura, salva e ricarica: leggi l'errore.</li>
+      <li>Crea <b>classe.json</b> con gli stessi dati. Nella Console dei DevTools (F12) scrivi <code>JSON.parse(`</code>, incolla il file, chiudi con <code>`)</code> e premi Invio.</li>
+      <li>Metti in <b>classe-cognome.zip</b> i due file.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il browser segnala l'errore XML con la riga (in Chrome "This page contains the following errors", in Firefox "Errore di interpretazione XML"). <code>JSON.parse</code> restituisce un oggetto che puoi espandere; se c'è un errore, ti dice la posizione.</div>
+  </div>
+  <aside class="notes">Gli accenti gravi (backtick) servono a incollare testo su più righe in JavaScript. Firefox apre i file .json con un visualizzatore che segnala gli errori anche senza la Console. Errori tipici da cercare girando tra i banchi: virgola dopo l'ultimo studente, voti scritti come "9" (stringa) invece che 9 (numero), nome della radice diverso in apertura e chiusura. Estensione: aggiungere un attributo con il carattere &amp; e vedere che va scritto &amp;amp;.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Descrizione e scoperta</p><h2>Come so che cosa offre un servizio, e dove trovarlo?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>WSDL</h3><p class="small">Descrizione in XML di un servizio SOAP: operazioni, messaggi, tipi (XSD), indirizzo. Da un WSDL si genera il client in automatico.</p></div>
+    <div class="card soft"><h3>OpenAPI</h3><p class="small">Descrizione in YAML o JSON di un'API REST: percorsi, metodi, parametri, risposte. Nata come Swagger, dal 2016 si chiama OpenAPI.</p></div>
+    <div class="card soft"><h3>Cataloghi</h3><p class="small">Portali per sviluppatori e cataloghi interni delle aziende, con documentazione e chiavi d'accesso.</p></div>
+  </div>
+  <div class="callout">La scoperta automatica sognata nei primi anni 2000, <b>UDDI</b>, un grande elenco telefonico mondiale dei servizi, non ha funzionato: il registro pubblico di IBM, Microsoft e SAP ha chiuso nel 2006.</div>
+  <aside class="notes">UDDI (Universal Description, Discovery and Integration) prevedeva che un programma trovasse da solo il servizio giusto in un registro pubblico e lo usasse. In pratica le aziende non volevano esporre i servizi a sconosciuti e i contratti richiedevano accordi commerciali. È rimasto in qualche registro interno. Curiosità: con gli agenti AI l'idea della scoperta automatica torna di moda; con MCP un'applicazione chiede a un server l'elenco degli strumenti (tools/list) e le loro descrizioni in JSON Schema, e il modello decide quale usare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Due web service pubblici, due formati</h2>
+  <div class="stack">
+<pre class="code" style="font-size:22px">curl "https://api.open-meteo.com/v1/forecast?latitude=45.46&amp;longitude=9.19&amp;current=temperature_2m"
+curl https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml</pre>
+    <div class="cols-2 wide-left">
+      <ol class="steps small">
+        <li>Nel Prompt dei comandi esegui i due comandi (in PowerShell: <code>curl.exe</code>).</li>
+        <li>Nel JSON di Open-Meteo trova la temperatura attuale a Milano e la sua unità di misura.</li>
+        <li>Nell'XML della Banca Centrale Europea trova il cambio euro-dollaro e la data.</li>
+        <li>Ripeti con <code>-i</code> e annota l'header <code>Content-Type</code> delle due risposte.</li>
+        <li>Salva le risposte e le note in <b>due-formati-cognome.txt</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> nel JSON c'è un oggetto <code>"current"</code> con <code>"temperature_2m"</code>, l'unità è in <code>"current_units"</code>. Nell'XML c'è un elemento <code>Cube</code> con <code>currency='USD'</code> e un <code>rate</code>. Il primo Content-Type contiene json, il secondo xml.</div>
+    </div>
+  </div>
+  <aside class="notes">Nessuno dei due servizi richiede un account o una chiave. Open-Meteo è un servizio meteo open source; i parametri latitude e longitude sono quelli di Milano (cambiateli con quelli del vostro comune). Il file della BCE è aggiornato ogni giorno lavorativo nel pomeriggio. Le virgolette intorno al primo URL sono necessarie perché la &amp; nel Prompt dei comandi separa i comandi. Se la rete della scuola blocca i siti, il docente esegue i comandi sulla LIM da un hotspot. Domanda: perché la BCE, una grande istituzione, usa ancora XML? (Il servizio esiste da molti anni, molti sistemi bancari lo leggono così: cambiare formato romperebbe i client.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un client Java per un web service</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)">
+<pre class="code" style="font-size:19px"><span class="k">import</span> java.net.URI;
+<span class="k">import</span> java.net.http.*;
+<span class="k">import</span> java.util.regex.*;
+
+<span class="k">public class</span> Meteo {
+  <span class="k">public static void</span> main(String[] a) <span class="k">throws</span> Exception {
+    String url = <span class="s">"https://api.open-meteo.com/v1/forecast"</span>
+        + <span class="s">"?latitude=45.46&amp;longitude=9.19&amp;current=temperature_2m"</span>;
+    <span class="k">var</span> client = HttpClient.newHttpClient();
+    <span class="k">var</span> req = HttpRequest.newBuilder(URI.create(url)).build();
+    <span class="k">var</span> r = client.send(req, HttpResponse.BodyHandlers.ofString());
+    System.out.println(<span class="s">"HTTP "</span> + r.statusCode() + <span class="s">"  "</span>
+        + r.headers().firstValue(<span class="s">"content-type"</span>).orElse(<span class="s">"?"</span>));
+    Matcher m = Pattern.compile(<span class="s">"\"temperature_2m\":(-?[\\d.]+)"</span>)
+        .matcher(r.body());
+    System.out.println(m.find() ? <span class="s">"A Milano ci sono "</span> + m.group(1)
+        + <span class="s">" gradi"</span> : <span class="s">"Temperatura non trovata"</span>);
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Scrivi <b>Meteo.java</b> ed eseguilo con <code>java Meteo.java</code>.</li>
+        <li>Cambia le coordinate con quelle della tua città.</li>
+        <li>Chiedi anche il vento con <code style="white-space:normal;word-break:break-all">current=temperature_2m,wind_speed_10m</code> e stampalo.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> <b>HTTP 200</b>, un Content-Type con <code>application/json</code> e una temperatura plausibile, per esempio <b>A Milano ci sono 14.3 gradi</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">L'espressione regolare cerca il primo "temperature_2m" seguito da un numero: quello in current_units è seguito da una stringa ("°C") e quindi viene saltato. È una scorciatoia didattica: in un progetto vero si usa un parser JSON (per esempio la libreria Jackson o Gson con Maven), perché le espressioni regolari si rompono se il formato cambia anche di poco. Domanda: che cosa succede al programma se il servizio è giù? (client.send lancia un'eccezione: collegare con il laboratorio Riprova della lezione 1.) Soluzione dello step 3: regex analoga con "wind_speed_10m".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le API dei modelli AI sono web service</h2></div>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)">
+<pre class="code" style="font-size:20px"><span class="k">POST</span> https://api.anthropic.com/v1/messages
+x-api-key: <span class="c">(la tua chiave segreta)</span>
+anthropic-version: 2023-06-01
+content-type: application/json
+
+{ <span class="s">"model"</span>: <span class="s">"nome-del-modello"</span>,
+  <span class="s">"max_tokens"</span>: 200,
+  <span class="s">"messages"</span>: [
+    { <span class="s">"role"</span>: <span class="s">"user"</span>,
+      <span class="s">"content"</span>: <span class="s">"Spiega il marshalling"</span> } ] }</pre>
+    <div class="stack">
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Chiedere qualcosa a un modello linguistico da un programma è una <b>richiesta HTTP con un corpo JSON</b>: la risposta è un altro JSON con il testo generato e i token usati. OpenAI, Google e Anthropic seguono lo stesso schema.</p></div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per farsi rispondere con dati strutturati, si descrivono gli strumenti o il formato atteso con <b>JSON Schema</b>: lo stesso tipo di contratto che usano i web service.</p></div>
+    </div>
+  </div>
+  <aside class="notes">L'esempio segue la documentazione pubblica della Messages API di Anthropic: endpoint /v1/messages, header x-api-key e anthropic-version, corpo con model, max_tokens e messages. Il nome del modello è volutamente generico perché cambia spesso: si trova nella documentazione. La risposta contiene tra l'altro "content": [{"type": "text", "text": "..."}] e "usage" con input_tokens e output_tokens, che determinano il costo. Non far provare agli studenti chiamate con chiavi personali: le API sono a pagamento e la chiave non va mai scritta nel codice o condivisa. Se il docente vuole, mostra una chiamata sulla LIM con la chiave della scuola, dentro una variabile d'ambiente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un'API risponde con l'header Content-Type application/json. Che cosa garantisce?</h2></div>
+  <div class="poll" data-id="ws-ct" data-tipo="quiz" data-risposta="A">
+    <ol><li>Niente: è una dichiarazione del server, il client deve comunque controllare</li><li>Che il corpo è sicuramente JSON valido</li><li>Che il corpo rispetta uno schema JSON</li><li>Che i dati sono cifrati durante il viaggio</li></ol>
+    <p class="why">L'header dice che cosa il server <b>dichiara</b> di mandare. Un server con un bug, o una pagina d'errore di un proxy, può mandare HTML con quell'header. Un client robusto gestisce l'errore di parsing. La cifratura dipende da HTTPS, non dal tipo di contenuto.</p>
+  </div>
+  <aside class="notes">Tranello: molti scelgono B. Esempio reale: un proxy aziendale o un gateway che restituisce una pagina HTML di errore, o un servizio che manda un JSON troncato perché la connessione cade. La C confonde il formato con il contratto (lo schema si verifica a parte). Prepara la lezione successiva sugli header HTTP e i tipi MIME.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un web service è pensato per l'interazione tra <span class="blank" data-risposta="macchine|programmi|computer"></span>, non tra persone.</p>
+    <p>Un documento XML che rispetta le regole di sintassi si dice ben <span class="blank" data-risposta="formato"></span>.</p>
+    <p>In JSON chiavi e stringhe vanno tra virgolette <span class="blank" data-risposta="doppie"></span>.</p>
+    <p>Lo schema per validare un documento XML si scrive in <span class="blank" data-risposta="XSD|XML Schema"></span>.</p>
+    <p>La descrizione standard di un'API REST si chiama <span class="blank" data-risposta="OpenAPI|Swagger"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: macchine (accettati programmi, computer), formato, doppie, XSD, OpenAPI (accettato Swagger).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Web service: interazione tra macchine, su protocolli Web</li>
+      <li>Interoperabilità: formato, trasporto e contratto comuni</li>
+      <li>XML: tag, attributi, radice unica, schema XSD</li>
+    </ul>
+    <ul class="points">
+      <li>JSON: oggetti, array, sei tipi, virgolette doppie, niente date</li>
+      <li>Descrizione: WSDL per SOAP, OpenAPI per REST</li>
+      <li>Le API dei modelli AI sono web service HTTP + JSON</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (il cambio del giorno in XML e JSON con Java). Prossima lezione: il protocollo HTTP visto da vicino, con DevTools e curl.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

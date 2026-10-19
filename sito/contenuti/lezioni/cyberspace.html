@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il cyberspace · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Cybersecurity · Lezione 1</p>
+  <h1>Il cyberspace</h1>
+  <p class="lead">Un luogo che non si vede, ma ha cavi, regole, confini e miliardi di abitanti. Prima di difenderlo bisogna sapere com'è fatto.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Cavi, protocolli, identità e confini</span></p>
+  <aside class="notes">Obiettivi: definire il cyberspace e i suoi tre livelli (fisico, logico, persona), riconoscere chi lo governa e perché è un dominio da proteggere. Durata indicativa: 2-3 ore con i laboratori. Prerequisiti: TCP/IP, DNS e HTTP dal corso di Sistemi e reti. Questa lezione apre l'Unità 1; le lezioni già viste in 5G (principi-sicurezza, attacchi-informatici, difese-informatiche) verranno riprese nelle lezioni 2, 3 e 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove si trova, fisicamente, l'ultima foto che hai pubblicato?</h2></div>
+  <div class="poll" data-id="cs-foto">
+    <ol><li>Nel mio telefono</li><li>In un data center, da qualche parte</li><li>"Nel cloud", cioè da nessuna parte</li><li>In più posti nello stesso momento</li></ol>
+  </div>
+  <aside class="notes">Sondaggio d'apertura, senza risposta giusta da annunciare subito. Alla fine della discussione: la risposta più vicina al vero è la D. Una foto pubblicata esiste in più copie: sul telefono, nei data center del servizio (replicata in più siti per la disponibilità), nelle cache delle CDN vicine a chi la guarda. Il "cloud" è sempre un computer di qualcun altro, in un luogo preciso e sotto le leggi di un paese preciso: è il filo conduttore della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da dove viene la parola</p><h2>Prima un romanzo, poi un dominio</h2></div>
+  <figure class="citazione">
+    <blockquote>Cyberspazio. Un'allucinazione vissuta consensualmente ogni giorno da miliardi di operatori legittimi, in ogni nazione.</blockquote>
+    <figcaption><b>William Gibson</b>, scrittore di fantascienza, nel romanzo <i>Neuromante</i>, 1984</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><h3>1982-1984</h3><p>Gibson usa la parola nel racconto <i>Burning Chrome</i> e la rende famosa con <i>Neuromante</i>.</p></div>
+    <div class="card soft"><h3>2016</h3><p>Al vertice di Varsavia la NATO riconosce il cyberspace come <b>dominio operativo</b>, accanto a terra, mare e aria.</p></div>
+  </div>
+  <aside class="notes">La traduzione è nostra dall'originale inglese: "Cyberspace. A consensual hallucination experienced daily by billions of legitimate operators, in every nation". Curiosità: nel 1984 Internet collegava poche migliaia di computer; i "miliardi di operatori" erano fantascienza, oggi sono realtà. Lo spazio extra-atmosferico è stato aggiunto dalla NATO come quinto dominio nel 2019. Domanda: perché un'alleanza militare ha bisogno di dichiarare il cyberspace un dominio? (Perché un attacco informatico può avere conseguenze paragonabili a un attacco fisico, e serve una base per pianificare la difesa.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una definizione di lavoro</p><h2>Che cos'è il cyberspace oggi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">L'insieme <mark>interconnesso</mark> di reti, dispositivi, software, dati e persone che li usano, insieme alle regole con cui comunicano.</p>
+      <ul class="points">
+        <li>Non coincide con Internet: comprende anche reti industriali, satelliti, reti mobili.</li>
+        <li>Ha una parte fisica, in luoghi precisi, e una parte logica, che sembra senza luogo.</li>
+        <li>È creato dall'uomo, ed è l'unico dominio che cambia ogni giorno.</li>
+      </ul>
+    </div>
+    <div class="card night"><p class="num" style="color:#fff">3</p><h3>livelli per studiarlo</h3><ul class="points"><li>Fisico</li><li>Logico</li><li>Persona</li></ul><p class="muted small">Il modello a tre livelli è usato nelle dottrine militari e nei corsi di sicurezza.</p></div>
+  </div>
+  <aside class="notes">Non esiste una definizione unica e ufficiale valida ovunque: ogni organizzazione ne dà una. Quella proposta riprende gli elementi comuni (reti, dati, persone, regole). Il modello a tre livelli (physical network, logical network, cyber-persona) viene dalla dottrina militare statunitense sulle operazioni nel cyberspace ed è molto usato nella didattica. Domanda: una rete di sensori in una fabbrica, scollegata da Internet, fa parte del cyberspace? (Sì: è un sistema informatico in rete; Stuxnet ha colpito proprio una rete isolata.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La mappa della lezione</p><h2>Tre livelli, uno sopra l'altro</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Fisico</h3><p>Cavi sottomarini, fibre, antenne, satelliti, data center, router, il tuo telefono.</p><p class="muted small">Ha un indirizzo, un proprietario, uno Stato.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Logico</h3><p>Protocolli, indirizzi IP, DNS, routing BGP, sistemi operativi, applicazioni, dati.</p><p class="small">Sembra non avere luogo.</p></div>
+    <div class="card"><p class="num">3</p><h3>Persona</h3><p>Account, indirizzi e-mail, profili social, identità digitali, bot e agenti software.</p><p class="muted small">Una persona può avere molte identità.</p></div>
+  </div>
+  <div class="callout">Ogni attacco colpisce almeno un livello: <b>tagliare un cavo</b>, <b>dirottare il DNS</b>, <b>rubare un account</b>. E ogni difesa deve sapere dove sta lavorando.</div>
+  <aside class="notes">Far collegare i livelli alla pila TCP/IP: il livello fisico corrisponde in buona parte a fisico e collegamento, il livello logico a rete, trasporto e applicazione, il livello persona sta "sopra" l'applicazione. Esempi di attacco per livello: danneggiamento di cavi sottomarini (casi documentati nel Mar Baltico e nel Mar Rosso), dirottamento di prefissi BGP o di record DNS, furto di credenziali e profili falsi. Domanda: un deepfake del preside che telefona alla segreteria, a che livello agisce? (Persona.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Come viaggia la maggior parte dei dati tra Europa e Americhe?</h2></div>
+  <div class="poll" data-id="cs-cavi" data-tipo="quiz" data-risposta="C">
+    <ol><li>Via satellite geostazionario</li><li>Con le costellazioni in orbita bassa, come Starlink</li><li>Su cavi in fibra ottica posati sul fondo dell'oceano</li><li>Con ponti radio da un'isola all'altra</li></ol>
+    <p class="why">Oltre il 95% del traffico dati intercontinentale passa su cavi sottomarini in fibra ottica: hanno capacità enormemente superiori ai satelliti e latenze minori. I satelliti servono soprattutto dove i cavi non arrivano.</p>
+  </div>
+  <aside class="notes">Il tranello è la B: Starlink è molto citato e cresce, ma la sua capacità totale è piccola rispetto a quella dei cavi; un singolo cavo moderno trasporta centinaia di terabit al secondo. La stima "oltre il 95%" è ricorrente nelle fonti di settore (TeleGeography, analisi parlamentari europee); va presentata come stima. Un satellite geostazionario sta a circa 36 000 km: il solo viaggio andata e ritorno del segnale richiede circa un quarto di secondo, troppo per molte applicazioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Livello 1 · Fisico</p><h2>Il cyberspace pesa tonnellate</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Cavi sottomarini</h3><p>Centinaia di sistemi in fibra. La Sicilia è uno snodo tra Europa, Africa e Asia.</p></div>
+    <div class="card"><h3>Data center</h3><p>Edifici pieni di server, con alimentazione e raffreddamento ridondati.</p></div>
+    <div class="card"><h3>Punti di interscambio</h3><p>Gli IXP, come MIX a Milano e Namex a Roma, dove le reti dei provider si scambiano traffico.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le costellazioni in orbita bassa, come Starlink, portano Internet dove i cavi non arrivano, anche in zone di guerra. Ma un'infrastruttura così diventa un obiettivo: chi la controlla può decidere chi resta connesso.</p></div>
+  <aside class="notes">Il livello fisico ha sempre un proprietario e una giurisdizione: per questo la protezione dei cavi e dei data center è una questione di sicurezza nazionale. Gli IXP italiani principali sono MIX (Milano), Namex (Roma) e TOP-IX (Torino). Per l'orbita bassa: i satelliti stanno a qualche centinaio di km, quindi la latenza è bassa, ma servono migliaia di satelliti. Il caso della guerra in Ucraina ha mostrato quanto un servizio privato possa diventare strategico. Restare sui fatti, senza schierarsi su aziende o persone.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Segui i tuoi pacchetti con tracert</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il Prompt dei comandi ed esegui <code>tracert -d www.istruzione.it</code>.</li>
+      <li>Poi esegui <code>tracert -d</code> verso un sito di un altro continente a tua scelta.</li>
+      <li>In <b>tracert-cognome.txt</b> annota per ciascuno: numero di salti, tempo dell'ultimo salto, salto in cui il tempo cresce di più.</li>
+      <li>Rispondi: in quale salto, secondo te, il pacchetto attraversa un oceano?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> da 6 a 25 salti circa. Attraversando un oceano il tempo sale di solito oltre i 100 ms. Le righe <code>* * *</code> sono router che non rispondono: è normale.</div>
+  </div>
+  <aside class="notes">L'opzione -d evita la risoluzione inversa dei nomi e rende il comando molto più veloce. Su Linux e macOS il comando è traceroute. Risultato tipico: i primi salti sono nella rete della scuola e del provider (indirizzi privati 10.x o 192.168.x), poi la dorsale. Sorpresa frequente: un sito "americano" può rispondere in pochi salti e pochi millisecondi perché è servito da una CDN con server in Europa; è un'ottima occasione per parlarne. Se la rete della scuola blocca l'ICMP in uscita, il comando mostra solo asterischi: in quel caso il docente mostra il risultato da un hotspot sulla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz per chi conosce le reti</p><h2>Come fa tracert a scoprire i router intermedi?</h2></div>
+  <div class="poll" data-id="cs-ttl" data-tipo="quiz" data-risposta="B">
+    <ol><li>Chiede a ogni router il suo nome con una query DNS</li><li>Invia pacchetti con TTL 1, 2, 3… e ascolta i messaggi ICMP "Time Exceeded"</li><li>Legge la tabella di routing del provider con un comando remoto</li><li>Ogni router aggiunge il proprio indirizzo nell'intestazione del pacchetto</li></ol>
+    <p class="why">Ogni router decrementa il TTL; quando arriva a 0 scarta il pacchetto e rimanda un ICMP Time Exceeded con il proprio indirizzo. Aumentando il TTL di uno alla volta, tracert scopre un router per volta.</p>
+  </div>
+  <aside class="notes">La D è il distrattore più insidioso: esiste un'opzione IP "record route" che fa qualcosa di simile, ma è limitata a 9 indirizzi e quasi sempre ignorata o filtrata, e tracert non la usa. Il DNS (risposta A) serve solo a tradurre gli indirizzi in nomi, ed è proprio ciò che -d disattiva. Windows usa ICMP Echo Request, il traceroute di Linux usa di default datagrammi UDP. All'esame: saper spiegare il TTL è un classico dell'orale di Sistemi e TPSI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Livello 2 · Logico</p><h2>Scrivi un indirizzo e premi Invio: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="cs-url">
+    <li>Il browser chiede al resolver DNS l'indirizzo IP del nome</li>
+    <li>Il resolver risponde con l'IP, dopo aver interrogato i server autorevoli</li>
+    <li>Il client apre una connessione TCP con il three-way handshake</li>
+    <li>Client e server negoziano TLS e verificano il certificato</li>
+    <li>Il browser invia la richiesta HTTP GET</li>
+    <li>Il server risponde con codice 200 e il documento HTML</li>
+  </ol>
+  <aside class="notes">Ordine corretto: DNS, risposta DNS, TCP, TLS, GET, risposta. Errore tipico: mettere TLS prima di TCP (con HTTP/1.1 e HTTP/2 TLS viaggia sopra TCP; con HTTP/3 c'è QUIC su UDP, che unisce trasporto e cifratura: citarlo per chi è curioso). Collegamento con la sicurezza: ogni passo è un punto d'attacco. DNS: avvelenamento della cache o dirottamento del dominio; TCP: SYN flood; TLS: certificati falsi; HTTP: le vulnerabilità web della lezione 5.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Dal nome all'indirizzo, in Java</h2>
+  <div class="cols-2" style="grid-template-columns:1.9fr 1fr">
+<pre class="code" style="font-size:26px"><span class="k">import</span> java.net.*;
+<span class="k">public class</span> Risolvi {
+  <span class="k">public static void</span> main(String[] a) <span class="k">throws</span> Exception {
+    String[] nomi = {<span class="s">"www.istruzione.it"</span>,
+                     <span class="s">"www.wikipedia.org"</span>};
+    <span class="k">for</span> (String n : nomi)
+      <span class="k">for</span> (InetAddress ip : InetAddress.getAllByName(n))
+        System.out.println(n + <span class="s">" -> "</span> + ip.getHostAddress());
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Salva come <b>Risolvi.java</b> ed esegui <code>java Risolvi.java</code>.</li>
+        <li>Confronta con <code>nslookup www.wikipedia.org</code>.</li>
+        <li>Aggiungi un nome che non esiste e gestisci l'eccezione.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> almeno un indirizzo IPv4 per nome; se la rete ha IPv6 vedi anche indirizzi con i due punti. Gli IP sono gli stessi di nslookup.</div>
+    </div>
+  </div>
+  <aside class="notes">Con JDK 11 e successivi si può eseguire direttamente il sorgente con java Risolvi.java, senza javac. Il nome inesistente lancia UnknownHostException: soluzione con try { ... } catch (UnknownHostException e) { System.out.println(n + " -> nome non trovato"); }. Estensione: stampare "(IPv6)" se ip instanceof Inet6Address. Osservazione per la sicurezza: il programma si fida della risposta del resolver; se il DNS è manipolato, anche il programma va dal server sbagliato. Per questo esiste DNSSEC e per questo TLS verifica il certificato del nome richiesto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Livello 3 · Persona</p><h2>Chi abita il cyberspace?</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Persone con molte identità: e-mail, social, SPID, account di gioco.</li>
+      <li>Organizzazioni: aziende, scuole, enti pubblici.</li>
+      <li>Bot e programmi automatici: una parte rilevante del traffico web.</li>
+      <li>Identità false: profili rubati, account creati per truffe.</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Gli agenti AI hanno un'identità</h3><p>Un agente di programmazione o un assistente collegato con il Model Context Protocol agisce con chiavi API e permessi propri. Va trattato come un utente: credenziali dedicate, minimo privilegio, registro delle azioni.</p></div>
+  </div>
+  <aside class="notes">Il livello persona è quello su cui lavorano phishing e ingegneria sociale (lezione 3). Diversi rapporti annuali sul traffico web (per esempio quelli di aziende che offrono protezione anti-bot) stimano che circa metà del traffico sia automatico, tra bot utili (motori di ricerca) e malevoli; il numero esatto varia tra le fonti, quindi non citarlo come dato certo. Agenti AI: il Model Context Protocol, pubblicato da Anthropic nel 2024, è uno standard aperto per collegare i modelli a strumenti e dati. Messaggio: un agente con una chiave API che può cancellare file è un'identità con privilegi, quindi va protetta come quella di un amministratore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Domini e confini</p><h2>Chi decide le regole in un luogo senza confini?</h2></div>
+  <table class="data compact">
+    <tr><th>Chi</th><th>Che cosa governa</th></tr>
+    <tr><td><b>IETF</b></td><td>Gli standard dei protocolli, pubblicati come RFC</td></tr>
+    <tr><td><b>ICANN e IANA</b></td><td>La radice del DNS, i domini di primo livello, i numeri di protocollo</td></tr>
+    <tr><td><b>RIPE NCC</b></td><td>Assegna gli indirizzi IP in Europa e Medio Oriente</td></tr>
+    <tr><td><b>Stati e UE</b></td><td>Leggi: GDPR, NIS2, codice penale; agenzie come l'ACN in Italia</td></tr>
+    <tr><td><b>Aziende</b></td><td>Le piattaforme, i cloud, i cavi e i data center che possiedono</td></tr>
+  </table>
+  <div class="callout">Il GDPR si applica anche a un'azienda extraeuropea che tratta dati di persone che si trovano nell'UE: i confini seguono le <b>persone</b>, non solo i server.</div>
+  <aside class="notes">Nessuno "possiede" Internet: il governo del cyberspace è multi-attore (multistakeholder). Il Manuale di Tallinn (2013, seconda edizione 2017), scritto da esperti su invito del centro NATO CCDCOE, analizza come il diritto internazionale esistente si applica alle operazioni informatiche: non è un trattato e non è vincolante. L'ambito territoriale del GDPR è all'articolo 3. L'ACN (Agenzia per la Cybersicurezza Nazionale) la vedremo nella prossima lezione. Domanda: se un server in Islanda ospita i dati di studenti italiani per un'azienda statunitense, quali leggi contano? (Tutte e tre, ed è proprio questo il problema.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle storico</p><h2>Abbina ogni evento a ciò che ha dimostrato</h2></div>
+  <dl class="puzzle-abbina" data-id="cs-eventi">
+    <dt>Estonia, 2007</dt><dd>Settimane di DDoS possono paralizzare banche, media e governo di un paese</dd>
+    <dt>Stuxnet, 2010</dt><dd>Un malware può danneggiare macchine fisiche: le centrifughe di Natanz</dd>
+    <dt>WannaCry, 2017</dt><dd>Un worm ransomware blocca anche gli ospedali del servizio sanitario inglese</dd>
+    <dt>NotPetya, 2017</dt><dd>Un aggiornamento software compromesso devasta aziende in tutto il mondo</dd>
+    <dt>Colonial Pipeline, 2021</dt><dd>Un ransomware fa fermare per giorni un oleodotto negli Stati Uniti</dd>
+  </dl>
+  <aside class="notes">Dettagli per il racconto. Estonia, aprile-maggio 2007: ondate di DDoS dopo lo spostamento di una statua sovietica a Tallinn; il paese ha poi ospitato il centro NATO CCDCOE. Stuxnet, scoperto nel 2010: colpiva i controllori Siemens che governavano le centrifughe per l'arricchimento dell'uranio, entrando anche in reti isolate tramite chiavette USB. WannaCry, maggio 2017: sfruttava la falla SMB detta EternalBlue, già corretta da Microsoft due mesi prima, a chi non aveva aggiornato. NotPetya, giugno 2017: partito dall'aggiornamento di un software di contabilità ucraino, si è comportato come un distruttore più che come un ransomware; colpite tra le altre Maersk e Merck. Colonial Pipeline, maggio 2021: ransomware del gruppo DarkSide; l'azienda fermò l'oleodotto per precauzione per alcuni giorni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I cavi che collegano l'Italia</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>submarinecablemap.com</b> (non serve un account).</li>
+      <li>Cerca i punti di approdo in Italia: clicca almeno 4 cavi diversi.</li>
+      <li>In Calc crea le colonne <b>Cavo · Approdo in Italia · Altri paesi · Anno</b>.</li>
+      <li>Sotto la tabella scrivi quale regione italiana ti sembra più strategica e perché.</li>
+      <li>Salva come <b>cavi-italia-cognome.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> trovi approdi in più regioni, con una forte concentrazione in Sicilia; molti cavi collegano l'Italia al Medio Oriente, all'Africa e all'Asia.</div>
+  </div>
+  <aside class="notes">La mappa è curata da TeleGeography ed è pubblica. Approdi tipici: Sicilia (Mazara del Vallo, Catania, Palermo), Puglia (Bari, Otranto), Liguria (Genova), oltre a Sardegna e altre località; l'elenco esatto cambia nel tempo con i nuovi cavi. Discussione: un'isola al centro del Mediterraneo diventa un nodo; concentrare molti approdi nello stesso punto aumenta il rischio (un solo incidente o sabotaggio può colpirne diversi). Collegamento con la disponibilità della triade CIA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché proteggerlo</p><h2>Ormai tutto passa da qui</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Energia</h3><p class="muted">Reti elettriche e gasdotti controllati a distanza.</p></div>
+    <div class="card"><h3>Salute</h3><p class="muted">Cartelle cliniche, prenotazioni, apparecchi in rete.</p></div>
+    <div class="card"><h3>Denaro</h3><p class="muted">Pagamenti, borsa, stipendi: solo bit.</p></div>
+    <div class="card"><h3>Democrazia</h3><p class="muted">Informazione, servizi pubblici, fiducia.</p></div>
+  </div>
+  <div class="callout hl"><b>All'esame.</b> In una prova di progetto, prima di proporre una soluzione, chiediti a quale livello stai difendendo: fisico (ridondanza, sedi), logico (firewall, cifratura) o persona (autenticazione, formazione).</div>
+  <aside class="notes">Un servizio essenziale oggi dipende da una catena: cavi, data center, software, fornitori, persone. Basta un anello debole. Collegare alla NIS2 (lezione 2), che chiede ai soggetti di settori come energia, trasporti, sanità e infrastrutture digitali di gestire il rischio informatico. Sulla parte "Democrazia" restare neutrali: si parla di disinformazione e di disponibilità dei servizi pubblici, non di partiti. Il suggerimento d'esame è un metodo di ragionamento, non una richiesta ufficiale della prova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La parola cyberspace è stata resa famosa dal romanzo <i>Neuromante</i> di William <span class="blank" data-risposta="Gibson" style="--w:8ch"></span>.</p>
+    <p>I tre livelli del cyberspace sono fisico, logico e <span class="blank" data-risposta="persona" style="--w:8ch"></span>.</p>
+    <p>tracert scopre i router aumentando a ogni prova il campo <span class="blank" data-risposta="TTL|time to live"></span> del pacchetto IP.</p>
+    <p>La maggior parte del traffico intercontinentale viaggia su cavi <span class="blank" data-risposta="sottomarini|sottomarino" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Gibson; persona; TTL (accettato "time to live"); sottomarini. Chi finisce prima può scrivere sul quaderno un esempio di attacco per ognuno dei tre livelli.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Cyberspace = reti, dispositivi, dati, persone e regole</li>
+      <li>Tre livelli: fisico, logico, persona</li>
+      <li>Il livello fisico ha sempre un luogo e un proprietario</li>
+    </ul>
+    <ul class="points">
+      <li>Governo multi-attore: IETF, ICANN, RIR, Stati, aziende</li>
+      <li>Dal 2016 per la NATO è un dominio operativo</li>
+      <li>Prossima lezione: proteggere un'azienda</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula ("La mia mappa del cyberspace"). Anticipare la lezione 2: dai principi generali (già visti in principi-sicurezza) alla gestione del rischio in un'azienda vera.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

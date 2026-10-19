@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I web service con REST · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Web service · Lezione 8</p>
+  <h1>I web service<br>con REST</h1>
+  <p class="lead">Niente buste XML e niente contratti di cento righe: risorse, indirizzi e i verbi di HTTP. Lo stile con cui oggi parlano quasi tutte le app.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Fielding, risorse, URI, metodi, codici di stato, JSON</span></p>
+  <aside class="notes">Obiettivi: conoscere l'origine di REST (tesi di Roy Fielding, 2000), i sei vincoli dello stile, il concetto di risorsa e rappresentazione, l'uso corretto di URI, metodi HTTP e codici di stato, sicurezza e idempotenza dei metodi; saper progettare gli endpoint di una semplice API. Durata indicativa: 3 ore con i laboratori. Prerequisiti: le lezioni precedenti dell'unità su HTTP e SOAP. Da qui in poi l'unità segue un esempio unico, BiblioAPI, l'API della biblioteca della scuola: oggi la progettiamo, nella lezione 9 la scriviamo in Java, nella 10 la usiamo da Java e JSP, nella 11 la testiamo, nella 12 la usiamo da una pagina web.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale di queste API hai già usato, anche senza saperlo?</h2></div>
+  <div class="poll" data-id="rest-api-usate">
+    <ol><li>Le previsioni del meteo in un'app</li><li>Il pulsante "Accedi con Google"</li><li>Una mappa dentro un sito</li><li>Un pagamento online</li><li>Un chatbot dentro un'app</li><li>Nessuna, che io sappia</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Chiusura: chi ha risposto F in realtà le ha usate tutte. Dietro ognuna c'è un'app che manda richieste HTTP a un server di qualcun altro e riceve dati, quasi sempre in JSON. Il login con Google usa OAuth 2.0 e OpenID Connect, i pagamenti le API di un gestore come Stripe o Nexi, il chatbot le API di un modello linguistico. Domanda di aggancio: rispetto ai web service SOAP della lezione 6, che cosa vi aspettate sia cambiato?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una tesi di dottorato del 2000</p><h2>REST nasce per descrivere il Web</h2></div>
+  <figure class="citazione">
+    <blockquote style="font-size:46px">Il nome Representational State Transfer vuole evocare l'immagine di come si comporta un'applicazione web ben progettata: una rete di pagine web […] in cui l'utente avanza selezionando dei link.</blockquote>
+    <figcaption><b>Roy T. Fielding</b>, coautore delle specifiche di HTTP/1.1 e degli URI, nella tesi di dottorato all'Università della California a Irvine, 2000</figcaption>
+  </figure>
+  <div class="callout">REST non è un protocollo, né un formato, né una libreria: è uno <b>stile architetturale</b>, un insieme di vincoli. HTTP è il protocollo che lo realizza meglio.</div>
+  <aside class="notes">La tesi si intitola "Architectural Styles and the Design of Network-based Software Architectures"; REST è descritto nel capitolo 5, la frase sul nome è nel capitolo 6.1. Traduzione nostra dall'inglese, con un taglio segnalato dalle parentesi. Fielding non inventò REST dal nulla: mentre lavorava agli standard del Web (HTTP/1.0, HTTP/1.1, la sintassi degli URI, il server Apache) cercava di spiegare perché il Web scalava così bene, e ne ricavò i vincoli. Domanda: perché "stato" e "trasferimento"? Ogni pagina che ricevi è una rappresentazione dello stato dell'applicazione; cliccando un link passi allo stato successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla lezione 6</p><h2>SOAP chiama operazioni, REST manipola risorse</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>SOAP</th><th>REST</th></tr>
+    <tr><td><b>Al centro</b></td><td>Operazioni: <code>getLibro</code>, <code>prestaLibro</code></td><td>Risorse con un URI: <code>/libri/3</code></td></tr>
+    <tr><td><b>Azioni</b></td><td>Il nome dell'operazione è nel messaggio</td><td>I metodi di HTTP: GET, POST, PUT, DELETE</td></tr>
+    <tr><td><b>Messaggio</b></td><td>Envelope XML, sempre</td><td>Rappresentazioni: JSON, XML, HTML, immagini</td></tr>
+    <tr><td><b>Contratto</b></td><td>WSDL, obbligatorio</td><td>Facoltativo, di solito OpenAPI</td></tr>
+    <tr><td><b>HTTP</b></td><td>Solo un trasporto, quasi sempre POST</td><td>Semantica sfruttata: metodi, codici, header, cache</td></tr>
+    <tr><td><b>Dove vive</b></td><td>Banche, PA, sistemi aziendali</td><td>App, siti, cloud, API pubbliche</td></tr>
+  </table>
+  <aside class="notes">Messaggio chiave: SOAP non è "vecchio e sbagliato". È ancora usato dove servono contratti rigidi e standard WS-* (sicurezza, transazioni), per esempio in molti servizi della Pubblica Amministrazione e del settore bancario. REST ha vinto sul Web pubblico perché è più leggero, usa ciò che HTTP già offre (cache, codici, proxy) e si prova con un browser. Domanda: con SOAP, se tutte le richieste sono POST verso lo stesso URL, può una cache HTTP aiutare? (No, perché POST non è cacheabile per definizione e l'URL non identifica la risorsa.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I vincoli di Fielding</p><h2>Sei vincoli, uno sopra l'altro</h2></div>
+  <table class="data compact">
+    <tr><th>Vincolo</th><th>Che cosa chiede</th></tr>
+    <tr><td><b>Client-server</b></td><td>Interfaccia separata dai dati: client e server evolvono in modo indipendente</td></tr>
+    <tr><td><b>Stateless</b></td><td>Ogni richiesta contiene tutto ciò che serve: il server non ricorda la "conversazione"</td></tr>
+    <tr><td><b>Cache</b></td><td>Ogni risposta dice se e per quanto si può riusare</td></tr>
+    <tr><td><b>Interfaccia uniforme</b></td><td>Risorse con URI, rappresentazioni, messaggi autodescrittivi, link (HATEOAS)</td></tr>
+    <tr><td><b>Sistema a livelli</b></td><td>Il client non sa se parla con il server o con un proxy, una CDN, un gateway</td></tr>
+    <tr><td><b>Codice su richiesta</b></td><td>Facoltativo: il server può inviare codice da eseguire, come JavaScript</td></tr>
+  </table>
+  <aside class="notes">Nella tesi i vincoli sono introdotti uno alla volta, partendo dallo stile "nullo": client-server, stateless, cache, interfaccia uniforme, sistema a livelli, codice su richiesta (l'unico facoltativo). L'interfaccia uniforme ha quattro sotto-vincoli: identificazione delle risorse, manipolazione tramite rappresentazioni, messaggi autodescrittivi, ipermedia come motore dello stato dell'applicazione (HATEOAS). Domanda: se un'API usa una sessione lato server (il server ricorda il carrello per un cookie di sessione), quale vincolo viola? (Stateless. Molte API reali lo violano ed è un compromesso: lo stato si sposta in un database o in un token.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni vincolo al beneficio che porta</h2></div>
+  <dl class="puzzle-abbina" data-id="rest-vincoli">
+    <dt>Stateless</dt><dd>Un bilanciatore può mandare ogni richiesta a un server diverso</dd>
+    <dt>Cache</dt><dd>Meno richieste al server e risposte più rapide</dd>
+    <dt>Sistema a livelli</dt><dd>Si può mettere una CDN davanti al server senza cambiare il client</dd>
+    <dt>Interfaccia uniforme</dt><dd>Un client che conosce HTTP sa già come usare qualsiasi risorsa</dd>
+    <dt>Client-server</dt><dd>L'app mobile e il sito usano lo stesso back-end</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti. Il collegamento più utile per l'esame è stateless e scalabilità orizzontale: se nessun server ricorda la conversazione, posso aggiungere server dietro a un load balancer senza "sessioni appiccicose". Collegamento con la lezione 3 sulle architetture a servizi: i microservizi usano quasi sempre API REST interne, e l'API gateway è un esempio di sistema a livelli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Risorse e URI</p><h2>Gli URI sono nomi, i metodi sono verbi</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Così no</h3>
+      <ul class="points small">
+        <li><code>GET /getLibro?id=3</code></li>
+        <li><code>POST /cancellaLibro</code></li>
+        <li><code>GET /libri/3/elimina</code></li>
+        <li><code>POST /api?azione=nuovoPrestito</code></li>
+      </ul>
+    </div>
+    <div class="card ok"><h3>Così sì</h3>
+      <ul class="points small">
+        <li><code>GET /libri/3</code></li>
+        <li><code>DELETE /libri/3</code></li>
+        <li><code>GET /libri?autore=Calvino</code></li>
+        <li><code>POST /libri/3/prestiti</code></li>
+      </ul>
+    </div>
+  </div>
+  <ul class="points small">
+    <li>Nomi al plurale per le collezioni, un identificatore per il singolo elemento.</li>
+    <li>Gerarchia nel percorso, filtri e ordinamenti nella query string.</li>
+  </ul>
+  <aside class="notes">Una risorsa è qualsiasi cosa abbia un nome: un libro, l'elenco dei libri, i prestiti di un libro, perfino "il meteo di Roma adesso". L'URI la identifica; la rappresentazione (JSON, XML) è ciò che viaggia. Il caso GET /libri/3/elimina è il più pericoloso: un crawler o un'anteprima dei link segue i GET e cancellerebbe i libri. Sono convenzioni diffuse, non regole della tesi: Fielding parla di identificazione delle risorse, non di plurali. Altre convenzioni: minuscole, trattini invece di underscore, versione nel percorso (/v1/) o in un header.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla lezione 5, sui metodi di BiblioAPI</p><h2>Sicuro, idempotente: due parole da sapere</h2></div>
+  <table class="data compact">
+    <tr><th>Metodo e URI</th><th>Che cosa fa</th><th>Sicuro</th><th>Idempotente</th></tr>
+    <tr><td class="mono">GET /libri</td><td>Legge l'elenco</td><td>sì</td><td>sì</td></tr>
+    <tr><td class="mono">GET /libri/3</td><td>Legge un libro</td><td>sì</td><td>sì</td></tr>
+    <tr><td class="mono">POST /libri</td><td>Crea un libro, il server sceglie l'id</td><td>no</td><td class="hl">no</td></tr>
+    <tr><td class="mono">PUT /libri/3</td><td>Sostituisce tutto il libro 3</td><td>no</td><td>sì</td></tr>
+    <tr><td class="mono">PATCH /libri/3</td><td>Modifica solo alcuni campi</td><td>no</td><td>non garantito</td></tr>
+    <tr><td class="mono">DELETE /libri/3</td><td>Elimina il libro 3</td><td>no</td><td>sì</td></tr>
+  </table>
+  <p class="small"><b>Sicuro</b>: non cambia lo stato del server. <b>Idempotente</b>: ripetere la stessa richiesta lascia il server come dopo la prima volta.</p>
+  <aside class="notes">Le definizioni sono quelle della RFC 9110 (HTTP Semantics, 2022), sezioni 9.2.1 e 9.2.2. Perché conta l'idempotenza: se la rete cade e non so se la richiesta è arrivata, posso ripeterla senza danni solo se è idempotente. Un POST ripetuto crea due libri, o due pagamenti: per questo le API di pagamento accettano una "idempotency key" in un header. PATCH può essere idempotente o no a seconda del formato della modifica (per esempio "anno = 1957" sì, "incrementa le copie di 1" no). Domanda: GET che incrementa un contatore di visite è ancora "sicuro"? (Per la RFC sì, se l'effetto non è richiesto dal client e non è una sua responsabilità.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Per un timeout il client ripete tre volte <code>PUT /libri/3</code> e tre volte <code>POST /libri</code>. Quanti libri in più ci sono?</h2></div>
+  <div class="poll" data-id="rest-ripeti" data-tipo="quiz" data-risposta="D">
+    <ol><li>Nessuno: il server riconosce da solo le richieste doppie</li><li>Sei: ogni richiesta riuscita scrive qualcosa</li><li>Uno: i POST uguali vengono uniti</li><li>Tre: i PUT sostituiscono sempre lo stesso libro 3, ogni POST ne crea uno nuovo</li></ol>
+    <p class="why">PUT è idempotente: indica la risorsa (/libri/3) e il suo stato completo, quindi ripeterlo non cambia il risultato. POST chiede al server di creare una risorsa nuova scegliendo lui l'URI: tre POST, tre libri.</p>
+  </div>
+  <aside class="notes">Riprende la definizione di idempotenza della lezione 5 dal punto di vista di chi progetta. La A è il tranello: HTTP non deduplica nulla da solo. Le API serie risolvono il problema dei POST ripetuti con una chiave di idempotenza: il client genera un identificativo unico e lo manda in un header (per esempio Idempotency-Key); se il server lo ha già visto, restituisce la risposta precedente senza creare un secondo libro. È il modo in cui le API di pagamento evitano doppi addebiti. Collegamento con il quiz sul timeout della lezione 2 (RPC): da fuori non si sa se la richiesta è stata eseguita.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I codici di stato, da progettisti</p><h2>La prima cifra dice di chi è il problema</h2></div>
+  <div class="cols-4">
+    <div class="card ok"><h3>2xx</h3><p class="small"><b>200</b> OK<br><b>201</b> Created<br><b>204</b> No Content</p></div>
+    <div class="card soft"><h3>3xx</h3><p class="small"><b>301</b> spostato<br><b>304</b> Not Modified, usa la cache</p></div>
+    <div class="card bad"><h3>4xx · client</h3><p class="small"><b>400</b> richiesta errata<br><b>401</b> non autenticato<br><b>403</b> vietato<br><b>404</b> non trovato<br><b>409</b> conflitto</p></div>
+    <div class="card night"><h3>5xx · server</h3><p class="small"><b>500</b> errore interno<br><b>502</b> gateway<br><b>503</b> non disponibile</p></div>
+  </div>
+  <div class="callout">Una buona API risponde <b>201</b> con l'header <code>Location: /libri/4</code> quando crea, <b>204</b> quando cancella, e mette nel corpo degli errori un JSON che spiega il motivo.</div>
+  <aside class="notes">Ripasso dalla lezione 5 su HTTP, ma visto da chi progetta. Errori tipici di progetto: rispondere 200 con {"errore": "..."} nel corpo (il client e i proxy credono che sia andato tutto bene); usare 500 per un input sbagliato (la colpa è del client: 400 o 422); confondere 401 (chi sei? manca o è scaduta l'autenticazione) e 403 (so chi sei ma non puoi). 409 Conflict è perfetto per "il libro è già in prestito". 405 Method Not Allowed quando il metodo non è previsto sulla risorsa, con l'header Allow.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di queste scelte viola il vincolo stateless?</h2></div>
+  <div class="poll" data-id="rest-stateless" data-tipo="quiz" data-risposta="B">
+    <ol><li>Ogni richiesta porta il token nell'header Authorization</li><li>Il server ricorda la pagina di ogni utente: GET /libri/avanti dà la successiva</li><li>L'elenco si sfoglia con GET /libri?pagina=3</li><li>Le risposte contengono Cache-Control: max-age=60</li></ol>
+    <p class="why">Nella B il significato della richiesta dipende da ciò che il server ricorda delle richieste precedenti: se la richiesta arriva a un altro server dietro il bilanciatore, la "pagina successiva" non esiste. Nella C tutto ciò che serve è nella richiesta stessa.</p>
+  </div>
+  <aside class="notes">La A è il tranello: "il server deve controllare il token" sembra stato, ma il token viaggia in ogni richiesta e il server può verificarlo senza ricordare nulla (per esempio un JWT firmato). La D realizza un altro vincolo, la cache, ed è perfettamente compatibile. Collegamento con la lezione 1: stateless significa che posso aggiungere server dietro un bilanciatore senza sessioni "appiccicose". Lo stato dell'utente non sparisce: si sposta nel client o in un database condiviso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Una vera API REST, nel browser</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri nel browser:<br><span class="mono" style="font-size:25px;word-break:break-all;color:var(--accent)">https://api.open-meteo.com/v1/forecast?latitude=41.90&amp;longitude=12.50&amp;current=temperature_2m</span></li>
+      <li>Leggi il JSON: trova la temperatura e la sua unità di misura.</li>
+      <li>Cambia latitudine e longitudine con quelle della tua città.</li>
+      <li>Apri gli Strumenti per sviluppatori (F12), scheda <b>Rete</b>, ricarica: annota codice di stato e <code>Content-Type</code>.</li>
+      <li>Togli la latitudine dall'URL e ricarica. Annota tutto in <b>meteo-api.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con l'URL giusto lo stato è <b>200</b>, il tipo <code>application/json</code>, e il JSON ha un oggetto <code>current</code> con <code>temperature_2m</code> e un oggetto <code>current_units</code> con <code>°C</code>. Senza latitudine il server risponde <b>400</b> con un messaggio d'errore.</div>
+  </div>
+  <aside class="notes">Open-Meteo è un servizio meteo gratuito per uso non commerciale e non richiede chiave né account; controllare prima della lezione che sia raggiungibile dalla rete della scuola (dominio api.open-meteo.com). Le coordinate sono di Roma. Firefox mostra il JSON già formattato con un visualizzatore; Chrome ha una casella "Stampa formattata". Osservazioni da far emergere: la risorsa è "il meteo in questo punto", i parametri della query la filtrano, la risposta è autodescrittiva (Content-Type e unità di misura dentro il JSON). Con un parametro mancante Open-Meteo risponde 400 con un JSON del tipo {"error": true, "reason": "..."}: un buon esempio di errore 4xx ben fatto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rappresentazioni</p><h2>Una risorsa, più rappresentazioni</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:27px"><span class="c">GET /api/libri/2 HTTP/1.1</span>
+<span class="k">Accept</span>: application/json
+<span class="k">Authorization</span>: Bearer eyJhbGciOi…
+
+<span class="c">HTTP/1.1 200 OK</span>
+<span class="k">Content-Type</span>: application/json
+<span class="k">Cache-Control</span>: max-age=60
+
+{ <span class="s">"id"</span>: 2,
+  <span class="s">"titolo"</span>: <span class="s">"Il barone rampante"</span>,
+  <span class="s">"autore"</span>: <span class="s">"Italo Calvino"</span>,
+  <span class="s">"anno"</span>: 1957 }</pre>
+    <ul class="points small">
+      <li>Il client chiede un formato con <code>Accept</code>, il server dice quale manda con <code>Content-Type</code>.</li>
+      <li><b>JSON</b>: oggetti, array, stringhe, numeri, <code>true</code>, <code>false</code>, <code>null</code>. Niente commenti.</li>
+      <li><b>Stateless</b> in pratica: il token viaggia in ogni richiesta, il server non ricorda chi sei.</li>
+      <li><code>Cache-Control</code> realizza il vincolo cache.</li>
+    </ul>
+  </div>
+  <aside class="notes">Il libro della biblioteca nel database è la risorsa; il JSON è una sua rappresentazione. Lo stesso libro potrebbe essere servito come XML o come pagina HTML (negoziazione del contenuto con Accept). Il token Bearer, spesso un JWT, contiene o identifica l'utente: è ciò che rende possibile l'autenticazione senza sessione lato server. Errori JSON tipici: virgolette singole, virgola dopo l'ultimo elemento, chiavi senza virgolette. Sono validi in JavaScript, non in JSON.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Leggere le risposte con curl</h2>
+<pre class="code" style="font-size:22px;padding:22px 32px">curl -i https://jsonplaceholder.typicode.com/users/1
+curl -i https://jsonplaceholder.typicode.com/users/99
+curl -i -X DELETE https://jsonplaceholder.typicode.com/posts/1
+curl -i -X POST -H "Content-Type: application/json" -d "{\"title\":\"prova\"}" https://jsonplaceholder.typicode.com/posts</pre>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri il Prompt dei comandi (in PowerShell scrivi <code>curl.exe</code>).</li>
+      <li>Esegui i quattro comandi, uno alla volta.</li>
+      <li>In <b>curl-rest.txt</b> annota per ognuno metodo, URI, codice e un header della risposta.</li>
+      <li>Ripeti il POST: che id ottieni?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> utente 1: <b>200</b>, <code>Leanne Graham</code>. Utente 99: <b>404</b>, corpo <code>{}</code>. DELETE: <b>200</b>. POST: <b>201</b>, <code>"id": 101</code>, anche la seconda volta: il servizio finge di salvare.</div>
+  </div>
+  <aside class="notes">JSONPlaceholder è una finta API REST gratuita e molto usata per esercitarsi: risponde a tutti i metodi ma non salva davvero nulla. Verificare prima che jsonplaceholder.typicode.com sia raggiungibile dalla rete della scuola. curl è incluso in Windows 10 e 11. In PowerShell 5 "curl" è un alias di Invoke-WebRequest, per questo serve curl.exe. Il comando del punto 4 è scritto per il Prompt dei comandi (cmd); in PowerShell le virgolette annidate sono scomode: nella lezione 11 useremo -d @file.json. Domanda finale: il POST ripetuto restituisce sempre 101; con una vera API che cosa succederebbe? (Due risorse create: POST non è idempotente.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto è REST la tua API?</p><h2>Metti in ordine i livelli di maturità, dal più basso</h2></div>
+  <ol class="puzzle-ordina" data-id="rest-richardson">
+    <li>Livello 0: un solo URL, tutto in POST, come in SOAP</li>
+    <li>Livello 1: un URI per ogni risorsa</li>
+    <li>Livello 2: metodi HTTP e codici di stato usati correttamente</li>
+    <li>Livello 3: le risposte contengono i link alle azioni possibili (HATEOAS)</li>
+  </ol>
+  <p class="small muted">Fielding, 2008: «Se il motore dello stato dell'applicazione non è guidato dall'ipertesto, allora non può essere RESTful e non può essere un'API REST. Punto.»</p>
+  <aside class="notes">È il modello di maturità di Leonard Richardson, presentato nel 2008 e reso famoso da un articolo di Martin Fowler del 2010. La maggior parte delle API pubbliche si ferma al livello 2: in senso stretto, per Fielding, non sono REST ma "HTTP API". La frase di Fielding viene dal suo blog, nell'articolo "REST APIs must be hypertext-driven" (ottobre 2008); traduzione nostra. Esempio di livello 3: la risposta di GET /libri/3 contiene "links": {"prestito": "/libri/3/prestiti"} solo se il libro è disponibile. Il client non deve conoscere gli URI in anticipo: li scopre, come un utente che clicca.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Progetta BiblioAPI</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">La biblioteca della scuola vuole un'API per i libri e per i prestiti. In un file <b>biblioapi-design.md</b> scrivi una tabella con: metodo, URI, corpo della richiesta, codici di risposta possibili.</p>
+      <ol class="steps small">
+        <li>Leggere tutti i libri, uno solo, quelli di un autore.</li>
+        <li>Aggiungere, sostituire ed eliminare un libro.</li>
+        <li>Prestare un libro e restituirlo.</li>
+        <li>Scrivi l'esempio JSON di un libro e di un errore.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> almeno 8 righe. <code>POST /api/libri</code> → 201 o 400. <code>DELETE /api/libri/{id}</code> → 204 o 404. Il prestito di un libro già prestato → <b>409</b>. Nessun verbo dentro gli URI.</div>
+  </div>
+  <aside class="notes">Il file .md si apre con qualsiasi editor; chi non conosce Markdown può usare un .txt con le colonne separate da |. Soluzione di riferimento: GET /api/libri (200); GET /api/libri/{id} (200, 404); GET /api/libri?autore=Calvino (200, anche con array vuoto); POST /api/libri (201 + Location, 400); PUT /api/libri/{id} (200, 400, 404); DELETE /api/libri/{id} (204, 404); POST /api/libri/{id}/prestiti con {"studente": "..."} (201, 404, 409 se già in prestito); DELETE /api/prestiti/{id} oppure PUT /api/prestiti/{id} con {"restituito": true} (204/200, 404). La restituzione si presta a discussione: è una cancellazione del prestito o una modifica del suo stato? Entrambe difendibili, la seconda conserva lo storico. Conservare il file: nella lezione 9 lo implementiamo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponti verso oggi</p><h2>Le API dell'intelligenza artificiale sono REST</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:24px"><span class="k">POST</span> https://api.anthropic.com/v1/messages
+<span class="k">x-api-key</span>: <span class="hl">LA_TUA_CHIAVE</span>  <span class="c">(mai nel codice)</span>
+<span class="k">anthropic-version</span>: 2023-06-01
+<span class="k">content-type</span>: application/json
+
+{ <span class="s">"model"</span>: <span class="s">"nome-del-modello"</span>,
+  <span class="s">"max_tokens"</span>: 300,
+  <span class="s">"messages"</span>: [ { <span class="s">"role"</span>: <span class="s">"user"</span>,
+    <span class="s">"content"</span>: <span class="s">"Spiega REST in due righe"</span> } ] }</pre>
+    <div class="stack">
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un chatbot dentro un'app è quasi sempre una <b>richiesta POST con JSON</b> verso l'API di un modello linguistico. La risposta è un JSON con il testo generato. Stateless: a ogni chiamata si rimanda tutta la conversazione.</p></div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con <b>OpenAPI</b> un'API si descrive in un file YAML o JSON. Gli agenti AI leggono descrizioni come queste per decidere quale endpoint chiamare e con quali parametri.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il formato è quello della Messages API di Anthropic (header x-api-key e anthropic-version); quelli di altri fornitori sono molto simili. Al posto di "nome-del-modello" va l'identificativo di un modello preso dalla documentazione ufficiale. Non mostrare mai una chiave vera: chi la ottiene spende a nome tuo. Notare la statelessness: il modello non ricorda nulla tra una chiamata e l'altra; l'app rimanda ogni volta l'intera lista di messaggi. Spunto critico: "POST /v1/messages" è REST? È una risorsa su cui si crea qualcosa, ma somiglia molto a una chiamata di procedura remota (lezione 2). OpenAPI nasce da Swagger, donato nel 2015 alla OpenAPI Initiative della Linux Foundation; la versione 3.1 (2021) usa JSON Schema, lo stesso linguaggio con cui si descrivono gli strumenti che un modello può chiamare (tool use) e i tool dei server MCP (Model Context Protocol).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto di BiblioAPI</h2></div>
+  <div class="puzzle-codice" data-risposta="5414" data-aiuto="la prima cifra conta i vincoli di Fielding tolto quello facoltativo">
+    <ul class="points small">
+      <li>1ª cifra: quanti sono i vincoli REST obbligatori</li>
+      <li>2ª cifra: la prima cifra del codice che dice "il libro non esiste"</li>
+      <li>3ª cifra: l'ultima cifra del codice di risposta a un POST che crea un libro</li>
+      <li>4ª cifra: l'ultima cifra del codice di risposta a una DELETE riuscita senza corpo</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 5 vincoli obbligatori (più il codice su richiesta), 404, 201 Created, 204 No Content.</div>
+  </div>
+  <aside class="notes">Codice: 5414. Le squadre scrivono il codice su un foglio prima di provarlo alla LIM. Errore frequente sulla prima cifra: 6 (dimenticano che il codice su richiesta è facoltativo). Sulla quarta: 0 (pensando a 200 OK, che è accettabile ma non è "senza corpo").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>REST è uno stile architetturale descritto da Roy <span class="blank" data-risposta="Fielding"></span> nel 2000.</p>
+    <p>Il server non ricorda le richieste precedenti: REST è <span class="blank" data-risposta="stateless|senza stato" style="--w:8ch"></span>.</p>
+    <p>Una richiesta che ripetuta lascia il server nello stesso stato si dice <span class="blank" data-risposta="idempotente" style="--w:9ch"></span>.</p>
+    <p>Quando un POST crea una risorsa il server risponde con il codice <span class="blank" data-risposta="201"></span>.</p>
+    <p>L'URI giusto per eliminare il libro 7 è DELETE <span class="blank" data-risposta="/libri/7|/api/libri/7" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: Fielding, stateless (accettato "senza stato"), idempotente, 201, /libri/7 (accettato /api/libri/7). Chi sbaglia l'ultima di solito scrive /libri/7/elimina: riprendere la regola "gli URI sono nomi".</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>REST è uno stile con sei vincoli, uno facoltativo</li>
+      <li>Risorse con URI, rappresentazioni in JSON</li>
+      <li>Metodi HTTP come verbi; GET, PUT, DELETE idempotenti, POST no</li>
+    </ul>
+    <ul class="points">
+      <li>201 + Location, 204, 400, 404, 409: codici che parlano</li>
+      <li>Stateless: il token viaggia in ogni richiesta</li>
+      <li>Le API dell'AI sono richieste HTTP con JSON</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: nella prova scritta si chiede spesso di progettare un'architettura client-server. Elencare gli endpoint con metodo, URI e codici, come in BiblioAPI, rende il progetto chiaro e verificabile.</div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: BiblioAPI diventa un server Java vero, con il solo JDK. Chiedere di portare il file biblioapi-design.md.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

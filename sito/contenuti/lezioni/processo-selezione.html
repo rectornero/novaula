@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il processo di selezione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Selezionare un prodotto informatico</p>
+  <h1>Il processo<br>di selezione</h1>
+  <p class="lead">Prima di confrontare prodotti bisogna sapere che cosa serve davvero: bisogni, requisiti, vincoli e un metodo per non scegliere a istinto.</p>
+  <div class="meta"><span class="chip">Lezione 1 di 4</span><span>Bisogni · requisiti · MoSCoW · vincoli</span></div>
+  <aside class="notes">Obiettivi: descrivere le fasi del processo di selezione, distinguere bisogno, requisito e soluzione, classificare i requisiti in funzionali e non funzionali, assegnare le priorità con MoSCoW, riconoscere i vincoli. Durata indicativa: 2-3 ore con i laboratori. Il caso Lumen Ottica attraversa tutte e quattro le lezioni dell'unità e la verifica: conviene che ogni studente tenga una cartella "lumen" con i file dei laboratori. Collegamento: la lezione "Lavorare a progetti" (user story, backlog) usa idee molto vicine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi comprare un portatile nuovo per la scuola. Da dove parti?</h2></div>
+  <div class="poll" data-id="u6l1-partenza">
+    <ol><li>Dalle recensioni su YouTube</li><li>Dal budget che ho</li><li>Da che cosa ci devo fare</li><li>Da quello che ha il mio amico</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Far notare che quasi tutti partono dal prodotto (recensioni, amico) o dal prezzo, e pochi dall'uso. Domanda di rilancio: "se ci devi far girare Android Studio, 8 GB di RAM bastano?" Il budget è un vincolo, l'uso genera i requisiti: è esattamente la distinzione di oggi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il caso dell'unità</p><h2>Lumen Ottica ha perso due mesi di schede clienti</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Lumen Ottica è una piccola catena di <b>4 negozi</b> con <b>20 dipendenti</b> (azienda inventata, problemi verissimi).</p>
+      <ul class="points">
+        <li>I file stanno su un PC del negozio centrale che fa da "server".</li>
+        <li>Tra i negozi i documenti viaggiano su chiavette USB e per email.</li>
+        <li>A marzo il disco del PC si è rotto: nessun backup recente.</li>
+        <li>Nelle schede ci sono le <b>prescrizioni ottiche</b> dei clienti.</li>
+      </ul>
+    </div>
+    <div class="card night">
+      <h3>Il titolare</h3>
+      <p>"Mettiamo tutto nel cloud, quello che costa meno. Entro il mese prossimo."</p>
+      <p class="muted">Tu sei il consulente IT. In quattro lezioni devi arrivare a una <b>scelta motivata</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Presentare il caso come una commessa reale. Chiedere: "nella frase del titolare quante decisioni sono già prese senza analisi?" Almeno tre: la soluzione (cloud), il criterio (il prezzo più basso), il tempo (un mese). Le prescrizioni ottiche sono dati relativi alla salute, una categoria particolare per il GDPR (art. 9): lo riprenderemo nella lezione 3. Chiedere chi sono gli stakeholder: titolare (costi, tempi), commessi (trovare subito la scheda), ottometrista (riservatezza delle prescrizioni), consulente privacy (GDPR), tecnico esterno (poca manutenzione). Tecniche di raccolta: interviste, osservazione del lavoro reale, questionari, analisi dei documenti. Chi non viene ascoltato di solito boccia il prodotto dopo l'acquisto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il problema più difficile viene prima del codice</h2></div>
+  <figure class="citazione">
+    <blockquote>La parte più difficile nel costruire un sistema software è decidere con precisione che cosa costruire.</blockquote>
+    <figcaption><b>Fred Brooks</b>, informatico, capo progetto del sistema operativo IBM OS/360, nel saggio "No Silver Bullet", 1986</figcaption>
+  </figure>
+  <p class="lead">Vale anche quando non costruisci ma <b>compri</b>: la parte più difficile è decidere con precisione che cosa ti serve.</p>
+  <aside class="notes">Originale: "The hardest single part of building a software system is deciding precisely what to build." (F. P. Brooks, "No Silver Bullet: Essence and Accidents of Software Engineering", 1986, ripubblicato in IEEE Computer nel 1987 e nell'edizione 1995 di "The Mythical Man-Month"). Traduzione nostra. Brooks ricevette il premio Turing nel 1999. Domanda: "perché un errore nei requisiti costa più di un errore nel codice?" Perché lo scopri tardi, quando hai già comprato, migrato e formato le persone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Sei fasi, dal problema alla scelta</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Bisogni</h3><p class="small">Che problema risolviamo? Per chi? <b>· Lezione 1</b></p></div>
+    <div class="card soft"><p class="num">2</p><h3>Requisiti e vincoli</h3><p class="small">Che cosa deve fare, quanto bene, entro quali limiti. <b>· Lezione 1</b></p></div>
+    <div class="card"><p class="num">3</p><h3>Ricerca</h3><p class="small">Quali prodotti e fornitori esistono? Fonti affidabili, RFI. <b>· Lezione 2</b></p></div>
+    <div class="card"><p class="num">4</p><h3>Valutazione</h3><p class="small">Costo totale, licenze, SLA, dati, fornitore. <b>· Lezione 3</b></p></div>
+    <div class="card"><p class="num">5</p><h3>Confronto e scelta</h3><p class="small">Matrice con pesi e punteggi, scelta motivata. <b>· Lezione 4</b></p></div>
+    <div class="card"><p class="num">6</p><h3>Contratto e adozione</h3><p class="small">Firma, migrazione, formazione, verifica. <b>· Dopo la scelta</b></p></div>
+  </div>
+  <aside class="notes">Il processo non è rigido: se in fase 3 si scopre che nessun prodotto soddisfa un requisito obbligatorio, si torna alla fase 2 e si discute il requisito con il cliente. Ogni fase produce un documento: elenco dei requisiti, lista dei candidati (long list e short list), schede di valutazione, matrice di confronto, relazione di scelta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il consulente di Lumen: metti in ordine il suo lavoro</h2></div>
+  <ol class="puzzle-ordina" data-id="u6l1-fasi">
+    <li>Intervista titolare, commessi e ottometrista</li>
+    <li>Scrive l'elenco dei requisiti con le priorità</li>
+    <li>Cerca soluzioni e manda una richiesta di informazioni ai fornitori</li>
+    <li>Calcola il costo totale e legge contratti e SLA</li>
+    <li>Confronta i candidati con una matrice pesata</li>
+    <li>Presenta la scelta motivata al titolare</li>
+    <li>Pianifica la migrazione dei file e la formazione</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Errore tipico: mettere "cerca soluzioni" prima di "scrive i requisiti". Discutere: chi cerca prima di avere i requisiti si innamora del primo prodotto bello e poi scrive requisiti su misura per lui (bias di conferma). Si può fare a squadre con il timer: 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre parole da non confondere</p><h2>Bisogno, requisito, soluzione</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Bisogno</h3><p>"Non vogliamo più perdere le schede dei clienti."</p><p class="muted small">Il problema, nel linguaggio del cliente.</p></div>
+    <div class="card fill"><h3>Requisito</h3><p>"Backup automatico ogni notte, con una copia fuori dalla sede."</p><p class="small">Che cosa deve fare la soluzione, verificabile.</p></div>
+    <div class="card soft"><h3>Soluzione</h3><p>"Il servizio X del fornitore Y."</p><p class="muted small">Un prodotto concreto: arriva solo alla fine.</p></div>
+  </div>
+  <div class="callout">Il titolare ha detto una <b>soluzione</b> ("il cloud"). Il consulente risale al <b>bisogno</b> chiedendo "perché?" più volte: è la tecnica dei <mark>5 perché</mark>, nata alla Toyota.</div>
+  <aside class="notes">La tecnica dei 5 perché è associata a Taiichi Ohno e al Toyota Production System. Esempio in classe: "Perché il cloud?" "Per non perdere i file." "Perché si perdono?" "Perché c'è un solo disco e nessun backup." "Perché nessuno fa il backup?" "Perché è manuale e nessuno se ne occupa." Ecco il vero bisogno: un backup automatico e controllato. Il cloud è una delle possibili soluzioni, non l'unica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due famiglie di requisiti</p><h2>Che cosa fa e quanto bene lo fa</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Funzionali</h3>
+      <p>Descrivono una <b>funzione</b>: un'azione del sistema o dell'utente.</p>
+      <ul class="points small"><li>Condividere una cartella tra i negozi</li><li>Ripristinare una versione precedente di un file</li><li>Inviare un avviso se il backup fallisce</li></ul>
+    </div>
+    <div class="card">
+      <h3>Non funzionali</h3>
+      <p>Descrivono una <b>qualità</b> o un vincolo: prestazioni, sicurezza, affidabilità.</p>
+      <ul class="points small"><li>Disponibilità almeno 99,9% all'anno</li><li>Dati conservati nell'Unione europea</li><li>Ripristino di un file entro 15 minuti</li></ul>
+    </div>
+  </div>
+  <p class="small">Per i non funzionali c'è un modello standard di qualità, la norma <b>ISO/IEC 25010</b>:</p>
+  <div class="chips"><span class="chip">idoneità funzionale</span><span class="chip">efficienza</span><span class="chip">compatibilità</span><span class="chip">usabilità</span><span class="chip">affidabilità</span><span class="chip">sicurezza</span><span class="chip">manutenibilità</span><span class="chip">portabilità</span></div>
+  <aside class="notes">Le otto caratteristiche sono quelle della versione 2011 di ISO/IEC 25010, la più citata nei libri. La revisione del 2023 ha rinominato alcune voci (per esempio "interaction capability" al posto di usabilità, "flexibility" al posto di portabilità) e ha aggiunto la "safety". Usare le chip come check-list: per ogni caratteristica chiedersi "c'è un requisito che la riguarda?". Spesso si dimenticano compatibilità (funziona con i PC che abbiamo?) e portabilità (posso portare via i dati?).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi è un requisito NON funzionale?</h2></div>
+  <div class="poll" data-id="u6l1-nf" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il titolare riceve una mail se il backup notturno fallisce</li><li>Il commesso cerca una scheda cliente per cognome</li><li>Il ripristino di un file cancellato richiede al massimo 15 minuti</li><li>Ogni negozio vede solo la propria cartella</li></ol>
+    <p class="why">C fissa una qualità misurabile (tempo di ripristino, cioè affidabilità e recuperabilità). A parla di affidabilità ma descrive una funzione: inviare una mail. D sembra sicurezza, ma descrive un comportamento del sistema (permessi per cartella): è funzionale.</p>
+  </div>
+  <aside class="notes">A e D sono i tranelli: contengono parole "da non funzionale" (backup, sicurezza) ma sono azioni che il sistema compie. Regola pratica: se puoi scriverlo come "il sistema permette/fa X" è funzionale; se è "il sistema fa X almeno così bene" è non funzionale. Nei casi reali il confine è sfumato: l'importante è che il requisito sia scritto e verificabile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le priorità</p><h2>MoSCoW: non tutto è obbligatorio</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><p class="num" style="color:#fff">M</p><h3>Must</h3><p class="small">Obbligatorio. Se manca, il prodotto è scartato.</p></div>
+    <div class="card soft"><p class="num">S</p><h3>Should</h3><p class="small">Importante, ma si può sopravvivere senza o con un'alternativa.</p></div>
+    <div class="card soft"><p class="num">C</p><h3>Could</h3><p class="small">Gradito se c'è, a parità di tutto il resto.</p></div>
+    <div class="card"><p class="num">W</p><h3>Won't</h3><p class="small">Non in questa scelta. Scritto per non dimenticarlo.</p></div>
+  </div>
+  <div class="callout hl">Nella selezione i <b>Must</b> sono un filtro: chi non li soddisfa esce subito. Gli altri diventano <b>criteri con un peso</b> nella matrice della lezione 4.</div>
+  <aside class="notes">MoSCoW è stato proposto da Dai Clegg (Oracle) nel 1994 e reso popolare dal metodo agile DSDM. Le "o" minuscole servono solo a renderlo pronunciabile. Avvertenza: se tutto è Must, niente lo è. Una regola usata in DSDM è tenere i Must intorno al 60% dello sforzo; per una selezione basta pretendere pochi Must davvero eliminatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Nel metodo MoSCoW, che cosa vuol dire un requisito W?</h2></div>
+  <div class="poll" data-id="u6l1-wont" data-tipo="quiz" data-risposta="B">
+    <ol><li>Che il cliente non lo vorrà mai</li><li>Che non rientra in questa scelta, ma resta registrato</li><li>Che è un desiderio (wish) da valutare con un peso basso</li><li>Che è vietato dalla legge</li></ol>
+    <p class="why">Won't (this time): non fa parte di questa selezione, ma si scrive per gestire le aspettative e per ricordarlo in futuro. Non significa "mai" e non è un "wish": i desideri a bassa priorità sono i Could.</p>
+  </div>
+  <aside class="notes">Molti rispondono A o C. Esempio Lumen: l'integrazione con il programma di fatturazione è W: oggi non serve, ma se un prodotto la offre in futuro è un vantaggio da annotare. Scriverlo evita che a metà progetto qualcuno dica "ma non doveva anche fare le fatture?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I requisiti di Lumen</p><h2>I dieci requisiti di Lumen, con le priorità</h2></div>
+  <table class="data compact">
+    <tr><th>ID</th><th>Requisito</th><th>Priorità</th></tr>
+    <tr><td class="mono">R1</td><td>I dati sono conservati in data center nell'Unione europea</td><td class="mono">M</td></tr>
+    <tr><td class="mono">R2</td><td>Backup automatico ogni notte, con una copia fuori dalla sede</td><td class="mono">M</td></tr>
+    <tr><td class="mono">R3</td><td>Accesso con autenticazione a due fattori</td><td class="mono">M</td></tr>
+    <tr><td class="mono">R4</td><td>Ripristino di un file cancellato entro 15 minuti</td><td class="mono">M</td></tr>
+    <tr><td class="mono">R5</td><td>Cartelle condivise per negozio, con permessi diversi</td><td class="mono">S</td></tr>
+    <tr><td class="mono">R6</td><td>Accesso ai file dal tablet in negozio</td><td class="mono">S</td></tr>
+    <tr><td class="mono">R7</td><td>Disponibilità del servizio almeno 99,9% all'anno</td><td class="mono">S</td></tr>
+    <tr><td class="mono">R8</td><td>Ricerca di un documento per nome dal browser</td><td class="mono">C</td></tr>
+    <tr><td class="mono">R9</td><td>Interfaccia in italiano</td><td class="mono">C</td></tr>
+    <tr><td class="mono">R10</td><td>Integrazione con il programma di fatturazione</td><td class="mono">W</td></tr>
+  </table>
+  <aside class="notes">Questa tabella serve per il laboratorio successivo. Classificazione attesa: funzionali R2, R5, R6, R8, R10; non funzionali R1 (vincolo di localizzazione), R3 (sicurezza), R4 (affidabilità), R7 (disponibilità), R9 (usabilità). R3 è discutibile: l'autenticazione a due fattori è anche una funzione; la accettiamo come requisito di sicurezza, quindi non funzionale. Chiedere: "perché R1 è Must?" Perché ci sono dati sanitari e il consulente privacy vuole evitare trasferimenti fuori dall'UE.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>L'elenco dei requisiti in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1:E1 scrivi <b>ID</b>, <b>Requisito</b>, <b>Tipo</b>, <b>Priorità</b>, <b>Chi lo chiede</b>.</li>
+      <li>Copia i 10 requisiti della slide precedente nelle righe 2-11. In C scrivi <b>F</b> o <b>NF</b>.</li>
+      <li>In G2:G5 scrivi M, S, C, W. In H2: <code>=CONTA.SE($D$2:$D$11;G2)</code> e trascina fino a H5.</li>
+      <li>In H7: <code>=CONTA.PIÙ.SE(C2:C11;"NF";D2:D11;"M")</code>.</li>
+      <li>Salva come <b>requisiti-lumen.ods</b> nella cartella lumen.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> H2:H5 mostrano 4, 3, 2, 1. Con la classificazione F/NF corretta ci sono 5 non funzionali e H7 vale 3 (R1, R3, R4).</div>
+  </div>
+  <aside class="notes">Se in H7 esce 2 o 4, lo studente ha classificato diversamente R1 o R3: discuterne, è un buon segno se sa motivare. CONTA.SE e CONTA.PIÙ.SE sono i nomi italiani di COUNTIF e COUNTIFS. Variante più veloce: formattazione condizionale sulla colonna D (Formato, Condizionale) per colorare di verde i Must. Il file serve ancora nelle lezioni 2-4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere bene · puzzle</p><h2>Un buon requisito si può verificare: abbina</h2></div>
+  <p class="small muted">"Deve essere veloce" non si può controllare. A ogni requisito si collega un <b>criterio di accettazione</b>: la prova che farai durante la demo o il periodo di prova.</p>
+  <dl class="puzzle-abbina" data-id="u6l1-verificabile">
+    <dt>"Sempre disponibile"</dt><dd>Disponibilità mensile almeno 99,9%, con penali se scende sotto</dd>
+    <dt>"Non perdiamo i dati"</dt><dd>Al massimo 24 ore di lavoro perse dopo un guasto</dd>
+    <dt>"Funziona ovunque"</dt><dd>Si usa da Chrome, Firefox ed Edge senza installare nulla</dd>
+    <dt>"Dati al sicuro"</dt><dd>Cifratura dei file sui server e durante il trasferimento</dd>
+    <dt>"Supporto rapido"</dt><dd>Risposta a un guasto bloccante entro 4 ore lavorative</dd>
+  </dl>
+  <aside class="notes">Coppie come scritte. "Al massimo 24 ore perse" anticipa il concetto di RPO (Recovery Point Objective) della lezione 3; il tempo per tornare operativi è invece l'RTO. Chiedere di trasformare in modo verificabile anche "deve piacere ai commessi" (test di usabilità con 3 commessi: completano 5 compiti senza aiuto).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Ogni requisito con la sua prova</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Riapri <b>requisiti-lumen.ods</b> e aggiungi in F1 la colonna <b>Criterio di accettazione</b>.</li>
+      <li>Per R1-R7 scrivi una prova concreta e misurabile (che cosa fai, che cosa ti aspetti).</li>
+      <li>Aggiungi R11, R12 e R13 riscrivendo in modo verificabile: "deve essere veloce", "deve costare poco", "deve essere facile".</li>
+      <li>Colora di rosso le celle dei criteri che non sai ancora verificare.</li>
+      <li>Salva con lo stesso nome.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni criterio contiene un numero o un'azione osservabile. Esempio per R4: "Cancello un file di prova e lo ripristino: ci metto meno di 15 minuti."</div>
+  </div>
+  <aside class="notes">Soluzioni possibili: R1 "Il contratto e la documentazione indicano data center in UE"; R2 "Dopo una notte trovo nel pannello il backup con data e ora e una copia in un'altra sede"; R3 "Senza il codice dell'app non riesco ad accedere"; R5 "Un account del negozio 2 non apre la cartella del negozio 3"; R7 "Lo SLA scritto garantisce 99,9% mensile". Le celle rosse sono la lista di domande per i fornitori della lezione 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I limiti del gioco</p><h2>Vincoli: quello che non si può cambiare</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Budget</b>: 16 000 euro in 5 anni, tutto compreso.</li>
+      <li><b>Tempi</b>: operativi prima dei saldi di gennaio.</li>
+      <li><b>Normativa</b>: dati sanitari, quindi GDPR art. 9.</li>
+      <li><b>Compatibilità</b>: 12 PC Windows e 4 tablet già acquistati.</li>
+      <li><b>Rete</b>: connessione da 30 Mbit/s in ogni negozio.</li>
+      <li><b>Competenze</b>: nessun informatico interno.</li>
+    </ul>
+    <div class="card soft">
+      <h3>Make or buy?</h3>
+      <p class="small">Si potrebbe anche <b>sviluppare</b> una soluzione su misura. Per Lumen no: nessun informatico interno, tempi stretti, e il problema è comune a milioni di aziende.</p>
+      <p class="small muted">Si sviluppa quando il bisogno è davvero unico e dà un vantaggio competitivo.</p>
+    </div>
+  </div>
+  <aside class="notes">Differenza tra requisito e vincolo: il requisito descrive la soluzione, il vincolo restringe lo spazio delle soluzioni e di solito non è negoziabile. La rete da 30 Mbit/s è importante: caricare 200 GB di archivio nel cloud richiede ore (200 GB = 1 600 000 Mbit, a 30 Mbit/s circa 53 000 s, quasi 15 ore, in pratica di più). Domanda: "un vincolo di competenze favorisce SaaS o server in sede?" SaaS, perché la manutenzione la fa il fornitore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con oggi</p><h2>L'AI ti aiuta a scrivere i requisiti?</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Bozza, non verità</h3><p>Un modello linguistico può trasformare la trascrizione di un'intervista in un elenco ordinato di requisiti. Ma inventa con sicurezza dettagli mai detti e non sa quello che il cliente non ha detto. Ogni riga va verificata con lo stakeholder. E prima di incollare l'intervista: contiene dati personali?</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Anche un modello si sceglie</h3><p>Lumen vuole un assistente che risponda ai clienti in chat. Requisiti come "le conversazioni non escono dall'UE" o "costo sotto 100 euro al mese" eliminano subito alcuni modelli e servizi. Il processo è lo stesso: bisogni, requisiti, vincoli, poi i prodotti.</p></div>
+  </div>
+  <aside class="notes">Messaggio: l'AI accelera la scrittura, non sostituisce l'ascolto. Le "allucinazioni" dei modelli linguistici sono un limite noto e documentato. Sulla privacy: incollare in un chatbot pubblico l'intervista con nomi e prescrizioni dei clienti sarebbe un trattamento di dati personali verso un terzo, da evitare senza un contratto adeguato. La scelta di un modello di AI tornerà nella lezione 4 con un laboratorio sul costo per token.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Disegna il processo di selezione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>app.diagrams.net</b> (non serve un account) e scegli di salvare sul dispositivo.</li>
+      <li>Disegna le 6 fasi come rettangoli collegati da frecce.</li>
+      <li>Dopo "Ricerca" aggiungi un rombo: <b>"Almeno un prodotto soddisfa tutti i Must?"</b>. Se no, freccia indietro a "Requisiti e vincoli".</li>
+      <li>Dopo "Valutazione" un secondo rombo: <b>"Costo totale entro il budget?"</b>.</li>
+      <li>Salva <b>processo-lumen.drawio</b> ed esporta anche <b>processo-lumen.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 6 rettangoli, 2 rombi con le uscite "sì" e "no" etichettate, almeno una freccia che torna indietro. Il diagramma si legge dall'alto in basso senza incroci.</div>
+  </div>
+  <aside class="notes">diagrams.net (draw.io) funziona nel browser senza registrazione; se il sito è bloccato dalla rete della scuola, si può usare la versione desktop o LibreOffice Draw. La freccia all'indietro è il messaggio chiave: il processo è iterativo. Possibile secondo rombo alternativo: "Il fornitore accetta le condizioni sui dati?". Il PNG si riusa nella relazione finale della lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>"Il sistema deve mandare un avviso se il backup fallisce" è un requisito <span class="blank" data-risposta="funzionale" style="--w:11ch"></span>.</p>
+    <p>Nel metodo MoSCoW, i requisiti che fanno scartare un prodotto se mancano sono i <span class="blank" data-risposta="must|m"></span>.</p>
+    <p>La norma ISO/IEC <span class="blank" data-risposta="25010"></span> descrive le caratteristiche di qualità di un prodotto software.</p>
+    <p>Un limite non negoziabile, come il budget o una legge, si chiama <span class="blank" data-risposta="vincolo" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: funzionale, Must (accettato M), 25010, vincolo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Prima il bisogno, poi i requisiti, solo alla fine i prodotti</li>
+      <li>Requisiti funzionali (che cosa) e non funzionali (quanto bene)</li>
+      <li>Ogni requisito ha un criterio di accettazione</li>
+    </ul>
+    <ul class="points">
+      <li>MoSCoW: i Must filtrano, gli altri pesano</li>
+      <li>Vincoli: budget, tempi, leggi, compatibilità</li>
+      <li><b>All'esame</b>: in un caso progettuale elenca requisiti e vincoli prima di proporre una soluzione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: il processo di ricerca, dove si cercano i candidati per Lumen e si scrive la richiesta di informazioni (RFI) ai fornitori, partendo dalle celle rosse del laboratorio 2.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

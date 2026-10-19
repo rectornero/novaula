@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Button e Toast · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 6</p>
+  <h1>L'interattività: Button e Toast</h1>
+  <p class="lead">QuizTPSI impara ad ascoltare: pulsanti Vero e Falso, un messaggio che compare e sparisce, i punti che crescono. E un bug che tutti incontrano almeno una volta: la rotazione.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Eventi, Button, setOnClickListener, Toast</span></p>
+  <aside class="notes">Obiettivi: capire la programmazione a eventi e il main thread, aggiungere Button al layout, gestire il clic con setOnClickListener e una lambda, mostrare un Toast, scrivere la logica del quiz con una data class, salvare lo stato con onSaveInstanceState. Durata: 2-3 ore. Si riparte dal progetto della lezione 5 (layout con tvContatore, ivDomanda, tvDomanda). Piano B: telefono via USB al posto dell'emulatore; a coppie; dimostrazione sulla LIM con gli studenti che scrivono il codice sul quaderno e lo verificano poi in laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dopo un tocco, quale conferma preferisci?</h2></div>
+  <div class="poll" data-id="bt-feedback">
+    <ol><li>Una breve vibrazione</li><li>Un messaggio che compare e sparisce</li><li>Il pulsante che cambia colore</li><li>Un suono</li><li>Nessuna: mi basta che funzioni</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta: ogni feedback ha un uso. Il messaggio che compare e sparisce è il Toast di oggi; il cambio di colore è lo stato "premuto" che i pulsanti Material hanno già; la vibrazione si chiama feedback aptico. Domanda: e se il telefono è in modalità silenziosa? E per chi non vede? (Il feedback deve passare da più canali.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Programmazione a eventi</p><h2>L'app non fa niente: aspetta</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Evento</h3><p class="small">Il dito tocca lo schermo, arriva una notifica, scade un timer.</p></div>
+    <div class="card fill"><h3>Main thread</h3><p class="small">Un unico thread prende gli eventi da una coda, uno alla volta.</p></div>
+    <div class="card"><h3>Listener</h3><p class="small">Il tuo codice, registrato prima, viene chiamato.</p></div>
+    <div class="card night"><h3>Ridisegno</h3><p class="small">Lo stesso thread aggiorna l'interfaccia.</p></div>
+  </div>
+  <div class="callout">Se un listener lavora troppo a lungo il thread è bloccato: dopo circa <b>5 secondi</b> senza risposta a un input, Android mostra la finestra <b>ANR</b>, "L'app non risponde".</div>
+  <aside class="notes">Il main thread (o UI thread) esegue un ciclo di messaggi (Looper): è lo stesso modello degli event handler in JavaScript che gli studenti conoscono. Il lavoro lungo (rete, file grandi) va spostato fuori dal main thread: in Kotlin con le coroutine, che non vediamo in questa unità. Accedere alla rete dal main thread fa lanciare NetworkOnMainThreadException. Collegamento con l'Unità 3: thread e ExecutorService in Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo pulsante</p><h2>Un Button nel layout, un listener nel codice</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:24px">&lt;<span class="k">Button</span>
+    android:id=<span class="s">"@+id/btnVero"</span>
+    android:layout_width=<span class="s">"wrap_content"</span>
+    android:layout_height=<span class="s">"wrap_content"</span>
+    android:text=<span class="s">"@string/vero"</span> /&gt;</pre>
+<pre class="code" style="font-size:24px"><span class="k">val</span> btnVero =
+    findViewById&lt;Button&gt;(R.id.btnVero)
+
+btnVero.setOnClickListener {
+    Toast.makeText(<span class="k">this</span>, <span class="s">"Hai detto Vero"</span>,
+        Toast.LENGTH_SHORT).<span class="hl">show()</span>
+}</pre>
+  </div>
+  <div class="cols-2">
+    <p class="small"><b>In Java</b> si scriveva <code>btnVero.setOnClickListener(v -&gt; { … });</code> o una classe anonima che implementa <code>View.OnClickListener</code>.</p>
+    <p class="small"><b>In Kotlin</b> la lambda finale va fuori dalle parentesi; <code>this</code> è l'Activity, che fa da <b>Context</b> per il Toast.</p>
+  </div>
+  <aside class="notes">OnClickListener è un'interfaccia Java con un solo metodo onClick(View v): Kotlin permette di passare una lambda (conversione SAM). Dentro la lambda il parametro implicito it è la View cliccata. Esiste anche l'attributo XML android:onClick="nomeMetodo", ma è sconsigliato: il collegamento si vede solo a runtime e si rompe con l'offuscamento. Con il tema Material dei progetti recenti i Button sono MaterialButton, arrotondati e colorati con il colore primario del tema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel listener c'è solo questa riga. Tocchi il pulsante: che cosa succede?</h2></div>
+  <pre class="code">Toast.makeText(<span class="k">this</span>, <span class="s">"Giusto!"</span>, Toast.LENGTH_SHORT)</pre>
+  <div class="poll" data-id="bt-show" data-tipo="quiz" data-risposta="C">
+    <ol><li>Compare il messaggio "Giusto!"</li><li>Il progetto non compila</li><li>Non compare niente, e non c'è nessun errore</li><li>L'app si chiude con un'eccezione</li></ol>
+    <p class="why">makeText crea l'oggetto Toast ma non lo mostra: serve .show(). Il codice è valido, quindi compila e gira, ma il Toast non arriva mai sullo schermo. Lint di solito lo segnala con un avviso.</p>
+  </div>
+  <aside class="notes">È l'errore più comune in assoluto con i Toast: guardare il codice evidenziato in giallo da Android Studio, che avverte "Toast created but not shown". Morale da ripetere: compilare non vuol dire funzionare, e gli avvisi gialli vanno letti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>I pulsanti Vero e Falso</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>In strings.xml aggiungi <code>vero</code>, <code>falso</code>, <code>giusto</code> e <code>sbagliato</code>.</li>
+      <li>Sotto tvDomanda aggiungi un LinearLayout <b>orizzontale</b> con <b>btnVero</b> e <b>btnFalso</b>.</li>
+      <li>Dai a entrambi <code>layout_width="0dp"</code> e <code>layout_weight="1"</code>.</li>
+      <li>In onCreate registra un listener su ciascuno che mostra un Toast.</li>
+    </ol>
+    <div class="stack">
+<pre class="code" style="font-size:22px">btnFalso.setOnClickListener {
+    Toast.makeText(<span class="k">this</span>, R.string.sbagliato,
+        Toast.LENGTH_SHORT).show()
+}</pre>
+      <div class="check"><b>Controllo:</b> i due pulsanti dividono a metà la larghezza dello schermo. Toccando Vero compare <b>Giusto!</b>, toccando Falso compare <b>Sbagliato</b> (la domanda 1 è vera).</div>
+    </div>
+  </div>
+  <aside class="notes">makeText accetta sia un testo sia l'id di una risorsa stringa. layout_weight divide lo spazio rimanente in proporzione ai pesi: con larghezza 0dp e pesi uguali i pulsanti vengono identici. Per un piccolo spazio tra i due: layout_marginEnd="8dp" sul primo. Errore frequente: Toast.makeText(MainActivity, …) invece di this o this@MainActivity; dentro una lambda this resta l'Activity, ma dentro una classe anonima Java-style no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Toast</p><h2>Un messaggio breve, che non si tocca</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><code>LENGTH_SHORT</code> dura circa 2 secondi, <code>LENGTH_LONG</code> circa 3,5.</li>
+      <li>Non ha pulsanti e non si può toccare: solo informazione.</li>
+      <li>Da Android 12 un Toast di testo mostra al massimo due righe, con l'icona dell'app.</li>
+      <li>Per un'azione da annullare si usa una <b>Snackbar</b>; per una scelta obbligata un <b>dialog</b>.</li>
+    </ul>
+    <div class="card soft"><h3>Toast o Logcat?</h3><p class="small">Il Toast lo vede l'utente. Per capire che cosa fa il codice usa <code>Log.d</code>: un Toast messo "per debug" e dimenticato finisce in produzione.</p></div>
+  </div>
+  <aside class="notes">Le durate non sono documentate al millisecondo nella API pubblica, ma nel codice della piattaforma corrispondono a circa 2 e 3,5 secondi. Da Android 11 i Toast personalizzati (con una View propria) mostrati da un'app in background sono bloccati. Snackbar fa parte della libreria Material Components: Snackbar.make(view, "Risposta cancellata", Snackbar.LENGTH_LONG).setAction("Annulla") { … }.show().</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dal dito al Toast: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="bt-tocco">
+    <li>Il dito tocca lo schermo sopra btnVero</li>
+    <li>Il sistema crea un evento di tocco e lo consegna alla finestra dell'app</li>
+    <li>Sul main thread il Button riconosce un clic completo</li>
+    <li>Il Button chiama la lambda registrata con setOnClickListener</li>
+    <li>Il codice crea il Toast con makeText</li>
+    <li>show() chiede al sistema di mostrarlo sopra l'app</li>
+  </ol>
+  <aside class="notes">L'evento di tocco è un MotionEvent; il clic scatta al rilascio del dito (ACTION_UP) dentro il pulsante, non alla pressione: lo si può provare premendo, trascinando fuori e rilasciando. Il Toast è disegnato dal sistema, non dentro l'Activity: per questo resta visibile anche se l'Activity si chiude subito dopo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La logica del quiz</p><h2>Dati in una data class, stato in due variabili</h2></div>
+<pre class="code" style="font-size:23px"><span class="k">data class</span> Domanda(<span class="k">val</span> testo: Int, <span class="k">val</span> immagine: Int, <span class="k">val</span> risposta: Boolean)
+
+<span class="k">private val</span> domande = listOf(
+    Domanda(R.string.domanda_1, R.drawable.img_domanda1, <span class="k">true</span>),
+    Domanda(R.string.domanda_2, R.drawable.img_domanda2, <span class="k">false</span>),
+    Domanda(R.string.domanda_3, R.drawable.img_domanda3, <span class="k">false</span>))
+<span class="k">private var</span> indice = 0
+<span class="k">private var</span> punti = 0
+
+<span class="k">private fun</span> controlla(rispostaUtente: Boolean) {
+    <span class="k">val</span> giusta = rispostaUtente == domande[indice].risposta
+    <span class="k">if</span> (giusta) punti++
+    Toast.makeText(<span class="k">this</span>, <span class="k">if</span> (giusta) R.string.giusto <span class="k">else</span> R.string.sbagliato,
+        Toast.LENGTH_SHORT).show()
+}</pre>
+  <aside class="notes">testo e immagine sono Int perché contengono id di risorse (R.string…, R.drawable…); chi vuole può annotarli con @StringRes e @DrawableRes per avere controlli da Lint. Le domande: 1 "Android usa un kernel Linux" vero; 2 "ART esegue i file .class come la JVM" falso; 3 "In Kotlin una variabile val si può riassegnare" falso. La data class va dichiarata fuori dalla classe MainActivity (nello stesso file o in Domanda.kt). Le variabili indice e punti sono lo "stato" dell'Activity: tenerlo a mente per la slide sulla rotazione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il quiz funziona davvero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Aggiungi <code>domanda_2</code>, <code>domanda_3</code> e le immagini <code>img_domanda2</code>, <code>img_domanda3</code>.</li>
+      <li>Copia la data class e la funzione <code>controlla</code>; i listener chiamano <code>controlla(true)</code> e <code>controlla(false)</code>.</li>
+      <li>Scrivi <code>mostraDomanda()</code>: aggiorna testo, immagine e contatore da <code>domande[indice]</code>.</li>
+      <li>Aggiungi <b>btnAvanti</b>: se ci sono altre domande, <code>indice++</code> e <code>mostraDomanda()</code>; altrimenti un Toast con i punti.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> rispondendo Vero, Falso, Falso, all'ultimo Avanti compare <b>Quiz finito: 3 su 3</b>. Il contatore passa da Domanda 1 di 3 a Domanda 3 di 3.</div>
+  </div>
+  <aside class="notes">Soluzione mostraDomanda: val d = domande[indice]; tvDomanda.setText(d.testo); ivDomanda.setImageResource(d.immagine); tvContatore.text = getString(R.string.contatore, indice + 1, domande.size). Le View vanno dichiarate come proprietà con private lateinit var tvDomanda: TextView e assegnate in onCreate, così mostraDomanda le vede. Toast finale: Toast.makeText(this, "Quiz finito: $punti su ${domande.size}", Toast.LENGTH_LONG).show() (meglio con una stringa di risorsa con segnaposto). Chiamare mostraDomanda() alla fine di onCreate. Bug da far scoprire: toccando Vero tre volte sulla stessa domanda si prendono tre punti. Lo correggiamo tra due slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Hai risposto a due domande, punti = 2. Ruoti il telefono: che cosa vedi?</h2></div>
+  <div class="poll" data-id="bt-ruota" data-tipo="quiz" data-risposta="D">
+    <ol><li>Domanda 3 di 3, con 2 punti</li><li>Domanda 2 di 3, con 2 punti</li><li>L'app si chiude: errore di indice</li><li>Domanda 1 di 3, con 0 punti</li></ol>
+    <p class="why">La rotazione distrugge e ricrea l'Activity: onCreate riparte, indice e punti tornano a 0 e mostraDomanda mostra la prima domanda. È la tabella della lezione 2, ora con un danno visibile.</p>
+  </div>
+  <aside class="notes">Far provare subito sul dispositivo, se il quiz è pronto: la sorpresa è garantita. Chiedere: in quali altre situazioni si perde lo stato allo stesso modo? (Cambio di lingua o di tema scuro, ridimensionamento della finestra su tablet e pieghevoli, e il processo ucciso dal sistema mentre l'app è in background.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La correzione</p><h2>Salva lo stato prima che l'Activity sparisca</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:23px"><span class="k">override fun</span> onSaveInstanceState(outState: Bundle) {
+    <span class="k">super</span>.onSaveInstanceState(outState)
+    outState.putInt(<span class="s">"indice"</span>, indice)
+    outState.putInt(<span class="s">"punti"</span>, punti)
+}
+
+<span class="c">// in onCreate, prima di mostraDomanda()</span>
+indice = savedInstanceState?.getInt(<span class="s">"indice"</span>) ?: 0
+punti = savedInstanceState?.getInt(<span class="s">"punti"</span>) ?: 0</pre>
+    <ul class="points small">
+      <li>Il <b>Bundle</b> è una mappa chiave-valore che il sistema conserva.</li>
+      <li>Al primo avvio <code>savedInstanceState</code> è null: ecco perché <code>?.</code> e <code>?:</code>.</li>
+      <li>Per stati più grandi si usa un <b>ViewModel</b>, che sopravvive alla rotazione.</li>
+    </ul>
+  </div>
+  <aside class="notes">Il Bundle salvato sopravvive anche alla chiusura del processo da parte del sistema (l'utente torna all'app e la ritrova com'era), ma deve restare piccolo: qualche valore, non liste di immagini. Il ViewModel di Jetpack sopravvive ai cambi di configurazione ma non alla chiusura del processo; per entrambe le cose si combina con SavedStateHandle. Le chiavi andrebbero messe in costanti (companion object) per non sbagliare a scriverle: anticipazione della lezione 7.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Niente più punti persi, niente più punti regalati</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Aggiungi <code>onSaveInstanceState</code> e il ripristino in onCreate, come nella slide.</li>
+      <li>In <code>controlla</code>, dopo la risposta, disattiva i pulsanti con <code>isEnabled = false</code>.</li>
+      <li>In <code>mostraDomanda</code> riattivali.</li>
+      <li>Salva anche se la domanda corrente ha già una risposta, e ripristinalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> rispondi a due domande, ruota: resti su <b>Domanda 2 di 3</b> con i punti giusti. Toccare Vero tre volte dà al massimo un punto.</div>
+  </div>
+  <aside class="notes">Soluzione per il punto 4: private var risposto = false; in controlla risposto = true; in onSaveInstanceState outState.putBoolean("risposto", risposto); in onCreate risposto = savedInstanceState?.getBoolean("risposto") ?: false e poi btnVero.isEnabled = !risposto (lo stesso per btnFalso). In alternativa, più semplice per chi è in difficoltà: punti 1-3. In Kotlin isEnabled è la proprietà che corrisponde a setEnabled/isEnabled di Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Gli utenti toccheranno tutto</h2></div>
+  <div class="cols-2">
+    <div class="card night"><h3>Apollo 8, dicembre 1968</h3><p class="small">Margaret Hamilton, a capo del software di bordo al MIT, aveva visto la figlia avviare per gioco il programma P01 nel simulatore, cancellando i dati di navigazione. Le risposero che gli astronauti, addestrati, non l'avrebbero mai fatto. In volo Jim Lovell lo fece. Da allora il software di Apollo ebbe più controlli sugli errori dell'utente.</p></div>
+    <figure class="citazione">
+      <blockquote style="font-size:44px">Il collaudo di un programma può mostrare la presenza di bug, mai la loro assenza.</blockquote>
+      <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, Notes on Structured Programming, 1970</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">La storia è raccontata da Hamilton in numerose interviste e nelle ricostruzioni della NASA: il team dovette inviare nuovi dati di navigazione alla capsula. Il collegamento con oggi: disattivare un pulsante dopo la risposta è lo stesso principio, prevenire l'errore invece di sperare che non accada. Citazione: traduzione nostra da "Program testing can be used to show the presence of bugs, but never to show their absence!" (EWD249, 1970). Domanda: quali altri "tocchi sbagliati" può fare un utente di QuizTPSI? (Doppio tocco veloce su Avanti, rotazione, uscire e rientrare.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="bt-termini">
+    <dt>setOnClickListener</dt><dd>Registra il codice da eseguire al clic</dd>
+    <dt>Toast.LENGTH_LONG</dt><dd>Messaggio visibile per circa 3,5 secondi</dd>
+    <dt>isEnabled = false</dt><dd>Il pulsante non risponde più ai tocchi</dd>
+    <dt>onSaveInstanceState</dt><dd>Salva lo stato prima che l'Activity venga distrutta</dd>
+    <dt>Main thread</dt><dd>Riceve gli eventi e disegna l'interfaccia</dd>
+    <dt>ANR</dt><dd>L'app non risponde a un input da circa 5 secondi</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Poi chiedere a ogni coppia di inventare una domanda Vero/Falso da aggiungere a QuizTPSI usando uno di questi termini: è il primo punto del compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I pulsanti oggi</p><h2>Un pulsante può chiedere aiuto all'AI, o essere una trappola</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un pulsante "Suggerimento" con l'AI</h3><p>Con le API di AI generativa di ML Kit, sui telefoni compatibili, un'app può chiedere a Gemini Nano di riscrivere o riassumere un testo <b>sul dispositivo</b>, senza server. Ma la risposta può essere sbagliata: va presentata come aiuto, non come verità.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Tapjacking</h3><p>Un'app malevola può disegnare una finestra trasparente sopra la tua e farti toccare un pulsante che non vedi. Da Android 12 il sistema blocca molti tocchi che passano attraverso finestre di altre app; per i pulsanti critici esiste l'attributo <b>filterTouchesWhenObscured</b>.</p></div>
+  </div>
+  <aside class="notes">Le API GenAI di ML Kit (riassunto, correzione, riscrittura, descrizione di immagini) sono state presentate da Google nel 2025 e funzionano solo sui dispositivi che supportano Gemini Nano: un'app seria deve prevedere il caso in cui non sono disponibili. Il tapjacking è un attacco classico agli overlay: collegamento con il deck attacchi-informatici. filterTouchesWhenObscured="true" fa ignorare al pulsante i tocchi quando un'altra finestra lo copre; le app bancarie lo usano sui pulsanti di conferma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il codice da eseguire al clic si registra con <span class="blank" data-risposta="setonclicklistener" style="--w:14ch"></span>.</p>
+    <p>Senza la chiamata a <span class="blank" data-risposta="show|show()"></span> il Toast non compare.</p>
+    <p>Gli eventi e il disegno dell'interfaccia passano dal <span class="blank" data-risposta="main thread|ui thread|thread principale" style="--w:10ch"></span>.</p>
+    <p>Lo stato da conservare alla rotazione si salva in onSaveInstanceState dentro un <span class="blank" data-risposta="bundle"></span>.</p>
+    <p>Un pulsante si disattiva con <code>isEnabled =</code> <span class="blank" data-risposta="false"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: setOnClickListener, show, main thread (accettati UI thread e thread principale), Bundle, false.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>L'app reagisce a eventi, sul main thread</li>
+      <li>setOnClickListener { … } con una lambda</li>
+      <li>Toast.makeText(…).show(): show non si dimentica</li>
+    </ul>
+    <ul class="points">
+      <li>Dati in data class, stato in variabili</li>
+      <li>La rotazione cancella lo stato: onSaveInstanceState</li>
+      <li>Prevenire gli errori dell'utente: isEnabled</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: la schermata del risultato con un Intent e una nuova Activity.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

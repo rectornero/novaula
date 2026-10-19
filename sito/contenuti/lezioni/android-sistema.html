@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il sistema operativo Android · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.pila{display:flex;flex-direction:column;gap:14px}
+.pila .liv{display:grid;grid-template-columns:380px 1fr;align-items:center;gap:28px;border-radius:18px;padding:22px 32px;font-size:31px;line-height:1.3;background:var(--card);border:2px solid var(--line)}
+.pila .liv b{font-family:var(--display);font-size:35px}
+.pila .liv.a{background:var(--accent);border-color:var(--accent);color:#fff}
+.pila .liv.s{background:var(--accent-soft);border-color:transparent}
+.pila .liv.n{background:var(--night);border-color:var(--night);color:var(--night-ink)}
+</style>
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 2</p>
+  <h1>Il sistema operativo Android</h1>
+  <p class="lead">Un kernel Linux, un runtime che non è una JVM, app chiuse in gabbia e un ciclo di vita deciso dal sistema. Ecco su che cosa girerà la nostra app.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Architettura, ciclo di vita, permessi, distribuzione</span></p>
+  <aside class="notes">Obiettivi: descrivere i livelli dell'architettura Android (kernel Linux, HAL, librerie native e ART, framework, app), spiegare sandbox e componenti di un'app, prevedere le chiamate del ciclo di vita di un'Activity, distinguere permessi concessi all'installazione e a runtime, conoscere APK, AAB e Google Play. Durata: 2-3 ore. Prerequisiti: sistema operativo (processi, utenti, permessi su file) dal corso di Sistemi; Java. Per i laboratori servono un telefono Android o l'emulatore, oppure la dimostrazione del docente sulla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che sistema operativo ha il tuo telefono?</h2></div>
+  <div class="poll" data-id="and-os">
+    <ol><li>Android</li><li>iOS</li><li>Un'altra cosa</li><li>Non lo so con certezza</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio. Chi ha un iPhone può fare i laboratori sull'emulatore o con un compagno. Domanda di rilancio a chi ha Android: quale versione? Quasi nessuno lo sa: lo scopriamo nel laboratorio sui permessi. Stima da far controllare: secondo StatCounter Android è su circa 7 smartphone su 10 nel mondo; in Italia la quota è simile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le radici</p><h2>Tutto parte da un hobby del 1991</h2></div>
+  <figure class="citazione">
+    <blockquote>Sto facendo un sistema operativo (libero), solo un hobby, non sarà grande e professionale come GNU.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, studente all'Università di Helsinki, messaggio al gruppo comp.os.minix, 25 agosto 1991</figcaption>
+  </figure>
+  <div class="cols-4">
+    <div class="card soft"><h3>2003</h3><p class="small">Nasce Android Inc., in California.</p></div>
+    <div class="card soft"><h3>2005</h3><p class="small">Google compra la società.</p></div>
+    <div class="card soft"><h3>2007</h3><p class="small">Annuncio con la Open Handset Alliance.</p></div>
+    <div class="card soft"><h3>2008</h3><p class="small">Primo telefono: HTC Dream.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'originale: "I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu) for 386(486) AT clones." Il kernel Linux oggi gira su miliardi di telefoni proprio grazie ad Android. Android Inc. fu fondata nel 2003 da Andy Rubin, Rich Miner, Nick Sears e Chris White; Google la acquistò nel 2005; l'Open Handset Alliance fu annunciata il 5 novembre 2007. Il progetto è open source come AOSP (Android Open Source Project), con licenza Apache 2.0 per gran parte del codice e GPLv2 per il kernel; le app e i servizi Google (Play Store, Play Services) invece non sono open source.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'architettura</p><h2>Cinque livelli, dal silicio alle app</h2></div>
+  <div class="pila">
+    <div class="liv a"><b>App</b><span>App di sistema e app installate: Telefono, Fotocamera, la nostra QuizTPSI</span></div>
+    <div class="liv s"><b>Framework Java API</b><span>Activity Manager, Package Manager, View System, notifiche, Content Provider</span></div>
+    <div class="liv"><b>ART + librerie native</b><span>Android Runtime che esegue il bytecode DEX; librerie C/C++ come SQLite, OpenGL ES, WebKit/Chromium</span></div>
+    <div class="liv"><b>HAL</b><span>Hardware Abstraction Layer: interfacce standard per fotocamera, audio, sensori, Bluetooth</span></div>
+    <div class="liv n"><b>Kernel Linux</b><span>Driver, processi, memoria, gestione energetica, comunicazione Binder tra processi</span></div>
+  </div>
+  <aside class="notes">È lo schema ufficiale della documentazione Android ("platform architecture"). L'HAL permette ai produttori di scrivere i propri driver senza modificare i livelli superiori: il framework chiama sempre la stessa interfaccia, per esempio quella della fotocamera. Binder è il meccanismo di IPC di Android: le app non parlano direttamente con i servizi di sistema, ma mandano richieste via Binder. Le librerie native sono usabili dalle app con l'Android NDK, in C e C++. Nella prova di esame, uno schema a livelli come questo è un buon modo per rispondere a "descrivi l'architettura di un sistema".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Tocchi "Scatta": metti in ordine il viaggio della richiesta</h2></div>
+  <ol class="puzzle-ordina" data-id="and-foto">
+    <li>L'app chiama le API Camera del framework</li>
+    <li>Il framework inoltra la richiesta al servizio di sistema della fotocamera via Binder</li>
+    <li>Il servizio usa l'HAL della fotocamera del produttore</li>
+    <li>L'HAL comunica con il driver nel kernel Linux</li>
+    <li>Il driver comanda il sensore e i dati dell'immagine tornano su</li>
+  </ol>
+  <aside class="notes">Ordine: app, framework, servizio di sistema (cameraserver) via Binder, HAL, driver del kernel, hardware. Far notare che l'app non tocca mai l'hardware direttamente: per questo il sistema può controllare i permessi a metà strada. Domanda: in quale punto Android verifica che l'app abbia il permesso CAMERA? (Nel servizio di sistema, prima di aprire la fotocamera.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il runtime</p><h2>ART non è una Java Virtual Machine</h2></div>
+  <div class="flow">
+    <div class="card"><h3>.kt / .java</h3><p class="small">Il tuo codice sorgente</p></div>
+    <div class="card"><h3>.class</h3><p class="small">Bytecode JVM prodotto da kotlinc o javac</p></div>
+    <div class="card fill"><h3>classes.dex</h3><p class="small">D8 lo traduce in bytecode Dalvik (DEX)</p></div>
+    <div class="card night"><h3>ART</h3><p class="small">Sul telefono: interpretato, JIT e compilato AOT</p></div>
+  </div>
+  <ul class="points">
+    <li>ART ha sostituito la vecchia macchina virtuale Dalvik con Android 5.0, nel 2014.</li>
+    <li>Da Android 7 combina JIT e compilazione anticipata dei metodi più usati, guidata da profili.</li>
+  </ul>
+  <aside class="notes">DEX è un formato a registri, più compatto del bytecode JVM a stack, pensato per dispositivi con poca memoria. Le prime versioni di ART (Android 5-6) compilavano tutta l'app all'installazione (AOT), con installazioni lente; da Android 7 il sistema compila in anticipo solo le parti "calde" individuate dai profili, anche mentre il telefono è in carica. Oggi gli sviluppatori possono fornire Baseline Profile per far partire l'app più velocemente. Ogni app gira in un proprio processo con la sua istanza di runtime.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa esegue davvero ART sul telefono?</h2></div>
+  <div class="poll" data-id="and-art" data-tipo="quiz" data-risposta="C">
+    <ol><li>I file .class, come la JVM del PC</li><li>Il sorgente Kotlin, interpretato riga per riga</li><li>Bytecode DEX, compilato in parte in codice macchina</li><li>Codice JavaScript prodotto da Kotlin</li></ol>
+    <p class="why">Nell'app finisce il file classes.dex, non i .class. ART lo interpreta, lo compila al volo (JIT) e compila in anticipo (AOT) i metodi usati più spesso.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: "Android usa Java, quindi c'è una JVM". Android usa il linguaggio Java (e Kotlin) e buona parte delle API standard, ma non la JVM di Oracle né i suoi .class. La D è plausibile perché Kotlin può davvero essere compilato anche in JavaScript (Kotlin/JS), ma non per Android.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sicurezza di base</p><h2>Ogni app nella sua gabbia</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>All'installazione ogni app riceve un proprio <b>utente Linux</b> (UID).</li>
+      <li>Gira in un processo separato: i suoi file in <code>/data/data/&lt;pacchetto&gt;</code> sono privati.</li>
+      <li><b>SELinux</b> limita anche ciò che i processi di sistema possono fare.</li>
+      <li>Ogni app è <b>firmata</b> dallo sviluppatore: gli aggiornamenti devono avere la stessa firma.</li>
+      <li>Per uscire dalla gabbia servono <b>permessi</b> e API del sistema.</li>
+    </ul>
+    <div class="card night"><h3>Collegamento</h3><p>È il principio del <b>privilegio minimo</b> visto in principi-sicurezza, applicato a milioni di telefoni.</p><p class="muted small">Il "root" del telefono rompe questa gabbia: per questo molte app bancarie si rifiutano di funzionare.</p></div>
+  </div>
+  <aside class="notes">La sandbox di Android riusa il modello di utenti e permessi di Linux, che gli studenti conoscono da Sistemi: invece di un utente per persona, un utente per app. SELinux è in modalità enforcing per tutto il sistema da Android 5.0. La firma: se un aggiornamento ha una firma diversa, Android rifiuta di installarlo sopra la versione esistente. Le app bancarie usano la Play Integrity API per verificare che il dispositivo non sia stato modificato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Com'è fatta un'app</p><h2>Abbina i componenti di un'app Android</h2></div>
+  <dl class="puzzle-abbina" data-id="and-componenti">
+    <dt>Activity</dt><dd>Una schermata con cui l'utente interagisce</dd>
+    <dt>Service</dt><dd>Lavoro senza interfaccia, per esempio la musica in riproduzione</dd>
+    <dt>BroadcastReceiver</dt><dd>Reagisce a eventi di sistema, come "batteria scarica"</dd>
+    <dt>ContentProvider</dt><dd>Condivide dati con altre app, come fa la rubrica</dd>
+    <dt>Intent</dt><dd>Il messaggio che chiede di avviare un componente</dd>
+    <dt>AndroidManifest.xml</dt><dd>Dichiara componenti e permessi dell'app</dd>
+  </dl>
+  <aside class="notes">I quattro componenti fondamentali sono Activity, Service, BroadcastReceiver e ContentProvider; l'Intent è il meccanismo che li collega (lezione 7), il manifest li dichiara. Da Android 8 molti broadcast di sistema non si possono più ricevere con receiver dichiarati nel manifest, per risparmiare batteria. Nella nostra app useremo due Activity.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo di vita</p><h2>Non sei tu a decidere quando l'Activity vive</h2></div>
+  <table class="data compact">
+    <tr><th>Che cosa fa l'utente</th><th>Chiamate che riceve l'Activity</th></tr>
+    <tr><td>Apre l'app</td><td class="mono">onCreate → onStart → onResume</td></tr>
+    <tr><td>Preme Home</td><td class="mono">onPause → onStop</td></tr>
+    <tr><td>Torna nell'app</td><td class="mono">onRestart → onStart → onResume</td></tr>
+    <tr class="hl"><td>Ruota il telefono</td><td class="mono">onPause → onStop → onDestroy → onCreate → onStart → onResume</td></tr>
+    <tr><td>Preme Indietro</td><td class="mono">onPause → onStop → onDestroy</td></tr>
+  </table>
+  <div class="callout">Con poca memoria il sistema può <b>uccidere il processo</b> di un'app in background senza altre chiamate: ciò che conta va salvato in <code>onPause</code> o <code>onStop</code>.</div>
+  <aside class="notes">Stati: Created, Started (visibile), Resumed (in primo piano e interattiva). La rotazione è un cambio di configurazione: per caricare il layout giusto Android distrugge e ricrea l'Activity. Da Android 9 onSaveInstanceState viene chiamato dopo onStop. Dalla versione 12 il tasto Indietro sull'Activity principale del launcher di solito non la distrugge più ma la manda in background: segnalarlo come dettaglio, la regola generale resta "Indietro chiude l'Activity". Nella lezione 4 vedremo queste chiamate dal vivo in Logcat.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un contatore è in una variabile dell'Activity e vale 7. Ruoti il telefono: che cosa succede?</h2></div>
+  <div class="poll" data-id="and-rotazione" data-tipo="quiz" data-risposta="B">
+    <ol><li>Niente: cambia solo la disposizione dello schermo</li><li>L'Activity viene ricreata e il contatore torna al valore iniziale</li><li>L'Activity va in pausa e riprende con il contatore a 7</li><li>L'app si chiude con un errore</li></ol>
+    <p class="why">La rotazione distrugge e ricrea l'Activity: le sue variabili ripartono da capo. Per conservarle si salvano in onSaveInstanceState o in un ViewModel.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono A o C. Dettaglio da dire dopo: il testo scritto in un EditText con un id viene ripristinato automaticamente, perché le View salvano il proprio stato; le variabili dell'Activity no. Lo correggeremo davvero nella lezione 6 con onSaveInstanceState. Il ViewModel (Jetpack) sopravvive ai cambi di configurazione ma non alla chiusura del processo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Simula il ciclo di vita in Java</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>CicloVita.java</b> con un <code>enum Stato { CREATA, AVVIATA, ATTIVA, FERMA, DISTRUTTA }</code>.</li>
+      <li>Scrivi i metodi <code>apri()</code>, <code>home()</code>, <code>torna()</code>, <code>ruota()</code>, <code>indietro()</code>: ognuno stampa i callback della tabella e aggiorna lo stato.</li>
+      <li>Conta i callback stampati con un campo <code>int chiamate</code>.</li>
+      <li>Nel <code>main</code> esegui: apri, home, torna, ruota, indietro.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in tutto <b>17</b> callback; l'ultimo è <code>onDestroy</code> e lo stato finale è DISTRUTTA. Se ruota() ne stampa meno di 6, rivedi la tabella.</div>
+  </div>
+  <aside class="notes">Conteggio: apri 3, home 2, torna 3, ruota 6, indietro 3 = 17. Traccia di soluzione: private void cb(String n) { System.out.println(n); chiamate++; } void home() { cb("onPause"); cb("onStop"); stato = Stato.FERMA; } void ruota() { cb("onPause"); cb("onStop"); cb("onDestroy"); cb("onCreate"); cb("onStart"); cb("onResume"); stato = Stato.ATTIVA; }. Estensione: lanciare IllegalStateException se si chiama torna() quando lo stato non è FERMA. Serve a fissare la tabella prima di vederla vera in Logcat.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I permessi</p><h2>Dichiarati nel manifest, alcuni chiesti al momento</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <pre class="code" style="font-size:25px"><span class="c">&lt;!-- AndroidManifest.xml --&gt;</span>
+&lt;<span class="k">uses-permission</span> android:name=
+    <span class="s">"android.permission.INTERNET"</span>/&gt;
+&lt;<span class="k">uses-permission</span> android:name=
+    <span class="s">"android.permission.CAMERA"</span>/&gt;</pre>
+      <ul class="points small">
+        <li><b>Normali</b> (INTERNET, VIBRATE): concessi all'installazione.</li>
+        <li><b>Pericolosi</b> (CAMERA, posizione, microfono, contatti): chiesti <b>a runtime</b>, da Android 6.0.</li>
+      </ul>
+    </div>
+    <pre class="code" style="font-size:25px"><span class="c">// In Kotlin, nell'Activity</span>
+<span class="k">val</span> richiesta = registerForActivityResult(
+    ActivityResultContracts.RequestPermission()
+) { concesso <span class="k">-&gt;</span>
+    <span class="k">if</span> (concesso) apriFotocamera()
+    <span class="k">else</span> spiegaPerche()
+}
+<span class="c">// quando l'utente tocca "Scatta"</span>
+richiesta.launch(Manifest.permission.CAMERA)</pre>
+  </div>
+  <aside class="notes">Regola d'oro: chiedere il permesso nel momento in cui serve, spiegando perché, e far funzionare l'app anche se l'utente rifiuta. Evoluzione: Android 10 posizione "solo mentre l'app è in uso"; Android 11 permessi "solo questa volta" e azzeramento automatico per le app non usate; Android 12 posizione approssimativa e pannello privacy; Android 13 permesso a runtime per le notifiche (POST_NOTIFICATIONS) e permessi separati per foto, video e audio; Android 14 accesso solo alle foto selezionate. Il selettore di foto di sistema permette di scegliere immagini senza alcun permesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale permesso l'app riceve all'installazione, senza chiedere nulla?</h2></div>
+  <div class="poll" data-id="and-permesso" data-tipo="quiz" data-risposta="D">
+    <ol><li>CAMERA</li><li>ACCESS_FINE_LOCATION</li><li>POST_NOTIFICATIONS, su Android 13 e successivi</li><li>INTERNET</li></ol>
+    <p class="why">INTERNET è un permesso normale: basta dichiararlo nel manifest. Fotocamera, posizione e, da Android 13, le notifiche richiedono il consenso dell'utente a runtime.</p>
+  </div>
+  <aside class="notes">Sorpresa frequente: qualunque app può usare la rete senza chiedere nulla all'utente. Per questo una torcia che manda dati a un server non fa comparire nessun avviso: il controllo si sposta sullo store e sulla sezione Sicurezza dei dati di Google Play. La C è il tranello per chi pensa alle notifiche come a una cosa innocua.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al telefono o all'emulatore <span class="time">· 15 minuti</span></p>
+  <h2>Indagine sui permessi del tuo telefono</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Impostazioni apri <b>Info sul telefono</b>: annota versione di Android e data della patch di sicurezza.</li>
+      <li>Cerca "autorizzazioni" nelle Impostazioni e apri la <b>Gestione autorizzazioni</b>.</li>
+      <li>Apri <b>Posizione</b>: conta le app "sempre consentite" e "solo durante l'utilizzo".</li>
+      <li>Apri il <b>Pannello privacy</b>, se c'è: quali app hanno usato microfono e fotocamera nelle ultime 24 ore?</li>
+      <li>Scrivi tutto in <b>permessi.txt</b> sul PC.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il Pannello privacy esiste da Android 12. Se trovi un'app con la posizione "sempre consentita" senza motivo, hai trovato la prima cosa da sistemare.</div>
+  </div>
+  <aside class="notes">I nomi dei menu cambiano tra produttori (Samsung, Xiaomi, Pixel): per questo la consegna dice di cercare "autorizzazioni". Chi ha un iPhone usa Impostazioni, Privacy e sicurezza, Localizzazione, oppure l'emulatore di Android Studio, oppure osserva la dimostrazione del docente sulla LIM. Nessuno deve mostrare ai compagni contenuti privati del telefono: si annotano solo nomi di app e numeri. Discussione: la data della patch è vecchia di più di sei mesi? Che cosa significa per la sicurezza?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La distribuzione</p><h2>Dal codice al Play Store</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Gradle</h3><p class="small">Compila, unisce risorse e codice</p></div>
+    <div class="card fill"><h3>AAB firmato</h3><p class="small">Android App Bundle, con tutte le risorse</p></div>
+    <div class="card"><h3>Play Console</h3><p class="small">Controlli, test, scheda dello store</p></div>
+    <div class="card night"><h3>APK su misura</h3><p class="small">Play genera APK per lingua, densità, CPU</p></div>
+  </div>
+  <div class="cols-2">
+    <ul class="points small">
+      <li><b>APK</b>: il pacchetto installabile, un archivio zip firmato.</li>
+      <li><b>AAB</b>: obbligatorio per le nuove app su Google Play da agosto 2021.</li>
+    </ul>
+    <ul class="points small">
+      <li>Play chiede di puntare a una versione recente di Android (targetSdk).</li>
+      <li>Fuori dallo store: altri store, come F-Droid, o installazione manuale.</li>
+    </ul>
+  </div>
+  <aside class="notes">Con l'AAB lo sviluppatore carica un pacchetto unico e Google Play, che firma con la chiave gestita da Play App Signing, genera gli APK suddivisi (split APK) adatti a ogni dispositivo: il download è più piccolo. Il conto sviluppatore Google Play richiede una quota una tantum (25 dollari). Il requisito sul targetSdk viene aggiornato ogni anno: circa un anno dopo l'uscita di una versione di Android, nuove app e aggiornamenti devono puntare a quella. L'installazione da origini sconosciute va autorizzata app per app da Android 8. Google ha anche annunciato nel 2025 l'obbligo di verifica dell'identità degli sviluppatori per installare app sui dispositivi certificati, con un'introduzione graduale a partire da alcuni paesi: controllare lo stato attuale prima di parlarne in classe.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Apri un APK come un archivio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>f-droid.org</b> scegli un'app open source e scarica il suo file .apk sul PC, senza installarlo.</li>
+      <li>Aprilo con 7-Zip, oppure copialo e rinomina la copia in <b>.zip</b>.</li>
+      <li>Trova <code>classes.dex</code>, <code>AndroidManifest.xml</code>, <code>resources.arsc</code>, <code>res/</code> e, se c'è, <code>lib/</code>.</li>
+      <li>Apri il manifest con il Blocco note: che cosa vedi?</li>
+      <li>Annota cartelle e dimensioni in <b>dentro-apk.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> c'è almeno un file <code>classes.dex</code>, non ci sono file .class. Il manifest è illeggibile: nell'APK è salvato in XML binario.</div>
+  </div>
+  <aside class="notes">F-Droid distribuisce solo app libere: scaricare un APK da lì è legale e sicuro; non serve installarlo. Nella cartella lib/ ci sono le librerie native per architettura (arm64-v8a, armeabi-v7a, x86_64). La cartella META-INF può contenere la firma vecchio stile (v1); con gli schemi di firma v2 e successivi la firma sta in un blocco speciale del file zip e non compare come file. Alternativa con Android Studio: Build, Analyze APK, che decodifica anche il manifest. Domanda: perché un APK con lib/x86_64 e lib/arm64-v8a pesa di più? (Contiene il codice nativo per più CPU: è il problema che l'AAB risolve.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il sistema oggi</p><h2>AI e sicurezza dentro il sistema operativo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI come servizio di sistema</h3><p>Su alcuni telefoni Android il modello <b>Gemini Nano</b> è gestito da un servizio di sistema, AICore: le app lo usano tramite API, come usano la fotocamera, senza includere il modello nel proprio APK.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Le minacce mobili</h3><p>I trojan bancari per Android spesso si fanno concedere i servizi di <b>accessibilità</b> per leggere lo schermo e toccare al posto dell'utente. Play Protect analizza le app anche sul dispositivo per riconoscere comportamenti sospetti.</p></div>
+  </div>
+  <aside class="notes">AICore è disponibile da Android 14 su un numero limitato di dispositivi; aggiorna il modello in modo centralizzato. Il fatto che il modello sia condiviso evita che ogni app scarichi gigabyte. Sui trojan bancari: le campagne documentate dai ricercatori (e dall'ACN e dal CERT-AGID in Italia) abusano dei servizi di accessibilità e degli overlay; da Android 13 le app installate fuori dallo store hanno restrizioni nell'attivare l'accessibilità. Collegamento con il deck attacchi-informatici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il livello più basso di Android è il kernel <span class="blank" data-risposta="linux"></span>.</p>
+    <p>Il runtime che esegue il bytecode DEX si chiama <span class="blank" data-risposta="art|android runtime"></span>.</p>
+    <p>Quando ruoti il telefono l'Activity riceve per ultima la chiamata <span class="blank" data-risposta="onresume" style="--w:9ch"></span>.</p>
+    <p>I permessi pericolosi si chiedono a <span class="blank" data-risposta="runtime|run time|tempo di esecuzione"></span>, da Android 6.0.</p>
+    <p>Su Google Play le nuove app si caricano in formato <span class="blank" data-risposta="aab|app bundle|android app bundle"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Linux, ART, onResume, runtime, AAB.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Kernel Linux, HAL, ART e librerie, framework, app</li>
+      <li>Ogni app ha il suo utente Linux: sandbox</li>
+      <li>Activity, Service, Receiver, Provider, Intent</li>
+    </ul>
+    <ul class="points">
+      <li>Ciclo di vita: la rotazione ricrea l'Activity</li>
+      <li>Permessi normali e pericolosi, chiesti a runtime</li>
+      <li>APK installabile, AAB per Google Play</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: il linguaggio Kotlin, confrontato con Java.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

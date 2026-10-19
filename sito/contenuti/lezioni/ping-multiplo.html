@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ping multiplo · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Applicazioni Java per la comunicazione in rete</p>
+  <h1>Il ping multiplo:<br>tutta la rete in un secondo</h1>
+  <p class="lead">Controllare un host è facile. Controllarne duecento senza aspettare quattro minuti richiede thread, pool e un po' di attenzione alla concorrenza.</p>
+  <aside class="notes">Lezione di laboratorio, 3 ore. Obiettivi: capire perché un controllo sequenziale è lento; usare ExecutorService, Callable e Future; conoscere i problemi di concorrenza (race condition) e gli strumenti thread-safe; usare i virtual thread di Java 21 sapendo quando aiutano; scrivere un monitor periodico con ScheduledExecutorService. Prerequisito: la lezione "Il ping in Java" (isReachable, Statistiche). Controllare prima quali indirizzi del laboratorio si possono controllare: le scansioni vanno fatte solo sulla rete della scuola e con il permesso del responsabile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il laboratorio ha 30 PC. Come scopri quali sono accesi?</h2></div>
+  <div class="poll" data-id="multi-30pc">
+    <ol><li>Faccio il giro e guardo gli schermi</li><li>Un ping alla volta, a mano</li><li>Un programma che li controlla tutti insieme</li><li>Chiedo al tecnico, che ha un sistema di monitoraggio</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta: la D è quello che succede nelle aziende vere, la C è quello che costruiamo oggi. Chiedere a chi ha votato B quanto tempo ci metterebbe se 20 PC su 30 fossero spenti (ogni ping a vuoto aspetta il timeout).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Il tempo perso è tutto nell'attesa</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:48px"><small>Una rete /24, tutti gli host spenti, timeout 1 s, in sequenza</small>254 × 1 s = <span class="hl">254 s</span></div>
+    <div class="formula" style="font-size:48px"><small>Stessa rete, 32 thread in parallelo</small>⌈254 / 32⌉ × 1 s = <span class="hl">8 s</span></div>
+  </div>
+  <ul class="points">
+    <li>Un controllo passa quasi tutto il tempo ad <b>aspettare la rete</b>, non a calcolare.</li>
+    <li>Mentre un thread aspetta, la CPU è libera: altri thread possono lanciare altri controlli.</li>
+    <li>Compiti così si dicono <mark>I/O-bound</mark>: il parallelismo li accelera anche su un PC con pochi core.</li>
+  </ul>
+  <aside class="notes">Una rete /24 ha 256 indirizzi, di cui 254 assegnabili (si escludono indirizzo di rete e broadcast). ⌈⌉ è la parte intera superiore: 254/32 = 7,9 → 8 "giri" da 1 s. Contrasto con i compiti CPU-bound (per esempio calcolare numeri primi): lì più thread dei core non servono. Domanda: perché non 254 thread, uno per host? Si può, ma i thread della piattaforma costano memoria (lo stack, di solito circa 1 MB riservato ciascuno): vedremo che i virtual thread cambiano il discorso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Fai il conto</p><h2>100 host spenti, timeout 2 s, un pool di 25 thread. Quanto dura la scansione?</h2></div>
+  <div class="poll" data-id="multi-conto" data-tipo="quiz" data-risposta="D">
+    <ol><li>Circa 2 secondi</li><li>Circa 50 secondi</li><li>Circa 200 secondi</li><li>Circa 8 secondi</li></ol>
+    <p class="why">100 compiti diviso 25 thread = 4 turni; ogni turno aspetta il timeout di 2 s: 4 × 2 = 8 s. In sequenza sarebbero 200 s; 2 s servirebbe un thread per host.</p>
+  </div>
+  <aside class="notes">La C è il conto sequenziale, la B divide male (100/2), la A presuppone 100 thread. Far notare che se gli host sono accesi rispondono in pochi ms e la scansione è molto più rapida: il caso peggiore sono proprio gli host spenti o filtrati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli attrezzi di Java</p><h2>Dai thread a mano al pool</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Thread</h3><p><code>new Thread(r).start()</code></p><p class="muted small">Un thread per compito, creato a mano. Il risultato va passato con variabili condivise.</p></div>
+    <div class="card soft"><h3>ExecutorService</h3><p><code>pool.submit(compito)</code></p><p class="muted small">Un gruppo di N thread riusati. Riceve compiti e li mette in coda.</p></div>
+    <div class="card fill"><h3>Future</h3><p><code style="background:rgba(255,255,255,.18);color:#fff">futuro.get()</code></p><p class="small">Una "ricevuta": <b>get()</b> aspetta che il compito finisca e ne restituisce il risultato.</p></div>
+  </div>
+  <div class="callout">Un <b>Callable</b> è come un Runnable che <b>restituisce un valore</b> (e può lanciare eccezioni): perfetto per "controlla questo host e dimmi com'è andata".</div>
+  <aside class="notes">Ripasso del quarto anno: Runnable.run() non restituisce nulla; Callable.call() restituisce un valore. submit() accetta entrambi. Con le lambda il compilatore sceglie Callable se la lambda restituisce un valore. Da Java 19 ExecutorService è AutoCloseable: con try-with-resources close() aspetta la fine di tutti i compiti e chiude il pool.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · 1</p><h2>Il compito: controllare un host e restituire un esito</h2></div>
+  <pre class="code" style="font-size:25px;flex:none"><span class="k">record</span> Esito(String host, <span class="k">boolean</span> vivo, <span class="k">long</span> ms) {}
+
+<span class="k">static</span> Esito controlla(String host) {
+    <span class="k">long</span> t0 = System.nanoTime();
+    <span class="k">try</span> {
+        <span class="k">boolean</span> ok = InetAddress.getByName(host).isReachable(1000);
+        <span class="k">return new</span> Esito(host, ok, (System.nanoTime() - t0) / 1_000_000);
+    } <span class="k">catch</span> (IOException e) {          <span class="c">// host sconosciuto, rete assente...</span>
+        <span class="k">return new</span> Esito(host, <span class="k">false</span>, -1);
+    }
+}</pre>
+  <p class="muted small">Un <code>record</code> (Java 16+) è una classe immutabile con costruttore, getter <code>host()</code>, <code>vivo()</code>, <code>ms()</code> e <code>toString()</code> già pronti.</p>
+  <aside class="notes">Perché restituire un oggetto invece di stampare dentro il compito? Perché le stampe di thread diversi si mescolano in ordine casuale, e perché così il risultato si può ordinare, filtrare, salvare in CSV. Il catch trasforma l'eccezione in un esito: un singolo host sbagliato nel file non deve far fallire tutta la scansione. UnknownHostException è una sottoclasse di IOException.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · 2</p><h2>Il pool: un compito per host, i risultati in ordine</h2></div>
+  <pre class="code" style="font-size:25px;flex:none">List&lt;String&gt; hosts = Files.readAllLines(Path.of(<span class="s">"hosts.txt"</span>));
+<span class="k">long</span> t0 = System.nanoTime();
+<span class="k">try</span> (ExecutorService pool = Executors.<span class="hl">newFixedThreadPool(32)</span>) {
+    List&lt;Future&lt;Esito&gt;&gt; futuri = <span class="k">new</span> ArrayList&lt;&gt;();
+    <span class="k">for</span> (String h : hosts)
+        futuri.add(pool.submit(() -&gt; controlla(h)));    <span class="c">// parte subito</span>
+    <span class="k">for</span> (Future&lt;Esito&gt; f : futuri)
+        System.out.println(f.get());                     <span class="c">// aspetta quel risultato</span>
+}                                     <span class="c">// close(): attende la fine di tutti</span>
+System.out.println(<span class="s">"Tempo: "</span> + (System.nanoTime() - t0) / 1_000_000 + <span class="s">" ms"</span>);</pre>
+  <div class="callout small">I risultati escono nell'<b>ordine della lista</b>, anche se i compiti finiscono in ordine diverso: <code>get()</code> aspetta proprio quel futuro.</div>
+  <aside class="notes">Il codice completo di PingMultiplo.java è nel compito per casa e qui: import java.io.IOException; java.net.InetAddress; java.nio.file.*; java.util.*; java.util.concurrent.*; record e metodo della slide precedente come membri statici della classe, main che lancia Exception. f.get() può lanciare ExecutionException se il compito ha lanciato un'eccezione: qui non succede perché controlla() la cattura. Domanda: che cosa succede se scrivo f.get() subito dopo submit, dentro il primo for? Si torna sequenziali, perché si aspetta ogni compito prima di lanciare il successivo: è l'errore più comune.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Sequenziale contro parallelo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella cartella <b>u3-multiplo</b> crea <b>hosts.txt</b>: 127.0.0.1, il gateway e da <code>192.0.2.1</code> a <code>192.0.2.10</code>, uno per riga.</li>
+      <li>Scrivi <b>PingMultiplo.java</b> con il codice delle due slide.</li>
+      <li>Scrivi <b>Sequenziale.java</b>: stesso file, un <code>for</code> che chiama <code>controlla</code> uno dopo l'altro.</li>
+      <li>Esegui entrambi e annota il tempo totale in <b>tempi.txt</b>.</li>
+      <li>Prova il pool con 1, 4 e 12 thread.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i 10 indirizzi 192.0.2.x non rispondono. Sequenziale: circa 10 s. Pool da 12: poco più di 1 s. Pool da 4: circa 3 s (10 compiti lenti in 3 turni).</div>
+  </div>
+  <aside class="notes">Soluzione di Sequenziale: for (String h : hosts) System.out.println(PingMultiplo.controlla(h)); con lo stesso cronometro. Con 1 thread il pool si comporta come la versione sequenziale. Con 4 thread: ⌈10/4⌉ = 3 turni da 1 s. Se in laboratorio isReachable restituisce subito true per i 192.0.2.x, un apparato della rete sta rispondendo al posto loro (vedi lezione precedente): usare allora un indirizzo libero della LAN del laboratorio indicato dal tecnico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>4 thread fanno <code>n++</code> 100 000 volte ciascuno su un <code>static int n</code>. Che cosa stampa?</h2></div>
+  <div class="poll" data-id="multi-race" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sempre 400 000</li><li>Un numero fino a 400 000, spesso diverso a ogni esecuzione</li><li>Sempre 100 000</li><li>Non compila: serve synchronized</li></ol>
+    <p class="why"><code>n++</code> sono tre passi: leggi, somma 1, scrivi. Se due thread leggono lo stesso valore, un incremento va perso. È una <b>race condition</b>: compila, gira, e sbaglia in silenzio.</p>
+  </div>
+  <aside class="notes">In prova su un PC con 4 core abbiamo ottenuto per esempio 343 729 e poi 339 398: numeri diversi a ogni esecuzione. Correzioni: AtomicInteger.incrementAndGet(), un blocco synchronized, oppure (meglio) non condividere nulla: ogni compito restituisce il suo risultato con un Future e il main somma. Per la scansione: contare gli host vivi con un int condiviso dentro i compiti sarebbe esattamente questo errore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni attrezzo al problema che risolve</h2></div>
+  <dl class="puzzle-abbina" data-id="multi-attrezzi">
+    <dt>AtomicInteger</dt><dd>Un contatore condiviso che non perde incrementi</dd>
+    <dt>ConcurrentHashMap</dt><dd>Una mappa che più thread possono aggiornare insieme</dd>
+    <dt>Future.get()</dt><dd>Aspettare il risultato di un compito già lanciato</dd>
+    <dt>synchronized</dt><dd>Un solo thread alla volta dentro un blocco di codice</dd>
+    <dt>ScheduledExecutorService</dt><dd>Ripetere un compito ogni N secondi</dd>
+  </dl>
+  <aside class="notes">Tutte le classi sono in java.util.concurrent (AtomicInteger in java.util.concurrent.atomic). Domanda: quale useremmo per ricordare l'ultimo stato SU/GIU di ogni host nel monitor? ConcurrentHashMap. Ricordare che ArrayList e HashMap normali NON sono thread-safe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Java 21</p><h2>Virtual thread: migliaia di attese, pochi thread veri</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <pre class="code" style="font-size:24px;flex:none"><span class="k">try</span> (<span class="k">var</span> pool = Executors
+        .<span class="hl">newVirtualThreadPerTaskExecutor()</span>) {
+    <span class="c">// un virtual thread per ogni compito</span>
+}</pre>
+      <table class="data compact">
+        <tr><th>64 host che non rispondono, timeout 1 s, 4 core</th><th>Tempo</th></tr>
+        <tr><td>Pool fisso da 64 + isReachable</td><td class="mono">~1 s</td></tr>
+        <tr><td>Virtual thread + isReachable</td><td class="mono hl">~16 s</td></tr>
+        <tr><td>Virtual thread + <code>Socket.connect</code></td><td class="mono">~1 s</td></tr>
+      </table>
+    </div>
+    <div class="stack">
+      <p class="small">Un virtual thread costa pochissimo: la JVM lo "parcheggia" mentre aspetta un socket e usa il thread vero per altro.</p>
+      <div class="callout hl small"><b>Ma</b> <code>isReachable</code> è una chiamata nativa che blocca il thread vero: con 4 core se ne fanno solo 4 alla volta.</div>
+    </div>
+  </div>
+  <aside class="notes">I virtual thread sono definitivi da Java 21 (JEP 444). Misure fatte da noi con JDK 21 su Linux, 4 core, 64 indirizzi 192.0.2.x: pool fisso da 64 circa 1,07 s; virtual thread con isReachable circa 15,9 s (64/4 = 16 turni da 1 s); virtual thread con Socket.connect circa 1,04 s. Su un altro sistema operativo o un'altra versione del JDK i numeri possono cambiare: per questo nel lab si misura. Morale da esame: una tecnologia nuova va scelta con una misura, non per moda. Le operazioni sui socket di java.net sono state riscritte per collaborare con i virtual thread; le chiamate native (JNI) e alcuni blocchi synchronized invece "inchiodano" (pinning) il thread portatore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Controllare un servizio</p><h2>L'host risponde. Ma il sito funziona?</h2></div>
+  <pre class="code" style="font-size:25px;flex:none"><span class="k">static boolean</span> aperta(String host, <span class="k">int</span> porta) {
+    <span class="k">try</span> (Socket s = <span class="k">new</span> Socket()) {
+        s.connect(<span class="k">new</span> InetSocketAddress(host, porta), 1000);   <span class="c">// timeout 1 s</span>
+        <span class="k">return true</span>;
+    } <span class="k">catch</span> (IOException e) {
+        <span class="k">return false</span>;
+    }
+}</pre>
+  <div class="cols-3">
+    <div class="card ok"><h4>Connessione riuscita</h4><p class="small">Il servizio ascolta su quella porta.</p></div>
+    <div class="card soft"><h4>Connection refused</h4><p class="small">Risposta immediata: host acceso, porta chiusa.</p></div>
+    <div class="card bad"><h4>Timeout</h4><p class="small">Nessuna risposta: host spento o porta filtrata.</p></div>
+  </div>
+  <aside class="notes">È il "TCP ping": usa il three-way handshake invece di ICMP, quindi funziona anche dove ICMP è bloccato e senza privilegi. Controlla il servizio vero (porta 443 di un sito, 5432 di PostgreSQL, 5000 della nostra chat della prossima lezione). La differenza tra refused (ConnectException "Connection refused", subito) e timeout (SocketTimeoutException dopo 1 s) è un'informazione preziosa: chi fa una scansione di porte la sfrutta, ed è per questo che i firewall preferiscono scartare in silenzio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Porte aperte, chiuse, filtrate</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>PortaAperta.java</b> con il metodo <code>aperta</code> e un <code>main</code> che usa <code>newVirtualThreadPerTaskExecutor()</code>.</li>
+      <li>In un secondo terminale avvia un web server di prova: <code>jwebserver -p 8000</code> (è nel JDK).</li>
+      <li>Controlla <code>127.0.0.1</code> sulle porte 8000 e 8001, poi <code>192.0.2.1</code> sulla 80.</li>
+      <li>Per ogni caso stampa il tempo e il nome dell'eccezione: <code>e.getClass().getSimpleName()</code>.</li>
+      <li>Annota i risultati in <b>porte.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 8000 aperta in pochi ms; 8001 <code>ConnectException</code> (refused) quasi subito; 192.0.2.1:80 <code>SocketTimeoutException</code> dopo circa 1000 ms.</div>
+  </div>
+  <aside class="notes">jwebserver è il server web minimo incluso nel JDK da Java 18 (JEP 408): serve i file della cartella corrente. Se il comando non è nel PATH, usare il percorso completo della cartella bin del JDK. Per vedere il nome dell'eccezione nel catch: catch (IOException e) { System.out.println(e.getClass().getSimpleName() + " dopo " + ms + " ms"); }. Solo indirizzi del proprio PC e 192.0.2.x: niente scansioni di porte su PC dei compagni o server della scuola senza permesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché controllare continuamente</h2></div>
+  <figure class="citazione">
+    <blockquote>Un sistema distribuito è un sistema in cui il guasto di un computer di cui non conoscevi nemmeno l'esistenza può rendere inutilizzabile il tuo.</blockquote>
+    <figcaption><b>Leslie Lamport</b>, informatico, premio Turing 2013, in una email del 1987</figcaption>
+  </figure>
+  <p class="lead">Il registro elettronico, la stampante, il DNS, il Wi-Fi: un monitor ci dice <b>prima degli utenti</b> che qualcosa si è rotto.</p>
+  <aside class="notes">Originale: "A distributed system is one in which the failure of a computer you didn't even know existed can render your own computer unusable." Email di Leslie Lamport del 28 maggio 1987 a una mailing list del DEC Systems Research Center; Lamport la riporta nella sua pagina delle pubblicazioni. Traduzione nostra. Collegamento con l'Unità 2 (sistemi distribuiti). Chiedere: quale servizio "invisibile" usate ogni giorno senza saperlo? (DNS, DHCP, server di autenticazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il monitor</p><h2>Ogni 5 secondi, tutti i servizi, un allarme se cambia</h2></div>
+  <pre class="code" style="font-size:23px;flex:none"><span class="k">static final</span> Map&lt;String, Boolean&gt; stato = <span class="k">new</span> ConcurrentHashMap&lt;&gt;();
+
+<span class="k">static void</span> controlla(String voce, PrintWriter csv) {        <span class="c">// voce = "host:porta"</span>
+    String[] p = voce.split(<span class="s">":"</span>);
+    <span class="k">boolean</span> su = PortaAperta.aperta(p[0], Integer.parseInt(p[1]));
+    Boolean prima = stato.put(voce, su);                       <span class="c">// stato precedente</span>
+    <span class="k">synchronized</span> (csv) { csv.println(ora() + <span class="s">";"</span> + voce + <span class="s">";"</span> + (su ? <span class="s">"SU"</span> : <span class="s">"GIU"</span>)); csv.flush(); }
+    <span class="k">if</span> (prima != <span class="k">null</span> &amp;&amp; prima != su)
+        System.out.println(<span class="s">"ALLARME "</span> + voce + (su ? <span class="s">" torna SU"</span> : <span class="s">" va GIU"</span>));
+}
+<span class="c">// nel main</span>
+timer.<span class="hl">scheduleAtFixedRate</span>(() -&gt; {
+    <span class="k">for</span> (String v : voci) pool.submit(() -&gt; controlla(v, csv));
+}, 0, 5, TimeUnit.SECONDS);</pre>
+  <aside class="notes">Codice completo di Monitor.java: imports java.io.*, java.nio.file.*, java.time.LocalTime, java.time.format.DateTimeFormatter, java.util.*, java.util.concurrent.*. ora() restituisce LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")). Nel main: List&lt;String&gt; voci = Files.readAllLines(Path.of("servizi.txt")); PrintWriter csv = new PrintWriter(new FileWriter("monitor.csv", true)); ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor(); ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor(); poi scheduleAtFixedRate come nella slide; System.out.println("Premi Invio per fermare"); System.in.read(); timer.shutdownNow(); pool.close(); csv.close();. Il synchronized su csv serve perché più virtual thread scrivono nello stesso file. Si allarma solo al CAMBIO di stato, non a ogni controllo: è quello che fanno i monitor veri per non sommergere i tecnici di notifiche.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il monitor del laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>servizi.txt</b> con <code>127.0.0.1:8000</code>, <code>127.0.0.1:5000</code> e i servizi del laboratorio indicati dal docente.</li>
+      <li>Scrivi <b>Monitor.java</b> partendo dalla slide precedente.</li>
+      <li>Avvialo, poi in un altro terminale avvia e ferma <code>jwebserver -p 8000</code> un paio di volte.</li>
+      <li>Apri <b>monitor.csv</b> con LibreOffice Calc (separatore <code>;</code>).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> quando avvii jwebserver compare <code>ALLARME 127.0.0.1:8000 torna SU</code> entro 5 secondi; quando lo fermi, <code>va GIU</code>. Nel CSV ogni riga ha ora, servizio e stato.</div>
+  </div>
+  <aside class="notes">Il primo giro non genera allarmi perché lo stato precedente è null. Estensioni per i più veloci: calcolare la disponibilità percentuale di ogni servizio (righe SU / righe totali) e stamparla quando si preme Invio; aggiungere il tempo di risposta e un allarme se supera una soglia; mandare l'allarme come messaggio alla chat della prossima lezione. La porta 5000 resterà GIU fino a quando non avvieremo il server della chat.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi di una scansione parallela</h2></div>
+  <ol class="puzzle-ordina" data-id="multi-ordine">
+    <li>Leggi la lista degli host da hosts.txt</li>
+    <li>Crea il pool di thread</li>
+    <li>Per ogni host, submit di un compito e salva il Future</li>
+    <li>Ogni compito misura e restituisce un Esito</li>
+    <li>Con get() raccogli gli esiti nell'ordine della lista</li>
+    <li>Chiudi il pool e stampa il tempo totale</li>
+  </ol>
+  <aside class="notes">Il punto delicato è tra il 3 e il 5: prima si lanciano TUTTI i compiti, poi si raccolgono i risultati. Il passo 4 avviene in parallelo, mentre il main è già al passo 5 ad aspettare il primo Future. Chiedere di disegnare la stessa cosa come diagramma di sequenza con il main, il pool e tre compiti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Regole del gioco</p><h2>Scansionare una rete non è un gioco innocente</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Mai</h3><ul class="points small"><li>Scansionare reti di altri: aziende, vicini di casa, server su Internet.</li><li>Scansionare la rete della scuola senza il permesso del responsabile.</li></ul></div>
+    <div class="card ok"><h3>Sì</h3><ul class="points small"><li>Il tuo PC, la tua rete di casa, la rete del laboratorio con il docente.</li><li>Gli indirizzi di documentazione 192.0.2.x, che non portano a nessuno.</li></ul></div>
+  </div>
+  <div class="callout">I sistemi di difesa (IDS, firewall) riconoscono una scansione come la <b>prima fase di un attacco</b>, la ricognizione: il tuo programma può far scattare un allarme vero.</div>
+  <aside class="notes">Collegamento con l'Unità 1 (attaccanti, catena di un attacco, ricognizione). In Italia l'accesso abusivo a un sistema informatico è punito dall'art. 615-ter del codice penale; una scansione di per sé non è un accesso, ma può violare il regolamento d'istituto o le condizioni del provider e, soprattutto, è il primo passo di molti attacchi: comportamento professionale = solo dove si è autorizzati, per iscritto nel mondo del lavoro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il monitoraggio vero</p><h2>Che cosa usano le aziende</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Strumenti di monitoraggio</h3><p>Zabbix, Nagios, Uptime Kuma e Prometheus fanno su larga scala quello che hai fatto tu: controlli ICMP, TCP e HTTP a intervalli regolari, storico dei risultati, allarmi solo quando lo stato cambia, pagine di stato pubbliche.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>AI nel centro operativo</h3><p>Con migliaia di misure al minuto, si usano modelli che imparano il comportamento normale e segnalano le <b>anomalie</b>, e assistenti AI che riassumono gli allarmi. La decisione resta a un tecnico: un falso allarme alle 3 di notte costa caro.</p></div>
+  </div>
+  <aside class="notes">Uptime Kuma è open source e si installa facilmente (anche con Docker): buona demo sulla LIM. Prometheus usa il "blackbox exporter" per i controlli ICMP/TCP/HTTP. L'uso dell'AI per il monitoraggio si chiama spesso AIOps; collegarlo all'AI nei SOC vista nell'Unità 1. Evitare l'hype: questi sistemi riducono il rumore, ma possono anche sbagliare e vanno verificati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Progettare un sistema di monitoraggio</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li><b>Che cosa</b> controlli: host (ICMP) o servizi (TCP, HTTP)?</li>
+      <li><b>Ogni quanto</b> e con quale timeout: il caso peggiore dura ⌈host / thread⌉ × timeout.</li>
+      <li><b>Come</b>: pool fisso o virtual thread, e perché.</li>
+      <li><b>Dove</b> salvi lo storico e <b>chi</b> riceve gli allarmi.</li>
+    </ol>
+    <div class="card soft"><h3>Frase da orale</h3><p>"Il controllo è I/O-bound: i thread passano il tempo ad aspettare, quindi il parallelismo riduce il tempo totale anche con pochi core. Ho misurato prima di scegliere."</p></div>
+  </div>
+  <aside class="notes">In una prova di progetto di rete aziendale il monitoraggio è un requisito naturale (disponibilità dei servizi, SLA). Far scrivere a ogni studente il calcolo del caso peggiore per la propria scelta. Collegamento con Sistemi e reti: SNMP è il protocollo classico per il monitoraggio degli apparati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un compito che passa il tempo ad aspettare la rete si dice <span class="blank" data-risposta="I/O-bound|io-bound|io bound" style="--w:9ch"></span>.</p>
+    <p>Il metodo <code>submit</code> di un ExecutorService restituisce un <span class="blank" data-risposta="Future"></span>.</p>
+    <p>Due thread che fanno <code>n++</code> sulla stessa variabile creano una race <span class="blank" data-risposta="condition"></span>.</p>
+    <p>120 host spenti, timeout 1 s, 40 thread: la scansione dura circa <span class="blank" data-risposta="3" style="--w:3ch"></span> secondi.</p>
+    <p>Un "TCP ping" verso una porta chiusa riceve subito un errore connection <span class="blank" data-risposta="refused"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: I/O-bound; Future; condition; 3 (120/40 = 3 turni da 1 s); refused.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>In sequenza: host × timeout. In parallelo: ⌈host / thread⌉ × timeout</li>
+      <li>ExecutorService, Callable e Future: lanciare tutto, poi raccogliere</li>
+      <li>Variabili condivise = race condition: Atomic, Concurrent, oppure niente condivisione</li>
+    </ul>
+    <ul class="points">
+      <li>Virtual thread: ottimi con i socket, inutili con isReachable</li>
+      <li>TCP ping: refused = porta chiusa, timeout = spento o filtrato</li>
+      <li>Si scansiona solo dove si è autorizzati</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: dai controlli alla comunicazione vera, con un server di chat su socket TCP. Assegnare il compito "Il cruscotto del laboratorio".</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

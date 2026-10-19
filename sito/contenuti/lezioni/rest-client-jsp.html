@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Usare REST da Java e JSP · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Web service · Lezione 10</p>
+  <h1>Usare REST<br>da Java e JSP</h1>
+  <p class="lead">Il server c'è. Ora dall'altra parte del filo: un programma Java che chiama BiblioAPI e una pagina JSP che trasforma il suo JSON in una pagina web.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>HttpClient, POST, errori di rete, chiamate asincrone, JSP su Tomcat</span></p>
+  <aside class="notes">Obiettivi: usare java.net.http.HttpClient (Java 11+) per GET e POST, leggere codice di stato, header e corpo; distinguere un errore HTTP (404, 500) da un errore di rete (eccezione); fare chiamate asincrone con sendAsync; realizzare una pagina JSP su Tomcat che consuma l'API lato server, con l'escape dell'output. Durata indicativa: 4 ore. Prerequisiti: il BiblioServer della lezione 9 acceso sulla porta 8000. Software: JDK 21; Apache Tomcat 10.1 o successivo (pacchetti jakarta.*), distribuito come zip, non serve installarlo. Fallback se Tomcat non è disponibile: il docente mostra la parte JSP sulla LIM, e gli studenti fanno la variante "ClientHtml" descritta nelle note del laboratorio 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Una pagina deve mostrare i libri di BiblioAPI. Chi dovrebbe chiamare l'API?</h2></div>
+  <div class="poll" data-id="rc-chi">
+    <ol><li>Il browser, con JavaScript</li><li>Il server web, che poi manda l'HTML pronto</li><li>Dipende da chi deve vedere i dati</li><li>Non importa, è uguale</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, che regge tutta la lezione. Oggi facciamo la chiamata lato server (JSP), nella lezione 12 lato browser (fetch). Argomenti da far emergere: lato server la chiave o la password dell'API restano nascoste e non serve il CORS; il browser riceve HTML già pronto, utile per i motori di ricerca. Lato browser la pagina si aggiorna senza ricaricarsi e il server web lavora meno. La D è l'unica davvero sbagliata: cambiano sicurezza, prestazioni e chi vede che cosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il client del JDK</p><h2>Una GET in tre oggetti</h2></div>
+<pre class="code" style="font-size:24px;line-height:1.45"><span class="k">import</span> java.net.URI;
+<span class="k">import</span> java.net.http.*;
+<span class="k">import</span> java.time.Duration;
+<span class="k">import</span> java.util.regex.*;
+
+<span class="k">public class</span> ClientBiblio {
+  <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> Exception {
+    HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();
+    HttpRequest get = HttpRequest.newBuilder(URI.create(<span class="s">"http://localhost:8000/api/libri"</span>))
+        .header(<span class="s">"Accept"</span>, <span class="s">"application/json"</span>).GET().build();
+    HttpResponse&lt;String&gt; r = client.send(get, HttpResponse.BodyHandlers.ofString());
+    System.out.println(<span class="s">"Stato: "</span> + r.statusCode());
+    Matcher m = Pattern.compile(<span class="s">"\"titolo\":\"([^\"]*)\""</span>).matcher(r.body());
+    <span class="k">while</span> (m.find()) System.out.println(<span class="s">"- "</span> + m.group(1));
+  }
+}</pre>
+  <aside class="notes">Tre oggetti: HttpClient (si crea una volta e si riusa: gestisce le connessioni, HTTP/1.1 e HTTP/2, i redirect se configurati), HttpRequest (immutabile, si costruisce con il builder), HttpResponse (codice, header, corpo). BodyHandlers.ofString() dice di leggere il corpo come stringa; esistono ofFile, ofLines, ofInputStream. L'espressione regolare che estrae i titoli è fragile: si rompe se il server cambia l'ordine o la spaziatura dei campi. Va bene per il laboratorio; in un progetto si usa Jackson o Gson (ObjectMapper.readValue(r.body(), Libro[].class)). Il codice è provato con JDK 21 contro il BiblioServer della lezione 9.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il primo client di BiblioAPI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Avvia BiblioServer della lezione 9 in un terminale.</li>
+      <li>In un'altra cartella, <b>client</b>, crea <b>ClientBiblio.java</b> con il codice della slide.</li>
+      <li>In un secondo terminale: <code>java ClientBiblio.java</code>.</li>
+      <li>Stampa anche l'header <code>Content-Type</code>: <code>r.headers().firstValue("Content-Type")</code>.</li>
+      <li>Cambia l'URI in <code>/api/libri/9</code>: che codice ottieni? E che eccezione?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>Stato: 200</code> e i titoli dei tre libri, uno per riga. L'header vale <code>Optional[application/json; charset=utf-8]</code>. Con <code>/9</code>: <code>Stato: 404</code> e <b>nessuna eccezione</b>.</div>
+  </div>
+  <aside class="notes">Il punto chiave del passo 5: per HttpClient un 404 o un 500 è una risposta valida, non un errore. Tocca al programma controllare statusCode(). È la stessa cosa che vedremo con fetch in JavaScript. firstValue restituisce un Optional: per stampare solo il valore si usa .orElse("nessuno"). Se le lettere accentate escono male nella console di Windows, eseguire prima chcp 65001 oppure lanciare java -Dstdout.encoding=UTF-8 ClientBiblio.java (Java 19+).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni pezzo del client al suo compito</h2></div>
+  <dl class="puzzle-abbina" data-id="rc-pezzi">
+    <dt>HttpClient</dt><dd>Si crea una volta e si riusa: gestisce le connessioni</dd>
+    <dt>HttpRequest</dt><dd>Immutabile: URI, metodo, header, corpo</dd>
+    <dt>BodyPublishers.ofString</dt><dd>Trasforma una stringa nel corpo della richiesta</dd>
+    <dt>BodyHandlers.ofString</dt><dd>Dice come leggere il corpo della risposta</dd>
+    <dt>sendAsync</dt><dd>Restituisce subito un CompletableFuture</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 2 minuti. Domanda di approfondimento: perché è sbagliato creare un nuovo HttpClient per ogni richiesta in un ciclo? (Ogni client ha il suo pool di connessioni e i suoi thread: crearne mille spreca risorse e impedisce il riuso delle connessioni keep-alive.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Inviare dati</p><h2>POST con JSON, e un limite di tempo</h2></div>
+<pre class="code" style="font-size:25px;line-height:1.45">String json = <span class="s">"""
+    {"titolo":"Lessico famigliare","autore":"Natalia Ginzburg","anno":1963}"""</span>;
+HttpRequest post = HttpRequest.newBuilder(URI.create(BASE))
+    .header(<span class="s">"Content-Type"</span>, <span class="s">"application/json"</span>)
+    .timeout(Duration.ofSeconds(5))
+    .POST(HttpRequest.BodyPublishers.ofString(json))
+    .build();
+<span class="k">try</span> {
+  HttpResponse&lt;String&gt; c = client.send(post, HttpResponse.BodyHandlers.ofString());
+  System.out.println(c.statusCode() + <span class="s">" "</span> + c.headers().firstValue(<span class="s">"Location"</span>).orElse(<span class="s">"-"</span>));
+} <span class="k">catch</span> (<span class="hl">java.net.ConnectException</span> e) {
+  System.out.println(<span class="s">"BiblioAPI non raggiungibile: il server è acceso?"</span>);
+} <span class="k">catch</span> (<span class="hl">java.net.http.HttpTimeoutException</span> e) {
+  System.out.println(<span class="s">"Nessuna risposta entro 5 secondi"</span>);
+}</pre>
+  <aside class="notes">Il text block (tre virgolette, Java 15+) evita di scrivere \" per ogni virgoletta. BASE è la costante "http://localhost:8000/api/libri". Due tempi diversi: connectTimeout sul client (tempo massimo per aprire la connessione, eccezione HttpConnectTimeoutException) e timeout sulla richiesta (tempo massimo per avere la risposta, HttpTimeoutException). Senza timeout un client può restare appeso per sempre a un server bloccato: in un sistema distribuito è uno dei guasti più comuni (lezione 1 dell'unità). Domanda: se scatta il timeout del POST, il libro è stato creato? (Non lo sappiamo: il server potrebbe averlo salvato. Ripetere un POST non è sicuro, perché non è idempotente.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il server è spento. Che cosa succede a <code>client.send(get, …)</code>?</h2></div>
+  <div class="poll" data-id="rc-spento" data-tipo="quiz" data-risposta="B">
+    <ol><li>Restituisce una risposta con codice 404</li><li>Lancia una ConnectException: non c'è nessun codice di stato</li><li>Restituisce una risposta con codice 503</li><li>Restituisce null</li></ol>
+    <p class="why">Un codice di stato può mandarlo solo un server che risponde. Se nessuno ascolta sulla porta, la connessione TCP viene rifiutata e HttpClient lancia un'eccezione. 503 lo manda un server (o un proxy) acceso che non può servire la richiesta.</p>
+  </div>
+  <aside class="notes">Il tranello è la C: "servizio non disponibile" suona giusto, ma deve essere qualcuno a dirlo. Se davanti al server ci fosse un proxy o un API gateway acceso, allora il client riceverebbe davvero 502 o 503 dal proxy: è il vincolo "sistema a livelli" della lezione 8. Provato con JDK 21: a server spento compare java.net.ConnectException. Tre famiglie di problemi da distinguere nei client: errori di rete (eccezioni), errori del client (4xx), errori del server (5xx).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Un client che non crolla</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Aggiungi a ClientBiblio il POST della slide, con i due <code>catch</code>.</li>
+      <li>Dopo il POST, fai una GET sull'URI ricevuto in <code>Location</code> e stampa il JSON.</li>
+      <li>Se il codice è 4xx o 5xx, stampa <code>Errore</code> seguito dal corpo della risposta.</li>
+      <li>Spegni il server (Ctrl+C) e riesegui il client.</li>
+      <li>Salva il file finale: lo consegnerai con il compito.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a server acceso: <code>201 /api/libri/4</code> e poi il JSON di Lessico famigliare. Riesegui: <code>/api/libri/5</code>. A server spento: <code>BiblioAPI non raggiungibile: il server è acceso?</code> e nessuno stack trace.</div>
+  </div>
+  <aside class="notes">Per il passo 2: URI nuovo = URI.create(BASE).resolve(location), perché Location contiene un percorso relativo (/api/libri/4) e resolve lo combina con schema, host e porta di BASE. Per il passo 3: if (c.statusCode() >= 400) System.out.println("Errore " + c.statusCode() + ": " + c.body()). Fa' notare che la prima GET deve stare anch'essa nel try, altrimenti a server spento l'eccezione arriva da lì. Chi finisce prima: un menu da console con Scanner (1 elenco, 2 cerca per id, 3 aggiungi, 4 elimina), che è anche il compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Senza aspettare</p><h2>Più richieste insieme con sendAsync</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:23px;line-height:1.45">var f1 = client.sendAsync(richiesta(<span class="s">"/1"</span>),
+                 BodyHandlers.ofString());
+var f2 = client.sendAsync(richiesta(<span class="s">"/2"</span>),
+                 BodyHandlers.ofString());
+<span class="c">// qui il programma può fare altro</span>
+String t1 = f1.thenApply(HttpResponse::body).join();
+String t2 = f2.thenApply(HttpResponse::body).join();
+System.out.println(t1 + <span class="s">"\n"</span> + t2);</pre>
+    <ul class="points small">
+      <li><code>send</code> blocca il thread finché la risposta non arriva.</li>
+      <li><code>sendAsync</code> torna subito con un <b>CompletableFuture</b>: le richieste viaggiano in parallelo.</li>
+      <li><code>thenApply</code> dice che cosa fare con la risposta; <code>join</code> aspetta il risultato.</li>
+      <li>Tempo totale ≈ quello della risposta più lenta, non la somma.</li>
+    </ul>
+  </div>
+  <aside class="notes">richiesta(p) è un piccolo metodo che costruisce HttpRequest.newBuilder(URI.create(BASE + p)).build(). È lo stesso modello delle Promise di JavaScript che useremo nella lezione 12 (then, await). Esperimento con il quiz della lezione 9: 200 POST con sendAsync, poi una GET dell'elenco: con ConcurrentHashMap e AtomicInteger gli id sono tutti diversi; con HashMap e int++ capita di perdere libri. Collegamento con la lezione 2 sulle RPC sincrone e asincrone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">JavaServer Pages</p><h2>HTML con dentro un po' di Java, eseguito sul server</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Direttiva</h3><p class="small"><code>&lt;%@ page import="…" %&gt;</code></p><p class="small muted">Impostazioni della pagina: import, codifica.</p></div>
+    <div class="card"><h3>Scriptlet</h3><p class="small"><code>&lt;% codice Java %&gt;</code></p><p class="small muted">Istruzioni eseguite a ogni richiesta.</p></div>
+    <div class="card"><h3>Espressione</h3><p class="small"><code>&lt;%= valore %&gt;</code></p><p class="small muted">Il valore finisce nell'HTML.</p></div>
+  </div>
+  <div class="callout">Alla prima richiesta Tomcat <b>traduce la JSP in una servlet</b> Java e la compila. Il browser non vede mai il Java: riceve solo l'HTML prodotto.</div>
+  <p class="small muted">Nei progetti veri il Java sta in una servlet e la JSP mostra soltanto i dati (modello MVC). Per il laboratorio basta una pagina.</p>
+  <aside class="notes">Il traduttore di Tomcat si chiama Jasper; i file generati stanno in work/Catalina/localhost/&lt;app&gt;/org/apache/jsp, ed è istruttivo aprirli. Esiste anche la dichiarazione &lt;%! … %&gt; per campi e metodi della servlet: la usiamo per un HttpClient condiviso e per la funzione di escape. Da Tomcat 10 i pacchetti sono jakarta.servlet.* e non più javax.servlet.*: una vecchia guida trovata in rete può non funzionare. JSP è una tecnologia matura, oggi usata soprattutto in applicazioni aziendali esistenti; il libro di testo la usa perché mostra bene il rendering lato server.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La pagina della biblioteca</p><h2>libri.jsp: l'API dentro una tabella</h2></div>
+<pre class="code" style="font-size:21px;line-height:1.42">&lt;%@ page contentType=<span class="s">"text/html; charset=UTF-8"</span> import=<span class="s">"java.net.URI, java.net.http.*, java.util.regex.*"</span> %&gt;
+&lt;%! <span class="k">static final</span> HttpClient CLIENT = HttpClient.newHttpClient();
+    <span class="k">static</span> String html(String s) {
+      <span class="k">return</span> s.replace(<span class="s">"&amp;"</span>, <span class="s">"&amp;amp;"</span>).replace(<span class="s">"&lt;"</span>, <span class="s">"&amp;lt;"</span>).replace(<span class="s">"&gt;"</span>, <span class="s">"&amp;gt;"</span>).replace(<span class="s">"\""</span>, <span class="s">"&amp;quot;"</span>);
+    } %&gt;
+&lt;% HttpRequest req = HttpRequest.newBuilder(URI.create(<span class="s">"http://localhost:8000/api/libri"</span>)).build();
+   HttpResponse&lt;String&gt; r = CLIENT.send(req, HttpResponse.BodyHandlers.ofString());
+   Matcher m = Pattern.compile(<span class="s">"\"titolo\":\"([^\"]*)\",\"autore\":\"([^\"]*)\",\"anno\":(\\d+)"</span>).matcher(r.body()); %&gt;
+&lt;!doctype html&gt;
+&lt;html lang=<span class="s">"it"</span>&gt;&lt;head&gt;&lt;meta charset=<span class="s">"utf-8"</span>&gt;&lt;title&gt;Biblioteca&lt;/title&gt;&lt;/head&gt;&lt;body&gt;
+&lt;h1&gt;Libri della biblioteca&lt;/h1&gt;
+&lt;table border=<span class="s">"1"</span>&gt;&lt;tr&gt;&lt;th&gt;Titolo&lt;/th&gt;&lt;th&gt;Autore&lt;/th&gt;&lt;th&gt;Anno&lt;/th&gt;&lt;/tr&gt;
+&lt;% <span class="k">while</span> (m.find()) { %&gt;
+  &lt;tr&gt;&lt;td&gt;<span class="hl">&lt;%= html(m.group(1)) %&gt;</span>&lt;/td&gt;&lt;td&gt;<span class="hl">&lt;%= html(m.group(2)) %&gt;</span>&lt;/td&gt;&lt;td&gt;&lt;%= m.group(3) %&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;% } %&gt;
+&lt;/table&gt;&lt;p&gt;Risposta dell'API: &lt;%= r.statusCode() %&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</pre>
+  <aside class="notes">La pagina gira sul server Tomcat (porta 8080) e chiama BiblioAPI (porta 8000): sono due server diversi sulla stessa macchina, un piccolo sistema distribuito. L'oggetto HttpClient è nella dichiarazione &lt;%! %&gt;, quindi è condiviso tra tutte le richieste: va bene, perché HttpClient è thread-safe. L'espressione regolare si appoggia sull'ordine dei campi prodotto dal nostro server (titolo, autore, anno): è un accoppiamento forte, ed è proprio ciò che una libreria JSON evita. La funzione html() fa l'escape dei caratteri speciali dell'HTML: senza, un titolo pieno di tag verrebbe eseguito dal browser (quiz successivo). Con JSTL si scriverebbe &lt;c:out value="${titolo}"/&gt;, che fa l'escape da sola, ma servono i jar di Jakarta Standard Tag Library nella cartella WEB-INF/lib.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Qualcuno aggiunge un libro con titolo <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>. La JSP senza <code>html()</code>…</h2></div>
+  <div class="poll" data-id="rc-xss" data-tipo="quiz" data-risposta="D">
+    <ol><li>Mostra il titolo così com'è, come testo</li><li>Dà errore di compilazione</li><li>Non fa niente: il JSON non può contenere tag</li><li>Manda lo script al browser, che lo esegue</li></ol>
+    <p class="why">È un Cross-Site Scripting memorizzato: il dato arriva da un'API, ma la JSP lo copia nell'HTML e il browser di chiunque apra la pagina esegue lo script. L'escape trasforma &lt; in &amp;lt; e il titolo torna testo innocuo.</p>
+  </div>
+  <aside class="notes">Collegamento con l'Unità 1 (Network e Web App Security, OWASP Top 10: Injection). Il punto importante: anche i dati che arrivano da un nostro servizio vanno trattati come non fidati quando finiscono in un altro contesto (HTML, SQL, comandi). La C è il tranello: una stringa JSON può contenere qualsiasi carattere, tag compresi. Si può provare in laboratorio, solo sul proprio server locale: un POST con quel titolo e poi la pagina senza escape. Ricordare di non provarlo mai su sistemi altrui.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>BiblioAPI in una pagina web, con Tomcat</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Estrai lo zip di Tomcat 10.1 in <b>C:\tomcat</b> (o nella cartella indicata dal docente).</li>
+      <li>Crea la cartella <b>webapps\biblio</b> e dentro il file <b>libri.jsp</b> della slide.</li>
+      <li>Avvia Tomcat con <code>bin\startup.bat</code> e BiblioServer sulla porta 8000.</li>
+      <li>Apri <code>http://localhost:8080/biblio/libri.jsp</code>.</li>
+      <li>Aggiungi con curl un libro con titolo <code>&lt;b&gt;Prova&lt;/b&gt;</code> e ricarica la pagina.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> una tabella con i libri e in fondo <code>Risposta dell'API: 200</code>. Il libro nuovo appare con il testo <code>&lt;b&gt;Prova&lt;/b&gt;</code> scritto per intero, <b>non in grassetto</b>: l'escape funziona. Con "Visualizza sorgente" non c'è traccia del Java.</div>
+  </div>
+  <aside class="notes">Tomcat richiede la variabile JAVA_HOME (o JRE_HOME) che punta al JDK: set JAVA_HOME=C:\Program Files\Java\jdk-21 nel Prompt prima di startup.bat. Se la porta 8080 è occupata, cambiarla in conf\server.xml (Connector port). Spegnere Tomcat con bin\shutdown.bat. Se il server BiblioAPI è spento, la pagina mostra un errore 500 con una ConnectException: miglioria da proporre con try/catch nello scriptlet e un messaggio gentile. Comando curl per il passo 5: creare titolo.json con {"titolo":"&lt;b&gt;Prova&lt;/b&gt;","autore":"Test","anno":2026} e usare -d @titolo.json. Fallback senza Tomcat: scrivere ClientHtml.java, che fa la stessa GET e scrive con Files.writeString un file libri.html con la tabella (usando la stessa funzione html()); aprendo il file nel browser si vede lo stesso risultato. Il rendering avviene comunque lato "server", cioè nel programma Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle per l'esame</p><h2>Il browser chiede libri.jsp: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="rc-sequenza">
+    <li>Il browser invia GET /biblio/libri.jsp a Tomcat</li>
+    <li>Tomcat traduce e compila la JSP in una servlet, se è la prima volta</li>
+    <li>La servlet invia GET /api/libri a BiblioAPI</li>
+    <li>BiblioAPI risponde 200 con l'array JSON</li>
+    <li>La servlet scrive le righe della tabella con l'escape</li>
+    <li>Tomcat risponde al browser 200 con l'HTML</li>
+  </ol>
+  <aside class="notes">È esattamente il diagramma di sequenza che si chiede di disegnare in una prova di progetto: quattro "attori" (browser, Tomcat, BiblioAPI e, in un progetto vero, il database dietro BiblioAPI). Far disegnare il diagramma alla lavagna con le frecce numerate e le porte (8080, 8000). Domanda: il browser sa che esiste BiblioAPI? (No: vede solo Tomcat. Per questo la chiave di un'API a pagamento può stare al sicuro sul server.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un livello in più: Tomcat tra il browser e l'API</h2></div>
+  <figure class="citazione">
+    <blockquote>Ogni problema in informatica si può risolvere aggiungendo un livello di indirezione.</blockquote>
+    <figcaption><b>David Wheeler</b>, informatico di Cambridge, tra i creatori dell'EDSAC e inventore della subroutine: frase a lui attribuita, resa celebre da Butler Lampson</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card soft"><h3>Il livello in più</h3><p class="small">La JSP sta in mezzo: il browser non sa che BiblioAPI esiste, e l'API non sa nulla del browser.</p></div>
+    <div class="card"><h3>Il prezzo</h3><p class="small">Un salto di rete in più, un server in più da tenere acceso, un punto in più dove qualcosa può guastarsi.</p></div>
+  </div>
+  <aside class="notes">La frase è attribuita a David Wheeler (1927-2004), che lavorò all'EDSAC di Cambridge e a cui si deve la "Wheeler jump", la prima tecnica di chiamata di subroutine. Butler Lampson la cita attribuendola a lui; non esiste un testo scritto di Wheeler con questa frase, per questo diciamo "attribuita". Traduzione nostra di "All problems in computer science can be solved by another level of indirection". Spesso si aggiunge la seconda parte: "…tranne il problema di avere troppi livelli di indirezione". Collegamenti: il vincolo "sistema a livelli" di REST (lezione 8), l'API gateway e l'ESB (lezione 3), e il proxy che custodisce la chiave dell'API nella prossima slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponti verso oggi</p><h2>Un modello linguistico chiamato da Java</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:21px;line-height:1.45">String chiave = System.getenv(<span class="s">"ANTHROPIC_API_KEY"</span>);
+HttpRequest ai = HttpRequest.newBuilder(
+    URI.create(<span class="s">"https://api.anthropic.com/v1/messages"</span>))
+  .header(<span class="s">"x-api-key"</span>, chiave)
+  .header(<span class="s">"anthropic-version"</span>, <span class="s">"2023-06-01"</span>)
+  .header(<span class="s">"content-type"</span>, <span class="s">"application/json"</span>)
+  .POST(BodyPublishers.ofString(corpoJson))
+  .build();</pre>
+    <div class="stack">
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per un'app che usa l'AI, il modello è <b>un web service come BiblioAPI</b>: lo stesso HttpClient, un POST con JSON. La chiave si legge da una variabile d'ambiente e resta sul server, mai nel codice o su GitHub.</p></div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Generare l'HTML sul server, come fa la JSP, è tornato centrale: framework moderni come Next.js lo fanno per pagine più veloci e più leggibili dai motori di ricerca.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Non eseguire il codice senza una chiave del docente: serve un account a pagamento del fornitore e la chiave non va mai condivisa con gli studenti. corpoJson è il JSON con model, max_tokens e messages visto nella lezione 8. Se una chiave finisce per sbaglio in un repository pubblico, va revocata subito: esistono bot che scandiscono GitHub in cerca di chiavi. Sul secondo box: il rendering lato server non è mai sparito, ma per qualche anno le single page application lo avevano messo in secondo piano; oggi molti framework mescolano le due cose.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La classe di Java 11 per fare richieste HTTP si chiama <span class="blank" data-risposta="HttpClient" style="--w:10ch"></span>.</p>
+    <p>Se il server è spento, <code>send</code> lancia una <span class="blank" data-risposta="ConnectException|ConnectException." style="--w:15ch"></span>.</p>
+    <p>Il metodo che non blocca e restituisce un CompletableFuture è <span class="blank" data-risposta="sendAsync" style="--w:9ch"></span>.</p>
+    <p>Alla prima richiesta Tomcat traduce la JSP in una <span class="blank" data-risposta="servlet" style="--w:8ch"></span>.</p>
+    <p>Per evitare il Cross-Site Scripting si fa l'<span class="blank" data-risposta="escape" style="--w:7ch"></span> dei caratteri speciali.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: HttpClient, ConnectException, sendAsync, servlet, escape.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>HttpClient, HttpRequest, HttpResponse</li>
+      <li>404 e 500 sono risposte: controlla statusCode()</li>
+      <li>Server irraggiungibile o lento: eccezioni e timeout</li>
+    </ul>
+    <ul class="points">
+      <li>sendAsync per chiamate in parallelo</li>
+      <li>JSP: Java sul server, HTML al browser</li>
+      <li>Ogni dato che finisce nell'HTML va "escapato"</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: un diagramma di sequenza browser → server web → API → database, con i messaggi numerati, spiega un'architettura meglio di una pagina di testo.</div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: testiamo sul serio BiblioAPI con curl e Postman, anche nei casi d'errore.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

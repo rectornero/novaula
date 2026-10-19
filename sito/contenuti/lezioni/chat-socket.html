@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La chat con i socket · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 3 · Applicazioni Java per la comunicazione in rete</p>
+  <h1>La chat<br>con i socket TCP</h1>
+  <p class="lead">Un server, tanti client, un thread per ciascuno e un piccolo protocollo di testo: costruiamo da zero la stessa idea che sta dietro a ogni app di messaggi.</p>
+  <aside class="notes">Lezione di laboratorio, 3-4 ore. Obiettivi: ripassare Socket e ServerSocket; capire perché un server a thread singolo serve un client alla volta; scrivere un server multi-client con un thread per client; progettare un protocollo di testo; gestire correttamente la disconnessione; riflettere sulla sicurezza (testo in chiaro, TLS). Porta usata: 5000 (deve essere libera e, per le prove tra PC diversi, aperta nel firewall del PC che fa da server: altrimenti si lavora tutti su 127.0.0.1).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Con quale app scrivi di più ai compagni?</h2></div>
+  <div class="poll" data-id="chat-app">
+    <ol><li>WhatsApp</li><li>Telegram</li><li>Instagram</li><li>Discord</li><li>Un'altra</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di apertura. Poi la domanda vera: in tutte queste app, il messaggio va direttamente dal tuo telefono a quello dell'amico? No: passa da un server, che lo inoltra (e lo conserva se l'amico è offline). È esattamente l'architettura che costruiamo oggi: client e server con connessioni TCP sempre aperte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia del 1971</p><h2>Il primo messaggio tra due computer in rete</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>1971, BBN, Cambridge (USA). <b>Ray Tomlinson</b> manda un messaggio tra due computer PDP-10 collegati ad ARPANET, uno accanto all'altro. Per separare utente e computer sceglie il simbolo <b>@</b>.</p>
+      <p>1988, Università di Oulu (Finlandia). <b>Jarkko Oikarinen</b> crea <b>IRC</b>: canali, nickname e comandi di testo come <code>NICK</code> e <code>PRIVMSG</code>.</p>
+    </div>
+    <figure class="citazione">
+      <blockquote>I messaggi di prova erano del tutto dimenticabili, e quindi li ho dimenticati.</blockquote>
+      <figcaption><b>Ray Tomlinson</b>, ingegnere, nel suo racconto "The First Network Email"</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Originale: "The test messages were entirely forgettable and I have, therefore, forgotten them." Dalla pagina di Ray Tomlinson sul sito di BBN; traduzione nostra. Il primo messaggio NON era "QWERTYUIOP" con certezza: Tomlinson disse che probabilmente era qualcosa del genere. La @ fu scelta perché era sulla tastiera e non compariva nei nomi. IRC è descritto nella RFC 1459 (1993). Il protocollo che inventeremo oggi somiglia molto a IRC: comandi di testo, una riga per messaggio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso veloce</p><h2>Socket TCP: che cosa ci dà e che cosa no</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>ServerSocket</h3><p class="small">Ascolta su una porta. <code>accept()</code> si blocca finché arriva un client e restituisce un nuovo <b>Socket</b> per parlare con lui.</p></div>
+    <div class="card soft"><h3>Socket</h3><p class="small">Un capo della connessione: indirizzo IP + porta. Da qui prendi un InputStream e un OutputStream.</p></div>
+    <div class="card bad"><h3>Niente messaggi</h3><p class="small">TCP è un <b>flusso di byte</b> affidabile e ordinato. Dove finisce un messaggio lo decide il nostro <b>protocollo</b>: noi useremo una riga.</p></div>
+  </div>
+  <div class="callout">Nella lezione su Claude Code un agente correggeva <code>ServerChat.java</code> e <code>GestoreClient.java</code>. Oggi quei file li scriviamo noi, e capiamo da dove veniva quel bug.</div>
+  <aside class="notes">Collegamento con il deck claude-code: l'esempio "il server della chat si blocca quando un client si disconnette" era causato da un'eccezione di readLine() non gestita. Oggi la eviteremo con try/finally. Ricordare il three-way handshake (SYN, SYN-ACK, ACK) visto in Sistemi e reti: lo fa il sistema operativo, Java ci mostra solo il risultato. TCP non preserva i confini: due println possono arrivare in un solo read() o un println in due; BufferedReader.readLine() ricompone le righe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine la vita di una connessione</h2></div>
+  <ol class="puzzle-ordina" data-id="chat-vita">
+    <li>Il server crea <code>new ServerSocket(5000)</code></li>
+    <li>Il server chiama <code>accept()</code> e si blocca</li>
+    <li>Il client crea <code>new Socket(host, 5000)</code>: parte l'handshake TCP</li>
+    <li><code>accept()</code> restituisce un Socket nuovo per quel client</li>
+    <li>Client e server si scambiano righe di testo</li>
+    <li>Il client chiude: sul server <code>readLine()</code> restituisce <code>null</code></li>
+  </ol>
+  <aside class="notes">Il passo 3 prima del 2 è un errore comune: se il server non è ancora in ascolto, il client riceve "Connection refused". Far notare che il Socket restituito da accept() è diverso dal ServerSocket: il ServerSocket continua ad ascoltare per altri client. Sul server, la porta locale del nuovo Socket è sempre 5000; ciò che distingue le connessioni è la coppia (IP e porta del client).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · 1</p><h2>ServerEco: ripete in maiuscolo quello che riceve</h2></div>
+  <pre class="code" style="font-size:24px;flex:none"><span class="k">try</span> (ServerSocket server = <span class="k">new</span> ServerSocket(5000)) {
+    System.out.println(<span class="s">"In ascolto sulla porta 5000"</span>);
+    <span class="k">while</span> (<span class="k">true</span>) {
+        <span class="k">try</span> (Socket s = server.<span class="hl">accept()</span>;
+             <span class="k">var</span> in = <span class="k">new</span> BufferedReader(<span class="k">new</span> InputStreamReader(s.getInputStream(), UTF_8));
+             <span class="k">var</span> out = <span class="k">new</span> PrintWriter(s.getOutputStream(), <span class="k">true</span>, UTF_8)) {
+            System.out.println(<span class="s">"Connesso: "</span> + s.getRemoteSocketAddress());
+            String riga;
+            <span class="k">while</span> ((riga = in.readLine()) != <span class="k">null</span>)       <span class="c">// null = il client ha chiuso</span>
+                out.println(<span class="s">"ECO "</span> + riga.toUpperCase());
+        }
+    }
+}</pre>
+  <p class="muted small">Il <code>true</code> di PrintWriter è l'<b>autoflush</b>: senza, la risposta resta nel buffer e il client aspetta per sempre.</p>
+  <aside class="notes">File completo ServerEco.java: import java.io.*; import java.net.*; import static java.nio.charset.StandardCharsets.UTF_8; public class ServerEco { public static void main(String[] args) throws IOException { ...codice della slide... } }. Specificare UTF_8 da entrambe le parti evita problemi con le lettere accentate tra Windows e Linux. Domanda: perché il try-with-resources dentro il while? Perché a ogni client chiudiamo il suo socket e i suoi stream, ma non il ServerSocket.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il server che fa eco</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella cartella <b>u3-chat</b> crea <b>ServerEco.java</b> e avvialo: <code>java ServerEco.java</code></li>
+      <li>In un secondo terminale collegati con <code>curl telnet://127.0.0.1:5000</code></li>
+      <li>Scrivi qualche riga e premi Invio; chiudi con Ctrl+C.</li>
+      <li>Ora apri <b>due</b> client insieme e scrivi da entrambi.</li>
+      <li>Annota in <b>eco.txt</b> che cosa succede al secondo client.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> scrivendo <code>ciao</code> ricevi <code>ECO CIAO</code> e il server stampa <code>Connesso: /127.0.0.1:</code> seguito da una porta alta, diversa per ogni client.</div>
+  </div>
+  <aside class="notes">curl è incluso in Windows 10/11 e supporta il protocollo telnet:// come client TCP grezzo. Alternative: PuTTY in modalità "Raw", nc su Linux/macOS, oppure il ClientChat che scriveremo più avanti. Usare 127.0.0.1 invece di localhost: su alcuni sistemi localhost viene risolto prima in ::1 (IPv6). La porta del client è effimera (es. 52002), scelta dal sistema operativo. Il comportamento del secondo client è il tema del quiz successivo: non svelarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>ServerEco sta servendo un client. Se ne collega un secondo: che cosa succede?</h2></div>
+  <div class="poll" data-id="chat-secondo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Riceve subito "Connection refused"</li><li>Si connette, ma non riceve risposte finché il primo non esce</li><li>I due client vengono serviti a turno, una riga ciascuno</li><li>Il server va in errore e si chiude</li></ol>
+    <p class="why">L'handshake lo completa il sistema operativo, che mette la connessione in coda (backlog). Il server però è bloccato nel <code>while</code> del primo client e chiamerà di nuovo <code>accept()</code> solo quando quel client chiude.</p>
+  </div>
+  <aside class="notes">Molti rispondono A: invece la connessione riesce, ed è proprio questo che inganna. Lo abbiamo verificato: il secondo client si collega ma non riceve nulla finché il primo non si disconnette; a quel punto il server legge le righe che il secondo aveva già mandato e risponde. Il backlog si imposta con il secondo argomento di new ServerSocket(porta, backlog). Soluzione: un thread per client.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'architettura</p><h2>Un thread per client, una lista condivisa</h2></div>
+  <div class="flow">
+    <div class="card fill"><h3>ServerChat</h3><p class="small">Ciclo infinito: <code style="background:rgba(255,255,255,.18);color:#fff">accept()</code>, poi crea un thread e torna subito ad ascoltare.</p></div>
+    <div class="stack">
+      <div class="card soft"><h4>GestoreClient anna</h4></div>
+      <div class="card soft"><h4>GestoreClient bruno</h4></div>
+      <div class="card soft"><h4>GestoreClient carla</h4></div>
+    </div>
+    <div class="card"><h3>clienti</h3><p class="small">Un <code>Set</code> thread-safe con tutti i gestori: per inoltrare un messaggio si scorre il Set e si scrive a ognuno.</p></div>
+  </div>
+  <aside class="notes">Ogni GestoreClient legge dal proprio socket in un ciclo bloccante: con un thread per client i blocchi non si disturbano. Il Set è condiviso tra tutti i thread: per questo ConcurrentHashMap.newKeySet() e non un HashSet. Alternativa: CopyOnWriteArraySet, ottimo quando si legge molto e si modifica poco. Domanda: quanti thread ci sono con 3 client? Quattro: il main che fa accept e tre gestori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · 2</p><h2>ServerChat.java</h2></div>
+  <pre class="code" style="font-size:22px;flex:none"><span class="k">public class</span> ServerChat {
+    <span class="k">static final</span> Set&lt;GestoreClient&gt; clienti = ConcurrentHashMap.newKeySet();
+
+    <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> IOException {
+        <span class="k">try</span> (ServerSocket server = <span class="k">new</span> ServerSocket(5000)) {
+            System.out.println(<span class="s">"Chat in ascolto sulla porta 5000"</span>);
+            <span class="k">while</span> (<span class="k">true</span>) {
+                Socket s = server.accept();                  <span class="c">// aspetta un client</span>
+                <span class="hl">new Thread(new GestoreClient(s)).start();</span>    <span class="c">// un thread per client</span>
+            }
+        }
+    }
+
+    <span class="k">static void</span> inoltra(String riga, GestoreClient mittente) {
+        <span class="k">for</span> (GestoreClient c : clienti)
+            <span class="k">if</span> (c != mittente) c.invia(riga);
+    }
+}</pre>
+  <aside class="notes">Import: java.io.IOException, java.net.*, java.util.Set, java.util.concurrent.ConcurrentHashMap. Qui il Socket NON va in un try-with-resources: lo chiuderà il GestoreClient quando finisce. Con Java 21 basta cambiare una riga per usare i virtual thread: Thread.ofVirtual().start(new GestoreClient(s)); il resto del codice resta identico ed è adatto a migliaia di client.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice · 3</p><h2>GestoreClient: il cuore del metodo <code>run()</code></h2></div>
+  <pre class="code" style="font-size:22px;flex:none"><span class="k">try</span> (s; <span class="k">var</span> in = <span class="k">new</span> BufferedReader(<span class="k">new</span> InputStreamReader(s.getInputStream(), UTF_8))) {
+    out = <span class="k">new</span> PrintWriter(s.getOutputStream(), <span class="k">true</span>, UTF_8);
+    String riga = in.readLine();                              <span class="c">// 1a riga: NICK nome</span>
+    <span class="k">if</span> (riga == <span class="k">null</span> || !riga.matches(<span class="s">"NICK \\w{1,16}"</span>)) { invia(<span class="s">"ERR serve NICK nome"</span>); <span class="k">return</span>; }
+    nick = riga.substring(5);
+    ServerChat.clienti.add(<span class="k">this</span>);
+    invia(<span class="s">"OK benvenuto "</span> + nick);
+    ServerChat.inoltra(<span class="s">"INFO "</span> + nick + <span class="s">" entra nella chat"</span>, <span class="k">this</span>);
+    <span class="k">while</span> ((riga = in.readLine()) != <span class="k">null</span> &amp;&amp; !riga.equals(<span class="s">"QUIT"</span>)) {
+        <span class="k">if</span> (riga.startsWith(<span class="s">"MSG "</span>)) ServerChat.inoltra(<span class="s">"MSG "</span> + nick + <span class="s">" "</span> + riga.substring(4), <span class="k">this</span>);
+        <span class="k">else</span> invia(<span class="s">"ERR comando sconosciuto"</span>);
+    }
+} <span class="k">catch</span> (IOException e) {
+    System.out.println(<span class="s">"Connessione persa: "</span> + e.getMessage());
+} <span class="hl">finally</span> {                                                   <span class="c">// sempre, anche dopo un errore</span>
+    <span class="k">if</span> (ServerChat.clienti.remove(<span class="k">this</span>)) ServerChat.inoltra(<span class="s">"INFO "</span> + nick + <span class="s">" esce dalla chat"</span>, <span class="k">this</span>);
+}</pre>
+  <aside class="notes">Classe completa: public class GestoreClient implements Runnable { private final Socket s; private PrintWriter out; private String nick; GestoreClient(Socket s) { this.s = s; } synchronized void invia(String riga) { out.println(riga); } @Override public void run() { ...codice della slide... } }. Import: java.io.*, java.net.Socket, static java.nio.charset.StandardCharsets.UTF_8. "try (s; ...)" (Java 9+) chiude anche il socket. invia è synchronized perché più thread possono scrivere allo stesso client nello stesso momento (due messaggi inoltrati insieme): senza, le righe potrebbero mescolarsi. Il finally è la correzione del bug visto con Claude Code: se il client sparisce (rete staccata, finestra chiusa) readLine lancia un'eccezione o restituisce null, e in entrambi i casi il gestore viene tolto dal Set. Senza finally il server continuerebbe a scrivere a un socket morto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il protocollo</p><h2>Una riga = un comando. Le regole le decidiamo noi</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Client → server</th><th>Significato</th></tr>
+      <tr><td class="mono">NICK anna</td><td>Mi presento (prima riga)</td></tr>
+      <tr><td class="mono">MSG ciao a tutti</td><td>Messaggio per tutti</td></tr>
+      <tr><td class="mono">QUIT</td><td>Esco</td></tr>
+    </table>
+    <table class="data compact">
+      <tr><th>Server → client</th><th>Significato</th></tr>
+      <tr><td class="mono">OK benvenuto anna</td><td>Comando accettato</td></tr>
+      <tr><td class="mono">ERR serve NICK nome</td><td>Errore, con il motivo</td></tr>
+      <tr><td class="mono">MSG anna ciao</td><td>Messaggio di anna</td></tr>
+      <tr><td class="mono">INFO bruno entra…</td><td>Avviso del server</td></tr>
+    </table>
+  </div>
+  <div class="callout">Un protocollo è un <b>contratto</b>: formato, ordine dei messaggi, risposte agli errori. Scriverlo prima del codice permette a due gruppi di fare client e server separatamente.</div>
+  <aside class="notes">È lo stesso stile di IRC, SMTP, POP3, FTP e anche HTTP/1.1: comandi di testo leggibili, una riga per comando, codici o parole chiave per le risposte. Vantaggio: si prova con curl o telnet. Svantaggio: il testo è più lento da analizzare di un formato binario. Domanda: che cosa succede se un utente scrive un messaggio che contiene un a capo? Con readLine diventano due righe: il client deve impedirlo o il protocollo deve prevedere un "escape".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>La chat multi-client</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>ServerChat.java</b> e <b>GestoreClient.java</b> nella stessa cartella.</li>
+      <li>Compila e avvia: <code>javac *.java</code> e poi <code>java ServerChat</code></li>
+      <li>Apri tre client con <code>curl telnet://127.0.0.1:5000</code>; nel primo scrivi <code>NICK anna</code>, negli altri <code>NICK bruno</code> e <code>NICK carla</code>.</li>
+      <li>Da anna scrivi <code>MSG ciao</code>, poi chiudi la finestra di bruno senza QUIT.</li>
+      <li>Collegati al server di un compagno con il suo IP.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> bruno e carla ricevono <code>MSG anna ciao</code>; anna no. Quando chiudi bruno, gli altri ricevono <code>INFO bruno esce dalla chat</code> e il server continua a funzionare.</div>
+  </div>
+  <aside class="notes">Se il collegamento tra due PC non riesce: il firewall di Windows del PC server blocca le connessioni in ingresso (alla prima esecuzione Windows chiede se consentire Java: serve il permesso dell'amministratore). In quel caso fare le prove solo su 127.0.0.1 o usare il PC del docente come server. Errori tipici: dimenticare l'autoflush (nessuna risposta), scrivere "nick anna" in minuscolo (ERR: il protocollo distingue le maiuscole), avviare due server sulla stessa porta (BindException: Address already in use).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Sul server, <code>in.readLine()</code> restituisce <code>null</code>. Che cosa è successo?</h2></div>
+  <div class="poll" data-id="chat-null" data-tipo="quiz" data-risposta="A">
+    <ol><li>Il client ha chiuso la connessione</li><li>Il client ha mandato una riga vuota</li><li>Per 30 secondi non è arrivato nulla</li><li>Il messaggio era più lungo del buffer</li></ol>
+    <p class="why"><code>null</code> significa fine del flusso: l'altro capo ha chiuso. Una riga vuota arriva come <code>""</code>; il silenzio fa restare <code>readLine</code> bloccato (a meno di un timeout con <code>setSoTimeout</code>, che lancia un'eccezione).</p>
+  </div>
+  <aside class="notes">La B è il tranello: "" e null sono diversi. Se il client si spegne di colpo (cavo staccato), il server può non accorgersene per molto tempo: niente arriva, readLine resta bloccato. Rimedi: s.setSoTimeout(ms) con un messaggio di "ping" periodico a livello di protocollo, oppure l'opzione TCP keepalive. Collegamento: è lo stesso motivo per cui WebSocket ha i frame ping e pong.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il client Java con due thread</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Un client deve fare due cose insieme: leggere la tastiera e ascoltare il server. Crea <b>ClientChat.java</b>:</p>
+      <ol class="steps">
+        <li>Apri <code>new Socket(host, 5000)</code> con i suoi stream in UTF-8.</li>
+        <li>Avvia con <code>Thread.ofVirtual().start(...)</code> un thread che stampa ogni riga del server.</li>
+        <li>Nel main leggi la tastiera e invia ogni riga; esci dopo <code>QUIT</code>.</li>
+        <li>Prova con due ClientChat e un client curl.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> i messaggi degli altri compaiono anche mentre stai scrivendo; dopo <code>QUIT</code> il programma termina e gli altri vedono <code>INFO ... esce dalla chat</code>.</div>
+  </div>
+  <aside class="notes">Soluzione (main): String host = args.length &gt; 0 ? args[0] : "127.0.0.1"; try (Socket s = new Socket(host, 5000); var in = new BufferedReader(new InputStreamReader(s.getInputStream(), UTF_8)); var out = new PrintWriter(s.getOutputStream(), true, UTF_8); var tastiera = new BufferedReader(new InputStreamReader(System.in))) { Thread.ofVirtual().start(() -&gt; { try { String r; while ((r = in.readLine()) != null) System.out.println(r); } catch (IOException e) { } }); String r; while ((r = tastiera.readLine()) != null) { out.println(r); if (r.equals("QUIT")) break; } }. Un virtual thread è "daemon": non impedisce alla JVM di chiudersi quando il main finisce. Sul terminale di Windows le lettere accentate possono apparire male: provare chcp 65001 o il terminale di IntelliJ. Estensione: il client manda da solo "NICK" con il nome passato come argomento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni pezzo di codice al suo compito</h2></div>
+  <dl class="puzzle-abbina" data-id="chat-pezzi">
+    <dt>server.accept()</dt><dd>Aspetta un client e restituisce il suo Socket</dd>
+    <dt>new PrintWriter(os, true)</dt><dd>Scrive righe e le invia subito (autoflush)</dd>
+    <dt>readLine() == null</dt><dd>L'altro capo ha chiuso la connessione</dd>
+    <dt>ConcurrentHashMap.newKeySet()</dt><dd>Un Set che più thread possono modificare insieme</dd>
+    <dt>finally</dt><dd>Toglie il client dalla lista anche dopo un errore</dd>
+  </dl>
+  <aside class="notes">Far spiegare a voce, per ogni coppia, che cosa succederebbe senza quel pezzo: senza autoflush il client non riceve; senza il Set concorrente si rischia ConcurrentModificationException durante l'inoltro; senza finally restano "client fantasma".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sicurezza</p><h2>Chi può leggere la nostra chat?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li>Il testo viaggia <b>in chiaro</b>: con Wireshark chiunque sulla stessa rete può leggerlo.</li>
+        <li>Rimedio di base: <b>TLS</b>, con <code>SSLServerSocket</code> e <code>SSLSocket</code>. Cifra il canale tra client e server.</li>
+        <li>Ma il server, che decifra, legge comunque tutto.</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Cifratura end-to-end</h3><p>WhatsApp e Signal usano il <b>Signal Protocol</b>: i messaggi sono cifrati sul telefono del mittente e decifrati solo su quello del destinatario. Il server inoltra dati che non può leggere, come il nostro <b style="font-family:var(--mono);font-size:.9em">inoltra()</b>, ma senza capirli.</p></div>
+  </div>
+  <aside class="notes">Demo possibile (solo in laboratorio, sulla propria macchina): Wireshark con il filtro tcp.port == 5000 sull'interfaccia di loopback, poi "Segui flusso TCP": si legge tutta la conversazione. WhatsApp ha completato l'adozione della cifratura end-to-end basata sul Signal Protocol nel 2016. Collegamento con l'Unità 1 (triade CIA: riservatezza) e con crittografia simmetrica/asimmetrica. TLS in Java richiede un certificato in un keystore (keytool): esercizio possibile per i più avanzati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>IRC non è morto, e i thread sono diventati leggeri</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Protocolli di testo ovunque</h3><p>La chat di Twitch offre ancora un'interfaccia IRC per i bot: un programma si collega, manda <b style="font-family:var(--mono);font-size:.9em">NICK</b> e <b style="font-family:var(--mono);font-size:.9em">JOIN</b> e legge i messaggi riga per riga, proprio come il nostro client.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un thread per client, in grande</h3><p>Con Java 21 il modello "un thread per client" torna conveniente: <b style="font-family:var(--mono);font-size:.9em">Thread.ofVirtual()</b> permette a un server di tenere aperte decine di migliaia di connessioni con codice semplice e leggibile.</p></div>
+  </div>
+  <div class="callout">Discord, WhatsApp, i giochi online: tutti tengono una <b>connessione sempre aperta</b> verso un server, come la nostra chat. Nel browser, quella connessione si chiama <b>WebSocket</b>: è la prossima lezione.</div>
+  <aside class="notes">Twitch documenta la sua interfaccia chat basata su IRC per i bot (molti bot di moderazione, anche basati su AI, leggono così i messaggi). Prima dei virtual thread, per migliaia di client si usavano NIO (Selector) o framework asincroni come Netty: codice più veloce ma molto più difficile da leggere. Collegamento con la lezione sul ping multiplo: i socket di java.net collaborano con i virtual thread.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Progettare un servizio client-server</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Disegna l'<b>architettura</b>: un server, N client, porta, protocollo di trasporto (TCP o UDP, e perché).</li>
+      <li>Scrivi il <b>protocollo</b>: tabella di comandi e risposte, compresi gli errori.</li>
+      <li>Disegna un <b>diagramma di sequenza</b>: due client, il server, un messaggio inoltrato.</li>
+      <li>Spiega la <b>concorrenza</b>: un thread per client e la lista condivisa thread-safe.</li>
+    </ol>
+    <div class="card soft"><h3>Domanda classica</h3><p>"Perché TCP e non UDP per una chat?" Perché serve che ogni messaggio arrivi, una volta sola e nell'ordine giusto. Per voce e video in diretta invece si preferisce UDP: un pacchetto in ritardo è inutile.</p></div>
+  </div>
+  <aside class="notes">Far disegnare alla lavagna il diagramma di sequenza: anna → server "MSG ciao"; server → bruno "MSG anna ciao"; server → carla "MSG anna ciao". Aggiungere il caso di errore (comando sconosciuto → ERR solo al mittente). È un formato tipico delle prove di progetto: architettura, protocollo, scelte motivate.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il metodo che aspetta un nuovo client si chiama <span class="blank" data-risposta="accept|accept()"></span>.</p>
+    <p>TCP non trasporta messaggi ma un flusso di <span class="blank" data-risposta="byte|bytes"></span>: i confini li decide il protocollo.</p>
+    <p>Se l'altro capo chiude, <code>readLine()</code> restituisce <span class="blank" data-risposta="null"></span>.</p>
+    <p>Per servire più client insieme si usa un <span class="blank" data-risposta="thread"></span> per ogni client.</p>
+    <p>Per togliere il client dalla lista anche dopo un errore si usa il blocco <span class="blank" data-risposta="finally"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: accept; byte; null; thread; finally.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>ServerSocket ascolta, accept() restituisce un Socket per ogni client</li>
+      <li>Un server a thread singolo serve un client alla volta</li>
+      <li>Un thread per client e un Set thread-safe per inoltrare</li>
+    </ul>
+    <ul class="points">
+      <li>Protocollo di testo: una riga = un comando, con OK ed ERR</li>
+      <li>null = connessione chiusa; finally per non lasciare fantasmi</li>
+      <li>In chiaro chiunque legge: TLS, o meglio end-to-end</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: portiamo la chat nel browser con WebSocket. Assegnare il compito "Chat 2.0: comandi nuovi" (lavoro di gruppo facoltativo).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

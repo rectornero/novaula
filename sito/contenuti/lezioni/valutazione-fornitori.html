@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Valutare prodotti e fornitori · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Selezionare un prodotto informatico</p>
+  <h1>Valutare prodotti<br>e fornitori</h1>
+  <p class="lead">Il prezzo di listino è solo l'inizio: costo totale, licenze, SLA, protezione dei dati e il rischio di restare legati a un fornitore.</p>
+  <div class="meta"><span class="chip">Lezione 3 di 4</span><span>TCO · licenze · SLA · lock-in · GDPR</span></div>
+  <aside class="notes">Obiettivi: elencare i criteri di valutazione di prodotto e fornitore, calcolare il costo totale di possesso (TCO), distinguere i modelli di licenza, leggere uno SLA e calcolare il fermo ammesso, riconoscere il vendor lock-in, applicare le regole essenziali del GDPR alla scelta di un servizio. La short list di Lumen ha tre candidati (nomi inventati): NuvolaBox (SaaS in abbonamento), NAS in sede con backup fuori sede, Nextcloud gestito da un provider italiano. Collegamento con "Principi di sicurezza" (triade CIA) per i criteri di sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un'app costa 0 euro al mese. Quanto ti costa davvero?</h2></div>
+  <div class="poll" data-id="u6l3-gratis">
+    <ol><li>Niente, è gratis</li><li>Il tempo per impararla</li><li>I miei dati e la mia attenzione</li><li>Dipende da come guadagna chi la fa</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di apertura. Ogni risposta tranne la prima apre un pezzo della lezione: il tempo è un costo (formazione), i dati sono un costo (privacy), il modello di business decide il rischio (un servizio gratuito può chiudere o diventare a pagamento). "Se non paghi il prodotto, il prodotto sei tu" è un detto diffuso, di origine incerta: non attribuirlo a nessuno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa valutare</p><h2>Si sceglie un prodotto, ma si sposa un fornitore</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Il prodotto</h3>
+      <ul class="points small">
+        <li>Quanti requisiti copre, e come</li>
+        <li>Qualità: affidabilità, usabilità, prestazioni</li>
+        <li>Compatibilità con PC, tablet, programmi esistenti</li>
+        <li>Sicurezza: cifratura, 2FA, registro degli accessi</li>
+        <li>Scalabilità: e se gli utenti raddoppiano?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Il fornitore</h3>
+      <ul class="points small">
+        <li>Solidità: anni sul mercato, bilanci, clienti</li>
+        <li>Assistenza: lingua, orari, tempi di risposta</li>
+        <li>Sede e legge applicabile al contratto</li>
+        <li>Certificazioni, per esempio ISO/IEC 27001</li>
+        <li>Roadmap: il prodotto sarà sviluppato o abbandonato?</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">ISO/IEC 27001 certifica il sistema di gestione della sicurezza delle informazioni dell'organizzazione (non il singolo prodotto): chiedere il certificato e verificarne il perimetro (copre il servizio che compriamo?). Domanda: "un prodotto ottimo di una startup di 3 persone o uno discreto di un'azienda solida?" Dipende dal rischio: per dati che Lumen deve conservare per anni, la solidità del fornitore pesa molto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il costo vero</p><h2>TCO: il costo totale di possesso</h2></div>
+  <div class="formula"><small>Total Cost of Ownership, su un orizzonte di anni</small>TCO = <span class="hl">avvio</span> + <span class="hl">esercizio</span> + <span class="hl">uscita</span></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Avvio</h3><p class="small">Acquisto o attivazione, hardware, installazione, migrazione dei dati, formazione.</p></div>
+    <div class="card soft"><h3>Esercizio</h3><p class="small">Abbonamenti, manutenzione, assistenza, energia, ricambi, tempo del personale.</p></div>
+    <div class="card soft"><h3>Uscita</h3><p class="small">Esportazione dei dati, smaltimento, doppio servizio durante il passaggio.</p></div>
+  </div>
+  <aside class="notes">Il concetto di TCO in informatica è stato reso popolare dalla società di analisi Gartner alla fine degli anni '80. I costi nascosti più dimenticati: il tempo del personale (ore perse per un servizio lento o difficile), la migrazione, l'uscita. Un orizzonte di 5 anni è tipico per l'hardware, che poi va sostituito. Per Lumen il budget è 16 000 euro in 5 anni (lezione 1).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Primo anno: NuvolaBox 3 880 €, NAS 5 030 €, Nextcloud 4 460 €. Su 5 anni chi costa meno?</h2></div>
+  <div class="poll" data-id="u6l3-tco" data-tipo="quiz" data-risposta="B">
+    <ol><li>NuvolaBox, è la più economica già dal primo anno</li><li>Il NAS in sede</li><li>Nextcloud gestito</li><li>Costano circa uguale</li></ol>
+    <p class="why">Il NAS ha un costo d'avvio alto (hardware) ma costi annuali bassi: su 5 anni costa 12 950 euro, contro 13 100 di Nextcloud e 15 400 di NuvolaBox, il cui abbonamento si paga ogni mese. Il primo anno inganna: conta l'intero orizzonte.</p>
+  </div>
+  <aside class="notes">Far votare prima di mostrare la tabella successiva. Il conto completo è nella prossima slide e nel laboratorio. Attenzione però: costare meno non vuol dire essere la scelta migliore. Il NAS richiede più lavoro del tecnico e ha un'affidabilità minore (un solo apparato in un negozio): lo peseremo nella lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il TCO di Lumen</p><h2>Tre candidati, cinque anni, 20 utenti</h2></div>
+  <table class="data compact">
+    <tr><th>Voce (5 anni)</th><th>NuvolaBox · SaaS</th><th>NAS in sede</th><th>Nextcloud gestito</th></tr>
+    <tr><td>Abbonamento o hosting</td><td class="mono">12 €/utente/mese → 14 400</td><td class="mono">—</td><td class="mono">180 €/mese → 10 800</td></tr>
+    <tr><td>Hardware e ricambi</td><td class="mono">—</td><td class="mono">3 200 + 600 dischi</td><td class="mono">—</td></tr>
+    <tr><td>Backup fuori sede</td><td class="mono">incluso</td><td class="mono">40 €/mese → 2 400</td><td class="mono">incluso</td></tr>
+    <tr><td>Tecnico e manutenzione</td><td class="mono">—</td><td class="mono">1 200 €/anno → 6 000</td><td class="mono">—</td></tr>
+    <tr><td>Energia</td><td class="mono">—</td><td class="mono">150 €/anno → 750</td><td class="mono">—</td></tr>
+    <tr><td>Migrazione e formazione</td><td class="mono">1 000</td><td class="mono">—</td><td class="mono">1 500 + 800</td></tr>
+    <tr><td><b>TCO</b></td><td class="mono hl"><b>15 400</b></td><td class="mono hl"><b>12 950</b></td><td class="mono hl"><b>13 100</b></td></tr>
+  </table>
+  <p class="muted small">Prezzi inventati ma realistici, IVA esclusa. Tutti e tre restano sotto il budget di 16 000 euro.</p>
+  <aside class="notes">Controllo dei conti: NuvolaBox 12 × 20 × 60 = 14 400 + 1 000 = 15 400. NAS 3 200 + 600 + 2 400 + 6 000 + 750 = 12 950 (migrazione fatta dal tecnico, inclusa nel suo contratto). Nextcloud 180 × 60 = 10 800 + 1 500 + 800 = 13 100. Primo anno (quiz): NuvolaBox 2 880 + 1 000 = 3 880; NAS 3 200 + 480 + 1 200 + 150 = 5 030; Nextcloud 2 160 + 2 300 = 4 460. Domanda: "quale voce manca?" Il tempo del personale e il costo di uscita: nessuno dei tre lo ha stimato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il TCO in Calc, con un parametro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>tco-lumen.ods</b>. In F1 scrivi <b>Utenti</b> e in G1 <b>20</b>; in F2 <b>Mesi</b> e in G2 <b>60</b>.</li>
+      <li>In A2:A7 le voci della slide precedente, in B1:D1 i tre candidati.</li>
+      <li>Abbonamento NuvolaBox in B2: <code>=12*$G$1*$G$2</code>. Hosting Nextcloud in D2: <code>=180*$G$2</code>. Le altre voci come in tabella.</li>
+      <li>In riga 8 il totale con <code>=SOMMA(B2:B7)</code>; in riga 9: <code>=SE(B8&lt;=16000;"ok";"fuori budget")</code>.</li>
+      <li>Ora metti 25 in G1. Che cosa succede?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 20 utenti 15 400, 12 950, 13 100, tutti "ok". Con 25 utenti NuvolaBox sale a 19 000 ed è "fuori budget"; gli altri due non cambiano.</div>
+  </div>
+  <aside class="notes">Il messaggio: il SaaS a utente scala linearmente con le persone, l'hosting a canone fisso no (fino al limite di spazio del piano). Chiedere di aggiungere una riga "Tempo del personale": se NuvolaBox fa risparmiare 1 ora al mese a ciascun commesso rispetto al NAS, a 20 euro l'ora sono 20 × 12 × 5 × 20 = 24 000 euro in 5 anni. Le stime di tempo cambiano tutto, ma vanno giustificate. Salvare: il file serve anche per il laboratorio sugli SLA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Licenze</p><h2>Che cosa compri davvero: il diritto di usare</h2></div>
+  <table class="data compact">
+    <tr><th>Modello</th><th>Come paghi</th><th>Da sapere</th></tr>
+    <tr><td><b>Perpetua</b></td><td>Una volta, più un canone di manutenzione se vuoi aggiornamenti</td><td>Senza manutenzione resti con una versione che invecchia</td></tr>
+    <tr><td><b>Abbonamento</b> e <b>SaaS</b></td><td>Ogni mese o anno, per utente o per spazio</td><td>Se smetti di pagare perdi l'accesso; il prezzo può cambiare</td></tr>
+    <tr><td><b>Open source</b></td><td>Il software è gratuito; paghi hosting, supporto, competenze</td><td>Libertà di usare, studiare, modificare e ridistribuire</td></tr>
+    <tr><td><b>Freemium</b></td><td>Gratis fino a una soglia, poi a pagamento</td><td>Controlla limiti e condizioni d'uso per le aziende</td></tr>
+  </table>
+  <div class="chips"><span class="chip">per utente</span><span class="chip">per dispositivo</span><span class="chip">per core o CPU</span><span class="chip">a consumo</span><span class="chip">sito o istituto</span></div>
+  <aside class="notes">Le chip sono le metriche di licenza: lo stesso prodotto può costare molto diverso a seconda di come si conta. Esempio: 20 utenti su 16 dispositivi condivisi in negozio; una licenza per dispositivo costerebbe meno di una per utente. Le versioni gratuite "personali" di molti servizi non si possono usare per un'attività commerciale: leggere i termini d'uso. Il software proprietario si usa secondo un contratto di licenza (EULA) che di solito vieta di modificare e ridistribuire.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Libero non vuol dire gratis</h2></div>
+  <figure class="citazione">
+    <blockquote>Il software libero è una questione di libertà, non di prezzo. Pensa a "free" come in "libertà di parola", non come in "birra gratis".</blockquote>
+    <figcaption><b>Richard Stallman</b>, fondatore del progetto GNU (1983) e della Free Software Foundation, nella pagina "Che cos'è il software libero?"</figcaption>
+  </figure>
+  <p class="lead">Per Lumen Nextcloud è gratuito come software, ma l'hosting, la migrazione e il supporto si pagano. In cambio i dati restano in un formato e su un software che nessuno può "spegnere".</p>
+  <aside class="notes">Originale: "Free software is a matter of liberty, not price. To understand the concept, you should think of 'free' as in 'free speech,' not as in 'free beer'." (gnu.org, "What is free software?", testo pubblicato dalla FSF dagli anni '90 e aggiornato nel tempo). Traduzione nostra. In inglese "free" significa sia libero sia gratuito, da qui l'ambiguità. Il termine "open source" nasce nel 1998 con la Open Source Initiative: pone l'accento sui vantaggi pratici più che sull'etica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la licenza alla sua regola chiave</h2></div>
+  <dl class="puzzle-abbina" data-id="u6l3-licenze">
+    <dt>GPL</dt><dd>Chi distribuisce versioni modificate deve rilasciarne il codice con la stessa licenza</dd>
+    <dt>AGPL</dt><dd>Anche chi offre il software modificato come servizio in rete deve dare il codice</dd>
+    <dt>MIT</dt><dd>Permissiva: basta conservare l'avviso di copyright e la licenza</dd>
+    <dt>Apache 2.0</dt><dd>Permissiva, con una concessione esplicita dei brevetti</dd>
+    <dt>EULA proprietaria</dt><dd>Il codice resta chiuso; l'uso è regolato dal contratto</dd>
+  </dl>
+  <aside class="notes">GPL e AGPL sono licenze "copyleft": la libertà si trasmette alle versioni derivate. MIT e Apache sono "permissive": il codice si può riusare anche in prodotti chiusi. Nextcloud Server è distribuito con licenza AGPLv3: chi lo usa senza modificarlo, come Lumen, non ha obblighi particolari. Per un'azienda che sviluppa software la licenza delle librerie usate è un criterio di selezione importante.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Leggi le licenze come un professionista</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>choosealicense.com/licenses</b> (sito curato da GitHub, senza account).</li>
+      <li>In <b>tco-lumen.ods</b> crea il foglio <b>Licenze</b>: colonne MIT, Apache-2.0, GPL-3.0, AGPL-3.0.</li>
+      <li>Righe: uso commerciale, modifica, uso dei brevetti, obbligo di rilasciare il codice, stessa licenza, uso in rete come distribuzione.</li>
+      <li>Segna sì o no leggendo i riquadri Permissions, Conditions e Limitations.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> uso commerciale e modifica sì per tutte. Brevetti esplicitati: Apache, GPL, AGPL. Codice e stessa licenza: solo GPL e AGPL. Uso in rete: solo AGPL.</div>
+  </div>
+  <aside class="notes">Le etichette del sito sono in inglese: "Commercial use", "Modification", "Patent use", "Disclose source", "Same license", "Network use is distribution". Far notare che il sito semplifica: il testo legale vincolante è quello della licenza. Domanda di chiusura: "se Lumen modificasse Nextcloud e lo offrisse online ad altri ottici, che cosa dovrebbe fare?" Pubblicare il codice delle modifiche (AGPL).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il contratto di servizio</p><h2>SLA: le promesse scritte, con le penali</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Disponibilità</th><th>Fermo all'anno</th><th>Fermo al mese (30 gg)</th></tr>
+      <tr><td class="mono">99%</td><td class="mono">87,6 ore</td><td class="mono">7,2 ore</td></tr>
+      <tr><td class="mono">99,5%</td><td class="mono">43,8 ore</td><td class="mono">3,6 ore</td></tr>
+      <tr><td class="mono hl">99,9%</td><td class="mono hl">8,76 ore</td><td class="mono hl">43,2 minuti</td></tr>
+      <tr><td class="mono">99,99%</td><td class="mono">52,6 minuti</td><td class="mono">4,3 minuti</td></tr>
+    </table>
+    <ul class="points small">
+      <li><b>RPO</b>: quanti dati puoi perdere (es. 24 ore)</li>
+      <li><b>RTO</b>: in quanto tempo torni operativo</li>
+      <li>Tempi di risposta dell'assistenza</li>
+      <li>Penali o crediti se lo SLA non è rispettato</li>
+      <li>Esclusioni: manutenzione programmata, cause di forza maggiore</li>
+    </ul>
+  </div>
+  <aside class="notes">SLA = Service Level Agreement. Calcolo: 365 × 24 = 8 760 ore; 0,1% di 8 760 = 8,76 ore. Mese di 30 giorni: 43 200 minuti × 0,001 = 43,2 minuti. Leggere sempre se la disponibilità è calcolata sul mese o sull'anno, e che cosa è escluso. Di solito la penale è un credito sul canone (per esempio il 10% del mese), non un risarcimento del danno: per Lumen un giorno di negozi fermi vale molto di più. RPO e RTO valgono anche per il NAS: lì non c'è uno SLA, i tempi dipendono dal tecnico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Lo SLA garantisce il 99,9% su base mensile. Quanto fermo è ammesso in un mese di 30 giorni?</h2></div>
+  <div class="poll" data-id="u6l3-sla" data-tipo="quiz" data-risposta="A">
+    <ol><li>Circa 43 minuti</li><li>8,76 ore</li><li>4,3 minuti</li><li>Circa 1 ora e mezza</li></ol>
+    <p class="why">30 × 24 × 60 = 43 200 minuti; lo 0,1% è 43,2 minuti. 8,76 ore è il fermo ammesso in un anno intero; 4,3 minuti corrisponde al 99,99%.</p>
+  </div>
+  <aside class="notes">Tranello: B, il valore annuale che circola di più. Chiedere: "meglio 99,9% annuo o 99,9% mensile?" Mensile, per il cliente: un fermo di 8 ore tutto in un giorno rispetterebbe l'annuo ma non il mensile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il calcolatore di SLA</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>tco-lumen.ods</b> crea il foglio <b>SLA</b>. In A2:A5 scrivi 99%, 99,5%, 99,9%, 99,99%.</li>
+      <li>In B2 (ore di fermo all'anno): <code>=(1-A2)*365*24</code>.</li>
+      <li>In C2 (minuti al mese): <code>=(1-A2)*30*24*60</code>. Trascina fino alla riga 5.</li>
+      <li>In A8 scrivi i minuti di fermo di ottobre: <b>120</b>. In B8: <code>=SE(A8&gt;C4;"SLA violato";"SLA rispettato")</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> per 99,9% B4 = 8,76 e C4 = 43,2. Con 120 minuti di fermo B8 mostra "SLA violato". Con 40 minuti, "SLA rispettato".</div>
+  </div>
+  <aside class="notes">Se compaiono numeri strani, controllare che le celle A2:A5 siano in formato percentuale (99,9% = 0,999). Estensione: aggiungere in C8 il credito, per esempio <code>=SE(A8&gt;C4;0,1*240;0)</code> con un canone mensile di 240 euro (12 × 20 utenti): il credito di 24 euro mostra quanto poco rimborsa una penale rispetto a una giornata di negozi fermi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il rischio nascosto</p><h2>Vendor lock-in: entrare è facile, uscire no</h2></div>
+  <div class="cols-2">
+    <div class="card bad">
+      <h3>Come ti legano</h3>
+      <ul class="points small"><li>Formati di file o database proprietari</li><li>Esportazione assente, parziale o a pagamento</li><li>Contratti lunghi con rinnovo automatico</li><li>Integrazioni che funzionano solo con quel fornitore</li></ul>
+    </div>
+    <div class="card ok">
+      <h3>Come ti proteggi</h3>
+      <ul class="points small"><li>Formati aperti e standard (es. WebDAV, file normali)</li><li>Clausola scritta di restituzione dei dati</li><li>Prova di esportazione durante il periodo di prova</li><li>Una strategia d'uscita prima di firmare</li></ul>
+    </div>
+  </div>
+  <p class="small">Dal 12 settembre 2025 il <b>Data Act</b> europeo impone ai fornitori cloud regole per facilitare il passaggio a un altro fornitore.</p>
+  <aside class="notes">Il Data Act è il Regolamento (UE) 2023/2854: tra le altre cose prevede che i fornitori di servizi di elaborazione dati (cloud) permettano il cambio di fornitore e riducano progressivamente i costi di passaggio, fino ad azzerarli dal 12 gennaio 2027. Per Lumen: Nextcloud usa file normali e il protocollo standard WebDAV, quindi il lock-in è basso; un NAS ha un lock-in medio (formato del backup del produttore); NuvolaBox va verificato nella RFI. Il lock-in esiste anche nelle competenze: chi ha imparato un prodotto non vuole cambiarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I dati dei clienti</p><h2>GDPR: le domande da fare a ogni fornitore</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Lumen è <b>titolare</b> del trattamento; il fornitore è <b>responsabile</b>: serve un contratto (art. 28).</li>
+      <li>Le prescrizioni sono <b>dati relativi alla salute</b> (art. 9): sicurezza più alta.</li>
+      <li>Dove sono dati, backup e assistenza? Fuori dall'UE servono garanzie (capo V).</li>
+      <li>Chi sono i <b>sub-responsabili</b>, cioè le altre aziende coinvolte?</li>
+      <li>Cifratura, registro degli accessi, notifica delle violazioni.</li>
+    </ul>
+    <div class="card soft">
+      <h3>Trasferimenti fuori UE</h3>
+      <p class="small">Sono possibili solo con una decisione di adeguatezza della Commissione (per gli USA il Data Privacy Framework del 2023, per le aziende aderenti) o con garanzie come le clausole contrattuali tipo.</p>
+    </div>
+  </div>
+  <aside class="notes">Articoli: art. 28 (responsabile del trattamento), art. 9 (categorie particolari, tra cui i dati relativi alla salute), art. 32 (sicurezza del trattamento), art. 33 (notifica delle violazioni al Garante entro 72 ore), capo V artt. 44-49 (trasferimenti verso Paesi terzi). La decisione di adeguatezza sul EU-US Data Privacy Framework è del 10 luglio 2023. Per un'azienda con dati sanitari conviene valutare con il consulente privacy se serve una valutazione d'impatto (DPIA, art. 35). Collegamento con la lezione sulla privacy del primo biennio, se la classe l'ha fatta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con i numeri della lezione</h2></div>
+  <div class="puzzle-codice" data-risposta="8935" data-aiuto="la terza cifra: confronta i tre TCO con 16 000 euro">
+    <ul class="points">
+      <li>1ª cifra: le ore intere di fermo all'anno ammesse con il 99,9%</li>
+      <li>2ª cifra: l'articolo del GDPR sui dati relativi alla salute</li>
+      <li>3ª cifra: quanti candidati di Lumen hanno un TCO sotto il budget</li>
+      <li>4ª cifra: gli anni su cui abbiamo calcolato il TCO</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 8,76 ore, art. 9, tutti e 3 sotto i 16 000 euro, 5 anni.</div>
+  </div>
+  <aside class="notes">Codice 8935. Squadre da 3-4, la prima che apre vince. Chi mette 2 come seconda cifra pensa all'art. 28 (contratto con il responsabile): buona occasione per ripassare la differenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con oggi</p><h2>Valutare un servizio di AI: stessi criteri, nuove voci</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il TCO di un'API di AI</h3><p>I modelli via API si pagano a <b>token</b>, con prezzi diversi per i token in ingresso e in uscita, di solito indicati per milione. Il costo dipende da quante conversazioni fai e da quanto sono lunghe: va stimato come un abbonamento a consumo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>SLA, dati e lock-in</h3><p>Da chiedere: le conversazioni sono usate per addestrare i modelli? Per quanto tempo sono conservate, e dove? Che SLA c'è? I fornitori ritirano i modelli vecchi con un preavviso: un prodotto costruito su un solo modello deve prevedere come cambiarlo.</p></div>
+  </div>
+  <aside class="notes">Tutto vero e verificabile sulle pagine dei principali fornitori: prezzi per milione di token, separati tra input e output; politiche sui dati diverse tra versioni consumer e API o enterprise; calendari di deprecazione dei modelli. Non citare prezzi precisi: cambiano spesso. Il calcolo del costo per token lo facciamo nella lezione 4 con numeri di esempio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il costo di un prodotto lungo tutta la sua vita, non solo l'acquisto, si chiama <span class="blank" data-risposta="TCO|costo totale di possesso" style="--w:8ch"></span>.</p>
+    <p>Con uno SLA del 99,9% annuo il fermo massimo è di circa <span class="blank" data-risposta="8,76|8.76|8,8|9"></span> ore.</p>
+    <p>La licenza open source che obbliga a dare il codice anche a chi usa il servizio in rete è la <span class="blank" data-risposta="AGPL"></span>.</p>
+    <p>Restare legati a un fornitore perché uscire costa troppo si dice vendor <span class="blank" data-risposta="lock-in|lockin|lock in"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: TCO (o costo totale di possesso), 8,76 (accettati 8,8 e 9), AGPL, lock-in.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Si valutano il prodotto e il fornitore</li>
+      <li>TCO = avvio + esercizio + uscita, su più anni</li>
+      <li>Perpetua, abbonamento, SaaS, open source: libero non è gratis</li>
+    </ul>
+    <ul class="points">
+      <li>SLA: disponibilità, RPO, RTO, penali, esclusioni</li>
+      <li>Lock-in e GDPR si verificano prima di firmare</li>
+      <li><b>All'esame</b>: giustifica una scelta con un TCO e i rischi sui dati</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: la valutazione comparata, dove i dati raccolti finora entrano in una matrice con pesi e punteggi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

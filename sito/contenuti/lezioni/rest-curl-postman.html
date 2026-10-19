@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Testare le API con curl e Postman · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Web service · Lezione 11</p>
+  <h1>Testare le API<br>con curl e Postman</h1>
+  <p class="lead">Un'API funziona quando risponde bene anche alle richieste sbagliate. Oggi BiblioAPI finisce sotto esame: a mano, con una collezione di test e con uno script.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>curl, Postman e Bruno, test automatici, casi negativi, OpenAPI</span></p>
+  <aside class="notes">Obiettivi: usare curl con le opzioni principali e leggerne l'output verboso; organizzare le richieste in una collezione con variabili e test automatici (Postman o Bruno); progettare casi di test positivi e negativi; automatizzare i controlli con uno script; conoscere OpenAPI come documentazione e contratto. Durata indicativa: 3-4 ore. Software: curl (incluso in Windows 10 e 11); Bruno (desktop, open source, nessun account, le collezioni sono file in una cartella) oppure Postman (desktop; senza account offre un client leggero per le singole richieste, per collezioni e ambienti salvati serve l'accesso: verificare la versione installata in laboratorio). Hoppscotch (hoppscotch.io) funziona dal browser ma per chiamare localhost ha bisogno della sua estensione o dell'app desktop. Serve il BiblioServer della lezione 9 sulla porta 8000.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come controlli di solito che un tuo programma funzioni?</h2></div>
+  <div class="poll" data-id="tc-come">
+    <ol><li>Lo eseguo una volta e guardo se va</li><li>Provo anche input sbagliati</li><li>Scrivo test automatici</li><li>Lo fa provare a un compagno</li><li>Se compila, funziona</li></ol>
+  </div>
+  <aside class="notes">Sondaggio sincero, senza giudizio. Di solito vince A. Messaggio della lezione: per un'API le richieste sbagliate sono la norma, non l'eccezione (client scritti da altri, utenti distratti, attaccanti), quindi i casi negativi valgono quanto quelli positivi. La D è più seria di quanto sembri: chi non ha scritto il codice prova cose che l'autore non immagina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché testare un'API</p><h2>Quattro motivi, quattro strumenti</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Esplorare</h3><p class="small muted">Capire come risponde davvero un servizio: curl.</p></div>
+    <div class="card"><p class="num">2</p><h3>Verificare</h3><p class="small muted">Controllare codici, header e corpo: test in Postman o Bruno.</p></div>
+    <div class="card"><p class="num">3</p><h3>Non regredire</h3><p class="small muted">Rieseguire tutto dopo ogni modifica: script e runner.</p></div>
+    <div class="card"><p class="num">4</p><h3>Documentare</h3><p class="small muted">Una collezione o un file OpenAPI dice come si usa l'API.</p></div>
+  </div>
+  <div class="callout">Un test ha sempre tre parti: <b>la richiesta</b>, <b>il risultato atteso</b> scritto prima, <b>il confronto</b>. Senza il risultato atteso è solo una prova.</div>
+  <aside class="notes">Collegare al test di unità in Java (JUnit) che gli studenti conoscono da Informatica: qui testiamo dall'esterno, attraverso la rete, come farebbe un client vero. Sono test di integrazione o "end-to-end" dell'API. La regressione è il motivo più sottovalutato: nella lezione 12 aggiungeremo il CORS al server, e i test di oggi ci diranno se abbiamo rotto qualcosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni opzione di curl a ciò che fa</h2></div>
+  <dl class="puzzle-abbina" data-id="tc-opzioni">
+    <dt><code>-i</code></dt><dd>Mostra anche riga di stato e header della risposta</dd>
+    <dt><code>-v</code></dt><dd>Mostra tutto lo scambio: richiesta inviata e risposta</dd>
+    <dt><code>-X DELETE</code></dt><dd>Sceglie il metodo HTTP</dd>
+    <dt><code>-H "Accept: …"</code></dt><dd>Aggiunge un header alla richiesta</dd>
+    <dt><code>-d @libro.json</code></dt><dd>Invia come corpo il contenuto di un file</dd>
+    <dt><code>-w "%{http_code}"</code></dt><dd>Stampa il codice di stato alla fine</dd>
+  </dl>
+  <aside class="notes">Altre opzioni utili: -s (silenzioso, niente barra di avanzamento), -o file (salva il corpo), -L (segue i redirect), --json '{...}' nelle versioni recenti di curl (dalla 7.82) imposta POST, Content-Type e Accept application/json in un colpo solo. La documentazione completa: curl --help all oppure curl.se/docs/manpage.html. curl è nato nel 1998, lo mantiene lo svedese Daniel Stenberg ed è installato in miliardi di dispositivi, dalle auto agli smartphone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Leggere curl -v</p><h2>Asterisco, maggiore, minore</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:24px;line-height:1.45"><span class="c">* Connected to localhost (127.0.0.1) port 8000</span>
+<span class="k">&gt;</span> GET /api/libri/2 HTTP/1.1
+<span class="k">&gt;</span> Host: localhost:8000
+<span class="k">&gt;</span> User-Agent: curl/8.5.0
+<span class="k">&gt;</span> Accept: */*
+<span class="k">&gt;</span>
+<span class="s">&lt;</span> HTTP/1.1 200 OK
+<span class="s">&lt;</span> Date: Mon, 19 Oct 2026 15:22:22 GMT
+<span class="s">&lt;</span> Content-type: application/json; charset=utf-8
+<span class="s">&lt;</span> Content-length: 75
+<span class="s">&lt;</span>
+{"id":2,"titolo":"Il barone rampante",…}</pre>
+    <ul class="points small">
+      <li><code>*</code> informazioni di curl: DNS, connessione TCP, TLS.</li>
+      <li><code>&gt;</code> righe <b>inviate</b>: la richiesta.</li>
+      <li><code>&lt;</code> righe <b>ricevute</b>: la risposta.</li>
+      <li>La riga vuota separa gli header dal corpo.</li>
+      <li><code>Content-length: 75</code> sono byte, non caratteri.</li>
+    </ul>
+  </div>
+  <aside class="notes">Output reale di curl 8.5 contro il BiblioServer della lezione 9 (le righe sulla barra di avanzamento sono state tolte). È la stessa struttura del messaggio HTTP vista nella lezione 5. Con un URL https le righe con * mostrano anche la negoziazione TLS e il certificato del server: è un ottimo strumento di diagnosi. Domanda: chi ha aggiunto l'header Host? (curl, da solo: in HTTP/1.1 è obbligatorio, e permette a un server con un solo IP di ospitare molti siti.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un giro completo di BiblioAPI con curl</h2>
+<pre class="code" style="font-size:22px;padding:18px 28px">curl -i http://localhost:8000/api/libri
+curl -i -X POST -H "Content-Type: application/json" -d @libro.json http://localhost:8000/api/libri
+curl -i -X PUT -H "Content-Type: application/json" -d @libro2.json http://localhost:8000/api/libri/4
+curl -v -X DELETE http://localhost:8000/api/libri/4</pre>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riavvia BiblioServer: i dati tornano ai tre libri iniziali.</li>
+      <li>Prepara <b>libro.json</b> e <b>libro2.json</b> (stesso libro, anno diverso).</li>
+      <li>Esegui i comandi e salva l'output in <b>giro-curl.txt</b>, aggiungendo <code>&gt;&gt; giro-curl.txt 2&gt;&amp;1</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 200, poi <b>201</b> con <code>Location: /api/libri/4</code>, poi 200 con l'anno nuovo, poi <code>&lt; HTTP/1.1 204 No Content</code> senza corpo.</div>
+  </div>
+  <aside class="notes">In PowerShell usare curl.exe. Il reindirizzamento 2&gt;&amp;1 serve perché curl scrive l'output di -v sullo standard error, non sullo standard output: senza, nel file finirebbe solo il corpo. Se il POST risponde 400, il JSON nel file è sbagliato: controllare virgolette e virgole (un buon trucco è aprirlo nel browser o in VS Code, che segnala gli errori). Se risponde con un id diverso da 4, il server non è stato riavviato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>curl con <code>-d @libro.json</code> ma senza <code>-X</code>: che cosa parte verso BiblioAPI?</h2></div>
+  <div class="poll" data-id="tc-d" data-tipo="quiz" data-risposta="C">
+    <ol><li>Una GET con il file nella query string</li><li>Un POST con Content-Type application/json</li><li>Un POST con Content-Type application/x-www-form-urlencoded</li><li>Un errore: senza -X curl non sa che metodo usare</li></ol>
+    <p class="why">Con -d curl passa da solo al metodo POST, ma dichiara il corpo come dati di un modulo HTML. Il nostro server non controlla il tipo e funziona lo stesso; un'API più severa risponderebbe 415 Unsupported Media Type. Per il JSON serve -H "Content-Type: application/json".</p>
+  </div>
+  <aside class="notes">Verificato con curl -v: compare "&gt; Content-Type: application/x-www-form-urlencoded". La B è il tranello: il file si chiama .json, ma curl non guarda l'estensione. Conseguenza pratica: un test che "passa" con curl può fallire con un client vero, o viceversa. Se il server controlla il Content-Type (miglioria proposta nella lezione 9), questo diventa un buon caso negativo da aggiungere alla collezione. Con -d e senza -X, aggiungere -X POST è inutile: curl stesso lo segnala in modalità verbosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oltre la riga di comando</p><h2>Client grafici per le API</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Postman</h3><p class="small">Il più diffuso nelle aziende. Collezioni, ambienti, test in JavaScript, runner, documentazione.</p><p class="small muted">Per salvare collezioni e ambienti serve un account.</p></div>
+    <div class="card fill"><h3>Bruno</h3><p class="small">Open source, funziona offline e senza account. Le collezioni sono file di testo in una cartella: si mettono su Git.</p></div>
+    <div class="card"><h3>Hoppscotch</h3><p class="small">Open source, si usa dal browser. Per chiamare <code>localhost</code> serve la sua estensione o l'app.</p></div>
+  </div>
+  <ul class="points small">
+    <li><b>Collezione</b>: le richieste di un'API, in cartelle.</li>
+    <li><b>Ambiente</b>: variabili come <code>{{base}}</code> = <code>http://localhost:8000/api</code>, da cambiare per passare dal PC al server di produzione.</li>
+  </ul>
+  <aside class="notes">Tutti e tre importano comandi curl incollati, collezioni Postman e file OpenAPI. In laboratorio consigliamo Bruno per evitare gli account; chi usa già Postman con un account personale può continuare. Le variabili d'ambiente servono anche per i segreti: un token si mette in una variabile segreta e non nella collezione condivisa. In Bruno i file .bru stanno nella cartella della collezione: aprendoli con un editor si vede che sono testo leggibile, quindi un compagno può rivedere i test in una pull request come fosse codice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Test automatici</p><h2>Stesso test, due strumenti</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>Postman</b> · scheda Scripts, Post-response</p>
+<pre class="code" style="font-size:22px;line-height:1.45">pm.test(<span class="s">"201 Created"</span>, () =&gt;
+  pm.response.to.have.status(201));
+pm.test(<span class="s">"ha un id numerico"</span>, () =&gt; {
+  <span class="k">const</span> libro = pm.response.json();
+  pm.expect(libro.id).to.be.a(<span class="s">"number"</span>);
+  pm.collectionVariables.set(<span class="s">"id"</span>, libro.id);
+});</pre>
+    </div>
+    <div class="stack">
+      <p class="small"><b>Bruno</b> · scheda Tests</p>
+<pre class="code" style="font-size:22px;line-height:1.45">test(<span class="s">"201 Created"</span>, () =&gt; {
+  expect(res.getStatus()).to.equal(201);
+});
+test(<span class="s">"ha un id numerico"</span>, () =&gt; {
+  <span class="k">const</span> libro = res.getBody();
+  expect(libro.id).to.be.a(<span class="s">"number"</span>);
+  bru.setVar(<span class="s">"id"</span>, libro.id);
+});</pre>
+    </div>
+  </div>
+  <p class="small">Il test salva l'id del libro creato: la richiesta successiva usa <code>{{base}}/libri/{{id}}</code>.</p>
+  <aside class="notes">Entrambi usano JavaScript e le asserzioni in stile Chai (expect(...).to.equal, to.be.a, to.have.property). Nelle versioni meno recenti di Postman la scheda si chiamava "Tests"; nelle attuali è in Scripts, Post-response. In Bruno esiste anche la scheda Assert, dichiarativa: res.status eq 201, senza scrivere codice. Concatenare le richieste salvando l'id rende la collezione indipendente dai dati: non serve sapere in anticipo che il nuovo libro avrà id 4.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 35 minuti</span></p>
+  <h2>La collezione di test di BiblioAPI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Bruno (o Postman) crea la collezione <b>BiblioAPI</b> e un ambiente <b>locale</b> con <code>base</code> = <code>http://localhost:8000/api</code>.</li>
+      <li>Aggiungi in ordine: elenco, POST nuovo libro, GET <code>{{id}}</code>, PUT <code>{{id}}</code>, DELETE <code>{{id}}</code>, GET <code>{{id}}</code>.</li>
+      <li>Ogni richiesta ha almeno un test sul codice; il POST salva <code>id</code>.</li>
+      <li>Avvia il <b>Runner</b> sull'intera collezione, due volte di fila.</li>
+      <li>Esporta la collezione (in Bruno: la cartella in zip).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 6 richieste, tutte verdi, anche alla seconda esecuzione: 200, 201, 200, 200, 204, <b>404</b>. Se la seconda volta qualcosa fallisce, un test dipende da un id scritto a mano.</div>
+  </div>
+  <aside class="notes">L'ultima GET deve aspettarsi 404: è un test positivo di un caso negativo (il libro cancellato non c'è più). Errore tipico: scrivere l'id 4 a mano; alla seconda esecuzione il POST crea il 5 e i test successivi falliscono o, peggio, passano su un altro libro. In Postman l'esportazione è Collection v2.1 in JSON; in Bruno basta comprimere la cartella della collezione. Conservare tutto: è la base del compito per casa e servirà nella lezione 12 per verificare di non aver rotto niente aggiungendo il CORS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine la collezione: perché ogni test regga da solo</h2></div>
+  <ol class="puzzle-ordina" data-id="tc-catena">
+    <li>POST /libri e salva l'id ricevuto</li>
+    <li>GET /libri/{{id}}: il libro esiste e ha il titolo inviato</li>
+    <li>PUT /libri/{{id}} con l'anno cambiato</li>
+    <li>GET /libri/{{id}}: l'anno è quello nuovo</li>
+    <li>DELETE /libri/{{id}}: 204</li>
+    <li>GET /libri/{{id}}: 404</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. È lo schema "crea, leggi, modifica, rileggi, cancella, verifica" e lascia il server com'era all'inizio: per questo la collezione si può rieseguire all'infinito. Domanda: perché rileggere dopo il PUT, se il PUT ha già risposto con il JSON aggiornato? (Perché la risposta del PUT dice che cosa il server crede di aver salvato; la GET successiva verifica che lo abbia salvato davvero.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I casi negativi</p><h2>Le richieste sbagliate che un'API deve reggere</h2></div>
+  <table class="data compact">
+    <tr><th>Richiesta</th><th>Che cosa simula</th><th>Atteso</th></tr>
+    <tr><td class="mono">GET /api/libri/9999</td><td>Un id che non esiste</td><td><b>404</b></td></tr>
+    <tr><td class="mono">GET /api/libri/abc</td><td>Un id che non è un numero</td><td><b>400</b></td></tr>
+    <tr><td class="mono">POST /api/libri  {"titolo":"X"}</td><td>Campi obbligatori mancanti</td><td><b>400</b></td></tr>
+    <tr><td class="mono">POST /api/libri  {"titolo": </td><td>JSON non valido</td><td><b>400</b></td></tr>
+    <tr><td class="mono">PATCH /api/libri</td><td>Un metodo non previsto</td><td><b>405</b></td></tr>
+    <tr><td class="mono">GET /api/autori</td><td>Una risorsa che non esiste</td><td><b>404</b></td></tr>
+  </table>
+  <p class="small">In ogni caso il server deve restare acceso e rispondere con un JSON d'errore: mai un 500, mai uno stack trace.</p>
+  <aside class="notes">Il BiblioServer della lezione 9 supera tutti questi casi tranne, a seconda di com'è scritto, GET /api/autori: non c'è un contesto registrato, quindi il JDK risponde 404 con una pagina HTML e non con JSON. Si può correggere registrando un contesto "/" che risponde sempre 404 in JSON. Uno stack trace nella risposta è anche un problema di sicurezza: rivela classi, versioni e percorsi a un attaccante (Unità 1, OWASP: Security Misconfiguration). Un caso in più per i curiosi: un titolo lunghissimo, di centomila caratteri. Che cosa dovrebbe fare il server? (Rifiutarlo con 400 o 413 Content Too Large.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Tutti i test della collezione sono verdi. Che cosa sappiamo davvero?</h2></div>
+  <div class="poll" data-id="tc-verdi" data-tipo="quiz" data-risposta="A">
+    <ol><li>Che l'API si comporta come atteso nei casi che abbiamo provato</li><li>Che l'API non ha bug</li><li>Che l'API è sicura</li><li>Che l'API regge mille utenti insieme</li></ol>
+    <p class="why">Un test controlla solo ciò che descrive. I bug possono stare nei casi non provati; la sicurezza e il carico richiedono test diversi, come le scansioni di vulnerabilità e i test di carico.</p>
+  </div>
+  <aside class="notes">Introduce la citazione di Dijkstra nella slide successiva. Per il carico esistono strumenti come k6 o JMeter; per la sicurezza scanner come OWASP ZAP, da usare solo su sistemi propri o autorizzati. Anche la copertura dei test (quante righe di codice vengono eseguite) dice quanto si è provato, non quanto il codice sia corretto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il limite di ogni test</h2></div>
+  <figure class="citazione">
+    <blockquote>Il test dei programmi può servire a mostrare la presenza di bug, ma mai a dimostrarne l'assenza!</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, premio Turing 1972, in <i>Notes on Structured Programming</i>, 1970</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI dei client per API e gli agenti di programmazione propongono casi di test leggendo le risposte o la documentazione dell'API. Sono un ottimo punto di partenza, ma i casi negativi importanti e il risultato atteso deve sceglierli chi conosce il problema.</p></div>
+  <aside class="notes">Originale: "Program testing can be used to show the presence of bugs, but never to show their absence!", nelle note EWD249 del 1970, poi nel libro Structured Programming (1972) con Dahl e Hoare. Traduzione nostra. Sul box Oggi: Postman ha integrato un assistente AI nel 2023 e altri strumenti hanno funzioni simili; non nominare prestazioni o percentuali. Esercizio veloce: chiedere a un assistente i casi negativi per POST /api/libri e confrontarli con la tabella di due slide fa. Che cosa ha aggiunto? Che cosa ha dimenticato?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Uno script che controlla tutto in un secondo</h2>
+  <div class="cols-2" style="grid-template-columns:1.5fr 1fr">
+<pre class="code" style="font-size:20px;line-height:1.45"><span class="c">@echo off</span>
+<span class="c">rem test-api.bat: in un file .bat il % si scrive %%</span>
+set B=http://localhost:8000/api/libri
+curl -s -o NUL -w "GET elenco      %%{http_code}\n" %B%
+curl -s -o NUL -w "POST nuovo      %%{http_code}\n" ^
+  -X POST -H "Content-Type: application/json" -d @libro.json %B%
+curl -s -o NUL -w "GET 4           %%{http_code}\n" %B%/4
+curl -s -o NUL -w "DELETE 4        %%{http_code}\n" -X DELETE %B%/4
+curl -s -o NUL -w "GET 4 di nuovo  %%{http_code}\n" %B%/4
+curl -s -o NUL -w "POST senza dati %%{http_code}\n" -X POST -d "{}" %B%
+curl -s -o NUL -w "PATCH elenco    %%{http_code}\n" -X PATCH %B%</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Salva <b>test-api.bat</b> accanto a libro.json.</li>
+        <li>Riavvia il server ed esegui lo script.</li>
+        <li>Aggiungi due casi negativi della tabella.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> a server appena avviato: 200, 201, 200, 204, 404, 400, 405, uno per riga.</div>
+    </div>
+  </div>
+  <aside class="notes">Output verificato con il BiblioServer della lezione 9. -o NUL butta via il corpo (su Linux e macOS -o /dev/null, e nello script .sh il % non va raddoppiato); -w stampa il codice. Il ^ a fine riga continua il comando sulla riga successiva nel Prompt dei comandi. Lo script dipende dall'id 4, quindi va eseguito a server appena riavviato: è proprio il limite che la collezione con {{id}} risolve. Miglioria: confrontare automaticamente con i codici attesi e stampare OK o ERRORE (in batch con if, oppure riscrivendo lo script in Java con HttpClient o in Python). In azienda questi controlli girano a ogni modifica del codice, in una pipeline di integrazione continua; con Postman c'è Newman, con Bruno il comando bru run (entrambi richiedono Node.js).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il contratto dell'API</p><h2>OpenAPI: la documentazione che le macchine sanno leggere</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:22px;line-height:1.45">openapi: 3.1.0
+info: { title: BiblioAPI, version: <span class="s">"1.0"</span> }
+paths:
+  /api/libri/{id}:
+    get:
+      summary: Legge un libro
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        <span class="s">"200"</span>: { description: Il libro }
+        <span class="s">"404"</span>: { description: Libro non trovato }</pre>
+    <div class="stack">
+      <p class="small">Da un file OpenAPI si generano una pagina di documentazione interattiva, una collezione per Postman o Bruno e perfino il codice dei client.</p>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli agenti AI usano descrizioni come questa per capire quali operazioni esistono e con quali parametri chiamarle. Un'API ben documentata è un'API che anche un agente sa usare, e sbaglia meno.</p></div>
+    </div>
+  </div>
+  <aside class="notes">OpenAPI nasce dalla specifica Swagger (2011), donata nel 2015 alla OpenAPI Initiative della Linux Foundation; la 3.1 è del 2021. Swagger UI è lo strumento più noto per la documentazione interattiva. Con un file OpenAPI i test possono diventare "test di contratto": si verifica che le risposte reali rispettino lo schema dichiarato. Nella prova d'esame, scrivere gli endpoint in forma tabellare con metodo, URI, parametri e codici è l'equivalente "su carta" di questo file. Per i curiosi: la versione completa di BiblioAPI in OpenAPI è un ottimo esercizio extra del compito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Il lucchetto del tester</h2></div>
+  <div class="puzzle-codice" data-risposta="4054" data-aiuto="la seconda e la terza cifra vengono dal codice di un metodo non consentito">
+    <ul class="points small">
+      <li>1ª cifra: la prima cifra del codice per GET di un libro cancellato</li>
+      <li>2ª e 3ª cifra: le ultime due cifre del codice per PATCH su /api/libri</li>
+      <li>4ª cifra: quante richieste ha la catena del puzzle, prima della DELETE</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 404, 405 Method Not Allowed, e quattro richieste prima della DELETE: POST, GET, PUT, GET.</div>
+  </div>
+  <aside class="notes">Codice: 4054 (4 da 404; 05 da 405; 4 richieste prima della DELETE nella catena: POST, GET, PUT, GET). La quarta cifra fa rileggere il puzzle: alcuni contano anche la DELETE (5) o tutta la catena (6).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'opzione di curl che mostra anche la richiesta inviata è <span class="blank" data-risposta="-v|--verbose"></span>.</p>
+    <p>Con <code>-d</code> e senza <code>-X</code>, curl usa il metodo <span class="blank" data-risposta="POST"></span>.</p>
+    <p>Un metodo non previsto sulla risorsa deve ricevere <span class="blank" data-risposta="405"></span>.</p>
+    <p>Il formato standard per descrivere un'API REST si chiama <span class="blank" data-risposta="OpenAPI|Swagger" style="--w:8ch"></span>.</p>
+    <p>Il test può mostrare la presenza dei bug, mai la loro <span class="blank" data-risposta="assenza" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: -v (accettato --verbose), POST, 405, OpenAPI (accettato Swagger, il nome storico), assenza.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>curl: -i, -v, -X, -H, -d @file, -w</li>
+      <li>Collezioni, ambienti, variabili come {{id}}</li>
+      <li>Ogni test: richiesta, atteso, confronto</li>
+    </ul>
+    <ul class="points">
+      <li>I casi negativi contano quanto i positivi</li>
+      <li>Script e runner per non regredire</li>
+      <li>OpenAPI: il contratto leggibile da persone e macchine</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: in un progetto, una tabella di casi di test con richiesta, risultato atteso e motivo dimostra che hai pensato anche a ciò che può andare storto.</div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: BiblioAPI arriva in una pagina web con fetch, e incontreremo il CORS.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

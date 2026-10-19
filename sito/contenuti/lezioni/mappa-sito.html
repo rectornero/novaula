@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mappa del sito e wireframe · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Realizzare un sito web</p>
+  <h1>Mappa del sito<br>e wireframe</h1>
+  <p class="lead">Il progetto generale: come si organizzano i contenuti, come ci si muove tra le pagine e come si disegna una pagina prima di scriverne il codice.</p>
+  <aside class="notes">Obiettivi: conoscere i componenti dell'architettura dell'informazione, scegliere una struttura di navigazione, fare l'inventario dei contenuti, disegnare la mappa del sito e i wireframe mobile e desktop. Si riparte dal brief di squadra della lezione precedente: tenerlo aperto. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Cerchi un'informazione in un sito: che cosa usi per primo?</h2></div>
+  <div class="poll" data-id="u5-mappa-ricerca">
+    <ol><li>Il menu in alto</li><li>La barra di ricerca del sito</li><li>Torno su Google e cerco lì</li><li>Scorro la home finché la trovo</li></ol>
+  </div>
+  <aside class="notes">Molti risponderanno C: è un dato importante. Vuol dire che spesso si atterra su una pagina interna e non sulla home, quindi ogni pagina deve dire dove sei e come proseguire (titolo chiaro, menu, breadcrumb). Ponte verso la navigazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Architettura dell'informazione</p><h2>Quattro sistemi dietro ogni sito ben fatto</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Organizzazione</h3><p class="small muted">Come raggruppi i contenuti: per argomento, per pubblico, per data, per attività.</p></div>
+    <div class="card"><p class="num">2</p><h3>Etichette</h3><p class="small muted">Come chiami le voci: "Iscriviti" dice più di "Modulistica".</p></div>
+    <div class="card"><p class="num">3</p><h3>Navigazione</h3><p class="small muted">Come ti muovi: menu, breadcrumb, link nel testo, piè di pagina.</p></div>
+    <div class="card"><p class="num">4</p><h3>Ricerca</h3><p class="small muted">Come trovi senza navigare: una casella, filtri, risultati.</p></div>
+  </div>
+  <p class="small muted">Modello di Louis Rosenfeld e Peter Morville, "Information Architecture for the World Wide Web", 1998.</p>
+  <aside class="notes">Il libro è noto come "polar bear book" per l'orso in copertina. Esercizio orale: prendere il sito della scuola e chiedere di indicare un esempio di ciascun sistema, e un'etichetta poco chiara (classici: "Albo", "Area riservata", "Modulistica"). Sulle etichette: usare le parole degli utenti, non quelle dell'organizzazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strutture</p><h2>Quattro forme per collegare le pagine</h2></div>
+  <div class="cols-4">
+    <div class="card"><svg viewBox="0 0 300 170" width="100%" height="170" aria-hidden="true"><g stroke="#7e45cc" stroke-width="5" fill="none"><line x1="150" y1="30" x2="60" y2="100"/><line x1="150" y1="30" x2="150" y2="100"/><line x1="150" y1="30" x2="240" y2="100"/><line x1="60" y1="100" x2="30" y2="150"/><line x1="60" y1="100" x2="90" y2="150"/></g><g fill="#7e45cc"><circle cx="150" cy="30" r="20"/><circle cx="60" cy="100" r="16"/><circle cx="150" cy="100" r="16"/><circle cx="240" cy="100" r="16"/><circle cx="30" cy="150" r="12"/><circle cx="90" cy="150" r="12"/></g></svg><h3>Gerarchica</h3><p class="small muted">Ad albero: home, sezioni, pagine. La più comune.</p></div>
+    <div class="card"><svg viewBox="0 0 300 170" width="100%" height="170" aria-hidden="true"><g stroke="#7e45cc" stroke-width="5"><line x1="30" y1="85" x2="270" y2="85"/></g><g fill="#7e45cc"><circle cx="30" cy="85" r="18"/><circle cx="110" cy="85" r="18"/><circle cx="190" cy="85" r="18"/><circle cx="270" cy="85" r="18"/></g></svg><h3>Lineare</h3><p class="small muted">Un passo dopo l'altro: tutorial, iscrizione, acquisto.</p></div>
+    <div class="card"><svg viewBox="0 0 300 170" width="100%" height="170" aria-hidden="true"><g stroke="#7e45cc" stroke-width="5"><line x1="60" y1="40" x2="240" y2="40"/><line x1="60" y1="40" x2="150" y2="140"/><line x1="240" y1="40" x2="150" y2="140"/><line x1="60" y1="40" x2="260" y2="130"/><line x1="150" y1="140" x2="260" y2="130"/><line x1="30" y1="120" x2="150" y2="140"/><line x1="30" y1="120" x2="240" y2="40"/></g><g fill="#7e45cc"><circle cx="60" cy="40" r="16"/><circle cx="240" cy="40" r="16"/><circle cx="150" cy="140" r="16"/><circle cx="260" cy="130" r="16"/><circle cx="30" cy="120" r="16"/></g></svg><h3>A rete</h3><p class="small muted">Tutto collegato a tutto, come Wikipedia.</p></div>
+    <div class="card"><svg viewBox="0 0 300 170" width="100%" height="170" aria-hidden="true"><g stroke="#7e45cc" stroke-width="5" fill="none"><line x1="150" y1="25" x2="70" y2="85"/><line x1="150" y1="25" x2="230" y2="85"/><line x1="70" y1="85" x2="70" y2="150"/><line x1="70" y1="150" x2="150" y2="150"/><line x1="150" y1="150" x2="230" y2="150"/><line x1="230" y1="85" x2="150" y2="150"/></g><g fill="#7e45cc"><circle cx="150" cy="25" r="18"/><circle cx="70" cy="85" r="16"/><circle cx="230" cy="85" r="16"/><circle cx="70" cy="150" r="12"/><circle cx="150" cy="150" r="12"/><circle cx="230" cy="150" r="12"/></g></svg><h3>Mista</h3><p class="small muted">Albero più percorsi lineari e link trasversali.</p></div>
+  </div>
+  <aside class="notes">Il sito della squadra sarà quasi sempre misto: struttura gerarchica per le sezioni, percorso lineare per l'iscrizione (dati, conferma, grazie), link trasversali dal testo. Chiedere alla classe di trovare un esempio reale per ogni struttura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La "regola dei tre clic" è…</h2></div>
+  <div class="poll" data-id="u5-mappa-treclic" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un criterio delle WCAG 2.2</li><li>Un requisito di Google per indicizzare una pagina</li><li>Un mito: conta che ogni clic sia chiaro, non quanti sono</li><li>Un obbligo della Legge Stanca per i siti della PA</li></ol>
+    <p class="why">Non esiste in nessuna norma. Uno studio di Joshua Porter (2003) e le analisi del Nielsen Norman Group mostrano che gli utenti non abbandonano dopo tre clic se a ogni passo sanno di essere sulla strada giusta. Una gerarchia piatta con 40 voci di menu è peggio di quattro clic chiari.</p>
+  </div>
+  <aside class="notes">Il tranello è la familiarità: tutti l'hanno sentita. Fonti: Joshua Porter, "Testing the Three-Click Rule", User Interface Engineering, 2003; Nielsen Norman Group, "The 3-Click Rule for Navigation Is False". Resta vero che i contenuti più richiesti devono essere vicini alla home: la profondità conta meno della chiarezza delle etichette.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>L'inventario dei contenuti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri un foglio di calcolo condiviso <b>inventario-contenuti</b>.</li>
+      <li>Colonne: <b>ID</b>, <b>Contenuto</b>, <b>Tipo</b> (testo, foto, PDF, modulo), <b>Chi lo fornisce</b>, <b>Ogni quanto cambia</b>.</li>
+      <li>Inserisci almeno 15 contenuti presi dal brief e dall'intervista al cliente.</li>
+      <li>Ognuno di voi raggruppa i contenuti da solo in 4-6 gruppi e dà un nome a ogni gruppo.</li>
+      <li>Confrontate i raggruppamenti: dove coincidono nasce una sezione.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni contenuto ha un responsabile. Se nessuno lo fornisce, o è da eliminare o diventa un rischio del progetto.</div>
+  </div>
+  <aside class="notes">Il punto 4 è un card sorting aperto fatto in piccolo: di solito si fa con utenti veri e cartoncini (o strumenti online). Fa emergere etichette diverse per la stessa cosa ("Eventi" o "Calendario"?). Nel compito per casa la squadra lo ripete con almeno 3 persone esterne.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La mappa del sito</p><h2>Il sito del club di scacchi, dall'alto</h2></div>
+  <div class="org">
+    <div class="org-box top">Home</div>
+    <div class="org-row" style="--l:9%;--r:9%">
+      <div class="org-box">Chi siamo</div>
+      <div class="org-box acc">Corsi</div>
+      <div class="org-box acc">Tornei</div>
+      <div class="org-box">Notizie</div>
+      <div class="org-box">Contatti</div>
+    </div>
+  </div>
+  <div class="cols-2">
+    <div class="callout small"><b>Corsi</b> → Principianti · Avanzati · Orari e costi</div>
+    <div class="callout small"><b>Tornei</b> → Calendario · Iscrizione (modulo → conferma) · Classifiche</div>
+  </div>
+  <aside class="notes">Le sezioni in colore sono quelle legate agli obiettivi SMART del brief (iscrizioni). Far notare il percorso lineare dentro Tornei. Le pagine di servizio (privacy, accessibilità, mappa del sito per gli utenti) vanno nel piè di pagina e non nel menu principale. Regola pratica: 5-7 voci di menu al massimo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni elemento di navigazione al suo uso</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-mappa-navigazione">
+    <dt>Menu hamburger</dt><dd>Nasconde le voci su schermi stretti dietro un'icona</dd>
+    <dt>Breadcrumb</dt><dd>Mostra il percorso: Home › Tornei › Iscrizione</dd>
+    <dt>Piè di pagina</dt><dd>Privacy, contatti, dichiarazione di accessibilità</dd>
+    <dt>Barra di schede in basso</dt><dd>3-5 sezioni principali a portata di pollice su mobile</dd>
+    <dt>Link di salto</dt><dd>"Vai al contenuto": permette di saltare il menu da tastiera</dd>
+  </dl>
+  <aside class="notes">Il link di salto anticipa la lezione sull'accessibilità. Sul menu hamburger: è comodo, ma nasconde le voci; per siti piccoli su desktop meglio un menu visibile. Chiedere: quale di questi elementi c'è sul sito della scuola?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>Disegna la mappa del vostro sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b> (draw.io): si usa senza account, salvando sul dispositivo.</li>
+      <li>Crea un riquadro <b>Home</b> e sotto le sezioni nate dall'inventario.</li>
+      <li>Aggiungi le pagine di secondo livello; colora quelle legate agli obiettivi del brief.</li>
+      <li>Disegna con una freccia tratteggiata ogni percorso lineare (es. iscrizione).</li>
+      <li>Esporta con <b>File › Esporta come › PNG</b>: <b>mappa-sito.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> al massimo 7 voci nel primo livello, nessuna pagina "orfana" (senza un genitore), e ogni contenuto dell'inventario ha una pagina che lo ospita.</div>
+  </div>
+  <aside class="notes">In alternativa: Excalidraw (excalidraw.com, nessun account) o carta e foto. Verificare incrociando l'inventario: aggiungere nel foglio una colonna "Pagina" e riempirla. Se un contenuto non trova posto, manca una pagina o il contenuto non serve.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal disegno alla pagina</p><h2>Wireframe, mockup, prototipo</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Wireframe</h3><p class="small">Scheletro in bianco e nero: blocchi, gerarchia, priorità dei contenuti. Niente colori né foto.</p><p class="chip">bassa fedeltà</p></div>
+    <div class="card soft"><h3>Mockup</h3><p class="small">L'aspetto finale statico: palette, font, immagini vere. Serve per approvare la grafica.</p><p class="chip">alta fedeltà</p></div>
+    <div class="card fill"><h3>Prototipo</h3><p class="small">Si clicca: collega le schermate e simula i percorsi. Serve per i test con gli utenti.</p><p class="chip">interattivo</p></div>
+  </div>
+  <div class="callout">Si disegna prima il <b>mobile</b>: lo schermo piccolo costringe a decidere che cosa conta davvero (approccio "mobile first").</div>
+  <aside class="notes">Il wireframe è economico: cambiarlo costa un minuto, cambiare il codice costa ore. Per l'esame scritto un wireframe a mano con riquadri etichettati (header, menu, hero, card eventi, footer) è perfettamente adeguato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>A che cosa serve soprattutto un wireframe a bassa fedeltà?</h2></div>
+  <div class="poll" data-id="u5-mappa-wireframe" data-tipo="quiz" data-risposta="A">
+    <ol><li>A discutere struttura e priorità senza distrarsi con la grafica</li><li>A far approvare al cliente colori e logo</li><li>A misurare la velocità di caricamento</li><li>A sostituire la mappa del sito</li></ol>
+    <p class="why">Togliendo colori e foto, la discussione resta su che cosa c'è nella pagina e in che ordine. Colori e logo si approvano sul mockup; la velocità si misura sul sito vero; la mappa mostra le pagine, il wireframe l'interno di una pagina.</p>
+  </div>
+  <aside class="notes">La D è il tranello concettuale: mappa = relazioni tra pagine, wireframe = layout di una pagina. Chiedere di dirlo con parole proprie.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti · in squadra</span></p>
+  <h2>Wireframe della home: telefono e desktop</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>excalidraw.com</b> (nessun account). Disegna un riquadro largo 360 e uno largo 1280.</li>
+      <li>Nel telefono metti i blocchi in colonna, in ordine di importanza per le personas.</li>
+      <li>Nel desktop gli stessi blocchi, disposti in 2-3 colonne.</li>
+      <li>Scrivi in ogni blocco il contenuto vero (es. "Prossimo torneo: 12 aprile"), non "lorem ipsum".</li>
+      <li>Esporta come <b>wireframe-home.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nelle due versioni ci sono gli stessi blocchi, nello stesso ordine di lettura, e l'azione principale (es. "Iscriviti al torneo") si vede senza scorrere sul desktop.</div>
+  </div>
+  <aside class="notes">Usare lo strumento rettangolo e testo; lo stile "a mano" di Excalidraw aiuta a non perdersi nella grafica. Sullo "stesso ordine": cambiare l'ordine tra mobile e desktop crea problemi a chi usa tastiera e screen reader (lo vedremo con le WCAG). Far vedere 2 wireframe alla classe e chiedere: qual è il primo blocco che leggete?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La prima legge dell'usabilità</h2></div>
+  <figure class="citazione">
+    <blockquote>Non farmi pensare!</blockquote>
+    <figcaption><b>Steve Krug</b>, consulente di usabilità, titolo e "prima legge" del suo libro "Don't Make Me Think", 2000</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card bad"><h3>Fa pensare</h3><p class="small">"Risorse", "Area soci", un pulsante grigio che forse è cliccabile, un logo che non porta alla home.</p></div>
+    <div class="card ok"><h3>Si capisce da solo</h3><p class="small">"Iscriviti al torneo", link riconoscibili, la stessa posizione del menu in tutte le pagine.</p></div>
+  </div>
+  <aside class="notes">Originale: "Don't make me think!". Traduzione nostra. Krug sostiene che gli utenti non leggono le pagine: le scorrono, scelgono la prima opzione ragionevole e vanno avanti. Quindi la pagina deve essere ovvia. Chiedere a ogni squadra di trovare un'etichetta del proprio wireframe che "fa pensare".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dall'idea al mockup: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-mappa-processo">
+    <li>Obiettivi e personas dal brief</li>
+    <li>Inventario dei contenuti</li>
+    <li>Card sorting con utenti veri</li>
+    <li>Mappa del sito</li>
+    <li>Wireframe mobile e desktop</li>
+    <li>Test del wireframe con 5 persone</li>
+    <li>Mockup con colori e tipografia</li>
+  </ol>
+  <aside class="notes">Il numero 5 viene da Jakob Nielsen, "Why You Only Need to Test with 5 Users" (2000): con 5 utenti si scopre gran parte dei problemi di usabilità, meglio fare più test piccoli che uno grande. Il test del wireframe si fa anche su carta: "dove cliccheresti per iscriverti?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Progettare con l'AI</p><h2>Dalla descrizione allo schermo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Wireframe generati</h3><p>Strumenti di design con AI generano un layout o un prototipo cliccabile da una frase. È un buon punto di partenza, ma tende a produrre pagine tutte uguali: la struttura deve venire dai vostri contenuti, non dal modello.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Ricerca che capisce</h3><p>La ricerca interna "semantica" usa embedding: trova "corso per chi inizia" anche se la pagina dice "livello principianti". Etichette chiare restano comunque il primo aiuto.</p></div>
+  </div>
+  <aside class="notes">Un embedding è un vettore di numeri che rappresenta il significato di un testo: testi simili hanno vettori vicini. Collegare al deck sui big data o alle API degli LLM dell'unità 2, se svolte. Nessun nome di prodotto è necessario: chi vuole può mostrare sulla LIM uno strumento di generazione di interfacce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Mappa e wireframe in una prova scritta</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Mappa ad albero con la home in alto, al massimo tre livelli</li>
+      <li>Accanto a ogni sezione: per quale utente o obiettivo esiste</li>
+      <li>Un wireframe della home a riquadri etichettati</li>
+      <li>Due righe sulla versione mobile</li>
+    </ul>
+    <div class="card soft"><h3>Errore tipico</h3><p class="small">Disegnare la mappa del <b>database</b> o delle cartelle del server al posto delle pagine viste dall'utente. La mappa del sito parla la lingua del visitatore.</p></div>
+  </div>
+  <aside class="notes">Se la traccia comprende un'applicazione web con database, la mappa del sito resta utile e si affianca al modello dei dati. Esercizio: in 10 minuti mappa e wireframe per il sito di una palestra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La struttura ad albero, con home e sezioni, si dice <span class="blank" data-risposta="gerarchica"></span>.</p>
+    <p>Il percorso Home › Tornei › Iscrizione mostrato in cima alla pagina si chiama <span class="blank" data-risposta="breadcrumb|briciole di pane"></span>.</p>
+    <p>Lo scheletro di una pagina senza colori né foto è il <span class="blank" data-risposta="wireframe"></span>.</p>
+    <p>Progettare prima per lo schermo piccolo si dice mobile <span class="blank" data-risposta="first"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: gerarchica, breadcrumb (accettato "briciole di pane"), wireframe, first.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Organizzazione, etichette, navigazione, ricerca</li>
+      <li>Strutture gerarchica, lineare, a rete, mista</li>
+      <li>Inventario e card sorting prima della mappa</li>
+    </ul>
+    <ul class="points">
+      <li>Mappa = pagine e relazioni; wireframe = una pagina</li>
+      <li>Wireframe, mockup, prototipo: fedeltà crescente</li>
+      <li>Mobile first e "non farmi pensare"</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Compito di squadra: mappa del sito, card sorting con 3 persone esterne e wireframe di 3 pagine, mobile e desktop.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

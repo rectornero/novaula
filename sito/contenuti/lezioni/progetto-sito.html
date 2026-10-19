@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il progetto di un sito · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Realizzare un sito web</p>
+  <h1>Il progetto<br>di un sito</h1>
+  <p class="lead">Prima del codice: per chi è il sito, a che cosa serve, che cosa deve fare e come capiremo se ha funzionato.</p>
+  <aside class="notes">Obiettivi: distinguere le fasi del progetto web, scrivere un brief con obiettivi misurabili, descrivere gli utenti con personas e user story, separare requisiti funzionali e non funzionali, scegliere la tecnologia con motivazioni. Da questa lezione parte il progetto di squadra dell'unità: ogni squadra (3-4 studenti) realizza un piccolo sito vero per un'associazione del territorio o un club della scuola. Chiedere già oggi alle squadre di scegliere il "cliente" (meglio se reale e disponibile a una breve intervista). Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il club di scacchi vuole un sito. Da dove parti?</h2></div>
+  <div class="poll" data-id="u5-progetto-partenza">
+    <ol><li>Scelgo colori, logo e font</li><li>Apro l'editor e scrivo l'HTML</li><li>Chiedo al club che cosa deve ottenere</li><li>Cerco un template già pronto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, ma la discussione deve arrivare qui: tutte le opzioni tranne la C sono soluzioni prima di conoscere il problema. Chiedere a chi ha scelto A o B: "e se il club volesse soprattutto raccogliere le iscrizioni al torneo? Il template andrebbe ancora bene?". Ponte verso il concetto di brief.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Anche il Web è nato da un documento di progetto</h2></div>
+  <figure class="citazione">
+    <blockquote>Vaga, ma interessante.</blockquote>
+    <figcaption><b>Mike Sendall</b>, responsabile di Tim Berners-Lee al CERN, a matita sulla copertina della proposta "Information Management: A Proposal", marzo 1989</figcaption>
+  </figure>
+  <div class="callout">Berners-Lee non partì dal codice: descrisse un <b>problema</b> (al CERN le informazioni si perdevano), gli <b>utenti</b> (i fisici) e i <b>requisiti</b> (collegamenti tra documenti, nessun controllo centrale). Il primo sito, info.cern.ch, arrivò dopo.</div>
+  <aside class="notes">Originale: "Vague but exciting...". Traduzione nostra. La copia annotata della proposta è conservata e pubblicata dal CERN (cercare "Information Management: A Proposal CERN"). Il primo sito web fu messo online alla fine del 1990 e reso pubblico nel 1991; il CERN ne ha ricostruito una copia allo stesso indirizzo info.cern.ch. Chiedere: "che cosa rendeva la proposta 'vaga'?" (non diceva ancora come realizzarla, ma era chiarissima sul perché).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo di vita</p><h2>Sei fasi, ognuna produce un documento</h2></div>
+  <table class="data compact">
+    <tr><th>Fase</th><th>Domanda chiave</th><th>Che cosa produce</th></tr>
+    <tr><td><b>Analisi</b></td><td>Per chi e perché?</td><td>Brief, personas, requisiti</td></tr>
+    <tr><td><b>Progettazione</b></td><td>Come è organizzato?</td><td>Mappa del sito, wireframe, scelte tecniche</td></tr>
+    <tr><td><b>Realizzazione</b></td><td>Come lo costruiamo?</td><td>HTML, CSS, contenuti, immagini</td></tr>
+    <tr><td><b>Test</b></td><td>Funziona per tutti?</td><td>Piano di test, report, correzioni</td></tr>
+    <tr><td><b>Pubblicazione</b></td><td>Dove vive?</td><td>Hosting, dominio, HTTPS</td></tr>
+    <tr><td><b>Manutenzione</b></td><td>Chi lo tiene vivo?</td><td>Piano di aggiornamento, backup, statistiche</td></tr>
+  </table>
+  <p class="small muted">Il progetto è iterativo: dai test si torna spesso alla progettazione. Sono le sei tappe di questa unità.</p>
+  <aside class="notes">Collegare al deck "Lavorare a progetti" già visto: lì il backlog e gli sprint, qui il contenuto specifico di un progetto web. Ogni fase corrisponde a una lezione dell'unità e a un pezzo del progetto di squadra (brief, mappa e wireframe, design responsive, SEO, audit di accessibilità, test e pubblicazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine le attività del sito del club</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-progetto-ordine">
+    <li>Intervistare il presidente del club e due soci</li>
+    <li>Scrivere il brief con gli obiettivi misurabili</li>
+    <li>Disegnare la mappa del sito e i wireframe</li>
+    <li>Scrivere HTML e CSS della home</li>
+    <li>Provare il sito con tastiera, telefono e validatore</li>
+    <li>Pubblicarlo su un hosting con HTTPS</li>
+    <li>Aggiornare il calendario dei tornei ogni mese</li>
+  </ol>
+  <aside class="notes">Squadre da 3, 2 minuti. Il dibattito tipico: "i test vanno alla fine?" No, si testa anche durante (un wireframe si prova con gli utenti), ma il test completo del sito finito viene prima della pubblicazione. Far notare che l'ultima voce non finisce mai: la manutenzione è la fase più lunga.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analisi</p><h2>Il brief: una pagina che evita mesi di lavoro inutile</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Committente</b> e referente: chi decide</li>
+      <li><b>Obiettivi</b> misurabili, con una scadenza</li>
+      <li><b>Pubblico</b>: chi userà il sito, da quale dispositivo</li>
+      <li><b>Contenuti</b>: che cosa c'è già, chi scrive il resto</li>
+      <li><b>Vincoli</b>: budget, tempi, tecnologie, norme</li>
+      <li><b>Criteri di successo</b>: come capiremo che ha funzionato</li>
+    </ul>
+    <div class="card soft"><h3>Obiettivo SMART</h3><p>Specifico, Misurabile, Raggiungibile, Rilevante, con un Tempo.</p><p class="small"><b>No:</b> "far conoscere il club".</p><p class="small"><b>Sì:</b> "40 iscrizioni online al torneo di primavera entro il 15 marzo".</p></div>
+  </div>
+  <aside class="notes">Il brief nasce da un'intervista al committente. Domande utili: che cosa deve succedere grazie al sito? Chi vi chiede informazioni oggi e come? Quali siti vi piacciono e perché? Chi aggiornerà i contenuti? Sottolineare che "chi aggiorna" è un vincolo enorme: se il club non sa usare Git, un sito statico pubblicato con GitHub va bene solo se c'è uno studente che se ne occupa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale obiettivo puoi davvero verificare alla fine?</h2></div>
+  <div class="poll" data-id="u5-progetto-smart" data-tipo="quiz" data-risposta="D">
+    <ol><li>Dare al club un'immagine moderna e giovane</li><li>Comparire primi su Google per "scacchi"</li><li>Usare le tecnologie web più recenti</li><li>Ridurre del 50% le telefonate per gli orari entro dicembre</li></ol>
+    <p class="why">Solo la D ha un numero, una scadenza e un modo per misurarla (contare le telefonate prima e dopo). La B sembra misurabile ma non è raggiungibile: "scacchi" è una ricerca nazionale dominata da siti enormi; un obiettivo sensato sarebbe locale, per esempio "scacchi Bari corsi".</p>
+  </div>
+  <aside class="notes">La B è il tranello: è misurabile, ma non realistica, e confonde il mezzo (Google) con il fine (iscrizioni, contatti). Anticipa la lezione sulla SEO locale. A e C sono desideri, non obiettivi: chiedere come trasformarli (es. A diventa "almeno 8 studenti su 10 di un test lo trovano adatto ai giovani").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli utenti</p><h2>Personas: persone inventate, bisogni veri</h2></div>
+  <p class="lead">Una persona riassume un gruppo di utenti reali emerso dalle interviste. Gira le carte.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Giulia, 15 anni</h3><p>Studentessa di prima, usa solo il telefono.</p></div><div class="retro"><p><b>Vuole:</b> sapere quando c'è il corso per principianti e iscriversi in un minuto.</p><p class="muted small">Story: come studentessa voglio iscrivermi dal telefono per non dover passare in segreteria.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Marco, 52 anni</h3><p>Genitore, legge da PC in ufficio.</p></div><div class="retro"><p><b>Vuole:</b> orari, costi, chi sono gli istruttori, come contattarli.</p><p class="muted small">Story: come genitore voglio vedere costi e orari per decidere se iscrivere mio figlio.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Prof.ssa Ferri</h3><p>Referente del club, poco tempo, ipovedente.</p></div><div class="retro"><p><b>Vuole:</b> pubblicare una notizia in 5 minuti e leggere il sito con lo zoom al 200%.</p><p class="muted small">Story: come referente voglio aggiornare il calendario senza chiedere a un tecnico.</p></div></div>
+  </div>
+  <aside class="notes">Le user story le abbiamo già viste in "Lavorare a progetti" (formato: come RUOLO voglio AZIONE per SCOPO). La terza persona introduce di proposito l'accessibilità: non è un requisito "in più", è un utente. Errore da evitare: personas inventate a tavolino senza aver parlato con nessuno.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Fai l'analisi di un sito che esiste già</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il sito di un'associazione o di un club della tua zona (o quello del cliente della squadra).</li>
+      <li>Crea il file <b>analisi-sito.md</b> con tre titoli: <code>## Obiettivi</code>, <code>## Utenti</code>, <code>## Problemi</code>.</li>
+      <li>Deduci 2 obiettivi del sito e 3 tipi di utenti.</li>
+      <li>Aprilo anche dal telefono (o con <code>Ctrl+Shift+M</code> negli Strumenti per sviluppatori) e trova 3 problemi concreti.</li>
+      <li>Per ogni problema scrivi pagina, utente danneggiato e proposta.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni problema ha la forma "Pagina Contatti · Marco · il numero di telefono non è cliccabile · usare un link <code>tel:</code>". Niente giudizi vaghi come "è brutto".</div>
+  </div>
+  <aside class="notes">Se un sito di associazione non è disponibile, usare il sito della scuola o quello del comune (attenzione: sono siti della PA, utili anche per la lezione sull'accessibilità). Problemi frequenti: orari in PDF o in immagine, nessun indirizzo cliccabile, menu che su mobile non si apre, ultime notizie vecchie di anni. Far leggere 2-3 analisi ad alta voce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I requisiti</p><h2>Che cosa fa il sito e come lo fa</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Funzionali: che cosa fa</h3><ul class="points"><li>Il visitatore si iscrive al torneo con un modulo</li><li>Il calendario mostra gli eventi del mese</li><li>La referente pubblica una notizia</li></ul></div>
+    <div class="card soft"><h3>Non funzionali: come lo fa</h3><ul class="points"><li>Home caricata in meno di 2,5 s su rete mobile</li><li>Conforme alle WCAG 2.2 livello AA</li><li>Dati del modulo trattati secondo il GDPR</li></ul></div>
+  </div>
+  <div class="callout">Un requisito è buono se è <b>verificabile</b>: alla fine qualcuno deve poter dire "sì, c'è" oppure "no, manca".</div>
+  <aside class="notes">I non funzionali riguardano qualità: prestazioni, sicurezza, accessibilità, usabilità, compatibilità, manutenibilità. Il valore di 2,5 secondi viene dalla soglia "buona" del Largest Contentful Paint di Google (lo vedremo in Web Design). Ricordare che per i siti della PA, scuole statali comprese, l'accessibilità è un obbligo di legge, non una scelta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale requisito è NON funzionale?</h2></div>
+  <div class="poll" data-id="u5-progetto-nf" data-tipo="quiz" data-risposta="B">
+    <ol><li>L'utente può scaricare il regolamento del torneo in PDF</li><li>Ogni pagina si può usare solo con la tastiera</li><li>Il visitatore filtra gli eventi per mese</li><li>Chi si iscrive riceve un'email di conferma</li></ol>
+    <p class="why">La B descrive una qualità di tutto il sito (accessibilità), non una funzione in più: è non funzionale. Le altre sono cose che il sistema fa per l'utente. Molti scelgono D pensando che l'email sia "tecnica", ma inviare una conferma è un comportamento del sistema.</p>
+  </div>
+  <aside class="notes">Domanda di approfondimento: "Le email partono entro 1 minuto" sarebbe invece non funzionale (prestazioni). Utile per l'orale: saper classificare un requisito e motivare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti · in squadra</span></p>
+  <h2>Il brief della vostra squadra, versione 1</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Create un documento condiviso <b>brief-squadra.md</b> (o Google Docs) con le sei voci del brief.</li>
+      <li>Scrivete 2 obiettivi SMART e 2 personas.</li>
+      <li>Elencate almeno 8 requisiti, ognuno marcato F o NF.</li>
+      <li>Date a ogni requisito una priorità MoSCoW: <b>M</b>ust, <b>S</b>hould, <b>C</b>ould, <b>W</b>on't.</li>
+      <li>Scambiate il brief con un'altra squadra: segnano un requisito non verificabile.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 3 requisiti NF, al massimo metà dei requisiti "Must", e una riga "Won't" (che cosa NON farete, per esempio un'area riservata con login).</div>
+  </div>
+  <aside class="notes">MoSCoW: tecnica di priorità diffusa nei metodi agili. Il "Won't" protegge dal "feature creep": la squadra ha poche settimane. Se una squadra non ha ancora un cliente reale, assegnare uno scenario: club di robotica della scuola, biblioteca di quartiere, associazione sportiva dilettantistica, gruppo di volontari della protezione civile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I vincoli</p><h2>Le regole che un sito vero deve rispettare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Privacy</h3><p class="small">Un modulo raccoglie dati personali: informativa GDPR, solo i dati necessari, cookie di profilazione solo con consenso (linee guida del Garante, 2021).</p></div>
+    <div class="card"><p class="num">2</p><h3>Accessibilità</h3><p class="small">Obbligatoria per la PA, scuole statali comprese (Legge Stanca), e dal 2025 per molti servizi privati (European Accessibility Act).</p></div>
+    <div class="card"><p class="num">3</p><h3>Diritto d'autore</h3><p class="small">Foto e testi presi dal web non si copiano: servono permessi, licenze Creative Commons o materiale proprio.</p></div>
+  </div>
+  <aside class="notes">Approfondiremo l'accessibilità in una lezione dedicata. Per il sito di una scuola statale esiste anche il "Modello di sito per le scuole" di Designers Italia, legato alle misure PNRR: vale la pena mostrarlo come esempio di brief già risolto. Sul diritto d'autore richiamare la lezione di educazione civica, se svolta. Per le foto dei soci minorenni serve il consenso dei genitori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scelte tecniche</p><h2>Quale strumento per quale sito?</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-progetto-tecnologie">
+    <dt>HTML e CSS statici</dt><dd>Poche pagine che cambiano di rado, hosting gratuito, massimo controllo</dd>
+    <dt>Generatore statico</dt><dd>Molte pagine con lo stesso layout scritte in Markdown (Hugo, Eleventy, Astro)</dd>
+    <dt>CMS</dt><dd>Una redazione senza competenze tecniche pubblica notizie ogni giorno (WordPress)</dd>
+    <dt>Applicazione web</dt><dd>Login, dati per utente, prenotazioni con database e logica lato server</dd>
+    <dt>Site builder</dt><dd>Sito vetrina in un pomeriggio con editor visuale e abbonamento</dd>
+  </dl>
+  <aside class="notes">Nessuna scelta è "la migliore": dipende da requisiti e vincoli del brief. Per il progetto di squadra consigliamo HTML e CSS statici (si vede tutto, si pubblica gratis su GitHub Pages, ottimo per capire SEO e accessibilità). Una squadra forte può usare un generatore statico. All'orale: motivare la scelta con un requisito ("la referente deve pubblicare da sola, quindi CMS") vale più che elencare tecnologie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto nell'era dell'AI</p><h2>Che cosa può fare un'AI, e che cosa no</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Dal brief al prototipo</h3><p>Un modello linguistico trasforma gli appunti di un'intervista in una bozza di brief, oppure genera in pochi secondi un prototipo HTML da una descrizione. Ottimo per partire: ma i requisiti li conosce solo il cliente.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Utenti sintetici?</h3><p>Alcuni strumenti propongono "utenti simulati" dall'AI per rispondere alle interviste. Possono suggerire domande, ma non sostituiscono le persone vere: inventano bisogni plausibili, non reali.</p></div>
+  </div>
+  <aside class="notes">Collegare al deck "Claude Code": un agente AI può scrivere l'HTML, ma il brief è la sua specifica; un brief vago produce un sito vago. Proporre una mini prova sulla LIM (docente): dare a un chatbot gli appunti dell'intervista e chiedere il brief; poi far cercare alla classe almeno un requisito inventato che il cliente non ha mai detto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>Il repository del progetto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Un membro crea su GitHub il repository <b>sito-squadra</b> e invita gli altri come collaboratori.</li>
+      <li>Aggiungete <b>README.md</b> con nome del cliente, obiettivi e link al brief.</li>
+      <li>Trasformate ogni requisito "Must" in una <b>Issue</b> con l'etichetta <code>must</code>.</li>
+      <li>Create una board in <b>Projects</b> con le colonne Da fare, In corso, Fatto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella scheda Issues ci sono almeno 4 issue aperte con l'etichetta <code>must</code>, e il README si vede formattato nella pagina del repository.</div>
+  </div>
+  <aside class="notes">Questo repository servirà fino alla pubblicazione su GitHub Pages nell'ultima lezione. Account GitHub gratuito (gli studenti sono maggiorenni o quasi; l'età minima di GitHub è 13 anni). Alternativa senza account: cartella condivisa su Drive con un file requisiti in un foglio di calcolo, e la board fatta con un foglio a tre colonne.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Quando la traccia dice "progetta un sito per…"</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Analisi</h3><p class="small">Riformula il problema, individua utenti e obiettivi, elenca requisiti F e NF. Dichiara le ipotesi aggiuntive.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Progetto</h3><p class="small">Mappa del sito, wireframe della home, scelte tecniche motivate da un requisito.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Qualità</h3><p class="small">Come garantisci accessibilità, prestazioni, privacy e manutenzione. Come lo testi.</p></div>
+  </div>
+  <p class="small muted">Le "ipotesi aggiuntive" motivate sono quasi sempre apprezzate: mostrano che hai capito il contesto.</p>
+  <aside class="notes">Non diamo per certi dettagli della traccia ministeriale: diciamo solo che le prove di indirizzo chiedono spesso di analizzare uno scenario e motivare le scelte progettuali. Esercitarsi a scrivere l'analisi in una facciata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il documento che riassume obiettivi, pubblico e vincoli si chiama <span class="blank" data-risposta="brief"></span>.</p>
+    <p>"Il sito deve caricarsi in 2 secondi" è un requisito non <span class="blank" data-risposta="funzionale"></span>.</p>
+    <p>Un utente tipico inventato a partire da interviste reali si chiama <span class="blank" data-risposta="persona|personas"></span>.</p>
+    <p>Nella priorità MoSCoW, la W sta per <span class="blank" data-risposta="won't|wont|won t"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: brief, funzionale, persona (accettato personas), won't. Tre minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sei fasi: analisi, progettazione, realizzazione, test, pubblicazione, manutenzione</li>
+      <li>Il brief fissa obiettivi SMART, pubblico e vincoli</li>
+      <li>Personas e user story danno voce agli utenti</li>
+    </ul>
+    <ul class="points">
+      <li>Requisiti F e NF, sempre verificabili, con priorità</li>
+      <li>Privacy, accessibilità e diritto d'autore sono vincoli</li>
+      <li>La tecnologia si sceglie dopo, motivandola</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Compito di squadra: il brief completo, dopo un'intervista vera al cliente. È la prima tappa del sito che pubblicheremo alla fine dell'unità.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

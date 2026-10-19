@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Attaccanti: i cybercriminali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Cybersecurity · Lezione 3</p>
+  <h1>Attaccanti:<br>i cybercriminali</h1>
+  <p class="lead">Chi attacca, perché lo fa, come si organizza e in quali fasi si muove. Per difendersi bisogna pensare come l'avversario.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Profili, economia del crimine, kill chain, MITRE ATT&amp;CK</span></p>
+  <aside class="notes">Obiettivi: riconoscere i profili degli attaccanti e le loro motivazioni, capire l'economia del ransomware, descrivere un attacco con la Cyber Kill Chain e con le tattiche e tecniche di MITRE ATT&amp;CK. Le singole tecniche (malware, phishing, password, MITM, DDoS, SQL injection, XSS, zero-day) sono già state viste nella lezione attacchi-informatici: qui si guarda chi le usa e come le combina. Premessa da ripetere: provare queste tecniche su sistemi altrui senza autorizzazione scritta è reato (art. 615-ter c.p. e seguenti). Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo te, chi attacca più spesso un'azienda italiana?</h2></div>
+  <div class="poll" data-id="cc-chi">
+    <ol><li>Un ragazzo annoiato</li><li>Un'organizzazione criminale, per soldi</li><li>Un servizio segreto straniero</li><li>Un dipendente scontento</li></ol>
+  </div>
+  <aside class="notes">Lasciare votare e poi commentare: i rapporti annuali del Clusit (Associazione Italiana per la Sicurezza Informatica) classificano la grande maggioranza degli incidenti gravi noti come cybercrime, cioè attacchi a scopo di lucro; seguono hacktivism, spionaggio e sabotaggio, guerra dell'informazione. Le percentuali esatte cambiano ogni anno: se si vogliono citare, prenderle dall'ultimo rapporto pubblicato. Attenzione: gli incidenti causati da insider sono probabilmente sottostimati, perché spesso non vengono resi pubblici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Profili</p><h2>Non esiste "l'hacker": esistono avversari diversi</h2></div>
+  <table class="data compact">
+    <tr><th>Profilo</th><th>Motivazione</th><th>Risorse e pazienza</th></tr>
+    <tr><td><b>Script kiddie</b></td><td>Curiosità, sfida, notorietà</td><td>Strumenti già pronti, poca competenza</td></tr>
+    <tr><td><b>Cybercriminale</b></td><td>Denaro: riscatti, frodi, furto di dati da rivendere</td><td>Organizzazioni con ruoli e "fornitori"</td></tr>
+    <tr><td><b>Hacktivista</b></td><td>Ideologia, protesta politica</td><td>DDoS, defacement, fughe di documenti</td></tr>
+    <tr><td><b>Gruppo statale (APT)</b></td><td>Spionaggio, sabotaggio, influenza</td><td>Molto alte: mesi di lavoro, zero-day</td></tr>
+    <tr><td><b>Insider</b></td><td>Vendetta, denaro, oppure semplice errore</td><td>Accessi legittimi dall'interno</td></tr>
+  </table>
+  <aside class="notes">APT = Advanced Persistent Threat: avanzata (competenze e strumenti), persistente (resta nella rete a lungo), minaccia (con un obiettivo preciso). I confini sono sfumati: alcuni gruppi statali fanno anche crimine per finanziarsi, e alcuni gruppi criminali lavorano tollerati da uno Stato. L'insider involontario (chi sbaglia una configurazione o invia un file alla persona sbagliata) è un profilo importante: non è un criminale, ma il risultato può essere lo stesso. Domanda: per ogni profilo, quale principio della triade CIA colpisce più spesso?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il colore del cappello</p><h2>Stesse competenze, scelte diverse</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>White hat</h3><p>Che cosa fa?</p></div><div class="retro"><p><b>Lavora con l'autorizzazione del proprietario.</b></p><p class="muted">Penetration test con contratto, bug bounty, ricerca con divulgazione responsabile.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Grey hat</h3><p>Che cosa fa?</p></div><div class="retro"><p><b>Entra senza permesso, poi magari avvisa.</b></p><p class="muted">Anche con buone intenzioni, in Italia l'accesso abusivo resta un reato.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Black hat</h3><p>Che cosa fa?</p></div><div class="retro"><p><b>Attacca per profitto o per danneggiare.</b></p><p class="muted">È il cybercriminale di questa lezione.</p></div></div>
+  </div>
+  <aside class="notes">Il nome viene dai vecchi film western, in cui i buoni portavano il cappello bianco e i cattivi quello nero. La parola "hacker" in origine (MIT, anni Sessanta) indicava chi esplora a fondo i sistemi con creatività; il significato negativo è arrivato dopo. Messaggio chiave per la lezione 6 sulle CTF: la differenza tra white e grey hat non è la tecnica, è l'autorizzazione. Prima di girare la carta grey hat chiedere: "è legale?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni nome al suo profilo</h2></div>
+  <dl class="puzzle-abbina" data-id="cc-profili">
+    <dt>LockBit</dt><dd>Gruppo di ransomware che "affittava" il proprio malware ad affiliati</dd>
+    <dt>NoName057(16)</dt><dd>Hacktivisti filorussi che lanciano DDoS anche contro siti italiani</dd>
+    <dt>Lazarus Group</dt><dd>Gruppo attribuito alla Corea del Nord, noto per furti di criptovalute</dd>
+    <dt>Stuxnet</dt><dd>Sabotaggio industriale attribuito a Stati, scoperto nel 2010</dd>
+    <dt>Il tecnico licenziato</dt><dd>Insider che usa una password mai revocata</dd>
+  </dl>
+  <aside class="notes">LockBit: uno dei gruppi ransomware più attivi tra il 2020 e il 2024; a febbraio 2024 l'operazione internazionale Cronos (guidata dalla National Crime Agency britannica con FBI ed Europol, e altri paesi) ha sequestrato la sua infrastruttura. NoName057(16): dal 2022 rivendica DDoS contro siti di istituzioni e aziende di paesi che sostengono l'Ucraina, Italia compresa. Lazarus: attribuito dai governi USA e di altri paesi alla Corea del Nord; WannaCry (2017) gli è stato attribuito. Stuxnet: mai rivendicato, attribuito da molte fonti giornalistiche a Stati Uniti e Israele. Le attribuzioni sono dichiarazioni di governi e ricercatori, non sentenze: dirlo agli studenti. Il tecnico licenziato è un profilo generico ma frequentissimo: per questo la revoca degli accessi è nelle policy della lezione 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il crimine come servizio</p><h2>Come funziona un'azienda criminale del ransomware</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Sviluppatori RaaS</h3><p class="small">Forniscono malware, portale per i riscatti e sito per pubblicare i dati.</p></div>
+    <div class="card soft"><h3>Broker di accessi</h3><p class="small">Vendono credenziali o accessi già ottenuti a reti aziendali.</p></div>
+    <div class="card fill"><h3>Affiliati</h3><p class="small">Entrano, si muovono nella rete, rubano dati, lanciano il ransomware.</p></div>
+    <div class="card soft"><h3>Riciclaggio</h3><p class="small">Ripuliscono i pagamenti in criptovaluta.</p></div>
+  </div>
+  <div class="callout">RaaS = <b>Ransomware as a Service</b>: gli sviluppatori trattengono una percentuale di ogni riscatto, il resto va all'affiliato.</div>
+  <aside class="notes">È lo stesso modello del software as a service, applicato al crimine: specializzazione e divisione del lavoro abbassano la competenza necessaria per attaccare. Per questo anche attaccanti poco esperti riescono a colpire aziende grandi. Le forze dell'ordine colpiscono i "servizi" centrali (infrastruttura, riciclaggio) per fermare molti affiliati insieme, come nell'operazione Cronos contro LockBit (2024). Le percentuali di spartizione dichiarate variano tra i gruppi: non serve citarle.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In un'operazione RaaS, chi materialmente entra nella rete della vittima?</h2></div>
+  <div class="poll" data-id="cc-raas" data-tipo="quiz" data-risposta="A">
+    <ol><li>Di solito l'affiliato, a volte con un accesso comprato da un broker</li><li>Lo sviluppatore del ransomware, che controlla tutto</li><li>Il malware da solo, come un worm, senza nessuna persona</li><li>Il servizio di riciclaggio, che deve verificare la vittima</li></ol>
+    <p class="why">Lo sviluppatore fornisce il "prodotto"; l'intrusione la fa l'affiliato, spesso partendo da un accesso venduto da un broker. Gli attacchi ransomware moderni sono in gran parte condotti a mano da persone.</p>
+  </div>
+  <aside class="notes">Il distrattore C è il più scelto da chi ricorda WannaCry, che era davvero un worm. Ma la maggior parte del ransomware a cui assistiamo dal 2019 in poi è "human-operated": l'affiliato esplora la rete per giorni o settimane, cerca i backup, ruba i dati e solo alla fine cifra. Questo cambia la difesa: c'è tempo per accorgersi dell'intruso, ed è il lavoro del SOC (lezione 4).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La persona, prima del computer</p><h2>L'anello più debole</h2></div>
+  <figure class="citazione">
+    <blockquote>Il fattore umano è davvero l'anello più debole della sicurezza.</blockquote>
+    <figcaption><b>Kevin Mitnick</b>, ex hacker condannato negli anni Novanta, poi consulente di sicurezza, in <i>L'arte dell'inganno</i>, 2002</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2024 la società di ingegneria Arup ha confermato che un dipendente di Hong Kong ha trasferito circa 25 milioni di dollari dopo una videochiamata in cui il direttore finanziario e i colleghi erano <b>deepfake</b> generati con l'AI. L'ingegneria sociale ora ha anche voce e volto.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese ("the human factor is truly security's weakest link"), dal libro The Art of Deception scritto con William L. Simon. Mitnick è morto nel 2023. Caso Arup: notizia riportata dalla polizia di Hong Kong a febbraio 2024 (senza nome dell'azienda) e confermata da Arup a maggio 2024; circa 200 milioni di dollari di Hong Kong. Difese che funzionano: procedure di verifica fuori banda per i pagamenti (richiamare su un numero noto), doppia approvazione, parole d'ordine concordate. Domanda: quale regola avrebbe fermato la truffa?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Decodifica un comando nascosto con CyberChef</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Molti malware lanciano PowerShell con un comando codificato: <code>powershell -enc …</code>. Questo è innocuo, ma il trucco è lo stesso:</p>
+<pre class="code" style="font-size:24px;white-space:pre-wrap;word-break:break-all">VwByAGkAdABlAC0ASABvAHMAdAAgACIAQwBpAGEAbwAgADUARwAiAA==</pre>
+      <ol class="steps small">
+        <li>Apri <b>gchq.github.io/CyberChef</b> e incolla la stringa in Input.</li>
+        <li>Trascina nella Recipe <b>From Base64</b>, poi <b>Decode text</b> con UTF-16LE.</li>
+        <li>Annota il comando in <b>decodifica-cognome.txt</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> ottieni un comando PowerShell che stampa un saluto alla classe. Senza il secondo passo vedi le lettere separate da caratteri vuoti.</div>
+  </div>
+  <aside class="notes">Risultato: Write-Host "Ciao 5G". L'opzione -EncodedCommand di PowerShell accetta testo in Base64 codificato in UTF-16LE: per questo ogni carattere ASCII è seguito da un byte zero (le "A" ricorrenti nella stringa Base64 sono un indizio). In alternativa a Decode text si può usare Remove null bytes. Nelle analisi reali (lezione 4) un analista SOC fa esattamente questo quando un EDR segnala un powershell -enc sospetto. Base64 non è cifratura: chiunque la decodifica. CyberChef è uno strumento open source pubblicato dal GCHQ britannico e funziona interamente nel browser, senza account.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le fasi di un attacco</p><h2>La Cyber Kill Chain</h2></div>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li><b>Ricognizione</b>: raccoglie informazioni sul bersaglio.</li>
+      <li><b>Armamento</b>: prepara l'arma, per esempio un documento con macro.</li>
+      <li><b>Consegna</b>: la recapita, via e-mail, link, chiavetta.</li>
+      <li><b>Sfruttamento</b>: la vulnerabilità viene sfruttata.</li>
+    </ol>
+    <ol class="steps small" start="5" style="counter-reset:s 4">
+      <li><b>Installazione</b>: malware o accesso persistente.</li>
+      <li><b>Comando e controllo</b> (C2): il malware contatta l'attaccante.</li>
+      <li><b>Azioni sull'obiettivo</b>: furto di dati, cifratura, sabotaggio.</li>
+    </ol>
+  </div>
+  <div class="callout">Il difensore vince se <b>spezza un anello qualsiasi</b>: prima lo spezza, meno danni subisce.</div>
+  <aside class="notes">Modello pubblicato nel 2011 da tre ricercatori di Lockheed Martin (Hutchins, Cloppert, Amin), ispirato al concetto militare di kill chain. Nomi originali: Reconnaissance, Weaponization, Delivery, Exploitation, Installation, Command and Control, Actions on Objectives. Limiti: è molto lineare e centrato sul malware; non descrive bene gli insider, gli attacchi solo con credenziali rubate o il movimento laterale. Per questo oggi si usa insieme a MITRE ATT&amp;CK. Esempio di contromisura per anello: ricognizione (ridurre le informazioni pubbliche), consegna (filtro antispam), sfruttamento (patch), installazione (EDR), C2 (firewall in uscita e DNS filtrato), azioni (backup, cifratura dei dati).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Un attacco vero, in ordine di kill chain</h2></div>
+  <ol class="puzzle-ordina" data-id="cc-killchain">
+    <li>Su LinkedIn trova i nomi di chi lavora all'ufficio acquisti</li>
+    <li>Prepara un finto ordine in Excel con una macro malevola</li>
+    <li>Lo invia a un'impiegata da un fornitore imitato</li>
+    <li>L'impiegata abilita le macro e il codice parte</li>
+    <li>Il codice installa un programma che si riavvia a ogni accensione</li>
+    <li>Il programma contatta ogni ora un server esterno per ricevere ordini</li>
+    <li>L'attaccante copia l'archivio dei clienti e poi lo cifra</li>
+  </ol>
+  <aside class="notes">Una frase per fase, nell'ordine: ricognizione, armamento, consegna, sfruttamento, installazione, comando e controllo, azioni sull'obiettivo. Dopo la soluzione, a squadre: ogni squadra propone una contromisura per due fasi; vince chi ferma l'attacco il prima possibile con una misura realistica. Nota: dal 2022 Microsoft blocca di default le macro nei file scaricati da Internet, il che ha spinto gli attaccanti verso altri formati; è un ottimo esempio di anello spezzato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Prepara un Word con macro malevola, ma non l'ha ancora inviato. Quale fase?</h2></div>
+  <div class="poll" data-id="cc-fase" data-tipo="quiz" data-risposta="B">
+    <ol><li>Ricognizione</li><li>Armamento</li><li>Consegna</li><li>Sfruttamento</li></ol>
+    <p class="why">Costruire l'arma, abbinando un exploit o una macro a un documento credibile, è l'armamento. La consegna inizia quando il file parte verso la vittima, lo sfruttamento quando il codice viene eseguito.</p>
+  </div>
+  <aside class="notes">Molti rispondono C o D perché pensano che "il malware" sia già l'attacco. Osservazione importante: l'armamento avviene sui computer dell'attaccante, quindi il difensore non lo vede quasi mai. Si combatte indirettamente con la threat intelligence, cioè conoscendo in anticipo i documenti e gli strumenti che un gruppo usa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il vocabolario comune</p><h2>MITRE ATT&amp;CK: il "perché" e il "come"</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Una base di conoscenza pubblica di comportamenti di attaccanti reali, osservati negli incidenti.</p>
+      <ul class="points small">
+        <li><b>Tattica</b> = l'obiettivo del momento: 14 colonne, da Reconnaissance a Impact.</li>
+        <li><b>Tecnica</b> = il modo per ottenerlo, con un codice: <code>T1566</code> Phishing.</li>
+        <li><b>Sotto-tecnica</b>: <code>T1566.001</code> allegato di spear phishing.</li>
+        <li>Per ogni tecnica: gruppi che la usano, rilevamento, mitigazioni.</li>
+      </ul>
+    </div>
+    <table class="data compact">
+      <tr><th>Tattica</th><th>Tecnica d'esempio</th></tr>
+      <tr><td>Initial Access</td><td class="mono">T1566</td></tr>
+      <tr><td>Credential Access</td><td class="mono">T1110</td></tr>
+      <tr><td>Lateral Movement</td><td class="mono">T1021</td></tr>
+      <tr><td>Impact</td><td class="mono">T1486</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ATT&amp;CK = Adversarial Tactics, Techniques, and Common Knowledge, curato da MITRE, organizzazione statunitense senza scopo di lucro (la stessa che gestisce il programma CVE). La matrice Enterprise ha 14 tattiche: Reconnaissance, Resource Development, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, Impact. Tecniche in tabella: T1566 Phishing, T1110 Brute Force, T1021 Remote Services (T1021.001 Remote Desktop Protocol), T1486 Data Encrypted for Impact. Differenza con la kill chain: ATT&amp;CK non è una sequenza obbligata, ma un catalogo; serve ai difensori per descrivere un attacco con parole comuni e per verificare quali tecniche sanno rilevare. La matrice viene aggiornata più volte l'anno: se il numero di tattiche cambia, fa fede il sito.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Indaga due tecniche su attack.mitre.org</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>attack.mitre.org</b> e cerca la tecnica <code>T1566</code>, poi <code>T1486</code>.</li>
+      <li>Per ciascuna annota: nome, tattica, una sotto-tecnica se c'è, due mitigazioni con il loro codice M….</li>
+      <li>Nella sezione dei gruppi trova un gruppo che usa T1566 e scrivi in una riga che cosa ha fatto.</li>
+      <li>Salva tutto in <b>attack-cognome.md</b>, con un titolo per ogni tecnica.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> T1566 è <b>Phishing</b>, tattica <b>Initial Access</b>; T1486 è <b>Data Encrypted for Impact</b>, tattica <b>Impact</b>. Tra le mitigazioni di T1566 trovi la formazione degli utenti.</div>
+  </div>
+  <aside class="notes">Sito pubblico, senza account. Mitigazioni tipiche di T1566: M1049 Antivirus/Antimalware, M1031 Network Intrusion Prevention, M1021 Restrict Web-Based Content, M1054 Software Configuration, M1017 User Training. Per T1486: M1040 Behavior Prevention on Endpoint, M1053 Data Backup. I codici delle mitigazioni possono essere aggiornati: verificare il giorno prima. Il formato Markdown prepara al compito e alle write-up delle CTF della lezione 6. Esempio di riga: "APT28 (attribuito all'intelligence militare russa) ha usato e-mail di spear phishing con allegati e link malevoli".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice penale</p><h2>Che cosa rischia chi attacca, in Italia</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Articolo c.p.</th><th>Reato</th></tr>
+      <tr><td class="mono">615-ter</td><td>Accesso abusivo a un sistema informatico</td></tr>
+      <tr><td class="mono" style="white-space:nowrap">615-quater</td><td>Detenzione e diffusione abusiva di codici di accesso</td></tr>
+      <tr><td class="mono">635-bis</td><td>Danneggiamento di dati e programmi</td></tr>
+      <tr><td class="mono">640-ter</td><td>Frode informatica</td></tr>
+    </table>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche gli attaccanti usano l'AI. Nel febbraio 2024 Microsoft e OpenAI hanno descritto gruppi legati a Stati che usavano i modelli linguistici per tradurre, scrivere e-mail credibili e correggere script. Un aiuto, non una superarma: le difese di base funzionano ancora.</p></div>
+  </div>
+  <aside class="notes">Gli articoli sono stati introdotti principalmente dalla legge 547/1993 e modificati più volte; la legge 90/2024 ha inasprito diverse pene. Non serve ricordare le pene: serve sapere che anche il solo accesso senza autorizzazione è reato, anche senza rubare o rompere nulla, e che detenere password altrui è a sua volta reato. Rapporto Microsoft Threat Intelligence e OpenAI del 14 febbraio 2024: gli account di cinque gruppi legati a Stati sono stati chiusi; l'uso descritto era di supporto (ricerca, traduzione, scrittura, codice semplice). Messaggio: l'AI aumenta la quantità e la credibilità del phishing, quindi aumentano il valore della MFA e delle procedure di verifica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti · a squadre</span></p>
+  <h2>Ricostruisci l'attacco alla Officine Rossi</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small"><b>Il caso (inventato).</b> Lunedì un dipendente riceve una falsa fattura PDF con un link. Inserisce la password su una pagina identica a quella aziendale. Mercoledì qualcuno entra in VPN con il suo account, senza MFA. Usa il Desktop remoto per raggiungere il server dei file, copia 40 GB verso un servizio cloud e venerdì notte cifra tutto, backup collegati compresi.</p>
+      <p class="small">In <b>caso-squadra.md</b> fai una tabella: <b>Evento · Fase kill chain · Tattica ATT&amp;CK · Tecnica · Contromisura</b>.</p>
+    </div>
+    <div class="check small"><b>Controllo:</b> almeno 6 righe. Ci sono di sicuro Initial Access, Lateral Movement, Exfiltration e Impact. La contromisura che ferma tutto mercoledì è la <b>MFA sulla VPN</b>.</div>
+  </div>
+  <aside class="notes">Soluzione indicativa. 1) Falsa fattura con link: consegna; Initial Access, T1566.002 Spearphishing Link; filtro posta, formazione. 2) Password inserita sulla pagina falsa: sfruttamento (dell'utente); Credential Access, T1056 Input Capture o, in modo più semplice, phishing per credenziali; password manager che non compila su domini falsi, passkey. 3) Accesso in VPN con l'account: installazione/accesso persistente; Initial Access o Persistence, T1078 Valid Accounts e T1133 External Remote Services; MFA sulla VPN. 4) Desktop remoto verso il server: Lateral Movement, T1021.001 Remote Desktop Protocol; segmentazione, minimo privilegio. 5) Copia di 40 GB verso il cloud: azioni sull'obiettivo; Exfiltration, T1567 Exfiltration Over Web Service; monitoraggio del traffico in uscita, DLP. 6) Cifratura dei file e dei backup: azioni sull'obiettivo; Impact, T1486 Data Encrypted for Impact e T1490 Inhibit System Recovery; backup offline o immutabili. Valutare la coerenza, non i codici a memoria: si possono consultare sul sito. Vince la squadra con la tabella più completa e con la contromisura "più a monte" ben motivata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un gruppo statale che resta a lungo nella rete si chiama <span class="blank" data-risposta="APT" style="--w:5ch"></span>.</p>
+    <p>Il modello in cui gli sviluppatori affittano il ransomware agli affiliati si chiama <span class="blank" data-risposta="RaaS|ransomware as a service" style="--w:6ch"></span>.</p>
+    <p>La sesta fase della kill chain è comando e <span class="blank" data-risposta="controllo" style="--w:9ch"></span>.</p>
+    <p>In ATT&amp;CK la tecnica T1566 si chiama <span class="blank" data-risposta="phishing" style="--w:9ch"></span>.</p>
+    <p>L'accesso abusivo a un sistema informatico è punito dall'articolo <span class="blank" data-risposta="615-ter|615 ter|615ter" style="--w:8ch"></span> del codice penale.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: APT; RaaS; controllo; phishing; 615-ter (accettate le varianti con spazio o senza trattino).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Profili diversi: script kiddie, criminali, hacktivisti, Stati, insider</li>
+      <li>Il ransomware è un'industria: broker, affiliati, RaaS</li>
+      <li>La persona resta l'anello debole, ora anche con i deepfake</li>
+    </ul>
+    <ul class="points">
+      <li>Kill chain: 7 fasi, basta spezzarne una</li>
+      <li>ATT&amp;CK: tattiche e tecniche con un codice</li>
+      <li>Prossima lezione: chi difende, e come</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula ("Anatomia di un attacco vero"). La prossima lezione riprende la tabella del caso Officine Rossi dal punto di vista del SOC.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

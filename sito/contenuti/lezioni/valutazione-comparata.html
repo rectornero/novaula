@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La valutazione comparata · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Unità 6 · Selezionare un prodotto informatico</p>
+  <h1>La valutazione<br>comparata</h1>
+  <p class="lead">Pesi, punteggi e una matrice in Calc: come trasformare tanti dati in una scelta motivata, e come capire quanto è solida.</p>
+  <div class="meta"><span class="chip">Lezione 4 di 4</span><span>Matrice pesata · MATR.SOMMA.PRODOTTO · sensibilità</span></div>
+  <aside class="notes">Obiettivi: applicare i Must come filtro, definire criteri e pesi, usare una scala con descrittori, calcolare il punteggio pesato con MATR.SOMMA.PRODOTTO, fare l'analisi di sensibilità dei pesi, riconoscere i trucchi che falsano una matrice, scrivere la relazione di scelta. Si usano i dati di Lumen raccolti nelle lezioni 1-3 (requisiti, long list, TCO, SLA, licenze). Chiusura dell'unità: dopo questa lezione c'è la simulazione della verifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un'offerta costa meno, l'altra è più facile da usare. Come decidi?</h2></div>
+  <div class="poll" data-id="u6l4-decidi">
+    <ol><li>A istinto: so già quale mi piace</li><li>Chiedo a chi la userà</li><li>Una lista di pro e contro</li><li>Un punteggio con pesi</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta sbagliata: le opzioni B, C e D si combinano. Far notare che l'istinto non è vietato, ma va dichiarato e messo alla prova. La lista di pro e contro ha un difetto: tutti i punti sembrano valere uguale. Il punteggio con pesi corregge proprio questo, come aveva già intuito Franklin (prossima slide).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Nel 1772 qualcuno pesava già i pro e i contro</h2></div>
+  <figure class="citazione">
+    <blockquote>Cerco di stimarne i rispettivi pesi… Ho tratto grande vantaggio da questo tipo di equazione, in quella che si può chiamare algebra morale o prudenziale.</blockquote>
+    <figcaption><b>Benjamin Franklin</b>, scienziato e politico americano, lettera a Joseph Priestley, 19 settembre 1772</figcaption>
+  </figure>
+  <p class="lead">Franklin divideva un foglio in due colonne, pro e contro, e cancellava gli argomenti di peso uguale sui due lati. La matrice pesata è la sua "algebra" con i numeri.</p>
+  <aside class="notes">Originale: "…I endeavour to estimate their respective Weights; … I have found great Advantage from this kind of Equation, in what may be called Moral or Prudential Algebra." Traduzione nostra. Priestley, chimico, gli aveva chiesto un consiglio su un'offerta di lavoro; Franklin non gli disse che cosa fare ma come decidere. Domanda: "perché Franklin consiglia di lasciare il foglio per qualche giorno prima di decidere?" Perché in momenti diversi vengono in mente argomenti diversi: è l'antenato del confronto tra più valutatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Cinque passi, nell'ordine giusto</h2></div>
+  <ol class="steps">
+    <li><b>Filtro</b>: chi non soddisfa un Must è eliminato. Niente punteggi.</li>
+    <li><b>Criteri e pesi</b>, decisi <mark>prima</mark> di guardare le offerte. I pesi sommano a 100%.</li>
+    <li><b>Scala</b> da 1 a 5 con descrittori scritti per ogni livello.</li>
+    <li><b>Punteggio pesato</b>: Σ peso × punteggio, per ogni candidato.</li>
+    <li><b>Sensibilità</b>: la classifica regge se i pesi cambiano un po'? Poi la relazione.</li>
+  </ol>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">4</p><p class="small">candidati nella short list di Lumen</p></div>
+    <div class="card soft"><p class="num">4</p><p class="small">requisiti Must usati come filtro</p></div>
+    <div class="card soft"><p class="num">6</p><p class="small">criteri con un peso nella matrice</p></div>
+  </div>
+  <aside class="notes">Il punto 2 è quello che si sbaglia di più: se i pesi si decidono dopo aver visto i punteggi, la matrice diventa un modo elegante per giustificare una scelta già fatta. Per questo i pesi vanno approvati dal cliente (il titolare di Lumen) e messi per iscritto nella RFI o prima delle demo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 1</p><h2>Il filtro dei Must: chi esce subito</h2></div>
+  <table class="data">
+    <tr><th>Candidato</th><th>R1 dati in UE</th><th>R2 backup fuori sede</th><th>R3 2FA</th><th>R4 ripristino 15 min</th><th>Esito</th></tr>
+    <tr><td><b>NuvolaBox</b> · SaaS</td><td>sì</td><td>sì</td><td>sì</td><td>sì</td><td class="hl"><b>passa</b></td></tr>
+    <tr><td><b>NAS in sede</b></td><td>sì</td><td>sì</td><td>sì</td><td>sì</td><td class="hl"><b>passa</b></td></tr>
+    <tr><td><b>Nextcloud gestito</b></td><td>sì</td><td>sì</td><td>sì</td><td>sì</td><td class="hl"><b>passa</b></td></tr>
+    <tr><td><b>CloudFree</b> · piano personale gratuito</td><td>no</td><td>sì</td><td>sì</td><td>sì</td><td>escluso</td></tr>
+  </table>
+  <div class="callout">CloudFree costava zero, ma ha i server fuori dall'UE, non offre il contratto art. 28 e il piano personale non si può usare per un'azienda. <b>Un solo no su un Must basta.</b></div>
+  <aside class="notes">Tutti i nomi sono inventati. Se CloudFree entrasse nella matrice, il suo punteggio altissimo sul costo potrebbe compensare il no sui dati: è proprio per questo che i Must si applicano come filtro e non come criterio con un peso. Un modello "compensativo" (la somma pesata) permette di compensare un difetto con un pregio; un Must non deve essere compensabile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passi 2 e 3</p><h2>Pesi e descrittori: le regole del gioco, scritte</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Criterio</th><th>Peso</th></tr>
+      <tr><td>Sicurezza e GDPR</td><td class="mono">25%</td></tr>
+      <tr><td>Costo (TCO 5 anni)</td><td class="mono">20%</td></tr>
+      <tr><td>Affidabilità e SLA</td><td class="mono">20%</td></tr>
+      <tr><td>Facilità d'uso</td><td class="mono">15%</td></tr>
+      <tr><td>Assistenza</td><td class="mono">10%</td></tr>
+      <tr><td>Portabilità e lock-in</td><td class="mono">10%</td></tr>
+      <tr><td><b>Totale</b></td><td class="mono"><b>100%</b></td></tr>
+    </table>
+    <div class="card soft">
+      <h3>Descrittori del costo</h3>
+      <ul class="points small">
+        <li><b>5</b>: TCO sotto 13 000 €</li>
+        <li><b>4</b>: da 13 000 a 14 000 €</li>
+        <li><b>3</b>: da 14 000 a 15 000 €</li>
+        <li><b>2</b>: da 15 000 a 16 000 €</li>
+        <li><b>1</b>: oltre il budget</li>
+      </ul>
+      <p class="small muted">Ogni criterio ha i suoi descrittori: due valutatori devono arrivare allo stesso voto.</p>
+    </div>
+  </div>
+  <aside class="notes">Con questi descrittori: NAS 12 950 → 5, Nextcloud 13 100 → 4, NuvolaBox 15 400 → 2. Un'alternativa è la formula proporzionale 5 × TCO minimo / TCO, che però "schiaccia" le differenze (NuvolaBox prenderebbe 4,2): la scelta della scala cambia il risultato e va dichiarata. Per pesare in modo meno arbitrario esiste il confronto a coppie (metodo AHP di Thomas Saaty, anni '70): si confrontano i criteri due alla volta e i pesi si ricavano dai confronti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 4</p><h2>La matrice di Lumen in Calc</h2></div>
+  <p class="small">In C8, poi trascina a destra: <code>=MATR.SOMMA.PRODOTTO($B$2:$B$7;C2:C7)</code></p>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+    <tr><th>1</th><td><b>Criterio</b></td><td><b>Peso</b></td><td><b>NuvolaBox</b></td><td><b>NAS</b></td><td><b>Nextcloud</b></td></tr>
+    <tr><th>2</th><td>Sicurezza e GDPR</td><td>25%</td><td>4</td><td>3</td><td>4</td></tr>
+    <tr><th>3</th><td>Costo (TCO)</td><td>20%</td><td>2</td><td>5</td><td>4</td></tr>
+    <tr><th>4</th><td>Affidabilità e SLA</td><td>20%</td><td>5</td><td>3</td><td>4</td></tr>
+    <tr><th>5</th><td>Facilità d'uso</td><td>15%</td><td>5</td><td>3</td><td>3</td></tr>
+    <tr><th>6</th><td>Assistenza</td><td>10%</td><td>4</td><td>2</td><td>3</td></tr>
+    <tr><th>7</th><td>Portabilità</td><td>10%</td><td>2</td><td>4</td><td>5</td></tr>
+    <tr><th>8</th><td><b>Punteggio</b></td><td class="f">=SOMMA(B2:B7)</td><td class="sel f">3,75</td><td class="f">3,40</td><td class="f">3,85</td></tr>
+  </table>
+  <aside class="notes">MATR.SOMMA.PRODOTTO è il nome italiano di SUMPRODUCT: moltiplica gli elementi corrispondenti di due intervalli e somma i prodotti. Conto per NuvolaBox: 0,25×4 + 0,20×2 + 0,20×5 + 0,15×5 + 0,10×4 + 0,10×2 = 1 + 0,4 + 1 + 0,75 + 0,4 + 0,2 = 3,75. NAS: 0,75 + 1 + 0,6 + 0,45 + 0,2 + 0,4 = 3,40. Nextcloud: 1 + 0,8 + 0,8 + 0,45 + 0,3 + 0,5 = 3,85. Il riferimento assoluto $B$2:$B$7 è essenziale: trascinando, i pesi devono restare fermi. Da dove vengono i voti: sicurezza e portabilità dalle risposte alla RFI e dalla prova di esportazione, affidabilità dallo SLA e dall'architettura (un NAS in un negozio è un singolo punto di guasto), uso dalla prova con 3 commessi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nextcloud 3,85, NuvolaBox 3,75. Che cosa puoi concludere?</h2></div>
+  <div class="poll" data-id="u6l4-conclusione" data-tipo="quiz" data-risposta="B">
+    <ol><li>Nextcloud è chiaramente la soluzione migliore</li><li>La differenza è piccola: bisogna vedere se regge cambiando i pesi</li><li>NuvolaBox va scartata perché è seconda</li><li>Il NAS, ultimo, era da escludere già con il filtro</li></ol>
+    <p class="why">Una differenza di 0,10 su 5 è dentro l'incertezza dei voti e dei pesi. Prima di concludere serve l'analisi di sensibilità. Il NAS non andava escluso: ha passato tutti i Must, è solo ultimo nella somma pesata.</p>
+  </div>
+  <aside class="notes">A è la risposta istintiva: il numero più alto "vince". Ma i voti sono stime da 1 a 5 e i pesi sono scelte: due decimali danno un'impressione di precisione che non c'è. D confonde filtro e punteggio. Lanciare la domanda: "quanto dovrebbero cambiare i pesi per ribaltare la classifica?" e rispondere con il prossimo laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Costruisci la matrice pesata</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>matrice-lumen.ods</b> e copia la tabella della slide 7 in A1:E7. Formatta B2:B7 come percentuale.</li>
+      <li>In B8: <code>=SOMMA(B2:B7)</code>. In C8: <code>=MATR.SOMMA.PRODOTTO($B$2:$B$7;C2:C7)</code>, trascina fino a E8.</li>
+      <li>In C9: <code>=RANGO(C8;$C$8:$E$8)</code>, trascina fino a E9.</li>
+      <li>In A11: <code>=INDICE(C1:E1;CONFRONTA(MAX(C8:E8);C8:E8;0))</code>.</li>
+      <li>Aggiungi una formattazione condizionale che colori di verde il punteggio più alto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> B8 = 100%. Punteggi 3,75, 3,40, 3,85; ranghi 2, 3, 1. A11 mostra <b>Nextcloud</b>. Se B8 non fa 100% il risultato non ha senso.</div>
+  </div>
+  <aside class="notes">RANGO, INDICE e CONFRONTA sono i nomi italiani di RANK, INDEX e MATCH. Con CONFRONTA il terzo argomento 0 chiede la corrispondenza esatta. Errore tipico: dimenticare i $ e ottenere numeri diversi trascinando. Variante per chi finisce prima: aggiungere una riga con la "somma semplice" senza pesi (=SOMMA(C2:C7): 22, 20, 23) e commentare. Salvare: il file serve per la sensibilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 5</p><h2>Analisi di sensibilità: basta poco per ribaltare?</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Scenario del titolare</h3>
+      <p class="small">"I commessi devono usarlo senza fatica": uso 25%, costo 15%, portabilità 5%, il resto uguale.</p>
+      <p class="num">4,05 · 3,25 · 3,70</p>
+      <p class="small">NuvolaBox · NAS · Nextcloud: vince <b>NuvolaBox</b>.</p>
+    </div>
+    <div class="card fill">
+      <h3>Il punto di svolta</h3>
+      <p class="small">Sposta <b>x</b> punti di peso dalla portabilità alla facilità d'uso.</p>
+      <p class="num" style="color:#fff">x = 2</p>
+      <p class="small">Con uso 17% e portabilità 8% i due candidati sono pari a 3,81. Da x = 3 vince NuvolaBox.</p>
+    </div>
+  </div>
+  <div class="callout hl">La classifica è <b>fragile</b>: la scelta dipende da quanto Lumen tiene alla portabilità rispetto alla facilità d'uso. È questa la domanda da fare al titolare.</div>
+  <aside class="notes">Conti dello scenario (25, 15, 20, 25, 10, 5): NuvolaBox 1 + 0,3 + 1 + 1,25 + 0,4 + 0,1 = 4,05; NAS 0,75 + 0,75 + 0,6 + 0,75 + 0,2 + 0,2 = 3,25; Nextcloud 1 + 0,6 + 0,8 + 0,75 + 0,3 + 0,25 = 3,70. Punto di svolta: spostando x punti dalla portabilità all'uso NuvolaBox guadagna x × (5 − 2) / 100 = 0,03x e Nextcloud perde x × (5 − 3) / 100 = 0,02x; la differenza iniziale 0,10 si annulla quando 0,05x = 0,10, cioè x = 2. Il valore dell'analisi non è il numero, è la conversazione che apre con il cliente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Trova il punto di svolta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>matrice-lumen.ods</b> scrivi in G1 <b>x</b> e in H1 il valore <b>0</b>.</li>
+      <li>In F1 scrivi <b>Peso 2</b>. In F5: <code>=(15+$H$1)/100</code>, in F7: <code>=(10-$H$1)/100</code>. Nelle altre celle di F copia i pesi di B.</li>
+      <li>In C10: <code>=MATR.SOMMA.PRODOTTO($F$2:$F$7;C2:C7)</code>, trascina fino a E10.</li>
+      <li>Prova x = 1, 2, 3, 5. Annota chi vince ogni volta.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con x = 2 NuvolaBox e Nextcloud fanno entrambi 3,81. Con x = 3: NuvolaBox 3,84, Nextcloud 3,79. Il NAS non vince mai.</div>
+  </div>
+  <aside class="notes">Con x = 1: NuvolaBox 3,78, Nextcloud 3,83. Con x = 5: NuvolaBox 3,90, Nextcloud 3,75. Per chi vuole di più: Strumenti › Ricerca obiettivo in Calc può trovare x imponendo che la differenza C10 − E10 valga 0 (va messa in una cella apposita). In alternativa un grafico a linee dei due punteggi al variare di x mostra l'incrocio. Domanda finale: "scriveresti nella relazione 'vince Nextcloud'?" Meglio: "Nextcloud se la portabilità pesa almeno quanto stabilito; altrimenti NuvolaBox".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Occhio ai trucchi</p><h2>Tre modi per falsare una matrice. Tocca le carte.</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>I pesi dopo</h3><p>Il consulente fissa i pesi dopo aver visto i punteggi.</p></div><div class="retro"><p><b>Matrice truccata.</b></p><p class="small">Con i pesi giusti vince sempre il preferito. I pesi si scrivono prima e li approva il cliente.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>Il costo due volte</h3><p>Ci sono i criteri "TCO" e "prezzo di listino".</p></div><div class="retro"><p><b>Doppio conteggio.</b></p><p class="small">Il costo pesa il doppio senza che nessuno l'abbia deciso. Ogni aspetto deve stare in un solo criterio.</p></div></div>
+    <div class="flip" style="--h:400px"><div class="fronte"><h3>La demo perfetta</h3><p>La demo era bellissima: 5 a tutti i criteri.</p></div><div class="retro"><p><b>Effetto alone.</b></p><p class="small">Un'impressione positiva contagia tutti i voti. Servono descrittori e più valutatori indipendenti.</p></div></div>
+  </div>
+  <aside class="notes">Far indovinare il nome del problema prima di girare. Altri trucchi da citare: scala troppo fine (voti da 1 a 100 danno falsa precisione); un solo valutatore (meglio la media di 3 valutatori che votano separatamente, discutendo i casi in cui differiscono di 2 punti o più); effetto ancoraggio (il primo prezzo visto diventa il riferimento). La matrice non elimina la soggettività: la rende visibile e discutibile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con oggi</p><h2>Scegliere un modello di AI per la chat di Lumen</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Criteri tipici</h3><p>Qualità sulle domande vere dei clienti, <b>costo per token</b>, <b>latenza</b> (quanto tempo prima che compaia la risposta), dove sono trattati i dati, condizioni d'uso, SLA. Gli stessi pesi e la stessa matrice di oggi.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Open-weight o chiuso?</h3><p>Un modello <b>open-weight</b> si scarica e gira su server propri: i dati non escono, ma paghi hardware e competenze. Un modello <b>chiuso</b> si usa solo via API del fornitore. Open-weight non vuol dire open source: spesso dati e codice di addestramento non sono pubblici.</p></div>
+  </div>
+  <aside class="notes">Esempi di famiglie open-weight: Llama (Meta), Mistral, Gemma (Google), Qwen, gpt-oss (OpenAI, 2025); chiusi: i modelli di punta di OpenAI, Anthropic, Google. Le licenze dei modelli open-weight variano molto: alcune hanno limiti d'uso. Nell'ottobre 2024 la Open Source Initiative ha pubblicato la Open Source AI Definition 1.0, che richiede anche informazioni sufficienti sui dati di addestramento: molti modelli open-weight non la soddisfano. Per i requisiti normativi in UE c'è anche l'AI Act (Regolamento (UE) 2024/1689): una chat con i clienti deve far capire che si sta parlando con un'AI.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Quanto costa un assistente AI al mese?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>modelli-ai.ods</b>. In B1 <b>3000</b> conversazioni al mese, in B2 <b>2000</b> token in ingresso e in B3 <b>400</b> in uscita per conversazione.</li>
+      <li>Righe 5-7: Alfa (3 € e 15 € per milione di token in ingresso e in uscita), Beta (0,50 € e 1,50 €), Gamma open-weight su server proprio (900 € al mese fissi).</li>
+      <li>Costo di Alfa: <code>=$B$1*$B$2/1000000*B5+$B$1*$B$3/1000000*C5</code>.</li>
+      <li>Quante conversazioni al mese servono perché Gamma costi come Alfa?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Alfa 36 € al mese, Beta 4,80 €, Gamma 900 €. Pareggio con Alfa a <b>75 000</b> conversazioni al mese (Alfa costa 0,012 € a conversazione).</div>
+  </div>
+  <aside class="notes">Modelli e prezzi inventati, ordini di grandezza realistici. Conti: token in ingresso al mese 3 000 × 2 000 = 6 milioni, in uscita 1,2 milioni. Alfa 6 × 3 + 1,2 × 15 = 18 + 18 = 36 €. Beta 6 × 0,5 + 1,2 × 1,5 = 3 + 1,8 = 4,80 €. Costo per conversazione di Alfa: 0,002 × 3 + 0,0004 × 15 = 0,012 €; 900 / 0,012 = 75 000. Messaggio: a piccoli volumi l'API conviene, il self-hosting si giustifica con volumi grandi o con requisiti forti sui dati. Ma il costo non basta: Beta costa 7 volte meno di Alfa, e va provato su 50 domande vere per vedere se risponde abbastanza bene. Si possono inserire questi dati come criteri in una matrice come quella di Lumen.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa significa che un modello di AI è open-weight?</h2></div>
+  <div class="poll" data-id="u6l4-openweight" data-tipo="quiz" data-risposta="D">
+    <ol><li>Che è gratuito da usare per qualsiasi scopo</li><li>Che sono pubblici anche i dati di addestramento</li><li>Che è un modello open source secondo la definizione dell'OSI</li><li>Che i pesi sono scaricabili e il modello può girare su server propri</li></ol>
+    <p class="why">Open-weight vuol dire solo che i pesi (i parametri addestrati) sono pubblicati. La licenza può porre limiti d'uso, i dati di addestramento di solito non sono pubblici, e per questo molti di questi modelli non rispettano la definizione di AI open source dell'OSI.</p>
+  </div>
+  <aside class="notes">A e C sono i tranelli più frequenti. Collegamento con la lezione 3: open source "libero" non vuol dire gratis, e open-weight non vuol dire nemmeno open source. Anche far girare un modello aperto ha un TCO: GPU, energia, manutenzione, competenze.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La scelta motivata</p><h2>Metti in ordine la relazione per il titolare</h2></div>
+  <ol class="puzzle-ordina" data-id="u6l4-relazione">
+    <li>Contesto e bisogni di Lumen</li>
+    <li>Requisiti, priorità e vincoli</li>
+    <li>Candidati considerati e fonti consultate</li>
+    <li>Filtro dei Must: chi è stato escluso e perché</li>
+    <li>Matrice pesata con pesi e descrittori</li>
+    <li>Analisi di sensibilità e rischi</li>
+    <li>Raccomandazione e prossimi passi</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Molti mettono la raccomandazione all'inizio: in un documento per un dirigente si può aggiungere anche un riassunto iniziale di 3 righe, ma il ragionamento segue questo ordine. Prossimi passi tipici: periodo di prova con dati finti, contratto art. 28, piano di migrazione notturna, formazione dei commessi, verifica dello SLA dopo 3 mesi. È la struttura del compito per casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In Calc la somma dei prodotti di pesi e punteggi si calcola con la funzione MATR.<span class="blank" data-risposta="SOMMA.PRODOTTO|somma prodotto" style="--w:12ch"></span>.</p>
+    <p>I pesi di tutti i criteri devono sommare al <span class="blank" data-risposta="100%|100"></span>.</p>
+    <p>Un requisito Must non si mette nella matrice: si usa come <span class="blank" data-risposta="filtro" style="--w:8ch"></span>.</p>
+    <p>Verificare se la classifica cambia modificando i pesi si chiama analisi di <span class="blank" data-risposta="sensibilità|sensibilita" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: SOMMA.PRODOTTO, 100% (accettato 100), filtro, sensibilità.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Prima il filtro dei Must, poi la matrice</li>
+      <li>Pesi decisi prima, descrittori scritti, più valutatori</li>
+      <li>Punteggio = MATR.SOMMA.PRODOTTO(pesi; voti)</li>
+    </ul>
+    <ul class="points">
+      <li>Sensibilità: quanto deve cambiare un peso per ribaltare?</li>
+      <li>La relazione racconta il ragionamento, non solo il vincitore</li>
+      <li><b>All'esame</b>: confronta due soluzioni con criteri espliciti e motiva</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula e pubblicare la simulazione della verifica dell'unità. Nella verifica ci saranno un calcolo di TCO, uno di SLA e una piccola matrice pesata da completare a mano: ricordare di portare la calcolatrice.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

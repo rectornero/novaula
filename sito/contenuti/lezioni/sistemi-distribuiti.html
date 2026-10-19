@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi distribuiti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 1</p>
+  <h1>I sistemi<br>distribuiti</h1>
+  <p class="lead">Tanti computer indipendenti che devono sembrare uno solo, parlando attraverso una rete che a volte perde, ritarda e si spezza.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Modelli, middleware, fallacie, teorema CAP</span></p>
+  <aside class="notes">Obiettivi: definire un sistema distribuito, elencarne vantaggi e problemi, distinguere client-server, peer-to-peer e architetture a livelli, capire che cos'è il middleware, conoscere le otto fallacie e il teorema CAP. Durata indicativa: 3 ore con i laboratori. Prerequisiti: TCP/IP, porte, DNS e HTTP di base (Sistemi e reti), Java. Questa lezione apre l'Unità 2: tutto quello che segue (RPC, SOA, web service, REST) è un modo diverso di far parlare i nodi di un sistema distribuito. Collegamento con big-data (già vista): Hadoop e Spark sono sistemi distribuiti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultima volta che un'app non funzionava, di chi era la colpa?</h2></div>
+  <div class="poll" data-id="sd-colpa">
+    <ol><li>Del mio telefono</li><li>Della rete: Wi-Fi o 4G/5G</li><li>Dei server dell'app</li><li>Di un servizio di un'altra azienda, usato dall'app</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Chiedere a chi ha scelto D come fa a saperlo: di solito non lo sa. È proprio il punto: un'app moderna dipende da decine di servizi (autenticazione, pagamenti, mappe, notifiche, CDN, cloud) che l'utente non vede. Lasciare la domanda aperta e passare alla citazione di Lamport, che descrive esattamente questa situazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La definizione più famosa è una battuta</h2></div>
+  <figure class="citazione">
+    <blockquote>Un sistema distribuito è un sistema in cui il guasto di un computer di cui non conoscevi nemmeno l'esistenza può rendere inutilizzabile il tuo computer.</blockquote>
+    <figcaption><b>Leslie Lamport</b>, informatico statunitense, in un'email ai colleghi del 28 maggio 1987</figcaption>
+  </figure>
+  <div class="cols-3">
+    <div class="card soft"><h3>Il tempo</h3><p class="small">Nel 1978 spiega come ordinare gli eventi senza un orologio comune: gli <b>orologi logici</b>.</p></div>
+    <div class="card soft"><h3>Il consenso</h3><p class="small">Inventa <b>Paxos</b>: come far decidere la stessa cosa a nodi che possono guastarsi.</p></div>
+    <div class="card soft"><h3>Il premio</h3><p class="small">Turing Award 2013. E sì: ha creato anche <b>LaTeX</b>.</p></div>
+  </div>
+  <aside class="notes">Originale inglese, pubblicato da Lamport stesso sul suo sito (email del 28 maggio 1987 alla mailing list del DEC SRC): "A distributed system is one in which the failure of a computer you didn't even know existed can render your own computer unusable." Traduzione nostra. L'articolo sugli orologi logici è "Time, Clocks, and the Ordering of Events in a Distributed System" (Communications of the ACM, 1978), uno degli articoli più citati dell'informatica. Domanda: perché in un sistema distribuito non basta guardare l'ora di ogni computer per sapere chi ha scritto per primo? (Gli orologi dei nodi non sono mai perfettamente sincronizzati: anche pochi millisecondi di scarto cambiano l'ordine.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Molti computer, un solo sistema</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un sistema distribuito è un insieme di <mark>computer indipendenti</mark> che appare ai suoi utenti come un <mark>unico sistema coerente</mark>.</p>
+      <p class="small muted">Andrew Tanenbaum e Maarten van Steen, <i>Distributed Systems</i></p>
+      <ul class="points">
+        <li>Ogni nodo ha la sua CPU, la sua memoria, il suo orologio.</li>
+        <li>Non c'è memoria condivisa: i nodi comunicano solo <b>scambiandosi messaggi</b> in rete.</li>
+        <li>Un nodo può guastarsi mentre gli altri continuano: <b>guasto parziale</b>.</li>
+      </ul>
+    </div>
+    <div class="card night"><h3>Esempi che usi ogni giorno</h3><ul class="points"><li>Il Web e i motori di ricerca</li><li>WhatsApp, Instagram, Spotify</li><li>Il circuito dei bancomat</li><li>I giochi online multiplayer</li><li>Il DNS di Internet</li></ul></div>
+  </div>
+  <aside class="notes">La definizione è quella del manuale di Tanenbaum e van Steen (traduzione nostra: "a collection of independent computers that appears to its users as a single coherent system"). Insistere sul guasto parziale: in un programma su un solo computer, se qualcosa si rompe si ferma tutto; in un sistema distribuito una parte può rompersi in silenzio, e le altre devono accorgersene e reagire. Domanda: il DNS è un sistema distribuito? (Sì: milioni di server organizzati in gerarchia, nessuno conosce tutti i nomi.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché distribuire</p><h2>Quattro buoni motivi, quattro nuovi problemi</h2></div>
+  <table class="data compact">
+    <tr><th>Vantaggio</th><th>Esempio</th><th>Il prezzo da pagare</th></tr>
+    <tr><td><b>Scalabilità</b></td><td>Aggiungo server quando crescono gli utenti</td><td>Coordinare tanti nodi</td></tr>
+    <tr><td><b>Affidabilità</b></td><td>Dati replicati in tre data center</td><td>Tenere le copie coerenti</td></tr>
+    <tr><td><b>Condivisione</b></td><td>Una stampante, un database, una GPU per molti</td><td>Accessi concorrenti, sicurezza</td></tr>
+    <tr><td><b>Vicinanza</b></td><td>Una CDN serve i video da Milano, non dalla California</td><td>Latenza variabile, rete inaffidabile</td></tr>
+  </table>
+  <div class="callout">Scalare <b>in verticale</b> = un server più potente. Scalare <b>in orizzontale</b> = più server uguali dietro un bilanciatore di carico.</div>
+  <aside class="notes">Far notare la simmetria: ogni vantaggio porta con sé un problema nuovo, che in un programma locale non esiste. La scalabilità verticale ha un limite fisico ed economico (il server più grande che esiste) e resta un singolo punto di guasto; quella orizzontale non ha un limite teorico ma richiede software progettato per essere distribuito. Domanda all'esame tipica: "giustifica la scelta di un'architettura scalabile".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il sito delle iscrizioni crolla il primo giorno. Quale scelta lo rende anche più affidabile?</h2></div>
+  <div class="poll" data-id="sd-scala" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un server nuovo con il quadruplo di RAM e CPU</li><li>Una connessione in fibra più veloce per il server</li><li>Quattro server uguali dietro un bilanciatore di carico</li><li>Spostare il database sullo stesso server dell'applicazione</li></ol>
+    <p class="why">Solo la C è scalabilità orizzontale: regge più utenti e, se un server si guasta, gli altri tre continuano. La A aumenta la potenza ma resta un singolo punto di guasto. La B non serve se il collo di bottiglia è la CPU. La D peggiora: un solo guasto ferma tutto.</p>
+  </div>
+  <aside class="notes">La A è il tranello: risolve il carico ma non l'affidabilità, perché se quell'unico server si rompe il sito è giù. Far notare che la domanda chiede "anche più affidabile". Approfondimento: con quattro server il bilanciatore stesso diventa un punto critico, per questo nei cloud è a sua volta replicato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le trasparenze</p><h2>Che cosa il sistema nasconde all'utente</h2></div>
+  <dl class="puzzle-abbina" data-id="sd-trasparenze">
+    <dt>Accesso</dt><dd>Leggi un file locale o remoto con le stesse operazioni</dd>
+    <dt>Posizione</dt><dd>Non sai in quale data center è la tua foto</dd>
+    <dt>Migrazione</dt><dd>Il servizio cambia server mentre lo usi</dd>
+    <dt>Replicazione</dt><dd>Ci sono tre copie, ma ne vedi una</dd>
+    <dt>Guasto</dt><dd>Un nodo cade e tu non te ne accorgi</dd>
+    <dt>Concorrenza</dt><dd>Mille utenti insieme, sembri l'unico</dd>
+  </dl>
+  <aside class="notes">Classificazione delle trasparenze dallo standard ISO RM-ODP, ripresa da Tanenbaum. Messaggio importante per le lezioni successive: la trasparenza totale è impossibile e a volte pericolosa. Un programmatore che tratta una chiamata remota come una locale dimentica che può fallire o metterci un secondo invece di un nanosecondo. Lo vedremo con RPC (lezione 2) e con il saggio "A Note on Distributed Computing" di Waldo e colleghi (Sun, 1994).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quanti server servono per una pagina?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il sito di un quotidiano nazionale in Chrome, Edge o Firefox. Premi <b>F12</b>, scheda <b>Network</b> (Rete).</li>
+      <li>Spunta <b>Disable cache</b> e ricarica con <b>Ctrl+F5</b>.</li>
+      <li>Leggi in basso il numero di richieste e il tempo totale. Aggiungi la colonna <b>Domain</b> (tasto destro sulle intestazioni).</li>
+      <li>Ordina per dominio e conta i domini diversi: quali sono del giornale, quali di CDN, pubblicità, statistiche?</li>
+      <li>Annota tutto in <b>pagina-distribuita-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> di solito trovi decine o centinaia di richieste verso 10-50 domini diversi. Una sola pagina è già un sistema distribuito: se uno di quei server è lento, la pagina resta "a metà".</div>
+  </div>
+  <aside class="notes">Funziona senza account e senza installare nulla. Firefox chiama la scheda "Rete". Se la colonna Domain non c'è, basta passare il mouse sulle richieste. Domande: che cosa succede alla pagina se il server delle pubblicità non risponde? (Spesso la pagina si carica lo stesso: è progettata per tollerare il guasto parziale; a volte invece resta bloccata, e questo è un errore di progetto.) Estensione: provare con il blocco delle richieste (tasto destro, Block request domain) e vedere come cambia la pagina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Modelli architetturali</p><h2>Chi chiede e chi risponde</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Client-server</h3><p>Il client chiede, il server risponde. Il server è centrale: facile da gestire e proteggere, ma va dimensionato bene.</p><p class="muted small">Web, posta, giochi online, home banking</p></div>
+    <div class="card"><h3>Peer-to-peer</h3><p>Ogni nodo è insieme client e server. Più nodi ci sono, più risorse ci sono. Difficile da controllare.</p><p class="muted small">BitTorrent, blockchain, aggiornamenti di Windows tra PC vicini</p></div>
+    <div class="card"><h3>A livelli (multi-tier)</h3><p>Il server si divide in livelli: <b>presentazione</b>, <b>logica</b>, <b>dati</b>. Ogni livello può scalare da solo.</p><p class="muted small">Browser, server applicativo, database</p></div>
+  </div>
+  <div class="callout">Molti sistemi reali sono <b>ibridi</b>: le videochiamate usano un server per trovarsi, poi spesso un flusso diretto.</div>
+  <aside class="notes">Il modello a tre livelli è quello che gli studenti useranno di più all'esame (pagina web, server applicativo Java o PHP, database). Sulle videochiamate: WebRTC usa un server di segnalazione per mettere in contatto i due browser e poi, quando la rete lo permette, un flusso diretto; quando non è possibile passa da un server di inoltro (TURN), e nelle chiamate di gruppo grandi si usano server che smistano i flussi (SFU). Domanda: in quale modello è più facile far rispettare una regola a tutti? (Client-server: c'è un punto di controllo.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Middleware</p><h2>Lo strato che nasconde la rete al programmatore</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="card fill"><h3>Applicazioni distribuite</h3><p class="small">App del registro elettronico, e-commerce, gioco online</p></div>
+      <div class="card soft"><h3>Middleware</h3><p class="small">RPC e Java RMI · broker di messaggi (RabbitMQ, Kafka) · web service SOAP e REST · gRPC</p></div>
+      <div class="card"><h3>Sistemi operativi e rete</h3><p class="small">Windows, Linux, Android · TCP/IP · socket</p></div>
+    </div>
+    <div class="stack">
+      <p>Il <b>middleware</b> è il software che sta tra il sistema operativo e l'applicazione e offre servizi comuni:</p>
+      <ul class="points small">
+        <li>comunicazione tra nodi</li>
+        <li>conversione dei dati</li>
+        <li>nomi e ricerca dei servizi</li>
+        <li>sicurezza e transazioni</li>
+      </ul>
+      <p class="small muted">Tutta l'Unità 2 è un viaggio tra diversi tipi di middleware.</p>
+    </div>
+  </div>
+  <aside class="notes">Il nome dice già tutto: sta "in mezzo". Senza middleware ogni programmatore dovrebbe aprire socket, decidere un formato per i byte, gestire timeout e ritrasmissioni. Due grandi famiglie: middleware orientato alle chiamate (RPC, RMI, gRPC, web service: chiedo e aspetto la risposta) e middleware orientato ai messaggi (MOM, code e broker: mando e vado avanti). Le socket le studieranno in dettaglio nell'Unità 3 (chat Java).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le otto fallacie</p><h2>Otto cose che i programmatori credono, sbagliando</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>La rete è affidabile.</li>
+      <li>La latenza è zero.</li>
+      <li>La banda è infinita.</li>
+      <li>La rete è sicura.</li>
+    </ol>
+    <ol class="steps" start="5" style="counter-reset:s 4">
+      <li>La topologia non cambia.</li>
+      <li>C'è un solo amministratore.</li>
+      <li>Il costo del trasporto è zero.</li>
+      <li>La rete è omogenea.</li>
+    </ol>
+  </div>
+  <p class="small muted">Le "fallacie del calcolo distribuito": elenco nato in Sun Microsystems negli anni '90, reso famoso da <b>L. Peter Deutsch</b>; l'ottava è di <b>James Gosling</b>, il padre di Java.</p>
+  <aside class="notes">Ricostruzione più diffusa: le prime quattro furono individuate da Bill Joy e Tom Lyon in Sun nei primi anni '90, L. Peter Deutsch portò l'elenco a sette (1994) e James Gosling aggiunse l'ottava, "la rete è omogenea" (circa 1997). Le fonti non sono concordi sui dettagli, per questo sulla slide parliamo di elenco nato in Sun. Far trovare un esempio concreto per ognuna: 1 il Wi-Fi che cade in treno, 2 New York è a decine di millisecondi, 3 il video in 4K a scuola, 4 la rete pubblica del bar, 5 il cloud che sposta le macchine, 6 la rete di casa, quella del provider, quella del cloud, 7 serializzare costa CPU e il traffico in uscita dal cloud si paga, 8 un client Android che parla con un server Java su Linux. Il prossimo laboratorio smonta la fallacia numero 1.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La rete non è affidabile: riprova con giudizio</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)">
+<pre class="code" style="font-size:20px"><span class="k">var</span> client = HttpClient.newBuilder()
+    .connectTimeout(Duration.ofSeconds(<span class="hl">2</span>)).build();
+<span class="k">var</span> req = HttpRequest.newBuilder(URI.create(a[0])).build();
+<span class="k">long</span> attesa = 500;
+<span class="k">for</span> (<span class="k">int</span> t = 1; t &lt;= 4; t++) {
+  <span class="k">try</span> {
+    <span class="k">var</span> r = client.send(req, HttpResponse.BodyHandlers.ofString());
+    System.out.println(<span class="s">"Tentativo "</span> + t + <span class="s">": HTTP "</span> + r.statusCode());
+    <span class="k">return</span>;
+  } <span class="k">catch</span> (java.io.IOException e) {
+    System.out.println(<span class="s">"Tentativo "</span> + t + <span class="s">" fallito: "</span>
+        + e.getClass().getSimpleName() + <span class="s">", attendo "</span> + attesa);
+    Thread.sleep(attesa);
+    attesa *= 2;   <span class="c">// backoff esponenziale</span>
+  }
+}
+System.out.println(<span class="s">"Irraggiungibile: uso i dati in cache"</span>);</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Crea <b>Riprova.java</b>: il codice va nel <code>main</code>, con le import di <code>java.net</code>, <code>java.net.http</code> e <code>java.time</code>.</li>
+        <li>Esegui <code>java Riprova.java URL</code> con questi tre URL:<br><code>https://www.wikipedia.org</code><br><code>http://localhost:9</code><br><code>http://10.255.255.1</code></li>
+      </ol>
+      <div class="check"><b>Controllo:</b> Wikipedia risponde subito. Con la porta 9 ricevi <b>ConnectException</b> immediata, con 10.255.255.1 un <b>timeout</b> dopo 2 secondi.</div>
+    </div>
+  </div>
+  <aside class="notes">Da JDK 11 si può eseguire un singolo file sorgente con "java Riprova.java" senza compilare. Programma completo: le tre import, "public class Riprova { public static void main(String[] a) throws Exception { ... } }". Differenza da far notare: la porta 9 su localhost è chiusa, quindi il sistema operativo rifiuta subito la connessione (connection refused); 10.255.255.1 è un indirizzo privato a cui nessuno risponde, quindi si aspetta il timeout. Sono due guasti diversi con tempi diversi. Discussione: perché raddoppiare l'attesa (backoff esponenziale)? Se mille client riprovano tutti subito, il server appena ripartito crolla di nuovo. Nei sistemi reali si aggiunge anche un'attesa casuale (jitter). Attenzione: riprovare va bene se l'operazione è idempotente (leggere), è pericoloso se è un pagamento: ne riparleremo con RPC e HTTP. Nota: su alcune reti scolastiche il proxy risponde al posto del server e il risultato cambia; è un ottimo esempio della fallacia "la topologia non cambia".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il teorema CAP</p><h2>Quando la rete si spezza, devi scegliere</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">C</p><h3>Consistency</h3><p class="small">Tutti i nodi vedono lo stesso dato nello stesso momento.</p></div>
+    <div class="card soft"><p class="num">A</p><h3>Availability</h3><p class="small">Ogni richiesta riceve una risposta, anche se un nodo è irraggiungibile.</p></div>
+    <div class="card soft"><p class="num">P</p><h3>Partition tolerance</h3><p class="small">Il sistema continua a funzionare anche se la rete si divide in due parti.</p></div>
+  </div>
+  <div class="callout">In rete le <b>partizioni capitano</b>. Durante una partizione un nodo può rispondere con un dato forse vecchio (<b>A</b>) oppure rifiutarsi finché non è sicuro (<b>C</b>). Tutte e due insieme, no.</div>
+  <p class="small muted">Congettura di Eric Brewer (2000), dimostrata da Seth Gilbert e Nancy Lynch (2002).</p>
+  <aside class="notes">Esempio da raccontare: due sportelli bancomat collegati alla stessa banca, il cavo tra loro si interrompe. Se il bancomat continua a dare soldi (A) rischia che lo stesso conto venga svuotato due volte; se si blocca (C) i clienti restano senza contanti. Le banche, per importi piccoli, scelgono spesso la disponibilità con limiti di prelievo e riconciliano dopo. Un social network sceglie A: meglio vedere un "mi piace" in ritardo che una pagina di errore. Un sistema di prenotazione dei posti in aereo, al momento del pagamento, sceglie C. Brewer stesso nel 2012 ("CAP twelve years later") ha precisato che la formula "due su tre" è fuorviante: la scelta tra C e A si fa solo quando c'è una partizione, e in modo graduale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale frase sul teorema CAP è corretta?</h2></div>
+  <div class="poll" data-id="sd-cap" data-tipo="quiz" data-risposta="B">
+    <ol><li>Si scelgono liberamente due proprietà su tre, per esempio C e A</li><li>Se la rete si divide, bisogna scegliere tra coerenza e disponibilità</li><li>Un database relazionale garantisce sempre tutte e tre</li><li>Con la fibra ottica le partizioni non avvengono più</li></ol>
+    <p class="why">In un sistema distribuito la partizione non si sceglie: prima o poi succede. Quando succede, la scelta vera è tra C e A. Un sistema "CA" esiste solo su un unico nodo, cioè quando non è distribuito.</p>
+  </div>
+  <aside class="notes">La A è la frase che si trova in tanti siti e meme ("pick two"): è l'errore classico. Un database relazionale su un solo server è C e A, ma non è distribuito; appena lo replichi su due server collegati in rete, il problema si ripresenta. La D è un'altra versione della fallacia "la rete è affidabile": scavatrici, router configurati male, data center isolati capitano anche con la fibra.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La latenza non è zero: misurala</h2>
+  <div class="stack">
+<pre class="code" style="font-size:24px">curl -o NUL -s -w "connessione %{time_connect} s  totale %{time_total} s\n" https://www.wikipedia.org</pre>
+    <div class="cols-2 wide-left">
+      <ol class="steps small">
+        <li>Nel <b>Prompt dei comandi</b> esegui il comando 3 volte. In PowerShell scrivi <code>curl.exe</code>; su Linux e macOS usa <code>-o /dev/null</code>.</li>
+        <li>Ripeti con il sito del tuo comune e con un sito di un altro continente.</li>
+        <li>Calcola il minimo teorico: nella fibra la luce fa circa <b>200 000 km/s</b>. Milano-New York sono circa 6 500 km: quanto vale l'andata e ritorno?</li>
+        <li>Salva valori e calcoli in <b>latenza-cognome.txt</b>.</li>
+      </ol>
+      <div class="check small"><b>Controllo:</b> il minimo teorico per Milano-New York è circa <b>65 ms</b> (andata e ritorno). La connessione a un sito vicino richiede pochi millisecondi; se un sito "lontano" risponde in 10 ms, lo sta servendo una CDN in Europa.</div>
+    </div>
+  </div>
+  <aside class="notes">Calcolo: 6 500 km / 200 000 km/s = 0,0325 s = 32,5 ms solo andata, quindi circa 65 ms andata e ritorno, senza contare router e code. time_connect misura fino al completamento della connessione TCP (un andata e ritorno dopo la risoluzione DNS), time_total comprende TLS, richiesta e risposta. curl è incluso in Windows 10 e 11. In Windows PowerShell 5 la parola curl è un alias di Invoke-WebRequest: per questo serve curl.exe. Se la rete della scuola usa un proxy, i tempi includono anche il proxy: discuterne. Collegamento: una chiamata remota costa milioni di volte una chiamata di metodo locale (nanosecondi contro millisecondi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>I sistemi distribuiti più grandi del pianeta</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Addestrare un'AI è un problema distribuito</h3><p>Meta ha addestrato Llama 3 su circa <b>16 000 GPU</b> in parallelo. In 54 giorni ha contato <b>419 interruzioni impreviste</b>, circa una ogni tre ore. Senza salvataggi periodici e ripartenze automatiche, l'addestramento non finirebbe mai.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Lamport aveva ragione</h3><p>Il 20 ottobre 2025 un guasto legato al DNS nella regione us-east-1 di Amazon Web Services, in Virginia, ha bloccato per ore app e siti usati in tutto il mondo. Milioni di persone hanno scoperto di dipendere da computer di cui non conoscevano l'esistenza.</p></div>
+  </div>
+  <aside class="notes">Fonte Llama 3: articolo "The Llama 3 Herd of Models" (Meta, luglio 2024), sezione sull'affidabilità dell'infrastruttura: 466 interruzioni in un periodo di 54 giorni, di cui 47 programmate e 419 impreviste, molte dovute a GPU e memoria HBM. Messaggio: a quella scala il guasto non è un'eccezione, è la normalità, e il software va progettato per sopravvivere. Fonte AWS: il resoconto pubblico di Amazon sul disservizio del 19-20 ottobre 2025 (un errore nella gestione automatica dei record DNS dell'endpoint di DynamoDB in us-east-1, con effetti a catena su altri servizi). Non dare numeri di utenti colpiti che non si possono verificare. Domanda: come avrebbe potuto un'app proteggersi? (Usare più regioni, degradare con grazia, mostrare dati in cache.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame · sfida a squadre</p><h2>Progetta in 6 minuti: prenotare le aule della scuola</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Docenti e studenti prenotano laboratori e palestra da app e browser. Disegnate l'architettura e rispondete:</p>
+      <ol class="steps small">
+        <li>Quali sono i tre livelli e su quali macchine stanno?</li>
+        <li>Che cosa succede se cade il server del database?</li>
+        <li>Due docenti prenotano lo stesso laboratorio nello stesso istante: chi vince?</li>
+        <li>Durante una partizione preferite C o A? Perché?</li>
+      </ol>
+    </div>
+    <div class="stack">
+      <div class="timer" data-min="6"></div>
+      <div class="callout hl small">All'esame una traccia di progetto chiede quasi sempre uno <b>schema dell'architettura</b> e la <b>giustificazione</b> delle scelte. Un disegno senza motivazioni vale la metà.</div>
+    </div>
+  </div>
+  <aside class="notes">Squadre da 3-4. Soluzione attesa: presentazione (browser e app), logica (server applicativo, possibilmente due istanze dietro un bilanciatore), dati (database con una replica). Se cade il database primario si promuove la replica; senza replica il servizio si ferma (singolo punto di guasto). La prenotazione doppia si risolve con una transazione o un vincolo di unicità sul database: vince chi arriva per primo al database, l'altro riceve un errore e un messaggio chiaro. Per le prenotazioni la scelta giusta è C: meglio un messaggio "riprova tra poco" che due classi nello stesso laboratorio. Premiare la squadra con le giustificazioni migliori, non il disegno più bello.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto distribuito</h2></div>
+  <div class="puzzle-codice" data-risposta="8371" data-aiuto="la terza cifra viene dall'anno dell'email di Lamport, 1987">
+    <ul class="points">
+      <li>1ª cifra: quante sono le fallacie del calcolo distribuito</li>
+      <li>2ª cifra: quante proprietà nomina il teorema CAP</li>
+      <li>3ª cifra: l'ultima cifra dell'anno dell'email di Lamport</li>
+      <li>4ª cifra: durante una partizione, quante tra C e A puoi garantire</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 8 fallacie, 3 lettere C A P, 1987, e una sola tra coerenza e disponibilità.</div>
+  </div>
+  <aside class="notes">Codice: 8371. A squadre: vince la prima che apre. L'aiuto compare dopo tre tentativi sbagliati. Se qualcuno prova 8372 (convinto del "due su tre"), è l'occasione per ripetere il quiz sul CAP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In un sistema distribuito i nodi non condividono la memoria: comunicano solo scambiandosi <span class="blank" data-risposta="messaggi"></span>.</p>
+    <p>Quando un nodo si guasta e gli altri continuano si parla di guasto <span class="blank" data-risposta="parziale"></span>.</p>
+    <p>Aggiungere server uguali dietro un bilanciatore significa scalare in <span class="blank" data-risposta="orizzontale"></span>.</p>
+    <p>Lo strato software tra sistema operativo e applicazione si chiama <span class="blank" data-risposta="middleware"></span>.</p>
+    <p>Secondo il teorema CAP, durante una partizione si sceglie tra coerenza e <span class="blank" data-risposta="disponibilità|disponibilita|availability"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: messaggi, parziale, orizzontale, middleware, disponibilità (accettato anche availability).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Computer indipendenti che sembrano un solo sistema</li>
+      <li>Solo messaggi in rete, guasti parziali, nessun orologio comune</li>
+      <li>Client-server, peer-to-peer, architetture a livelli</li>
+    </ul>
+    <ul class="points">
+      <li>Il middleware nasconde la rete al programmatore</li>
+      <li>Otto fallacie: la rete non è affidabile, né istantanea</li>
+      <li>CAP: con una partizione, coerenza o disponibilità</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (autopsia di un disservizio reale). Prossima lezione: la comunicazione con RPC, cioè come far sembrare locale una chiamata a un altro computer, e perché non bisogna crederci del tutto.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

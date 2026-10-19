@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il mondo in tasca · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 1</p>
+  <h1>Il mondo in tasca</h1>
+  <p class="lead">Uno smartphone è un computer completo, ma con una batteria piccola, uno schermo da toccare e una rete che va e viene. Progettare per lui è un altro mestiere.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Caratteristiche e problematiche dei dispositivi mobili</span></p>
+  <aside class="notes">Obiettivi: riconoscere i vincoli dei dispositivi mobili (energia, schermo e input, rete, sensori, sicurezza, frammentazione), calcolare dp e px, distinguere app native, web, ibride e multipiattaforma e saper motivare una scelta. Durata indicativa: 2-3 ore con i laboratori. Prerequisiti: Java, HTML/CSS/JS, nozioni di reti. Questa lezione apre l'Unità 4: nelle lezioni 4-7 costruiremo passo passo una piccola app Android, QuizTPSI. Collegamento: la sicurezza dei dispositivi riprende i deck principi-sicurezza e attacchi-informatici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Se potessi migliorare una sola cosa del tuo telefono, quale sceglieresti?</h2></div>
+  <div class="poll" data-id="mob-desiderio">
+    <ol><li>Una batteria che dura tre giorni</li><li>Una rete sempre veloce, ovunque</li><li>Più memoria per foto e app</li><li>Uno schermo più grande, ma stesso ingombro</li><li>App che non mi tracciano</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Ogni opzione corrisponde a un vincolo che vedremo: energia, rete, memoria, schermo, privacy. Di solito vince la batteria: è il vincolo che chi sviluppa app dimentica più spesso. Chiedere a chi ha scelto la privacy che cosa intende per "tracciare" (posizione, identificativi pubblicitari, contatti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gennaio 2007, San Francisco</p><h2>Un solo dispositivo, tre mestieri</h2></div>
+  <figure class="citazione">
+    <blockquote>Ogni tanto arriva un prodotto rivoluzionario che cambia tutto.</blockquote>
+    <figcaption><b>Steve Jobs</b>, cofondatore di Apple, presentazione dell'iPhone al Macworld, 9 gennaio 2007</figcaption>
+  </figure>
+  <div class="cols-3">
+    <div class="card soft"><h3>2007</h3><p>L'iPhone: "un iPod, un telefono e un comunicatore Internet" in un solo oggetto con schermo multi-touch.</p></div>
+    <div class="card soft"><h3>2008</h3><p>Esce il primo telefono Android, l'HTC Dream (T-Mobile G1), con tastiera a scomparsa.</p></div>
+    <div class="card soft"><h3>Oggi</h3><p>Gli smartphone sono il computer principale, spesso l'unico, di miliardi di persone.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'originale inglese: "Every once in a while, a revolutionary product comes along that changes everything." Nella stessa presentazione Jobs ripete "an iPod, a phone, and an Internet communicator" finché il pubblico capisce che è un solo dispositivo; cita anche Alan Kay ("People who are really serious about software should make their own hardware"). L'HTC Dream è stato annunciato nel settembre 2008 e venduto negli USA dall'ottobre 2008. Domanda: che cosa mancava all'iPhone del 2007 che oggi diamo per scontato? (App store di terze parti, arrivato nel 2008; 3G; GPS vero e proprio; copia e incolla.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa cambia</p><h2>Stesso computer, vincoli diversi</h2></div>
+  <table class="data compact">
+    <tr><th>Aspetto</th><th>PC del laboratorio</th><th>Smartphone</th></tr>
+    <tr><td>Processore</td><td>x86-64, raffreddato a ventola</td><td>SoC ARM: CPU, GPU, NPU e modem in un chip, raffreddamento passivo</td></tr>
+    <tr><td>Energia</td><td>Presa di corrente</td><td>Batteria di circa 15-20 Wh, da far durare tutto il giorno</td></tr>
+    <tr><td>Schermo e input</td><td>Grande, mouse e tastiera</td><td>Piccolo, densità alta, dita imprecise, orientamento che cambia</td></tr>
+    <tr><td>Rete</td><td>Cavo o Wi-Fi stabile</td><td>Cellulare e Wi-Fi che si alternano, a volte a consumo o assenti</td></tr>
+    <tr><td>Sensori</td><td>Quasi nessuno</td><td>GPS, accelerometro, giroscopio, fotocamere, impronta</td></tr>
+    <tr><td>Rischi</td><td>Resta in aula</td><td>Si perde, si ruba, contiene la vita privata del proprietario</td></tr>
+  </table>
+  <aside class="notes">Far notare il SoC (System on a Chip): Snapdragon, Exynos, Tensor, Dimensity, Apple A. Molti usano core di tipo diverso (architettura big.LITTLE e successive): core potenti per i picchi, core efficienti per il lavoro leggero. Il raffreddamento passivo spiega il "thermal throttling": dopo qualche minuto di gioco pesante il chip rallenta per non scaldarsi troppo. Domanda: quale riga cambia di più il modo di scrivere il codice? (Energia e rete.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vincolo 1 · Energia</p><h2>La batteria è il budget di ogni app</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula" style="font-size:50px"><small>Energia della batteria</small>Wh = mAh × V ÷ 1000<br><span class="hl">5000 mAh × 3,85 V = 19,25 Wh</span></div>
+      <ul class="points">
+        <li>Consumano di più: schermo, modem con segnale debole, GPS, CPU sempre sveglia.</li>
+        <li>Android limita il lavoro in background: da Android 6 c'è la modalità <b>Doze</b>.</li>
+      </ul>
+    </div>
+    <div class="card night"><h3>Per confronto</h3><p>Un portatile ha spesso una batteria da 50-70 Wh: tre o quattro volte quella di un telefono.</p><p class="muted small">Ogni risveglio inutile del telefono si paga in minuti di autonomia.</p></div>
+  </div>
+  <aside class="notes">3,85 V è una tensione nominale tipica delle celle agli ioni di litio dei telefoni attuali; i mAh da soli non bastano per confrontare batterie con tensioni diverse, servono i Wh. Doze (Android 6.0, 2015): quando il telefono è fermo e con lo schermo spento, il sistema raggruppa allarmi, sincronizzazioni e accessi alla rete in finestre di manutenzione. Gli sviluppatori devono usare API come WorkManager, che rispettano questi limiti. Collegamento all'esame: nelle prove di progetto è un buon argomento per motivare scelte come la sincronizzazione periodica rispetto al polling continuo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un'app deve inviare 10 piccoli dati in 10 minuti. Quale strategia consuma più batteria?</h2></div>
+  <div class="poll" data-id="mob-radio" data-tipo="quiz" data-risposta="A">
+    <ol><li>Un invio ogni minuto, appena il dato è pronto</li><li>Un unico invio con tutti i dati alla fine</li><li>Due invii, uno ogni cinque minuti</li><li>Sono uguali: conta solo il numero di byte</li></ol>
+    <p class="why">Dopo ogni trasmissione il modem cellulare resta per alcuni secondi in uno stato ad alto consumo prima di tornare a riposo. Dieci invii separati pagano dieci volte questa "coda": conviene raggruppare (batching).</p>
+  </div>
+  <aside class="notes">Il tranello è la D: chi ragiona da PC pensa solo ai byte. Nelle reti cellulari la radio passa tra stati a consumo diverso (gestiti dal protocollo RRC): attivarla e tenerla accesa costa più dei dati stessi. Per questo le linee guida Android consigliano di raggruppare le richieste di rete e di rimandare quelle non urgenti. Domanda di approfondimento: e una chat? (Lì serve immediatezza: si usano le notifiche push, che passano da un unico canale condiviso da tutte le app, Firebase Cloud Messaging.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un sito visto da un telefono con rete lenta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Chrome o Edge su un sito a scelta (per esempio <b>it.wikipedia.org</b>) e premi <b>F12</b>.</li>
+      <li>Attiva la barra dei dispositivi (<b>Ctrl+Maiusc+M</b>) e scegli un modello di telefono.</li>
+      <li>Nella scheda <b>Network</b> spunta <i>Disable cache</i>, ricarica e annota tempo di <i>Load</i> e kB trasferiti.</li>
+      <li>Nel menu della limitazione di rete scegli un profilo lento (per esempio <i>Slow 4G</i> o <i>3G</i>) e ricarica.</li>
+      <li>Scrivi i due tempi e i kB in <b>rete-mobile.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i kB trasferiti restano quasi uguali, ma con la rete lenta il tempo di caricamento cresce di molte volte. La pagina è la stessa: cambia la rete.</div>
+  </div>
+  <aside class="notes">I nomi dei profili di limitazione cambiano tra le versioni di Chrome (No throttling, Fast 4G, Slow 4G, 3G, Offline): va bene qualunque profilo lento. I valori in fondo alla scheda Network sono "transferred" e "Load". Domanda: quale parte della pagina pesa di più? (Di solito immagini e JavaScript.) Estensione per i più veloci: scheda Lighthouse, categoria Performance, dispositivo Mobile. Ripresa in Unità 5 (web design e prestazioni).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vincolo 2 · Schermo</p><h2>Pixel diversi, stessa misura: il dp</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula"><small>Pixel indipendenti dalla densità</small>px = dp × <span class="hl">dpi ÷ 160</span></div>
+      <ul class="points">
+        <li><b>dp</b>: 160 dp sono circa un pollice su qualunque schermo.</li>
+        <li><b>sp</b>: come il dp, ma segue la dimensione del testo scelta dall'utente.</li>
+        <li>Un'area da toccare dovrebbe misurare almeno <b>48 dp</b>.</li>
+      </ul>
+    </div>
+    <table class="data compact">
+      <tr><th>Densità</th><th>dpi</th><th>Fattore</th><th>48 dp</th></tr>
+      <tr><td>mdpi</td><td class="mono">160</td><td class="mono">1×</td><td class="mono">48 px</td></tr>
+      <tr><td>hdpi</td><td class="mono">240</td><td class="mono">1,5×</td><td class="mono">72 px</td></tr>
+      <tr><td>xhdpi</td><td class="mono">320</td><td class="mono">2×</td><td class="mono">96 px</td></tr>
+      <tr class="hl"><td>xxhdpi</td><td class="mono">480</td><td class="mono">3×</td><td class="mono">144 px</td></tr>
+      <tr><td>xxxhdpi</td><td class="mono">640</td><td class="mono">4×</td><td class="mono">192 px</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Il dp (density-independent pixel) è l'unità di Android: 1 dp = 1 px su uno schermo a 160 dpi. Gli schermi reali hanno densità qualunque; Android li assegna al gruppo più vicino e sceglie le risorse grafiche di quel gruppo (cartelle drawable-xxhdpi ecc.). 48 dp sono circa 0,3 pollici, cioè 7-8 mm: la misura minima consigliata per un bersaglio da toccare. Usare sp per i caratteri è una questione di accessibilità: chi ingrandisce il testo nelle impostazioni deve vederlo più grande. Lo riprenderemo nella lezione 5 sul layout.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il convertitore dp → px in Java</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea in IntelliJ o VS Code il file <b>Densita.java</b>.</li>
+      <li>Scrivi il metodo <code>static double px(double dp, int dpi)</code> con la formula della slide precedente.</li>
+      <li>Nel <code>main</code> stampa una riga per ogni densità: 160, 240, 320, 480, 640 dpi, per 48 dp.</li>
+      <li>Aggiungi la misura fisica: <code>mm = dp / 160 * 25.4</code>.</li>
+      <li>Salva ed esegui con <code>java Densita.java</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le righe danno 48, 72, 96, 144 e 192 px. La misura fisica è sempre la stessa: circa <b>7,6 mm</b>. È proprio lo scopo del dp.</div>
+  </div>
+  <aside class="notes">Soluzione:
+  static double px(double dp, int dpi) { return dp * dpi / 160.0; }
+  public static void main(String[] a) { int[] d = {160, 240, 320, 480, 640}; for (int x : d) System.out.printf("%d dpi: %.0f px, %.1f mm%n", x, px(48, x), 48 / 160.0 * 25.4); }
+  Attenzione alla divisione intera: dp * dpi / 160 con tutti int funziona qui per caso; 1 dp a 240 dpi darebbe 1 invece di 1,5. 48 / 160 * 25.4 in Java con 48 e 160 interi dà 0! Ottima occasione per ripassare. Con Java 11+ si può eseguire un singolo file sorgente con java Densita.java senza compilare prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vincoli 3 e 4 · Rete e contesto</p><h2>Il telefono si muove, la rete no</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Rete instabile</h3><p>Si passa da Wi-Fi a 5G, poi in galleria a niente. Le richieste falliscono a metà.</p><p class="muted small">Soluzione: timeout, nuovi tentativi, dati salvati in locale (offline first).</p></div>
+    <div class="card"><h3>Rete a consumo</h3><p>Molti hanno un piano dati limitato. Scaricare un video in automatico costa soldi veri.</p><p class="muted small">Soluzione: rispettare le reti a consumo, chiedere prima dei download grandi.</p></div>
+    <div class="card"><h3>Interruzioni</h3><p>Una chiamata, una notifica, il telefono in tasca: l'app può essere messa da parte in qualunque momento.</p><p class="muted small">Soluzione: salvare lo stato. Lo vedremo con il ciclo di vita.</p></div>
+  </div>
+  <div class="callout">Un'app mobile ben fatta <b>non si fida della rete</b> e <b>non si fida di restare in primo piano</b>.</div>
+  <aside class="notes">Esempi concreti: l'app di messaggistica che mette il messaggio in coda con l'orologio e lo invia appena torna la rete; le mappe scaricabili offline. Android segnala se una rete è a consumo (ConnectivityManager, NetworkCapabilities). Il tema delle interruzioni prepara la lezione 2 sul ciclo di vita delle Activity.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · I sensori</p><h2>Abbina ogni sensore a ciò che rende possibile</h2></div>
+  <dl class="puzzle-abbina" data-id="mob-sensori">
+    <dt>Accelerometro</dt><dd>Contare i passi e capire se il telefono è in verticale</dd>
+    <dt>Giroscopio</dt><dd>Seguire la rotazione per la realtà aumentata</dd>
+    <dt>GNSS (GPS, Galileo)</dt><dd>Calcolare la posizione dai segnali dei satelliti</dd>
+    <dt>Magnetometro</dt><dd>Far funzionare la bussola</dd>
+    <dt>Sensore di prossimità</dt><dd>Spegnere lo schermo quando lo avvicini all'orecchio</dd>
+    <dt>Sensore di luce</dt><dd>Regolare da solo la luminosità dello schermo</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti. GNSS è il nome generale: i telefoni recenti ricevono più costellazioni (GPS americano, Galileo europeo, GLONASS, BeiDou). La posizione può arrivare anche da Wi-Fi e celle telefoniche, con meno precisione e meno consumo. Domanda: quali di questi dati sono sensibili per la privacy? (Posizione soprattutto: per questo Android chiede un permesso, lezione 2.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si costruisce un'app</p><h2>Quattro strade per arrivare sul telefono</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><h3>Nativa</h3><p>Kotlin o Java per Android, Swift per iOS. Tutte le API, prestazioni migliori.</p><p class="small">Due basi di codice.</p></div>
+    <div class="card"><h3>Web app e PWA</h3><p>HTML, CSS e JavaScript nel browser. Una PWA si installa e funziona anche offline.</p><p class="muted small">Accesso limitato all'hardware.</p></div>
+    <div class="card"><h3>Ibrida</h3><p>Pagine web dentro una WebView, in un contenitore nativo (Cordova, Capacitor).</p><p class="muted small">Va sugli store, sembra meno nativa.</p></div>
+    <div class="card"><h3>Multipiattaforma</h3><p>Un codice, due sistemi: Flutter (Dart), React Native (JS), Kotlin Multiplatform.</p><p class="muted small">Compromesso molto usato.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Dal 2024 Google supporta ufficialmente <b>Kotlin Multiplatform</b> per condividere la logica tra Android e iOS, lasciando l'interfaccia nativa o condividendo anche quella con Compose Multiplatform.</p></div>
+  <aside class="notes">In questa unità facciamo app native in Kotlin, come il libro. Differenze chiave: Flutter disegna l'interfaccia con un proprio motore grafico, React Native usa componenti nativi controllati da JavaScript, Kotlin Multiplatform compila codice Kotlin condiviso per entrambe le piattaforme. L'annuncio del supporto di Google a Kotlin Multiplatform è del Google I/O 2024. Collegamento: chi ha fatto App Inventor nel biennio ha già visto un altro approccio, visuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale affermazione sulle app ibride è corretta?</h2></div>
+  <div class="poll" data-id="mob-ibride" data-tipo="quiz" data-risposta="C">
+    <ol><li>Sono compilate in codice macchina come le native</li><li>Funzionano solo quando c'è connessione</li><li>Mostrano pagine web in una WebView dentro un'app installabile dagli store</li><li>Non possono essere pubblicate su Google Play</li></ol>
+    <p class="why">Un'app ibrida è un contenitore nativo con dentro una WebView: l'interfaccia è HTML, CSS e JavaScript, spesso inclusi nel pacchetto. Può funzionare offline e va sugli store; dei plugin nativi le danno accesso a fotocamera e sensori.</p>
+  </div>
+  <aside class="notes">La B è il tranello più frequente: si confonde l'ibrida con un sito. I file web sono di solito dentro il pacchetto dell'app, quindi funziona anche offline. La A descrive meglio Flutter, che compila il Dart in codice nativo. Domanda: perché un'azienda sceglie l'ibrida? (Ha già un sito e un team web, vuole tempi brevi.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vincolo 5 · Frammentazione</p><h2>Migliaia di modelli, molte versioni</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Android gira su telefoni, tablet, pieghevoli, TV, auto, orologi di centinaia di produttori.</li>
+      <li>Convivono più versioni del sistema: non tutti aggiornano.</li>
+      <li>Nel progetto si sceglie la versione <b>minima</b> supportata (minSdk).</li>
+      <li>Si prova l'app su schermi diversi, almeno con l'emulatore.</li>
+    </ul>
+    <div class="card soft"><p class="num">All'esame</p><p>In una prova di progetto ti può essere chiesto di scegliere tra nativa, web e multipiattaforma: <b>motiva con i vincoli</b> (utenti, budget, team, API necessarie, funzionamento offline), non con i gusti.</p></div>
+  </div>
+  <aside class="notes">iOS ha meno frammentazione perché un solo produttore controlla hardware e software. Android, secondo le stime di StatCounter, è il sistema di circa 7 smartphone su 10 nel mondo; presentarlo come stima e far controllare il dato aggiornato su gs.statcounter.com. Tracce di esame: non affermare nulla di specifico sulle prove ministeriali; il consiglio vale per ogni prova di progetto: requisiti, scelta, motivazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E voi cosa fareste?</p><h2>L'app della scuola con orari, avvisi e registro: come la costruireste?</h2></div>
+  <div class="poll" data-id="mob-scuola">
+    <ol><li>Nativa Android e nativa iOS</li><li>Una PWA</li><li>Multipiattaforma (Flutter o Kotlin Multiplatform)</li><li>Ibrida, partendo dal sito</li></ol>
+  </div>
+  <aside class="notes">Non c'è una risposta giusta: far difendere ogni scelta da una squadra in un minuto. Argomenti attesi: PWA economica e senza store, ma notifiche e installazione meno immediate su iOS (supportate dalla versione 16.4, con l'app aggiunta alla schermata Home); nativa costosa ma migliore; multipiattaforma buon compromesso per un piccolo team; ibrida veloce se il sito esiste già. È il tipo di ragionamento richiesto nelle prove di progetto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Quanto dura la batteria? Stima in Java</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>Autonomia.java</b> con una batteria da 5000 mAh a 3,85 V e calcola i Wh.</li>
+      <li>Crea un <code>record Scenario(String nome, double watt)</code> e una lista: video in Wi-Fi 1,5 W; navigatore con GPS 3,5 W; gioco 3D 5,5 W; standby 0,035 W.</li>
+      <li>Per ogni scenario stampa ore = Wh ÷ watt, con una cifra decimale.</li>
+      <li>Aggiungi una riga: quanti giorni dura in standby.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 19,25 Wh. Video 12,8 h, navigatore 5,5 h, gioco 3,5 h, standby 550 h, cioè circa 22,9 giorni.</div>
+  </div>
+  <aside class="notes">I consumi sono valori di esempio ragionevoli, non misure di un telefono preciso: dirlo agli studenti. Soluzione:
+  record Scenario(String nome, double watt) {}
+  double wh = 5000 * 3.85 / 1000; for (Scenario s : List.of(new Scenario("Video Wi-Fi", 1.5), new Scenario("Navigatore", 3.5), new Scenario("Gioco 3D", 5.5), new Scenario("Standby", 0.035))) System.out.printf("%s: %.1f h%n", s.nome(), wh / s.watt());
+  Standby: 550 / 24 = 22,9 giorni. I record sono in Java dalla versione 16: ci servono anche come ponte verso le data class di Kotlin (lezione 3). Discussione: perché il navigatore consuma tanto? (Schermo acceso, GPS, rete per le mappe, CPU.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vincolo 6 · Sicurezza e privacy</p><h2>Il computer più personale che esista</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Contiene foto, messaggi, posizione, banca, identità digitale.</li>
+      <li>Si perde e si ruba: servono blocco schermo, cifratura, cancellazione remota.</li>
+      <li>Ogni app installata è codice di terzi: il sistema la chiude in una <b>sandbox</b>.</li>
+      <li>Le app chiedono il permesso per i dati sensibili.</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI dentro il telefono</h3><p>Molti telefoni recenti eseguono modelli di AI direttamente sul dispositivo, grazie alla <b>NPU</b>: su alcuni modelli Android, Gemini Nano riassume registrazioni o riconosce chiamate truffa senza mandare l'audio su un server. Più privacy, ma serve un telefono potente.</p></div>
+  </div>
+  <aside class="notes">Gemini Nano è il modello di Google pensato per l'esecuzione sul dispositivo, disponibile tramite il servizio di sistema AICore solo su alcuni telefoni di fascia alta (per esempio Pixel recenti e alcuni Samsung Galaxy). Il rilevamento delle truffe nelle chiamate è stato introdotto da Google sui Pixel, inizialmente in alcuni paesi. Compromesso da far emergere: privacy e funzionamento offline contro memoria (il modello occupa gigabyte), batteria e disponibilità solo su telefoni costosi. Sandbox e permessi sono il cuore della lezione 2. Ripasso: triade CIA dal deck principi-sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto con i numeri della lezione</h2></div>
+  <div class="puzzle-codice" data-risposta="2144" data-aiuto="la prima cifra è il fattore di xhdpi; le altre tre sono i px di 48 dp a 480 dpi">
+    <ul class="points">
+      <li>1ª cifra: per quanto si moltiplicano i dp su uno schermo xhdpi</li>
+      <li>2ª, 3ª e 4ª cifra: quanti px misura un pulsante da 48 dp su uno schermo da 480 dpi</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> xhdpi = 320 dpi = 2×; 48 × 480 ÷ 160 = 144 px.</div>
+  </div>
+  <aside class="notes">Codice: 2144. Squadre da 3-4, vince la prima che apre. Dopo tre tentativi sbagliati compare l'aiuto. Variante orale: chiedere quanti mm misura il pulsante (circa 7,6).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'energia di una batteria si confronta in <span class="blank" data-risposta="wh|wattora|watt ora"></span>, non solo in mAh.</p>
+    <p>L'unità di misura di Android indipendente dalla densità si chiama <span class="blank" data-risposta="dp|dip"></span>.</p>
+    <p>Per i caratteri si usa lo <span class="blank" data-risposta="sp"></span>, che segue le impostazioni dell'utente.</p>
+    <p>Un'app con pagine web dentro una WebView si dice <span class="blank" data-risposta="ibrida"></span>.</p>
+    <p>Raggruppare le richieste di rete per risparmiare batteria si chiama <span class="blank" data-risposta="batching" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Wh, dp, sp, ibrida, batching.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Energia: Wh = mAh × V ÷ 1000, raggruppare il lavoro</li>
+      <li>Schermo: px = dp × dpi ÷ 160, bersagli da 48 dp</li>
+      <li>Rete: instabile e a consumo, pensare offline</li>
+    </ul>
+    <ul class="points">
+      <li>Sensori potenti, dati sensibili</li>
+      <li>Nativa, web, ibrida, multipiattaforma: si motiva</li>
+      <li>Prossima lezione: dentro Android</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: architettura di Android, ciclo di vita, permessi e distribuzione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

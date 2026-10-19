@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Un web service RESTful in Java · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Web service · Lezione 9</p>
+  <h1>Un web service<br>RESTful in Java</h1>
+  <p class="lead">BiblioAPI prende vita: un server REST con le operazioni CRUD, scritto con il solo JDK, senza framework. Ogni byte che parte lo decidi tu.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>HttpServer, HttpExchange, JSON, codici di stato, concorrenza</span></p>
+  <aside class="notes">Obiettivi: realizzare con com.sun.net.httpserver un servizio REST con GET, POST, PUT e DELETE sulle risorse /api/libri e /api/libri/{id}; produrre e leggere JSON semplice; scegliere i codici di stato giusti; capire perché servono strutture dati thread-safe. Durata indicativa: 4 ore di laboratorio. Ambiente: JDK 21 con IntelliJ IDEA Community o VS Code; nessuna libreria esterna. Con JDK 11 o successivo un singolo file si esegue con java BiblioServer.java senza compilare. Si parte dal file biblioapi-design.md della lezione 8. Porta scelta: 8000, per non scontrarsi con Tomcat (8080) nella lezione 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Se domani dovessi scrivere un'API in Java per un'azienda, con che cosa la scriveresti?</h2></div>
+  <div class="poll" data-id="rj-framework">
+    <ol><li>Spring Boot</li><li>Jakarta EE, con Jakarta REST</li><li>Solo il JDK, come oggi</li><li>Me la farei scrivere da un'AI</li><li>Non saprei da dove iniziare</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. In azienda la risposta più frequente è Spring Boot; Jakarta REST (ex JAX-RS) è lo standard di Jakarta EE e si usa anche con Quarkus. Oggi però usiamo il solo JDK per vedere tutto quello che i framework nascondono: il routing, i codici, gli header, la serializzazione. Chi ha scelto D: alla fine della lezione rivediamo che cosa bisogna controllare in un server scritto da un'AI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo stesso endpoint, tre modi</p><h2>I framework fanno con un'annotazione ciò che oggi scriviamo a mano</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Spring Boot</h3>
+<pre class="code" style="font-size:22px;padding:20px 24px">@GetMapping(<span class="s">"/libri/{id}"</span>)
+Libro uno(@PathVariable
+          <span class="k">int</span> id) {…}</pre>
+      <p class="small muted">Il framework più usato nelle aziende Java.</p></div>
+    <div class="card"><h3>Jakarta REST</h3>
+<pre class="code" style="font-size:22px;padding:20px 24px">@GET @Path(<span class="s">"/libri/{id}"</span>)
+Libro uno(@PathParam(<span class="s">"id"</span>)
+          <span class="k">int</span> id) {…}</pre>
+      <p class="small muted">Lo standard di Jakarta EE, ex JAX-RS.</p></div>
+    <div class="card fill"><h3>Solo JDK</h3>
+<pre class="code" style="font-size:22px;padding:20px 24px">server.createContext(
+  <span class="s">"/api/libri"</span>, ex -> {
+  <span class="c">// tutto a mano</span> });</pre>
+      <p class="small">Niente magia: routing, JSON e codici sono codice nostro.</p></div>
+  </div>
+  <aside class="notes">Con i framework la conversione da oggetto Java a JSON la fa una libreria (Jackson in Spring Boot, JSON-B in Jakarta EE) e i codici di stato si scelgono con ResponseEntity o Response. Il package com.sun.net.httpserver esiste dal JDK 6 ed è un modulo supportato (jdk.httpserver): non è pensato per la produzione ad alto carico, ma è perfetto per prototipi, test e didattica. Dal JDK 18 c'è anche il comando jwebserver, un server di file statici basato sulla stessa API.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come è fatto il server</p><h2>Dal socket al tuo metodo</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>HttpServer</h3><p class="small">Ascolta sulla porta 8000 e legge le richieste HTTP.</p></div>
+    <div class="card soft"><h3>Contesto</h3><p class="small">Sceglie l'handler in base al prefisso del percorso: <code>/api/libri</code>.</p></div>
+    <div class="card fill"><h3>Handler</h3><p class="small">Il tuo codice: guarda metodo e percorso e decide.</p></div>
+    <div class="card soft"><h3>HttpExchange</h3><p class="small">Richiesta e risposta: header, corpo, codice.</p></div>
+  </div>
+  <div class="callout">Un <b>Executor</b> decide quale thread esegue l'handler. Due client possono chiamare l'API nello stesso istante: il codice deve reggere richieste <b>concorrenti</b>.</div>
+  <aside class="notes">Senza setExecutor il server usa un solo thread di default: le richieste vengono servite una per volta. Con un pool di thread (o i thread virtuali di Java 21) le richieste sono servite in parallelo, e allora le strutture dati condivise diventano un problema: lo vediamo più avanti con il quiz sulla HashMap. Collegamento con la lezione 1 dell'unità: anche un piccolo server REST è un pezzo di sistema distribuito, con concorrenza e guasti parziali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo endpoint</p><h2>Quindici righe per un web service</h2></div>
+<pre class="code" style="font-size:23px;line-height:1.45"><span class="k">import</span> com.sun.net.httpserver.HttpServer;
+<span class="k">import</span> java.net.InetSocketAddress;
+<span class="k">import</span> java.nio.charset.StandardCharsets;
+
+<span class="k">public class</span> BiblioServer {
+  <span class="k">public static void</span> main(String[] args) <span class="k">throws</span> Exception {
+    HttpServer server = HttpServer.create(<span class="k">new</span> InetSocketAddress(<span class="hl">8000</span>), 0);
+    server.createContext(<span class="s">"/api/ping"</span>, ex -> {
+      <span class="k">byte</span>[] dati = <span class="s">"{\"stato\":\"ok\"}"</span>.getBytes(StandardCharsets.UTF_8);
+      ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"application/json"</span>);
+      ex.sendResponseHeaders(<span class="hl">200</span>, dati.length);   <span class="c">// prima gli header…</span>
+      <span class="k">try</span> (var os = ex.getResponseBody()) { os.write(dati); }  <span class="c">// …poi il corpo</span>
+    });
+    server.start();
+  }
+}</pre>
+  <aside class="notes">Punti da sottolineare. 1) L'ordine è obbligato: header e codice si impostano prima di sendResponseHeaders; dopo, si scrive solo il corpo. Impostare un header dopo non ha effetto. 2) La lunghezza va in byte, non in caratteri: "è" in UTF-8 occupa 2 byte, per questo si converte prima in byte[]. 3) Il try-with-resources chiude lo stream e completa lo scambio; se non si chiude, il client resta in attesa. 4) Il secondo argomento di create (0) è il backlog delle connessioni in coda: 0 significa valore di sistema.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Accendi BiblioAPI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Crea la cartella <b>biblioapi</b> e dentro il file <b>BiblioServer.java</b> con il codice della slide precedente.</li>
+      <li>Dal terminale, nella cartella: <code>java BiblioServer.java</code>. Il terminale resta occupato: è il server.</li>
+      <li>Apri nel browser <code>http://localhost:8000/api/ping</code>.</li>
+      <li>In un secondo terminale: <code>curl -i http://localhost:8000/api/ping</code>.</li>
+      <li>Prova anche <code>/api/pong</code>. Poi aggiungi una riga che stampi "BiblioAPI pronta" all'avvio.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il browser mostra <code>{"stato":"ok"}</code>. curl mostra <code>HTTP/1.1 200 OK</code>, <code>Content-type: application/json</code> e <code>Content-length: 14</code>. Per <code>/api/pong</code>: <b>404</b>, perché nessun contesto corrisponde.</div>
+  </div>
+  <aside class="notes">Se la porta 8000 è occupata compare java.net.BindException: Address already in use; cambiare porta o chiudere l'altro server (spesso è una seconda copia dello stesso programma ancora aperta). Il firewall di Windows può chiedere il permesso alla prima esecuzione: per localhost non serve consentire l'accesso dalle reti pubbliche. Curiosità da far notare: HttpServer scrive i nomi degli header come "Content-type", con la t minuscola. Gli header HTTP non distinguono maiuscole e minuscole, quindi è corretto. La risposta per /api/pong è una piccola pagina HTML di errore generata dal JDK: non è JSON, ed è un buon motivo per gestire noi tutti i percorsi sotto /api.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz per chi legge la documentazione</p><h2>DELETE riuscita: 204 No Content. Che cosa passi come lunghezza?</h2></div>
+  <div class="poll" data-id="rj-204" data-tipo="quiz" data-risposta="C">
+    <ol><li><code>ex.sendResponseHeaders(204, 0)</code></li><li><code>ex.sendResponseHeaders(204, null)</code></li><li><code>ex.sendResponseHeaders(204, -1)</code></li><li>Nessuna: con 204 non si chiama</li></ol>
+    <p class="why">Per HttpServer la lunghezza -1 significa "nessun corpo". Lo 0, che sembra naturale, significa "corpo di lunghezza sconosciuta", inviato a pezzi (chunked): con 204 il JDK corregge da solo e stampa un WARNING.</p>
+  </div>
+  <aside class="notes">È scritto nella documentazione di HttpExchange.sendResponseHeaders: "If the response length parameter is greater than zero, this specifies an exact number of bytes to send... If the response length parameter is zero, then chunked transfer encoding is used... If the response length parameter has the value -1 then no response body is being sent." La A è il tranello: quasi tutti la scelgono. Provato con JDK 21: con 204 e lunghezza 0 la risposta parte comunque corretta, ma nella console del server compare "WARNING: sendResponseHeaders: rCode = 204: forcing contentLen = -1"; con 200 e lunghezza 0, invece, la risposta usa davvero Transfer-encoding: chunked. Meglio scrivere -1 e non affidarsi alla correzione. La B non compila (il parametro è un long primitivo). La D è sbagliata: senza sendResponseHeaders non parte nemmeno la riga di stato. Dopo un 204 bisogna comunque chiudere lo scambio con ex.close().</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello e le risposte</p><h2>Un record, una mappa, un metodo che risponde</h2></div>
+<pre class="code" style="font-size:25px"><span class="k">record</span> Libro(<span class="k">int</span> id, String titolo, String autore, <span class="k">int</span> anno) {
+  String toJson() {
+    <span class="k">return</span> <span class="s">"{\"id\":%d,\"titolo\":\"%s\",\"autore\":\"%s\",\"anno\":%d}"</span>
+        .formatted(id, esc(titolo), esc(autore), anno);
+  }
+}
+<span class="k">static final</span> Map&lt;Integer, Libro&gt; libri = <span class="k">new</span> <span class="hl">ConcurrentHashMap</span>&lt;&gt;();
+<span class="k">static final</span> AtomicInteger prossimoId = <span class="k">new</span> <span class="hl">AtomicInteger</span>(1);
+
+<span class="k">static void</span> rispondi(HttpExchange ex, <span class="k">int</span> codice, String json) <span class="k">throws</span> IOException {
+  <span class="k">byte</span>[] dati = json.getBytes(StandardCharsets.UTF_8);
+  ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"application/json; charset=utf-8"</span>);
+  ex.sendResponseHeaders(codice, dati.length);
+  <span class="k">try</span> (OutputStream os = ex.getResponseBody()) { os.write(dati); }
+}</pre>
+  <aside class="notes">Il JSON è costruito a mano per vedere com'è fatto; esc(s) raddoppia le barre rovesciate e mette la barra davanti alle virgolette: s.replace("\\", "\\\\").replace("\"", "\\\""). Senza escape, un titolo con le virgolette romperebbe il JSON: è la stessa famiglia di problemi delle injection dell'Unità 1. In un progetto vero si usa una libreria: Jackson (com.fasterxml.jackson.core:jackson-databind) o Gson, via Maven o Gradle; con Jackson basta new ObjectMapper().writeValueAsString(libro). Il record (Java 16+) genera costruttore, getter id(), titolo()…, equals e toString. All'avvio inserire 3 libri: I promessi sposi (Manzoni, 1840), Il barone rampante (Calvino, 1957), Se questo è un uomo (Levi, 1947).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni metodo di HttpExchange a ciò che restituisce</h2></div>
+  <dl class="puzzle-abbina" data-id="rj-exchange">
+    <dt>getRequestMethod()</dt><dd><code>"PUT"</code></dd>
+    <dt>getRequestURI().getPath()</dt><dd><code>"/api/libri/3"</code></dd>
+    <dt>getRequestURI().getQuery()</dt><dd><code>"autore=Calvino"</code></dd>
+    <dt>getRequestHeaders().getFirst(…)</dt><dd>Il valore di un header, come <code>application/json</code></dd>
+    <dt>getRequestBody()</dt><dd>Un <code>InputStream</code> con il JSON inviato dal client</dd>
+    <dt>getResponseHeaders()</dt><dd>Gli header da preparare prima di rispondere</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti, con la documentazione Javadoc aperta se serve. Attenzione: getQuery() restituisce la query già decodificata (gli %20 diventano spazi); getRawQuery() la restituisce così come è arrivata. Il corpo si legge tutto con new String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il routing</p><h2>Metodo + percorso = che cosa fare</h2></div>
+<pre class="code" style="font-size:20px;line-height:1.4;padding:24px 36px"><span class="k">static void</span> gestisci(HttpExchange ex) <span class="k">throws</span> IOException {
+  String metodo = ex.getRequestMethod();
+  String[] parti = ex.getRequestURI().getPath().split(<span class="s">"/"</span>);  <span class="c">// ["", "api", "libri", "3"]</span>
+  <span class="k">try</span> {
+    <span class="k">if</span> (parti.length == 3) {                                  <span class="c">// /api/libri</span>
+      <span class="k">switch</span> (metodo) {
+        <span class="k">case</span> <span class="s">"GET"</span>  -> rispondi(ex, 200, elenco());
+        <span class="k">case</span> <span class="s">"POST"</span> -> crea(ex);
+        <span class="k">default</span>     -> rispondi(ex, <span class="hl">405</span>, errore(<span class="s">"metodo non consentito"</span>));
+      }
+    } <span class="k">else if</span> (parti.length == 4) {                           <span class="c">// /api/libri/{id}</span>
+      Libro l = libri.get(Integer.parseInt(parti[3]));
+      <span class="k">if</span> (l == <span class="k">null</span>) { rispondi(ex, <span class="hl">404</span>, errore(<span class="s">"libro non trovato"</span>)); <span class="k">return</span>; }
+      <span class="c">// switch su GET, PUT, DELETE…</span>
+    } <span class="k">else</span> rispondi(ex, 404, errore(<span class="s">"risorsa non trovata"</span>));
+  } <span class="k">catch</span> (NumberFormatException e) { rispondi(ex, <span class="hl">400</span>, errore(<span class="s">"id non valido"</span>)); }
+}</pre>
+  <aside class="notes">Si registra con server.createContext("/api/libri", BiblioServer::gestisci). Il contesto fa corrispondere il prefisso del percorso, quindi anche /api/libri/3 arriva qui. Il ramo mancante: switch (metodo) { case "GET" -> rispondi(ex, 200, l.toJson()); case "PUT" -> aggiorna(ex, l.id()); case "DELETE" -> { libri.remove(l.id()); ex.sendResponseHeaders(204, -1); ex.close(); } default -> rispondi(ex, 405, ...); }. elenco() unisce i JSON dei libri ordinati per id: StringJoiner sj = new StringJoiner(",", "[", "]"); libri.values().stream().sorted(Comparator.comparingInt(Libro::id)).forEach(l -> sj.add(l.toJson())); return sj.toString(). errore(msg) restituisce {"errore":"msg"}. Miglioria per i più veloci: con il 405 aggiungere l'header Allow: GET, POST.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Leggere i libri: GET</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Aggiungi a BiblioServer il record, la mappa, <code>rispondi</code>, <code>errore</code> ed <code>elenco</code>.</li>
+      <li>All'avvio inserisci i tre libri di esempio con id 1, 2, 3.</li>
+      <li>Scrivi <code>gestisci</code> con i rami GET e registralo sul contesto <code>/api/libri</code>.</li>
+      <li>Riavvia il server (Ctrl+C e di nuovo <code>java BiblioServer.java</code>).</li>
+      <li>Prova <code>/api/libri</code>, <code>/api/libri/2</code>, <code>/api/libri/9</code>, <code>/api/libri/abc</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>/api/libri</code> → 200 e un array di 3 oggetti. <code>/api/libri/2</code> → 200 e <code>"autore":"Italo Calvino"</code>. <code>/9</code> → <b>404</b> con <code>{"errore":…}</code>. <code>/abc</code> → <b>400</b>.</div>
+  </div>
+  <aside class="notes">Errori frequenti: dimenticare il return dopo il 404 (il codice prosegue e tenta una seconda risposta: compare un'eccezione "headers already sent"); dimenticare di chiudere lo stream; confondere parti.length (con il percorso /api/libri/ e la barra finale split scarta le stringhe vuote finali, quindi la lunghezza resta 3). Se nella console di Windows le lettere accentate escono male, è un problema di codifica della console, non del server: il browser le mostra corrette. Per i più veloci: GET /api/libri?autore=Calvino con getQuery() e un filtro sullo stream.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Creare una risorsa</p><h2>POST: leggi, valida, salva, rispondi 201</h2></div>
+<pre class="code" style="font-size:25px"><span class="k">static void</span> crea(HttpExchange ex) <span class="k">throws</span> IOException {
+  String corpo = <span class="k">new</span> String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+  String titolo = campo(corpo, <span class="s">"titolo"</span>), autore = campo(corpo, <span class="s">"autore"</span>);
+  Integer anno = numero(corpo, <span class="s">"anno"</span>);
+  <span class="k">if</span> (titolo == <span class="k">null</span> || autore == <span class="k">null</span> || anno == <span class="k">null</span>) {
+    rispondi(ex, <span class="hl">400</span>, errore(<span class="s">"servono titolo, autore e anno"</span>)); <span class="k">return</span>;
+  }
+  <span class="k">int</span> id = prossimoId.getAndIncrement();
+  Libro l = <span class="k">new</span> Libro(id, titolo, autore, anno);
+  libri.put(id, l);
+  ex.getResponseHeaders().set(<span class="s">"Location"</span>, <span class="s">"/api/libri/"</span> + id);
+  rispondi(ex, <span class="hl">201</span>, l.toJson());
+}</pre>
+  <aside class="notes">campo e numero estraggono un valore con un'espressione regolare: Pattern.compile("\"" + nome + "\"\\s*:\\s*\"([^\"]*)\"") per le stringhe e Pattern.compile("\"" + nome + "\"\\s*:\\s*(\\d+)") per i numeri; restituiscono null se il campo manca. È una semplificazione didattica: non gestisce virgolette dentro i valori, oggetti annidati o campi ripetuti. Dirlo chiaramente e mostrare che con Jackson basterebbe new ObjectMapper().readValue(corpo, Libro.class). Il PUT è quasi identico: stesso parsing, ma l'id viene dall'URI, si sostituisce il libro esistente e si risponde 200 con il JSON. Domanda: perché il server sceglie l'id e non il client? (Evita collisioni tra client diversi; se fosse il client a scegliere l'URI, il metodo giusto sarebbe PUT /api/libri/{id}.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Una richiesta POST arriva al server: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="rj-post">
+    <li>Il contesto <code>/api/libri</code> passa lo scambio all'handler</li>
+    <li>L'handler legge metodo e percorso e sceglie <code>crea</code></li>
+    <li>Legge il corpo e ne estrae titolo, autore e anno</li>
+    <li>Se manca un campo risponde 400 e si ferma</li>
+    <li>Prende un nuovo id e salva il libro nella mappa</li>
+    <li>Imposta gli header Location e Content-Type</li>
+    <li>Invia il codice 201, scrive il JSON e chiude lo stream</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Errori da discutere: impostare gli header dopo sendResponseHeaders (non hanno effetto), salvare prima di validare (resterebbero libri incompleti), prendere l'id prima della validazione (non è un errore grave, ma lascia "buchi" nella numerazione: va bene, gli id non devono essere consecutivi).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 35 minuti</span></p>
+  <h2>CRUD completo: POST, PUT, DELETE</h2>
+<pre class="code" style="font-size:22px;padding:18px 28px"><span class="c">libro.json</span>
+{"titolo":"Il nome della rosa","autore":"Umberto Eco","anno":1980}
+<span class="c">comandi (in PowerShell scrivi curl.exe)</span>
+curl -i -X POST -H "Content-Type: application/json" -d @libro.json http://localhost:8000/api/libri
+curl -i -X DELETE http://localhost:8000/api/libri/4</pre>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scrivi <code>campo</code>, <code>numero</code>, <code>crea</code> e <code>aggiorna</code>; completa i rami PUT e DELETE.</li>
+      <li>Crea <b>libro.json</b> nella cartella del server e prova i comandi.</li>
+      <li>Prova anche un PUT su <code>/api/libri/4</code> e un POST senza anno.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> POST → <b>201</b> e <code>Location: /api/libri/4</code>; ripetuto crea il 5. PUT → 200. DELETE → <b>204</b> senza corpo, poi GET <code>/4</code> → <b>404</b>. Senza anno → <b>400</b>.</div>
+  </div>
+  <aside class="notes">Per il PUT: curl -i -X PUT -H "Content-Type: application/json" -d @libro.json http://localhost:8000/api/libri/4 (modificare prima l'anno nel file). L'opzione -d @file evita i problemi delle virgolette nel Prompt dei comandi e in PowerShell. Se nella console del server compare un WARNING "forcing contentLen = -1", nella DELETE è stato scritto 0 invece di -1. Chi finisce prima può aggiungere il controllo del Content-Type: se non contiene application/json, rispondere 415 Unsupported Media Type. Salvare la cartella biblioapi: serve nelle lezioni 10, 11 e 12 (dove aggiungeremo il CORS).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz sulla concorrenza</p><h2>Con una HashMap e un <code>int</code> contatore, due POST arrivano nello stesso istante. Che cosa può succedere?</h2></div>
+  <div class="poll" data-id="rj-concorrenza" data-tipo="quiz" data-risposta="A">
+    <ol><li>Due libri diversi possono ricevere lo stesso id</li><li>Niente: HttpServer serve sempre una richiesta per volta</li><li>Il secondo client riceve 409 Conflict</li><li>La JVM se ne accorge e lancia un'eccezione</li></ol>
+    <p class="why"><code>id++</code> non è atomico: leggi, somma, scrivi. Due thread possono leggere lo stesso valore e un libro sovrascrive l'altro. Con AtomicInteger e ConcurrentHashMap le operazioni sono sicure tra thread.</p>
+  </div>
+  <aside class="notes">La B è vera solo senza setExecutor (un solo thread): appena si usa un pool, come facciamo con server.setExecutor(Executors.newVirtualThreadPerTaskExecutor()), le richieste sono parallele. La D è il tranello: la JVM non rileva le race condition; una HashMap modificata in concorrenza può perdere dati o corrompersi senza alcun errore. La C confonde un codice HTTP (deciso da noi) con un problema interno. Per provarlo: un ciclo di 1000 POST in parallelo da un client con sendAsync (lezione 10) e contare i libri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Prima il codice, poi le discussioni</h2></div>
+  <figure class="citazione">
+    <blockquote>Parlare costa poco. Fammi vedere il codice.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, creatore del kernel Linux, in un messaggio alla mailing list del kernel, 25 agosto 2000</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Java 21 ha introdotto i <b>thread virtuali</b>: con <b>Executors.newVirtualThreadPerTaskExecutor()</b> ogni richiesta ha il suo thread leggerissimo, gestito dalla JVM. Un server ne regge migliaia senza cambiare stile di programmazione.</p></div>
+  <aside class="notes">Originale: "Talk is cheap. Show me the code.", scritto da Torvalds sulla linux-kernel mailing list in una discussione tecnica il 25 agosto 2000; traduzione nostra. Lo spirito è quello del laboratorio: un'API si discute meglio quando c'è un prototipo che risponde. I thread virtuali sono stati definitivi con la JEP 444 in Java 21 (2023, progetto Loom). Un thread di piattaforma corrisponde a un thread del sistema operativo e occupa memoria per lo stack; i thread virtuali vengono montati su pochi thread di piattaforma solo quando lavorano, e si "smontano" quando aspettano I/O.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il server scritto da un'AI</p><h2>Che cosa controllare prima di fidarsi</h2></div>
+  <div class="cols-2">
+    <ul class="points small">
+      <li>I codici: 201 e Location, 204, 400, 404, 405.</li>
+      <li>La validazione dell'input, prima di salvare.</li>
+      <li>L'escape del JSON e dei caratteri speciali.</li>
+      <li>Le strutture dati condivise tra thread.</li>
+      <li>Nessun segreto o password scritti nel codice.</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un agente di programmazione come quelli visti nella lezione su Claude Code scrive un server come questo in pochi secondi. Ma il codice va letto e provato: chi firma il progetto sei tu. Chiedi all'agente anche i test con curl e controlla che passino davvero.</p></div>
+  </div>
+  <aside class="notes">Collegamento al deck claude-code già visto in 5G. Esperimento possibile: far generare all'agente lo stesso server e confrontarlo con quello scritto in classe usando la lista a sinistra come griglia. Errori che i modelli fanno spesso in questo contesto: 200 invece di 201, lunghezza 0 per il 204, HashMap non sincronizzata, JSON costruito senza escape. Non è una regola fissa: dipende dal modello e dalla richiesta, ed è per questo che si verifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La classe del JDK che ascolta le richieste HTTP si chiama <span class="blank" data-risposta="HttpServer" style="--w:10ch"></span>.</p>
+    <p>Per rispondere senza corpo si passa come lunghezza il valore <span class="blank" data-risposta="-1"></span>.</p>
+    <p>Dopo un POST riuscito il server invia l'header <span class="blank" data-risposta="Location" style="--w:8ch"></span> con l'URI del nuovo libro.</p>
+    <p>Un metodo non previsto su una risorsa riceve il codice <span class="blank" data-risposta="405"></span>.</p>
+    <p>Per un contatore condiviso tra thread si usa <span class="blank" data-risposta="AtomicInteger" style="--w:12ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: HttpServer, -1, Location, 405, AtomicInteger. Chi scrive 0 alla seconda riga ha bisogno di rivedere il quiz.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>HttpServer, contesti, handler, HttpExchange</li>
+      <li>Prima header e codice, poi corpo, poi chiusura</li>
+      <li>Routing su metodo e segmenti del percorso</li>
+    </ul>
+    <ul class="points">
+      <li>POST: valida, salva, 201 + Location</li>
+      <li>Codici d'errore con un JSON che spiega</li>
+      <li>Richieste concorrenti: ConcurrentHashMap, AtomicInteger</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: per il lato server di un progetto basta un elenco degli endpoint e lo pseudocodice di uno di essi (leggi, valida, salva, rispondi). Saper motivare i codici di stato fa la differenza all'orale.</div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: il server resta acceso e scriviamo i client, in Java e in una pagina JSP.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La prima app in Android Studio · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 4</p>
+  <h1>La prima app in Android Studio</h1>
+  <p class="lead">Oggi nasce QuizTPSI, l'app che faremo crescere fino alla fine dell'unità: progetto, struttura, emulatore o telefono, e il ciclo di vita visto dal vivo.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Progetto, emulatore, struttura di un'app</span></p>
+  <aside class="notes">Obiettivi: creare un progetto Kotlin con le View XML (non Compose), riconoscerne la struttura (manifest, codice, risorse, Gradle), eseguirlo su emulatore o telefono, osservare il ciclo di vita in Logcat. Durata: 2-3 ore. Prerequisiti: lezioni 2 e 3. Da preparare: Android Studio installato sui PC (o almeno su quello del docente), SDK scaricato in anticipo, perché il primo avvio scarica molti componenti. Piano B in ordine: emulatore sui PC più potenti; telefoni Android degli studenti con il debug USB; lavoro a coppie; dimostrazione del docente sulla LIM con gli studenti che seguono e annotano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Con che computer lavorerai ad Android a casa?</h2></div>
+  <div class="poll" data-id="pa-pc">
+    <ol><li>PC o portatile con 16 GB di RAM o più</li><li>PC con 8 GB di RAM</li><li>PC con meno di 8 GB, o non lo so</li><li>Non ho un PC: solo telefono o tablet</li></ol>
+  </div>
+  <aside class="notes">Serve al docente per organizzare compiti e coppie. Android Studio richiede un PC a 64 bit; la documentazione indica almeno 8 GB di RAM, ma con l'emulatore acceso ne servono di più: con 8 GB conviene usare il telefono via USB invece dell'emulatore. Chi non ha un PC adatto farà la parte pratica dei compiti in laboratorio: dirlo subito, senza imbarazzi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto dell'unità</p><h2>Quattro lezioni, una sola app</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Oggi</h3><p class="small">Progetto QuizTPSI, emulatore, struttura, Logcat</p></div>
+    <div class="card soft"><p class="num">5</p><h3>Layout</h3><p class="small">TextView e ImageView: la schermata della domanda</p></div>
+    <div class="card soft"><p class="num">6</p><h3>Interazione</h3><p class="small">Button e Toast: rispondere Vero o Falso</p></div>
+    <div class="card soft"><p class="num">7</p><h3>Due schermate</h3><p class="small">Intent e nuova Activity: il risultato</p></div>
+  </div>
+  <figure class="citazione">
+    <blockquote>Il modo migliore per prevedere il futuro è inventarlo.</blockquote>
+    <figcaption><b>Alan Kay</b>, informatico, pioniere delle interfacce grafiche allo Xerox PARC, 1971</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra di "The best way to predict the future is to invent it." Kay racconta di averla detta nel 1971 durante una riunione allo Xerox PARC, rispondendo a chi chiedeva previsioni sul futuro dei computer; al PARC nacquero l'interfaccia a finestre e il linguaggio Smalltalk. Il suo Dynabook, un computer personale portatile per bambini, è un antenato ideale dei tablet. Nella lezione 7 lo citeremo ancora, a proposito di messaggi tra oggetti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>Android Studio: un IDE con un telefono dentro</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Editor e IDE</h3><p class="small">Basato su IntelliJ IDEA: completamento, refactoring, editor visuale dei layout.</p></div>
+    <div class="card"><h3>SDK Manager</h3><p class="small">Scarica le piattaforme Android, gli strumenti di build e le immagini dell'emulatore.</p></div>
+    <div class="card"><h3>Gradle</h3><p class="small">Il sistema di build: compila, scarica le librerie, crea APK e AAB.</p></div>
+    <div class="card"><h3>Device Manager</h3><p class="small">Crea telefoni virtuali (AVD) e mostra quelli collegati via USB.</p></div>
+    <div class="card"><h3>Logcat</h3><p class="small">Il registro del telefono: i tuoi messaggi e gli errori dell'app.</p></div>
+    <div class="card night"><h3>Attenzione</h3><p class="small">Il primo avvio scarica gigabyte di componenti: fallo a casa o con calma.</p></div>
+  </div>
+  <aside class="notes">Android Studio è gratuito, prodotto da Google sulla base di IntelliJ IDEA di JetBrains. I nomi dei menu cambiano un po' tra le versioni (le ultime hanno una nuova interfaccia con i menu dietro l'icona con le quattro linee): se un percorso non coincide, cercare con Maiusc due volte (Search Everywhere). Per il laboratorio della scuola: la rete deve permettere i download da dl.google.com, maven.google.com, repo.maven.apache.org e plugins.gradle.org.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Crea il progetto QuizTPSI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>New Project</b>. Scegli il modello con le View, di solito chiamato <b>Empty Views Activity</b>, non "Empty Activity".</li>
+      <li>Name <b>QuizTPSI</b>, package <code>it.novaula.quiztpsi</code>.</li>
+      <li>Language <b>Kotlin</b>, Minimum SDK <b>API 24</b>, build in <b>Kotlin DSL</b>.</li>
+      <li>Premi Finish e attendi la fine della sincronizzazione di Gradle.</li>
+      <li>Apri <b>MainActivity.kt</b> e <b>activity_main.xml</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in MainActivity c'è <code>setContentView(R.layout.activity_main)</code>. Se vedi <code>setContent { … }</code> e la parola <code>@Composable</code>, hai scelto il modello Compose: ricrea il progetto.</div>
+  </div>
+  <aside class="notes">Il modello predefinito di Android Studio per un nuovo progetto (Empty Activity) usa Jetpack Compose. Il libro e questa unità usano le View con layout XML: serve il modello con "Views" nel nome; nelle versioni recenti si chiama Empty Views Activity, il nome esatto può cambiare. API 24 (Android 7.0) copre quasi tutti i telefoni in uso; Android Studio mostra la percentuale stimata di dispositivi compatibili. La prima sincronizzazione può durare diversi minuti. Se Gradle fallisce per la rete, controllare proxy e siti consentiti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In MainActivity vedi <code>setContent { Greeting("Android") }</code> e non c'è nessun activity_main.xml. Che cosa è successo?</h2></div>
+  <div class="poll" data-id="pa-compose" data-tipo="quiz" data-risposta="D">
+    <ol><li>Gradle non ha finito la sincronizzazione</li><li>Manca l'SDK di Android</li><li>Hai scelto Java invece di Kotlin</li><li>Hai scelto il modello Compose</li></ol>
+    <p class="why">Con Jetpack Compose l'interfaccia si scrive in funzioni Kotlin con @Composable, quindi non ci sono layout XML. Per seguire il libro serve il modello con le View.</p>
+  </div>
+  <aside class="notes">La A è plausibile perché durante la sincronizzazione mancano davvero dei pezzi, ma i file del modello ci sono subito. Rassicurare: chi ha sbagliato modello non ha perso niente, basta creare un nuovo progetto. Compose non è sbagliato, anzi è il futuro: semplicemente oggi studiamo le View, che si trovano ancora in moltissime app esistenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Struttura del progetto</p><h2>Dove sta che cosa, nella vista Android</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px">app/
+├─ manifests/
+│   └─ <span class="hl">AndroidManifest.xml</span>
+├─ kotlin+java/
+│   └─ it.novaula.quiztpsi/
+│       └─ <span class="hl">MainActivity.kt</span>
+└─ res/
+    ├─ drawable/     <span class="c">immagini</span>
+    ├─ layout/
+    │   └─ <span class="hl">activity_main.xml</span>
+    ├─ mipmap/       <span class="c">icona dell'app</span>
+    └─ values/       <span class="c">strings, colors, themes</span>
+Gradle Scripts/
+└─ build.gradle.kts (Module :app)</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Codice e risorse separati</h3><p class="small">Il Kotlin dice <b>cosa fare</b>, l'XML in <code>res/</code> dice <b>come appare</b>. Ogni risorsa ha un id nella classe generata <code>R</code>.</p></div>
+      <div class="callout small">Sul disco i file stanno in <code>app/src/main/</code>: la vista "Android" li raggruppa per tipo.</div>
+    </div>
+  </div>
+  <aside class="notes">La cartella del codice compare come "java" nelle versioni meno recenti e come "kotlin+java" nelle più recenti. R.layout.activity_main, R.string.app_name, R.drawable.logo: la classe R viene generata dal build a partire dalle risorse. Il file libs.versions.toml (version catalog) raccoglie le versioni delle librerie. Far aprire a ognuno i file evidenziati e trovare app_name in strings.xml.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni file al suo compito</h2></div>
+  <dl class="puzzle-abbina" data-id="pa-file">
+    <dt>AndroidManifest.xml</dt><dd>Dichiara Activity, permessi e l'Activity di avvio</dd>
+    <dt>MainActivity.kt</dt><dd>Il codice Kotlin della prima schermata</dd>
+    <dt>activity_main.xml</dt><dd>Il layout: quali View ci sono e dove</dd>
+    <dt>strings.xml</dt><dd>I testi dell'app, compreso il nome</dd>
+    <dt>build.gradle.kts (:app)</dt><dd>minSdk, targetSdk e le librerie da usare</dd>
+    <dt>mipmap/ic_launcher</dt><dd>L'icona che compare nel menu delle app</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti, poi verifica aprendo i file. Domanda: se voglio tradurre l'app in inglese, quale file tocco? (Creo values-en/strings.xml, lezione 5.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il codice generato</p><h2>MainActivity, riga per riga</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:22px"><span class="k">class</span> MainActivity : AppCompatActivity() {
+    <span class="k">override fun</span> onCreate(savedInstanceState: Bundle?) {
+        <span class="k">super</span>.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        <span class="hl">setContentView(R.layout.activity_main)</span>
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.main)) { v, insets <span class="k">-&gt;</span>
+            <span class="k">val</span> bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top,
+                bars.right, bars.bottom)
+            insets
+        }
+    }
+}</pre>
+    <ul class="points small">
+      <li><code>: AppCompatActivity()</code> è l'extends di Java.</li>
+      <li><code>onCreate</code> è il primo callback del ciclo di vita.</li>
+      <li><code>Bundle?</code>: lo stato salvato, null al primo avvio.</li>
+      <li><code>setContentView</code> carica il layout XML.</li>
+      <li>Il resto disegna l'app sotto le barre di sistema: <b>lascialo</b>, e non togliere l'id <code>main</code>.</li>
+    </ul>
+  </div>
+  <aside class="notes">Il codice generato può variare leggermente con la versione di Android Studio. enableEdgeToEdge e il listener degli insets ci sono perché le app che puntano ad Android 15 (API 35) vengono disegnate da bordo a bordo: senza padding il contenuto finirebbe sotto la barra di stato. Il listener cerca la View con id main nel layout: se nella lezione 5 cambiate il contenitore principale, l'id va mantenuto, altrimenti il progetto non compila. Ripasso Kotlin: override obbligatorio, lambda finale { v, insets -&gt; ... } con due parametri, l'ultima espressione (insets) è il valore restituito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove gira l'app</p><h2>Emulatore o telefono vero?</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Emulatore (AVD)</h3><p class="small">Un telefono virtuale creato in Device Manager. Comodo, ma vuole un PC potente e la virtualizzazione attiva nel BIOS.</p></div>
+    <div class="card fill"><h3>Telefono via USB</h3><p class="small">Impostazioni, Info sul telefono: tocca 7 volte <b>Numero build</b>. Poi in Opzioni sviluppatore attiva il <b>Debug USB</b>.</p></div>
+    <div class="card"><h3>Debug wireless</h3><p class="small">Da Android 11 si collega il telefono via Wi-Fi con un codice di abbinamento, sulla stessa rete del PC.</p></div>
+  </div>
+  <div class="callout">Al primo collegamento il telefono chiede di <b>autorizzare il computer</b> mostrando la sua impronta RSA: accetta solo sui PC di cui ti fidi.</div>
+  <aside class="notes">Il percorso per Numero build varia: su alcuni telefoni sta in Info sul telefono, Informazioni software. Su Windows alcuni telefoni richiedono il driver USB del produttore; per i Pixel c'è il Google USB Driver nell'SDK Manager. Il debug USB dà al PC un controllo ampio sul telefono (installare app, leggere log): dopo il laboratorio conviene disattivarlo. Se la rete della scuola isola i dispositivi tra loro, il debug wireless non funziona: usare il cavo. Chi non ha un telefono Android lavora in coppia o sull'emulatore di un PC potente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Esegui QuizTPSI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Con l'emulatore: apri <b>Device Manager</b>, crea un dispositivo (per esempio un Pixel) con un'immagine di sistema recente.</li>
+      <li>Con il telefono: collegalo via USB e accetta l'autorizzazione del PC.</li>
+      <li>Scegli il dispositivo nella barra in alto e premi <b>Run</b> (il triangolo verde).</li>
+      <li>In <b>strings.xml</b> cambia <code>app_name</code> in <b>QuizTPSI 5G</b> ed esegui di nuovo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> sul dispositivo si apre l'app con il testo <b>Hello World!</b> al centro, e nel menu delle app l'icona si chiama <b>QuizTPSI 5G</b>.</div>
+  </div>
+  <aside class="notes">Errori frequenti: virtualizzazione disattivata (l'emulatore non parte: attivare Intel VT-x o AMD-V nel BIOS, e su Windows la piattaforma Hypervisor); spazio disco esaurito (ogni immagine di sistema occupa alcuni GB); telefono non visto (cavo solo di ricarica, driver mancante, debug USB spento). La prima build è lenta, le successive molto meno. Se nessuna postazione riesce, il docente esegue sulla LIM e gli studenti fanno il punto 4 sul proprio progetto, verificando con l'anteprima del layout.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il manifest</p><h2>Chi parte per primo lo decide un filtro</h2></div>
+  <div class="cols-2" style="grid-template-columns:1.9fr 1fr">
+<pre class="code" style="font-size:23px">&lt;<span class="k">application</span>
+    android:icon=<span class="s">"@mipmap/ic_launcher"</span>
+    android:label=<span class="s">"@string/app_name"</span>
+    android:theme=<span class="s">"@style/Theme.QuizTPSI"</span>&gt;
+    &lt;<span class="k">activity</span>
+        android:name=<span class="s">".MainActivity"</span>
+        android:exported=<span class="s">"true"</span>&gt;
+        &lt;<span class="k">intent-filter</span>&gt;
+            &lt;<span class="k">action</span> android:name=<span class="s">"android.intent.action.MAIN"</span>/&gt;
+            &lt;<span class="k">category</span> android:name=<span class="s">"android.intent.category.LAUNCHER"</span>/&gt;
+        &lt;/<span class="k">intent-filter</span>&gt;
+    &lt;/<span class="k">activity</span>&gt;
+&lt;/<span class="k">application</span>&gt;</pre>
+    <ul class="points small">
+      <li><b>MAIN + LAUNCHER</b>: questa Activity è il punto d'ingresso e ha l'icona nel menu.</li>
+      <li><code>exported="true"</code>: il launcher, un'altra app, può avviarla.</li>
+      <li>Da Android 12 <code>exported</code> va scritto per ogni componente con un intent-filter.</li>
+    </ul>
+  </div>
+  <aside class="notes">Ogni Activity dell'app deve comparire nel manifest (lezione 7). Il nome .MainActivity è relativo al namespace del progetto. Il tema arriva da res/values/themes.xml. android:exported esplicito è obbligatorio per le app che puntano ad Android 12 (API 31) o successivi quando il componente ha un intent-filter.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Togli l'intent-filter MAIN/LAUNCHER dalla MainActivity. Che cosa succede?</h2></div>
+  <div class="poll" data-id="pa-launcher" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il progetto non compila più</li><li>L'app si installa, ma non ha più l'icona nel menu delle app</li><li>All'avvio si vede una schermata bianca</li><li>Android sceglie da solo un'altra Activity come avvio</li></ol>
+    <p class="why">Il filtro è solo una dichiarazione per il launcher: senza, il codice compila e l'app si installa, ma nessuna Activity risulta "avviabile". Android Studio infatti segnala che non trova l'Activity predefinita.</p>
+  </div>
+  <aside class="notes">Molti pensano alla A: il manifest non è codice compilato in senso stretto, è una descrizione. Le app senza icona esistono davvero: per esempio servizi o tastiere che si aprono dalle Impostazioni. Rimettere subito il filtro, o la Run configuration non saprà che cosa avviare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il ciclo di vita dal vivo in Logcat</h2>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code" style="font-size:22px"><span class="k">private val</span> TAG = <span class="s">"QuizTPSI"</span>
+
+<span class="k">override fun</span> onStart() {
+    <span class="k">super</span>.onStart()
+    Log.d(TAG, <span class="s">"onStart"</span>)
+}
+<span class="c">// uguale per onResume, onPause,</span>
+<span class="c">// onStop, onDestroy, onRestart</span></pre>
+      <p class="small">In <code>onCreate</code>, dopo <code>super</code>, aggiungi <code>Log.d(TAG, "onCreate")</code>.</p>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Scrivi i 7 callback con <code>Log.d</code> (importa <code>android.util.Log</code>).</li>
+        <li>Esegui, apri <b>Logcat</b> e filtra con <code>tag:QuizTPSI</code>.</li>
+        <li>Ruota il dispositivo, poi premi Home e torna nell'app.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> la rotazione stampa onPause, onStop, onDestroy, onCreate, onStart, onResume. Home stampa onPause, onStop; il ritorno onRestart, onStart, onResume.</div>
+    </div>
+  </div>
+  <aside class="notes">È la tabella della lezione 2, ora vera. Nell'emulatore la rotazione si fa con i pulsanti della barra laterale; sul telefono va attivata la rotazione automatica. Se la rotazione non ricrea l'Activity, controllare che nel manifest non ci sia android:configChanges. Ctrl+O in Android Studio apre la lista dei metodi da sovrascrivere e genera il codice. Il filtro tag: è la sintassi del Logcat delle versioni recenti; nelle vecchie versioni si scrive il tag nella casella di ricerca. Il punto con onDestroy: si vede anche premendo Indietro, ma dalle versioni recenti di Android non sempre per l'Activity principale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gradle</p><h2>Tre numeri da non confondere</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:26px">android {
+    namespace = <span class="s">"it.novaula.quiztpsi"</span>
+    compileSdk = 36
+    defaultConfig {
+        applicationId = <span class="s">"it.novaula.quiztpsi"</span>
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 1
+        versionName = <span class="s">"1.0"</span>
+    }
+}</pre>
+    <ul class="points small">
+      <li><b>minSdk</b>: la versione più vecchia su cui l'app si installa.</li>
+      <li><b>targetSdk</b>: la versione per cui l'app è stata provata; ne attiva i comportamenti.</li>
+      <li><b>compileSdk</b>: le API disponibili quando compili.</li>
+      <li><b>applicationId</b>: il nome unico dell'app sullo store.</li>
+    </ul>
+  </div>
+  <aside class="notes">I numeri esatti di compileSdk e targetSdk dipendono dalla versione di Android Studio usata: non importa che coincidano con quelli della slide. versionCode è un intero che deve crescere a ogni pubblicazione; versionName è quello che vede l'utente. Collegamento alla lezione 2: Google Play impone un targetSdk recente. Per creare il pacchetto: menu Build, voce per generare App Bundle o APK (il nome esatto cambia tra versioni).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Premi Run: metti in ordine che cosa succede</h2></div>
+  <ol class="puzzle-ordina" data-id="pa-run">
+    <li>Gradle compila il Kotlin e le risorse</li>
+    <li>D8 crea il file DEX</li>
+    <li>Gradle impacchetta un APK di debug firmato con una chiave di prova</li>
+    <li>adb installa l'APK sul dispositivo</li>
+    <li>Viene avviata l'Activity con MAIN e LAUNCHER</li>
+    <li>onCreate chiama setContentView e appare il layout</li>
+  </ol>
+  <aside class="notes">adb (Android Debug Bridge) è lo strumento a riga di comando che parla con il dispositivo; Android Studio lo usa dietro le quinte. La chiave di debug viene creata automaticamente sul PC: un APK di debug non si può pubblicare su Google Play. Collegamento con la lezione 3 (kt → class → dex) e la lezione 2 (firma).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo sviluppo oggi</p><h2>Due cose che vedrai fuori da questo corso</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Jetpack Compose</h3><p>È il toolkit moderno raccomandato da Google: la schermata si descrive con funzioni Kotlin, non con XML. Per questo è il modello predefinito dei nuovi progetti. Noi studiamo le View: capirle aiuta a leggere anche le app esistenti.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI dentro l'IDE</h3><p>Android Studio integra un assistente, Gemini, che spiega gli errori di build e propone codice. Usalo come un collega frettoloso: ascoltalo, poi verifica in Logcat e sul dispositivo.</p></div>
+  </div>
+  <aside class="notes">Gemini in Android Studio richiede l'accesso con un account Google e l'accettazione dei termini; nei PC della scuola meglio una dimostrazione del docente. Non mandare all'assistente codice o dati riservati. Collegamento con il deck claude-code: gli agenti di programmazione sono utili quando chi li usa sa leggere e controllare il codice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per usare le View XML si sceglie il modello <span class="blank" data-risposta="empty views activity|empty views" style="--w:12ch"></span>.</p>
+    <p>Il layout viene caricato in onCreate da <span class="blank" data-risposta="setcontentview" style="--w:12ch"></span>.</p>
+    <p>La classe generata con gli id di tutte le risorse si chiama <span class="blank" data-risposta="r"></span>.</p>
+    <p>I messaggi scritti con Log.d si leggono nella finestra <span class="blank" data-risposta="logcat"></span>.</p>
+    <p>La versione più vecchia di Android supportata si imposta con <span class="blank" data-risposta="minsdk"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Empty Views Activity, setContentView, R, Logcat, minSdk.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Modello con le View, non quello Compose</li>
+      <li>Manifest, codice Kotlin, risorse in res/</li>
+      <li>MAIN + LAUNCHER: l'Activity di avvio</li>
+    </ul>
+    <ul class="points">
+      <li>Emulatore se il PC regge, altrimenti telefono via USB</li>
+      <li>Log.d e Logcat per vedere il ciclo di vita</li>
+      <li>minSdk, targetSdk, compileSdk</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Chiedere di conservare il progetto QuizTPSI: nella prossima lezione costruiamo la schermata della domanda. Consiglio: salvarlo anche su una chiavetta o su Drive (senza le cartelle build).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

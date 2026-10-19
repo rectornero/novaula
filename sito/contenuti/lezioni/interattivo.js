@@ -469,6 +469,25 @@
     return { load: load, open: open, badge: badge };
   })();
 
+  // ---------- Note del docente (tasto N): solo per il docente collegato, o in prova locale ----------
+  var Notes = (function () {
+    function render() {
+      var i = window.NovaulaDeck.current(), n = SLIDES[i] && SLIDES[i].querySelector("aside.notes");
+      var p = panel("Note del docente · slide " + (i + 1));
+      p.el.classList.add("is-notes");
+      var box = h("div", { class: "ia-notes" });
+      box.innerHTML = n ? n.innerHTML : "<p>Nessuna nota per questa slide.</p>";
+      p.body.appendChild(box);
+    }
+    function toggle() {
+      var open = document.querySelector(".ia-panel.is-notes");
+      if (open) { open.remove(); return; }
+      Cloud.get().then(function (cl) { if (!cl || cl.teacher) render(); });
+    }
+    document.addEventListener("slide", function () { if (document.querySelector(".ia-panel.is-notes")) render(); });
+    return { toggle: toggle };
+  })();
+
   function init(opts) {
     PRINT = !!opts.print; SLIDES = opts.slides || [].slice.call(document.querySelectorAll("section.slide")); TITLE = opts.title || "";
     [].forEach.call(document.querySelectorAll(".poll"), poll);
@@ -480,6 +499,9 @@
     [].forEach.call(document.querySelectorAll(".timer"), timer);
     if (PRINT) return;
     document.addEventListener("ask", Questions.open);
+    document.addEventListener("keydown", function (e) {
+      if ((e.key === "n" || e.key === "N") && !(e.target.closest && e.target.closest("input,textarea,select,[contenteditable]"))) Notes.toggle();
+    });
     document.addEventListener("slide", Questions.badge);
     Questions.load();
   }

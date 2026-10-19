@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEO e motori di ricerca · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Unità 5 · Realizzare un sito web</p>
+  <h1>SEO e motori<br>di ricerca</h1>
+  <p class="lead">Come un motore di ricerca trova, capisce e ordina le pagine, e che cosa possiamo fare perché trovi anche la nostra. Senza trucchi.</p>
+  <aside class="notes">Obiettivi: descrivere scansione, indicizzazione e ranking; scrivere title, meta description e titoli corretti; preparare robots.txt e sitemap.xml; aggiungere dati strutturati JSON-LD; distinguere SEO on-page e off-page, tecniche lecite e penalizzate; capire che cosa cambia con le risposte generate dall'AI nei motori di ricerca. Serve il sito di squadra della lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultima volta che hai cercato qualcosa, dove hai trovato la risposta?</h2></div>
+  <div class="poll" data-id="u5-seo-risposta">
+    <ol><li>Nel primo risultato</li><li>Più in basso o nella seconda pagina</li><li>Nel riassunto scritto dall'AI in cima</li><li>Ho chiesto direttamente a un chatbot</li></ol>
+  </div>
+  <aside class="notes">Le opzioni C e D sono la novità degli ultimi anni: se molti le scelgono, è il punto di partenza perfetto per la parte "Oggi". Chiedere: "avete controllato le fonti citate nel riassunto?". Annotare la distribuzione: la si riprende a fine lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona</p><h2>Tre fasi, prima che tu scriva la domanda</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Scansione</h3><p class="small">Un crawler (Googlebot, Bingbot) segue i link e scarica le pagine, rispettando robots.txt.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Indicizzazione</h3><p class="small">Analizza testo, titoli, immagini e dati strutturati, e salva la pagina nell'indice.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Ranking</h3><p class="small">Alla tua ricerca ordina le pagine per pertinenza, qualità, località, esperienza.</p></div>
+  </div>
+  <div class="callout"><b>SEO</b> (Search Engine Optimization): rendere un sito facile da scansionare, da capire e da scegliere. Il pubblico resta l'utente, non il motore.</div>
+  <aside class="notes">Google ha scritto queste fasi nella sua guida "Come funziona la Ricerca Google" (crawling, indexing, serving). Il crawler di Google esegue anche JavaScript, ma con ritardo e costi: un sito statico con contenuto nell'HTML è il caso più semplice. Le pagine non linkate da nessuna parte e non nella sitemap è come se non esistessero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Stanford, 1998: i link come voti</h2></div>
+  <figure class="citazione">
+    <blockquote>Il grafo delle citazioni (i link) del Web è una risorsa importante, finora quasi inutilizzata dai motori di ricerca.</blockquote>
+    <figcaption><b>Sergey Brin e Larry Page</b>, dottorandi a Stanford, "The Anatomy of a Large-Scale Hypertextual Web Search Engine", 1998</figcaption>
+  </figure>
+  <div class="callout">Era l'idea del <b>PageRank</b>: una pagina è importante se la linkano pagine importanti. Da quel progetto, chiamato prima BackRub, nacque Google.</div>
+  <aside class="notes">Originale: "The citation (link) graph of the web is an important resource that has largely gone unused in existing web search engines." Traduzione nostra, leggermente condensata. Oggi il PageRank è uno tra moltissimi segnali. Collegamento con la matematica: il PageRank è il vettore stazionario di una catena di Markov (il "navigatore casuale").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Una pagina bloccata in robots.txt può comparire nei risultati?</h2></div>
+  <div class="poll" data-id="u5-seo-robots" data-tipo="quiz" data-risposta="B">
+    <ol><li>No, mai: Disallow la nasconde a Google</li><li>Sì: robots.txt blocca la scansione, non l'indicizzazione</li><li>Solo se ha una meta description</li><li>Solo nella ricerca immagini</li></ol>
+    <p class="why">Se altri siti linkano quell'URL, Google può indicizzarlo anche senza leggerlo, mostrando il link senza descrizione. Per escludere una pagina dai risultati serve <b>noindex</b> (meta tag o intestazione HTTP), e la pagina deve restare scansionabile perché il crawler lo veda. Per i dati riservati serve una password.</p>
+  </div>
+  <aside class="notes">È scritto chiaramente nella documentazione di Google Search Central: robots.txt non è un meccanismo per tenere una pagina fuori da Google. E robots.txt è pubblico: elencare lì /area-riservata/ è come mettere un cartello "qui ci sono cose interessanti". Collegamento all'unità 1 sulla sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">SEO on-page</p><h2>Che cosa legge un motore nel tuo HTML</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:26px">&lt;html lang=<span class="s">"it"</span>&gt;
+&lt;head&gt;
+  &lt;title&gt;<span class="hl">Corsi di scacchi a Bari</span> · Club Alfiere&lt;/title&gt;
+  &lt;meta name=<span class="s">"description"</span> content=<span class="s">"Corsi per
+   principianti e tornei ogni mese. Prima
+   lezione gratuita, iscrizione online."</span>&gt;
+  &lt;link rel=<span class="s">"canonical"</span>
+        href=<span class="s">"https://clubalfiere.it/corsi/"</span>&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Corsi di scacchi per tutti&lt;/h1&gt;
+  &lt;img src=<span class="s">"lezione.webp"</span> alt=<span class="s">"Istruttore spiega
+   l'apertura a tre ragazzi"</span> width=<span class="s">"1200"</span> height=<span class="s">"800"</span>&gt;</pre>
+    <ul class="points">
+      <li><b>title</b> unico, circa 50-60 caratteri, parole chiave all'inizio</li>
+      <li><b>description</b>: il "volantino" nei risultati</li>
+      <li>Un <b>h1</b>, poi titoli in ordine</li>
+      <li>URL leggibili: <code>/corsi/</code></li>
+      <li><b>alt</b> descrittivo, link interni con testo chiaro</li>
+    </ul>
+  </div>
+  <aside class="notes">Google può riscrivere title e description nei risultati se non li ritiene adatti alla ricerca; la description non influenza il ranking ma il clic. Canonical: indica la versione "ufficiale" di una pagina raggiungibile da più URL (con e senza www, con parametri). Link "clicca qui" non dicono niente né al motore né a chi usa uno screen reader.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La radiografia SEO di una pagina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri la home del sito di squadra e quella di un sito di un'associazione locale.</li>
+      <li>Per ciascuna premi <code>Ctrl+U</code> e cerca <code>&lt;title</code>, <code>description</code>, <code>&lt;h1</code>.</li>
+      <li>Lancia Lighthouse con la sola categoria <b>SEO</b>.</li>
+      <li>In <b>seo-radiografia.md</b> annota title, lunghezza della description, numero di h1, punteggio e avvisi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> se la pagina non ha meta description, Lighthouse la elenca tra i controlli non superati e il punteggio SEO scende sotto 100. Correggi il tuo sito finché il punteggio SEO è 100.</div>
+  </div>
+  <aside class="notes">100 in Lighthouse SEO vuol dire solo che i controlli tecnici di base sono a posto (title, description, link con testo, codici HTTP, robots, hreflang, alt): non dice niente su contenuti, pertinenza e link in ingresso. Lo stesso vale per l'accessibilità, come vedremo. Per contare gli h1 si può usare in console: document.querySelectorAll('h1').length.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Parlare ai crawler</p><h2>robots.txt e sitemap.xml</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>robots.txt</b>, nella radice del dominio</p>
+<pre class="code" style="font-size:26px">User-agent: *
+Disallow: /bozze/
+
+Sitemap: https://clubalfiere.it/sitemap.xml</pre>
+      <p class="small muted">Indicazioni per i crawler educati, non un sistema di sicurezza.</p>
+    </div>
+    <div class="stack">
+      <p class="small"><b>sitemap.xml</b>: l'elenco delle pagine da scansionare</p>
+<pre class="code" style="font-size:24px">&lt;?xml version=<span class="s">"1.0"</span> encoding=<span class="s">"UTF-8"</span>?&gt;
+&lt;urlset xmlns=<span class="s">"http://www.sitemaps.org/
+           schemas/sitemap/0.9"</span>&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://clubalfiere.it/corsi/&lt;/loc&gt;
+    &lt;lastmod&gt;2026-10-19&lt;/lastmod&gt;
+  &lt;/url&gt;
+&lt;/urlset&gt;</pre>
+    </div>
+  </div>
+  <aside class="notes">Nel file vero l'attributo xmlns va su una riga sola: qui è spezzato solo per la slide. Il robots.txt vale solo nella radice dell'host (https://host/robots.txt). Attenzione per GitHub Pages: in un sito di progetto, su utente.github.io/repo/, un robots.txt nella cartella del repository NON viene letto dai crawler, perché non è nella radice dell'host. In quel caso la sitemap si comunica tramite Google Search Console oppure si usa un dominio proprio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti · in squadra</span></p>
+  <h2>Sitemap e robots.txt per il vostro sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella cartella del sito crea <b>sitemap.xml</b> con un <code>&lt;url&gt;</code> per ogni pagina della mappa del sito.</li>
+      <li>Usa indirizzi assoluti, con <code>https://</code>, e la data di oggi in <code>lastmod</code>.</li>
+      <li>Crea <b>robots.txt</b> con <code>User-agent: *</code>, una riga <code>Disallow</code> per la cartella <code>/bozze/</code> e la riga <code>Sitemap:</code>.</li>
+      <li>Apri sitemap.xml nel browser per vedere se l'XML è ben formato.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il browser mostra l'albero XML senza "error on line…". Le pagine nella sitemap sono tante quante quelle della mappa del sito di squadra, né una di più né una di meno.</div>
+  </div>
+  <aside class="notes">Errori tipici: dimenticare xmlns, usare indirizzi relativi, mettere nella sitemap pagine bloccate o con noindex. Per l'indirizzo definitivo si può usare provvisoriamente quello previsto su GitHub Pages; si aggiornerà alla pubblicazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni strumento al suo scopo</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-seo-strumenti">
+    <dt><code>&lt;title&gt;</code></dt><dd>Il titolo cliccabile nei risultati e nella scheda del browser</dd>
+    <dt>meta description</dt><dd>Il testo di anteprima che convince a cliccare</dd>
+    <dt><code>rel="canonical"</code></dt><dd>Indica la versione ufficiale di una pagina duplicata</dd>
+    <dt><code>noindex</code></dt><dd>Chiede di non mostrare la pagina nei risultati</dd>
+    <dt>Redirect 301</dt><dd>La pagina si è spostata per sempre a un nuovo indirizzo</dd>
+    <dt>Dati strutturati</dt><dd>Dicono in modo esplicito che la pagina descrive un evento</dd>
+  </dl>
+  <aside class="notes">Il 301 tornerà nell'ultima lezione, quando parleremo di aggiornamento del sito: cambiare gli indirizzi senza redirect fa perdere visite e posizionamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">SEO off-page</p><h2>Che cosa succede fuori dal tuo sito</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Lecito e utile</h3><ul class="points"><li>Link da siti affidabili: comune, scuola, federazione</li><li>Scheda dell'attività su Google Maps per le ricerche locali</li><li>Contenuti originali che altri citano</li><li>Esperienza, competenza, autorevolezza, affidabilità</li></ul></div>
+    <div class="card bad"><h3>Penalizzato</h3><ul class="points"><li>Comprare link o scambiarli in massa</li><li>Ripetere parole chiave all'infinito</li><li>Testo nascosto o pagine diverse per il crawler</li><li>Pagine copiate o generate in serie senza valore</li></ul></div>
+  </div>
+  <aside class="notes">La quarta voce verde è l'E-E-A-T delle linee guida per i valutatori della qualità di Google (Experience, Expertise, Authoritativeness, Trustworthiness): non è un singolo segnale ma un criterio di qualità. Le tecniche rosse violano le norme antispam di Google e possono far declassare o rimuovere il sito. Pagine generate in serie con l'AI solo per manipolare il ranking rientrano nell'abuso di contenuti su larga scala.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il meta tag keywords aiuta a salire su Google?</h2></div>
+  <div class="poll" data-id="u5-seo-keywords" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sì, è il segnale più importante</li><li>Sì, se le parole sono meno di dieci</li><li>Solo per i siti con dominio .it</li><li>No: Google dichiara di ignorarlo dal 2009</li></ol>
+    <p class="why">Il meta keywords era facilissimo da riempire di parole a caso, quindi i motori hanno smesso di fidarsi. Google lo ha scritto in un post del 2009 sul suo blog per i webmaster. Contano le parole che compaiono davvero nel testo, nei titoli e nei link.</p>
+  </div>
+  <aside class="notes">Molti tutorial vecchi lo consigliano ancora: occasione per parlare di fonti datate. Post: "Google does not use the keywords meta tag in web ranking", Google Webmaster Central Blog, settembre 2009.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dati strutturati</p><h2>Dire al motore che cosa c'è nella pagina</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:27px">&lt;script type=<span class="s">"application/ld+json"</span>&gt;
+{
+  <span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>,
+  <span class="k">"@type"</span>: <span class="s">"Event"</span>,
+  <span class="k">"name"</span>: <span class="s">"Torneo di primavera"</span>,
+  <span class="k">"startDate"</span>: <span class="s">"2027-04-12T15:00+02:00"</span>,
+  <span class="k">"location"</span>: {
+    <span class="k">"@type"</span>: <span class="s">"Place"</span>,
+    <span class="k">"name"</span>: <span class="s">"Aula magna, ITIS"</span>,
+    <span class="k">"address"</span>: <span class="s">"Via Roma 1, Bari"</span>
+  }
+}
+&lt;/script&gt;</pre>
+    <div class="stack">
+      <p>Vocabolario <b>schema.org</b> in formato <b>JSON-LD</b>: lo stesso JSON delle API dell'unità 2.</p>
+      <div class="card soft"><p class="small">Tipi utili per il progetto: <b>Organization</b>, <b>Event</b>, <b>Course</b>, <b>LocalBusiness</b>, <b>FAQPage</b>.</p></div>
+    </div>
+  </div>
+  <aside class="notes">I dati strutturati non garantiscono un risultato "ricco" (con data, luogo, stelline): rendono la pagina idonea. Devono descrivere ciò che è davvero visibile nella pagina. Schema.org è un vocabolario fondato nel 2011 da Google, Microsoft, Yahoo e Yandex. Indirizzo e data qui sono di esempio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti · in squadra</span></p>
+  <h2>Il JSON-LD del vostro sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nella home aggiungi un blocco JSON-LD di tipo <b>Organization</b> con name, url, logo, email.</li>
+      <li>Nella pagina di un evento o corso aggiungi un blocco <b>Event</b> o <b>Course</b>.</li>
+      <li>Apri <b>validator.schema.org</b>, scheda "Snippet di codice", incolla l'HTML della pagina.</li>
+      <li>Correggi finché non ci sono errori.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il validatore mostra a destra l'elemento rilevato (Organization, Event…) con 0 errori. Una virgola mancante nel JSON fa sparire tutto il blocco: è il primo sospetto.</div>
+  </div>
+  <aside class="notes">Lo Schema Markup Validator non richiede account. Il Test dei risultati multimediali di Google (search.google.com/test/rich-results) dice se la pagina è idonea per i risultati speciali di Google: utile ma più restrittivo. Gli avvisi (proprietà consigliate mancanti) non sono errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La ricerca con l'AI</p><h2>Quando la risposta arriva senza clic</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Risposte generate</h3><p>Google mostra in molti paesi, Italia compresa, un riassunto scritto dall'AI con link alle fonti; altri motori e chatbot fanno lo stesso. Molte ricerche finiscono lì, senza visitare alcun sito. Vince chi è citato come fonte: contenuti chiari, verificabili, ben strutturati.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>I crawler delle AI</h3><p>Le aziende di AI hanno crawler con nomi propri, come GPTBot di OpenAI, e Google usa il token Google-Extended per l'addestramento di Gemini. Si gestiscono in robots.txt: un sito può restare nella ricerca e dire no all'addestramento.</p></div>
+  </div>
+  <aside class="notes">Accuratezza: il riassunto si chiama AI Overview; le fonti sono linkate ma i clic verso i siti diminuiscono per molte ricerche informative (è il motivo per cui molti editori protestano). Google-Extended non è un crawler separato ma un token di robots.txt: bloccarlo non toglie il sito da Google Search. Esempio: "User-agent: GPTBot" + "Disallow: /". Proposte di file come llms.txt circolano, ma non sono uno standard adottato dai motori principali. Discussione: per il club conviene essere citato dalle AI o no?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dalla pubblicazione al risultato: in che ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-seo-percorso">
+    <li>Pubblichi la pagina e la aggiungi alla sitemap</li>
+    <li>Il crawler trova l'URL nella sitemap o in un link</li>
+    <li>Controlla robots.txt e scarica la pagina</li>
+    <li>Esegue il JavaScript e legge il contenuto finale</li>
+    <li>Salva la pagina nell'indice</li>
+    <li>Un utente cerca "corsi scacchi Bari"</li>
+    <li>Il motore ordina le pagine e mostra lo snippet</li>
+  </ol>
+  <aside class="notes">Il passo 4 (rendering) per Google può avvenire anche più tardi della prima scansione. Tra la pubblicazione e la comparsa nei risultati possono passare giorni o settimane. Con Google Search Console si può chiedere l'indicizzazione di un URL e vedere gli errori di scansione: richiede la verifica della proprietà del sito. All'esame: saper descrivere il ciclo scansione, indicizzazione, ranking.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il programma che segue i link e scarica le pagine si chiama <span class="blank" data-risposta="crawler|spider|bot"></span>.</p>
+    <p>Per tenere una pagina fuori dai risultati si usa <span class="blank" data-risposta="noindex"></span>, non robots.txt.</p>
+    <p>L'elenco delle pagine da scansionare va nel file <span class="blank" data-risposta="sitemap.xml|sitemap"></span>.</p>
+    <p>I dati strutturati si scrivono di solito nel formato <span class="blank" data-risposta="JSON-LD|jsonld|json ld"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: crawler (accettati spider, bot), noindex, sitemap.xml, JSON-LD.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Scansione, indicizzazione, ranking</li>
+      <li>On-page: title, description, h1, alt, URL</li>
+      <li>robots.txt guida i crawler, noindex esclude</li>
+    </ul>
+    <ul class="points">
+      <li>Sitemap e dati strutturati JSON-LD</li>
+      <li>Off-page: link affidabili, SEO locale, niente trucchi</li>
+      <li>Con l'AI: farsi citare come fonte</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Compito di squadra: piano SEO del sito (parole chiave, title e description per ogni pagina) con sitemap, robots.txt e JSON-LD validati.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

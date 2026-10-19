@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Web service SOAP in Java · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 7</p>
+  <h1>Web service<br>SOAP in Java</h1>
+  <p class="lead">Laboratorio: scriviamo un servizio SOAP vero con Maven e Jakarta XML Web Services, leggiamo il WSDL che genera e costruiamo il client partendo solo dal contratto.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Maven, @WebService, Endpoint, WSDL, wsimport, Fault</span></p>
+  <aside class="notes">Obiettivi: creare un progetto Maven con la dipendenza Jakarta XML Web Services (implementazione Eclipse Metro); pubblicare un servizio con @WebService ed Endpoint.publish; leggere il WSDL generato e collegarlo al codice Java; chiamare il servizio con curl e con un client generato da wsimport; gestire i Fault. Durata: 4 ore (due lezioni da 2 ore). Prerequisiti: lezione 6. Software: JDK 21, IntelliJ IDEA Community (Maven incluso) o VS Code con Extension Pack for Java; la prima volta Maven scarica le librerie da Maven Central (repo.maven.apache.org), circa 15 MB: va permesso dalla rete della scuola, oppure le librerie vanno scaricate prima. Tutto il codice di queste slide è stato provato con JDK 21 e jaxws-rt 4.0.3. Piano B se Maven non può scaricare: il docente esegue il progetto sulla LIM da un hotspot e gli studenti fanno i laboratori con curl (che non richiede librerie) verso il PC del docente, oppure ripetono i laboratori 3 e 4 della lezione 6 con il server senza librerie e ispezionano il WSDL pubblico con il browser o SoapUI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che rapporto hai con Maven?</h2></div>
+  <div class="poll" data-id="sj-maven">
+    <ol><li>Mai sentito</li><li>So che cos'è, non l'ho mai usato</li><li>L'ho usato in un progetto</li><li>Lo uso spesso</li></ol>
+  </div>
+  <aside class="notes">Serve al docente per calibrare il ritmo. Se la maggioranza risponde A o B, spendere 5 minuti su che cos'è Maven: uno strumento che descrive il progetto in un file pom.xml, scarica da solo le librerie (dipendenze) e i loro requisiti, compila ed esegue i plugin (come wsimport). Il repository centrale si chiama Maven Central. Analogia: è come npm per JavaScript o pip per Python, con in più la gestione della compilazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il piano del laboratorio</p><h2>Dal codice al contratto, dal contratto al client</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>1 · Servizio</h3><p class="small">Una classe Java con <code>@WebService</code></p></div>
+    <div class="card soft"><h3>2 · Pubblica</h3><p class="small"><code>Endpoint.publish</code> su <code>localhost:8080/calc</code></p></div>
+    <div class="card fill"><h3>3 · WSDL</h3><p class="small">Generato da solo: <code style="background:rgba(255,255,255,.2)">?wsdl</code></p></div>
+    <div class="card soft"><h3>4 · Client</h3><p class="small"><code>wsimport</code> legge il WSDL e genera lo stub</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="card"><h3>Code-first</h3><p class="small">Scrivo il codice, il framework genera il WSDL. È quello che facciamo per il servizio.</p></div>
+    <div class="card"><h3>Contract-first</h3><p class="small">Parto dal WSDL concordato e genero il codice. È quello che facciamo per il client, e che si fa tra aziende.</p></div>
+  </div>
+  <aside class="notes">Il client non vedrà mai il codice del servizio: solo il WSDL, come un'azienda esterna. Nelle integrazioni vere con la PA o con una banca si lavora quasi sempre contract-first: il WSDL è il documento ufficiale concordato (per esempio quello del Sistema di Interscambio per le fatture elettroniche). Due progetti Maven separati: calc-soap (servizio) e calc-client (client).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Copi un esempio del 2015 con <code>import javax.jws.WebService;</code> e con JDK 21 non compila. Perché?</h2></div>
+  <div class="poll" data-id="sj-javax" data-tipo="quiz" data-risposta="C">
+    <ol><li>Bisogna attivare un'opzione del compilatore per SOAP</li><li>Il pacchetto è stato rinominato <code>java.soap</code></li><li>JAX-WS è uscito dal JDK con Java 11: ora è una libreria, Jakarta XML Web Services</li><li>Java 21 non supporta più i web service SOAP</li></ol>
+    <p class="why">JAX-WS faceva parte del JDK da Java 6 a Java 10, nei pacchetti <code>javax.xml.ws</code> e <code>javax.jws</code>. Java 11 lo ha rimosso (JEP 320). Oggi si aggiunge con Maven: si chiama Jakarta XML Web Services, i pacchetti sono <code>jakarta.xml.ws</code> e <code>jakarta.jws</code>, l'implementazione di riferimento è Eclipse Metro.</p>
+  </div>
+  <aside class="notes">La D è il tranello per chi pensa che "rimosso dal JDK" voglia dire "non più possibile". Con JEP 320 sono usciti dal JDK anche JAXB e CORBA. Il passaggio da javax a jakarta è dovuto al trasferimento di Java EE dalla Oracle alla Eclipse Foundation (2017-2019), che ha dovuto cambiare il nome dei pacchetti. Conseguenza pratica: negli esempi trovati in rete, se c'è javax.jws bisogna sostituirlo con jakarta.jws e usare la dipendenza della versione 3 o 4.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio 1: il progetto Maven del servizio</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
+<pre class="code" style="font-size:18px">&lt;<span class="k">project</span> xmlns=<span class="s">"http://maven.apache.org/POM/4.0.0"</span>&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;<span class="hl">it.scuola</span>&lt;/groupId&gt;
+  &lt;artifactId&gt;<span class="hl">calc-soap</span>&lt;/artifactId&gt;
+  &lt;version&gt;1.0&lt;/version&gt;
+  &lt;properties&gt;
+    &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+  &lt;/properties&gt;
+  &lt;dependencies&gt;
+    &lt;<span class="k">dependency</span>&gt;
+      &lt;groupId&gt;<span class="s">com.sun.xml.ws</span>&lt;/groupId&gt;
+      &lt;artifactId&gt;<span class="s">jaxws-rt</span>&lt;/artifactId&gt;
+      &lt;version&gt;<span class="s">4.0.3</span>&lt;/version&gt;
+    &lt;/<span class="k">dependency</span>&gt;
+  &lt;/dependencies&gt;
+&lt;/<span class="k">project</span>&gt;</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>IntelliJ: <b>New Project</b>, build system <b>Maven</b>, JDK 21, nome <b>calc-soap</b>, GroupId <b>it.scuola</b>.</li>
+        <li>Sostituisci il <b>pom.xml</b> con questo.</li>
+        <li>Premi l'icona <b>Load Maven Changes</b> (la "m" con le frecce).</li>
+        <li>Crea il pacchetto <code>it.scuola.calc</code> in <code>src/main/java</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> in <b>External Libraries</b> compaiono <code>jaxws-rt-4.0.3</code> e altre librerie scaricate da sole (jaxb, saaj…). Nessuna riga rossa nel pom.</div>
+    </div>
+  </div>
+  <aside class="notes">jaxws-rt è il runtime di Metro: porta con sé le API jakarta.xml.ws e jakarta.jws, JAXB per convertire XML in oggetti e SAAJ per i messaggi SOAP. Versioni più recenti della serie 4.0.x vanno bene. In VS Code: comando "Java: Create Java Project", tipo Maven, archetype quickstart, poi sostituire il pom. Se il download non parte: verificare il proxy della scuola (in IntelliJ: Settings, HTTP Proxy; per Maven il file settings.xml). Da riga di comando, con Maven installato: mvn compile nella cartella del progetto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio 2: la classe del servizio</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)">
+<pre class="code" style="font-size:19px"><span class="k">package</span> it.scuola.calc;
+
+<span class="k">import</span> jakarta.jws.WebMethod;
+<span class="k">import</span> jakarta.jws.WebParam;
+<span class="k">import</span> jakarta.jws.WebService;
+
+<span class="hl">@WebService</span>(serviceName = <span class="s">"CalcolatriceService"</span>)
+<span class="k">public class</span> Calcolatrice {
+  <span class="hl">@WebMethod</span>
+  <span class="k">public int</span> somma(<span class="hl">@WebParam</span>(name = <span class="s">"a"</span>) <span class="k">int</span> a,
+                   <span class="hl">@WebParam</span>(name = <span class="s">"b"</span>) <span class="k">int</span> b) {
+    <span class="k">return</span> a + b;
+  }
+  <span class="hl">@WebMethod</span>
+  <span class="k">public double</span> dividi(<span class="hl">@WebParam</span>(name = <span class="s">"a"</span>) <span class="k">double</span> a,
+                       <span class="hl">@WebParam</span>(name = <span class="s">"b"</span>) <span class="k">double</span> b) {
+    <span class="k">if</span> (b == 0) <span class="k">throw new</span> IllegalArgumentException(<span class="s">"Divisione per zero"</span>);
+    <span class="k">return</span> a / b;
+  }
+}</pre>
+    <table class="data compact">
+      <tr><th>Annotazione</th><th>Effetto</th></tr>
+      <tr><td class="mono">@WebService</td><td>La classe diventa un servizio; <code>serviceName</code> dà il nome nel WSDL</td></tr>
+      <tr><td class="mono">@WebMethod</td><td>Il metodo diventa un'operazione</td></tr>
+      <tr><td class="mono">@WebParam</td><td>Nome dell'elemento XML del parametro</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Senza @WebParam i parametri si chiamerebbero arg0 e arg1 nel WSDL: funziona, ma il contratto è illeggibile. I metodi pubblici di una classe @WebService sono esposti anche senza @WebMethod; metterlo rende esplicita la scelta (e con @WebMethod(exclude = true) si esclude un metodo). L'eccezione lanciata in dividi diventerà un soap:Fault: lo vedremo con curl. Collegamento con la lezione 2: questa classe è l'implementazione; lo skeleton lo genera Metro a runtime.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio 3: pubblica e leggi il WSDL</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+    <div class="stack">
+<pre class="code" style="font-size:21px"><span class="k">package</span> it.scuola.calc;
+
+<span class="k">import</span> jakarta.xml.ws.Endpoint;
+
+<span class="k">public class</span> Server {
+  <span class="k">public static void</span> main(String[] args) {
+    String url = <span class="s">"http://localhost:<span class="hl">8080</span>/calc"</span>;
+    <span class="hl">Endpoint.publish</span>(url, <span class="k">new</span> Calcolatrice());
+    System.out.println(<span class="s">"Servizio attivo: "</span> + url + <span class="s">"?wsdl"</span>);
+  }
+}</pre>
+      <p class="small">Avvialo con il pulsante <b>Run</b> dell'IDE accanto al <code>main</code>.</p>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Crea <b>Server.java</b> ed eseguilo.</li>
+        <li>Apri nel browser <code>http://localhost:8080/calc?wsdl</code></li>
+        <li>Apri anche <code>http://localhost:8080/calc</code> e <code>?xsd=1</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> un WSDL con <code>name="CalcolatriceService"</code> e <code>targetNamespace="http://calc.scuola.it/"</code>, operazioni <b>somma</b> e <b>dividi</b>. Senza ?wsdl: una pagina "Web Services" con l'elenco degli endpoint.</div>
+    </div>
+  </div>
+  <aside class="notes">Endpoint.publish usa il piccolo server HTTP incluso nel JDK (lo stesso HttpServer delle lezioni precedenti): non serve Tomcat. In produzione il servizio si installerebbe in un application server Jakarta EE o in Tomcat con Metro. Il targetNamespace http://calc.scuola.it/ è ricavato dal pacchetto Java it.scuola.calc letto al contrario. Errori tipici: BindException "Address already in use" se la porta 8080 è occupata (chiudere l'altra esecuzione o cambiare porta); ClassNotFoundException su jakarta.xml.ws se Maven non ha caricato le dipendenze. Avviare dall'IDE e non con mvn exec:java: in quel modo, nelle nostre prove, i Fault non vengono serializzati per un problema di caricamento delle classi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dal Java al WSDL: chi diventa che cosa?</h2></div>
+  <dl class="puzzle-abbina" data-id="sj-mappa">
+    <dt>Pacchetto it.scuola.calc</dt><dd>targetNamespace http://calc.scuola.it/</dd>
+    <dt>Classe Calcolatrice</dt><dd>portType Calcolatrice</dd>
+    <dt>serviceName</dt><dd>service CalcolatriceService</dd>
+    <dt>Metodo somma</dt><dd>operation somma, messaggi somma e sommaResponse</dd>
+    <dt>@WebParam(name = "a") int</dt><dd>elemento a di tipo xs:int nello schema</dd>
+    <dt>Valore restituito</dt><dd>elemento return</dd>
+  </dl>
+  <aside class="notes">Far verificare ogni coppia nel WSDL aperto nel browser (e nello schema ?xsd=1 per i tipi). L'elemento della risposta si chiama return per default; si può cambiare con @WebResult(name = "risultato"). Domanda: se rinomino il pacchetto Java, che cosa succede ai client già generati? (Cambia il targetNamespace: i vecchi client mandano elementi in un namespace che il server non riconosce, e ricevono un Fault. Per questo nei servizi veri si fissa il namespace con @WebService(targetNamespace = "...").)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio 4: chiamalo con curl, come nella lezione 6</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:18px">curl -i -H "Content-Type: text/xml; charset=utf-8"
+     --data-binary @somma.xml http://localhost:8080/calc</pre>
+      <ol class="steps small">
+        <li>Riusa <b>somma.xml</b> della lezione 6 (o riscrivilo): stessa busta, stesso namespace.</li>
+        <li>Crea <b>dividi.xml</b>: operazione <code>c:dividi</code> con a = 20 e b = 0. Invialo.</li>
+        <li>Rimanda somma.xml con <code>Content-Type: application/json</code>.</li>
+        <li>Rinomina l'operazione in <code>c:moltiplica</code> e invia.</li>
+        <li>Copia le quattro risposte in <b>soap-java-curl-cognome.txt</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b><br>1. <b>200</b>, <code>&lt;return&gt;42&lt;/return&gt;</code><br>2. <b>500</b>, Fault <code>S:Server</code>, "Divisione per zero"<br>3. <b>415</b> Unsupported Media Type<br>4. <b>500</b>, Fault <code>S:Client</code>, "Cannot find dispatch method for {http://calc.scuola.it/}moltiplica"</div>
+  </div>
+  <aside class="notes">Tutte risposte verificate con il codice delle slide. Il file somma.xml della lezione 6 funziona senza modifiche: è la prova che il contratto è lo stesso anche se l'implementazione è cambiata da un server "finto" a un framework vero (accoppiamento debole, lezione 3). Leggere insieme le differenze: il Fault Server viene da un'eccezione Java nel nostro codice; il Fault Client da una richiesta che il framework non sa smistare; il 415 è HTTP che rifiuta il tipo di contenuto prima ancora di guardare la busta (lezione 5). Nel server, la console mostra lo stack trace dell'eccezione: il client invece riceve solo il messaggio, ed è giusto così per la sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Mandi al servizio vero la busta <b>senza</b> l'elemento <code>&lt;a&gt;</code>. Che cosa risponde?</h2></div>
+  <div class="poll" data-id="sj-senza-a" data-tipo="quiz" data-risposta="A">
+    <ol><li>200 con <code>&lt;return&gt;22&lt;/return&gt;</code></li><li>Un Fault Client: "manca il parametro a"</li><li>400 Bad Request</li><li>Il server va in crash e si ferma</li></ol>
+    <p class="why">Di default Metro non valida i messaggi rispetto allo schema: il parametro mancante diventa il valore predefinito di un int, cioè 0, e 0 + 22 = 22. Il server finto della lezione 6 rispondeva con un Fault; quello "vero" no. Per pretendere un messaggio corretto bisogna attivare la validazione.</p>
+  </div>
+  <aside class="notes">Risultato verificato. Quasi tutti scelgono B, convinti che un framework serio controlli tutto. Lezione importante: un contratto c'è, ma non sempre viene fatto rispettare. Soluzione: l'annotazione @SchemaValidation di Metro (pacchetto com.sun.xml.ws.developer) sulla classe del servizio: con lei la stessa richiesta riceve un Fault Client con il messaggio del validatore ("Invalid content was found starting with element 'b'. One of '{a}' is expected."). Anche questo è verificato. È un'estensione specifica di Metro, non dello standard. In alternativa si controllano i valori nel codice e si lancia un'eccezione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Laboratorio 5: il client nasce dal WSDL</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
+<pre class="code" style="font-size:17px"><span class="c">&lt;!-- pom.xml di calc-client: stessa dipendenza jaxws-rt, più --&gt;</span>
+&lt;<span class="k">build</span>&gt;&lt;<span class="k">plugins</span>&gt;
+  &lt;<span class="k">plugin</span>&gt;
+    &lt;groupId&gt;<span class="s">com.sun.xml.ws</span>&lt;/groupId&gt;
+    &lt;artifactId&gt;<span class="s">jaxws-maven-plugin</span>&lt;/artifactId&gt;
+    &lt;version&gt;<span class="s">4.0.3</span>&lt;/version&gt;
+    &lt;executions&gt;&lt;execution&gt;
+      &lt;goals&gt;&lt;goal&gt;<span class="hl">wsimport</span>&lt;/goal&gt;&lt;/goals&gt;
+      &lt;configuration&gt;
+        &lt;wsdlUrls&gt;
+          &lt;wsdlUrl&gt;<span class="hl">http://localhost:8080/calc?wsdl</span>&lt;/wsdlUrl&gt;
+        &lt;/wsdlUrls&gt;
+        &lt;packageName&gt;it.scuola.client.gen&lt;/packageName&gt;
+      &lt;/configuration&gt;
+    &lt;/execution&gt;&lt;/executions&gt;
+  &lt;/<span class="k">plugin</span>&gt;
+&lt;/<span class="k">plugins</span>&gt;&lt;/<span class="k">build</span>&gt;</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Lascia acceso il servizio. Crea un secondo progetto Maven <b>calc-client</b>.</li>
+        <li>Nel pom: la stessa dipendenza <code>jaxws-rt</code> e, dopo <code>&lt;/dependencies&gt;</code>, questo blocco <code>build</code>.</li>
+        <li>Esegui <b>mvn compile</b> (in IntelliJ: finestra Maven, Lifecycle, compile).</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> nel log "parsing WSDL… Generating code…" e in <code>target/generated-sources/wsimport</code> le classi <b>Calcolatrice</b>, <b>CalcolatriceService</b>, <b>Somma</b>, <b>SommaResponse</b>, <b>ObjectFactory</b>…</div>
+    </div>
+  </div>
+  <aside class="notes">wsimport legge il WSDL e lo schema e genera: l'interfaccia Calcolatrice (la SEI, Service Endpoint Interface, con i metodi somma e dividi), la classe CalcolatriceService (la "fabbrica" del proxy, con l'indirizzo letto dal WSDL), le classi JAXB per i messaggi (Somma, SommaResponse, Dividi, DividiResponse) e ObjectFactory. Sono lo stub della lezione 2, generato dal contratto. Se compare "Connection refused" il servizio non è acceso. In alternativa si può salvare il WSDL in un file e usare wsdlFiles invece di wsdlUrls: utile quando il servizio non è raggiungibile mentre si compila.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio 6: il client chiama, e gestisce il Fault</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)">
+<pre class="code" style="font-size:19px"><span class="k">package</span> it.scuola.client;
+
+<span class="k">import</span> it.scuola.client.gen.Calcolatrice;
+<span class="k">import</span> it.scuola.client.gen.CalcolatriceService;
+
+<span class="k">public class</span> Client {
+  <span class="k">public static void</span> main(String[] args) {
+    Calcolatrice calc =
+        <span class="k">new</span> CalcolatriceService().<span class="hl">getCalcolatricePort()</span>;
+    System.out.println(<span class="s">"20 + 22 = "</span> + calc.somma(20, 22));
+    <span class="k">try</span> {
+      System.out.println(calc.dividi(1, 0));
+    } <span class="k">catch</span> (jakarta.xml.ws.soap.<span class="hl">SOAPFaultException</span> e) {
+      System.out.println(<span class="s">"Fault dal server: "</span> + e.getMessage());
+    }
+  }
+}</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Crea <b>Client.java</b> nel pacchetto <code>it.scuola.client</code> ed eseguilo.</li>
+        <li>Spegni il servizio e rilancia il client: che cosa succede?</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> <b>20 + 22 = 42</b>, poi <b>Fault dal server: Client received SOAP Fault from server: Divisione per zero</b>… A servizio spento: un'eccezione di connessione.</div>
+    </div>
+  </div>
+  <aside class="notes">Output verificato. Nel codice del client non c'è traccia di XML, HTTP o socket: è esattamente l'RPC della lezione 2, con lo stub generato dal WSDL. Il nome getCalcolatricePort viene dal nome della port nel WSDL (CalcolatricePort). Il Fault arriva come SOAPFaultException, che è una RuntimeException: il compilatore non obbliga a gestirla (diverso da RMI, dove RemoteException è controllata). Discussione: è meglio così? A servizio spento, la creazione di CalcolatriceService fallisce già perché il proxy rilegge il WSDL dall'URL: si può evitare salvando il WSDL in locale. Estensione: misurare con System.nanoTime() quanto dura una chiamata somma in remoto rispetto a una somma locale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando non funziona</p><h2>Gli errori che incontrerai, e come uscirne</h2></div>
+  <table class="data compact">
+    <tr><th>Sintomo</th><th>Causa probabile</th><th>Rimedio</th></tr>
+    <tr><td class="mono">BindException: Address already in use</td><td>La porta 8080 è già occupata</td><td>Ferma l'altra esecuzione o cambia porta</td></tr>
+    <tr><td class="mono">package jakarta.jws does not exist</td><td>Dipendenza non caricata</td><td>Load Maven Changes, controlla il pom e il proxy</td></tr>
+    <tr><td class="mono">wsimport: Connection refused</td><td>Servizio spento mentre generi il client</td><td>Avvia Server, poi <b>mvn compile</b></td></tr>
+    <tr><td class="mono">415 Unsupported Media Type</td><td>Content-Type sbagliato</td><td><code>text/xml</code> per SOAP 1.1</td></tr>
+    <tr><td class="mono">Cannot find dispatch method</td><td>Operazione o namespace sbagliati</td><td>Confronta la busta con il WSDL</td></tr>
+    <tr><td class="mono">javax.jws non trovato</td><td>Esempio scritto per Java 8</td><td>Sostituisci <code>javax</code> con <code>jakarta</code></td></tr>
+  </table>
+  <aside class="notes">Lasciare questa slide proiettata durante il lavoro libero. Un buon esercizio di metodo: prima di chiedere aiuto, lo studente deve dire in quale livello è il problema (compilazione, rete, HTTP, SOAP, codice), come nel modello a livelli della lezione 1. Se il problema è il proxy della scuola per Maven, il docente può preparare una cartella .m2 già popolata da copiare sui PC del laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Meno chiacchiere</h2></div>
+  <figure class="citazione">
+    <blockquote>Parlare costa poco. Fammi vedere il codice.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, creatore di Linux, in un messaggio alla mailing list del kernel Linux, 25 agosto 2000</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un agente AI per programmatori può scrivere in pochi secondi il pom, il servizio e il client di oggi. Ma come ha visto il quiz sul parametro mancante, il codice che "funziona" può non fare ciò che il contratto promette. Verificare con chiamate vere, Fault compresi, resta il tuo lavoro: è la parte che l'esame e il mondo del lavoro valutano.</p></div>
+  <aside class="notes">Originale: "Talk is cheap. Show me the code." (Linus Torvalds, linux-kernel mailing list, 25 agosto 2000, in una discussione tecnica sulla gestione della memoria). Traduzione nostra. Collegamento con la lezione claude-code già vista: gli agenti accelerano, ma la responsabilità della verifica è di chi consegna. Domanda: quale test avresti scritto per accorgerti del problema del parametro mancante? (Una chiamata con una busta incompleta che si aspetta un Fault.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti · lavoro di gruppo</span></p>
+  <h2>Sfida a squadre: il servizio Registro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Squadre da 3: uno scrive il servizio, uno il client, uno prepara le buste di test con curl.</li>
+      <li>Aggiungi al progetto un servizio <b>Registro</b> con <code>aggiungiVoto(studente, voto)</code> e <code>media(studente)</code>, con i voti in una <code>Map</code>.</li>
+      <li>Voto fuori da 1-10 o studente sconosciuto: lancia un'eccezione con un messaggio chiaro.</li>
+      <li>Pubblicalo su <code>/registro</code> nello stesso <code>main</code>, rigenera il client con wsimport e provalo.</li>
+      <li>Consegna <b>registro-soap-squadra.zip</b> (i due progetti senza la cartella <code>target</code>, più le buste di test).</li>
+    </ol>
+    <div class="stack">
+      <div class="timer" data-min="40"></div>
+      <div class="check"><b>Controllo:</b> dopo aggiungiVoto("Ada", 8) e aggiungiVoto("Ada", 9), media("Ada") vale <b>8.5</b>; aggiungiVoto("Ada", 11) restituisce un <b>Fault</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione di riferimento: classe @WebService(serviceName = "RegistroService") public class Registro { private final Map&lt;String, List&lt;Integer&gt;&gt; voti = new ConcurrentHashMap&lt;&gt;(); @WebMethod public void aggiungiVoto(@WebParam(name="studente") String s, @WebParam(name="voto") int v) { if (v &lt; 1 || v &gt; 10) throw new IllegalArgumentException("Voto non valido: " + v); voti.computeIfAbsent(s, k -&gt; new CopyOnWriteArrayList&lt;&gt;()).add(v); } @WebMethod public double media(@WebParam(name="studente") String s) { List&lt;Integer&gt; l = voti.get(s); if (l == null) throw new IllegalArgumentException("Studente sconosciuto: " + s); return l.stream().mapToInt(Integer::intValue).average().orElse(0); } }. Nel Server: una seconda riga Endpoint.publish("http://localhost:8080/registro", new Registro()). Nel pom del client: un secondo wsdlUrl. Il servizio è un'unica istanza condivisa da tutte le richieste, eseguite su thread diversi: per questo la Map è concorrente (collegamento con l'Unità 3). Valutare anche la qualità delle buste di test: chi prova i casi d'errore merita di più. Attenzione, verificato nelle nostre prove: se due servizi nello stesso pacchetto Java hanno un'operazione con lo stesso nome (per esempio media), Metro genera due classi wrapper con lo stesso nome e la pubblicazione fallisce con "do not have a property of the name…"; si risolve mettendo il servizio in un pacchetto diverso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Un vecchio servizio SOAP, un nuovo utente: l'AI</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molte aziende vogliono che i loro assistenti AI usino i sistemi interni, spesso servizi SOAP di anni fa. Una soluzione frequente è scrivere un piccolo <b>server MCP</b> che espone strumenti semplici, per esempio "media dei voti di uno studente", e dietro chiama il servizio SOAP con un client generato da wsimport. Il modello vede JSON-RPC; il servizio continua a vedere buste XML.</p></div>
+    <div class="card night"><h3>Il ponte, in tre livelli</h3><ol class="steps small"><li>Agente AI → MCP (JSON-RPC)</li><li>Server MCP in Java → stub wsimport</li><li>Stub → servizio SOAP (XML su HTTP)</li></ol></div>
+  </div>
+  <aside class="notes">È il pattern "adapter" applicato all'architettura: nessuna modifica al servizio esistente, un nuovo strato che traduce. Temi da discutere: sicurezza (quali operazioni lasciare all'agente? un "aggiungiVoto" va protetto molto più di un "media"), idempotenza (lezione 2: se l'agente riprova, non deve inserire due voti), log e controllo umano. Esistono SDK ufficiali per scrivere server MCP in Java; non è richiesto in questo corso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il file che descrive un progetto Maven e le sue dipendenze si chiama <span class="blank" data-risposta="pom.xml|pom" style="--w:8ch"></span>.</p>
+    <p>L'annotazione che trasforma una classe in un servizio SOAP è <span class="blank" data-risposta="@WebService|WebService" style="--w:11ch"></span>.</p>
+    <p>Il metodo che pubblica il servizio senza un application server è <span class="blank" data-risposta="Endpoint.publish|publish" style="--w:15ch"></span>.</p>
+    <p>Lo strumento che genera il client dal WSDL si chiama <span class="blank" data-risposta="wsimport"></span>.</p>
+    <p>Lato client un Fault arriva come <span class="blank" data-risposta="SOAPFaultException" style="--w:17ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: pom.xml, @WebService, Endpoint.publish, wsimport, SOAPFaultException.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>JAX-WS non è più nel JDK: Jakarta XML Web Services con Maven</li>
+      <li>@WebService, @WebMethod, @WebParam, Endpoint.publish</li>
+      <li>Code-first per il servizio, il WSDL si genera da solo</li>
+    </ul>
+    <ul class="points">
+      <li>wsimport: dal WSDL allo stub, contract-first</li>
+      <li>Eccezione nel servizio = Fault; nel client SOAPFaultException</li>
+      <li>Senza validazione un parametro mancante diventa 0</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (estensione del servizio con convalida e test). Fine della parte SOAP dell'unità: dalla prossima lezione si passa a REST, lo stile proposto da Roy Fielding nel 2000, che usa HTTP in modo opposto a SOAP.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

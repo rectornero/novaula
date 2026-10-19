@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intent e nuove Activity · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+.pila2{display:flex;gap:40px;align-items:flex-end}
+.pila2 .col{display:flex;flex-direction:column;gap:10px;flex:1}
+.pila2 .col p{text-align:center;font-size:28px;color:var(--muted);margin-top:8px}
+.pila2 .el{border-radius:16px;padding:24px 18px;font-family:var(--mono);font-size:29px;text-align:center;background:var(--card);border:2px solid var(--line)}
+.pila2 .el.top{background:var(--accent);border-color:var(--accent);color:#fff}
+</style>
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">Unità 4 · Applicazioni per sistemi mobili · Lezione 7</p>
+  <h1>Una nuova pagina: Intent e New Activity</h1>
+  <p class="lead">Finito il quiz, QuizTPSI apre una seconda schermata con il risultato. Le Activity non si chiamano direttamente: si mandano messaggi, gli Intent, e il sistema fa il resto.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Più schermate, Intent espliciti e impliciti, passaggio di dati</span></p>
+  <aside class="notes">Obiettivi: creare una seconda Activity e trovarla nel manifest, avviarla con un Intent esplicito passando dati con putExtra e leggendoli con getIntExtra, capire back stack e finish(), usare un Intent implicito per condividere e aprire una pagina web, conoscere i rischi delle Activity esportate. Durata: 2-3 ore. Si chiude il progetto QuizTPSI. Piano B: telefono via USB; dimostrazione sulla LIM; per i Intent impliciti l'emulatore ha poche app installate, il telefono vero è più interessante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Tocchi un link di YouTube in una chat. Dove si apre?</h2></div>
+  <div class="poll" data-id="int-link">
+    <ol><li>Nel browser</li><li>Dentro la chat stessa</li><li>Nell'app di YouTube</li><li>Il telefono mi chiede quale app usare</li></ol>
+  </div>
+  <aside class="notes">Tutte le risposte sono possibili, dipende dalle app installate e dalle scelte fatte in passato: è proprio il comportamento degli Intent impliciti e dei filtri (e degli App Link verificati, che associano un dominio a un'app). L'app della chat non sa quale app aprirà il link: chiede al sistema "qualcuno sa aprire questo indirizzo?". Lo rivedremo dopo l'Intent esplicito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea</p><h2>Le Activity si parlano con messaggi</h2></div>
+  <figure class="citazione">
+    <blockquote style="font-size:48px">Mi dispiace di aver coniato tanto tempo fa il termine "oggetti" […]. La grande idea è lo scambio di messaggi.</blockquote>
+    <figcaption><b>Alan Kay</b>, messaggio alla mailing list di Squeak, 1998</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card fill"><h3>Intent esplicito</h3><p class="small">Dice <b>quale</b> Activity aprire: <code style="background:rgba(255,255,255,.2)">RisultatoActivity::class.java</code>. Si usa dentro la propria app.</p></div>
+    <div class="card"><h3>Intent implicito</h3><p class="small">Dice <b>che cosa</b> fare: "condividi questo testo", "apri questo indirizzo". Il sistema cerca le app adatte.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra da "I'm sorry that I long ago coined the term 'objects' for this topic because it gets many people to focus on the lesser idea. The big idea is 'messaging'." (mailing list Squeak, ottobre 1998). È la stessa persona citata nella lezione 4. Gli Intent sono un'applicazione molto concreta di questa idea: l'Activity mittente non crea l'oggetto della destinataria, consegna un messaggio al sistema (ActivityManager, via Binder: lezione 2), che decide se e come avviarla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una seconda schermata</p><h2>New Activity: tre file in un colpo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points small">
+        <li>Tasto destro sul package, <b>New</b>, <b>Activity</b>, il modello con le View (di solito <b>Empty Views Activity</b>).</li>
+        <li>Nome <b>RisultatoActivity</b>: Android Studio crea <code>RisultatoActivity.kt</code>, <code>activity_risultato.xml</code> e la voce nel manifest.</li>
+      </ul>
+<pre class="code" style="font-size:25px"><span class="c">&lt;!-- AndroidManifest.xml --&gt;</span>
+&lt;<span class="k">activity</span>
+    android:name=<span class="s">".RisultatoActivity"</span>
+    android:exported=<span class="s">"false"</span> /&gt;</pre>
+    </div>
+    <div class="card soft"><h3>Perché exported false?</h3><p class="small">Questa schermata la apre solo QuizTPSI. Con <code>false</code> nessun'altra app può avviarla: meno superficie di attacco.</p></div>
+  </div>
+  <aside class="notes">Se si crea la classe Kotlin a mano (New, Kotlin Class) la voce nel manifest non viene aggiunta: è l'errore della slide successiva. La seconda Activity non ha intent-filter MAIN/LAUNCHER: non deve avere un'icona nel menu delle app. Anche il nuovo layout ha un contenitore con id main e il codice degli insets: lasciarli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Crei RisultatoActivity.kt a mano e non la dichiari nel manifest. Avvii l'Intent:</h2></div>
+  <div class="poll" data-id="int-manifest" data-tipo="quiz" data-risposta="D">
+    <ol><li>Android la registra da solo al primo avvio</li><li>Il progetto non compila</li><li>Si riapre la MainActivity</li><li>L'app si chiude con ActivityNotFoundException</li></ol>
+    <p class="why">Il codice compila: la classe esiste. Ma al momento di startActivity il sistema cerca l'Activity tra quelle dichiarate nel manifest, non la trova e lancia ActivityNotFoundException, che chiude l'app.</p>
+  </div>
+  <aside class="notes">Il messaggio in Logcat dice esplicitamente "have you declared this activity in your AndroidManifest.xml?". Ottimo esempio di errore che il compilatore non vede perché dipende da una configurazione letta a runtime dal sistema. La B è il tranello di chi si fida troppo del compilatore.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Crea la schermata del risultato</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea <b>RisultatoActivity</b> con New, Activity, modello con le View.</li>
+      <li>In <b>activity_risultato.xml</b> usa un LinearLayout verticale (con id <code>main</code>) e aggiungi <b>tvEsito</b> (28sp), <b>btnRigioca</b> e <b>btnCondividi</b>.</li>
+      <li>In strings.xml aggiungi <code>esito</code> = <i>Hai totalizzato %1$d punti su %2$d</i>.</li>
+      <li>Apri il manifest e cerca la nuova Activity.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel manifest c'è <code>android:name=".RisultatoActivity"</code> con <code>exported="false"</code>, e l'anteprima del nuovo layout mostra il testo e i due pulsanti.</div>
+  </div>
+  <aside class="notes">Se il modello di Activity proposto usa Compose (alcune versioni lo mettono per primo nella lista), scegliere quello con Views. Testi dei pulsanti in strings.xml: rigioca = "Gioca ancora", condividi = "Condividi". Chi è avanti può dare un colore diverso allo sfondo del risultato con android:background.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Intent esplicito</p><h2>Partire con i dati in valigia</h2></div>
+  <div class="cols-2">
+    <div class="stack"><p class="kicker">MainActivity: chi invia</p>
+<pre class="code" style="font-size:23px"><span class="c">// all'ultimo Avanti, al posto del Toast</span>
+<span class="k">val</span> intent = Intent(<span class="k">this</span>,
+    RisultatoActivity::<span class="k">class</span>.java)
+intent.putExtra(
+    RisultatoActivity.EXTRA_PUNTI, punti)
+intent.putExtra(
+    RisultatoActivity.EXTRA_TOTALE, domande.size)
+startActivity(intent)</pre></div>
+    <div class="stack"><p class="kicker">RisultatoActivity: chi riceve</p>
+<pre class="code" style="font-size:23px"><span class="k">companion object</span> {
+  <span class="k">const val</span> EXTRA_PUNTI = <span class="s">"it.novaula.quiztpsi.PUNTI"</span>
+  <span class="k">const val</span> EXTRA_TOTALE = <span class="s">"it.novaula.quiztpsi.TOT"</span>
+}
+<span class="c">// in onCreate, dopo setContentView</span>
+<span class="k">val</span> punti = intent.getIntExtra(EXTRA_PUNTI, 0)
+<span class="k">val</span> totale = intent.getIntExtra(EXTRA_TOTALE, 0)
+findViewById&lt;TextView&gt;(R.id.tvEsito).text =
+    getString(R.string.esito, punti, totale)</pre></div>
+  </div>
+  <aside class="notes">::class.java dà l'oggetto Class Java, come RisultatoActivity.class in Java. Dentro l'Activity, intent (minuscolo) è la proprietà che corrisponde a getIntent(): l'Intent con cui l'Activity è stata avviata. Il secondo parametro di getIntExtra è il valore di default, restituito se la chiave non c'è. Il companion object fa le veci dei campi static di Java; const val è una costante di compilazione. Prefissare le chiavi con il nome del pacchetto è la convenzione consigliata. Forma idiomatica: Intent(this, RisultatoActivity::class.java).apply { putExtra(…); putExtra(…) }.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chi invia scrive <code>putExtra("punti", 3)</code>, chi riceve legge <code>getIntExtra("PUNTI", 0)</code>. Che cosa compare?</h2></div>
+  <div class="poll" data-id="int-chiave" data-tipo="quiz" data-risposta="B">
+    <ol><li>3: le chiavi non distinguono le maiuscole</li><li>0, senza nessun errore</li><li>L'app si chiude: chiave non trovata</li><li>Un errore di compilazione</li></ol>
+    <p class="why">Le chiavi sono stringhe confrontate esattamente: "punti" e "PUNTI" sono diverse. getIntExtra non trova la chiave e restituisce il valore di default, 0. Per evitarlo si usano costanti condivise.</p>
+  </div>
+  <aside class="notes">È un bug silenzioso, il peggiore: nessun crash, solo un risultato sbagliato. Ecco perché la slide precedente usa costanti in un companion object: se la scrivi una volta sola non puoi sbagliarla due volte. Domanda: e se chi invia mette un Double e chi riceve legge con getIntExtra? (Anche qui default, con un avviso in Logcat.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Passa il punteggio alla seconda schermata</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In RisultatoActivity aggiungi il <code>companion object</code> con le due costanti.</li>
+      <li>In onCreate leggi gli extra e scrivi l'esito in tvEsito.</li>
+      <li>In MainActivity, all'ultimo Avanti, sostituisci il Toast con l'Intent della slide.</li>
+      <li>Subito dopo <code>startActivity</code> azzera <code>indice</code> e <code>punti</code> e chiama <code>mostraDomanda()</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> rispondendo Vero, Falso, Falso compare <b>Hai totalizzato 3 punti su 3</b>; con tre Vero <b>1 punto su 3</b>. Premendo Indietro torni alla domanda 1.</div>
+  </div>
+  <aside class="notes">Il punto 4 serve perché la MainActivity non viene distrutta: resta sotto, nel back stack, con lo stato del quiz finito. Azzerarlo dopo startActivity funziona perché gli extra hanno già copiato il valore dei punti. Il plurale "1 punto" richiederebbe una risorsa plurals (getQuantityString): proposta per i più veloci; altrimenti accettare "1 punti". Errore frequente: leggere gli extra prima di setContentView non dà problemi, ma cercare tvEsito prima sì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il back stack</p><h2>Una pila di schermate</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="pila2">
+      <div class="col"><div class="el top">MainActivity</div><p>All'avvio</p></div>
+      <div class="col"><div class="el top">RisultatoActivity</div><div class="el">MainActivity</div><p>Dopo startActivity</p></div>
+      <div class="col"><div class="el top">MainActivity</div><p>Dopo Indietro</p></div>
+    </div>
+    <ul class="points small">
+      <li><code>startActivity</code> mette una nuova Activity <b>in cima</b>.</li>
+      <li><b>Indietro</b> o <code>finish()</code> la toglie e mostra quella sotto.</li>
+      <li>È una pila: l'ultima entrata è la prima a uscire (LIFO).</li>
+    </ul>
+  </div>
+  <div class="callout">La MainActivity sotto <b>non è distrutta</b>: è ferma (onStop) e conserva il suo stato. Ma con poca memoria il sistema può chiudere il processo: ecco perché onSaveInstanceState resta importante.</div>
+  <aside class="notes">Le Activity di una pila formano un task; l'utente può avere più task (un'app per ciascuno, di solito) e passare dall'uno all'altro con le app recenti. Da Android 13 e soprattutto 14-15 c'è il gesto Indietro predittivo: mentre trascini si vede un'anteprima di dove si tornerà; le app lo devono abilitare e non intercettare il tasto Indietro con codice vecchio (onBackPressed è deprecato, si usa OnBackPressedDispatcher). Collegamento con la struttura dati pila vista nel triennio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Tocchi "Vedi risultato": metti in ordine le chiamate</h2></div>
+  <ol class="puzzle-ordina" data-id="int-ciclo">
+    <li>MainActivity crea l'Intent e chiama startActivity</li>
+    <li>MainActivity riceve onPause</li>
+    <li>RisultatoActivity riceve onCreate</li>
+    <li>RisultatoActivity riceve onStart</li>
+    <li>RisultatoActivity riceve onResume</li>
+    <li>MainActivity riceve onStop, e resta nel back stack</li>
+  </ol>
+  <aside class="notes">È l'ordine documentato: l'Activity che esce va in pausa, la nuova diventa visibile e interattiva, solo allora la vecchia viene fermata (onStop) perché non è più visibile. Per questo onPause deve essere veloce: finché non termina la nuova schermata non parte. Verifica sperimentale: con i Log.d della lezione 4 in entrambe le Activity.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>"Gioca ancora" riapre MainActivity così. Dopo un giro premi Indietro: dove vai?</h2></div>
+  <pre class="code">startActivity(Intent(<span class="k">this</span>, MainActivity::<span class="k">class</span>.java))</pre>
+  <div class="poll" data-id="int-stack" data-tipo="quiz" data-risposta="A">
+    <ol><li>Alla schermata del risultato precedente</li><li>Fuori dall'app, alla schermata Home</li><li>Alla domanda 1 del quiz</li><li>L'app si chiude con un errore</li></ol>
+    <p class="why">startActivity aggiunge una nuova MainActivity sopra la pila: Main, Risultato, Main. Indietro toglie quella in cima e mostra Risultato. Per tornare indietro davvero, "Gioca ancora" deve chiamare finish().</p>
+  </div>
+  <aside class="notes">Molti rispondono C: pensano che "aprire MainActivity" riporti a quella esistente. Ogni startActivity crea, per default, una nuova istanza. Esistono flag (FLAG_ACTIVITY_CLEAR_TOP) e launchMode per cambiare il comportamento, ma qui la soluzione pulita è finish(). Dopo 5 partite con startActivity la pila contiene 10 schermate: anche memoria sprecata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Intent impliciti</p><h2>Chiedi al sistema, non a un'app precisa</h2></div>
+  <div class="cols-2" style="grid-template-columns:1.15fr 1fr">
+<pre class="code" style="font-size:21px"><span class="c">// Condividi il risultato</span>
+<span class="k">val</span> invia = Intent(Intent.ACTION_SEND).apply {
+    type = <span class="s">"text/plain"</span>
+    putExtra(Intent.EXTRA_TEXT,
+        <span class="s">"Ho fatto $punti su $totale a QuizTPSI!"</span>)
+}
+startActivity(
+    Intent.createChooser(invia, <span class="s">"Condividi con"</span>))</pre>
+<pre class="code" style="font-size:21px"><span class="c">// Apri una pagina web</span>
+<span class="k">val</span> web = Intent(Intent.ACTION_VIEW,
+    Uri.parse(<span class="s">"https://developer.android.com"</span>))
+<span class="k">try</span> {
+    startActivity(web)
+} <span class="k">catch</span> (e: ActivityNotFoundException) {
+    Toast.makeText(<span class="k">this</span>, <span class="s">"Nessun browser"</span>,
+        Toast.LENGTH_SHORT).show()
+}</pre>
+  </div>
+  <div class="callout small">Il sistema confronta <b>azione</b>, <b>tipo MIME</b> e <b>dati</b> dell'Intent con gli <code>intent-filter</code> dichiarati da tutte le app installate.</div>
+  <aside class="notes">createChooser mostra sempre il selettore di sistema, anche se l'utente ha un'app predefinita. Il tipo MIME è lo stesso concetto visto con HTTP nell'Unità 2 (Content-Type). Da Android 11 un'app non vede le altre app installate se non le dichiara in &lt;queries&gt;: per questo è più semplice provare startActivity e gestire ActivityNotFoundException che controllare prima con resolveActivity. Al posto di Uri.parse si può usare l'estensione Kotlin "https://…".toUri() della libreria core-ktx.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Gioca ancora e Condividi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>btnRigioca</b> registra un listener che chiama <code>finish()</code>.</li>
+      <li>Su <b>btnCondividi</b> crea l'Intent <code>ACTION_SEND</code> della slide, con il punteggio.</li>
+      <li>Aggiungi un pulsante <b>Scopri di più</b> che apre <i>developer.android.com</i> con <code>ACTION_VIEW</code>.</li>
+      <li>Prova sul dispositivo, poi premi Indietro dal browser.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Condividi apre il selettore di sistema con le app che accettano testo. Dal browser, Indietro torna alla schermata del risultato: il browser era finito in cima alla tua pila.</div>
+  </div>
+  <aside class="notes">Sull'emulatore il selettore mostra poche app (Messaggi, Gmail, Drive se presenti): sul telefono vero è più ricco. Nessuno deve davvero inviare il messaggio: basta vedere il selettore. Osservazione da far notare: un Intent implicito può mettere l'Activity di un'altra app nel tuo task. Soluzione completa del progetto: il docente può distribuirla dopo la consegna del compito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni elemento al suo ruolo</h2></div>
+  <dl class="puzzle-abbina" data-id="int-termini">
+    <dt>Intent esplicito</dt><dd>Indica la classe dell'Activity da aprire</dd>
+    <dt>Intent implicito</dt><dd>Indica un'azione: il sistema sceglie l'app</dd>
+    <dt>putExtra</dt><dd>Allega un dato all'Intent con una chiave</dd>
+    <dt>getIntExtra</dt><dd>Legge un intero, con un valore di default</dd>
+    <dt>finish()</dt><dd>Chiude l'Activity e torna a quella sotto</dd>
+    <dt>intent-filter</dt><dd>Dichiara quali Intent impliciti un'Activity accetta</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Ripasso completo prima della sfida finale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli Intent oggi</p><h2>Messaggi tra app: potenti e da proteggere</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Sicurezza degli Intent</h3><p>Un'Activity con <b>exported="true"</b> può essere avviata da qualunque app, con gli extra che vuole: vanno <b>controllati</b> come l'input di un form web. Inoltrare a occhi chiusi un Intent ricevuto (intent redirection) è una vulnerabilità nota.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Agenti AI che usano le app</h3><p>Gli assistenti AI sui telefoni iniziano ad agire dentro le app. Con le <b>App Functions</b> di Android un'app dichiara funzioni, come "crea una nota", che un agente può chiamare: un'idea vicina agli Intent impliciti e al Model Context Protocol.</p></div>
+  </div>
+  <div class="card soft"><p><b>All'esame</b> In una prova di progetto puoi descrivere un'app con un <b>diagramma di navigazione</b>: un riquadro per schermata, una freccia per ogni Intent, con i dati passati scritti sulla freccia.</p></div>
+  <aside class="notes">Da Android 12 bisogna dichiarare exported per ogni componente con intent-filter, proprio per evitare esportazioni involontarie; sempre da Android 12 i PendingIntent devono dichiarare se sono mutabili (FLAG_IMMUTABLE o FLAG_MUTABLE). Il rischio di intent redirection è descritto nelle linee guida di sicurezza di Android e ha riguardato app reali molto diffuse. App Functions: introdotte da Google con Android 16 in forma sperimentale; verificarne lo stato attuale prima di approfondire. MCP è uno dei temi "Oggi" del corso: un protocollo con cui un modello AI scopre e chiama strumenti esterni; la somiglianza con gli Intent sta nel dichiarare capacità che altri possono invocare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto di QuizTPSI</h2></div>
+  <div class="puzzle-codice" data-risposta="2521" data-aiuto="contate le Activity, poi i callback del puzzle sull'ordine, poi la pila prima e dopo Indietro">
+    <ul class="points">
+      <li>1ª cifra: quante Activity ha ora QuizTPSI</li>
+      <li>2ª cifra: quanti callback del ciclo di vita, in tutto, quando apri RisultatoActivity</li>
+      <li>3ª cifra: quante Activity ci sono nel back stack subito dopo</li>
+      <li>4ª cifra: quante ne restano dopo aver premuto Indietro</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 2 Activity; onPause, onCreate, onStart, onResume, onStop = 5; pila con 2 elementi; dopo Indietro 1.</div>
+  </div>
+  <aside class="notes">Codice: 2521. Squadre da 3-4. Chi sbaglia la seconda cifra dimentica di solito onStop della MainActivity o onPause. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Ogni Activity deve essere dichiarata nel file <span class="blank" data-risposta="androidmanifest.xml|androidmanifest|manifest" style="--w:14ch"></span>.</p>
+    <p>Un dato si allega all'Intent con <span class="blank" data-risposta="putextra" style="--w:8ch"></span>.</p>
+    <p>Per tornare alla schermata precedente l'Activity chiama <span class="blank" data-risposta="finish|finish()"></span>.</p>
+    <p>Per condividere un testo si usa l'azione ACTION_<span class="blank" data-risposta="send"></span>.</p>
+    <p>Le Activity aperte formano una pila chiamata back <span class="blank" data-risposta="stack"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: AndroidManifest.xml, putExtra, finish, SEND, stack.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>New Activity: classe, layout e manifest</li>
+      <li>Intent esplicito + putExtra, getIntExtra con default</li>
+      <li>Chiavi in costanti, mai scritte due volte</li>
+    </ul>
+    <ul class="points">
+      <li>Back stack: startActivity aggiunge, finish toglie</li>
+      <li>Intent impliciti: ACTION_SEND, ACTION_VIEW</li>
+      <li>exported="false" se nessun altro deve entrare</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula: completa QuizTPSI. Con questa lezione l'Unità 4 è finita: ricordare la simulazione della verifica su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

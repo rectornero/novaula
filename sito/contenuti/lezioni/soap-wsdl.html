@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I web service con SOAP · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Unità 2 · Progettare e utilizzare web service · Lezione 6</p>
+  <h1>I web service<br>con SOAP</h1>
+  <p class="lead">Una busta XML, un contratto WSDL e tante regole. Il protocollo delle banche, delle assicurazioni e della pubblica amministrazione.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Envelope, Header, Body, Fault, WSDL</span></p>
+  <aside class="notes">Obiettivi: descrivere la struttura di un messaggio SOAP (Envelope, Header, Body, Fault); distinguere SOAP 1.1 e 1.2; leggere un documento WSDL 1.1 (types, message, portType, binding, service); inviare una richiesta SOAP con curl e interpretare la risposta e i Fault; valutare pregi e difetti di SOAP. Durata indicativa: 3 ore. Prerequisiti: XML e namespace (lezione 4), HTTP (lezione 5). I laboratori 1 e 2 usano un servizio pubblico di esempio (www.dataaccess.com, nessun account); i laboratori 3 e 4 funzionano senza Internet. Nella lezione 7 lo stesso servizio "somma" verrà realizzato con la libreria standard Jakarta XML Web Services.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nel 2026 qualcuno usa ancora SOAP?</h2></div>
+  <div class="poll" data-id="soap-oggi">
+    <ol><li>No, è sparito da anni</li><li>Solo qualche sistema vecchio</li><li>Sì, banche e PA ogni giorno</li><li>Non so nemmeno che cosa sia</li></ol>
+  </div>
+  <aside class="notes">La risposta più vicina al vero è C. Esempi italiani verificabili: il Sistema di Interscambio dell'Agenzia delle Entrate per la fatturazione elettronica offre un canale di trasmissione basato su web service SOAP (SDICoop), e il servizio europeo VIES per verificare le partite IVA ha un'interfaccia SOAP con WSDL pubblico (oggi affiancata da una REST). Molti sistemi bancari e assicurativi espongono servizi SOAP tra aziende. Nelle API pubbliche nuove domina REST, ma chi lavorerà in un'azienda di software gestionale incontrerà SOAP quasi certamente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Simple Object Access Protocol, ma non così semplice</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>1998</h3><p class="small">Nasce in Microsoft (Don Box, Dave Winer e altri): RPC in XML su HTTP.</p></div>
+    <div class="card soft"><h3>2000</h3><p class="small">SOAP 1.1 è una Note del W3C. Nel 2001 arriva il WSDL.</p></div>
+    <div class="card soft"><h3>2003</h3><p class="small">SOAP 1.2 è raccomandazione W3C. Il nome non è più un acronimo.</p></div>
+    <div class="card soft"><h3>Anni 2000</h3><p class="small">Le specifiche WS-* (Security, Addressing…) si moltiplicano.</p></div>
+  </div>
+  <figure class="citazione">
+    <blockquote>Le cose semplici devono essere semplici, quelle complesse devono essere possibili.</blockquote>
+    <figcaption><b>Alan Kay</b>, informatico, pioniere della programmazione a oggetti (frase a lui attribuita)</figcaption>
+  </figure>
+  <aside class="notes">La specifica SOAP 1.2 dice esplicitamente che il nome non va più inteso come acronimo, perché il protocollo non riguarda solo l'accesso a oggetti. Dave Winer, di UserLand, pubblicò anche XML-RPC (1998), un antenato più semplice. Citazione: "Simple things should be simple, complex things should be possible", molto citata e attribuita ad Alan Kay; non ne conosciamo la fonte scritta precisa, per questo è "attribuita". Traduzione nostra. Domanda per la discussione: SOAP rende semplici le cose semplici? (Per sommare due numeri servono una busta, un namespace, un WSDL di decine di righe: è la critica che ha fatto nascere REST.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il messaggio</p><h2>Una busta con un'intestazione e un contenuto</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="card night">
+      <h3>soap:Envelope <span class="muted small">· obbligatorio, la radice</span></h3>
+      <div class="card" style="background:var(--night-2);border-color:rgba(255,255,255,.15);color:var(--night-ink)"><h3>soap:Header <span class="small" style="color:var(--night-muted)">· facoltativo</span></h3><p class="small">Informazioni per l'infrastruttura: sicurezza, identificativi, transazioni.</p></div>
+      <div class="card fill"><h3>soap:Body <span class="small">· obbligatorio</span></h3><p class="small">La richiesta o la risposta vera e propria. In caso di errore contiene un <b>soap:Fault</b>.</p></div>
+    </div>
+    <ul class="points">
+      <li>È un documento <b>XML</b>, con il namespace di SOAP sulla radice.</li>
+      <li>Di solito viaggia in una richiesta <b>HTTP POST</b>, ma può usare anche altri trasporti (code di messaggi, persino email).</li>
+      <li>Per SOAP, HTTP è solo un <b>trasporto</b>: le informazioni importanti sono tutte dentro la busta.</li>
+    </ul>
+  </div>
+  <aside class="notes">Il paragone con la posta funziona: l'Envelope è la busta, l'Header sono le annotazioni sulla busta (raccomandata, ricevuta di ritorno) che legge l'ufficio postale, il Body è la lettera. Un nodo intermedio (un gateway, un servizio di sicurezza) può leggere e consumare blocchi dell'Header senza toccare il Body. Questa indipendenza dal trasporto è la grande differenza filosofica con REST, che invece usa HTTP fino in fondo (metodi, codici, header).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un esempio vero</p><h2>Chiedere <code>somma(20, 22)</code> in SOAP 1.1</h2></div>
+  <div class="cols-2">
+<pre class="code" style="font-size:19px"><span class="c">POST /calc HTTP/1.1</span>
+<span class="c">Content-Type: text/xml; charset=utf-8</span>
+
+&lt;<span class="k">soapenv:Envelope</span>
+  xmlns:soapenv=<span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>
+  xmlns:c=<span class="s">"http://calc.scuola.it/"</span>&gt;
+  &lt;<span class="k">soapenv:Body</span>&gt;
+    &lt;<span class="hl">c:somma</span>&gt;
+      &lt;a&gt;20&lt;/a&gt;
+      &lt;b&gt;22&lt;/b&gt;
+    &lt;/<span class="hl">c:somma</span>&gt;
+  &lt;/<span class="k">soapenv:Body</span>&gt;
+&lt;/<span class="k">soapenv:Envelope</span>&gt;</pre>
+<pre class="code" style="font-size:19px"><span class="c">HTTP/1.1 200 OK</span>
+<span class="c">Content-Type: text/xml; charset=utf-8</span>
+
+&lt;<span class="k">S:Envelope</span>
+  xmlns:S=<span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;
+  &lt;<span class="k">S:Body</span>&gt;
+    &lt;<span class="hl">ns2:sommaResponse</span>
+        xmlns:ns2=<span class="s">"http://calc.scuola.it/"</span>&gt;
+      &lt;return&gt;42&lt;/return&gt;
+    &lt;/<span class="hl">ns2:sommaResponse</span>&gt;
+  &lt;/<span class="k">S:Body</span>&gt;
+&lt;/<span class="k">S:Envelope</span>&gt;</pre>
+  </div>
+  <p class="small">Il nome dell'operazione è l'elemento dentro il Body; la risposta si chiama per convenzione <b>operazione + Response</b>. I prefissi (<code>soapenv</code>, <code>S</code>, <code>ns2</code>) sono liberi: contano i <b>namespace</b>.</p>
+  <aside class="notes">La risposta è quella prodotta davvero dal servizio Java della lezione 7 (Metro, Jakarta XML Web Services 4), riformattata su più righe. Il client ha usato il prefisso soapenv, il server S: è lo stesso namespace, quindi lo stesso elemento. È il punto più difficile per chi legge XML la prima volta: un prefisso è solo un'abbreviazione locale del namespace. Domanda: se il client scrivesse xmlns:c="http://calc.scuola.it" (senza la barra finale)? (È un namespace diverso: il server non riconosce l'operazione e risponde con un Fault.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quali elementi devono esserci in ogni messaggio SOAP?</h2></div>
+  <div class="poll" data-id="soap-obbl" data-tipo="quiz" data-risposta="B">
+    <ol><li>Envelope, Header e Body</li><li>Envelope e Body</li><li>Solo il Body</li><li>Body e Fault</li></ol>
+    <p class="why">L'Envelope è la radice e il Body porta il contenuto: sono obbligatori. L'Header è facoltativo e si usa quando servono sicurezza, identificativi o altre informazioni per l'infrastruttura. Il Fault compare solo in caso di errore, dentro il Body.</p>
+  </div>
+  <aside class="notes">Chi sceglie A ricorda la figura della slide precedente, dove l'Header c'era: guardare di nuovo l'esempio vero, che non lo ha. La D confonde: Fault non è un elemento allo stesso livello del Body, ma un suo figlio, ed è presente solo negli errori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'Header</p><h2>Le informazioni per chi trasporta il messaggio</h2></div>
+<pre class="code" style="font-size:22px">&lt;<span class="k">soapenv:Header</span>&gt;
+  &lt;<span class="hl">wsse:Security</span> soapenv:<span class="hl">mustUnderstand</span>=<span class="s">"1"</span>
+      xmlns:wsse=<span class="s">"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"</span>&gt;
+    &lt;wsse:UsernameToken&gt; … &lt;/wsse:UsernameToken&gt;
+  &lt;/<span class="hl">wsse:Security</span>&gt;
+  &lt;app:IdTransazione xmlns:app=<span class="s">"http://registro.example.org/"</span>&gt;A-2026-0042&lt;/app:IdTransazione&gt;
+&lt;/<span class="k">soapenv:Header</span>&gt;</pre>
+  <div class="cols-3">
+    <div class="card soft"><h3>WS-Security</h3><p class="small">Credenziali, firme digitali e cifratura di parti del messaggio, anche attraverso più intermediari.</p></div>
+    <div class="card soft"><h3>WS-Addressing</h3><p class="small">A chi va il messaggio, a chi rispondere, che azione è: dentro la busta, non nell'URL.</p></div>
+    <div class="card soft"><h3>mustUnderstand</h3><p class="small">Con il valore 1, chi riceve deve saper gestire quel blocco, altrimenti risponde con un Fault.</p></div>
+  </div>
+  <aside class="notes">WS-Security è uno standard OASIS (2004). La possibilità di firmare e cifrare singole parti del messaggio, e non solo il canale come fa HTTPS, è uno dei motivi per cui banche e PA hanno scelto SOAP: il messaggio resta protetto anche dopo essere passato da un intermediario. L'Header permette di aggiungere funzionalità senza cambiare le operazioni del servizio. Il Fault per un blocco non capito ha codice MustUnderstand.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Fault</p><h2>Quando qualcosa va storto</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:21px"><span class="c">HTTP/1.1 500 Internal Server Error</span>
+<span class="c">Content-Type: text/xml; charset=utf-8</span>
+
+&lt;<span class="k">S:Envelope</span> xmlns:S=<span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;
+  &lt;<span class="k">S:Body</span>&gt;
+    &lt;<span class="hl">S:Fault</span>&gt;
+      &lt;faultcode&gt;S:Server&lt;/faultcode&gt;
+      &lt;faultstring&gt;Divisione per zero&lt;/faultstring&gt;
+    &lt;/<span class="hl">S:Fault</span>&gt;
+  &lt;/<span class="k">S:Body</span>&gt;
+&lt;/<span class="k">S:Envelope</span>&gt;</pre>
+    <table class="data compact">
+      <tr><th>faultcode (1.1)</th><th>Significa</th></tr>
+      <tr><td class="mono">Client</td><td>Richiesta sbagliata: colpa di chi chiama</td></tr>
+      <tr><td class="mono">Server</td><td>Errore durante l'elaborazione</td></tr>
+      <tr><td class="mono">VersionMismatch</td><td>Namespace della busta sconosciuto</td></tr>
+      <tr><td class="mono">MustUnderstand</td><td>Blocco dell'Header non gestito</td></tr>
+    </table>
+  </div>
+  <p class="small">In SOAP 1.2 gli elementi diventano <code>Code</code>, <code>Reason</code>, <code>Detail</code> e i codici <b>Sender</b> e <b>Receiver</b>. Su HTTP un Fault viaggia di solito con codice <b>500</b>.</p>
+  <aside class="notes">Anche questo Fault è quello reale prodotto dal servizio Java della lezione 7 quando si chiama dividi(20, 0): il metodo Java lancia un'eccezione e il framework la trasforma in un Fault. Un elemento facoltativo detail può contenere dati strutturati sull'errore (per esempio un codice applicativo). Confronto con JSON-RPC (lezione 2): lì l'errore stava nel corpo con codice HTTP 200; in SOAP su HTTP il 500 è previsto dalla specifica del binding HTTP. Client e Server di SOAP 1.1 corrispondono a Sender e Receiver di SOAP 1.2, e somigliano ai 4xx e 5xx di HTTP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due versioni</p><h2>SOAP 1.1 e SOAP 1.2: come riconoscerle</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>SOAP 1.1</th><th>SOAP 1.2</th></tr>
+    <tr><td><b>Namespace della busta</b></td><td class="mono">http://schemas.xmlsoap.org/soap/envelope/</td><td class="mono">http://www.w3.org/2003/05/soap-envelope</td></tr>
+    <tr><td><b>Content-Type</b></td><td class="mono">text/xml</td><td class="mono">application/soap+xml</td></tr>
+    <tr><td><b>Azione</b></td><td>Header HTTP <code>SOAPAction</code></td><td>Parametro <code>action</code> del Content-Type</td></tr>
+    <tr><td><b>Fault</b></td><td>faultcode, faultstring</td><td>Code, Reason, Detail</td></tr>
+    <tr><td><b>Codici</b></td><td>Client, Server</td><td>Sender, Receiver</td></tr>
+  </table>
+  <div class="callout">Un servizio può offrire entrambe: nel WSDL ci saranno due <b>binding</b>. Se mandi una busta 1.2 a un servizio solo 1.1, la risposta è un errore di versione.</div>
+  <aside class="notes">Il namespace è il modo più rapido per capire la versione guardando un messaggio. Nei WSDL il binding SOAP 1.1 usa il prefisso soap (http://schemas.xmlsoap.org/wsdl/soap/), quello 1.2 di solito soap12 (http://schemas.xmlsoap.org/wsdl/soap12/). Molti servizi .NET di esempio espongono entrambi i binding. SOAPAction può essere una stringa vuota: il servizio Java della lezione 7 lo accetta così.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Con SOAP su HTTP, quale metodo HTTP usa una chiamata a un'operazione?</h2></div>
+  <div class="poll" data-id="soap-metodo" data-tipo="quiz" data-risposta="D">
+    <ol><li>GET per leggere, POST per scrivere</li><li>Dipende dall'operazione, come in REST</li><li>PUT, perché si invia un documento</li><li>POST, per tutte le operazioni</li></ol>
+    <p class="why">In SOAP l'operazione è scritta nel Body, non nel metodo HTTP: tutte le chiamate sono POST verso lo stesso URL. Per questo le risposte SOAP non si possono mettere in cache come i GET e un proxy non sa distinguere una lettura da una scrittura.</p>
+  </div>
+  <aside class="notes">A e B sono il pensiero "REST" applicato a SOAP: un errore comune dopo la lezione su HTTP. SOAP 1.2 definisce in teoria anche un uso di GET per operazioni senza effetti, ma in pratica è usato pochissimo. È una delle critiche principali di Fielding e dei sostenitori di REST: SOAP usa HTTP come un tubo, ignorando metodi, codici e cache.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">WSDL · Web Services Description Language</p><h2>Il contratto, in XML</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:19px">&lt;<span class="k">definitions</span> name=<span class="s">"CalcolatriceService"</span>
+    targetNamespace=<span class="s">"http://calc.scuola.it/"</span> …&gt;
+  &lt;<span class="hl">types</span>&gt; <span class="c">schema XSD: somma ha a e b di tipo xs:int</span> &lt;/types&gt;
+  &lt;<span class="hl">message</span> name=<span class="s">"somma"</span>&gt;
+    &lt;part name=<span class="s">"parameters"</span> element=<span class="s">"tns:somma"</span>/&gt;
+  &lt;/message&gt;
+  &lt;<span class="hl">portType</span> name=<span class="s">"Calcolatrice"</span>&gt;
+    &lt;operation name=<span class="s">"somma"</span>&gt;
+      &lt;input message=<span class="s">"tns:somma"</span>/&gt;
+      &lt;output message=<span class="s">"tns:sommaResponse"</span>/&gt;
+    &lt;/operation&gt;
+  &lt;/portType&gt;
+  &lt;<span class="hl">binding</span> name=<span class="s">"CalcolatricePortBinding"</span> type=<span class="s">"tns:Calcolatrice"</span>&gt;
+    &lt;soap:binding style=<span class="s">"document"</span>
+        transport=<span class="s">"http://schemas.xmlsoap.org/soap/http"</span>/&gt; …
+  &lt;/binding&gt;
+  &lt;<span class="hl">service</span> name=<span class="s">"CalcolatriceService"</span>&gt;
+    &lt;port name=<span class="s">"CalcolatricePort"</span> binding=<span class="s">"tns:CalcolatricePortBinding"</span>&gt;
+      &lt;soap:address location=<span class="s">"http://localhost:8080/calc"</span>/&gt;
+    &lt;/port&gt;
+  &lt;/service&gt;
+&lt;/definitions&gt;</pre>
+    <div class="stack">
+      <p class="small"><b>Che cosa</b> (parte astratta): <b>types</b>, <b>message</b>, <b>portType</b> con le operazioni.</p>
+      <p class="small"><b>Come</b>: il <b>binding</b> lega le operazioni a SOAP su HTTP, con stile <i>document/literal</i>.</p>
+      <p class="small"><b>Dove</b>: il <b>service</b> con la <b>port</b> e l'indirizzo.</p>
+      <div class="callout hl">Da un WSDL gli strumenti generano il client in automatico: lo faremo con <code>wsimport</code> nella lezione 7.</div>
+    </div>
+  </div>
+  <aside class="notes">È un estratto del WSDL generato davvero dal servizio Java della lezione 7, all'indirizzo http://localhost:8080/calc?wsdl (lo schema XSD è in un file separato, ?xsd=1). WSDL 1.1 è una Note W3C del 2001 ed è ancora la versione più usata; WSDL 2.0 (2007) rinomina portType in interface e port in endpoint, ma si è diffuso poco. Lo stile document/literal, raccomandato dal WS-I Basic Profile, mette nel Body un documento XML definito dallo schema; lo stile più vecchio rpc/encoded è deprecato. All'esame: saper indicare in un WSDL dove sono le operazioni e dove l'indirizzo del servizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Ordina le parti del WSDL, dal più astratto al più concreto</h2></div>
+  <ol class="puzzle-ordina" data-id="soap-wsdl">
+    <li><b>types</b>: i tipi di dato, in XML Schema</li>
+    <li><b>message</b>: i messaggi costruiti con quei tipi</li>
+    <li><b>portType</b>: le operazioni, con messaggio di input e di output</li>
+    <li><b>binding</b>: protocollo e formato per ogni operazione</li>
+    <li><b>service</b>: l'insieme delle porte con gli indirizzi</li>
+  </ol>
+  <aside class="notes">Ognuno si riferisce al precedente: message usa i types, portType usa i message, binding si riferisce a un portType, la port dentro service si riferisce a un binding. Per questo leggere un WSDL "dal fondo" (service, poi binding, poi portType) è il modo più rapido per capire dove e come chiamare un servizio. Domanda: che cosa cambia nel WSDL se il servizio si sposta su un altro server? (Solo l'indirizzo in soap:address.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Leggi il WSDL di un servizio pubblico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri nel browser <code style="white-space:normal">https://www.dataaccess.com/webservicesserver/NumberConversion.wso?WSDL</code></li>
+      <li>Trova il <b>targetNamespace</b> e l'elenco delle <b>operation</b> nel portType.</li>
+      <li>Nello schema dentro <b>types</b>: come si chiama l'elemento di input di <b>NumberToWords</b>? Di che tipo è?</li>
+      <li>In fondo, nel <b>service</b>: quante <b>port</b> ci sono e qual è l'indirizzo? Quale binding è SOAP 1.2?</li>
+      <li>Rispondi in <b>wsdl-cognome.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> namespace <code style="white-space:normal;word-break:break-all">http://www.dataaccess.com/webservicesserver/</code>; operazioni <b>NumberToWords</b> e <b>NumberToDollars</b>; l'input di NumberToWords è <b>ubiNum</b>, di tipo <code>xs:unsignedLong</code>; due port, una per SOAP 1.1 e una per SOAP 1.2, con lo stesso indirizzo.</div>
+  </div>
+  <aside class="notes">È un servizio dimostrativo pubblico, usatissimo nei tutorial, che converte un numero in parole inglesi. Non richiede account. Se fosse irraggiungibile, alternative: il WSDL del servizio europeo VIES (https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl), con l'operazione checkVat che riceve countryCode e vatNumber; oppure l'estratto di WSDL della slide precedente; nella lezione 7 gli studenti genereranno un WSDL da soli. Far notare che il browser mostra l'XML come albero: è un documento XML come quelli della lezione 4. unsignedLong è un intero senza segno a 64 bit.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La tua prima chiamata SOAP con curl</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+    <div class="stack">
+<pre class="code" style="font-size:20px"><span class="c">&lt;!-- numero.xml --&gt;</span>
+&lt;<span class="k">soap:Envelope</span>
+  xmlns:soap=<span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;
+  &lt;<span class="k">soap:Body</span>&gt;
+    &lt;<span class="hl">NumberToWords</span>
+      xmlns=<span class="s">"http://www.dataaccess.com/webservicesserver/"</span>&gt;
+      &lt;ubiNum&gt;2026&lt;/ubiNum&gt;
+    &lt;/<span class="hl">NumberToWords</span>&gt;
+  &lt;/<span class="k">soap:Body</span>&gt;
+&lt;/<span class="k">soap:Envelope</span>&gt;</pre>
+<pre class="code" style="font-size:17px">curl -i -H "Content-Type: text/xml; charset=utf-8" --data-binary @numero.xml
+  https://www.dataaccess.com/webservicesserver/NumberConversion.wso</pre>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Salva <b>numero.xml</b> e lancia curl (tutto su una riga).</li>
+        <li>Prova un altro numero, poi l'operazione <b>NumberToDollars</b> con l'elemento <b>dNum</b>.</li>
+        <li>Incolla richieste e risposte in <b>soap-curl-cognome.txt</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> <b>HTTP 200</b>, Content-Type <code>text/xml</code>, e nel Body un elemento <b>NumberToWordsResult</b> con il numero in parole inglesi, come <i>two thousand twenty six</i>.</div>
+    </div>
+  </div>
+  <aside class="notes">--data-binary invia il file così com'è; con -d curl toglie gli a capo, cosa che con l'XML di solito non fa danni ma è meglio evitare. In PowerShell usare curl.exe. Il default namespace (xmlns senza prefisso) su NumberToWords vale anche per l'elemento figlio ubiNum: è quello che lo schema del servizio si aspetta. Se il servizio pubblico non risponde dalla rete della scuola, passare direttamente ai laboratori 3 e 4, che usano un server locale. Domanda: dove sta scritto quale operazione vogliamo chiamare? (Solo nel nome dell'elemento dentro il Body: l'URL è lo stesso per tutte.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un server SOAP senza librerie (per capire)</h2>
+  <div class="cols-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+<pre class="code" style="font-size:15px;padding:24px 28px"><span class="k">import</span> com.sun.net.httpserver.HttpServer;
+<span class="k">import</span> java.net.InetSocketAddress;
+<span class="k">import</span> java.util.regex.*;
+
+<span class="k">public class</span> MiniSoap {
+  <span class="k">static</span> String busta(String corpo) {
+    <span class="k">return</span> <span class="s">"&lt;soap:Envelope xmlns:soap="</span>
+      + <span class="s">"\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;"</span>
+      + <span class="s">"&lt;soap:Body&gt;"</span> + corpo + <span class="s">"&lt;/soap:Body&gt;&lt;/soap:Envelope&gt;"</span>;
+  }
+  <span class="k">public static void</span> main(String[] x) <span class="k">throws</span> Exception {
+    <span class="k">var</span> srv = HttpServer.create(<span class="k">new</span> InetSocketAddress(<span class="hl">8082</span>), 0);
+    srv.createContext(<span class="s">"/calc"</span>, ex -> {
+      String q = <span class="k">new</span> String(ex.getRequestBody().readAllBytes());
+      Matcher a = Pattern.compile(<span class="s">"&lt;a&gt;(-?\\d+)&lt;/a&gt;"</span>).matcher(q);
+      Matcher b = Pattern.compile(<span class="s">"&lt;b&gt;(-?\\d+)&lt;/b&gt;"</span>).matcher(q);</pre>
+<pre class="code" style="font-size:15px;padding:24px 28px">      <span class="k">int</span> code = <span class="hl">500</span>;
+      String corpo = <span class="s">"&lt;soap:Fault&gt;&lt;faultcode&gt;soap:Client"</span>
+        + <span class="s">"&lt;/faultcode&gt;&lt;faultstring&gt;Richiesta non valida"</span>
+        + <span class="s">"&lt;/faultstring&gt;&lt;/soap:Fault&gt;"</span>;
+      <span class="k">if</span> (q.contains(<span class="s">"somma"</span>) &amp;&amp; a.find() &amp;&amp; b.find()) {
+        <span class="k">int</span> s = Integer.parseInt(a.group(1))
+              + Integer.parseInt(b.group(1));
+        code = <span class="hl">200</span>;
+        corpo = <span class="s">"&lt;c:sommaResponse xmlns:c=\"http://calc.scuola.it/\"&gt;"</span>
+          + <span class="s">"&lt;return&gt;"</span> + s + <span class="s">"&lt;/return&gt;&lt;/c:sommaResponse&gt;"</span>;
+      }
+      <span class="k">byte</span>[] out = busta(corpo).getBytes();
+      ex.getResponseHeaders().set(<span class="s">"Content-Type"</span>, <span class="s">"text/xml; charset=utf-8"</span>);
+      ex.sendResponseHeaders(code, out.length);
+      ex.getResponseBody().write(out);
+      ex.close();
+    });
+    srv.start();
+  }
+}</pre>
+  </div>
+  <div class="cols-2 wide-left">
+    <p class="small"><b>1.</b> Scrivi <b>MiniSoap.java</b> e avvialo con <code>java MiniSoap.java</code>. <b>2.</b> Rispondi: questo server capisce davvero l'XML?</p>
+    <div class="check"><b>Controllo:</b> resta in attesa sulla porta 8082.</div>
+  </div>
+  <aside class="notes">Scopo: vedere che SOAP, sotto, è solo testo XML in una POST e testo XML in risposta. Il server è volutamente un "falso": non analizza l'XML, cerca con espressioni regolari i tag a e b e la parola somma. Ignora namespace, busta e Header, e accetterebbe anche un documento mal formato. Risposta alla domanda 3: non lo capisce, lo scansiona; un vero framework fa il parsing, controlla la busta e i namespace, valida rispetto allo schema e fa l'unmarshalling in oggetti Java. È quello che useremo nella lezione 7 con Jakarta XML Web Services. Si può mettere il sorgente su Classroom per evitare di copiarlo a mano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Richieste buone, richieste cattive, Fault</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px"><span class="c">&lt;!-- somma.xml --&gt;</span>
+&lt;<span class="k">soapenv:Envelope</span>
+    xmlns:soapenv=<span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>
+    xmlns:c=<span class="s">"http://calc.scuola.it/"</span>&gt;
+  &lt;<span class="k">soapenv:Body</span>&gt;
+    &lt;c:somma&gt;&lt;a&gt;20&lt;/a&gt;&lt;b&gt;22&lt;/b&gt;&lt;/c:somma&gt;
+  &lt;/<span class="k">soapenv:Body</span>&gt;
+&lt;/<span class="k">soapenv:Envelope</span>&gt;</pre>
+<pre class="code" style="font-size:18px">curl -i -H "Content-Type: text/xml; charset=utf-8"
+     --data-binary @somma.xml http://localhost:8082/calc</pre>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Salva <b>somma.xml</b> e invialo (comando su una riga).</li>
+        <li>Crea <b>senza-a.xml</b> togliendo <code>&lt;a&gt;20&lt;/a&gt;</code> e invialo.</li>
+        <li>Annota codice HTTP e faultstring.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> con somma.xml <b>200 OK</b> e <code>&lt;return&gt;42&lt;/return&gt;</code>. Senza a: <b>500</b> con un <b>soap:Fault</b>, faultcode <b>soap:Client</b>, "Richiesta non valida".</div>
+    </div>
+  </div>
+  <aside class="notes">Teniamo da parte somma.xml: nella lezione 7 lo invieremo, identico, al servizio vero sulla porta 8080 e funzionerà. Esperimenti per chi finisce prima: mandare "ciao" invece dell'XML (stesso Fault: il server finto non distingue); togliere la busta e lasciare solo &lt;somma&gt;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;/somma&gt; (risponde 3! un server vero risponderebbe con un Fault). Discussione: è giusto che il faultcode sia Client e non Server? (Sì, la richiesta era incompleta: è colpa di chi chiama, come un 400 in HTTP.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Bilancio</p><h2>SOAP: quando ha senso sceglierlo</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Punti di forza</h3><ul class="points small"><li>Contratto formale e tipizzato: il WSDL</li><li>Client generati in automatico, in molti linguaggi</li><li>Sicurezza a livello di messaggio (WS-Security)</li><li>Estensioni standard per affidabilità e transazioni</li><li>Indipendente dal trasporto</li></ul></div>
+    <div class="card bad"><h3>Punti deboli</h3><ul class="points small"><li>Messaggi XML lunghi e lenti da elaborare</li><li>Complesso: tante specifiche, strumenti pesanti</li><li>Tutto in POST: niente cache HTTP</li><li>Scomodo da usare dal browser e dalle app</li><li>Poco leggibile per chi lo prova a mano</li></ul></div>
+  </div>
+  <div class="callout hl">All'esame: SOAP è una scelta difendibile per integrare sistemi tra aziende o con la PA, dove contano contratto e sicurezza; per un'app web o mobile si preferisce REST con JSON.</div>
+  <aside class="notes">Far costruire alla classe la tabella prima di mostrarla (3 minuti a coppie, poi confronto). È la base per il confronto SOAP-REST delle prossime lezioni. Un argomento spesso trascurato: con SOAP gli errori di tipo si scoprono subito, perché il client generato dal WSDL non compila se il contratto cambia; con JSON a mano ci si accorge dell'errore solo a runtime (per questo è nato OpenAPI).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Contratti per le macchine, ieri e oggi</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>WSDL e MCP, a vent'anni di distanza</h3><p>Un WSDL dice a un programma quali operazioni esistono e con quali tipi. Un server MCP fa lo stesso con un agente AI: la risposta a <b>tools/list</b> elenca nome, descrizione e parametri di ogni strumento in JSON Schema. Cambia il lettore: non più un generatore di codice, ma un modello linguistico che sceglie che cosa chiamare.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI e il codice legacy</h3><p>Molte aziende hanno servizi SOAP scritti vent'anni fa. Gli assistenti AI per programmatori aiutano a leggere WSDL lunghi, scrivere client e test, o migrare verso REST. Ma il contratto resta la fonte di verità: il codice generato va sempre verificato con chiamate vere, come nei nostri laboratori.</p></div>
+  </div>
+  <aside class="notes">Nella specifica MCP ogni strumento ha un nome, una descrizione in linguaggio naturale e un inputSchema in JSON Schema. La descrizione testuale conta più che in un WSDL, perché è ciò che il modello legge per decidere. Collegamento con la lezione claude-code: un agente può generare un client SOAP, ma la verifica (curl, test) è responsabilità del programmatore. Evitare l'idea che l'AI "conosca" un servizio: legge il contratto che le diamo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'elemento radice di ogni messaggio SOAP è l'<span class="blank" data-risposta="Envelope"></span>.</p>
+    <p>L'elemento facoltativo per sicurezza e altre informazioni è l'<span class="blank" data-risposta="Header"></span>.</p>
+    <p>In caso di errore il Body contiene un <span class="blank" data-risposta="Fault"></span>.</p>
+    <p>Nel WSDL le operazioni sono elencate nel <span class="blank" data-risposta="portType|port type"></span>.</p>
+    <p>L'indirizzo del servizio si trova nell'elemento <span class="blank" data-risposta="service|port|soap:address|address"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Envelope, Header, Fault, portType, service (accettati anche port e soap:address).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>SOAP: messaggi XML in una busta, di solito in POST</li>
+      <li>Envelope e Body obbligatori, Header facoltativo</li>
+      <li>Fault: faultcode Client o Server, HTTP 500</li>
+    </ul>
+    <ul class="points">
+      <li>1.1: text/xml e SOAPAction; 1.2: application/soap+xml</li>
+      <li>WSDL: types, message, portType, binding, service</li>
+      <li>Contratto forte e WS-Security, ma pesante</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (verifica di una partita IVA con VIES o scrittura di buste SOAP). Prossima lezione: laboratorio, un servizio SOAP vero in Java con Maven e Jakarta XML Web Services, e il suo client generato dal WSDL.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

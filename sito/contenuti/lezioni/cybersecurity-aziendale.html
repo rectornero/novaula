@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La cybersecurity in azienda · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Unità 1 · Cybersecurity · Lezione 2</p>
+  <h1>La cybersecurity<br>in azienda</h1>
+  <p class="lead">Asset, rischio, framework e leggi: come un'azienda decide che cosa proteggere prima, con quanti soldi e chi ne risponde.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Analisi del rischio, ISO 27001, NIST CSF, NIS2, ACN</span></p>
+  <aside class="notes">Obiettivi: inventariare gli asset, stimare e trattare il rischio, conoscere ISO/IEC 27001, NIST CSF 2.0 e il Framework Nazionale, collocare GDPR, NIS2 e ACN. Durata indicativa: 3 ore. Prerequisiti già svolti in 5G: la lezione principi-sicurezza (triade CIA e i sei principi) e il lessico di attacchi-informatici (vulnerabilità, minaccia, attacco, rischio). Qui non si ripetono: si usano per lavorare su un'azienda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Una pizzeria con ordini online: quale perdita fa più male?</h2></div>
+  <div class="poll" data-id="az-pizzeria">
+    <ol><li>I dati delle carte dei clienti rubati</li><li>Il sito fermo il sabato sera</li><li>La ricetta dell'impasto copiata</li><li>Recensioni false che rovinano la reputazione</li></ol>
+  </div>
+  <aside class="notes">Non c'è una risposta giusta: dipende dall'azienda, ed è proprio il punto della lezione. Far notare che ogni opzione corrisponde a un principio: A riservatezza (e obblighi di legge), B disponibilità, C riservatezza di un segreto commerciale, D integrità dell'informazione su di loro. Osservazione: spesso una pizzeria non conserva le carte, perché il pagamento è gestito da un fornitore esterno; è già un trattamento del rischio (trasferimento). Tenere il risultato: lo riprendiamo nel laboratorio sul registro dei rischi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove eravamo rimasti</p><h2>Dalla teoria all'azienda vera</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Lo sappiamo già</h3><ul class="points"><li>Triade CIA e i sei principi (<i>principi-sicurezza</i>)</li><li>Vulnerabilità, minaccia, attacco, rischio (<i>attacchi-informatici</i>)</li><li>Difesa in profondità e backup 3-2-1 (<i>difese-informatiche</i>)</li></ul></div>
+    <div class="card fill"><h3>Oggi aggiungiamo</h3><ul class="points"><li>Quanto vale ogni asset</li><li>Come si misura e si sceglie il rischio da trattare</li><li>Framework e leggi che l'azienda deve rispettare</li></ul></div>
+  </div>
+  <div class="callout">Un'azienda ha un budget limitato: la sicurezza è una <b>scelta di priorità</b>, non una lista di tutto ciò che si potrebbe fare.</div>
+  <aside class="notes">Ripasso lampo di due minuti: chiedere a tre studenti di definire riservatezza, integrità e disponibilità con un esempio aziendale, e la differenza tra vulnerabilità e minaccia. Se la classe non ricorda, rimandare alle tre lezioni già pubblicate su Novaula.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 1 · Inventario</p><h2>Non puoi proteggere ciò che non sai di avere</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Informazioni</h3><p class="muted">Dati dei clienti, contabilità, progetti, contratti, credenziali.</p></div>
+    <div class="card"><h3>Sistemi</h3><p class="muted">Server, PC, telefoni, rete, software, servizi cloud, sito web.</p></div>
+    <div class="card"><h3>Persone e fornitori</h3><p class="muted">Dipendenti, competenze, il tecnico esterno, il provider, il gestionale in cloud.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche i <b>modelli di AI</b> usati in azienda sono asset: il chatbot per i clienti, i dati con cui è stato personalizzato, le chiavi API per usarlo. Se qualcuno ruba la chiave, consuma il tuo credito o legge le tue conversazioni.</p></div>
+  <aside class="notes">Per ogni asset si annota: proprietario (chi ne risponde), posizione, valore per ciascuna proprietà CIA. Esempio: il listino prezzi pubblicato ha bisogno di integrità e disponibilità, non di riservatezza; il database dei clienti di tutte e tre. I fornitori sono asset critici perché un loro problema diventa il tuo: è il rischio di filiera (supply chain), che la NIS2 chiede esplicitamente di gestire. Domanda: chi è il proprietario di un asset? (Non il tecnico IT, ma il responsabile del processo che lo usa.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 2 · Stima</p><h2>Il rischio si calcola</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>Una stima semplice, molto usata</small>R = <span class="hl">P</span> × <span class="hl">I</span></div>
+      <ul class="points small">
+        <li><b>P</b>, probabilità che la minaccia sfrutti la vulnerabilità: da 1 (rara) a 5 (quasi certa).</li>
+        <li><b>I</b>, impatto sull'azienda: da 1 (trascurabile) a 5 (fallimento, danni gravi a persone).</li>
+        <li>Si decide prima la soglia: per esempio alto da 15, medio da 8.</li>
+      </ul>
+    </div>
+    <table class="data compact" style="text-align:center">
+      <tr><th>P \ I</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+      <tr><th>5</th><td>5</td><td>10</td><td class="hl">15</td><td class="hl">20</td><td class="hl">25</td></tr>
+      <tr><th>4</th><td>4</td><td>8</td><td>12</td><td class="hl">16</td><td class="hl">20</td></tr>
+      <tr><th>3</th><td>3</td><td>6</td><td>9</td><td>12</td><td class="hl">15</td></tr>
+      <tr><th>2</th><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+      <tr><th>1</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    </table>
+  </div>
+  <aside class="notes">È un metodo qualitativo-semiquantitativo: i numeri sono giudizi, non misure, quindi contano la coerenza e la motivazione. Le norme (ISO/IEC 27005 sulla gestione del rischio) non impongono una formula: chiedono un metodo ripetibile e documentato. Esistono metodi quantitativi in euro, come la perdita annua attesa ALE = SLE × ARO (danno di un singolo evento per numero di eventi l'anno), utili per giustificare una spesa. In giallo le celle con rischio alto secondo la soglia di esempio. All'esame: in una prova di progetto, una piccola matrice del rischio motivata vale più di un elenco generico di contromisure.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un backup offline, provato ogni mese, riduce soprattutto…</h2></div>
+  <div class="poll" data-id="az-backup" data-tipo="quiz" data-risposta="D">
+    <ol><li>la probabilità di subire un ransomware</li><li>la vulnerabilità dei PC</li><li>il numero di attaccanti interessati</li><li>l'impatto di un ransomware</li></ol>
+    <p class="why">Il backup non impedisce l'attacco: la probabilità resta la stessa. Riduce il danno, perché si ripristina senza pagare. Aggiornamenti, MFA e formazione riducono invece la probabilità.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono A. Distinguere sempre: contromisure preventive (abbassano P), contromisure che limitano il danno (abbassano I), contromisure di rilevamento (abbassano il tempo in cui l'attaccante agisce indisturbato, e quindi anche I). Nella pratica, con la doppia estorsione il backup non riduce il danno da pubblicazione dei dati: l'impatto scende ma non si azzera. Ottimo spunto per una domanda orale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il registro dei rischi in Calc</h2>
+  <div class="cols-2" style="grid-template-columns:1.25fr 1fr">
+    <div class="stack">
+      <table class="sheet" style="font-size:22px">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+        <tr><th>1</th><td>Asset</td><td>Minaccia</td><td>P</td><td>I</td><td>R</td></tr>
+        <tr><th>2</th><td>E-mail</td><td>Phishing</td><td>4</td><td>4</td><td class="f sel">=C2*D2</td></tr>
+      </table>
+      <p class="small">In F2: <code>=SE(E2&gt;=15;"Alto";SE(E2&gt;=8;"Medio";"Basso"))</code></p>
+    </div>
+    <ol class="steps small">
+      <li>Scegli un'azienda: pizzeria online, studio dentistico o officina.</li>
+      <li>Compila almeno 8 righe, con asset e minacce diverse.</li>
+      <li>Ordina per R decrescente e colora le righe Alto.</li>
+      <li>Salva come <b>registro-rischi-cognome.ods</b>.</li>
+    </ol>
+  </div>
+  <div class="check"><b>Controllo:</b> la riga di esempio dà R = 16 e livello <b>Alto</b>. Con P = 2 e I = 4 ottieni 8, cioè <b>Medio</b>; con P = 2 e I = 3 ottieni 6, <b>Basso</b>.</div>
+  <aside class="notes">Soglie di esempio, coerenti con la matrice: Alto da 15, Medio da 8 a 14, Basso fino a 7. Nella formula SE il separatore è il punto e virgola (Calc in italiano). Per ordinare: Dati, Ordina, colonna E decrescente; per colorare automaticamente: Formato, Condizionale. Righe tipiche per una pizzeria: sito e-commerce/ransomware, database clienti/SQL injection, PC cassa/guasto, account e-mail/phishing, Wi-Fi ospiti/accesso non autorizzato, POS/guasto o frode, tablet degli ordini/furto, fornitore della piattaforma di consegne/indisponibilità. Valutare la motivazione dei numeri più dei numeri stessi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Passo 3 · Trattamento</p><h2>Quattro modi di trattare un rischio</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><h3>Mitigare</h3><p>Si applicano contromisure che abbassano P o I.</p></div>
+    <div class="card"><h3>Trasferire</h3><p class="muted">Si sposta il danno economico su altri: assicurazione, fornitore.</p></div>
+    <div class="card"><h3>Evitare</h3><p class="muted">Si rinuncia all'attività che crea il rischio.</p></div>
+    <div class="card"><h3>Accettare</h3><p class="muted">Si decide consapevolmente di non fare nulla, e lo si scrive.</p></div>
+  </div>
+  <div class="callout">Dopo il trattamento resta sempre un <b>rischio residuo</b>: la direzione lo deve conoscere e approvare.</div>
+  <aside class="notes">Trasferire il rischio economico non trasferisce la responsabilità: se un fornitore perde i dati dei tuoi clienti, verso il Garante e i clienti rispondi anche tu (GDPR, il titolare del trattamento). L'assicurazione cyber rimborsa costi, ma non restituisce i dati né la reputazione. Accettare è legittimo per rischi bassi o quando la contromisura costa più del danno, ma va documentato. Ponte verso il puzzle successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni scelta al tipo di trattamento</h2></div>
+  <dl class="puzzle-abbina" data-id="az-trattamento">
+    <dt>Mitigare</dt><dd>Attivare la MFA su tutte le caselle di posta</dd>
+    <dt>Trasferire</dt><dd>Stipulare una polizza che copre i costi di un incidente</dd>
+    <dt>Evitare</dt><dd>Smettere di conservare i numeri delle carte dei clienti</dd>
+    <dt>Accettare</dt><dd>Lasciare il vecchio PC della sala d'attesa, scollegato e senza dati</dd>
+    <dt>Mitigare l'impatto</dt><dd>Preparare un sito di emergenza che si attiva in un'ora</dd>
+  </dl>
+  <aside class="notes">Discussione sul caso "Evitare": non conservare le carte e affidare il pagamento a un fornitore certificato elimina il rischio interno; c'è chi lo classifica anche come trasferimento, ed è una buona occasione per discutere. Il sito di emergenza riduce l'impatto, non la probabilità: collegare al quiz sul backup.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto possiamo restare fermi?</p><h2>RTO e RPO: due numeri che decidono il backup</h2></div>
+  <div class="cols-2">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>RTO</h3><p>Recovery Time Objective. Che cosa misura?</p></div><div class="retro"><p><b>Il tempo massimo di fermo accettabile.</b></p><p class="muted">Se il sito di e-commerce ha RTO di 4 ore, entro 4 ore deve ripartire, anche su un server di riserva.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>RPO</h3><p>Recovery Point Objective. Che cosa misura?</p></div><div class="retro"><p><b>Quanti dati, misurati in tempo, puoi permetterti di perdere.</b></p><p class="muted">RPO di 24 ore: basta un backup al giorno. RPO di 15 minuti: serve una replica quasi continua.</p></div></div>
+  </div>
+  <p class="small muted">Si ricavano dalla <b>BIA</b>, la Business Impact Analysis: per ogni processo, quanto costa un'ora di fermo.</p>
+  <aside class="notes">Prima di girare le carte chiedere alla classe di indovinare la differenza. Errore tipico: confondere RPO con la frequenza dei backup; la frequenza è la conseguenza, l'RPO è il requisito. Esempio: uno studio dentistico può tollerare un giorno di fermo dell'agenda (RTO 24 h) ma non perdere le radiografie fatte in mattinata (RPO di qualche ora). Più RTO e RPO sono bassi, più la soluzione costa: è una scelta di business, non tecnica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il registro dei rischi in Java</h2>
+  <div class="cols-2" style="grid-template-columns:1.9fr 1fr">
+<pre class="code" style="font-size:24px"><span class="k">record</span> Rischio(String asset, String minaccia,
+               <span class="k">int</span> p, <span class="k">int</span> i) {
+  <span class="k">int</span> valore() { <span class="k">return</span> p * i; }
+  String livello() {
+    <span class="k">int</span> v = valore();
+    <span class="k">return</span> v &gt;= 15 ? <span class="s">"ALTO"</span> : v &gt;= 8 ? <span class="s">"MEDIO"</span> : <span class="s">"BASSO"</span>;
+  }
+}
+<span class="c">// nel main: List&lt;Rischio&gt; registro con 5 rischi, poi</span>
+registro.sort(Comparator
+    .comparingInt(Rischio::valore).reversed());
+<span class="k">for</span> (Rischio r : registro)
+  System.out.printf(<span class="s">"%-6s %2d  %s - %s%n"</span>, r.livello(),
+      r.valore(), r.asset(), r.minaccia());</pre>
+    <div class="stack">
+      <p class="small">In <b>RischiTop.java</b> metti nel registro questi 5 rischi (asset, minaccia, P, I), poi esegui:</p>
+      <ul class="points tiny"><li>Sito e-commerce, Ransomware sul server, 3, 5</li><li>Database clienti, SQL injection, 2, 5</li><li>PC cassa, Guasto del disco, 3, 2</li><li>Account e-mail, Phishing, 4, 4</li><li>Wi-Fi ospiti, Accesso non autorizzato, 2, 2</li></ul>
+      <div class="check small"><b>Controllo:</b> la prima riga è <code>ALTO   16  Account e-mail - Phishing</code>, l'ultima ha il valore più basso.</div>
+    </div>
+  </div>
+  <aside class="notes">I record esistono da Java 16: con JDK 21 vanno bene. Programma completo testato (con import java.util.*; e la classe RischiTop che contiene il record): List&lt;Rischio&gt; registro = new ArrayList&lt;&gt;(List.of(new Rischio("Sito e-commerce", "Ransomware sul server", 3, 5), new Rischio("Database clienti", "SQL injection", 2, 5), new Rischio("PC cassa", "Guasto del disco", 3, 2), new Rischio("Account e-mail", "Phishing", 4, 4), new Rischio("Wi-Fi ospiti", "Accesso non autorizzato", 2, 2))); serve ArrayList perché List.of è immutabile e sort fallirebbe. Output atteso: ALTO 16 Account e-mail - Phishing; ALTO 15 Sito e-commerce - Ransomware sul server; MEDIO 10 Database clienti - SQL injection; BASSO 6 PC cassa - Guasto del disco; BASSO 4 Wi-Fi ospiti - Accesso non autorizzato. Estensione: leggere il CSV esportato da Calc con Files.readAllLines e split(";").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Non si inventa da zero</p><h2>Tre framework per organizzare la sicurezza</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>ISO/IEC 27001</h3><p class="small">Norma internazionale per un <b>sistema di gestione</b> della sicurezza delle informazioni (ISMS). Un'azienda si può <b>certificare</b>.</p><p class="muted small">Ciclo continuo: pianifica, fai, verifica, agisci.</p></div>
+    <div class="card fill"><h3>NIST CSF 2.0</h3><p class="small">Framework statunitense del 2024, usato in tutto il mondo. Sei funzioni:</p><p class="small"><b>Govern, Identify, Protect, Detect, Respond, Recover</b></p></div>
+    <div class="card"><h3>Framework Nazionale</h3><p class="small">Il <b>Framework Nazionale per la Cybersecurity e la Data Protection</b>, adattamento italiano del NIST CSF, pensato anche per le PMI.</p></div>
+  </div>
+  <aside class="notes">ISO/IEC 27001:2022 ha nell'Allegato A 93 controlli raggruppati in quattro temi (organizzativi, persone, fisici, tecnologici). Il NIST Cybersecurity Framework 2.0 è stato pubblicato a febbraio 2024 e ha aggiunto la funzione Govern alle cinque della versione 1.1. Il Framework Nazionale è curato dal CIS-Sapienza e dal Laboratorio Nazionale di Cybersecurity del CINI (prima edizione 2015, aggiornato nel 2019). Nessuno dei tre è "il migliore": ISO serve per certificarsi, il NIST per organizzare e comunicare, il Framework Nazionale per partire in una PMI italiana.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Il ciclo di gestione del rischio: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="az-ciclo">
+    <li>Definire il contesto e i criteri: soglie, chi decide</li>
+    <li>Fare l'inventario degli asset e dei loro proprietari</li>
+    <li>Individuare minacce e vulnerabilità per ogni asset</li>
+    <li>Stimare probabilità e impatto, calcolare il rischio</li>
+    <li>Scegliere il trattamento e approvare il rischio residuo</li>
+    <li>Monitorare e rivedere, almeno una volta l'anno</li>
+  </ol>
+  <aside class="notes">L'ordine riprende il processo descritto da ISO/IEC 27005 (contesto, identificazione, analisi, valutazione, trattamento, monitoraggio e riesame). L'ultimo passo riporta al primo: è un ciclo, non una lista. Errore tipico: mettere le minacce prima degli asset; senza sapere che cosa hai, non sai quali minacce contano. Collegare alla citazione di Schneier.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Ogni misura nella sua funzione NIST</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">In un documento <b>csf-cognome</b> crea una tabella con le 6 funzioni del CSF 2.0 e colloca queste 12 misure. Salva come PDF.</p>
+      <div class="chips"><span class="chip">responsabile della sicurezza</span><span class="chip">inventario dei PC</span><span class="chip">MFA</span><span class="chip">formazione anti-phishing</span><span class="chip">backup cifrati</span><span class="chip">allarmi dell'EDR</span><span class="chip">analisi dei log</span><span class="chip">isolare un PC infetto</span><span class="chip">avvisare il CSIRT</span><span class="chip">ripristino dai backup</span><span class="chip">lezioni apprese</span><span class="chip">policy approvata dalla direzione</span></div>
+    </div>
+    <div class="check" style="align-self:start"><b>Controllo:</b> Govern 2, Identify 2, Protect 3, Detect 2, Respond 2, Recover 1. Se un tuo conteggio è diverso, scrivi accanto il perché: alcune misure sono discutibili.</div>
+  </div>
+  <aside class="notes">Soluzione: Govern = responsabile della sicurezza, policy approvata dalla direzione; Identify = inventario dei PC, lezioni apprese; Protect = MFA, formazione anti-phishing, backup cifrati; Detect = allarmi dell'EDR, analisi dei log; Respond = isolare un PC infetto, avvisare il CSIRT; Recover = ripristino dai backup. Discutibili: "lezioni apprese" nel CSF 2.0 sta nella categoria Improvement (ID.IM) dentro Identify, mentre nella versione 1.1 compariva anche in Recover (RC.IM): chi la mette in Recover va accettato se lo motiva; "backup cifrati" è Protect come misura di protezione dei dati, ma serve a Recover. Accettare spostamenti motivati. Si può lavorare a coppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole del gioco</p><h2>Leggi e autorità che un'azienda italiana deve conoscere</h2></div>
+  <table class="data compact">
+    <tr><th>Norma</th><th>Che cosa chiede</th></tr>
+    <tr><td><b>GDPR</b><br><span class="muted small">Reg. UE 2016/679</span></td><td>Sicurezza adeguata dei dati personali; violazioni notificate al Garante entro 72 ore</td></tr>
+    <tr><td><b>NIS2</b><br><span class="muted small">Dir. UE 2022/2555, in Italia D.Lgs. 138/2024</span></td><td>Gestione del rischio, misure di sicurezza, notifica degli incidenti significativi per i soggetti essenziali e importanti</td></tr>
+    <tr><td><b>ACN</b><br><span class="muted small">Agenzia per la Cybersicurezza Nazionale, dal 2021</span></td><td>Autorità nazionale per la NIS2; ospita il CSIRT Italia, che riceve le notifiche</td></tr>
+  </table>
+  <p class="small">La NIS2 riguarda in genere le <b>medie e grandi</b> imprese di settori come energia, trasporti, sanità, acqua, infrastrutture digitali, manifattura, e la Pubblica Amministrazione.</p>
+  <aside class="notes">NIS2: direttiva (UE) 2022/2555, recepita con il decreto legislativo 4 settembre 2024, n. 138, in vigore dal 16 ottobre 2024. I soggetti si registrano sulla piattaforma dell'ACN. Soglie: in genere medie imprese (almeno 50 dipendenti o oltre 10 milioni di euro di fatturato o di bilancio) e grandi, nei settori degli allegati; alcuni soggetti rientrano a prescindere dalla dimensione (per esempio fornitori di DNS, registri dei domini di primo livello, prestatori di servizi fiduciari). Sanzioni massime: per i soggetti essenziali fino a 10 milioni di euro o il 2% del fatturato mondiale annuo, per gli importanti fino a 7 milioni o l'1,4%. L'ACN è stata istituita con il D.L. 82/2021. Esiste anche il Perimetro di sicurezza nazionale cibernetica (D.L. 105/2019) per i soggetti più strategici. I dettagli applicativi cambiano con i provvedimenti dell'ACN: per casi concreti rimandare sempre al sito acn.gov.it. La notifica degli incidenti si vede nella lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Secondo la NIS2, chi risponde delle misure di sicurezza?</h2></div>
+  <div class="poll" data-id="az-nis2" data-tipo="quiz" data-risposta="B">
+    <ol><li>Solo il responsabile IT, che le applica</li><li>Gli organi di amministrazione, che le approvano e ne rispondono</li><li>Il fornitore cloud, se i dati sono da lui</li><li>L'ACN, che le controlla</li></ol>
+    <p class="why">La NIS2 chiede che gli organi di amministrazione e direttivi approvino le misure di gestione del rischio, ne sorveglino l'attuazione, seguano una formazione e possano esserne ritenuti responsabili.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: per anni la sicurezza è stata vista come "roba dei tecnici". La NIS2 (articolo 20 della direttiva) la porta al livello della direzione. L'ACN vigila e sanziona, ma non risponde delle scelte dell'azienda; il fornitore cloud ha i suoi obblighi, ma la scelta e il controllo del fornitore restano responsabilità del cliente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettere tutto per iscritto</p><h2>Le policy: le regole interne dell'azienda</h2></div>
+  <div class="cols-2">
+    <ul class="points small">
+      <li><b>Uso accettabile</b> di PC, posta e Internet</li>
+      <li><b>Password e accessi</b>: MFA, account personali, revoca a fine rapporto</li>
+      <li><b>Backup</b>: che cosa, quando, chi prova il ripristino</li>
+      <li><b>Dispositivi personali</b> (BYOD) e lavoro da remoto</li>
+      <li><b>Gestione degli incidenti</b>: chi chiamare, entro quando</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La policy sull'AI generativa</h3><p>Se un dipendente incolla in un chatbot pubblico il contratto di un cliente, quei dati escono dall'azienda. Molte aziende scrivono quali strumenti AI sono ammessi e con quali dati. In più, l'AI Act europeo regola i sistemi di AI per livello di rischio.</p></div>
+  </div>
+  <aside class="notes">Una policy è breve, approvata dalla direzione, comunicata e verificata; le procedure dettagliate stanno in documenti separati. L'uso non autorizzato di strumenti AI da parte dei dipendenti viene spesso chiamato "shadow AI", come la "shadow IT". L'AI Act è il Regolamento (UE) 2024/1689, con obblighi che entrano in vigore per fasi dal 2025 in poi. Domanda: quale regola sull'AI metteresti nel regolamento della scuola?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un processo, non un acquisto</h2></div>
+  <figure class="citazione">
+    <blockquote>La sicurezza è un processo, non un prodotto.</blockquote>
+    <figcaption><b>Bruce Schneier</b>, crittografo ed esperto di sicurezza statunitense, prefazione di <i>Secrets and Lies</i>, 2000</figcaption>
+  </figure>
+  <div class="callout hl"><b>All'esame.</b> Se ti chiedono di "mettere in sicurezza" un sistema, non elencare prodotti: parti dagli asset, stima i rischi principali, scegli le contromisure e spiega come verifichi nel tempo che funzionino.</div>
+  <aside class="notes">Traduzione nostra dall'inglese "Security is a process, not a product", frase che Schneier usa nella prefazione di Secrets and Lies (2000) e nei suoi articoli dello stesso periodo. Il senso: comprare un firewall non rende sicuri, come comprare una bilancia non fa dimagrire; serve un ciclo continuo di valutazione e miglioramento, che è esattamente il ciclo PDCA della ISO 27001. Il suggerimento d'esame è un metodo, non una richiesta ufficiale della prova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Con probabilità 3 e impatto 5 il rischio vale <span class="blank" data-risposta="15" style="--w:4ch"></span>.</p>
+    <p>Stipulare un'assicurazione cyber significa <span class="blank" data-risposta="trasferire" style="--w:10ch"></span> il rischio.</p>
+    <p>La quantità massima di dati che posso perdere, misurata in tempo, si chiama <span class="blank" data-risposta="RPO" style="--w:5ch"></span>.</p>
+    <p>La sesta funzione aggiunta nel NIST CSF 2.0 si chiama <span class="blank" data-risposta="Govern|governare|governo" style="--w:8ch"></span>.</p>
+    <p>In Italia l'autorità nazionale per la NIS2 è l'<span class="blank" data-risposta="ACN" style="--w:5ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 15; trasferire; RPO; Govern (accettato governare o governo); ACN (Agenzia per la Cybersicurezza Nazionale).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Inventario degli asset, con un proprietario</li>
+      <li>R = P × I, con soglie decise prima</li>
+      <li>Mitigare, trasferire, evitare, accettare</li>
+      <li>RTO e RPO guidano backup e continuità</li>
+    </ul>
+    <ul class="points">
+      <li>ISO 27001, NIST CSF 2.0, Framework Nazionale</li>
+      <li>GDPR, NIS2 e ACN: la direzione ne risponde</li>
+      <li>Policy scritte, anche sull'AI</li>
+      <li>Prossima lezione: chi sono gli attaccanti</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula ("Consulente per un giorno"). Nella prossima lezione si passa dall'altra parte: profili degli attaccanti, kill chain e MITRE ATT&amp;CK.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
