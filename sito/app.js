@@ -785,6 +785,8 @@
     return h("details", { open: !done }, h("summary", { class: "btn", text: done ? "Consegnato ✓" : "Consegna" }), form);
   }
 
+  function corrCtx() { return { h: h, sb: api.client, findClass: findClass, toast: toast, errText: errText, notice: notice }; }
+
   function teacherSubmissions(a) {
     var list = h("div", { class: "subs" });
     var det = h("details", { class: "teacher" }, h("summary", { text: "Consegne ricevute" }), list,
@@ -795,6 +797,7 @@
       list.replaceChildren(h("p", { class: "muted", text: "Caricamento…" }));
       try {
         var subs = await api.submissions(a.id);
+        var corr = window.NovaulaCorrezioni && api.client ? await window.NovaulaCorrezioni.forAssignment(a.id, corrCtx()).catch(function () { return null; }) : null;
         list.textContent = "";
         if (!subs.length) list.appendChild(h("p", { class: "muted", text: "Nessuna consegna finora." }));
         else list.appendChild(h("p", { class: "muted small", text: subs.length + (subs.length === 1 ? " consegna" : " consegne") }));
@@ -808,7 +811,8 @@
                 catch (e) { toast(errText(e)); }
               } }),
               confirmBtn("Elimina", "btn link", async function () { await api.deleteSubmission(s); det.open = false; det.open = true; })
-            )
+            ),
+            corr && corr(s, a.title)
           ));
         });
       } catch (e) { list.replaceChildren(notice("err", errText(e))); }
@@ -926,6 +930,7 @@
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
       ));
+      if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       var qbox = h("section", { class: "list" }, h("p", { class: "empty", text: "Caricamento delle domande…" }));
       app.appendChild(h("h2", { text: "Domande senza risposta" }));
       app.appendChild(qbox);
