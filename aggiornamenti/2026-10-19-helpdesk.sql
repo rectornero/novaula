@@ -43,7 +43,7 @@ create table if not exists helpdesk_keys (
   key_hash  text not null
 );
 
-create or replace function helpdesk_touch() returns trigger language plpgsql as $$
+create or replace function helpdesk_touch() returns trigger language plpgsql set search_path = public as $$
 begin new.updated_at := now(); return new; end $$;
 drop trigger if exists helpdesk_touch on helpdesk;
 create trigger helpdesk_touch before update on helpdesk for each row execute function helpdesk_touch();
@@ -71,6 +71,7 @@ drop policy if exists "helpdesk teacher" on helpdesk;
 create policy "helpdesk read"    on helpdesk for select using (true);
 create policy "helpdesk teacher" on helpdesk for all using (current_user_is_teacher()) with check (current_user_is_teacher());
 -- helpdesk_keys: nessun permesso diretto, la usano solo le funzioni qui sotto
+revoke all on helpdesk_keys from anon, authenticated;
 
 -- Lo studente fa una domanda (senza account): restituisce l'id della domanda
 drop function if exists helpdesk_ask(text, text, text, text, boolean, text, text);
