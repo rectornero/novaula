@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La sicurezza nelle reti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 9 · Le reti di computer</p>
+  <h1>La sicurezza<br>nelle reti</h1>
+  <p class="lead">Ogni dispositivo collegato è una porta aperta sul mondo. Chi può entrare, che cosa rischiamo e come ci difendiamo?</p>
+  <aside class="notes">Obiettivi: riconoscere le minacce accidentali e intenzionali, conoscere le proprietà della sicurezza (riservatezza, integrità, disponibilità), i principali tipi di malware e di attacchi in rete, valutare un rischio con probabilità e impatto, conoscere le difese di base. Durata indicativa: 2-3 ore. Crittografia, password e autenticazione si approfondiscono nella UDA 10: qui si citano soltanto. Servono: app Sicurezza di Windows e Prompt dei comandi (solo lettura, nessun diritto di amministratore), un browser, LibreOffice Calc e Writer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Ti è mai arrivato un messaggio sospetto: premi, pacchi in giacenza, account bloccato?</h2></div>
+  <div class="poll" data-id="sic-messaggio-sospetto">
+    <ol><li>Sì, spesso</li><li>Qualche volta</li><li>Mai</li><li>Forse sì, ma non me ne sono accorto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza giudizio. Far raccontare 2-3 esempi (senza nomi di persone). La D è la risposta più onesta per molti: i messaggi truffa ben fatti non si notano. Ponte: oggi impariamo a riconoscerli e a misurare i rischi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le minacce all'informazione</p><h2>Non solo hacker</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Accidentali</h3><ul class="points"><li>Guasti: il disco che si rompe</li><li>Errori umani: il file cancellato</li><li>Eventi naturali: incendi, allagamenti, fulmini</li><li>Blackout elettrici</li></ul></div>
+    <div class="card bad"><h3>Intenzionali</h3><ul class="points"><li>Attacchi da fuori: truffatori, criminali</li><li>Persone interne che abusano dei permessi</li><li>Furto di dispositivi</li><li>Malware e inganni in rete</li></ul></div>
+  </div>
+  <div class="callout">In rete le minacce aumentano: ogni dispositivo connesso è una porta in più da proteggere.</div>
+  <aside class="notes">Domanda: "qual è la causa più frequente di perdita di dati per uno studente?" Di solito non un hacker ma un telefono rotto o perso senza backup. La sicurezza informatica protegge da entrambi i tipi di minaccia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La sicurezza di un sistema informatico</p><h2>Tre proprietà da proteggere</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">R</p><h3>Riservatezza</h3><p>Solo chi è autorizzato può leggere i dati.</p></div>
+    <div class="card soft"><p class="num">I</p><h3>Integrità</h3><p>I dati non vengono modificati senza permesso.</p></div>
+    <div class="card soft"><p class="num">D</p><h3>Disponibilità</h3><p>Dati e servizi ci sono quando servono.</p></div>
+  </div>
+  <p class="muted">In inglese è la triade <b>CIA</b>: Confidentiality, Integrity, Availability. Spesso si aggiunge l'<b>autenticità</b>: sapere con certezza chi è l'autore di un messaggio.</p>
+  <aside class="notes">Esempi da far trovare alla classe: riservatezza = le chat private; integrità = il voto sul registro elettronico; disponibilità = Classroom che funziona la sera prima della consegna. In italiano si trova anche la sigla RID. Collegare alla UDA 10: la crittografia protegge soprattutto riservatezza e integrità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Quale proprietà è stata violata? Abbina</h2></div>
+  <dl class="puzzle-abbina" data-id="sic-rid">
+    <dt>Riservatezza</dt><dd>Un estraneo legge le chat del gruppo di classe</dd>
+    <dt>Integrità</dt><dd>Qualcuno cambia un voto nel registro elettronico</dd>
+    <dt>Disponibilità</dt><dd>Il sito della scuola è bloccato da milioni di richieste finte</dd>
+    <dt>Autenticità</dt><dd>Un'email sembra della preside, ma l'ha scritta un truffatore</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Discussione: un ransomware che cifra i file viola soprattutto la disponibilità (i dati ci sono ma non li puoi usare), e spesso anche la riservatezza, perché i criminali minacciano di pubblicarli.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il tuo PC è protetto?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Dal menu Start cerca e apri <b>Sicurezza di Windows</b>.</li>
+      <li>Annota lo stato di <b>Protezione da virus e minacce</b> e di <b>Firewall e protezione rete</b>: quale rete è attiva?</li>
+      <li>Nel Prompt dei comandi scrivi <code>netstat -n</code> e conta le righe con stato ESTABLISHED.</li>
+      <li>Apri due siti nel browser e ripeti <code>netstat -n</code>: le connessioni aumentano?</li>
+      <li>Scrivi i risultati in Writer e salva come <b>sicurezza-pc.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il firewall è attivo e non puoi spegnerlo: non hai i diritti di amministratore. Se la protezione è gestita dalla scuola o da un altro antivirus, lo trovi scritto. Aprendo i siti le connessioni ESTABLISHED crescono.</div>
+  </div>
+  <aside class="notes">Il firewall di Windows ha tre profili: dominio (rete aziendale o scolastica gestita), privata, pubblica. netstat -n mostra le connessioni attive con indirizzi IP e porte (collegare alla lezione sugli indirizzi IP); l'opzione -b, che mostra il programma, richiederebbe i diritti di amministratore e non serve. Far notare il principio del minimo privilegio: gli studenti usano account senza diritti di amministratore proprio per sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>2 novembre 1988: il worm di Morris</h2></div>
+  <p>Robert Tappan Morris, studente alla Cornell University, lancia un programma che si copia da solo di computer in computer. Per un errore si replica troppo: blocca o rallenta circa 6000 computer, forse un decimo di Internet di allora.</p>
+  <figure class="citazione">
+    <blockquote>L'unico sistema davvero sicuro è spento, chiuso in un blocco di cemento, sigillato in una stanza schermata di piombo con guardie armate. E anche allora ho i miei dubbi.</blockquote>
+    <figcaption><b>Gene Spafford</b>, esperto di sicurezza che analizzò il worm, citato su Scientific American, 1989</figcaption>
+  </figure>
+  <aside class="notes">Morris disse di voler solo "contare" i computer di Internet; un errore nel codice faceva reinfettare più volte la stessa macchina. Fu il primo condannato negli USA con la legge federale sui crimini informatici (Computer Fraud and Abuse Act del 1986): 3 anni di libertà vigilata, servizi sociali e una multa. Dopo l'attacco nacque il CERT/CC alla Carnegie Mellon University, il primo centro di risposta agli incidenti informatici. Oggi Morris è professore al MIT. Le cifre (circa 6000 computer su circa 60 000) sono le stime dell'epoca. La frase di Spafford è riportata nella rubrica "Computer Recreations" di A. K. Dewdney, Scientific American, marzo 1989; traduzione nostra. Il senso: la sicurezza assoluta non esiste, si può solo ridurre il rischio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il malware</p><h2>Programmi cattivi, nomi diversi</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Che cosa fa</th></tr>
+    <tr><td><b>Virus</b></td><td>Si attacca a un file o a un programma e si attiva quando lo apri</td></tr>
+    <tr><td><b>Worm</b></td><td>Si diffonde da solo attraverso la rete, senza bisogno di un file ospite</td></tr>
+    <tr><td><b>Trojan</b></td><td>Sembra un programma utile, ma nasconde una funzione dannosa</td></tr>
+    <tr><td><b>Ransomware</b></td><td>Cifra i tuoi file e chiede un riscatto per restituirli</td></tr>
+    <tr><td><b>Spyware</b></td><td>Spia ciò che fai, per esempio i tasti premuti (keylogger)</td></tr>
+  </table>
+  <div class="callout">Come entra? Allegati e link nei messaggi, programmi scaricati da siti sconosciuti, chiavette USB, sistemi non aggiornati.</div>
+  <aside class="notes">Malware = malicious software. Il trojan prende il nome dal cavallo di Troia. Esempio tipico per i ragazzi: il "trucco" o la versione gratuita di un gioco a pagamento scaricata da un sito sconosciuto, che contiene un trojan. Il ransomware WannaCry (2017) era anche un worm: si diffondeva da solo nelle reti con Windows non aggiornato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Qual è la differenza principale tra un virus e un worm?</h2></div>
+  <div class="poll" data-id="sic-virus-worm" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il worm è sempre più pericoloso del virus</li><li>Il virus si diffonde da solo in rete, il worm no</li><li>Il worm si diffonde da solo in rete, il virus ha bisogno di un file ospite</li><li>Nessuna: sono due nomi della stessa cosa</li></ol>
+    <p class="why">Il worm viaggia da solo sfruttando la rete, come quello di Morris. Il virus si attacca a un file e parte quando qualcuno lo apre. La B è il tranello: dice il contrario.</p>
+  </div>
+  <aside class="notes">Risposta C. La pericolosità (A) dipende da che cosa fa il malware, non dal modo in cui si diffonde. Nel linguaggio comune si dice "virus" per qualunque malware: tra informatici è meglio usare il nome giusto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli attacchi in rete</p><h2>Ingannare le persone o colpire la rete</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Contro le persone</h3><ul class="points"><li><b>Phishing</b>: email o SMS falsi per rubare dati</li><li><b>Ingegneria sociale</b>: la telefonata del finto tecnico</li><li><b>Furto di password</b>: provare milioni di combinazioni</li></ul></div>
+    <div class="card"><h3>Contro la rete</h3><ul class="points"><li><b>DoS e DDoS</b>: inondare un server di richieste finte, anche da migliaia di dispositivi infetti</li><li><b>Sniffing</b>: spiare il traffico di una rete</li><li><b>Man in the middle</b>: mettersi in mezzo tra due che comunicano</li></ul></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con l'AI generativa i truffatori scrivono messaggi senza errori in ogni lingua e possono perfino imitare una voce da brevi registrazioni. Gli errori di grammatica non sono più un indizio affidabile.</p></div>
+  <aside class="notes">DDoS = Distributed Denial of Service: colpisce la disponibilità. I dispositivi infetti usati insieme formano una botnet. Esempio reale: la botnet Mirai (2016) usava telecamere e router con password predefinite e bloccò per ore molti siti famosi. Sniffing e man in the middle sono più facili su reti Wi-Fi aperte. Sulle password robuste e sull'autenticazione a due fattori si torna nella UDA 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Qual è l'indizio più sicuro che questo SMS è una truffa?</h2></div>
+  <div class="callout hl">«Il tuo pacco è in giacenza. Paga 1,99 € per la consegna: corriere-consegne-italia.info»</div>
+  <div class="poll" data-id="sic-phishing" data-tipo="quiz" data-risposta="B">
+    <ol><li>Ci sono errori di grammatica</li><li>Il link non porta al sito ufficiale del corriere</li><li>Chiede pochi soldi</li><li>È arrivato di sera</li></ol>
+    <p class="why">Il dominio è l'indizio decisivo: il sito vero di un corriere non si chiama così. Gli errori (A) non ci sono, e oggi spesso mancano. I pochi soldi servono a farti inserire i dati della carta.</p>
+  </div>
+  <aside class="notes">Risposta B. La A è il tranello classico: "le truffe sono piene di errori" era vero anni fa. Regola pratica: non cliccare; apri tu il sito o l'app ufficiale scrivendo l'indirizzo. Collegare al box Oggi della slide precedente. Per le voci clonate: concordare in famiglia una "parola segreta" per le chiamate di emergenza.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia al phishing</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>phishingquiz.withgoogle.com</b>. Non serve un account.</li>
+      <li>Quando chiede nome ed email, <b>inventali</b>: servono solo a creare gli esempi.</li>
+      <li>Per ogni messaggio decidi: phishing o legittimo? Passa il mouse sui link senza cliccare.</li>
+      <li>In Writer annota il punteggio e, per 2 messaggi che ti hanno ingannato, l'indizio che non avevi visto.</li>
+      <li>Salva come <b>phishing.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> alla fine il sito mostra quante risposte sono giuste e spiega ogni caso. Gli indizi più utili sono l'indirizzo vero del mittente e la destinazione reale del link.</div>
+  </div>
+  <aside class="notes">Il Phishing Quiz è realizzato da Jigsaw (Google); i dati inseriti non vengono inviati, servono a personalizzare gli esempi, ma è comunque buona abitudine inventarli. Se il quiz compare in inglese, lavorare a coppie o farlo insieme alla LIM. Discussione finale: quale trucco ha ingannato più persone? Spesso i link che sembrano giusti ma hanno una lettera diversa o un dominio in più.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Wi-Fi pubblico</p><h2>Che cosa faresti? Tocca le carte</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Rete aperta</h3><p>Wi-Fi gratis del centro commerciale, senza password. Controlli il saldo della prepagata?</p></div><div class="retro"><p><b>Meglio di no.</b></p><p class="muted">Su una rete aperta altri possono spiare o falsificare il traffico. Usa la rete dati del telefono.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Reti gemelle</h3><p>Vedi «Bar_Centrale» e «Bar_Centrale_Free». Quale scegli?</p></div><div class="retro"><p><b>Chiedi al barista.</b></p><p class="muted">Un truffatore può creare una rete con un nome simile per mettersi in mezzo: si chiama "evil twin".</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>Il lucchetto</h3><p>Il sito mostra il lucchetto e https://. Allora è sicuro?</p></div><div class="retro"><p><b>Non per forza.</b></p><p class="muted">Il lucchetto dice solo che il collegamento è cifrato. Anche un sito truffa può averlo: controlla il nome.</p></div></div>
+  </div>
+  <aside class="notes">Far votare per alzata di mano prima di girare ogni carta. La terza è il misconcetto più diffuso: HTTPS protegge il viaggio dei dati (riservatezza e integrità), ma non dice nulla sull'onestà di chi gestisce il sito. La cifratura si approfondisce nella UDA 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La valutazione dei rischi</p><h2>Non si può proteggere tutto allo stesso modo</h2></div>
+  <div class="formula"><small>Probabilità e impatto si stimano, per esempio, da 1 (basso) a 3 (alto)</small>Rischio = <span class="hl">Probabilità</span> × <span class="hl">Impatto</span></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Bene</h3><p class="small">Ciò che ha valore: dati, dispositivi, account.</p></div>
+    <div class="card soft"><h3>Minaccia</h3><p class="small">Ciò che può danneggiarlo: furto, guasto, attacco.</p></div>
+    <div class="card soft"><h3>Vulnerabilità</h3><p class="small">Il punto debole che la minaccia sfrutta.</p></div>
+  </div>
+  <aside class="notes">Esempio guidato: bene = le foto del telefono; minaccia = furto o rottura; vulnerabilità = nessun backup e nessun blocco schermo. Probabilità 2, impatto 3: rischio 6, alto. Contromisura: backup automatico e blocco schermo. Il rischio zero non esiste (vedi Spafford): si sceglie dove investire tempo e soldi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi della valutazione dei rischi</h2></div>
+  <ol class="puzzle-ordina" data-id="sic-passi-rischio">
+    <li>Elenca i beni da proteggere</li>
+    <li>Individua le minacce per ogni bene</li>
+    <li>Trova le vulnerabilità che le minacce possono sfruttare</li>
+    <li>Stima probabilità e impatto</li>
+    <li>Calcola il rischio e decidi le priorità</li>
+    <li>Applica le contromisure e ricontrolla dopo un po' di tempo</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. L'ultimo passo riporta all'inizio: la valutazione dei rischi è un ciclo, perché nascono nuove minacce e cambiano i beni. Spesso gli studenti mettono le contromisure subito dopo le minacce: far notare che senza stimare il rischio non si sa da dove cominciare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La matrice dei rischi del laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc, da A1 a E1: <b>Minaccia</b>, <b>Probabilità</b>, <b>Impatto</b>, <b>Rischio</b>, <b>Livello</b>.</li>
+      <li>Da A2 ad A6: chiavetta infetta, phishing, disco guasto senza backup, furto del portatile, DDoS al sito della scuola. Voti da 1 a 3.</li>
+      <li>In D2 <code>=B2*C2</code>, in E2 <code>=SE(D2&gt;=6;"ALTO";SE(D2&gt;=3;"MEDIO";"BASSO"))</code>. Copia fino a riga 6.</li>
+      <li>Ordina per Rischio decrescente (Dati, Ordina) e aggiungi la colonna <b>Contromisura</b>.</li>
+      <li>Salva come <b>rischi-lab.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> probabilità 2 e impatto 3 danno rischio 6, ALTO; probabilità 1 e impatto 2 danno 2, BASSO. In cima alla tabella ci sono le minacce da affrontare per prime.</div>
+  </div>
+  <aside class="notes">Non c'è un'unica soluzione: conta che le stime siano motivate. Proposta di riferimento: chiavetta 2×2 = 4 medio (contromisura: antivirus, non usare chiavette sconosciute); phishing 3×3 = 9 alto (formazione, autenticazione a due fattori); disco senza backup 2×3 = 6 alto (backup 3-2-1); furto portatile 1×3 = 3 medio (armadio chiuso, cifratura del disco); DDoS 1×2 = 2 basso (servizio del provider). Chi finisce prima può aggiungere una formattazione condizionale che colora i livelli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le difese</p><h2>La sicurezza è fatta a strati</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Firewall</b>: filtra il traffico tra la rete e l'esterno</li>
+      <li><b>Antimalware</b> sempre attivo e aggiornato</li>
+      <li><b>Aggiornamenti</b>: chiudono le vulnerabilità</li>
+    </ul>
+    <ul class="points">
+      <li><b>Backup 3-2-1</b>: 3 copie, 2 supporti, 1 fuori sede</li>
+      <li><b>Minimo privilegio</b>: ognuno ha solo i permessi che servono</li>
+      <li><b>Persone formate</b>: la difesa contro il phishing</li>
+    </ul>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli antivirus moderni, come Microsoft Defender, usano anche il <b>machine learning</b>: oltre a riconoscere i malware già noti, notano i comportamenti sospetti, per esempio un programma che all'improvviso cifra centinaia di file.</p></div>
+  <aside class="notes">Il worm di Morris sfruttava vulnerabilità di programmi non aggiornati: gli aggiornamenti sono la difesa più semplice e più trascurata. Regola 3-2-1: tre copie dei dati, su due supporti diversi, una delle quali fuori casa o in cloud. Contro il ransomware il backup scollegato è la salvezza. Password e autenticazione a due fattori: UDA 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3981" data-aiuto="la seconda cifra è il rischio più alto possibile con voti da 1 a 3">
+    <ul class="points">
+      <li>1ª cifra: quante proprietà ci sono nella triade della sicurezza (RID)</li>
+      <li>2ª cifra: il rischio con probabilità 3 e impatto 3</li>
+      <li>3ª cifra: l'ultima cifra dell'anno del worm di Morris</li>
+      <li>4ª cifra: quante copie stanno fuori sede nella regola 3-2-1</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Riservatezza, integrità, disponibilità; 3 × 3 = 9; 1988; una copia fuori sede.</div>
+  </div>
+  <aside class="notes">Codice: 3981. A squadre: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Se qualcuno legge dati che non dovrebbe, è violata la <span class="blank" data-risposta="riservatezza|confidenzialita"></span>.</p>
+    <p>Un malware che si diffonde da solo attraverso la rete è un <span class="blank" data-risposta="worm"></span>.</p>
+    <p>Rischio = probabilità × <span class="blank" data-risposta="impatto"></span>.</p>
+    <p>Un'email falsa che imita una banca per rubarti i dati è un attacco di <span class="blank" data-risposta="phishing"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: riservatezza (accettato anche confidenzialità), worm, impatto, phishing.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Minacce accidentali e intenzionali</li>
+      <li>Riservatezza, integrità, disponibilità</li>
+      <li>Virus, worm, trojan, ransomware, spyware</li>
+    </ul>
+    <ul class="points">
+      <li>Phishing, DDoS, sniffing: controlla link e reti</li>
+      <li>Rischio = probabilità × impatto</li>
+      <li>Difese a strati: aggiornamenti, backup, firewall</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Con questa lezione si chiude la UDA 9: ricordare la verifica e la simulazione disponibile su Novaula. Prossima UDA: crittografia, autenticazione, firma digitale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

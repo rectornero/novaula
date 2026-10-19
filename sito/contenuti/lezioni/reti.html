@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Che cosa sono le reti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 9 · Le reti di computer</p>
+  <h1>Che cosa sono<br>le reti</h1>
+  <p class="lead">Dal primo messaggio di due lettere, nel 1969, ai miliardi di dispositivi di oggi: come si parlano i computer?</p>
+  <aside class="notes">Obiettivi: definire una rete e classificarla per estensione (PAN, LAN, MAN, WAN), distinguere client-server e peer-to-peer, conoscere i dispositivi (scheda di rete, switch, router, access point, modem), il cablaggio, le topologie, il modello ISO-OSI e l'architettura TCP/IP. Durata indicativa: 2-3 ore. Servono: Prompt dei comandi di Windows (nessun diritto di amministratore), LibreOffice Draw e Writer. Se possibile, mostrare dal vivo l'armadio di rete della scuola con il tecnico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti dispositivi sono collegati al Wi-Fi di casa tua?</h2></div>
+  <div class="poll" data-id="reti-dispositivi-casa">
+    <ol><li>Da 1 a 3</li><li>Da 4 a 7</li><li>Da 8 a 12</li><li>Più di 12</li></ol>
+  </div>
+  <aside class="notes">Far contare tutto: telefoni, PC, TV, console, stampante, assistente vocale, lampadine smart, campanello. Molti scoprono di avere più dispositivi che persone in casa. Domanda ponte: "e come fa il router a sapere a quale di questi mandare un video?" La risposta arriva nella lezione sugli indirizzi IP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Una rete di computer</h2></div>
+  <p class="lead">Una <b>rete</b> è un insieme di dispositivi collegati che si scambiano dati e <mark>condividono risorse</mark>: file, stampanti, la connessione a internet.</p>
+  <div class="cols-4">
+    <div class="card"><p class="num">PAN</p><h3>Personale</h3><p class="muted">Pochi metri: il telefono e le cuffie Bluetooth.</p></div>
+    <div class="card"><p class="num">LAN</p><h3>Locale</h3><p class="muted">Un edificio: il laboratorio, la casa.</p></div>
+    <div class="card"><p class="num">MAN</p><h3>Cittadina</h3><p class="muted">Una città: la rete che unisce le scuole del comune.</p></div>
+    <div class="card"><p class="num">WAN</p><h3>Geografica</h3><p class="muted">Paesi e continenti. Internet è la più grande.</p></div>
+  </div>
+  <aside class="notes">Sigle: Personal, Local, Metropolitan, Wide Area Network. Chiedere un esempio per tipo dalla vita degli studenti. Precisare che Internet è una "rete di reti": milioni di LAN collegate tra loro attraverso le reti degli operatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>29 ottobre 1969: il primo messaggio fu «LO»</h2></div>
+  <p>All'università UCLA lo studente Charley Kline prova a collegarsi a un computer dello Stanford Research Institute, a circa 500 km, nella rete <b>ARPANET</b>. Scrive L, poi O, poi... il sistema si blocca.</p>
+  <div class="row"><div class="bits"><span><b class="on">L</b><small>ok</small></span><span><b class="on">O</b><small>ok</small></span><span><b>G</b><small>persa</small></span><span><b>I</b><small>persa</small></span><span><b>N</b><small>persa</small></span></div><p class="muted small">Da UCLA (Los Angeles) a SRI (Menlo Park): LOGIN si ferma a metà.</p></div>
+  <figure class="citazione">
+    <blockquote>Così il primissimo messaggio della storia di Internet fu «Lo», come in «Lo and behold!»: ecco, guardate!</blockquote>
+    <figcaption><b>Leonard Kleinrock</b>, informatico, guidava il laboratorio di UCLA, ricordando quella sera</figcaption>
+  </figure>
+  <aside class="notes">Kline voleva scrivere LOGIN: dopo la L e la O il computer di Stanford andò in crash. Circa un'ora dopo il collegamento riuscì. Kleinrock racconta l'episodio in molte interviste e nell'articolo "An Early History of the Internet" (IEEE Communications Magazine, 2010); la frase è una traduzione nostra del suo racconto. "Lo and behold" è un'espressione inglese antica per dire "ecco, meraviglia!". ARPANET era finanziata dall'agenzia ARPA del Dipartimento della Difesa USA e collegava università e centri di ricerca.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Modelli di rete</p><h2>Chi serve chi?</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Client-server</h3><p>Il <b>server</b> offre un servizio, i <b>client</b> lo chiedono. Esempi: YouTube, il sito della scuola, Novaula.</p></div>
+    <div class="card soft"><h3>Peer-to-peer</h3><p>Tutti alla pari: ogni computer è client e server insieme. Esempi: AirDrop o Quick Share tra due telefoni.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando scrivi a un chatbot AI, il tuo telefono è il <b>client</b>. Il modello di solito gira su <b>server</b> in grandi data center, pieni di processori grafici (GPU). Per questo senza connessione non risponde.</p></div>
+  <aside class="notes">Domanda: "un videogioco online è client-server o peer-to-peer?" Dipende dal gioco: molti usano server dedicati, alcuni giochi tra amici fanno da host su una console. Esistono anche piccoli modelli AI che girano direttamente sul telefono, ma i chatbot più grandi lavorano nel cloud.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>A casa internet non va, ma il router è acceso e il Wi-Fi c'è. Puoi stampare sulla stampante Wi-Fi?</h2></div>
+  <div class="poll" data-id="reti-lan-senza-internet" data-tipo="quiz" data-risposta="B">
+    <ol><li>No: senza internet il Wi-Fi non serve a niente</li><li>Sì: la rete locale funziona anche senza internet</li><li>Solo se colleghi il PC con il cavo</li><li>Solo se la stampante ha una SIM</li></ol>
+    <p class="why">Il Wi-Fi è la tua LAN: PC e stampante si parlano dentro casa. Internet è la WAN fuori, raggiunta attraverso il router. Se cade la linea dell'operatore, la LAN continua a funzionare.</p>
+  </div>
+  <aside class="notes">Risposta B. Il misconcetto "Wi-Fi = internet" è diffusissimo. Esempi: in laboratorio si possono condividere file in rete anche senza internet; una console può fare una partita in rete locale. Ripetere: LAN dentro, WAN fuori, router al confine.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La carta d'identità della tua scheda di rete</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi il tasto Windows, scrivi <b>cmd</b> e apri il Prompt dei comandi.</li>
+      <li>Scrivi <code>ipconfig /all</code> e premi Invio.</li>
+      <li>Trova la scheda in uso (Ethernet o Wi-Fi): annota <b>Descrizione</b> e <b>Indirizzo fisico</b>.</li>
+      <li>Scrivi <code>getmac</code> e controlla che l'indirizzo fisico sia lo stesso.</li>
+      <li>In Writer annota i dati, confrontali con il compagno e salva come <b>scheda-rete.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'indirizzo fisico (MAC) ha 12 cifre esadecimali in 6 coppie, per esempio <code>3C-52-82-1A-7F-09</code>. Quello del compagno è diverso: ogni scheda ha il suo.</div>
+  </div>
+  <aside class="notes">Il MAC address è lungo 48 bit (6 byte), scritto in esadecimale: collegare alla lezione sui numeri binari. Le prime 3 coppie identificano il produttore della scheda. Non servono diritti di amministratore. Curiosità: gli smartphone moderni usano spesso un MAC "casuale" diverso per ogni rete Wi-Fi, per non farsi seguire. Gli altri dati di ipconfig (indirizzo IPv4, subnet mask, gateway) li useremo nella prossima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I dispositivi di rete</p><h2>Chi fa che cosa</h2></div>
+  <table class="data compact">
+    <tr><th>Dispositivo</th><th>Che cosa fa</th></tr>
+    <tr><td><b>Scheda di rete</b></td><td>Collega il computer alla rete. Ha un indirizzo fisico unico, il MAC</td></tr>
+    <tr><td><b>Switch</b></td><td>Collega i dispositivi di una LAN e manda i dati solo al destinatario giusto</td></tr>
+    <tr><td><b>Router</b></td><td>Collega reti diverse e sceglie la strada dei pacchetti</td></tr>
+    <tr><td><b>Access point</b></td><td>Porta la LAN senza fili: è il Wi-Fi</td></tr>
+    <tr><td><b>Modem</b></td><td>Adatta i segnali alla linea dell'operatore: rame, fibra, rete mobile</td></tr>
+  </table>
+  <div class="callout">Il "modem" di casa è in realtà <b>quattro in uno</b>: modem, router, switch e access point nella stessa scatola.</div>
+  <aside class="notes">Lo switch impara quale MAC si trova su quale porta e inoltra i dati solo lì. Il vecchio hub, invece, ripeteva tutto a tutti: oggi non si usa più. Il router lavora con gli indirizzi IP. Per la fibra fino a casa il "modem" si chiama ONT (Optical Network Terminal). Se possibile, mostrare uno switch vero del laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che dispositivo ti serve? Abbina</h2></div>
+  <dl class="puzzle-abbina" data-id="reti-dispositivi">
+    <dt>Switch</dt><dd>Collegare tra loro i 24 PC del laboratorio</dd>
+    <dt>Router</dt><dd>Far uscire la LAN della scuola su internet</dd>
+    <dt>Access point</dt><dd>Avere il Wi-Fi anche in palestra</dd>
+    <dt>Scheda di rete</dt><dd>Un vecchio PC non ha né la porta di rete né il Wi-Fi</dd>
+    <dt>Modem</dt><dd>Collegarsi alla linea in fibra dell'operatore</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Discussione: per la palestra si potrebbe anche "allungare" il Wi-Fi con un ripetitore, ma la soluzione pulita è un access point collegato con il cavo allo switch.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cablaggio</p><h2>I cavi che non vedi</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Cavo a <b>doppino intrecciato</b> (UTP): 4 coppie, 8 fili in tutto</li>
+      <li>Connettore <b>RJ45</b> a 8 contatti</li>
+      <li>Categorie: Cat 5e fino a 1 Gbit/s, Cat 6A fino a 10 Gbit/s</li>
+      <li>Al massimo <mark>100 metri</mark> tra lo switch e il computer</li>
+      <li>Tra edifici diversi si usa la fibra ottica</li>
+    </ul>
+    <div class="card soft"><h3>Cablaggio strutturato</h3><ol class="steps"><li>Presa a muro in aula</li><li>Cavo nascosto nel muro o nel controsoffitto</li><li>Pannello di permutazione nell'armadio rack</li><li>Switch</li></ol></div>
+  </div>
+  <aside class="notes">"Cablaggio strutturato" significa che i cavi seguono uno schema ordinato e standard: ogni presa ha un'etichetta e arriva a una porta numerata del pannello (patch panel), da cui un cavo corto va allo switch. Il limite di 100 metri vale per l'Ethernet su rame; oltre si usano switch intermedi o la fibra. Se il tecnico è disponibile, far vedere l'armadio rack della scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello ISO-OSI</p><h2>Sette livelli, un lavoro di squadra</h2></div>
+  <table class="data compact">
+    <tr><th>N.</th><th>Livello</th><th>Che cosa fa</th><th>Esempi</th></tr>
+    <tr><td class="mono">7</td><td><b>Applicazione</b></td><td>I servizi che usa la persona</td><td>web, email</td></tr>
+    <tr><td class="mono">6</td><td><b>Presentazione</b></td><td>Formato dei dati, compressione, cifratura</td><td>JPEG</td></tr>
+    <tr><td class="mono">5</td><td><b>Sessione</b></td><td>Apre, gestisce e chiude il dialogo</td><td>una sessione di accesso</td></tr>
+    <tr><td class="mono">4</td><td><b>Trasporto</b></td><td>Consegna i dati completi e in ordine</td><td>TCP, UDP</td></tr>
+    <tr><td class="mono">3</td><td><b>Rete</b></td><td>Indirizzi IP e scelta del percorso</td><td>IP, router</td></tr>
+    <tr><td class="mono">2</td><td><b>Collegamento dati</b></td><td>Passa i dati tra dispositivi vicini</td><td>MAC, switch</td></tr>
+    <tr><td class="mono">1</td><td><b>Fisico</b></td><td>Trasforma i bit in segnali</td><td>cavi, fibra, radio</td></tr>
+  </table>
+  <div class="callout">Come una lettera: chi spedisce scende dal livello 7 all'1, chi riceve risale dall'1 al 7. Ogni livello parla solo con quello sopra e quello sotto.</div>
+  <aside class="notes">Lo standard ISO 7498 (1984) è un modello di riferimento: serve a ragionare e a dare un nome ai problemi. Analogia della lettera: scrivi il testo (7), lo traduci nella lingua del destinatario (6), decidi di iniziare una corrispondenza (5), numeri le pagine (4), scrivi l'indirizzo sulla busta (3), il postino la porta all'ufficio vicino (2), il furgone viaggia sulla strada (1). Ogni livello parla solo con quello sopra e quello sotto. Frase per ricordare i livelli dall'1 al 7 (inventata dalla classe): far creare una frase con le iniziali F, C, R, T, S, P, A.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'architettura TCP/IP</p><h2>Il modello che usiamo davvero</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>TCP/IP</th><th>OSI</th><th>Protocolli</th></tr>
+      <tr><td><b>Applicazione</b></td><td class="mono">5-6-7</td><td>HTTP, DNS, email</td></tr>
+      <tr><td><b>Trasporto</b></td><td class="mono">4</td><td>TCP, UDP</td></tr>
+      <tr><td><b>Internet</b></td><td class="mono">3</td><td>IP</td></tr>
+      <tr><td><b>Accesso alla rete</b></td><td class="mono">1-2</td><td>Ethernet, Wi-Fi</td></tr>
+    </table>
+    <div class="card night"><h3>Vint Cerf e Bob Kahn</h3><p>Nel 1974 pubblicano il progetto del TCP/IP. Il 1° gennaio 1983 ARPANET passa al TCP/IP: nasce Internet come la conosciamo.</p><p class="muted">Nel 2004 ricevono il premio Turing.</p></div>
+  </div>
+  <aside class="notes">L'articolo è "A Protocol for Packet Network Intercommunication" (IEEE Transactions on Communications, maggio 1974). Il passaggio di ARPANET al TCP/IP del 1° gennaio 1983 è spesso chiamato il "flag day". Il premio Turing è considerato il Nobel dell'informatica. TCP/IP ha 4 livelli invece di 7: è nato dalla pratica, mentre OSI è nato come modello teorico.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Invii un messaggio: metti in ordine il viaggio</h2></div>
+  <ol class="puzzle-ordina" data-id="reti-incapsulamento">
+    <li>Scrivi il messaggio nell'app e premi Invia</li>
+    <li>TCP divide i dati in segmenti numerati</li>
+    <li>IP aggiunge l'indirizzo del mittente e del destinatario</li>
+    <li>La scheda di rete trasforma i bit in segnali sul cavo o nell'aria</li>
+    <li>I router inoltrano i pacchetti fino alla rete di destinazione</li>
+    <li>Il destinatario rimette in ordine i segmenti e legge il messaggio</li>
+  </ol>
+  <aside class="notes">Ordine: applicazione, trasporto, internet, accesso alla rete, poi il viaggio tra i router e la ricomposizione. Ogni livello aggiunge una sua "busta" (intestazione) ai dati: si chiama incapsulamento. All'arrivo le buste si aprono in ordine inverso. I pacchetti dello stesso messaggio possono seguire strade diverse: per questo TCP li numera.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Disegna la rete del laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Draw.</li>
+      <li>Disegna un rettangolo per ogni PC della tua fila, uno per lo switch, uno per il router e un'ellisse per Internet.</li>
+      <li>Collega gli oggetti con lo strumento Connettore o Linea.</li>
+      <li>Scrivi il nome dentro ogni oggetto e, a lato, il tipo di rete e la topologia.</li>
+      <li>Salva come <b>rete-lab.odg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni PC ha un solo cavo, che va allo switch: è una topologia a <b>stella</b>. Il router è l'unica porta verso Internet. Rete: LAN.</div>
+  </div>
+  <aside class="notes">Prima del lavoro, far seguire alla classe i cavi dei PC fino alla presa a muro. Se nel laboratorio ci sono più switch collegati tra loro, la topologia complessiva è una "stella estesa" (ad albero): accettarla e premiarla. Chi finisce prima aggiunge l'access point Wi-Fi e la stampante di rete.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le topologie</p><h2>Le forme di una rete</h2></div>
+  <div class="cols-4">
+    <div class="card">
+      <svg viewBox="0 0 300 160" width="100%" height="125" aria-hidden="true" style="color:var(--accent)"><g stroke="#596179" stroke-width="4"><line x1="15" y1="80" x2="285" y2="80"/><line x1="55" y1="80" x2="55" y2="35"/><line x1="125" y1="80" x2="125" y2="125"/><line x1="195" y1="80" x2="195" y2="35"/><line x1="255" y1="80" x2="255" y2="125"/></g><g fill="currentColor"><circle cx="55" cy="30" r="17"/><circle cx="125" cy="130" r="17"/><circle cx="195" cy="30" r="17"/><circle cx="255" cy="130" r="17"/></g></svg>
+      <h3>Bus</h3><p class="small muted">Un unico cavo condiviso: se si rompe, si ferma tutto.</p></div>
+    <div class="card">
+      <svg viewBox="0 0 300 160" width="100%" height="125" aria-hidden="true" style="color:var(--accent)"><g stroke="#596179" stroke-width="4"><line x1="150" y1="80" x2="150" y2="20"/><line x1="150" y1="80" x2="150" y2="140"/><line x1="150" y1="80" x2="70" y2="40"/><line x1="150" y1="80" x2="230" y2="40"/><line x1="150" y1="80" x2="70" y2="120"/><line x1="150" y1="80" x2="230" y2="120"/></g><g fill="currentColor"><circle cx="150" cy="18" r="15"/><circle cx="150" cy="142" r="15"/><circle cx="70" cy="40" r="15"/><circle cx="230" cy="40" r="15"/><circle cx="70" cy="120" r="15"/><circle cx="230" cy="120" r="15"/></g><rect x="128" y="62" width="44" height="36" rx="6" fill="#172033"/></svg>
+      <h3>Stella</h3><p class="small muted">Tutti collegati a un centro, lo switch. È la LAN di oggi.</p></div>
+    <div class="card">
+      <svg viewBox="0 0 300 160" width="100%" height="125" aria-hidden="true" style="color:var(--accent)"><circle cx="150" cy="80" r="62" fill="none" stroke="#596179" stroke-width="4"/><g fill="currentColor"><circle cx="150" cy="18" r="15"/><circle cx="204" cy="49" r="15"/><circle cx="204" cy="111" r="15"/><circle cx="150" cy="142" r="15"/><circle cx="96" cy="111" r="15"/><circle cx="96" cy="49" r="15"/></g></svg>
+      <h3>Anello</h3><p class="small muted">Ogni nodo ha due vicini: i dati girano in cerchio.</p></div>
+    <div class="card">
+      <svg viewBox="0 0 300 160" width="100%" height="125" aria-hidden="true" style="color:var(--accent)"><g stroke="#596179" stroke-width="4"><line x1="70" y1="30" x2="230" y2="30"/><line x1="70" y1="30" x2="40" y2="120"/><line x1="70" y1="30" x2="150" y2="140"/><line x1="230" y1="30" x2="260" y2="120"/><line x1="230" y1="30" x2="150" y2="140"/><line x1="40" y1="120" x2="150" y2="140"/><line x1="260" y1="120" x2="150" y2="140"/><line x1="70" y1="30" x2="260" y2="120"/></g><g fill="currentColor"><circle cx="70" cy="30" r="15"/><circle cx="230" cy="30" r="15"/><circle cx="40" cy="120" r="15"/><circle cx="260" cy="120" r="15"/><circle cx="150" cy="140" r="15"/></g></svg>
+      <h3>Maglia</h3><p class="small muted">Tante strade: se un collegamento cade, se ne usa un altro. È Internet.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nelle case grandi si usa il <b>Wi-Fi mesh</b>: più punti di accesso si parlano tra loro come una piccola maglia e il telefono passa dall'uno all'altro senza perdere la connessione.</p></div>
+  <aside class="notes">Il bus era la topologia delle prime reti Ethernet con cavo coassiale; l'anello era usato dalle reti Token Ring. La maglia completa (tutti con tutti) è costosa: Internet è una maglia parziale. Chiedere: "quale topologia ha la rete del nostro laboratorio?" (stella).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Nella rete a stella del laboratorio si rompe il cavo del PC 7. Chi resta senza rete?</h2></div>
+  <div class="poll" data-id="reti-stella" data-tipo="quiz" data-risposta="D">
+    <ol><li>Tutti i PC del laboratorio</li><li>I PC 6 e 8, vicini al 7</li><li>Nessuno: la rete trova un'altra strada</li><li>Solo il PC 7</li></ol>
+    <p class="why">Nella stella ogni PC ha il suo cavo verso lo switch: si ferma solo il PC 7. Se invece si guasta lo switch al centro, si fermano tutti. La A vale per il bus, la C per la maglia.</p>
+  </div>
+  <aside class="notes">Risposta D. Chi risponde B pensa ai "vicini di banco", ma in una rete conta come sono collegati i cavi, non dove sono i banchi. Domanda di rilancio: "qual è il punto debole della stella?" (il centro, lo switch).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quanto è lontano Google?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel Prompt dei comandi scrivi <code>ipconfig</code> e annota il <b>Gateway predefinito</b>: è il router.</li>
+      <li>Scrivi <code>ping</code> seguito dall'indirizzo del gateway e annota il tempo medio.</li>
+      <li>Scrivi <code>ping www.google.it</code> e annota il tempo medio.</li>
+      <li>Scrivi <code>tracert www.google.it</code> e conta i salti, cioè i router attraversati.</li>
+      <li>Annota tutto in Writer e salva come <b>ping-tracert.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il router della LAN risponde in pochi millisecondi (spesso <code>&lt;1ms</code>); un server su Internet ne richiede di più. In tracert ogni riga è un router; un <code>*</code> vuol dire che quel router non risponde.</div>
+  </div>
+  <aside class="notes">ping manda 4 piccoli pacchetti e misura il tempo di andata e ritorno. tracert mostra i router intermedi (di solito tra 8 e 20). Nessuno dei due comandi richiede diritti di amministratore. Il firewall della scuola potrebbe bloccare ping o tracert verso l'esterno: in quel caso fare la prova del gateway e mostrare tracert dalla LIM con un'altra connessione (per esempio l'hotspot del docente). Confronto da far fare: LAN = pochi metri e pochi millisecondi, WAN = centinaia di km e più router.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="7429" data-aiuto="la terza cifra: Kline voleva scrivere LOGIN, ma quante lettere arrivarono?">
+    <ul class="points">
+      <li>1ª cifra: quanti livelli ha il modello ISO-OSI</li>
+      <li>2ª cifra: quanti livelli ha l'architettura TCP/IP</li>
+      <li>3ª cifra: quante lettere arrivarono nel primo messaggio di ARPANET</li>
+      <li>4ª cifra: l'ultima cifra dell'anno di quel messaggio</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 7 livelli OSI, 4 livelli TCP/IP, «LO» = 2 lettere, 1969.</div>
+  </div>
+  <aside class="notes">Codice: 7429. A squadre, la prima squadra che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una rete che copre un edificio, come il laboratorio, si chiama <span class="blank" data-risposta="LAN"></span>.</p>
+    <p>Il dispositivo che collega reti diverse e sceglie il percorso è il <span class="blank" data-risposta="router"></span>.</p>
+    <p>Il modello ISO-OSI ha <span class="blank" data-risposta="7|sette"></span> livelli.</p>
+    <p>Nella topologia a <span class="blank" data-risposta="stella"></span> tutti i PC sono collegati a un dispositivo centrale.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: LAN, router, 7, stella.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Reti PAN, LAN, MAN, WAN: Internet è una rete di reti</li>
+      <li>Client-server o peer-to-peer</li>
+      <li>Scheda di rete, switch, router, access point, modem</li>
+    </ul>
+    <ul class="points">
+      <li>Doppino, RJ45, al massimo 100 metri</li>
+      <li>Topologie: bus, stella, anello, maglia</li>
+      <li>ISO-OSI a 7 livelli, TCP/IP a 4</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: gli indirizzi IP e le sottoreti.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

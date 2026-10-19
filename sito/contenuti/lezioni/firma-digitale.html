@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Firma elettronica e certificati digitali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 10 · La sicurezza e la protezione dei dati</p>
+  <h1>Firma elettronica<br>e certificati digitali</h1>
+  <p class="lead">Come si firma un contratto senza penna, si dimostra a che ora è stato firmato e si spedisce una "raccomandata" via email?</p>
+  <aside class="notes">Obiettivi: capire come funziona la firma digitale (impronta + chiave privata), distinguere i tipi di firma elettronica del regolamento eIDAS, conoscere firma remota, certificato digitale, marca temporale e PEC. Prerequisiti: crittografia asimmetrica (lezione "Principi di crittografia") e impronta hash (lezione "L'autenticazione dell'utente"). Durata: 2-3 ore. Servono Blocco note, Windows PowerShell, Calc e un browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai già un'identità digitale tutta tua?</h2></div>
+  <div class="poll" data-id="identita-digitale">
+    <ol><li>Sì, ho lo SPID</li><li>Sì, la CIE con il suo PIN</li><li>Ce l'hanno i miei genitori, io no</li><li>Non so bene che cosa sia</li></ol>
+  </div>
+  <aside class="notes">SPID (Sistema Pubblico di Identità Digitale) e CIE (Carta d'Identità Elettronica) servono ad accedere ai servizi pubblici online. La CIE contiene un chip con un certificato: con il PIN e un telefono con NFC (app CieID) diventa un'identità digitale. Molti studenti hanno la CIE ma non conoscono il PIN: lo trovano in due parti, una consegnata in Comune e una spedita a casa. Ponte: oggi vediamo che cosa c'è "dentro" quel chip.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché si firma</p><h2>Una firma deve garantire tre cose</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Autenticità</h3><p>Sappiamo <b>chi</b> ha firmato.</p></div>
+    <div class="card"><p class="num">2</p><h3>Integrità</h3><p>Il documento <b>non è stato cambiato</b> dopo la firma.</p></div>
+    <div class="card"><p class="num">3</p><h3>Non ripudio</h3><p>Chi ha firmato <b>non può negare</b> di averlo fatto.</p></div>
+  </div>
+  <div class="callout hl">La firma a penna su carta garantisce bene la prima e la terza. Ma su un file? Copiare l'immagine di una firma è un gioco da ragazzi.</div>
+  <aside class="notes">Chiedere: "Se incollo in un PDF la foto della mia firma, ho firmato?" No: chiunque può copiarla, e il PDF si può modificare dopo. Serve qualcosa che leghi la firma al contenuto esatto del file e a una chiave che ha solo il firmatario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona la firma digitale</p><h2>Impronta del documento + chiave privata</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Documento</h3><p class="small">contratto.pdf</p></div>
+    <div class="card soft"><h3>Impronta</h3><p class="small">calcolata con SHA-256</p></div>
+    <div class="card fill"><h3>Firma</h3><p class="small">impronta cifrata con la <b>chiave privata</b> di chi firma</p></div>
+  </div>
+  <ul class="points">
+    <li>Chi riceve verifica con la <b>chiave pubblica</b> di chi ha firmato.</li>
+    <li>Basta cambiare una virgola e l'impronta non coincide più: firma non valida.</li>
+    <li>Solo il titolare ha la chiave privata: non può dire "non sono stato io".</li>
+  </ul>
+  <aside class="notes">È il contrario del quiz di Anna e Marco della lezione di crittografia: per mandare un segreto si usa la chiave pubblica del destinatario, per firmare la propria chiave privata. Descrizione semplificata, valida per RSA; altri algoritmi di firma (per esempio a curve ellittiche) seguono lo stesso schema logico: si firma l'impronta con la chiave privata e si verifica con la pubblica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'impronta di un file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Con Blocco note crea <b>contratto.txt</b> con il testo: <code>Prezzo: 100 euro</code>. Salvalo in una cartella <b>firma</b>.</li>
+      <li>Fai una copia del file e chiamala <b>copia.txt</b>.</li>
+      <li>Nella cartella clic destro, <b>Apri nel Terminale</b> (o apri PowerShell), poi scrivi <code>Get-FileHash contratto.txt</code> e <code>Get-FileHash copia.txt</code>.</li>
+      <li>Nella copia cambia 100 in 1000, salva e ricalcola. Annota tutto in <b>impronte.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'algoritmo indicato è <b>SHA256</b> e ogni impronta ha <b>64</b> caratteri. Le due copie identiche hanno la stessa impronta; dopo la modifica le impronte non hanno più niente in comune.</div>
+  </div>
+  <aside class="notes">Su Windows 10 senza "Apri nel Terminale": tasto Maiusc + clic destro nella cartella, "Apri finestra di PowerShell qui", oppure cercare PowerShell e usare cd per entrare nella cartella. Usare file .txt e non PDF: un PDF esportato due volte di seguito può avere impronte diverse anche senza modifiche, perché contiene la data di creazione. Annotare le 64 cifre: serviranno per il lucchetto finale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Marco firma, Anna verifica: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="firma-verifica">
+    <li>Marco prepara il documento da firmare</li>
+    <li>Il programma calcola l'impronta del documento</li>
+    <li>L'impronta viene cifrata con la chiave privata di Marco</li>
+    <li>Ad Anna arrivano documento, firma e certificato di Marco</li>
+    <li>Anna apre la firma con la chiave pubblica scritta nel certificato</li>
+    <li>Anna ricalcola l'impronta: se coincide, la firma è valida</li>
+  </ol>
+  <aside class="notes">In pratica i passi 5 e 6 li fa il programma di verifica (per esempio il lettore PDF) in un attimo. Il tranello: molti mettono il certificato all'inizio. Il certificato serve a chi verifica, per sapere che quella chiave pubblica appartiene davvero a Marco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Per verificare la firma di Marco, Anna usa...</h2></div>
+  <div class="poll" data-id="verifica-chiave" data-tipo="quiz" data-risposta="A">
+    <ol><li>la chiave pubblica di Marco</li><li>la chiave privata di Marco</li><li>la chiave pubblica di Anna</li><li>la chiave privata di Anna</li></ol>
+    <p class="why">Marco firma con la sua chiave privata; chiunque può verificare con la sua chiave pubblica, che si trova nel certificato. Se Anna avesse la chiave privata di Marco, potrebbe firmare al suo posto.</p>
+  </div>
+  <aside class="notes">Errore tipico: la D, per analogia con la cifratura (dove il destinatario usa la propria chiave privata). Schema da lasciare alla lavagna: segreto → chiave pubblica del destinatario; firma → chiave privata del mittente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Firma con chiavi giocattolo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc: in B1 <b>33</b> (il numero n), in B2 <b>3</b> (chiave pubblica), in B3 <b>7</b> (chiave privata). In B5 l'impronta: <b>9</b>.</li>
+      <li>Firma in B6: <code>=RESTO(POTENZA(B5;B3);B1)</code></li>
+      <li>Verifica in B7: <code>=RESTO(POTENZA(B6;B2);B1)</code></li>
+      <li>Un falsario cambia l'impronta in <b>5</b> e tiene la vecchia firma. In B9 scrivi <code>=SE(RESTO(POTENZA(15;B2);B1)=5;"Valida";"NON valida")</code>.</li>
+      <li>Prova anche con impronta 4. Salva come <b>firma-giocattolo.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con impronta 9 la firma è <b>15</b> e la verifica restituisce di nuovo 9. Per il falsario esce <b>NON valida</b>. Con impronta 4 la firma è 16.</div>
+  </div>
+  <aside class="notes">È l'algoritmo RSA con numeri minuscoli: n = 3 × 11 = 33, e chiavi 3 e 7 scelte in modo che 3 × 7 = 21 dia resto 1 diviso per (3-1) × (11-1) = 20. Conti: 9^7 = 4 782 969, resto 15 nella divisione per 33; 15^3 = 3375, resto 9. 4^7 = 16 384, resto 16; 16^3 = 4096, resto 4. Nella realtà n ha più di 600 cifre decimali (2048 bit): scoprire la chiave privata dalla pubblica richiederebbe di scomporre n in fattori primi, cosa che nessun computer attuale sa fare in tempi utili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>L'idea che ha reso possibile tutto questo</h2></div>
+  <figure class="citazione">
+    <blockquote>Oggi siamo sull'orlo di una rivoluzione nella crittografia.</blockquote>
+    <figcaption><b>Whitfield Diffie e Martin Hellman</b>, New Directions in Cryptography, 1976</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card"><p class="num">1976</p><p class="small">Diffie e Hellman propongono la chiave pubblica e chiedono un equivalente digitale della <b>firma scritta</b>.</p></div>
+    <div class="card"><p class="num">1977</p><p class="small">Rivest, Shamir e Adleman inventano <b>RSA</b>: cifrare e firmare con due chiavi diventa possibile davvero.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con lo standard <b>C2PA</b> alcune fotocamere e alcuni generatori di immagini con l'AI aggiungono all'immagine una firma digitale che racconta come è stata creata. Se qualcuno la ritocca, la firma non torna più.</p></div>
+  <aside class="notes">Traduzione nostra della prima frase dell'articolo ("We stand today on the brink of a revolution in cryptography"). Nello stesso articolo i due autori indicano la necessità di un equivalente digitale della firma scritta. Premio Turing 2015. C2PA (Coalition for Content Provenance and Authenticity) definisce le "Content Credentials"; dal 2024 OpenAI le aggiunge alle immagini generate. Attenzione: i metadati si possono togliere, quindi l'assenza della firma non prova che un'immagine sia vera o falsa. Domanda: "Vi fidereste di più di una foto con la firma di provenienza?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il regolamento eIDAS (UE 910/2014)</p><h2>Non tutte le firme elettroniche valgono uguale</h2></div>
+  <table class="data">
+    <tr><th>Tipo</th><th>Esempio</th><th>Valore</th></tr>
+    <tr><td><b>Semplice</b></td><td>Spunti "Accetto" o scrivi il tuo nome in fondo a un modulo online</td><td>Lo valuta il giudice caso per caso</td></tr>
+    <tr><td><b>Avanzata</b></td><td>Firmi con la penna su un tablet in banca o alle Poste (firma grafometrica)</td><td>Legata in modo univoco a chi firma e al documento</td></tr>
+    <tr class="hl"><td><b>Qualificata</b></td><td>Smart card, token USB o firma remota rilasciati da un prestatore qualificato</td><td><b>Equivale alla firma autografa</b> in tutta l'UE</td></tr>
+  </table>
+  <p class="small">In Italia la <b>firma digitale</b> è un tipo di firma qualificata basato su chiave pubblica e chiave privata, definito dal Codice dell'Amministrazione Digitale.</p>
+  <aside class="notes">eIDAS = electronic IDentification, Authentication and trust Services, Regolamento UE 910/2014, in vigore dal 2016 in tutti gli Stati membri; aggiornato dal Regolamento UE 2024/1183 (eIDAS 2). Il CAD è il D.Lgs. 82/2005. La firma grafometrica è un esempio tipico di firma elettronica avanzata, se rispetta i requisiti previsti. Domanda: "Il nome scritto in fondo a un'email è una firma elettronica?" Sì, semplice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni strumento a quello che garantisce</h2></div>
+  <dl class="puzzle-abbina" data-id="strumenti-firma">
+    <dt>Firma semplice</dt><dd>Un clic su "Accetto" in un modulo online</dd>
+    <dt>Firma avanzata</dt><dd>La firma sul tablet allo sportello</dd>
+    <dt>Firma qualificata</dt><dd>Vale come la firma a penna in tutta l'UE</dd>
+    <dt>Certificato digitale</dt><dd>Lega una chiave pubblica a una persona</dd>
+    <dt>Marca temporale</dt><dd>Data e ora certe del documento</dd>
+    <dt>PEC</dt><dd>Email con ricevute che vale come raccomandata</dd>
+  </dl>
+  <aside class="notes">Gara a coppie, 3 minuti. Le ultime tre voci le approfondiamo nelle prossime slide: è normale indovinarle "a intuito". Riprendere l'abbinamento alla fine della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Firmare in pratica</p><h2>Dove sta la chiave privata?</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Smart card</h3><p class="small">Una tessera con chip, letta da un lettore collegato al PC. Si sblocca con il PIN.</p></div>
+    <div class="card"><h3>Token USB</h3><p class="small">Una chiavetta che contiene il chip della firma.</p></div>
+    <div class="card fill"><h3>Firma remota</h3><p class="small">La chiave sta in un server protetto del prestatore. Firmi da PC o telefono con PIN e codice OTP.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Con <b>eIDAS 2</b> ogni Stato dell'UE deve offrire ai cittadini un portafoglio di identità digitale. In Italia c'è <b>IT-Wallet</b> nell'app IO: patente e tessera sanitaria anche in versione digitale.</p></div>
+  <aside class="notes">La chiave privata non esce mai dal chip o dal server sicuro (HSM): il chip calcola la firma al suo interno. File firmati: .p7m (formato CAdES, il file originale "imbustato") oppure PDF firmato (PAdES), che si apre normalmente. Il Regolamento UE 2024/1183 prevede il portafoglio europeo di identità digitale (EUDI Wallet). IT-Wallet è disponibile per tutti nell'app IO dal dicembre 2024, con patente, tessera sanitaria e carta europea della disabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il certificato digitale</p><h2>La carta d'identità di una chiave pubblica</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data">
+      <tr><th>Campo</th><th>Che cosa dice</th></tr>
+      <tr><td>Titolare</td><td>A chi appartiene la chiave</td></tr>
+      <tr><td>Chiave pubblica</td><td>La chiave per verificare le firme</td></tr>
+      <tr><td>Emesso da</td><td>L'autorità di certificazione (CA)</td></tr>
+      <tr><td>Validità</td><td>Da quando a quando vale</td></tr>
+      <tr><td>Firma della CA</td><td>Garantisce che nessuno l'ha falsificato</td></tr>
+    </table>
+    <div class="card soft"><h3>Chi lo rilascia?</h3><p class="small">Un <b>prestatore di servizi fiduciari qualificato</b>, dopo aver controllato l'identità della persona. In Italia l'elenco è tenuto da <b>AgID</b>.</p><p class="small">Anche i siti HTTPS hanno un certificato.</p></div>
+  </div>
+  <aside class="notes">Lo standard dei certificati è X.509. Una CA può revocare un certificato prima della scadenza (per esempio se la smart card viene rubata): chi verifica controlla le liste di revoca. Catena di fiducia: il certificato del sito è firmato da una CA, il cui certificato è firmato da una CA "radice" già presente nel sistema operativo o nel browser.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Ispeziona il certificato di un sito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>www.agid.gov.it</b>.</li>
+      <li>Clicca sull'icona a sinistra dell'indirizzo, poi sulla voce sulla connessione sicura e infine sul certificato.</li>
+      <li>Annota: a chi è rilasciato, chi lo ha emesso, data di inizio e di fine validità.</li>
+      <li>Ripeti con il sito di un quotidiano o di un negozio online. Scrivi i dati in <b>certificati.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il nome del sito compare nel campo "rilasciato a" e l'emittente è un'autorità di certificazione, non il sito stesso. La validità dura pochi mesi: i certificati dei siti vanno rinnovati spesso.</div>
+  </div>
+  <aside class="notes">Nomi delle voci: Chrome ed Edge, icona a sinistra dell'indirizzo → "La connessione è sicura" → "Il certificato è valido"; Firefox, lucchetto → "Connessione sicura" → "Ulteriori informazioni" → "Visualizza certificato". Le voci cambiano spesso tra una versione e l'altra. Per le regole del CA/Browser Forum, dal marzo 2026 un certificato per siti web può durare al massimo 200 giorni, e la durata massima scenderà ancora negli anni successivi. Domanda: perché durate brevi? Se una chiave viene rubata, il danno dura meno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La marca temporale</p><h2>Il certificato di Marco scade nel 2028. Nel 2030, come si dimostra che la firma del 2026 era valida?</h2></div>
+  <div class="poll" data-id="marca-temporale" data-tipo="quiz" data-risposta="B">
+    <ol><li>Non si può: con il certificato scaduto la firma non vale più</li><li>Con una marca temporale aggiunta quando ha firmato</li><li>Rinnovando oggi il certificato di Marco</li><li>Stampando il documento e conservandolo in un cassetto</li></ol>
+    <p class="why">La marca temporale è emessa da un ente terzo fidato e certifica data e ora in cui il documento esisteva con quella firma. Dimostra che, in quel momento, il certificato era valido: la firma resta verificabile anche anni dopo.</p>
+  </div>
+  <aside class="notes">La marca temporale si ottiene mandando l'impronta del documento (non il documento) a un'autorità di marcatura temporale (TSA), che la firma insieme alla data e all'ora. È utile anche senza firma: prova che un'idea, un progetto o una foto esistevano in una certa data. Il tranello è la A, ragionamento intuitivo ma sbagliato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Posta Elettronica Certificata</p><h2>La PEC: una raccomandata con ricevuta, via email</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Mittente</h3><p class="small">invia da una casella PEC</p></div>
+    <div class="card fill"><h3>Ricevuta di accettazione</h3><p class="small">il suo gestore conferma la partenza</p></div>
+    <div class="card fill"><h3>Ricevuta di consegna</h3><p class="small">il messaggio è nella casella del destinatario</p></div>
+  </div>
+  <ul class="points">
+    <li>Ha lo stesso valore legale di una <b>raccomandata con ricevuta di ritorno</b>.</li>
+    <li>Prova invio e consegna, con data e ora: non dimostra che il destinatario l'abbia letta.</li>
+    <li>Ogni cittadino può indicare un <b>domicilio digitale</b> per ricevere le comunicazioni pubbliche.</li>
+  </ul>
+  <aside class="notes">Norma di riferimento: DPR 68/2005. Le ricevute sono firmate digitalmente dai gestori. Imprese e professionisti hanno l'obbligo di avere una PEC (elenco INI-PEC); i cittadini possono eleggere il domicilio digitale nell'indice INAD. La PEC italiana si sta allineando allo standard europeo dei servizi di recapito certificato previsto da eIDAS. Esempio vicino ai ragazzi: la scuola comunica con altri enti pubblici via PEC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Mandi una PEC a un indirizzo Gmail normale. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="pec-gmail" data-tipo="quiz" data-risposta="D">
+    <ol><li>Lo stesso valore di una raccomandata con ricevuta di ritorno</li><li>Niente: il messaggio viene bloccato e non parte</li><li>Una firma digitale automatica sul messaggio</li><li>Solo la ricevuta di accettazione: nessuna prova legale della consegna</li></ol>
+    <p class="why">Il messaggio parte e arriva come una normale email, ma il gestore del destinatario non è un gestore PEC: manca la ricevuta di avvenuta consegna. Il valore legale c'è solo quando anche il destinatario ha una casella PEC.</p>
+  </div>
+  <aside class="notes">Tranello classico, lo sbagliano anche molti adulti. Allo stesso modo, una email normale mandata a una casella PEC può essere rifiutata o arrivare senza valore legale, a seconda di come è configurata la casella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="2364" data-aiuto="le ultime due cifre sono la lunghezza dell'impronta calcolata con Get-FileHash">
+    <ul class="points">
+      <li>1ª cifra: quante chiavi ha ogni utente nella crittografia asimmetrica</li>
+      <li>2ª cifra: quanti tipi di firma elettronica prevede il regolamento eIDAS</li>
+      <li>3ª e 4ª cifra: quanti caratteri ha un'impronta SHA-256 scritta in esadecimale</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2 chiavi (pubblica e privata), 3 firme (semplice, avanzata, qualificata), 64 caratteri esadecimali = 256 bit.</div>
+  </div>
+  <aside class="notes">Codice: 2364. Collegamento con l'esadecimale: ogni cifra esadecimale vale 4 bit, 64 × 4 = 256. Gara a squadre come nelle altre lezioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per firmare, l'impronta del documento si cifra con la chiave <span class="blank" data-risposta="privata"></span> di chi firma.</p>
+    <p>Il documento che lega una chiave pubblica a una persona è il <span class="blank" data-risposta="certificato"></span> digitale.</p>
+    <p>Data e ora certe di un documento le garantisce la marca <span class="blank" data-risposta="temporale"></span>.</p>
+    <p>Il regolamento europeo sulle firme elettroniche si chiama <span class="blank" data-risposta="eIDAS"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: privata, certificato, temporale, eIDAS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Firma = impronta cifrata con la chiave privata</li>
+      <li>Si verifica con la chiave pubblica del certificato</li>
+      <li>eIDAS: firma semplice, avanzata, qualificata</li>
+    </ul>
+    <ul class="points">
+      <li>Smart card, token o firma remota</li>
+      <li>Marca temporale: data e ora certe</li>
+      <li>PEC: raccomandata digitale, solo tra caselle PEC</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Chiudere la UDA collegando le tre lezioni: la crittografia protegge la riservatezza, l'autenticazione dimostra chi sei, la firma dimostra chi ha scritto e che cosa. Ricordare la verifica della UDA e la simulazione disponibile su Novaula. Assegnare il compito collegato.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

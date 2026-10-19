@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programmiamo con Scratch · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 4 · Scratch e App Inventor</p>
+  <h1>Programmiamo<br>con Scratch</h1>
+  <p class="lead">Mattoncini colorati, un gatto e un palcoscenico: oggi dai i primi ordini a un computer e lo vedi obbedire.</p>
+  <aside class="notes">Obiettivi: sapere che cos'è Scratch, orientarsi nell'ambiente di lavoro, riconoscere sprite, stage, script e blocchi, scrivere il primo programma e animarlo con i costumi. Durata indicativa: 2 ore. In laboratorio basta il browser su scratch.mit.edu: non serve un account, si salva con File, Salva sul tuo computer. Verificare prima che il sito non sia bloccato dal filtro della scuola; in alternativa installare la Scratch app (offline) dal sito ufficiale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai dato istruzioni a un computer?</h2></div>
+  <div class="poll" data-id="scratch-esperienza">
+    <ol><li>Mai, oggi è la prima volta</li><li>Sì, con Scratch o Code.org alle medie</li><li>Sì, con un linguaggio scritto (Python, C…)</li><li>Ho creato mondi o mod (Minecraft, Roblox…)</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio: serve al docente per formare coppie miste (chi ha già usato Scratch accanto a chi parte da zero). Far notare che anche i comandi di Minecraft o gli editor di Roblox sono programmazione: oggi diamo un nome a quello che alcuni fanno già.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è Scratch</p><h2>Programmare incastrando blocchi</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Scratch è un <mark>linguaggio di programmazione visuale</mark>: invece di scrivere istruzioni, le prendi da una palette e le incastri come mattoncini.</p>
+      <ul class="points">
+        <li>La forma dei blocchi impedisce gli errori di battitura</li>
+        <li>Crei storie animate, giochi, musica e simulazioni</li>
+        <li>Il nome viene dallo <i>scratch</i> dei DJ: mescolare pezzi per creare qualcosa di nuovo</li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">ID</p><h3>Carta d'identità</h3><ul class="points"><li>Nato al MIT di Boston, gruppo di Mitchel Resnick</li><li>Online dal 2007, Scratch 3 dal 2019</li><li>Gratis, in italiano, nel browser</li><li>I progetti si salvano in file <code>.sb3</code></li></ul></div>
+  </div>
+  <aside class="notes">Scratch è sviluppato dal gruppo Lifelong Kindergarten del MIT Media Lab, guidato da Mitchel Resnick; è online dal 2007, la versione 3.0 (HTML5, funziona anche su tablet) è del gennaio 2019. La spiegazione del nome è quella data dal sito ufficiale di Scratch (la tecnica dei DJ hip hop). Chiedere: "che vantaggio c'è a non poter sbagliare a scrivere?" (ci si concentra sulla logica, non sulla punteggiatura).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Seymour Papert e la tartaruga</h2></div>
+  <figure class="citazione">
+    <blockquote>Si potrebbe dire che il computer viene usato per programmare il bambino. Nella mia visione, è il bambino a programmare il computer.</blockquote>
+    <figcaption><b>Seymour Papert</b>, matematico del MIT, tra gli inventori del linguaggio Logo, nel libro <i>Mindstorms</i>, 1980</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI scrivono pezzi di codice partendo da una richiesta in italiano. Ma qualcuno deve capire se quel codice fa davvero ciò che serve: chi sa leggere un algoritmo resta quello che <b>programma il computer</b>, non quello che viene programmato.</p></div>
+  <aside class="notes">Traduzione nostra dall'introduzione di "Mindstorms: Children, Computers, and Powerful Ideas" (1980). Papert, con Wally Feurzeig e Cynthia Solomon, creò Logo nel 1967: i bambini programmavano una "tartaruga" che disegnava sul pavimento o sullo schermo. Scratch è un erede diretto di quelle idee (Resnick era allievo di Papert). Domanda per la classe: "quando usate un'app, chi programma chi?". Due minuti di discussione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'ambiente di lavoro</p><h2>Cinque zone da conoscere</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="Schema dell'editor di Scratch con le cinque zone numerate" font-family="DM Sans, sans-serif">
+      <rect x="2" y="2" width="996" height="596" rx="18" fill="#fff" stroke="#c9ced9" stroke-width="3"/>
+      <path d="M2,20 Q2,2 20,2 H980 Q998,2 998,20 V50 H2 Z" fill="#855CD6"/>
+      <text x="26" y="35" fill="#fff" font-size="22" font-weight="700">Scratch</text>
+      <text x="140" y="35" fill="#fff" font-size="20">File</text><text x="200" y="35" fill="#fff" font-size="20">Modifica</text><text x="300" y="35" fill="#fff" font-size="20">Tutorial</text>
+      <rect x="70" y="56" width="90" height="34" rx="8" fill="#fff" stroke="#855CD6" stroke-width="2"/><text x="115" y="79" font-size="17" text-anchor="middle" fill="#855CD6" font-weight="700">Codice</text>
+      <text x="200" y="79" font-size="17" text-anchor="middle" fill="#596179">Costumi</text><text x="280" y="79" font-size="17" text-anchor="middle" fill="#596179">Suoni</text>
+      <line x1="2" y1="92" x2="640" y2="92" stroke="#dcdfe8" stroke-width="2"/>
+      <g><circle cx="34" cy="124" r="13" fill="#4C97FF"/><circle cx="34" cy="168" r="13" fill="#9966FF"/><circle cx="34" cy="212" r="13" fill="#CF63CF"/><circle cx="34" cy="256" r="13" fill="#FFBF00"/><circle cx="34" cy="300" r="13" fill="#FFAB19"/><circle cx="34" cy="344" r="13" fill="#5CB1D6"/><circle cx="34" cy="388" r="13" fill="#59C059"/><circle cx="34" cy="432" r="13" fill="#FF8C1A"/><circle cx="34" cy="476" r="13" fill="#FF6680"/></g>
+      <line x1="68" y1="92" x2="68" y2="598" stroke="#dcdfe8" stroke-width="2"/>
+      <g><rect x="86" y="112" width="150" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="156" width="190" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="200" width="130" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="260" width="170" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="304" width="120" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="364" width="180" height="34" rx="6" fill="#4C97FF"/><rect x="86" y="408" width="140" height="34" rx="6" fill="#4C97FF"/></g>
+      <line x1="300" y1="92" x2="300" y2="598" stroke="#dcdfe8" stroke-width="2"/>
+      <rect x="301" y="93" width="338" height="504" fill="#f9f9fb"/>
+      <g><path d="M340,170 C352,150 380,150 392,168 H520 V200 H340 Z" fill="#FFBF00"/><rect x="340" y="200" width="200" height="34" rx="4" fill="#9966FF"/><rect x="340" y="234" width="150" height="34" rx="4" fill="#4C97FF"/><rect x="340" y="268" width="230" height="34" rx="4" fill="#CF63CF"/></g>
+      <line x1="640" y1="50" x2="640" y2="598" stroke="#dcdfe8" stroke-width="2"/>
+      <path d="M664,60 v26" stroke="#45993d" stroke-width="3"/><path d="M665,60 q6,-3 11,0 t11,0 v12 q-6,-3 -11,0 t-11,0 z" fill="#4cbf56"/>
+      <polygon points="706,60 716,60 723,67 723,77 716,84 706,84 699,77 699,67" fill="#ec5959"/>
+      <rect x="652" y="94" width="334" height="250" rx="8" fill="#e8f1ff" stroke="#c9ced9" stroke-width="2"/>
+      <g transform="translate(790 180)"><ellipse cx="30" cy="62" rx="40" ry="34" fill="#FFAB19"/><circle cx="30" cy="20" r="30" fill="#FFAB19"/><path d="M8,0 L4,-24 L22,-6 Z M52,0 L56,-24 L38,-6 Z" fill="#FFAB19"/><circle cx="20" cy="16" r="5" fill="#172033"/><circle cx="40" cy="16" r="5" fill="#172033"/></g>
+      <rect x="652" y="356" width="334" height="232" rx="8" fill="#fff" stroke="#c9ced9" stroke-width="2"/>
+      <rect x="670" y="400" width="84" height="84" rx="10" fill="#fbe7dc" stroke="#d0541f" stroke-width="3"/><rect x="770" y="400" width="84" height="84" rx="10" fill="#eef1fa"/>
+      <circle cx="944" cy="540" r="26" fill="#855CD6"/><text x="944" y="550" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">+</text>
+      <g font-size="30" font-weight="800" text-anchor="middle" fill="#fff">
+        <circle cx="440" cy="26" r="22" fill="#d0541f"/><text x="440" y="37">1</text>
+        <circle cx="200" cy="520" r="22" fill="#d0541f"/><text x="200" y="531">2</text>
+        <circle cx="470" cy="420" r="22" fill="#d0541f"/><text x="470" y="431">3</text>
+        <circle cx="940" cy="130" r="22" fill="#d0541f"/><text x="940" y="141">4</text>
+        <circle cx="900" cy="440" r="22" fill="#d0541f"/><text x="900" y="451">5</text>
+      </g>
+    </svg>
+    <ol class="steps small">
+      <li><b>Menu</b>: File per salvare e caricare</li>
+      <li><b>Palette</b>: categorie e blocchi</li>
+      <li><b>Area degli script</b>: qui costruisci il programma</li>
+      <li><b>Stage</b>: dove succede tutto, con bandiera verde e stop</li>
+      <li><b>Sprite e sfondi</b>: i personaggi del progetto</li>
+    </ol>
+  </div>
+  <aside class="notes">Mostrare l'editor vero sulla LIM (scratch.mit.edu, pulsante Crea) e far indicare agli studenti le cinque zone. Sopra la palette ci sono le schede Codice, Costumi e Suoni. Il pulsante con il gatto e il segno + in basso a destra serve a scegliere un nuovo sprite; quello accanto allo stage sceglie gli sfondi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni categoria di blocchi al suo lavoro</h2></div>
+  <dl class="puzzle-abbina" data-id="categorie">
+    <dt>Movimento (blu)</dt><dd>Spostano e ruotano lo sprite sullo stage</dd>
+    <dt>Aspetto (viola)</dt><dd>Fumetti, costumi, dimensione ed effetti</dd>
+    <dt>Situazioni (giallo)</dt><dd>Fanno partire uno script: bandiera verde, tasti, clic</dd>
+    <dt>Controllo (arancione)</dt><dd>Attese e ripetizioni</dd>
+    <dt>Sensori (azzurro)</dt><dd>Sentono tocchi, mouse, tasti premuti</dd>
+    <dt>Operatori (verde)</dt><dd>Fanno calcoli e confronti</dd>
+  </dl>
+  <aside class="notes">Le categorie complete sono nove: Movimento, Aspetto, Suono, Situazioni, Controllo, Sensori, Operatori, Variabili, I miei blocchi (più le estensioni). Trucco da insegnare: il colore di un blocco ti dice in quale categoria cercarlo. Si può fare a coppie, 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli elementi di un programma</p><h2>Sei parole da sapere (tocca le carte)</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Sprite</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Un personaggio o un oggetto</b> che si muove ed esegue script. Il gatto è lo sprite di partenza.</p></div></div>
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Stage</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Il palcoscenico</b> dove si muovono gli sprite. Può cambiare sfondo e avere i suoi script.</p></div></div>
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Blocco</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Un'istruzione.</b> La sua forma dice dove si può incastrare.</p></div></div>
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Script</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Una pila di blocchi agganciati</b> che parte da un evento.</p></div></div>
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Costume</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Uno degli aspetti</b> di uno sprite. Cambiandoli si crea l'animazione.</p></div></div>
+    <div class="flip" style="--h:230px"><div class="fronte"><h3>Progetto</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Tutto insieme</b>: sprite, sfondi, suoni e script, salvati in un file <code>.sb3</code>.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare ogni carta far rispondere uno studente diverso. Collegamento: uno script è un algoritmo scritto con i blocchi; il progetto è il "file" che si consegna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo programma</p><h2>Un evento, poi le istruzioni in fila</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; dire Ciao, sono Scratch! per 2 secondi; fai 100 passi; produci suono Miao fino alla fine" viewBox="0 0 610 296" width="732" height="355" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L597.9243774414062,106 Q605.9243774414062,106 605.9243774414062,114 L605.9243774414062,158 Q605.9243774414062,166 597.9243774414062,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">dire</text><rect x="78.88836669921875" y="114" width="281.93141174316406" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="219.85407257080078" y="136" fill="#575E75" font-weight="500" text-anchor="middle">Ciao, sono Scratch!</text><text dominant-baseline="central" x="370.8197784423828" y="136" fill="#fff">per</text><rect x="426.6279602050781" y="114" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="450.6279602050781" y="136" fill="#575E75" font-weight="500" text-anchor="middle">2</text><text dominant-baseline="central" x="484.6279602050781" y="136" fill="#fff">secondi</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L221.6486358642578,166 Q229.6486358642578,166 229.6486358642578,174 L229.6486358642578,218 Q229.6486358642578,226 221.6486358642578,226 L54,226 L46,234 L26,234 L18,226 L10,226 Q2,226 2,218 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="196" fill="#fff">fai</text><rect x="59.01214599609375" y="174" width="75.82420349121094" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="96.92424774169922" y="196" fill="#575E75" font-weight="500" text-anchor="middle">100</text><text dominant-baseline="central" x="144.8363494873047" y="196" fill="#fff">passi</text><path d="M2,234 Q2,226 10,226 L18,226 L26,234 L46,234 L54,226 L513.7738189697266,226 Q521.7738189697266,226 521.7738189697266,234 L521.7738189697266,278 Q521.7738189697266,286 513.7738189697266,286 L54,286 L46,294 L26,294 L18,286 L10,286 Q2,286 2,278 Z" fill="#CF63CF" stroke="#BD42BD" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="256" fill="#fff">produci suono</text><rect x="220.17691040039062" y="234" width="116.79226684570312" height="44" rx="22" fill="#BD42BD" stroke="#BD42BD" stroke-width="1.5"/><text dominant-baseline="central" x="236.17691040039062" y="256" fill="#fff">Miao</text><path d="M306.96917724609375,252 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="346.96917724609375" y="256" fill="#fff">fino alla fine</text></svg>
+      <div class="callout small">Per tradizione il primo programma in quasi ogni linguaggio scrive <b>hello, world</b>: l'ha reso famoso il libro sul linguaggio C di Kernighan e Ritchie (1978).</div>
+    </div>
+    <ul class="points">
+      <li>Il <b>blocco a cappello</b> (giallo) dice <i>quando</i> partire</li>
+      <li>Gli altri blocchi si eseguono <b>uno dopo l'altro</b>, dall'alto in basso: è la <mark>sequenza</mark></li>
+      <li>La bandiera verde avvia, il segnale rosso di stop ferma tutto</li>
+      <li>Clicca su uno script per provarlo anche senza bandiera</li>
+    </ul>
+  </div>
+  <aside class="notes">Il libro è "The C Programming Language" di Brian Kernighan e Dennis Ritchie (1978): l'esempio compariva già in un tutorial di Kernighan del 1972, ma è il libro ad averlo reso famoso. Nel primo capitolo gli autori scrivono che l'unico modo di imparare un linguaggio è scrivere programmi in quel linguaggio, e propone come primo programma la stampa di "hello, world". Far leggere lo script ad alta voce come una ricetta. Domanda: "cosa succede se tolgo il blocco giallo?" (lo script non parte da solo con la bandiera).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il gatto si presenta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Vai su <b>scratch.mit.edu</b> e clicca <b>Crea</b>. Non serve un account.</li>
+      <li>Da <b>Situazioni</b> trascina <i>quando si clicca su bandiera verde</i>.</li>
+      <li>Aggancia sotto: <i>dire … per 2 secondi</i> (Aspetto), <i>fai 10 passi</i> (Movimento, cambia 10 in 100), <i>produci suono Miao fino alla fine</i> (Suono).</li>
+      <li>Scrivi nel fumetto una frase tua e clicca la bandiera verde.</li>
+      <li>File, <b>Salva sul tuo computer</b>: <b>primo-programma.sb3</b></li>
+    </ol>
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; dire Sono il gatto più veloce! per 2 secondi; fai 100 passi; produci suono Miao fino alla fine" viewBox="0 0 671 296" width="604" height="266" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L658.3360748291016,106 Q666.3360748291016,106 666.3360748291016,114 L666.3360748291016,158 Q666.3360748291016,166 658.3360748291016,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">dire</text><rect x="78.88836669921875" y="114" width="342.3431091308594" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="250.05992126464844" y="136" fill="#575E75" font-weight="500" text-anchor="middle">Sono il gatto più veloce!</text><text dominant-baseline="central" x="431.2314758300781" y="136" fill="#fff">per</text><rect x="487.03965759277344" y="114" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="511.03965759277344" y="136" fill="#575E75" font-weight="500" text-anchor="middle">2</text><text dominant-baseline="central" x="545.0396575927734" y="136" fill="#fff">secondi</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L221.6486358642578,166 Q229.6486358642578,166 229.6486358642578,174 L229.6486358642578,218 Q229.6486358642578,226 221.6486358642578,226 L54,226 L46,234 L26,234 L18,226 L10,226 Q2,226 2,218 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="196" fill="#fff">fai</text><rect x="59.01214599609375" y="174" width="75.82420349121094" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="96.92424774169922" y="196" fill="#575E75" font-weight="500" text-anchor="middle">100</text><text dominant-baseline="central" x="144.8363494873047" y="196" fill="#fff">passi</text><path d="M2,234 Q2,226 10,226 L18,226 L26,234 L46,234 L54,226 L513.7738189697266,226 Q521.7738189697266,226 521.7738189697266,234 L521.7738189697266,278 Q521.7738189697266,286 513.7738189697266,286 L54,286 L46,294 L26,294 L18,286 L10,286 Q2,286 2,278 Z" fill="#CF63CF" stroke="#BD42BD" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="256" fill="#fff">produci suono</text><rect x="220.17691040039062" y="234" width="116.79226684570312" height="44" rx="22" fill="#BD42BD" stroke="#BD42BD" stroke-width="1.5"/><text dominant-baseline="central" x="236.17691040039062" y="256" fill="#fff">Miao</text><path d="M306.96917724609375,252 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="346.96917724609375" y="256" fill="#fff">fino alla fine</text></svg>
+    <div class="check"><b>Controllo:</b> il gatto parla per 2 secondi, poi si sposta verso destra e miagola. Ora clicca di nuovo la bandiera e osserva bene dove va: ne parliamo tra un attimo.</div>
+    </div>
+  </div>
+  <aside class="notes">Lo script corretto è quello della slide precedente. Errori tipici: blocchi non agganciati (sono staccati di pochi pixel e non partono), blocco giallo dimenticato, "fai 10 passi" lasciato a 10 (movimento quasi invisibile). Se il browser chiede dove salvare, scegliere la cartella personale. Con un account scolastico si può anche salvare online, ma non è necessario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Clicchi la bandiera verde una seconda volta. Che cosa fa il gatto?</h2></div>
+  <div class="poll" data-id="secondo-clic" data-tipo="quiz" data-risposta="C">
+    <ol><li>Torna al centro e rifà tutto uguale</li><li>Niente: il programma è già finito</li><li>Saluta e fa altri 100 passi da dove si trova</li><li>Fa 200 passi tutti insieme</li></ol>
+    <p class="why">Scratch non rimette a posto lo sprite: ogni volta lo script parte dallo stato in cui lo hai lasciato. Per ripartire sempre uguale serve un blocco iniziale come <i>vai a x: 0 y: 0</i>.</p>
+  </div>
+  <aside class="notes">Il misconcetto è la A: molti pensano che "rieseguire" voglia dire "ripartire da capo". Il gatto avanza ogni volta di 100 passi finché arriva al bordo, dove Scratch lo tiene comunque un po' visibile. Lezione da ricordare: ogni programma deve preparare la sua situazione iniziale (inizializzazione). La useremo con le variabili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo stage</p><h2>Lo stage è un piano cartesiano</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 760 580" width="760" height="580" role="img" aria-label="Stage di Scratch con gli assi x da meno 240 a 240 e y da meno 180 a 180" font-family="DM Sans, sans-serif" font-size="26">
+      <rect x="20" y="20" width="720" height="540" rx="12" fill="#e8f1ff" stroke="#172033" stroke-width="3"/>
+      <line x1="20" y1="290" x2="740" y2="290" stroke="#596179" stroke-width="3"/>
+      <line x1="380" y1="20" x2="380" y2="560" stroke="#596179" stroke-width="3"/>
+      <circle cx="380" cy="290" r="9" fill="#172033"/>
+      <text x="392" y="322" fill="#172033" font-weight="700">(0, 0)</text>
+      <text x="30" y="278" fill="#596179">x = −240</text><text x="730" y="278" fill="#596179" text-anchor="end">x = 240</text>
+      <text x="392" y="52" fill="#596179">y = 180</text><text x="392" y="548" fill="#596179">y = −180</text>
+      <circle cx="530" cy="365" r="14" fill="#d0541f"/>
+      <line x1="530" y1="290" x2="530" y2="365" stroke="#d0541f" stroke-width="3" stroke-dasharray="8 6"/>
+      <line x1="380" y1="365" x2="530" y2="365" stroke="#d0541f" stroke-width="3" stroke-dasharray="8 6"/>
+      <text x="552" y="374" fill="#d0541f" font-weight="700">gatto (100, −50)</text>
+    </svg>
+    <ul class="points">
+      <li><b>x</b> va da −240 (sinistra) a 240 (destra)</li>
+      <li><b>y</b> va da −180 (giù) a 180 (su)</li>
+      <li>Il centro è il punto <code>(0, 0)</code></li>
+      <li>Lo stage misura 480 × 360 punti</li>
+      <li><i>vai a x: y:</i> salta in un punto, <i>cambia x di</i> sposta di poco</li>
+    </ul>
+  </div>
+  <aside class="notes">Collegamento con la matematica delle medie: è il piano cartesiano. Per vedere le coordinate dello sprite basta guardare il riquadro sotto lo stage (x e y), oppure passare il mouse sullo stage. Far notare che y cresce verso l'alto, al contrario di molti programmi di grafica dove cresce verso il basso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il gatto è in (100, −50). Esegue <i>cambia y di 80</i> e poi <i>cambia x di −120</i>. Dove arriva?</h2></div>
+  <div class="poll" data-id="coordinate" data-tipo="quiz" data-risposta="D">
+    <ol><li>x: 180, y: −170</li><li>x: 220, y: 30</li><li>x: −20, y: −130</li><li>x: −20, y: 30</li></ol>
+    <p class="why">y = −50 + 80 = 30 (sale) e x = 100 − 120 = −20 (va a sinistra, oltre il centro). La A scambia x e y, la B sbaglia il segno di x, la C quello di y.</p>
+  </div>
+  <aside class="notes">Far disegnare il percorso su un foglio a quadretti o sulla LIM. Chi sceglie la A ha applicato 80 alla x: ricordare che il nome del blocco dice quale coordinata cambia. Si può verificare subito in Scratch scrivendo i tre blocchi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Animare lo script</p><h2>Animare = cambiare costume, in fretta</h2></div>
+  <div class="cols-2">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; vai a x: -200 y: 0; ripeti 20 volte; fai 10 passi; passa al costume seguente; attendi 0.1 secondi" viewBox="0 0 428 452" width="492" height="520" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L311.1240234375,106 Q319.1240234375,106 319.1240234375,114 L319.1240234375,158 Q319.1240234375,166 311.1240234375,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">vai a x:</text><rect x="115.91612243652344" y="114" width="97.99580383300781" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="164.91402435302734" y="136" fill="#575E75" font-weight="500" text-anchor="middle">-200</text><text dominant-baseline="central" x="223.91192626953125" y="136" fill="#fff">y:</text><rect x="257.1240234375" y="114" width="48" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="281.1240234375" y="136" fill="#575E75" font-weight="500" text-anchor="middle">0</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L244.21514892578125,166 Q252.21514892578125,166 252.21514892578125,174 L252.21514892578125,218 Q252.21514892578125,226 244.21514892578125,226 L80,226 L72,234 L52,234 L44,226 L36,226 Q28,226 28,234 L28,398 Q28,406 36,406 L44,406 L52,414 L72,414 L80,406 L244.21514892578125,406 Q252.21514892578125,406 252.21514892578125,414 L252.21514892578125,434 Q252.21514892578125,442 244.21514892578125,442 L54,442 L46,450 L26,450 L18,442 L10,442 Q2,442 2,434 Z" fill="#FFAB19" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="196" fill="#fff">ripeti</text><rect x="98.10127258300781" y="174" width="63.21965026855469" height="44" rx="22" fill="#fff" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="129.71109771728516" y="196" fill="#575E75" font-weight="500" text-anchor="middle">20</text><text dominant-baseline="central" x="171.3209228515625" y="196" fill="#fff">volte</text><path d="M28,234 Q28,226 36,226 L44,226 L52,234 L72,234 L80,226 L228.32855224609375,226 Q236.32855224609375,226 236.32855224609375,234 L236.32855224609375,278 Q236.32855224609375,286 228.32855224609375,286 L80,286 L72,294 L52,294 L44,286 L36,286 Q28,286 28,278 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="256" fill="#fff">fai</text><rect x="85.01214599609375" y="234" width="56.504119873046875" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="113.26420593261719" y="256" fill="#575E75" font-weight="500" text-anchor="middle">10</text><text dominant-baseline="central" x="151.51626586914062" y="256" fill="#fff">passi</text><path d="M28,294 Q28,286 36,286 L44,286 L52,294 L72,294 L80,286 L415.88671875,286 Q423.88671875,286 423.88671875,294 L423.88671875,338 Q423.88671875,346 415.88671875,346 L80,346 L72,354 L52,354 L44,346 L36,346 Q28,346 28,338 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="316" fill="#fff">passa al costume seguente</text><path d="M28,354 Q28,346 36,346 L44,346 L52,354 L72,354 L80,346 L333.98683166503906,346 Q341.98683166503906,346 341.98683166503906,354 L341.98683166503906,398 Q341.98683166503906,406 333.98683166503906,406 L80,406 L72,414 L52,414 L44,406 L36,406 Q28,406 28,398 Z" fill="#FFAB19" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="376" fill="#fff">attendi</text><rect x="150.01780700683594" y="354" width="60.672607421875" height="44" rx="22" fill="#fff" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="180.35411071777344" y="376" fill="#575E75" font-weight="500" text-anchor="middle">0.1</text><text dominant-baseline="central" x="220.69041442871094" y="376" fill="#fff">secondi</text></svg>
+    <ul class="points">
+      <li>Il gatto ha <b>2 costumi</b>: alternandoli sembra camminare</li>
+      <li><b>ripeti</b> esegue più volte i blocchi che contiene</li>
+      <li>Senza <b>attendi</b> il computer è troppo veloce: vedi solo un lampo</li>
+      <li>Come nei cartoni animati: tanti disegni fermi, uno dopo l'altro</li>
+    </ul>
+  </div>
+  <aside class="notes">Nel cinema si usano 24 fotogrammi al secondo; qui ne vediamo circa 10 (un costume ogni 0,1 secondi). In Scratch i decimali si scrivono con il punto: 0.1. Far notare la forma a C di "ripeti": "abbraccia" i blocchi da ripetere. Calcolo: 20 ripetizioni × 10 passi = 200 passi, quindi il gatto arriva da x = −200 a x = 0.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il gatto cammina (davvero)</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>primo-programma.sb3</b> con File, Carica dal tuo computer.</li>
+      <li>Subito sotto la bandiera verde metti <i>vai a x: −200 y: 0</i>.</li>
+      <li>Da <b>Controllo</b> prendi <i>ripeti 10 volte</i> (scrivi 20) e mettici dentro: <i>fai 10 passi</i>, <i>passa al costume seguente</i>, <i>attendi 0.1 secondi</i>.</li>
+      <li>Scegli uno sfondo con il pulsante in basso a destra.</li>
+      <li>Salva come <b>camminata.sb3</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni volta che premi la bandiera il gatto riparte da sinistra, muove le zampe e si ferma al centro, in x = 0, dopo circa 2 secondi (20 × 0,1 s).</div>
+  </div>
+  <aside class="notes">Il blocco "fai 100 passi" del primo programma può restare dopo il ciclo oppure essere tolto: in quel caso il gatto si ferma a x = 100. Sfida per chi finisce prima: far tornare indietro il gatto con un secondo ciclo e "fai −10 passi"; si accorgeranno che cammina all'indietro (soluzione: "punta in direzione −90" e stile di rotazione sinistra-destra).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scratch oggi</p><h2>Le estensioni: Scratch esce dallo schermo</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Penna</h3><p class="muted">Lo sprite disegna mentre si muove, come la tartaruga di Logo.</p></div>
+    <div class="card"><h3>Musica</h3><p class="muted">Strumenti, note e ritmi da programmare.</p></div>
+    <div class="card"><h3>Sintesi vocale</h3><p class="muted">Lo sprite legge ad alta voce un testo.</p></div>
+    <div class="card"><h3>Rilevamento video</h3><p class="muted">La webcam diventa un sensore di movimento.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p><b>Rilevamento video non sa chi sei.</b> Confronta ogni immagine della webcam con la precedente e misura quanto si sono mossi i pixel. Per <i>riconoscere</i> qualcosa serve un modello addestrato con il machine learning: lo costruiremo noi in questa UDA, con Machine Learning for Kids.</p></div>
+  <aside class="notes">Le estensioni si aggiungono con il pulsante in basso a sinistra dell'editor. Sintesi vocale e Traduci funzionano solo online perché usano servizi in rete. Distinzione importante: misurare il movimento (differenza tra immagini) non è riconoscere volti o oggetti. Ci sono anche estensioni per micro:bit e LEGO.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Scenetta a due voci</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo progetto: aggiungi un secondo sprite e uno sfondo.</li>
+      <li>Sprite 1: bandiera verde, poi <i>dire Ciao! Come ti chiami? per 2 secondi</i>.</li>
+      <li>Sprite 2: bandiera verde, <i>attendi 2 secondi</i>, poi la sua risposta per 2 secondi.</li>
+      <li>Arriva ad almeno 4 battute alternate. Aggiungi a uno sprite <i>quando si clicca questo sprite</i> con un salto.</li>
+      <li>Salva come <b>scenetta.sb3</b>.</li>
+    </ol>
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="quando si clicca questo sprite; cambia y di 50; attendi 0.2 secondi; cambia y di -50" viewBox="0 0 441 296" width="419" height="281" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L428.43902587890625,46 Q436.43902587890625,46 436.43902587890625,54 L436.43902587890625,98 Q436.43902587890625,106 428.43902587890625,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca questo sprite</text><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L252.3607940673828,106 Q260.3607940673828,106 260.3607940673828,114 L260.3607940673828,158 Q260.3607940673828,166 252.3607940673828,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">cambia y di</text><rect x="181.8766326904297" y="114" width="64.48416137695312" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="214.11871337890625" y="136" fill="#575E75" font-weight="500" text-anchor="middle">50</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L315.6623992919922,166 Q323.6623992919922,166 323.6623992919922,174 L323.6623992919922,218 Q323.6623992919922,226 315.6623992919922,226 L54,226 L46,234 L26,234 L18,226 L10,226 Q2,226 2,218 Z" fill="#FFAB19" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="196" fill="#fff">attendi</text><rect x="124.01780700683594" y="174" width="68.34817504882812" height="44" rx="22" fill="#fff" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="158.19189453125" y="196" fill="#575E75" font-weight="500" text-anchor="middle">0.2</text><text dominant-baseline="central" x="202.36598205566406" y="196" fill="#fff">secondi</text><path d="M2,234 Q2,226 10,226 L18,226 L26,234 L46,234 L54,226 L267.8168640136719,226 Q275.8168640136719,226 275.8168640136719,234 L275.8168640136719,278 Q275.8168640136719,286 267.8168640136719,286 L54,286 L46,294 L26,294 L18,286 L10,286 Q2,286 2,278 Z" fill="#4C97FF" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="256" fill="#fff">cambia y di</text><rect x="181.8766326904297" y="234" width="79.94023132324219" height="44" rx="22" fill="#fff" stroke="#3373CC" stroke-width="1.5"/><text dominant-baseline="central" x="221.84674835205078" y="256" fill="#575E75" font-weight="500" text-anchor="middle">-50</text></svg>
+      <div class="check"><b>Controllo:</b> le battute non si sovrappongono, perché ogni sprite aspetta quanto dura la frase dell'altro. Cliccando lo sprite, salta.</div>
+    </div>
+  </div>
+  <aside class="notes">Il problema della sincronizzazione con "attendi" è voluto: se uno studente cambia la durata di una battuta, tutta la scenetta si sfasa. È l'occasione per anticipare i messaggi ("invia a tutti" e "quando ricevo"), che vedremo con i videogiochi. Sfida: far camminare uno dei due sprite verso l'altro prima di parlare.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-scratch">
+    <li>Nasce Logo, con la tartaruga che disegna</li>
+    <li>Papert pubblica il libro Mindstorms</li>
+    <li>LEGO lancia i robot programmabili Mindstorms, chiamati come il libro</li>
+    <li>Il MIT mette online Scratch</li>
+    <li>Google presenta App Inventor per creare app Android</li>
+    <li>Esce Scratch 3, che funziona anche su tablet</li>
+  </ol>
+  <aside class="notes">Date: Logo 1967 (Papert, Feurzeig, Solomon), Mindstorms 1980, LEGO Mindstorms 1998, Scratch 2007, App Inventor 2010 (dal 2012 è gestito dal MIT), Scratch 3.0 gennaio 2019. Squadre da 3: vince chi ordina correttamente al primo "Controlla". App Inventor è la seconda parte di questa UDA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="2940" data-aiuto="la terza cifra è il numero di lati di un quadrato; la quarta viene da 240">
+    <ul class="points">
+      <li>1ª cifra: quanti costumi ha il gatto in un progetto nuovo</li>
+      <li>2ª cifra: x vale 0, poi <i>ripeti 3 volte: cambia x di 3</i>. Quanto vale x?</li>
+      <li>3ª cifra: i lati della figura disegnata da <i>ripeti 4 volte: fai 100 passi, ruota di 90 gradi</i></li>
+      <li>4ª cifra: l'ultima cifra della x del bordo destro dello stage</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2 costumi, x = 3 + 3 + 3 = 9, un quadrato ha 4 lati, il bordo destro è x = 240.</div>
+  </div>
+  <aside class="notes">Codice: 2940. A squadre: la prima squadra che apre il lucchetto vince. La seconda e la terza cifra si possono verificare subito in Scratch (per il quadrato serve l'estensione Penna e il blocco "penna giù").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>I personaggi che si muovono sullo stage si chiamano <span class="blank" data-risposta="sprite"></span>.</p>
+    <p>Uno script parte sempre da un blocco <span class="blank" data-risposta="evento|situazioni|cappello" style="--w:9ch"></span>, come la bandiera verde.</p>
+    <p>Il centro dello stage ha coordinate x = <span class="blank" data-risposta="0|zero" style="--w:3ch"></span> e y = <span class="blank" data-risposta="0|zero" style="--w:3ch"></span>.</p>
+    <p>Per animare uno sprite si cambia il suo <span class="blank" data-risposta="costume"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: sprite; evento (accettati anche situazioni e cappello); 0 e 0; costume.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Scratch: programmi fatti di blocchi incastrati</li>
+      <li>Sprite, stage, script, costumi, suoni</li>
+      <li>Ogni script parte da un evento</li>
+    </ul>
+    <ul class="points">
+      <li>I blocchi si eseguono in sequenza</li>
+      <li>Coordinate: x da −240 a 240, y da −180 a 180</li>
+      <li>Animazione = costumi + ripeti + attendi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (biglietto animato in Scratch). Prossima lezione: videogiochi con tastiera, mouse e sensori.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

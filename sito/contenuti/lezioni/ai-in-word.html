@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'AI che scrive con te · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>L'AI che scrive<br>con te</h1>
+  <p class="lead">Bozze, riassunti, correzioni: come usare un assistente di scrittura senza smettere di pensare con la tua testa.</p>
+  <aside class="notes">Lezione del libro "Applicare l'intelligenza artificiale in Word". Obiettivi: capire come funziona un assistente di scrittura, conoscerne usi e limiti, scrivere una richiesta efficace, riassumere e rielaborare un testo, scrivere una relazione dichiarando l'eventuale aiuto dell'AI. Durata: 3 ore. Il libro cita un componente aggiuntivo per Word (Autopilot): non serve averlo. Gli studenti lavorano con Writer; l'AI si usa solo in demo dal PC del docente. Quasi tutti i chatbot richiedono almeno 13 anni e, per i minorenni, il consenso dei genitori; in Italia la legge sull'AI (L. 132/2025) chiede il consenso dei genitori sotto i 14 anni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai usato un'AI per un compito di scuola?</h2></div>
+  <div class="poll" data-id="ai-compiti">
+    <ol><li>Mai</li><li>Sì, per capire un argomento</li><li>Sì, per correggere un mio testo</li><li>Sì, per farmi scrivere una parte del compito</li></ol>
+  </div>
+  <aside class="notes">Usare il voto dal telefono, che è anonimo: le risposte sono più sincere. Nessun giudizio sui risultati: servono a capire da dove parte la classe. Riprendere i numeri alla fine della lezione: quali di questi usi sono un aiuto e quali un rischio?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona</p><h2>Un indovino di parole molto allenato</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un assistente di scrittura è un <b>modello linguistico</b>: ha letto enormi quantità di testi e ha imparato a prevedere <mark>quale parola viene dopo</mark>.</p>
+      <p>Parola dopo parola, costruisce frasi che <b>suonano</b> giuste. Ma suonare giusto non vuol dire <b>essere</b> giusto.</p>
+    </div>
+    <div class="card">
+      <p class="small">"Oggi in laboratorio abbiamo creato un …"</p>
+      <table class="data compact">
+        <tr><th>Parola</th><th>Probabilità</th></tr>
+        <tr><td>modulo</td><td class="mono">alta</td></tr>
+        <tr><td>documento</td><td class="mono">alta</td></tr>
+        <tr><td>file</td><td class="mono">media</td></tr>
+        <tr><td>dinosauro</td><td class="mono">bassissima</td></tr>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">È la stessa idea della tastiera del telefono che suggerisce la parola successiva, ma con modelli enormemente più grandi (ne avete parlato nella UDA 2). Il modello non consulta un'enciclopedia mentre scrive: genera il testo più probabile. Per questo può inventare con sicurezza nomi, date e fonti: si chiamano "allucinazioni". La tabella è un esempio, non dati reali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un'AI ti propone una citazione con autore, titolo del libro e numero di pagina. Che cosa puoi concludere?</h2></div>
+  <div class="poll" data-id="citazione-ai" data-tipo="quiz" data-risposta="D">
+    <ol><li>È vera: con la pagina precisa non può essere inventata</li><li>È vera se l'AI è di una grande azienda</li><li>È vera se è scritta in un italiano perfetto</li><li>Niente: va controllata su una fonte, potrebbe essere inventata</li></ol>
+    <p class="why">I dettagli precisi rendono una frase più credibile, non più vera. Un modello linguistico può generare titoli, autori e pagine plausibili che non esistono: la verifica tocca a te.</p>
+  </div>
+  <aside class="notes">La A è il tranello: il dettaglio sembra una garanzia. Sono documentati casi reali, anche di avvocati negli Stati Uniti che nel 2023 hanno presentato in tribunale sentenze inventate da un chatbot. Per controllare: cercare il libro in una biblioteca online o la citazione su fonti affidabili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa sa fare</p><h2>Quattro aiuti, quattro responsabilità</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Bozza</h3><p class="small">Propone una scaletta o un primo testo.</p><p class="small muted">Tu decidi cosa tenere.</p></div>
+    <div class="card soft"><h3>Riassunto</h3><p class="small">Accorcia un testo lungo.</p><p class="small muted">Tu controlli che non manchi il punto chiave.</p></div>
+    <div class="card soft"><h3>Riscrittura</h3><p class="small">Cambia tono: più semplice, più formale.</p><p class="small muted">Tu controlli che il senso resti lo stesso.</p></div>
+    <div class="card soft"><h3>Revisione</h3><p class="small">Segnala errori e ripetizioni.</p><p class="small muted">Tu accetti o rifiuti ogni modifica.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>In Word l'AI arriva come <b>componente aggiuntivo</b> (il libro cita Autopilot) o come assistente integrato, Microsoft Copilot; Google Documenti ha Gemini. Di solito serve un account e spesso un abbonamento.</p></div>
+  <aside class="notes">In Word i componenti aggiuntivi si cercano da Home › Componenti aggiuntivi (o Inserisci › Componenti aggiuntivi nelle versioni meno recenti). Non serve installarne nessuno per questa lezione: le stesse operazioni si fanno con un assistente qualsiasi, e il controllo finale si fa con gli strumenti di Writer. Sottolineare la seconda riga di ogni carta: è lì che si vede chi ha imparato qualcosa.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Le regole d'oro</p><h2>Usare l'AI a scuola, bene</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>L'autore sei tu</b>: l'AI aiuta, non consegna al posto tuo.</li>
+      <li><b>Verifica</b> ogni fatto, data e fonte.</li>
+      <li><b>Dichiara</b> se e come l'hai usata.</li>
+      <li><b>Proteggi i dati</b>: niente nomi, numeri, foto di persone.</li>
+      <li><b>Rispetta le regole</b> del docente e l'età minima del servizio.</li>
+    </ol>
+    <div class="card">
+      <p class="icon">🏋</p>
+      <h3>Perché tanta attenzione?</h3>
+      <p>Come in palestra: se il bilanciere lo solleva un altro, i tuoi muscoli non crescono. A scuola il "muscolo" è saper scrivere e ragionare.</p>
+    </div>
+  </div>
+  <aside class="notes">Far ripetere le cinque regole a voce. La regola 5: quasi tutti i servizi di chatbot richiedono almeno 13 anni e il consenso dei genitori per i minorenni; alcuni compiti si fanno senza AI perché l'obiettivo è allenare proprio quella capacità (come in palestra: se il bilanciere lo solleva un altro, i muscoli non crescono). Ciò che si incolla in un chatbot può essere conservato dal servizio: per questo niente dati personali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni rischio al suo esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="rischi-ai">
+    <dt>Allucinazione</dt><dd>Cita un libro con un titolo che non esiste</dd>
+    <dt>Pregiudizio (bias)</dt><dd>Descrive sempre l'ingegnere come un uomo</dd>
+    <dt>Dati non aggiornati</dt><dd>Non conosce il risultato della partita di ieri</dd>
+    <dt>Privacy</dt><dd>Hai incollato il numero di telefono di un amico</dd>
+    <dt>Plagio</dt><dd>Consegni come tuo un testo scritto dall'AI</dd>
+  </dl>
+  <aside class="notes">Per ogni rischio chiedere: come me ne accorgo e cosa faccio? Allucinazione: verifico. Pregiudizio: lo noto e chiedo una versione equilibrata; nasce dai testi con cui il modello è stato addestrato. Dati non aggiornati: il modello conosce i fatti fino a una certa data, se non cerca sul web. Privacy: non incollo dati di altri. Plagio: dichiaro e rielaboro.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prima il riassunto umano</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri la voce <b>Grace Hopper</b> su it.wikipedia.org e copia i primi tre paragrafi.</li>
+      <li>In Writer incollali come testo semplice: <b>Ctrl+Alt+Maiusc+V</b>. Scrivi sopra la fonte: indirizzo della pagina e data di oggi.</li>
+      <li><b>Strumenti › Conteggio parole</b>: annota quante parole ha il testo.</li>
+      <li>Sotto, scrivi tu un riassunto di <b>60 parole</b> circa: chi era, che cosa ha fatto, perché è importante.</li>
+      <li>Salva come <b>riassunto-hopper.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> seleziona solo il tuo riassunto: il conteggio parole indica tra 50 e 70 parole. Rileggilo: si capisce chi era Grace Hopper anche senza il testo originale?</div>
+  </div>
+  <aside class="notes">Il conteggio della selezione appare nella finestra Conteggio parole e nella barra di stato in basso. Riassunto di esempio: "Grace Hopper (1906-1992) è stata una matematica e informatica statunitense e ammiraglio della Marina. Ha lavorato al computer Harvard Mark I, ha creato uno dei primi compilatori e ha contribuito alla nascita del linguaggio COBOL. È importante perché ha reso la programmazione più vicina al linguaggio umano." Il file serve per la demo successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere la richiesta</p><h2>Una buona richiesta ha quattro parti</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="c">// compito</span>
+<span class="hl">Riassumi</span> il testo qui sotto
+<span class="c">// contesto e destinatari</span>
+per studenti di prima superiore
+<span class="c">// formato</span>
+in un elenco di 5 punti
+<span class="c">// vincoli</span>
+senza aggiungere fatti nuovi.</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Compito</h3><p class="small">Che cosa deve fare: riassumi, riscrivi, trova gli errori.</p></div>
+      <div class="card soft"><h3>Contesto, formato, vincoli</h3><p class="small">Per chi, in che forma, che cosa evitare.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Confrontare con una richiesta vaga: "fammi un riassunto". Il vincolo "senza aggiungere fatti nuovi" riduce il rischio di invenzioni ma non lo elimina. La richiesta in inglese si chiama prompt. Esercizio orale: trasformare "correggi" in una richiesta in quattro parti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Demo alla LIM</p><h2>Umano contro macchina: chi riassume meglio?</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Il docente incolla lo stesso testo in un assistente AI, con la richiesta in quattro parti.</li>
+      <li>La classe confronta il riassunto dell'AI con i propri.</li>
+      <li>Si vota il migliore e si cercano gli errori.</li>
+    </ol>
+    <div class="card">
+      <h3>Griglia di confronto</h3>
+      <ul class="points small">
+        <li>C'è il punto più importante?</li>
+        <li>Ci sono fatti che nel testo non c'erano?</li>
+        <li>È lungo quanto richiesto?</li>
+        <li>Si capisce senza l'originale?</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Demo solo dal PC del docente, con l'account del docente o della scuola: gli studenti non devono registrarsi. Se in classe non è disponibile un assistente AI, preparare a casa la risposta e mostrarla come immagine o testo. Spesso il riassunto dell'AI è scorrevole ma generico, o aggiunge dettagli non presenti nel testo: è proprio ciò che vogliamo far notare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il revisore umano</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="card small">"Grace Hopper (1906-1992) è stata un'informatica e ufficiale della Marina statunitense. Nel 1957 trovò una farfalla incastrata nel computer ENIAC e la incollò nel registro: da qui nasce la parola bug. In seguito inventò il linguaggio Python."</div>
+      <p class="small">Questo testo, generato da un'AI, contiene <b>4 errori</b>. Copialo in Writer, attiva <b>Modifica › Traccia modifiche › Registra</b> (Ctrl+Maiusc+C), correggi e spiega ogni correzione con <b>Inserisci › Commento</b>. Salva <b>revisione-ai.odt</b>.</p>
+    </div>
+    <div class="check"><b>Controllo:</b> le parole corrette compaiono colorate (le revisioni) e a margine ci sono 4 commenti, ognuno con la fonte che hai usato.</div>
+  </div>
+  <aside class="notes">Errori: 1) l'anno è il 1947, non il 1957; 2) era una falena (moth), non una farfalla; 3) il computer era l'Harvard Mark II, non l'ENIAC; 4) Hopper non inventò Python (Guido van Rossum, 1991): contribuì al COBOL e creò uno dei primi compilatori. Bonus: la parola "bug" per un guasto si usava già prima, anche Edison la usava nell'Ottocento; la nota sul registro, conservata allo Smithsonian, dice "First actual case of bug being found", cioè "il primo caso reale di bug trovato". In alcune versioni il menu si chiama Modifica › Revisioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La domanda che non ci ha più lasciato</h2></div>
+  <figure class="citazione">
+    <blockquote>Propongo di considerare la domanda: "Le macchine possono pensare?"</blockquote>
+    <figcaption><b>Alan Turing</b>, matematico inglese, in "Computing Machinery and Intelligence", 1950</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Turing propose un gioco: se in una conversazione scritta non distingui la macchina da una persona, la macchina "supera la prova". Oggi i chatbot scrivono testi che sembrano umani, ma <b>scrivere bene non vuol dire capire</b>, né sapere se ciò che si scrive è vero.</p></div>
+  <aside class="notes">Traduzione nostra della prima frase dell'articolo di Turing pubblicato sulla rivista Mind nel 1950. Il "gioco dell'imitazione" è oggi noto come test di Turing. Domanda per la classe: se un testo è indistinguibile da quello di una persona, chi ne è responsabile quando contiene un errore? (Chi lo pubblica o lo consegna.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Hai usato l'AI per trovare gli errori della tua relazione. Secondo le regole d'oro, che cosa fai?</h2></div>
+  <div class="poll" data-id="dichiarare-ai" data-tipo="quiz" data-risposta="A">
+    <ol><li>Scrivo in fondo quale strumento ho usato e per che cosa</li><li>Niente: il testo l'ho scritto io, conta solo quello</li><li>Metto il nome dell'AI come coautore sul frontespizio</li><li>Lo dico solo se il docente me lo chiede</li></ol>
+    <p class="why">Dichiarare è semplice e onesto: una riga come "Ho usato un assistente AI per controllare l'ortografia; ho accettato 6 correzioni su 9". L'AI non è un autore: non può prendersi la responsabilità del testo.</p>
+  </div>
+  <aside class="notes">La B è la risposta istintiva di molti: "ho scritto io". Ma chi legge ha il diritto di sapere come è nato il testo, come quando si cita una fonte. La C è sbagliata perché un autore risponde di ciò che scrive; anche molte riviste scientifiche vietano di indicare un'AI come autore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La relazione scolastica</p><h2>Metti in ordine le parti di una relazione</h2></div>
+  <ol class="puzzle-ordina" data-id="parti-relazione">
+    <li>Frontespizio: titolo, autore, classe, data</li>
+    <li>Obiettivo: che cosa volevamo fare</li>
+    <li>Strumenti: programmi e materiali usati</li>
+    <li>Svolgimento: che cosa abbiamo fatto, passo per passo</li>
+    <li>Risultati e conclusioni: che cosa abbiamo ottenuto e imparato</li>
+    <li>Fonti e uso dell'AI</li>
+  </ol>
+  <aside class="notes">Spesso si confondono obiettivo e conclusioni: l'obiettivo si scrive prima di sapere com'è andata. Le fonti vanno alla fine, insieme alla dichiarazione sull'uso dell'AI (anche "non ho usato strumenti di AI" è una dichiarazione valida). È lo stesso schema della relazione di laboratorio di scienze.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>La relazione dell'esperimento</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scrivi in Writer la relazione dell'esercizio <i>Il revisore umano</i>, con le sei parti come <b>Titolo 1</b>.</li>
+      <li>Usa <b>Strumenti › Sinonimi</b> (Ctrl+F7) per evitare almeno due ripetizioni.</li>
+      <li>Controlla l'ortografia con <b>F7</b>.</li>
+      <li>Nell'ultima parte scrivi le fonti e una riga sull'uso dell'AI (anche "nessuno").</li>
+      <li>Esporta in PDF: <b>relazione-revisione.pdf</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il Navigatore (F5) mostra sei titoli, la relazione sta in una o due pagine oltre al frontespizio e l'ultima parte dice da dove vengono le informazioni.</div>
+  </div>
+  <aside class="notes">Il docente può proiettare una scaletta proposta da un assistente AI per la stessa relazione e far discutere che cosa tenere: è un esempio di uso dichiarabile ("ho confrontato la mia scaletta con una proposta dall'AI mostrata in classe"). Valutare soprattutto lo svolgimento e le conclusioni: sono le parti in cui si vede il ragionamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un modello linguistico prevede la <span class="blank" data-risposta="parola|prossima parola|parola successiva"></span> che viene dopo.</p>
+    <p>Quando un'AI inventa con sicurezza un fatto falso si parla di <span class="blank" data-risposta="allucinazione|allucinazioni"></span>.</p>
+    <p>Per vedere le correzioni fatte in un testo si attiva Traccia <span class="blank" data-risposta="modifiche"></span>.</p>
+    <p>Se usi l'AI per un compito, lo devi <span class="blank" data-risposta="dichiarare|scrivere|dire"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: parola, allucinazione, modifiche, dichiarare (accettati anche dire o scrivere). Riprendere il sondaggio iniziale: chi ha risposto D, che cosa cambierebbe ora?</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>L'AI prevede parole: suona giusta, non è sempre giusta</li>
+      <li>Bozza, riassunto, riscrittura, revisione</li>
+      <li>Richiesta: compito, contesto, formato, vincoli</li>
+    </ul>
+    <ul class="points">
+      <li>Verifica fatti e fonti, sempre</li>
+      <li>Niente dati personali nei chatbot</li>
+      <li>L'autore sei tu: dichiara l'aiuto</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Il compito non richiede di usare un chatbot.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

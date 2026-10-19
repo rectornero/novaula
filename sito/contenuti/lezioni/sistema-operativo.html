@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il sistema operativo · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 1 · Il mondo dell'informatica</p>
+  <h1>Il sistema<br>operativo</h1>
+  <p class="lead">Il direttore d'orchestra nascosto in ogni PC, telefono e console: decide chi usa la CPU, dove finiscono i tuoi file e che cosa vedi sullo schermo.</p>
+  <aside class="notes">Obiettivi: distinguere software di base e applicativo, conoscere le funzioni e i componenti del sistema operativo (kernel e shell), riconoscere i sistemi più diffusi, usare con sicurezza file, estensioni, cartelle e Questo PC, provare un sistema Linux. Durata indicativa: 2–3 ore. Riprende la slide "Sistema operativo e applicazioni" della lezione "componenti-del-computer".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale sistema operativo usi di più nella tua giornata?</h2></div>
+  <div class="poll" data-id="so-preferito">
+    <ol><li>Android</li><li>iOS</li><li>Windows</li><li>macOS, ChromeOS o Linux</li><li>Non lo so!</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Se molti rispondono "non lo so", è il segnale giusto: il sistema operativo lavora così bene che non ci si accorge di lui. Far scoprire il proprio sistema: sul telefono Impostazioni, Info sul telefono. Chiedere: anche la console e la smart TV hanno un sistema operativo? Sì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il software</p><h2>Due famiglie di programmi</h2></div>
+  <p class="lead">L'<b>hardware</b> è la parte che puoi toccare. Il <b>software</b> sono i programmi: istruzioni che dicono all'hardware che cosa fare.</p>
+  <div class="cols-2">
+    <div class="card fill"><h3>Software di base</h3><p>Fa funzionare la macchina e permette agli altri programmi di girare.</p><p>Sistema operativo, driver delle periferiche, firmware (UEFI/BIOS).</p></div>
+    <div class="card soft"><h3>Software applicativo</h3><p>Serve all'utente per un compito preciso: scrivere, calcolare, giocare, navigare.</p><p>LibreOffice, il browser, Minecraft, WhatsApp, Scratch.</p></div>
+  </div>
+  <aside class="notes">Il firmware UEFI (un tempo BIOS) è il primo programma che parte all'accensione e avvia il sistema operativo. Il driver è il "traduttore" che permette al sistema operativo di usare una periferica specifica (stampante, scheda video). Chiedere: un'app di un telefono funzionerebbe senza sistema operativo? No: le app chiedono tutto al sistema (schermo, rete, file).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi è software di base?</h2></div>
+  <div class="poll" data-id="software-base" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il browser Google Chrome</li><li>Il driver della stampante</li><li>L'antivirus che hai installato</li><li>LibreOffice Calc</li></ol>
+    <p class="why">Il driver permette al sistema operativo di comunicare con la stampante: fa parte del software di base. Chrome, l'antivirus installato e Calc sono applicazioni: si installano e si disinstallano senza che il computer smetta di funzionare.</p>
+  </div>
+  <aside class="notes">Tranelli: il browser sembra indispensabile, e l'antivirus sembra "di sistema". Regola pratica: se lo togli e il computer continua ad avviarsi e a funzionare, è un'applicazione. Nota: Windows include già un antivirus, Microsoft Defender, che fa parte del sistema operativo; un antivirus aggiuntivo installato dall'utente resta un'applicazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il sistema operativo</p><h2>Sei lavori, tutti insieme, sempre</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Processi</h3><p class="muted">Decide quale programma usa la CPU e per quanto tempo.</p></div>
+    <div class="card"><h3>Memoria</h3><p class="muted">Assegna la RAM ai programmi e la libera quando li chiudi.</p></div>
+    <div class="card"><h3>File system</h3><p class="muted">Organizza file e cartelle sul disco e ricorda dove sono.</p></div>
+    <div class="card"><h3>Periferiche</h3><p class="muted">Con i driver parla con tastiera, stampante, schermo, rete.</p></div>
+    <div class="card"><h3>Interfaccia</h3><p class="muted">Finestre, icone e comandi con cui tu dai gli ordini.</p></div>
+    <div class="card"><h3>Sicurezza</h3><p class="muted">Gestisce utenti e password e protegge i file di ognuno.</p></div>
+  </div>
+  <aside class="notes">Metafora: il sistema operativo è il direttore d'orchestra (o il preside di una scuola): non suona nessuno strumento, ma decide chi suona, quando e con quali risorse. Far associare a ogni lavoro un'esperienza concreta: il PC lento con troppe schede aperte (memoria), la chiavetta riconosciuta appena inserita (periferiche e driver), il login con il proprio account a scuola (sicurezza).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I componenti</p><h2>Il sistema operativo è fatto a strati</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack" style="gap:14px">
+      <div class="card soft" style="padding:14px 36px"><h3>Tu, l'utente</h3></div>
+      <div class="card" style="padding:14px 36px;margin:0 30px"><h3>Applicazioni</h3><p class="muted small">Browser, Calc, giochi</p></div>
+      <div class="card fill" style="padding:14px 36px;margin:0 60px"><h3>Shell</h3><p class="small">L'interfaccia: grafica (finestre) o a riga di comando</p></div>
+      <div class="card night" style="padding:14px 36px;margin:0 90px"><h3>Kernel</h3><p class="small muted">Il nucleo: processi, memoria, file, driver</p></div>
+      <div class="card" style="padding:14px 36px;margin:0 120px;background:var(--soft)"><h3>Hardware</h3></div>
+    </div>
+    <div class="stack">
+      <div class="callout">Il <b>kernel</b> è il cuore: è l'unico che parla direttamente con l'hardware.</div>
+      <div class="callout">La <b>shell</b> è il guscio che ti permette di dare ordini al kernel: con il mouse o scrivendo comandi.</div>
+    </div>
+  </div>
+  <aside class="notes">Kernel in inglese significa nocciolo, shell significa guscio: la metafora della noce aiuta a ricordare. Le applicazioni non toccano mai l'hardware direttamente: chiedono al kernel con le "chiamate di sistema". Esempi di shell: l'interfaccia grafica di Windows (Esplora risorse), il Prompt dei comandi e PowerShell, il terminale di Linux e macOS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Doppio clic su un'icona: che cosa succede, in ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="doppio-clic">
+    <li>Il mouse invia il doppio clic al computer</li>
+    <li>La shell capisce su quale icona hai cliccato</li>
+    <li>Il sistema operativo trova il file del programma sul disco</li>
+    <li>Il programma viene copiato dal disco nella RAM</li>
+    <li>Il kernel crea un nuovo processo e gli dà la CPU</li>
+    <li>La finestra del programma compare sullo schermo</li>
+  </ol>
+  <aside class="notes">Ordine corretto: mouse, shell, ricerca del file, caricamento in RAM, processo, finestra. Molti mettono la CPU prima della RAM: ricordare che la CPU esegue solo istruzioni che si trovano in memoria. Per questo un programma grande si apre più lentamente, soprattutto da un disco HDD (collegamento con la lezione sui componenti).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Spia il sistema operativo al lavoro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Premi <b>Ctrl + Maiusc + Esc</b>: si apre Gestione attività. Se serve, clicca <b>Più dettagli</b> e vai su <b>Processi</b>.</li>
+      <li>Clicca sulla colonna <b>Memoria</b>: annota i 3 processi che ne usano di più.</li>
+      <li>Apri Blocco note e guarda: compare un nuovo processo. Chiudilo da Gestione attività con <b>Termina attività</b>.</li>
+      <li>Premi <b>Win + R</b>, scrivi <code>msinfo32</code> e premi Invio: annota <b>Nome SO</b> e <b>Versione</b>.</li>
+      <li>Scrivi tutto in Writer e salva come <b>processi.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> anche con 2 o 3 programmi aperti vedi decine di processi: molti sono servizi del sistema operativo che lavorano in background.</div>
+  </div>
+  <aside class="notes">Avvertire: chiudere solo processi aperti da noi (Blocco note); terminare processi di sistema può bloccare il PC. Di solito il browser compare tra i processi più "affamati" di memoria: ogni scheda aperta usa RAM. msinfo32 apre "Informazioni di sistema", che riporta anche il produttore, il modello, il processore e la memoria fisica installata: completa la carta d'identità del PC fatta nella prima lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Multitasking</p><h2>Una CPU, tanti programmi: a turno, velocissimi</h2></div>
+  <div class="cols-2 wide-left">
+    <p class="lead">Lo <b>scheduler</b> del sistema operativo dà a ogni processo un piccolo turno di CPU, di pochi millisecondi, poi passa al successivo. È così veloce che a noi sembra che tutto avvenga insieme.</p>
+    <div class="card soft"><h3>Come a ping-pong</h3><p>Un solo giocatore contro tanti avversari: risponde a uno alla volta, ma così in fretta che nessuno aspetta davvero.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I sistemi operativi stanno integrando assistenti AI: <b>Copilot</b> in Windows, <b>Gemini</b> su Android, <b>Apple Intelligence</b> su iPhone e Mac. Alcune funzioni girano sul dispositivo, grazie alla NPU; le richieste più pesanti vengono inviate a server nel cloud.</p></div>
+  <aside class="notes">I processori moderni hanno più core, quindi alcuni processi girano davvero in parallelo, ma i processi sono comunque molti più dei core e lo scheduler li alterna. Per l'AI: far riflettere sulla privacy, cosa resta sul telefono e cosa va in internet (collegamento con la NPU vista nella prima lezione). Gli assistenti AI richiedono account e hanno limiti di età: eventuali dimostrazioni le fa il docente alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I sistemi operativi più diffusi</p><h2>Abbina ogni sistema alla sua carta d'identità</h2></div>
+  <dl class="puzzle-abbina" data-id="sistemi">
+    <dt>Windows</dt><dd>Di Microsoft, il più usato sui PC di casa e di scuola</dd>
+    <dt>macOS</dt><dd>Di Apple, funziona sui computer Mac</dd>
+    <dt>Linux</dt><dd>Libero e gratuito, gira sui 500 supercomputer più potenti</dd>
+    <dt>Android</dt><dd>Di Google, basato sul kernel Linux, il più diffuso sugli smartphone</dd>
+    <dt>iOS</dt><dd>Di Apple, installato solo sugli iPhone</dd>
+    <dt>ChromeOS</dt><dd>Di Google, pensato per i Chromebook e le app nel browser</dd>
+  </dl>
+  <aside class="notes">Fonti dei dati: dal novembre 2017 tutti i 500 supercomputer della classifica TOP500 usano Linux (top500.org); Windows è il sistema più diffuso sui computer desktop e Android sugli smartphone secondo le statistiche di StatCounter. Tranello: Android e ChromeOS sono entrambi di Google; Android usa il kernel Linux. Domanda: quale sistema usa la console di casa? (PlayStation usa un sistema derivato da FreeBSD, parente di Unix.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Linus Torvalds e un hobby diventato gigante</h2></div>
+  <figure class="citazione">
+    <blockquote>Sto facendo un sistema operativo (libero). È solo un hobby, non sarà grande e professionale come GNU.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, studente finlandese di 21 anni, messaggio sul gruppo di discussione comp.os.minix, 25 agosto 1991</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quell'hobby è il kernel <b>Linux</b>: è dentro ogni telefono Android, fa girare gran parte dei server di internet e tutti i supercomputer più potenti, compreso Leonardo al Cineca di Bologna.</p></div>
+  <aside class="notes">Traduzione nostra, leggermente abbreviata, del messaggio originale: "I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu) for 386(486) AT clones." Torvalds studiava all'Università di Helsinki. Linux è software libero: il codice è pubblico e migliaia di persone e aziende contribuiscono. GNU è il progetto di sistema libero avviato da Richard Stallman nel 1983: le distribuzioni come Ubuntu uniscono il kernel Linux e gli strumenti GNU. Ironia della storia: oggi Linux è enorme e professionale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo schermo</p><h2>La scrivania di Windows</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 1000 560" style="width:100%;height:auto" aria-hidden="true">
+      <defs><linearGradient id="sfondo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+      <rect x="0" y="0" width="1000" height="560" rx="18" fill="url(#sfondo)"/>
+      <rect x="40" y="36" width="72" height="56" rx="8" fill="#fff" opacity=".92"/><text x="76" y="118" font-size="20" fill="#fff" text-anchor="middle" font-family="sans-serif">Questo PC</text>
+      <rect x="40" y="150" width="72" height="56" rx="8" fill="#fff" opacity=".92"/><text x="76" y="232" font-size="20" fill="#fff" text-anchor="middle" font-family="sans-serif">Cestino</text>
+      <rect x="300" y="60" width="560" height="350" rx="12" fill="#fff"/><rect x="300" y="60" width="560" height="46" rx="12" fill="#eef1f8"/><text x="324" y="91" font-size="22" fill="#172033" font-family="sans-serif">Esplora file</text>
+      <rect x="770" y="76" width="18" height="14" fill="#c9ced9"/><rect x="800" y="76" width="18" height="14" fill="#c9ced9"/><rect x="830" y="76" width="18" height="14" fill="#e5484d"/>
+      <rect x="330" y="130" width="150" height="250" rx="6" fill="#f3f5fa"/><rect x="500" y="130" width="330" height="24" rx="4" fill="#e3ecfc"/><rect x="500" y="170" width="280" height="18" rx="4" fill="#eef1f8"/><rect x="500" y="200" width="300" height="18" rx="4" fill="#eef1f8"/><rect x="500" y="230" width="240" height="18" rx="4" fill="#eef1f8"/>
+      <rect x="0" y="500" width="1000" height="60" fill="#141c30"/>
+      <rect x="374" y="514" width="14" height="14" fill="#5b9cf6"/><rect x="391" y="514" width="14" height="14" fill="#5b9cf6"/><rect x="374" y="531" width="14" height="14" fill="#5b9cf6"/><rect x="391" y="531" width="14" height="14" fill="#5b9cf6"/>
+      <rect x="430" y="514" width="32" height="32" rx="6" fill="#ffd25c"/><rect x="480" y="514" width="32" height="32" rx="6" fill="#47b881"/><rect x="530" y="514" width="32" height="32" rx="6" fill="#e5484d"/>
+      <text x="960" y="537" font-size="22" fill="#fff" text-anchor="end" font-family="sans-serif">10:42</text><circle cx="850" cy="530" r="9" fill="#a9b3cc"/><circle cx="878" cy="530" r="9" fill="#a9b3cc"/>
+      <g font-family="sans-serif" font-weight="700" font-size="26" text-anchor="middle">
+        <circle cx="200" cy="330" r="26" fill="#ffe45c"/><text x="200" y="339" fill="#2b2400">1</text>
+        <circle cx="146" cy="60" r="26" fill="#ffe45c"/><text x="146" y="69" fill="#2b2400">2</text>
+        <circle cx="300" cy="464" r="26" fill="#ffe45c"/><text x="300" y="473" fill="#2b2400">3</text>
+        <circle cx="660" cy="464" r="26" fill="#ffe45c"/><text x="660" y="473" fill="#2b2400">4</text>
+        <circle cx="920" cy="464" r="26" fill="#ffe45c"/><text x="920" y="473" fill="#2b2400">5</text>
+        <circle cx="896" cy="160" r="26" fill="#ffe45c"/><text x="896" y="169" fill="#2b2400">6</text>
+      </g>
+    </svg>
+    <ol class="steps">
+      <li><b>Desktop</b>, lo sfondo</li>
+      <li><b>Icone</b> di file e programmi</li>
+      <li><b>Start</b>: il menu dei programmi</li>
+      <li><b>Barra delle applicazioni</b></li>
+      <li><b>Area di notifica</b> e orologio</li>
+      <li><b>Finestra</b> di un programma</li>
+    </ol>
+  </div>
+  <aside class="notes">Disegno semplificato di Windows 11 (in Windows 10 il pulsante Start è all'estrema sinistra della barra). Domande: dove trovate rete, volume e batteria? (area di notifica). Che differenza c'è tra un'icona sul desktop e un collegamento? Il collegamento (con la freccetta) è solo un "puntatore": se lo cancelli, il file vero resta. Scorciatoie utili: Win + D mostra il desktop, Alt + Tab passa da una finestra all'altra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">File e icone di Windows</p><h2>Nome, punto, estensione</h2></div>
+  <div class="formula"><small>Ogni file ha un nome e un'estensione che dice di che tipo è</small>tabelle-verita<span class="hl">.ods</span></div>
+  <table class="data compact">
+    <tr><th>Estensione</th><th>Tipo di file</th><th>Estensione</th><th>Tipo di file</th></tr>
+    <tr><td class="mono">.odt .docx</td><td>Documento di testo</td><td class="mono">.jpg .png</td><td>Immagine</td></tr>
+    <tr><td class="mono">.ods .xlsx</td><td>Foglio di calcolo</td><td class="mono">.mp3 .mp4</td><td>Audio, video</td></tr>
+    <tr><td class="mono">.pdf</td><td>Documento da leggere e stampare</td><td class="mono">.exe</td><td>Programma da eseguire</td></tr>
+  </table>
+  <p class="muted">Windows sceglie l'icona e il programma che apre il file guardando l'estensione.</p>
+  <aside class="notes">Attenzione alla sicurezza: Windows per impostazione predefinita nasconde le estensioni dei tipi di file conosciuti, quindi un file "compiti.pdf.exe" può apparire come "compiti.pdf". Per questo nel laboratorio le rendiamo visibili. Collegamento con la UDA 10 sulla sicurezza. .zip = archivio compresso, .txt = testo semplice (il file del messaggio ASCII).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Rinomini «tema.odt» in «tema.pdf». Che cosa succede?</h2></div>
+  <div class="poll" data-id="rinomina" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il file diventa un vero PDF</li><li>Windows lo converte in automatico</li><li>Cambia solo il nome: il contenuto resta un documento di Writer</li><li>Il file viene cancellato</li></ol>
+    <p class="why">L'estensione è solo un'etichetta nel nome: cambiarla non trasforma il contenuto. Windows proverà ad aprirlo con il lettore PDF, che darà errore. Per avere un vero PDF bisogna esportarlo da Writer (File, Esporta come PDF).</p>
+  </div>
+  <aside class="notes">Misconcezione molto diffusa. Windows infatti avvisa: "Se si modifica l'estensione, il file potrebbe diventare inutilizzabile". Rinominandolo di nuovo in .odt torna tutto come prima: il contenuto non è mai cambiato. Mostrarlo dal vivo alla LIM con un file di prova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cartelle e schema ad albero</p><h2>Un albero capovolto, con le radici in alto</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">Questo PC</span>
+├─ Disco locale (C:)
+├─ Chiavetta USB (E:)
+└─ Documenti
+   └─ Scuola
+      ├─ Informatica
+      │  ├─ UDA1
+      │  │  └─ <span class="hl">tabelle-verita.ods</span>
+      │  └─ UDA2
+      └─ Italiano</pre>
+    <div class="stack">
+      <p>Le <b>cartelle</b> contengono file e altre cartelle. Il <b>percorso</b> è la strada dalla radice al file:</p>
+      <p class="mono small callout">Documenti › Scuola › Informatica › UDA1 › tabelle-verita.ods</p>
+      <p class="muted">In <b>Questo PC</b> vedi i dischi, le chiavette collegate e le cartelle principali del tuo utente.</p>
+    </div>
+  </div>
+  <aside class="notes">Nel file system di Windows ogni disco ha una lettera (C: è di solito il disco del sistema). Il percorso completo della cartella Documenti è del tipo C:\Users\nome\Documents: Esplora file mostra i nomi tradotti in italiano (Utenti, Documenti) ma sul disco i nomi veri sono in inglese. In Linux non ci sono lettere: tutto parte da un'unica radice, /. Regola d'oro: una cartella per materia, una sottocartella per UDA, nomi di file senza spazi strani e con il cognome.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Metti in ordine il tuo albero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Esplora file</b> (Win + E). In Documenti crea <b>Scuola</b>, dentro <b>Informatica</b> e <b>Italiano</b>, e in Informatica la cartella <b>UDA1</b>.</li>
+      <li>Mostra le estensioni: <b>Visualizza</b>, <b>Mostra</b>, <b>Estensioni nomi file</b>.</li>
+      <li>Sposta in UDA1 i file creati nelle ultime lezioni.</li>
+      <li>Clicca nella barra degli indirizzi e copia il percorso completo.</li>
+      <li>In Writer incolla percorso e screenshot dell'albero. Salva in UDA1: <b>albero-cartelle.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il percorso termina con <code>\Scuola\Informatica\UDA1</code> e accanto ai nomi vedi le estensioni: <code>.ods</code>, <code>.odt</code>, <code>.txt</code>.</div>
+  </div>
+  <aside class="notes">Sui PC della scuola i file potrebbero sparire al riavvio o stare su una cartella di rete: indicare agli studenti dove salvare (chiavetta o Drive della scuola). Cliccando nella barra degli indirizzi compare il percorso vero, per esempio C:\Users\studente\Documents\Scuola\Informatica\UDA1. In Windows 10 la casella Estensioni nomi file è direttamente nella scheda Visualizza. Spostare = trascinare nella stessa unità (oppure Taglia e Incolla); trascinando su un'altra unità Windows copia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Linux nel browser, senza installare niente</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Vai su <b>bellard.org/jslinux</b> e avvia una console <b>Alpine Linux</b>. Aspetta il prompt.</li>
+      <li>Scrivi, premendo Invio dopo ogni comando: <code>pwd</code>, <code>ls</code>, <code>mkdir scuola</code>, <code>cd scuola</code>.</li>
+      <li>Crea un file: <code>echo "ciao Linux" &gt; nota.txt</code>, poi leggilo con <code>cat nota.txt</code>.</li>
+      <li>Scrivi <code>uname -a</code>: annota il nome del kernel e la sua versione.</li>
+      <li>Fai uno screenshot, incollalo in Writer e salva come <b>linux-browser.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dopo <code>cd scuola</code> il comando <code>pwd</code> risponde <code>/root/scuola</code>, e <code>cat</code> mostra ciao Linux.</div>
+  </div>
+  <aside class="notes">JSLinux, di Fabrice Bellard, emula un PC completo dentro il browser: non serve account e non si installa nulla; ricaricando la pagina tutto si azzera. La macchina virtuale parte come utente root, nella cartella /root. Significato dei comandi: pwd = dove sono, ls = elenca, mkdir = crea cartella, cd = entra, echo = scrivi, cat = mostra il contenuto, uname = informazioni sul kernel. Far notare: niente lettere di unità, i percorsi usano / invece di \. Se il sito non è raggiungibile dalla rete della scuola, demo alla LIM o alternativa copy.sh/v86.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="1433" data-aiuto="la prima cifra viene dal 1991">
+    <ul class="points">
+      <li>1ª cifra: l'ultima cifra dell'anno in cui Torvalds annunciò Linux</li>
+      <li>2ª cifra: quante lettere ha l'estensione di un documento di Word moderno</li>
+      <li>3ª cifra: quante cartelle ci sono nel percorso C:\Scuola\Informatica\UDA1</li>
+      <li>4ª cifra: quanti tasti premi insieme per aprire Gestione attività</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1991, .docx, Scuola › Informatica › UDA1, Ctrl + Maiusc + Esc.</div>
+  </div>
+  <aside class="notes">Codice: 1433. Tranelli: per la seconda cifra qualcuno scrive 3 pensando a .doc (il vecchio formato); per la terza C: è un disco, non una cartella. A squadre: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il sistema operativo fa parte del software di <span class="blank" data-risposta="base|sistema"></span>.</p>
+    <p>Il nucleo del sistema operativo, che parla con l'hardware, si chiama <span class="blank" data-risposta="kernel|nucleo"></span>.</p>
+    <p>Un programma in esecuzione si chiama <span class="blank" data-risposta="processo"></span>.</p>
+    <p>Nel nome «foto.png», «png» è l'<span class="blank" data-risposta="estensione"></span> del file.</p>
+    <p>Il sistema operativo libero creato da Linus Torvalds si chiama <span class="blank" data-risposta="Linux"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti di tempo. Soluzioni: base (accettato sistema), kernel (accettato nucleo), processo, estensione, Linux.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Software di base e applicativo: il sistema operativo sta in mezzo</li>
+      <li>Gestisce processi, memoria, file, periferiche, interfaccia, sicurezza</li>
+      <li>Kernel = nucleo, shell = interfaccia per dare ordini</li>
+    </ul>
+    <ul class="points">
+      <li>Windows, macOS, Linux, Android, iOS, ChromeOS</li>
+      <li>File = nome + estensione; cartelle ad albero, percorsi</li>
+      <li>Linux: nato come hobby, oggi è ovunque</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "Detective del sistema operativo" (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

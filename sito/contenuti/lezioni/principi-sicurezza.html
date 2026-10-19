@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sei principi della sicurezza · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Sistemi e reti · Sicurezza informatica</p>
+  <h1>I sei principi<br>della sicurezza</h1>
+  <p class="lead">Che cosa vuol dire, esattamente, che un sistema è "sicuro"? Sei parole per rispondere con precisione.</p>
+  <aside class="notes">Aprire con una domanda alla classe: "il vostro telefono è sicuro? Che cosa vuol dire?". Raccogliere le risposte alla lavagna (password, antivirus, nessuno legge i messaggi, non si rompe...) e tenerle: alla fine della lezione si ricollocano sotto i sei principi. Obiettivo: saper classificare un problema di sicurezza e proporre una contromisura adatta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa proteggiamo</p><h2>La sicurezza protegge informazioni e servizi</h2></div>
+  <p class="lead">Non esiste un sistema "sicuro" in assoluto: esiste un sistema che rispetta certi <b>principi</b> contro certe <b>minacce</b>.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Dati</h3><p>Voti, cartelle cliniche, conti correnti, foto, messaggi privati.</p></div>
+    <div class="card soft"><h3>Servizi</h3><p>Registro elettronico, home banking, posta, sito della scuola.</p></div>
+    <div class="card soft"><h3>Persone</h3><p>Chi usa i sistemi: identità, reputazione, privacy.</p></div>
+  </div>
+  <div class="callout">Per ogni principio vedremo: <b>definizione</b>, <b>esempio</b>, <b>minaccia</b> tipica e <b>contromisura</b>.</div>
+  <aside class="notes">Distinguere "bene da proteggere" (asset) da "minaccia" (ciò che può danneggiarlo). Chiedere un esempio di asset per ciascuna colonna legato alla vita scolastica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La mappa della lezione</p><h2>Tre proprietà, tre meccanismi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <svg viewBox="0 0 600 430" width="600" height="430" role="img" aria-label="Triangolo CIA: riservatezza, integrità, disponibilità">
+        <polygon points="300,40 560,400 40,400" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="6"/>
+        <circle cx="300" cy="40" r="34" fill="var(--accent)"/><text x="300" y="52" text-anchor="middle" font-family="var(--display)" font-size="36" font-weight="700" fill="#fff">C</text>
+        <circle cx="560" cy="400" r="34" fill="var(--accent)"/><text x="560" y="412" text-anchor="middle" font-family="var(--display)" font-size="36" font-weight="700" fill="#fff">I</text>
+        <circle cx="40" cy="400" r="34" fill="var(--accent)"/><text x="40" y="412" text-anchor="middle" font-family="var(--display)" font-size="36" font-weight="700" fill="#fff">A</text>
+        <text x="300" y="270" text-anchor="middle" font-family="var(--display)" font-size="44" font-weight="700" fill="var(--ink)">CIA</text>
+        <text x="300" y="320" text-anchor="middle" font-family="var(--body)" font-size="26" fill="var(--muted)">la "triade"</text>
+      </svg>
+      <p class="small"><b>C</b>onfidentiality = riservatezza · <b>I</b>ntegrity = integrità · <b>A</b>vailability = disponibilità</p>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>Autenticazione</h3><p class="muted">Sei davvero chi dici di essere?</p></div>
+      <div class="card"><h3>Autorizzazione</h3><p class="muted">Che cosa ti è permesso fare?</p></div>
+      <div class="card"><h3>Non ripudio</h3><p class="muted">Non puoi negare di averlo fatto.</p></div>
+    </div>
+  </div>
+  <aside class="notes">La triade CIA descrive le proprietà che l'informazione deve avere. Gli altri tre sono meccanismi o garanzie che servono a ottenerle: per esempio senza autenticazione e autorizzazione non si può garantire la riservatezza. La sigla CIA è inglese: non ha niente a che fare con l'agenzia americana, ma conviene dirlo prima che lo dicano loro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 1 · C</p><h2>Riservatezza: legge solo chi ne ha diritto</h2></div>
+  <p class="lead">L'informazione è accessibile <b>solo</b> alle persone, ai processi e ai sistemi autorizzati.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Esempio</h3><p>I voti di uno studente li vedono lui, la famiglia e i docenti. Non i compagni.</p></div>
+    <div class="card bad"><h3>Minaccia</h3><p>Intercettazione su una Wi-Fi aperta, furto di un portatile, cartella condivisa "con tutti".</p></div>
+    <div class="card ok"><h3>Contromisura</h3><p><b>Cifratura</b> dei dati e delle comunicazioni, controllo degli accessi.</p></div>
+  </div>
+  <div class="callout">Chi tratta dati personali (scuole, ospedali, aziende) ha anche l'<b>obbligo di legge</b> di proteggerne la riservatezza: lo impone il GDPR.</div>
+  <aside class="notes">Domanda: "se perdo una chiavetta USB con i compiti, che principio è in pericolo?" (riservatezza, se nessuno li deve leggere). Ricordare che la riservatezza è anche un obbligo di legge quando si trattano dati personali (GDPR).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 2 · I</p><h2>Integrità: nessuno altera i dati di nascosto</h2></div>
+  <p class="lead">L'informazione è <b>completa e corretta</b>: non viene modificata da chi non è autorizzato, e se succede ce ne accorgiamo.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Esempio</h3><p>Un bonifico di 50 € deve arrivare come 50 €, allo stesso destinatario.</p></div>
+    <div class="card bad"><h3>Minaccia</h3><p>Un malware o un intermediario cambia un dato in transito o sul disco.</p></div>
+    <div class="card ok"><h3>Contromisura</h3><p><b>Hash</b> e firma digitale per accorgersi delle modifiche, permessi di sola lettura.</p></div>
+  </div>
+  <div class="callout hl">Integrità non vuol dire che il dato non cambia mai: cambia <b>solo</b> chi è autorizzato, e la modifica si può verificare.</div>
+  <aside class="notes">Introdurre l'hash: una funzione che trasforma un file di qualsiasi dimensione in un'"impronta" di lunghezza fissa. SHA-256 produce sempre 256 bit, cioè 64 cifre esadecimali. Basta cambiare un solo carattere del file perché l'impronta cambi completamente. Per questo i siti seri pubblicano l'hash dei programmi da scaricare. Attenzione: l'hash da solo rileva la modifica, non la impedisce.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'impronta di un file con SHA-256</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Con il Blocco note crea <code>voto.txt</code> con il testo <code>Verifica di Mario Rossi: 6</code> e salvalo in Documenti.</li>
+      <li>Nella barra degli indirizzi di Esplora file scrivi <code>cmd</code> e premi Invio, poi esegui <code>certutil -hashfile voto.txt SHA256</code>.</li>
+      <li>Copia l'hash nella cella A2 di un foglio Calc.</li>
+      <li>Cambia il 6 in 9, salva, ricalcola l'hash e copialo in B2.</li>
+      <li>In C2 scrivi <code>=SE(A2=B2;"uguali";"diversi")</code>. Salva come <b>hash-Cognome.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Da PowerShell</h4><p class="small"><code>Get-FileHash voto.txt</code><br>usa SHA-256 se non indichi altro.</p></div>
+      <div class="check"><b>Controllo:</b> ogni hash ha 64 caratteri (0-9, a-f). Basta una cifra cambiata e i due hash non si somigliano più. Rimetti il 6 e ricalcola: torna identico al primo.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione attesa: due stringhe esadecimali di 64 caratteri completamente diverse, C2 = "diversi"; ripristinando il testo originale (stesso contenuto e stessa codifica) l'hash torna uguale al primo. Il valore esatto dipende da codifica e a capo finale, quindi non c'è un hash "giusto" da confrontare fra compagni, a meno che usino esattamente lo stesso file: si può far passare un file da una chiavetta o da Classroom e far verificare che tutti ottengano lo stesso hash. certutil scrive l'hash in minuscolo, Get-FileHash in maiuscolo: il confronto di Calc con = non distingue maiuscole e minuscole, quindi va bene comunque. Domanda finale: "se il professore pubblica l'hash dei voti, come vi accorgereste di una modifica?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 3 · A</p><h2>Disponibilità: il servizio c'è quando serve</h2></div>
+  <p class="lead">Le persone autorizzate possono usare dati e servizi <b>nel momento in cui ne hanno bisogno</b>.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Esempio</h3><p>Il registro elettronico deve funzionare proprio durante gli scrutini.</p></div>
+    <div class="card bad"><h3>Minaccia</h3><p>Attacco DDoS, ransomware che blocca i file, guasto al disco, blackout.</p></div>
+    <div class="card ok"><h3>Contromisura</h3><p><b>Backup</b>, server e dischi ridondanti, gruppo di continuità (UPS).</p></div>
+  </div>
+  <div class="callout">La disponibilità si perde anche <b>senza attaccanti</b>: un disco rotto, un incendio o un errore di configurazione bastano.</div>
+  <aside class="notes">Far notare che la disponibilità si perde anche senza nessun attaccante: un incendio o un disco rotto sono minacce reali. Per questo la sicurezza comprende anche backup e manutenzione. Domanda: "quale servizio, se si fermasse per un giorno, vi creerebbe più problemi?"</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Attenzione</p><h2>I tre principi a volte si scontrano</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Più controlli</h3><p class="muted">Una password richiesta ogni 5 minuti protegge la riservatezza ma rende il servizio scomodo: <b>disponibilità</b> peggiore.</p></div>
+    <div class="card"><h3>Più copie</h3><p class="muted">Tanti backup aiutano la disponibilità, ma ogni copia è un posto in più da proteggere: <b>riservatezza</b>.</p></div>
+    <div class="card"><h3>Chiave persa</h3><p class="muted">Dati cifrati benissimo, ma se perdi la chiave nessuno li legge più, nemmeno tu.</p></div>
+  </div>
+  <p class="lead">Progettare la sicurezza significa trovare un <b>equilibrio</b> adatto a quel sistema.</p>
+  <aside class="notes">Messaggio chiave: la sicurezza è un compromesso, non un interruttore. Una banca e un blog personale fanno scelte diverse. Chiedere un esempio vissuto di misura di sicurezza "fastidiosa" e discutere se ne valeva la pena.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 4</p><h2>Autenticazione: dimostra chi sei</h2></div>
+  <p class="lead">Il sistema verifica che l'utente sia davvero chi dichiara di essere, usando uno o più <b>fattori</b>.</p>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Qualcosa che sai</h3><p>Password, PIN, risposta segreta.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Qualcosa che hai</h3><p>Telefono con app, chiavetta di sicurezza, carta d'identità elettronica.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Qualcosa che sei</h3><p>Impronta digitale, volto.</p></div>
+  </div>
+  <div class="row"><span class="chip">Minaccia</span><p class="small">password rubata o indovinata</p><span class="chip">Contromisura</span><p class="small"><b>MFA</b>: almeno due fattori di tipo diverso</p></div>
+  <aside class="notes">Precisare: due password non sono due fattori, perché appartengono alla stessa categoria. La MFA (autenticazione a più fattori) rende inutile la sola password rubata. Esempio italiano: SPID di livello 2 chiede password più codice temporaneo o notifica sull'app. Collegamento con la prossima attività: attivare la verifica in due passaggi sull'account della scuola.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Attiva la verifica in due passaggi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Accedi al tuo account Google della scuola e apri <code>myaccount.google.com</code>.</li>
+      <li>Nella casella di ricerca dell'account scrivi <b>Verifica in due passaggi</b> e aprila.</li>
+      <li>Segui la procedura: scegli come secondo passaggio la notifica sul telefono o un'app di autenticazione.</li>
+      <li>Genera i <b>codici di backup</b> e conservali in un posto sicuro, non sul PC della scuola.</li>
+      <li>Annota in un documento <b>mfa-Cognome</b> quali fattori hai attivato e a quale categoria appartengono.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Perché i codici di backup?</h4><p class="small">Se perdi il telefono, sono l'unico modo per rientrare senza chiedere aiuto all'amministratore.</p></div>
+      <div class="check"><b>Controllo:</b> apri una finestra in incognito e accedi di nuovo: dopo la password, Google ti chiede il secondo passaggio.</div>
+    </div>
+  </div>
+  <aside class="notes">Verificare prima della lezione che l'amministratore di Google Workspace della scuola consenta la verifica in due passaggi agli studenti: se l'opzione non compare, è disattivata a livello di dominio e l'attività si fa solo come discussione. Chi non ha uno smartphone può usare una chiavetta di sicurezza, se disponibile, oppure fermarsi alla lettura della pagina. Soluzione del documento: password = qualcosa che sai; telefono/app = qualcosa che hai; eventuale sblocco con impronta sul telefono = qualcosa che sei. I codici di backup non vanno fotografati né salvati in Drive in chiaro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 5</p><h2>Autorizzazione: che cosa puoi fare</h2></div>
+  <p class="lead">Dopo l'autenticazione, il sistema decide <b>a quali risorse</b> l'utente può accedere e <b>con quali operazioni</b>.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Esempio</h3><p>Nel registro lo studente legge i voti, il docente li inserisce, la segreteria gestisce le iscrizioni.</p></div>
+    <div class="card bad"><h3>Minaccia</h3><p>Permessi dati "a tutti" per comodità; un utente che ottiene privilegi che non dovrebbe avere.</p></div>
+    <div class="card ok"><h3>Contromisura</h3><p><b>Minimo privilegio</b>: a ciascuno solo i permessi che servono. Permessi per ruolo, rivisti spesso.</p></div>
+  </div>
+  <div class="callout hl">Al cinema: il documento all'ingresso è l'<b>autenticazione</b>, il biglietto per la sala 3 è l'<b>autorizzazione</b>.</div>
+  <aside class="notes">Differenza da chiarire bene: autenticazione = chi sei; autorizzazione = che cosa puoi fare. Esempio del cinema: il documento all'ingresso è l'autenticazione, il biglietto per la sala 3 è l'autorizzazione. L'aumento non autorizzato dei privilegi si chiama "privilege escalation". Il controllo per ruoli si chiama RBAC (Role-Based Access Control).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Principio 6</p><h2>Non ripudio: non puoi negare di averlo fatto</h2></div>
+  <p class="lead">Chi ha inviato un messaggio o eseguito un'azione <b>non può negarlo</b> in seguito, perché esiste una prova valida.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Esempio</h3><p>La <b>PEC</b> rilascia ricevute di invio e di consegna che hanno valore legale.</p></div>
+    <div class="card bad"><h3>Minaccia</h3><p>"Quel contratto non l'ho mai firmato", "quell'ordine non l'ho mandato io".</p></div>
+    <div class="card ok"><h3>Contromisura</h3><p><b>Firma digitale</b>, marca temporale, registri (log) protetti da modifiche.</p></div>
+  </div>
+  <div class="callout">Una normale e-mail <b>non</b> garantisce il non ripudio: il mittente si può falsificare e non c'è prova certa della consegna.</div>
+  <aside class="notes">La firma digitale lega un documento a una persona tramite un certificato: solo chi possiede la chiave privata può averlo firmato, e qualunque modifica successiva invalida la firma (quindi protegge anche l'integrità). La marca temporale prova quando è avvenuto. Domanda: "una mail normale garantisce il non ripudio?" (No: il mittente si può falsificare e non c'è prova certa della consegna.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiamoli in fila</p><h2>Che cosa succede quando accedi a un servizio</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Identificazione</h3><p class="small">Dici chi sei: il nome utente.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Autenticazione</h3><p class="small">Lo dimostri: password e secondo fattore.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Autorizzazione</h3><p class="small">Il sistema decide che cosa puoi fare.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Tracciamento</h3><p class="small">Ogni azione resta nei log, con data e ora.</p></div>
+  </div>
+  <div class="callout hl">Il tracciamento è la base del <b>non ripudio</b>: senza registri affidabili non si può provare chi ha fatto che cosa.</div>
+  <aside class="notes">Collegamento con la sigla AAA usata nelle reti: Authentication, Authorization, Accounting (contabilizzazione/tracciamento). Ripercorrere il flusso con il login al registro elettronico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Non confondetevi</p><h2>I libri li raggruppano in modi diversi</h2></div>
+  <p class="lead">I concetti sono gli stessi, cambiano il numero e i nomi. Se un testo ne elenca 3, 5 o 6, non è un errore.</p>
+  <table class="data compact">
+    <tr><th>Modello</th><th>Che cosa elenca</th></tr>
+    <tr><td><b>Triade CIA</b></td><td>Riservatezza, integrità, disponibilità</td></tr>
+    <tr><td><b>AAA</b> (reti)</td><td>Autenticazione, autorizzazione, accounting (tracciamento)</td></tr>
+    <tr><td><b>Esade di Parker</b></td><td>CIA più possesso (controllo), autenticità, utilità</td></tr>
+    <tr><td><b>ISO/IEC 27000</b></td><td>CIA, e in più può includere autenticità, responsabilità, non ripudio, affidabilità</td></tr>
+  </table>
+  <p class="muted small">In questa lezione: la triade CIA più autenticazione, autorizzazione e non ripudio.</p>
+  <aside class="notes">Donn Parker propose nel 1998 sei elementi (esade parkeriana): riservatezza, possesso o controllo, integrità, autenticità, disponibilità, utilità. Esempio di "possesso" senza perdita di riservatezza: una chiavetta cifrata rubata. Esempio di "utilità": dati intatti ma cifrati con una chiave persa, quindi inutilizzabili. La norma ISO/IEC 27000 definisce la sicurezza delle informazioni come preservazione di CIA e aggiunge che possono essere coinvolte anche altre proprietà. Per la verifica conta saper spiegare il concetto, non il numero.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quale principio è stato violato?</h2>
+  <table class="data compact">
+    <tr><th>#</th><th>Scenario</th></tr>
+    <tr><td>1</td><td>Il sito della scuola resta irraggiungibile per tutta la mattina, sommerso di richieste.</td></tr>
+    <tr><td>2</td><td>Qualcuno cambia un voto nel registro dopo che il docente l'ha inserito.</td></tr>
+    <tr><td>3</td><td>Un cliente sostiene di non aver mai firmato un contratto online.</td></tr>
+    <tr><td>4</td><td>Un compagno entra nella tua posta con la password letta su un post-it.</td></tr>
+    <tr><td>5</td><td>Uno studente apre la pagina dei docenti cambiando l'indirizzo nel browser.</td></tr>
+    <tr><td>6</td><td>Viene rubato un portatile non cifrato con i dati dei pazienti di un medico.</td></tr>
+  </table>
+  <div class="cols-2">
+    <p class="small">In Calc crea le colonne <b>Scenario · Principio · Contromisura</b> e compila una riga per scenario. Salva come <b>principi-Cognome.ods</b>.</p>
+    <div class="check"><b>Controllo:</b> ognuno dei sei principi compare almeno una volta nella colonna Principio.</div>
+  </div>
+  <aside class="notes">Soluzioni (principio principale, contromisura): 1 disponibilità, protezione anti-DDoS e ridondanza; 2 integrità (e autorizzazione), permessi per ruolo, log, hash/firma dei dati; 3 non ripudio, firma digitale con marca temporale; 4 autenticazione (con conseguente perdita di riservatezza), MFA e password manager; 5 autorizzazione, controllo dei permessi lato server per ogni pagina; 6 riservatezza, cifratura del disco. Accettare risposte con due principi se motivate: è normale che un incidente ne tocchi più di uno. Si può chiudere con una discussione sui casi in cui la classe non era d'accordo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>I sei principi in breve</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Riservatezza</h3><p class="muted small">Legge solo chi può. Cifratura, controllo accessi.</p></div>
+    <div class="card"><h3>Integrità</h3><p class="muted small">Nessuna modifica di nascosto. Hash, firma digitale.</p></div>
+    <div class="card"><h3>Disponibilità</h3><p class="muted small">C'è quando serve. Backup, ridondanza.</p></div>
+    <div class="card"><h3>Autenticazione</h3><p class="muted small">Dimostra chi sei. MFA.</p></div>
+    <div class="card"><h3>Autorizzazione</h3><p class="muted small">Solo ciò che ti spetta. Minimo privilegio.</p></div>
+    <div class="card"><h3>Non ripudio</h3><p class="muted small">Non puoi negarlo. Firma digitale, log.</p></div>
+  </div>
+  <aside class="notes">Riprendere le risposte raccolte all'inizio ("che cosa vuol dire sicuro?") e farle collocare sotto i sei principi. Anticipare la prossima lezione: i tipi di attacco, ciascuno collegato al principio che viola.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

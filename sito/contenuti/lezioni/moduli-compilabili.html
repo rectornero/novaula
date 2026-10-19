@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I moduli compilabili · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>I moduli<br>compilabili</h1>
+  <p class="lead">Autorizzazioni, iscrizioni, sondaggi: come si progetta un documento che gli altri compilano senza poterlo rovinare.</p>
+  <aside class="notes">Obiettivi: riconoscere le parti di un modulo, scegliere il controllo giusto per ogni domanda, creare un modulo in Writer con il menu Modulo, proteggerlo ed esportarlo come PDF compilabile, conoscere i moduli online. Durata indicativa: 2 ore. Prerequisito: la lezione Documenti con Word e Writer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Qual è l'ultimo modulo che hai compilato?</h2></div>
+  <div class="poll" data-id="ultimo-modulo">
+    <ol><li>Iscrizione a uno sport o a un corso</li><li>Autorizzazione per una gita</li><li>Registrazione a un'app o a un gioco</li><li>Non me lo ricordo proprio</li></ol>
+  </div>
+  <aside class="notes">Chiedere a chi ha scelto C: quali dati vi hanno chiesto? Erano tutti necessari? Spunto per la parte sulla privacy. Far notare che quasi tutti compiliamo moduli ogni settimana, spesso senza accorgercene (anche il login è un modulo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è un modulo</p><h2>Una parte fissa, una parte da riempire</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un <b>modulo</b> è un documento con un testo che non deve cambiare e degli spazi, i <b>campi</b>, che chi lo riceve compila.</p>
+      <ul class="points">
+        <li>Su carta: righe tratteggiate e quadratini da barrare</li>
+        <li>In digitale: <b>controlli</b> in cui si scrive o si sceglie</li>
+        <li>Il testo fisso è <b>protetto</b>: non si può cancellare</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="tiny muted">AUTORIZZAZIONE ALL'USCITA DIDATTICA</p>
+      <p class="small">Il/la sottoscritto/a <code>__________</code></p>
+      <p class="small">genitore dello studente <code>__________</code></p>
+      <p class="small"><b>○</b> autorizza &nbsp; <b>○</b> non autorizza</p>
+      <p class="small"><b>□</b> Ho letto il programma della gita</p>
+      <p class="small muted">Data <code>__/__/____</code> &nbsp; Firma</p>
+    </div>
+  </div>
+  <aside class="notes">Far individuare nella scheda a destra quali sono le parti fisse e quali i campi. Domanda: perché nel modulo cartaceo i due cerchietti di "autorizza / non autorizza" non bastano a impedire che qualcuno li barri entrambi? In digitale invece si può impedire: lo vediamo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I controlli</p><h2>Ogni domanda ha il suo controllo</h2></div>
+  <table class="data">
+    <tr><th>Controllo</th><th>Che cosa fa</th><th>Esempio</th></tr>
+    <tr><td><b>Casella di testo</b></td><td>Si scrive liberamente</td><td>Nome e cognome</td></tr>
+    <tr><td><b>Casella di controllo</b></td><td>Si spunta o no, indipendente dalle altre</td><td>Accetto il regolamento</td></tr>
+    <tr><td><b>Pulsante di scelta</b></td><td>Uno solo nel gruppo può essere scelto</td><td>Classe 1D o 1E</td></tr>
+    <tr><td><b>Casella di riepilogo</b></td><td>Si sceglie da un elenco chiuso</td><td>Provincia di residenza</td></tr>
+    <tr><td><b>Campo data</b></td><td>Accetta solo una data, con calendario</td><td>Data di nascita</td></tr>
+  </table>
+  <aside class="notes">Il pulsante di scelta in inglese si chiama option button o radio button: come i tasti delle vecchie autoradio, se ne premi uno l'altro salta fuori. Esiste anche la casella combinata: un elenco in cui si può anche scrivere una voce nuova. In Word gli stessi controlli si chiamano controlli contenuto (testo normale, casella di controllo, elenco a discesa, selezione data).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni domanda al controllo migliore</h2></div>
+  <dl class="puzzle-abbina" data-id="domanda-controllo">
+    <dt>Come ti chiami?</dt><dd>Casella di testo</dd>
+    <dt>Accetti il regolamento?</dt><dd>Casella di controllo</dd>
+    <dt>In che classe sei, 1D o 1E?</dt><dd>Pulsanti di scelta</dd>
+    <dt>In quale provincia abiti?</dt><dd>Casella di riepilogo</dd>
+    <dt>Quando sei nato?</dt><dd>Campo data</dd>
+  </dl>
+  <aside class="notes">Discutere la provincia: si potrebbe usare una casella di testo, ma poi qualcuno scrive "RM", qualcuno "Roma", qualcuno "roma ": tre scritture diverse per lo stesso dato. Un elenco chiuso rende i dati confrontabili. È l'idea chiave della lezione: un buon modulo guida chi lo compila.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Taglia della maglietta del torneo: S, M, L o XL. Se ne sceglie una sola. Quale controllo?</h2></div>
+  <div class="poll" data-id="taglia" data-tipo="quiz" data-risposta="D">
+    <ol><li>Quattro caselle di controllo</li><li>Una casella di testo</li><li>Quattro pulsanti di scelta, ognuno nel suo gruppo</li><li>Quattro pulsanti di scelta dello stesso gruppo</li></ol>
+    <p class="why">I pulsanti di scelta dello stesso gruppo si escludono a vicenda: ne scegli uno e gli altri si spengono. Con le caselle di controllo, o con quattro gruppi diversi, si potrebbero spuntare S e XL insieme.</p>
+  </div>
+  <aside class="notes">La A è il tranello più comune: le caselle di controllo sembrano uguali ai quadratini della carta, ma permettono più scelte. La C è sottile: un pulsante da solo nel suo gruppo si comporta quasi come una casella di controllo. Andrebbe bene anche una casella di riepilogo: chiedere alla classe quando conviene (con molte voci, per esempio 20 taglie di scarpe).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">In Writer</p><h2>Il menu Modulo</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li><b>Modulo › Modalità struttura</b>: entri in "cantiere".</li>
+      <li>Dal menu Modulo scegli un controllo e <b>disegnalo</b> trascinando il mouse.</li>
+      <li>Clic destro › <b>Proprietà del controllo</b>: nome, voci dell'elenco, gruppo.</li>
+      <li>Esci dalla Modalità struttura per <b>provarlo</b>.</li>
+    </ol>
+    <div class="card soft">
+      <h3>E in Word?</h3>
+      <p>Serve la scheda <b>Sviluppo</b>, che di solito è nascosta: <b>File › Opzioni › Personalizza barra multifunzione</b> e spunta Sviluppo.</p>
+      <p>Poi <b>Sviluppo › Controlli</b> e, per proteggere, <b>Limita modifica › Compilazione moduli</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Mostrare alla LIM: in modalità struttura un clic sul controllo lo seleziona (maniglie verdi), fuori dalla modalità struttura un clic lo usa. È la confusione più frequente: "non riesco a scriverci dentro" vuol dire quasi sempre che si è ancora in modalità struttura. La barra degli strumenti si può aprire anche da Visualizza › Barre degli strumenti › Controlli per formulario.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>L'autorizzazione per la gita</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Writer scrivi il titolo <b>Autorizzazione all'uscita didattica</b> (stile Titolo 1) e le frasi fisse del modulo.</li>
+      <li>Attiva <b>Modulo › Modalità struttura</b> e inserisci due <b>caselle di testo</b>: nome del genitore e nome dello studente.</li>
+      <li>Aggiungi due <b>pulsanti di scelta</b>, <i>Autorizzo</i> e <i>Non autorizzo</i>, con lo stesso <b>Nome del gruppo</b> nelle Proprietà.</li>
+      <li>Aggiungi una <b>casella di controllo</b>: <i>Ho letto il programma</i>.</li>
+      <li>Esci dalla Modalità struttura e salva come <b>autorizzazione-gita.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> fuori dalla Modalità struttura scrivi nelle caselle e clicca <i>Autorizzo</i>, poi <i>Non autorizzo</i>: il primo si deve spegnere da solo. Se restano accesi tutti e due, i gruppi sono diversi.</div>
+  </div>
+  <aside class="notes">Il testo accanto al pulsante di scelta si scrive nella proprietà Titolo (o direttamente nel controllo). Se due pulsanti non si escludono: in Proprietà del controllo, scheda Generale, dare a entrambi lo stesso Nome del gruppo (nelle versioni meno recenti basta lo stesso Nome). Allineare i controlli con il testo: clic destro › Ancoraggio › Al carattere. Il file serve anche nel prossimo esercizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Proteggere e distribuire</p><h2>Dal file di Writer al PDF che tutti possono compilare</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Progetta</h3><p>Testo fisso e controlli, in Modalità struttura.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Esporta</h3><p>PDF con l'opzione <b>Crea modulo PDF</b> attiva.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Compila</h3><p>Chi lo riceve scrive nei campi, anche dal browser.</p></div>
+  </div>
+  <div class="callout">Nel PDF il testo fisso <b>non si modifica</b>: si possono solo riempire i campi. Non serve avere Writer per compilarlo.</div>
+  <aside class="notes">L'opzione si trova in File › Esporta come › Esporta come PDF, scheda Generale, voce Crea modulo PDF. Il formato di invio (FDF, PDF, HTML, XML) serve solo se il modulo ha un pulsante che spedisce i dati a un server: per noi va bene il valore predefinito. Chrome, Edge e Firefox aprono e compilano i PDF con campi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Marta esporta il PDF ma dimentica di attivare "Crea modulo PDF". Che cosa succede?</h2></div>
+  <div class="poll" data-id="pdf-non-modulo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il PDF non si apre</li><li>I campi si vedono, ma non si possono compilare</li><li>Il PDF si compila, ma non si può salvare</li><li>Writer mostra un errore e non esporta</li></ol>
+    <p class="why">I controlli vengono "stampati" nel PDF come semplici disegni: rettangoli e cerchietti che sembrano campi, ma sono parte dell'immagine della pagina.</p>
+  </div>
+  <aside class="notes">Si può verificare dal vivo: esportare due volte lo stesso file, con e senza l'opzione, e aprirli nel browser. È un errore che fanno anche molti adulti: il modulo "sembra" giusto ma va stampato e compilato a penna.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il PDF compilabile</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riapri <b>autorizzazione-gita.odt</b>.</li>
+      <li><b>File › Esporta come › Esporta come PDF</b>. Nella scheda Generale spunta <b>Crea modulo PDF</b>.</li>
+      <li>Salva come <b>autorizzazione-gita.pdf</b>.</li>
+      <li>Apri il PDF con il browser (Edge, Chrome o Firefox), compila tutti i campi come se fossi un genitore e scarica la copia compilata.</li>
+      <li>Scambia il file con il compagno accanto e controlla il suo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel browser puoi scrivere nei campi e scegliere un solo pulsante, ma non puoi cancellare il titolo né le frasi fisse. Se non riesci a scrivere da nessuna parte, l'opzione Crea modulo PDF non era attiva.</div>
+  </div>
+  <aside class="notes">Il pulsante per scaricare la copia compilata in Chrome ed Edge è l'icona di download (o Salva) in alto. Se un browser non salva i valori, provare con un altro o con Microsoft Edge, che compila i moduli PDF in Windows. Nei PC della scuola non serve installare nulla.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Il censimento che fece nascere l'IBM</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Negli Stati Uniti il censimento del 1880 era stato contato <b>a mano</b>, modulo per modulo, per anni.</p>
+      <p>Per quello del <b>1890</b> l'ingegnere <b>Herman Hollerith</b> trasformò le risposte in buchi su <mark>schede perforate</mark>, lette da macchine tabulatrici elettriche. I tempi di conteggio crollarono.</p>
+    </div>
+    <div class="card"><p class="num">1924</p><p>La società fondata da Hollerith, dopo una fusione, prende il nome di <b>International Business Machines</b>: IBM.</p></div>
+  </div>
+  <aside class="notes">Collegamento: un modulo ben progettato (domande chiuse, caselle fisse) si trasforma facilmente in dati. È la stessa idea della casella di riepilogo: le risposte "chiuse" si contano in automatico. Fonte: storia del censimento sul sito dello U.S. Census Bureau e storia aziendale IBM (Tabulating Machine Company, 1896; CTR, 1911; IBM, 1924).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Dati sbagliati, risultati sbagliati</h2></div>
+  <figure class="citazione">
+    <blockquote>Mi è stato chiesto due volte: "Scusi, signor Babbage, se nella macchina si inseriscono numeri sbagliati, ne usciranno le risposte giuste?"</blockquote>
+    <figcaption><b>Charles Babbage</b>, matematico inglese, progettista della macchina analitica, nella sua autobiografia, 1864</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I moduli online <b>controllano i dati mentre li scrivi</b>: una e-mail senza @ o un campo obbligatorio vuoto vengono segnalati subito. Gli informatici lo riassumono con <b>GIGO</b>: <i>garbage in, garbage out</i>, se entra spazzatura esce spazzatura.</p></div>
+  <aside class="notes">Traduzione nostra da "Passages from the Life of a Philosopher" (1864). Babbage prosegue dicendo di non riuscire a capire quale confusione di idee possa portare a una domanda simile. Chiedere: quali controlli mettereste nel modulo della gita per evitare dati sbagliati? (Data con calendario, pulsanti invece di testo libero, campi obbligatori.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Caccia all'errore</p><h2>Che cosa non va in queste domande?</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>"Data di nascita"</h3><p>con una casella di testo libera</p></div><div class="retro"><p><b>Ognuno la scrive a modo suo:</b> 3/5/11, 03-05-2011, 3 maggio. Meglio un <b>campo data</b>.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>"Ti piace la scuola e la mensa?"</h3><p>con un sì e un no</p></div><div class="retro"><p><b>Due domande in una.</b> Se la scuola ti piace e la mensa no, cosa rispondi? Separale.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>"Numero di telefono dei nonni"</h3><p>nel modulo del torneo</p></div><div class="retro"><p><b>Dato non necessario.</b> Si chiede solo ciò che serve davvero: è la regola della <b>minimizzazione</b> del GDPR.</p></div></div>
+  </div>
+  <aside class="notes">Girare una carta alla volta dopo aver sentito almeno due ipotesi dalla classe. La minimizzazione dei dati è uno dei principi dell'articolo 5 del GDPR: i dati raccolti devono essere adeguati, pertinenti e limitati a quanto necessario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il lavoro di chi crea un modulo</h2></div>
+  <ol class="puzzle-ordina" data-id="ordine-modulo">
+    <li>Decidi quali dati ti servono davvero</li>
+    <li>Scrivi il testo fisso del modulo</li>
+    <li>In Modalità struttura disegna i controlli</li>
+    <li>Imposta le proprietà: nomi, gruppi, voci degli elenchi</li>
+    <li>Esci dalla Modalità struttura e prova il modulo</li>
+    <li>Esporta il PDF con "Crea modulo PDF"</li>
+  </ol>
+  <aside class="notes">Il primo passo è il più dimenticato: si progetta partendo dalle domande, non dal programma. Molti invertono 4 e 5: le proprietà si impostano in Modalità struttura, poi si prova.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>L'iscrizione al torneo di classe</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo documento Writer: <b>Iscrizione al torneo</b>. Scegli lo sport: calcetto, pallavolo o scacchi.</li>
+      <li>Inserisci una <b>casella di riepilogo</b>. Nelle Proprietà imposta <b>A discesa: Sì</b> e nelle <b>Voci elenco</b> scrivi le squadre, una per riga (Maiusc+Invio).</li>
+      <li>Aggiungi un <b>campo data</b> per la data della partita e due <b>caselle di testo</b>: nome della squadra e capitano.</li>
+      <li>Esporta come PDF compilabile: <b>iscrizione-torneo.pdf</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel PDF aperto nel browser l'elenco si apre e mostra le tue squadre, e nel campo data non riesci a scrivere "domani". Ogni campo ha un nome diverso nelle Proprietà.</div>
+  </div>
+  <aside class="notes">Il campo data in LibreOffice ha la proprietà Apribile (o A discesa) per mostrare il calendario. Se il browser non mostra il calendario nel PDF, va bene comunque: conta che il campo accetti una data. Chi finisce prima: aggiungere una casella di controllo "Ho letto il regolamento" obbligatoria e un pulsante di scelta per il livello (principiante, esperto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Moduli online</p><h2>Le risposte finiscono già in una tabella</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Google Moduli e Microsoft Forms creano moduli che si compilano dal telefono, con un link.</p>
+      <ul class="points">
+        <li>Ogni risposta diventa una <b>riga</b> di un foglio di calcolo</li>
+        <li>I grafici delle risposte si creano da soli</li>
+        <li>Servono un account e attenzione alla privacy</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcuni strumenti propongono con l'<b>AI</b> una bozza di domande a partire da una frase, per esempio "sondaggio sulla mensa". È un aiuto per partire: le domande vanno <b>rilette</b>, perché possono essere doppie, inutili o chiedere dati personali non necessari.</p></div>
+  </div>
+  <aside class="notes">Collegamento con Google Classroom: i quiz di Classroom sono Google Moduli. Con l'account scolastico il docente può mostrare alla LIM come un modulo raccoglie le risposte in un foglio di calcolo. Nella lezione sui fogli elettronici useremo proprio dati di questo tipo per contare e fare grafici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per scegliere una sola opzione tra tante si usano i pulsanti di <span class="blank" data-risposta="scelta"></span>.</p>
+    <p>Per disegnare i controlli in Writer bisogna attivare la Modalità <span class="blank" data-risposta="struttura"></span>.</p>
+    <p>Un elenco chiuso di voci tra cui scegliere è la casella di <span class="blank" data-risposta="riepilogo"></span>.</p>
+    <p>Il PDF si compila solo se all'esportazione attivi "Crea modulo <span class="blank" data-risposta="PDF"></span>".</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: scelta, struttura, riepilogo, PDF.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Modulo = testo fisso protetto + campi</li>
+      <li>Un controllo adatto a ogni domanda</li>
+      <li>Pulsanti di scelta: uno solo per gruppo</li>
+    </ul>
+    <ul class="points">
+      <li>Writer: menu Modulo e Modalità struttura</li>
+      <li>PDF con "Crea modulo PDF"</li>
+      <li>Chiedi solo i dati che servono</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

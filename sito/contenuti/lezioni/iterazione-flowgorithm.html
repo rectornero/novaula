@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'iterazione: ripeti! · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 5 · Dal problema al programma</p>
+  <h1>L'iterazione:<br>ripeti!</h1>
+  <p class="lead">Un computer non si annoia mai: ripete le stesse istruzioni mille, un milione, un miliardo di volte. Basta dirgli che cosa ripetere e quando fermarsi.</p>
+  <aside class="notes">Obiettivi: capire che cos'è un ciclo (corpo e condizione), distinguere l'iterazione indefinita (While con controllo in testa, Do con controllo in coda) da quella definita (For con contatore), usare contatori e accumulatori, riconoscere i cicli infiniti, realizzare i cicli in Flowgorithm. Durata indicativa: 2 ore. È l'ultima lezione della UDA 5: chiude il percorso sequenza, selezione, iterazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per punizione devi scrivere 100 volte "Non devo chiacchierare". Che cosa fai?</h2></div>
+  <div class="poll" data-id="it-100volte">
+    <ol><li>Lo scrivo 100 volte, con pazienza</li><li>Copio e incollo finché arrivo a 100</li><li>Scrivo un programma che lo fa per me</li><li>Tratto con il prof per farne 50</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, con ironia. Chi sceglie C ha già l'idea di ciclo: una sola istruzione, ripetuta 100 volte. Chiedere a chi ha scelto B: come fai a sapere quando sei arrivato a 100? (Devi contare: il contatore!) Collegamento con Scratch: i blocchi "ripeti 10 volte", "per sempre" e "ripeti fino a quando".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo</p><h2>Ripetere senza riscrivere</h2></div>
+  <p class="lead">Un <mark>ciclo</mark> ripete un gruppo di istruzioni, il <b>corpo</b>, finché una <b>condizione</b> dice di continuare. Ogni ripetizione si chiama <b>iterazione</b>.</p>
+  <div class="cols-2">
+    <div class="card soft"><h3>Iterazione indefinita</h3><p>Non sai in anticipo quante volte ripetere: dipende da quello che succede.</p><p class="muted">Mescola finché lo zucchero si scioglie. Leggi numeri finché arriva lo 0.</p><div class="chips"><span class="chip">While</span><span class="chip">Do</span></div></div>
+    <div class="card"><h3>Iterazione definita</h3><p>Sai già quante volte ripetere, prima di cominciare.</p><p class="muted">Fai 20 flessioni. Scrivi la tabellina del 7 da 1 a 10.</p><div class="chips"><span class="chip">For</span></div></div>
+  </div>
+  <aside class="notes">Far classificare a voce altri esempi: "ripassa finché sai la lezione" (indefinita), "fai 3 giri di campo" (definita), "suona la sveglia ogni 5 minuti finché ti alzi" (indefinita). In tutti i linguaggi esistono entrambe le famiglie.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-233.8 0 467.6 802" width="490" height="840" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Ciclo while con sentinella"><rect x="-101.1" y="16" width="202.2" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">somma ← 0</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-83,118 127,118 83,184 -127,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi n</text><path d="M0 184 L0 220" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="220" r="7" fill="#172033"/><path d="M0 220 L0 239" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,254 -9,237 9,237" fill="#172033"/><polygon points="0,254 100,310 0,366 -100,310" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="310" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">n != 0</text><path d="M0 366 L0 397" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,412 -9,395 9,395" fill="#172033"/><text x="12" y="386" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><rect x="-163.8" y="412" width="327.6" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="445" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">somma ← somma + n</text><path d="M0 478 L0 499" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,514 -9,497 9,497" fill="#172033"/><polygon points="-83,514 127,514 83,580 -127,580" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="547" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi n</text><path d="M0 580 L0 610 L-213.8 610 L-213.8 220 L-24 220" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,220 -26,229 -26,211" fill="#172033"/><text x="110" y="292" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M100 310 L213.8 310 L213.8 654 L0 654" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><path d="M0 654 L0 675" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,690 -9,673 9,673" fill="#172033"/><polygon points="-115,690 159,690 115,756 -159,756" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="723" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi somma</text></svg>
+    <div class="stack">
+      <div class="head"><p class="kicker">L'iterazione indefinita</p><h2>Mentre la condizione è vera, ripeti</h2></div>
+      <p>Il ciclo <b>While</b> controlla la condizione <b>prima</b> di ogni giro: se è falsa già all'inizio, il corpo non viene mai eseguito.</p>
+      <p class="small muted">Qui sommiamo i numeri letti finché arriva lo 0, il valore "sentinella" che dice basta.</p>
+    </div>
+  </div>
+  <aside class="notes">Nota la doppia lettura: una prima del ciclo (per avere un n da controllare) e una alla fine del corpo (per il giro successivo). È lo schema classico del ciclo con sentinella. Se il primo numero è 0, la somma resta 0 e il ciclo non parte. Vero entra nel corpo, Falso esce a destra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Eseguiamo a mano</p><h2>La tabella di traccia del ciclo</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Passo</th><th>n</th><th>n != 0 ?</th><th>somma</th></tr>
+      <tr><td>prima del ciclo</td><td class="mono">5</td><td>vero</td><td class="mono">0</td></tr>
+      <tr><td>1° giro</td><td class="mono">3</td><td>vero</td><td class="mono">5</td></tr>
+      <tr><td>2° giro</td><td class="mono">8</td><td>vero</td><td class="mono">8</td></tr>
+      <tr><td>3° giro</td><td class="mono">0</td><td>falso: esce</td><td class="mono">16</td></tr>
+      <tr><td>dopo il ciclo</td><td class="mono">0</td><td>–</td><td class="mono hl">16</td></tr>
+    </table>
+    <div class="card soft"><h3>Input: 5, 3, 8, 0</h3><p>Il corpo è stato eseguito <b>3 volte</b>. Lo 0 non viene sommato: serve solo a fermare il ciclo.</p></div>
+  </div>
+  <aside class="notes">In ogni riga del giro: prima somma ← somma + n (con il vecchio n), poi si legge il nuovo n. Far ripetere la traccia con l'input 4, 0 (somma 4, un giro) e con il solo 0 (somma 0, nessun giro).</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che numeri compaiono sullo schermo?</h2></div>
+    <pre class="code">i ← 0
+<span class="k">MENTRE</span> i &lt; 5
+  <span class="k">SCRIVI</span> i
+  i ← i + 1
+<span class="k">FINE MENTRE</span></pre>
+  </div>
+  <div class="poll" data-id="it-quali" data-tipo="quiz" data-risposta="C">
+    <ol><li class="mono">1 2 3 4 5</li><li class="mono">0 1 2 3 4 5</li><li class="mono">0 1 2 3 4</li><li class="mono">1 2 3 4</li></ol>
+    <p class="why">Si parte da 0 e si scrive prima di aumentare. Quando i diventa 5 la condizione i &lt; 5 è falsa e il ciclo esce senza scrivere il 5. I giri sono 5, ma i numeri vanno da 0 a 4.</p>
+  </div>
+  <aside class="notes">Errore tipico "di uno" (in inglese off-by-one), comunissimo anche tra i professionisti. Chi sceglie B pensa che il 5 venga scritto; chi sceglie A dimentica che si parte da 0. Far fare la tabella di traccia per convincersi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La calcolatrice che non si stanca</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Flowgorithm: Declare <code>n, somma</code> Integer. Assign <code>somma = 0</code>.</li>
+      <li>Output <code>"Numero (0 per finire)?"</code> e Input <code>n</code>.</li>
+      <li>Inserisci un <b>While</b> con condizione <code>n != 0</code>.</li>
+      <li>Nel corpo: Assign <code>somma = somma + n</code>, poi di nuovo Output della domanda e Input <code>n</code>.</li>
+      <li>Dopo il ciclo: Output <code>"Somma: " &amp; somma</code>. Salva come <b>somma-ciclo.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 5, 3, 8, 0 esce Somma: 16. Con il solo 0 esce Somma: 0. <b>Sfida:</b> aggiungi un contatore <code>c</code> e stampa anche quanti numeri hai sommato (con 5, 3, 8, 0 sono 3).</div>
+  </div>
+  <aside class="notes">Errore più frequente: dimenticare l'Input dentro il corpo. Risultato: n non cambia mai e il ciclo non finisce (ciclo infinito). In Flowgorithm si ferma con il pulsante Stop. Soluzione della sfida: Declare c Integer, c = 0 prima del ciclo, c = c + 1 nel corpo. Chi finisce ancora prima calcola la media: serve un Real e attenzione al caso c = 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due variabili speciali</p><h2>Il contatore e l'accumulatore</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="kicker">Contatore</p><div class="formula" style="font-size:48px">c ← c <span class="hl">+ 1</span></div><p>Aumenta sempre di 1 a ogni giro: conta <b>quante volte</b> succede qualcosa.</p><p class="muted small">Quanti numeri, quanti tentativi, quanti voti insufficienti.</p></div>
+    <div class="card"><p class="kicker">Accumulatore</p><div class="formula" style="font-size:48px">s ← s <span class="hl">+ n</span></div><p>Aumenta del valore letto: <b>accumula</b> un totale.</p><p class="muted small">La somma dei voti, il totale della spesa, i passi della settimana.</p></div>
+  </div>
+  <div class="callout">Tutti e due vanno <b>inizializzati</b> prima del ciclo, quasi sempre a 0. E la media? Accumulatore diviso contatore.</div>
+  <aside class="notes">Domanda trabocchetto: che cosa succede se si dimentica s ← 0? In alcuni linguaggi la variabile contiene un valore casuale (in C), in altri il programma si ferma con un errore (Flowgorithm, Python). Sono i "mattoni" di tantissimi programmi: li ritroveremo in C e in Python.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quante volte gira questo ciclo?</h2></div>
+    <pre class="code">n ← 1
+<span class="k">MENTRE</span> n != 10
+  n ← n + 2
+<span class="k">FINE MENTRE</span></pre>
+  </div>
+  <div class="poll" data-id="it-infinito" data-tipo="quiz" data-risposta="D">
+    <ol><li>4 volte</li><li>5 volte</li><li>9 volte</li><li>Non si ferma mai</li></ol>
+    <p class="why">n vale 1, 3, 5, 7, 9, 11, 13… sempre dispari: non sarà mai uguale a 10, quindi la condizione n != 10 resta vera per sempre. È un ciclo infinito. Con n &lt; 10 invece il ciclo si fermerebbe dopo 5 giri.</p>
+  </div>
+  <aside class="notes">La B è il tranello di chi pensa "da 1 a 10 a passi di 2". Lezione da ricordare: nelle condizioni dei cicli è più sicuro usare &lt; o &lt;= che !=, perché un valore può "saltare" il traguardo. Se capita in laboratorio, in Flowgorithm basta premere Stop.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-207 0 400.8 630" width="521" height="819" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Ciclo do: controllo dell'input"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 118" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="118" r="7" fill="#172033"/><path d="M0 118 L0 143" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,158 -9,141 9,141" fill="#172033"/><polygon points="-83,158 127,158 83,224 -127,224" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="191" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi n</text><path d="M0 224 L0 253" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,268 -9,251 9,251" fill="#172033"/><polygon points="0,268 100,324 0,380 -100,324" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="324" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">n &lt;= 0</text><text x="-110" y="306" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M-100 324 L-187 324 L-187 118 L-24 118" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,118 -26,127 -26,109" fill="#172033"/><text x="12" y="398" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M0 380 L0 401" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,416 -9,399 9,399" fill="#172033"/><polygon points="-133.8,416 177.8,416 133.8,482 -177.8,482" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="449" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi "Grazie!"</text><path d="M0 482 L0 503" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,518 -9,501 9,501" fill="#172033"/><rect x="-85" y="518" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="551" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+    <div class="stack">
+      <div class="head"><p class="kicker">Il controllo in coda</p><h2>Prima fai, poi controlla</h2></div>
+      <p>Nel ciclo <b>Do</b> la condizione sta <b>alla fine</b>: il corpo viene eseguito <b>almeno una volta</b>.</p>
+      <p>È perfetto per controllare l'input: chiedi un numero positivo e richiedilo finché l'utente sbaglia.</p>
+      <p class="small muted">In Flowgorithm il Do ripete mentre la condizione è vera. In C esiste (do… while), in Python no.</p>
+    </div>
+  </div>
+  <aside class="notes">Confronto con il While: con il While avremmo dovuto leggere n una volta prima del ciclo e una dentro; con il Do la lettura compare una sola volta. Esempio di esecuzione: input -3 (condizione n &lt;= 0 vera, si ripete), 0 (vera, si ripete), 7 (falsa, esce): scrive Grazie!</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-211.4 0 456.9 654" width="587" height="840" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Ciclo for: la tabellina"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-83,118 127,118 83,184 -127,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi n</text><path d="M0 184 L0 220" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="220" r="7" fill="#172033"/><path d="M0 220 L0 239" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,254 -9,237 9,237" fill="#172033"/><polygon points="-115.6,287 -89.6,254 89.6,254 115.6,287 89.6,320 -89.6,320" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="287" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">i da 1 a 10</text><path d="M0 320 L0 351" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,366 -9,349 9,349" fill="#172033"/><text x="12" y="340" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Ripeti</text><polygon points="-97.4,366 141.4,366 97.4,432 -141.4,432" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="399" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi n × i</text><path d="M0 432 L0 462 L-191.4 462 L-191.4 220 L-24 220" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,220 -26,229 -26,211" fill="#172033"/><text x="125.6" y="269" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Finito</text><path d="M115.6 287 L225.6 287 L225.6 506 L0 506" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><path d="M0 506 L0 527" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,542 -9,525 9,525" fill="#172033"/><rect x="-85" y="542" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="575" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+    <div class="stack">
+      <div class="head"><p class="kicker">L'iterazione definita</p><h2>Per i da 1 a 10</h2></div>
+      <p>Il ciclo <b>For</b> usa una variabile contatore che parte da un valore, arriva a un altro e aumenta da sola a ogni giro.</p>
+      <pre class="code"><span class="k">PER</span> i <span class="k">DA</span> 1 <span class="k">A</span> 10
+  <span class="k">SCRIVI</span> n × i
+<span class="k">FINE PER</span></pre>
+      <p class="small muted">Equivale a: i ← 1, mentre i &lt;= 10 ripeti e alla fine di ogni giro i ← i + 1.</p>
+    </div>
+  </div>
+  <aside class="notes">In Flowgorithm il For ha la forma di un esagono e chiede: variabile, valore iniziale, valore finale, direzione (crescente o decrescente) e passo. La variabile del For va dichiarata Integer. Il For si usa quando il numero di giri è noto prima di partire: nell'esempio sempre 10.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La macchina delle tabelline</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Declare <code>n, i</code> di tipo Integer. Chiedi e leggi <code>n</code>.</li>
+      <li>Inserisci un <b>For</b>: variabile <code>i</code>, da 1 a 10, crescente, passo 1.</li>
+      <li>Nel corpo: Output <code>n &amp; " x " &amp; i &amp; " = " &amp; n * i</code>.</li>
+      <li>Esegui con n = 7 e guarda la console.</li>
+      <li>Salva come <b>tabellina.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 10 righe, da 7 x 1 = 7 a 7 x 10 = 70. <b>Sfida:</b> stampala al contrario, da 7 x 10 a 7 x 1, con direzione decrescente.</div>
+  </div>
+  <aside class="notes">Soluzione della sfida: For i da 10 a 1, direzione decrescente (in C lo vedremo come "passo negativo"). Variante per chi finisce prima: la tavola pitagorica con due For uno dentro l'altro (cicli annidati, tema della UDA 6). Con la finestra delle variabili aperta si vede i che cresce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine il conto alla rovescia</h2></div>
+  <ol class="puzzle-ordina" data-id="it-rovescia">
+    <li>n ← 10</li>
+    <li>MENTRE n &gt; 0</li>
+    <li>SCRIVI n</li>
+    <li>n ← n - 1</li>
+    <li>FINE MENTRE</li>
+    <li>SCRIVI "Via!"</li>
+  </ol>
+  <aside class="notes">Ordine: n ← 10, MENTRE n &gt; 0, SCRIVI n, n ← n - 1, FINE MENTRE, SCRIVI "Via!". Varianti sbagliate da discutere: se n ← n - 1 sta prima di SCRIVI n, il conto va da 9 a 0; se SCRIVI "Via!" sta dentro il ciclo, compare 10 volte. Domanda: si poteva fare con un For? Sì, da 10 a 1 decrescente.</aside>
+</section>
+
+<section class="slide statement">
+  <figure class="citazione">
+    <blockquote>Possiamo vedere solo poco più avanti, ma possiamo vedere che lì c'è molto da fare.</blockquote>
+    <figcaption><b>Alan Turing</b>, matematico inglese, ultima frase di "Computing Machinery and Intelligence", 1950</figcaption>
+  </figure>
+  <p class="lead">Sequenza, selezione, iterazione: con questi tre mattoni si costruisce ogni algoritmo. Il prossimo passo è scriverli in C e in Python.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "We can only see a short distance ahead, but we can see plenty there that needs to be done." È la chiusura dell'articolo in cui Turing propone il "gioco dell'imitazione", oggi noto come test di Turing. Collegare al teorema di Böhm-Jacopini (1966): le tre strutture bastano per qualunque algoritmo. Fine della UDA 5: da qui si passa al linguaggio C (UDA 6).</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">Cicli dentro l'intelligenza artificiale</p><h2>Due cicli che usi senza saperlo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un chatbot che scrive</h3><p>Un chatbot non scrive la risposta tutta insieme: sceglie un pezzetto di parola alla volta, lo aggiunge al testo e ripete. Si ferma quando sceglie il segnale di fine. È un ciclo <b>indefinito</b>: prima non sa quanto sarà lunga la risposta.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un modello che impara</h3><p>L'addestramento di una rete neurale ripete lo stesso lavoro su tutti gli esempi: guarda, sbaglia, si corregge un poco. Ogni passata completa si chiama <b>epoca</b>, e il numero di epoche spesso si fissa prima: un ciclo <b>definito</b>.</p></div>
+  </div>
+  <aside class="notes">I pezzetti di parola si chiamano token. Si può mostrare sulla LIM come la risposta di un chatbot compare un po' alla volta: è proprio il ciclo che lavora (demo del docente, rispettando i limiti di età). Nell'addestramento, oltre al numero fisso di epoche, spesso si usa anche un controllo che ferma il ciclo quando il modello smette di migliorare: un esempio di condizione di uscita.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Indovina il numero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Declare <code>segreto, prova, tentativi</code> Integer. Il vicino, di nascosto, assegna <code>segreto</code> (da 1 a 100). Poi <code>tentativi = 0</code>.</li>
+      <li>Un <b>Do</b>. Nel corpo: Output "Prova:", Input <code>prova</code>, <code>tentativi = tentativi + 1</code>.</li>
+      <li>Nel corpo, due If semplici: se <code>prova &lt; segreto</code> scrivi "Più alto!", se <code>prova &gt; segreto</code> scrivi "Più basso!".</li>
+      <li>Condizione del Do: <code>prova != segreto</code>. Dopo il ciclo scrivi in quanti tentativi hai indovinato. Salva come <b>indovina.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il gioco risponde a ogni prova e si ferma solo quando indovini. Partendo da 50 e dimezzando, ti bastano al massimo <b>7</b> tentativi.</div>
+  </div>
+  <aside class="notes">Qui != va bene, perché prima o poi il giocatore indovina. Collegamento con la ricerca binaria della prima lezione. Sfida extra: far scegliere il numero al computer con segreto = Random(100) + 1 (Random(n) restituisce un intero da 0 a n-1; verificare nell'elenco delle funzioni di Flowgorithm). Torneremo ai numeri casuali in C nella UDA 6. Torneo finale: chi indovina con meno tentativi?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Quattro cicli, quattro cifre</h2></div>
+  <div class="puzzle-codice" data-risposta="6518" data-aiuto="nella seconda cifra n vale 2, 4, 8, 16, 32: conta i giri">
+    <ul class="points">
+      <li>1ª: s ← 0. PER i DA 1 A 3: s ← s + i. Quanto vale s?</li>
+      <li>2ª: n ← 1, c ← 0. MENTRE n &lt; 20: n ← n × 2, c ← c + 1. Quanto vale c?</li>
+      <li>3ª: quante volte gira un ciclo Do se la condizione è falsa fin dal primo controllo?</li>
+      <li>4ª: x ← 0. PER i DA 1 A 4: x ← x + 2. Quanto vale x?</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 1 + 2 + 3 = 6; cinque raddoppi fino a 32; il Do gira almeno una volta; 4 giri da 2 fanno 8.</div>
+  </div>
+  <aside class="notes">Codice: 6518. La terza cifra è la differenza chiave tra Do e While: con il While la risposta sarebbe 0. La prima cifra è un accumulatore, la seconda un contatore. Sfida a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Le istruzioni che un ciclo ripete formano il <span class="blank" data-risposta="corpo"></span> del ciclo.</p>
+    <p>Se non sai quante volte ripetere, usi l'iterazione <span class="blank" data-risposta="indefinita"></span>.</p>
+    <p>Una variabile che aumenta di 1 a ogni giro si chiama <span class="blank" data-risposta="contatore"></span>.</p>
+    <p>Il ciclo che esegue il corpo almeno una volta è il <span class="blank" data-risposta="do|do while"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: corpo, indefinita, contatore, Do (accettato anche do while).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ciclo = corpo ripetuto + condizione di uscita</li>
+      <li>While: controllo in testa, anche zero giri</li>
+      <li>Do: controllo in coda, almeno un giro</li>
+    </ul>
+    <ul class="points">
+      <li>For: numero di giri noto, contatore automatico</li>
+      <li>Contatore (+1) e accumulatore (+n), partono da 0</li>
+      <li>Occhio ai cicli infiniti e all'errore "di uno"</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula e annunciare la verifica della UDA 5 (sul sito c'è la simulazione con le soluzioni per esercitarsi).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

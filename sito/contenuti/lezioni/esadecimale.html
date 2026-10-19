@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oltre il binario: l'esadecimale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Sistemi di numerazione</p>
+  <h1>Oltre il binario:<br>l'esadecimale</h1>
+  <p class="lead">Sedici cifre per scrivere i bit in modo corto e leggibile: colori, indirizzi di rete, memoria.</p>
+  <aside class="notes">Prerequisito: la lezione "Numeri decimali e binari" (pesi, conversioni fino a 255). Aprire scrivendo alla lavagna un colore come #FF8000 e chiedendo: "cosa sono queste lettere in mezzo ai numeri?". Obiettivo: convertire tra esadecimale, binario e decimale e riconoscere dove si usa la base 16.</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">Il problema</p>
+  <h2>24 cifre binarie o 6 esadecimali?</h2>
+  <div class="formula"><small>Lo stesso numero in binario</small>1101 0010 0011 1111 1010 1100</div>
+  <div class="formula"><small>… e in esadecimale</small><span class="hl">D 2 3 F A C</span></div>
+  <p class="lead">Il binario è lungo e facile da sbagliare. Il decimale è corto ma non "si allinea" ai bit. L'esadecimale è corto <b>e</b> si legge a gruppi di 4 bit.</p>
+  <aside class="notes">Far provare a dettare a voce il numero binario a un compagno: dopo pochi bit si perde il conto. Poi dettare D23FAC. Chiedere: "perché i gruppi binari sono da 4?" e lasciare la risposta in sospeso fino alla slide 4. Verifica: 1101=D, 0010=2, 0011=3, 1111=F, 1010=A, 1100=C.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Base 16</p><h2>Sedici cifre: da 0 a 9, poi da A a F</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Decimale</th><th>Binario</th><th>Esadecimale</th></tr>
+      <tr><td class="mono">0</td><td class="mono">0000</td><td class="mono"><b>0</b></td></tr>
+      <tr><td class="mono">1</td><td class="mono">0001</td><td class="mono"><b>1</b></td></tr>
+      <tr><td class="mono">2</td><td class="mono">0010</td><td class="mono"><b>2</b></td></tr>
+      <tr><td class="mono">3</td><td class="mono">0011</td><td class="mono"><b>3</b></td></tr>
+      <tr><td class="mono">4</td><td class="mono">0100</td><td class="mono"><b>4</b></td></tr>
+      <tr><td class="mono">5</td><td class="mono">0101</td><td class="mono"><b>5</b></td></tr>
+      <tr><td class="mono">6</td><td class="mono">0110</td><td class="mono"><b>6</b></td></tr>
+      <tr><td class="mono">7</td><td class="mono">0111</td><td class="mono"><b>7</b></td></tr>
+    </table>
+    <table class="data compact">
+      <tr><th>Decimale</th><th>Binario</th><th>Esadecimale</th></tr>
+      <tr><td class="mono">8</td><td class="mono">1000</td><td class="mono"><b>8</b></td></tr>
+      <tr><td class="mono">9</td><td class="mono">1001</td><td class="mono"><b>9</b></td></tr>
+      <tr><td class="mono">10</td><td class="mono">1010</td><td class="mono hl"><b>A</b></td></tr>
+      <tr><td class="mono">11</td><td class="mono">1011</td><td class="mono hl"><b>B</b></td></tr>
+      <tr><td class="mono">12</td><td class="mono">1100</td><td class="mono hl"><b>C</b></td></tr>
+      <tr><td class="mono">13</td><td class="mono">1101</td><td class="mono hl"><b>D</b></td></tr>
+      <tr><td class="mono">14</td><td class="mono">1110</td><td class="mono hl"><b>E</b></td></tr>
+      <tr><td class="mono">15</td><td class="mono">1111</td><td class="mono hl"><b>F</b></td></tr>
+    </table>
+  </div>
+  <aside class="notes">Servono 16 simboli da una sola cifra: dopo il 9 si prendono in prestito le lettere. A=10, B=11, C=12, D=13, E=14, F=15. Trucco per ricordarle: A è "la prima dopo il 9", F è "l'ultima, 15". Domanda: "quanto fa F + 1 in esadecimale?" Risposta: 10 (si legge "uno-zero", vale sedici).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché proprio 16</p><h2>16 = 2⁴: una cifra esadecimale vale 4 bit</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">4 bit</p><h3>1 cifra</h3><p>Da <code>0000</code> a <code>1111</code>: esattamente 16 combinazioni, da 0 a F.</p></div>
+    <div class="card soft"><p class="num">8 bit</p><h3>2 cifre</h3><p>Un <b>byte</b> si scrive sempre con due cifre: da <code>00</code> a <code>FF</code>.</p></div>
+    <div class="card soft"><p class="num">FF</p><h3>= 255</h3><p>Il byte più grande: <code>11111111</code> in binario.</p></div>
+  </div>
+  <div class="callout">Per non confonderlo con il decimale si usa un segno: <code>0x2F</code> nei programmi, <code>#2F</code> nei colori, <code>2F₁₆</code> sul quaderno.</div>
+  <aside class="notes">Il gruppo di 4 bit si chiama anche "nibble" (mezzo byte). Domanda: "10 è dieci o sedici?" Senza indicazione della base non si può sapere: per questo serve il pedice o il prefisso 0x. Con la base 10 invece non c'è corrispondenza: 255 ha 3 cifre, 256 ne ha 3, ma in binario si passa da 8 a 9 bit.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Valore posizionale</p><h2>Ogni posto vale 16 volte quello a destra</h2></div>
+  <table class="data">
+    <tr><th>16³ · 4096</th><th>16² · 256</th><th>16¹ · 16</th><th>16⁰ · 1</th></tr>
+    <tr><td class="mono">0</td><td class="mono">1</td><td class="mono">A</td><td class="mono">3</td></tr>
+  </table>
+  <div class="formula"><small>1A3 in decimale (A vale 10)</small>1·256 + 10·16 + 3·1 = <span class="hl">419</span></div>
+  <div class="callout hl">Stesso metodo del binario: <b>cifra × peso</b>, poi si somma. Esempio veloce: <code>2F</code> = 2·16 + 15 = <b>47</b>.</div>
+  <aside class="notes">Ricollegare alla lezione sul binario: là i pesi raddoppiano, qui si moltiplicano per 16. Esercizio a voce: 10₁₆ = 16, 20₁₆ = 32, FF₁₆ = 15·16 + 15 = 255, 100₁₆ = 256.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da esadecimale a binario</p><h2>Ogni cifra diventa un gruppo di 4 bit</h2></div>
+  <div class="row" style="gap:72px;align-items:flex-start">
+    <div class="stack">
+      <p class="big">3</p>
+      <div class="bits">
+        <span><b>0</b><small>8</small></span><span><b>0</b><small>4</small></span><span><b class="on">1</b><small>2</small></span><span><b class="on">1</b><small>1</small></span>
+      </div>
+    </div>
+    <div class="stack">
+      <p class="big">C</p>
+      <div class="bits">
+        <span><b class="on">1</b><small>8</small></span><span><b class="on">1</b><small>4</small></span><span><b>0</b><small>2</small></span><span><b>0</b><small>1</small></span>
+      </div>
+    </div>
+  </div>
+  <div class="formula"><small>Si affiancano i gruppi</small>3C₁₆ = <span class="hl">0011 1100</span>₂ = 60</div>
+  <aside class="notes">Dentro ogni gruppo i pesi sono sempre 8 4 2 1. C = 12 = 8 + 4 → 1100. Sottolineare che si scrivono sempre 4 bit per cifra, anche quando a sinistra ci sono zeri (3 = 0011, non 11). Controllo in decimale: 3·16 + 12 = 60 e 32+16+8+4 = 60.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da binario a esadecimale</p><h2>Raggruppa a 4 bit, partendo da destra</h2></div>
+  <div class="flow">
+    <div class="card"><p class="num">1</p><h4>Il numero</h4><p class="mono">1011011</p><p class="muted small">7 bit</p></div>
+    <div class="card"><p class="num">2</p><h4>Gruppi da destra</h4><p class="mono">101 · 1011</p><p class="muted small">l'ultimo è incompleto</p></div>
+    <div class="card"><p class="num">3</p><h4>Zeri a sinistra</h4><p class="mono">0101 · 1011</p><p class="muted small">ora sono 4 + 4</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h4>Converti</h4><p class="mono">5 · B</p><p class="small">risultato <b>5B</b></p></div>
+  </div>
+  <p>Si parte sempre <mark>da destra</mark>: gli zeri aggiunti a sinistra non cambiano il valore.</p>
+  <aside class="notes">Errore tipico: raggruppare da sinistra (1011 · 011 → B3, sbagliato). Controllo in decimale: 1011011 = 64+16+8+2+1 = 91; 5B = 5·16 + 11 = 91. Proporre a voce: 11111 → 0001 1111 → 1F.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: esadecimale ↔ binario</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Calc</b>. In riga 1 scrivi: <b>Dato · A mano · Verifica</b>.</li>
+      <li>Da A2 ad A5 scrivi <code>7F</code> <code>A5</code> <code>1C</code> <code>B0</code>; in colonna B il binario a 8 bit calcolato a mano.</li>
+      <li>In C2 scrivi <code>=HEX.BINARIO(A2;8)</code> e trascina fino a C5.</li>
+      <li>Da A7 ad A9 scrivi <code>11110000</code> <code>101010</code> <code>11011110</code>; in B l'esadecimale a mano, in C <code>=BINARIO.HEX(A7)</code>.</li>
+      <li>Salva come <b>esadecimale_cognome.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Prima a mano</h4><p class="small">La formula serve solo a controllare. Se B e C non coincidono, cerca l'errore.</p></div>
+      <div class="check"><b>Controllo:</b> 7F = 01111111, 101010 = 2A.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni. Da esadecimale: 7F = 01111111, A5 = 10100101, 1C = 00011100, B0 = 10110000. Da binario: 11110000 = F0, 101010 = 2A, 11011110 = DE. Nota: Calc scrive i numeri binari senza gli zeri iniziali (00011100 diventa 11100): non è un errore, il valore è lo stesso. Il secondo argomento 8 di HEX.BINARIO chiede 8 cifre, cioè gli zeri a sinistra. Evitare dati come 1E5, che Calc interpreterebbe come notazione scientifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da decimale a esadecimale</p><h2>Divisioni successive per 16</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Dividi il numero per <b>16</b>.</li>
+      <li>Il <b>resto</b> va da 0 a 15: scrivilo come cifra (10 = A … 15 = F).</li>
+      <li>Ripeti con il quoziente finché arrivi a 0.</li>
+      <li>Leggi i resti <mark>dal basso verso l'alto</mark>.</li>
+    </ol>
+    <table class="data compact">
+      <tr><th>Divisione</th><th>Quoziente</th><th>Resto</th></tr>
+      <tr><td class="mono">470 : 16</td><td class="mono">29</td><td class="mono hl">6</td></tr>
+      <tr><td class="mono">29 : 16</td><td class="mono">1</td><td class="mono hl">13 → D</td></tr>
+      <tr><td class="mono">1 : 16</td><td class="mono">0</td><td class="mono hl">1</td></tr>
+    </table>
+  </div>
+  <div class="formula"><small>Resti letti dal basso</small>470 in esadecimale = <span class="hl">1D6</span></div>
+  <aside class="notes">Stesso metodo del binario, con 16 al posto di 2. Verifica: 1·256 + 13·16 + 6 = 256 + 208 + 6 = 470. Strada alternativa per numeri fino a 255: passare dal binario (decimale → binario → gruppi da 4). Esempio: 200 = 11001000 = C8.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le divisioni le fa Calc</h2>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+    <tr><th>1</th><td>Numero</td><td>Quoziente</td><td>Resto</td><td>Cifra</td></tr>
+    <tr><th>2</th><td>2026</td><td class="f">=QUOZIENTE(A2;16)</td><td class="f">=RESTO(A2;16)</td><td class="f sel">=DECIMALE.HEX(C2)</td></tr>
+    <tr><th>3</th><td class="f">=B2</td><td class="f">↓ copia</td><td class="f">↓ copia</td><td class="f">↓ copia</td></tr>
+  </table>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel file di prima aggiungi un foglio <b>Divisioni</b> e scrivi le righe 1–3.</li>
+      <li>Copia la riga 3 verso il basso finché il quoziente è 0. Leggi la colonna D dal basso.</li>
+      <li>Rifai con <b>300</b> e <b>1000</b>. Verifica con <code>=DECIMALE.HEX(2026)</code> e salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 2026 = 7EA. Ritorno: <code>=HEX.DECIMALE("7EA")</code> dà 2026.</div>
+  </div>
+  <aside class="notes">Soluzioni: 2026 → resti 10 (A), 14 (E), 7 → 7EA. 300 → resti 12 (C), 2, 1 → 12C. 1000 → resti 8, 14 (E), 3 → 3E8. Verifiche: 7·256 + 14·16 + 10 = 1792 + 224 + 10 = 2026; 256 + 32 + 12 = 300; 768 + 224 + 8 = 1000. In A3 la formula =B2 porta il quoziente alla riga successiva: è proprio il "ripeti con il quoziente" del metodo a mano.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Dove si usa</p><h2>L'esadecimale è ovunque ci siano byte</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Colori</h3><p class="mono">#1E90FF</p><p class="muted">In HTML e CSS: 3 byte, uno per rosso, verde e blu.</p></div>
+    <div class="card"><h3>Indirizzi MAC</h3><p class="mono">3C-52-82-1A-9F-04</p><p class="muted">6 byte che identificano la scheda di rete. I primi 3 indicano il produttore.</p></div>
+    <div class="card"><h3>Memoria</h3><p class="mono">0x00403A1C</p><p class="muted">Gli indirizzi delle celle di memoria, nei debugger e nei messaggi di errore.</p></div>
+  </div>
+  <p class="lead">In tutti i casi: <b>2 cifre esadecimali = 1 byte</b>.</p>
+  <aside class="notes">Gli esempi di MAC e di indirizzo di memoria sono inventati, solo per mostrare il formato. Attività veloce facoltativa: aprire il Prompt dei comandi e scrivere ipconfig /all; alla voce "Indirizzo fisico" compare il MAC della scheda di rete, con i byte separati da trattini. Chiedere: quanti bit ha un MAC? (6 byte = 48 bit). E un colore? (3 byte = 24 bit).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Colori in HTML e CSS</p><h2>#RRGGBB: tre byte, tre luci</h2></div>
+  <div class="formula"><small>Ogni coppia va da 00 (spento) a FF (massimo, 255): rosso · verde · blu</small>#<span class="hl">FF</span>8000 &nbsp;→&nbsp; 255 · 128 · 0</div>
+  <div class="cols-3">
+    <div class="card" style="background:#FF0000;color:#fff;border-color:transparent"><h3>#FF0000</h3><p>solo rosso</p></div>
+    <div class="card" style="background:#00FF00;border-color:transparent"><h3>#00FF00</h3><p>solo verde</p></div>
+    <div class="card" style="background:#0000FF;color:#fff;border-color:transparent"><h3>#0000FF</h3><p>solo blu</p></div>
+    <div class="card" style="background:#FFFFFF"><h3>#FFFFFF</h3><p>tutte al massimo: bianco</p></div>
+    <div class="card" style="background:#000000;color:#fff;border-color:transparent"><h3>#000000</h3><p>tutte spente: nero</p></div>
+    <div class="card" style="background:#808080;color:#fff;border-color:transparent"><h3>#808080</h3><p>tutte a metà: grigio</p></div>
+  </div>
+  <aside class="notes">Lo schermo mescola luce, non pittura: rosso + verde = giallo. Le combinazioni sono 256 · 256 · 256 = 16.777.216 colori. #FF8000 è arancione: tutto il rosso, metà verde (80 = 128), niente blu. Domanda: "#FFFF00 che colore è?" (giallo).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Indovina il colore prima di vederlo</h2>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">&lt;style&gt;</span>
+  div { padding: 20px; font-size: 28px; }
+  .a  { background: <span class="s">#FFFF00</span>; }
+  .b  { background: <span class="s">#00FFFF</span>; }
+  .c  { background: <span class="s">#FF8000</span>; }
+  .d  { background: <span class="s">#800080</span>; color: <span class="s">#FFFFFF</span>; }
+<span class="k">&lt;/style&gt;</span>
+<span class="k">&lt;div</span> class=<span class="s">"a"</span><span class="k">&gt;</span>A<span class="k">&lt;/div&gt;</span>
+<span class="k">&lt;div</span> class=<span class="s">"b"</span><span class="k">&gt;</span>B<span class="k">&lt;/div&gt;</span>
+<span class="k">&lt;div</span> class=<span class="s">"c"</span><span class="k">&gt;</span>C<span class="k">&lt;/div&gt;</span>
+<span class="k">&lt;div</span> class=<span class="s">"d"</span><span class="k">&gt;</span>D<span class="k">&lt;/div&gt;</span></pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Sul quaderno scrivi la tua <b>previsione</b> per A, B, C, D.</li>
+        <li>Apri <b>Blocco note</b> e copia il codice.</li>
+        <li>Salva come <b>colori_cognome.html</b> (tipo: Tutti i file).</li>
+        <li>Aprilo con doppio clic nel browser e confronta.</li>
+        <li>Aggiungi un riquadro E con il tuo colore preferito.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> A è giallo, B è azzurro (ciano).</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: A #FFFF00 = rosso + verde = giallo; B #00FFFF = verde + blu = ciano; C #FF8000 = arancione; D #800080 = rosso e blu a metà = viola scuro, con testo bianco. Per il riquadro E chiedere di scrivere nel file, come commento, il valore decimale delle tre componenti (es. #1E90FF = 30, 144, 255). Se il file si apre come testo, il nome è finito in .html.txt: rinominarlo. Consegna su Classroom il file .html.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un cenno</p><h2>L'ottale: base 8, gruppi di 3 bit</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li>Cifre da <b>0 a 7</b>; ogni posto vale 8 volte quello a destra.</li>
+        <li>8 = 2³: una cifra ottale vale <b>3 bit</b>.</li>
+        <li>Si raggruppa a 3 bit da destra, come per l'esadecimale.</li>
+        <li>Oggi è poco usato; resiste nei <b>permessi dei file</b> su Linux.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <div class="formula"><small>101110 a gruppi di 3</small>101 · 110 = <span class="hl">56₈</span></div>
+      <div class="card soft"><h4><code>chmod 755</code></h4><p class="small">7 = 111 → leggere, scrivere, eseguire<br>5 = 101 → leggere, eseguire</p></div>
+    </div>
+  </div>
+  <aside class="notes">Verifica: 101110 = 32+8+4+2 = 46; 5·8 + 6 = 46. Nei permessi Linux ogni cifra ottale è un gruppo di 3 bit: lettura (r), scrittura (w), esecuzione (x). 755 = proprietario rwx, gruppo r-x, altri r-x. Basta un cenno: non è richiesto saper convertire in ottale con sicurezza.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le quattro cose da ricordare</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1</p><h3>Cifre e pesi</h3><p class="muted">0–9 poi A–F (A = 10, F = 15). Pesi: 1, 16, 256, 4096.</p></div>
+    <div class="card"><p class="num">2</p><h3>Esadecimale ↔ binario</h3><p class="muted">1 cifra = 4 bit. Si raggruppa da destra.</p></div>
+    <div class="card"><p class="num">3</p><h3>Decimale ↔ esadecimale</h3><p class="muted">Dividi per 16 e leggi i resti dal basso; al ritorno, cifra × peso.</p></div>
+    <div class="card"><p class="num">4</p><h3>Dove si usa</h3><p class="muted">Colori #RRGGBB, indirizzi MAC, memoria: 2 cifre = 1 byte.</p></div>
+  </div>
+  <aside class="notes">Domande flash per chiudere: quanto vale FF? (255) Quanti bit ha un colore #RRGGBB? (24) Come si scrive 1100 1010 in esadecimale? (CA) Che colore è #000000? (nero)</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

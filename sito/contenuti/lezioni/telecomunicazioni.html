@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Introduzione alle telecomunicazioni · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 9 · Le reti di computer</p>
+  <h1>Introduzione alle<br>telecomunicazioni</h1>
+  <p class="lead">Dal telegrafo alla fibra ottica: come fa un messaggio a viaggiare da un punto all'altro del pianeta senza perdersi per strada?</p>
+  <aside class="notes">Obiettivi: conoscere lo schema della comunicazione (sorgente, trasmettitore, canale, ricevitore, destinazione), distinguere segnale e rumore, comunicazione analogica e digitale, seriale e parallela, sincrona e asincrona, conoscere i mezzi trasmissivi. Durata indicativa: 2-3 ore. Per il voto dal telefono collegare la LIM a Novaula da docente. Servono: LibreOffice Calc e Writer, un browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultima volta che hai parlato con un amico a distanza, come l'hai fatto?</h2></div>
+  <div class="poll" data-id="tlc-ultimo-messaggio">
+    <ol><li>Messaggio scritto</li><li>Messaggio vocale</li><li>Chiamata o videochiamata</li><li>Commento o storia sui social</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto chiedere: "in tutti questi casi, che cosa ha viaggiato davvero tra il tuo telefono e il suo? Lettere? Voce?" Risposta da far emergere: viaggiano segnali (onde radio, impulsi di luce, corrente), che portano bit. È il filo rosso della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tele = lontano</p><h2>Comunicare a distanza</h2></div>
+  <p class="lead">Una <b>telecomunicazione</b> trasmette informazioni a distanza attraverso un <mark>segnale</mark>. Nel 1948 Claude Shannon la descrisse con cinque blocchi.</p>
+  <div class="flow">
+    <div class="card soft" style="padding:28px 26px"><h4>Sorgente</h4><p class="small">Chi crea il messaggio: tu che parli.</p></div>
+    <div class="card soft" style="padding:28px 26px"><h4>Trasmettitore</h4><p class="small">Trasforma il messaggio in segnale: il tuo telefono.</p></div>
+    <div class="card fill" style="padding:28px 26px"><h4>Canale</h4><p class="small">Dove viaggia il segnale: aria, cavo, fibra.</p></div>
+    <div class="card soft" style="padding:28px 26px"><h4>Ricevitore</h4><p class="small">Dal segnale ricava il messaggio: il suo telefono.</p></div>
+    <div class="card soft" style="padding:28px 26px"><h4>Destinazione</h4><p class="small">Chi riceve: il tuo amico.</p></div>
+  </div>
+  <div class="callout">Sul canale arriva sempre anche il <b>rumore</b>: disturbi che sporcano il segnale.</div>
+  <aside class="notes">Far ricostruire lo schema con un esempio diverso: la radio della macchina (sorgente lo speaker in studio, trasmettitore l'antenna della stazione, canale l'aria, ricevitore l'autoradio, destinazione chi guida). Il rumore in questo caso: il fruscio in galleria. Lo schema viene dall'articolo di Shannon "A Mathematical Theory of Communication" (1948), dove compare anche la "noise source".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Claude Shannon, il padre della teoria dell'informazione</h2></div>
+  <figure class="citazione">
+    <blockquote>Il problema fondamentale della comunicazione è riprodurre in un punto, esattamente o in modo approssimato, un messaggio scelto in un altro punto.</blockquote>
+    <figcaption><b>Claude Shannon</b>, matematico e ingegnere statunitense, "A Mathematical Theory of Communication", 1948</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nelle videochiamate (Meet, Teams, Zoom) un modello di <b>machine learning</b>, addestrato su tantissimi esempi di voci e di rumori, separa la tua voce dal cane che abbaia o dalla tastiera. È la stessa lotta contro il rumore, fatta con l'AI.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point" (prima pagina dell'articolo, Bell System Technical Journal, 1948). Nello stesso articolo Shannon usa per la prima volta in stampa la parola "bit", attribuendola al collega John Tukey. Domanda alla classe: "quando una videochiamata si blocca o gracchia, qual è il canale e qual è il rumore?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Segnale e rumore</p><h2>Che segnale usano? Tocca le carte</h2></div>
+  <p class="lead">Il <b>segnale</b> è una grandezza fisica che cambia nel tempo e porta l'informazione. Il <b>rumore</b> è tutto ciò che la disturba.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Il telecomando della TV</h3><p>Che segnale usa? Che cosa lo disturba?</p></div><div class="retro"><p><b>Luce infrarossa</b>: lampi invisibili all'occhio.</p><p class="muted">Rumore: il sole forte sul televisore, un ostacolo davanti.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Il cavo delle cuffie</h3><p>Che segnale usa? Che cosa lo disturba?</p></div><div class="retro"><p><b>Corrente elettrica</b> che varia come il suono.</p><p class="muted">Rumore: il ronzio quando il cavo passa vicino a un alimentatore.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Il Wi-Fi di casa</h3><p>Che segnale usa? Che cosa lo disturba?</p></div><div class="retro"><p><b>Onde radio</b> a 2,4 o 5 GHz.</p><p class="muted">Rumore: muri spessi, il forno a microonde acceso, i Wi-Fi dei vicini.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare ogni carta far indovinare segnale e disturbo. Il forno a microonde lavora intorno ai 2,45 GHz, la stessa banda del Wi-Fi a 2,4 GHz: per questo può disturbarlo. Si può provare il telecomando puntandolo verso la fotocamera di un telefono: molte fotocamere mostrano il lampo infrarosso (non tutte, alcune hanno un filtro).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analogico e digitale</p><h2>Due modi di portare l'informazione</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <svg viewBox="0 0 600 120" width="100%" height="120" style="color:var(--accent)" aria-hidden="true"><path d="M0 60 C 50 -10, 100 -10, 150 60 S 250 130, 300 60 S 400 -10, 450 60 S 550 130, 600 60" fill="none" stroke="currentColor" stroke-width="7"/></svg>
+      <h3>Analogico</h3>
+      <p>Il segnale varia con continuità e può assumere infiniti valori, come la lancetta di un orologio.</p>
+      <p class="muted">Disco in vinile, radio FM, vecchio telefono di casa.</p>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 600 120" width="100%" height="120" style="color:var(--accent)" aria-hidden="true"><path d="M0 100 H 75 V 20 H 150 V 100 H 225 V 20 H 375 V 100 H 450 V 20 H 525 V 100 H 600" fill="none" stroke="currentColor" stroke-width="7"/></svg>
+      <h3>Digitale</h3>
+      <p>Il segnale assume pochi valori distinti, di solito due: 0 e 1.</p>
+      <p class="muted">Wi-Fi, musica in streaming, radio DAB+, fibra ottica.</p>
+    </div>
+  </div>
+  <div class="callout">Ricordi la lezione sui numeri binari? Il computer lavora con 0 e 1: per questo le telecomunicazioni sono diventate digitali.</div>
+  <aside class="notes">L'onda digitale disegnata rappresenta la sequenza 0 1 0 1 1 0 1 0 (un livello per ogni tratto). Chiedere: "la voce che esce dalla tua bocca è analogica o digitale?" (analogica: il microfono del telefono la trasforma in numeri). Il vecchio telefono fisso trasmetteva la voce in forma analogica fino alla centrale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chiamata da Milano a New York: perché in digitale si sente bene come una chiamata al vicino?</h2></div>
+  <div class="poll" data-id="tlc-rigenera" data-tipo="quiz" data-risposta="C">
+    <ol><li>Perché il segnale digitale non subisce rumore</li><li>Perché usa cavi più grossi e più costosi</li><li>Perché lungo la strada gli 0 e 1 vengono rigenerati puliti</li><li>Perché a ogni ripetitore il volume viene alzato</li></ol>
+    <p class="why">Anche il segnale digitale prende rumore (la A è il tranello). Ma un ripetitore deve solo capire se è arrivato uno 0 o un 1, e lo rispedisce pulito. Un amplificatore analogico invece alzava il volume del segnale e anche del rumore (la D).</p>
+  </div>
+  <aside class="notes">Risposta C. È il vantaggio decisivo del digitale: la rigenerazione. Esempio da raccontare: le fotocopie di fotocopie peggiorano a ogni passaggio (analogico), mentre copiare un file da una chiavetta all'altra dà sempre una copia identica (digitale). Se il rumore è troppo forte anche il digitale sbaglia qualche bit: per questo si aggiungono codici di controllo degli errori.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Da onda a scalini: digitalizza un segnale</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1 scrivi <b>t</b>, in B1 <b>Analogico</b>, in C1 <b>Digitale</b>.</li>
+      <li>In A2 scrivi 0 e in A3 1: seleziona le due celle e trascina il quadratino fino ad A42.</li>
+      <li>In B2 scrivi <code>=SEN(A2*PI.GRECO()/10)</code>, in C2 <code>=ARROTONDA(B2*2;0)/2</code>. Copia B2:C2 fino alla riga 42.</li>
+      <li>Seleziona B1:C42 e inserisci un grafico a linee (menu Inserisci, Grafico).</li>
+      <li>Salva come <b>campionamento.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> B7 vale 1 e C3 vale 0,5. La linea Analogico è un'onda morbida, la linea Digitale fa gli scalini: ha solo 5 livelli (−1; −0,5; 0; 0,5; 1).</div>
+  </div>
+  <aside class="notes">Soluzione: B3 = SEN(π/10) = 0,309, che moltiplicato per 2 e arrotondato dà 1, diviso 2 dà 0,5. B7 corrisponde a t = 5, cioè SEN(π/2) = 1. Ogni riga è un "campione" del segnale (campionamento), l'arrotondamento a pochi livelli è la quantizzazione. Sfida per i più veloci: cambiare C2 in =ARROTONDA(B2*8;0)/8. I livelli diventano 17 e gli scalini seguono molto meglio l'onda: più livelli (più bit per campione) significa più qualità, ma anche più dati da trasmettere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Seriale e parallela</p><h2>Tutti insieme o uno alla volta?</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <svg viewBox="0 0 640 210" width="100%" height="210" aria-hidden="true" style="color:var(--accent)"><g stroke="#c9ced9" stroke-width="3"><line x1="70" y1="16" x2="600" y2="16"/><line x1="70" y1="42" x2="600" y2="42"/><line x1="70" y1="68" x2="600" y2="68"/><line x1="70" y1="94" x2="600" y2="94"/><line x1="70" y1="120" x2="600" y2="120"/><line x1="70" y1="146" x2="600" y2="146"/><line x1="70" y1="172" x2="600" y2="172"/><line x1="70" y1="198" x2="600" y2="198"/></g><g fill="#c9ced9"><path d="M600 9 L616 16 L600 23 Z"/><path d="M600 35 L616 42 L600 49 Z"/><path d="M600 61 L616 68 L600 75 Z"/><path d="M600 87 L616 94 L600 101 Z"/><path d="M600 113 L616 120 L600 127 Z"/><path d="M600 139 L616 146 L600 153 Z"/><path d="M600 165 L616 172 L600 179 Z"/><path d="M600 191 L616 198 L600 205 Z"/></g><g fill="currentColor" font-family="JetBrains Mono,monospace" font-size="24" font-weight="700" text-anchor="middle"><text x="40" y="24">0</text><text x="40" y="50">1</text><text x="40" y="76">0</text><text x="40" y="102">0</text><text x="40" y="128">0</text><text x="40" y="154">0</text><text x="40" y="180">0</text><text x="40" y="206">1</text></g></svg>
+      <h3>Parallela</h3>
+      <p>Gli 8 bit di un byte partono insieme, su 8 fili. Era la vecchia porta della stampante.</p>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 640 210" width="100%" height="210" aria-hidden="true" style="color:var(--accent)"><line x1="20" y1="120" x2="600" y2="120" stroke="#c9ced9" stroke-width="3"/><path d="M600 113 L616 120 L600 127 Z" fill="#c9ced9"/><g fill="currentColor" font-family="JetBrains Mono,monospace" font-size="40" font-weight="700" text-anchor="middle"><text x="60" y="98">0</text><text x="126" y="98">1</text><text x="192" y="98">0</text><text x="258" y="98">0</text><text x="324" y="98">0</text><text x="390" y="98">0</text><text x="456" y="98">0</text><text x="522" y="98">1</text></g></svg>
+      <h3>Seriale</h3>
+      <p>I bit viaggiano uno dopo l'altro, su un solo filo. È la S di <b>USB</b>: Universal Serial Bus.</p>
+    </div>
+  </div>
+  <div class="callout hl">Sorpresa: oggi, alle velocità più alte, vince la seriale. Su tanti fili vicini i bit arrivano sfasati e si disturbano a vicenda. Sono seriali USB, SATA (dischi) e PCI Express (scheda video).</div>
+  <aside class="notes">I bit disegnati sono il codice ASCII della lettera A (01000001), già visto nella lezione sui numeri binari. Il paradosso da far discutere: "otto corsie sono più veloci di una, eppure...". Con frequenze altissime, sui cavi paralleli i bit di un byte non arrivano esattamente nello stesso istante (sfasamento) e i fili vicini si disturbano (diafonia). Un solo canale seriale molto veloce, o pochi canali seriali indipendenti, funziona meglio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sincrona e asincrona</p><h2>Con o senza un ritmo comune?</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Sincrona</h3><p>Trasmettitore e ricevitore seguono lo stesso ritmo, un <b>clock</b> comune, come i vogatori che remano al tempo del capovoga. I dati partono a blocchi, senza pause.</p><p class="muted">Esempio: i dati tra la CPU e la RAM (SDRAM = RAM sincrona).</p></div>
+    <div class="card soft"><h3>Asincrona</h3><p>Nessun clock comune: ogni carattere parte quando è pronto, preceduto da un <b>bit di start</b> e seguito da un <b>bit di stop</b>, come chi bussa prima di entrare.</p><p class="muted">Esempio: la porta seriale delle schede Arduino.</p></div>
+  </div>
+  <div class="row"><span class="chip">start</span><code>0 1 0 0 0 0 0 1</code><span class="chip">stop</span><span class="muted small">un carattere in una trasmissione asincrona</span></div>
+  <aside class="notes">Il bit di start avvisa il ricevitore "sta arrivando un carattere", il bit di stop chiude. Costo: 10 bit spediti per 8 bit utili. Dettaglio tecnico per i curiosi: la porta seriale (UART) spedisce prima il bit meno significativo. Attenzione al doppio significato: nella vita di tutti i giorni si dice "comunicazione asincrona" anche per i messaggi che leggi quando vuoi (chat, email), e "sincrona" per la chiamata in diretta. L'idea è la stessa: c'è o non c'è un tempo comune.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni tipo di comunicazione alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="tlc-tipi">
+    <dt>Analogica</dt><dd>Il segnale varia con continuità, come una lancetta</dd>
+    <dt>Digitale</dt><dd>Il segnale ha pochi valori distinti, come 0 e 1</dd>
+    <dt>Seriale</dt><dd>I bit viaggiano uno dopo l'altro su un solo filo</dd>
+    <dt>Parallela</dt><dd>Più bit viaggiano insieme su più fili</dd>
+    <dt>Sincrona</dt><dd>Trasmettitore e ricevitore seguono lo stesso clock</dd>
+    <dt>Asincrona</dt><dd>Ogni carattere ha un bit di start e uno di stop</dd>
+  </dl>
+  <aside class="notes">Si può fare a coppie in 2 minuti, poi correzione alla LIM con il pulsante Controlla. Gli errori più frequenti: scambiare sincrona e seriale (sono due classificazioni diverse: una trasmissione può essere seriale e sincrona insieme, come in USB).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Telegrafisti per un quarto d'ora</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>morsecode.world</b> e scegli il traduttore (Translator). Non serve un account.</li>
+      <li>Scrivi il tuo nome: guarda i punti e le linee e premi Play per ascoltarlo.</li>
+      <li>A coppie: uno sceglie una parola di 4 lettere e la trasmette battendo sul banco (colpo breve = punto, lungo = linea).</li>
+      <li>L'altro la decodifica con la tabella del sito. Poi scambiatevi i ruoli.</li>
+      <li>In Writer annota parole, tempo impiegato ed errori. Salva come <b>morse.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> CIAO si scrive <code>-.-. .. .- ---</code>. Se il ritmo non è regolare e non lasci una pausa tra le lettere, chi riceve sbaglia: serve un accordo sui tempi.</div>
+  </div>
+  <aside class="notes">Il codice Morse è una codifica con due simboli (punto e linea) più le pause: un antenato del digitale. Il 24 maggio 1844 Samuel Morse inviò sulla linea telegrafica tra Washington e Baltimora il messaggio "What hath God wrought", una frase della Bibbia. Far notare che SOS (... --- ...) è stato scelto perché facilissimo da trasmettere e riconoscere. Se il sito non fosse raggiungibile, proiettare una tabella Morse alla LIM: l'attività funziona anche solo con carta e banco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I mezzi trasmissivi</p><h2>Le strade dei segnali</h2></div>
+  <table class="data compact">
+    <tr><th>Mezzo</th><th>Come funziona</th><th>Dove lo trovi</th></tr>
+    <tr><td><b>Doppino</b></td><td>Due fili di rame intrecciati per ridurre i disturbi</td><td>Cavi di rete, linea del telefono</td></tr>
+    <tr><td><b>Cavo coassiale</b></td><td>Un filo centrale avvolto da una calza metallica che lo scherma</td><td>Il cavo dell'antenna TV</td></tr>
+    <tr><td><b>Fibra ottica</b></td><td>Un filo di vetro sottile come un capello: i bit sono impulsi di luce</td><td>Dorsali internet, FTTH di casa</td></tr>
+    <tr><td><b>Onde radio</b></td><td>Nessun cavo: il segnale viaggia nell'aria</td><td>Wi-Fi, Bluetooth, 4G e 5G, satelliti</td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Tra i continenti quasi tutto il traffico internet corre in <b>cavi sottomarini</b> in fibra. Quando fai una domanda a un chatbot AI, spesso viaggia in fibra fino a un data center lontano, e la risposta torna in meno di un secondo.</p></div>
+  <aside class="notes">FTTH = Fiber To The Home, la fibra fino a casa. Chiedere chi ha la fibra a casa e chi usa la connessione del telefono. Sui cavi sottomarini: le stime più citate (TeleGeography) parlano di circa il 99% del traffico dati intercontinentale; i satelliti servono soprattutto dove i cavi non arrivano. Per vedere la mappa dei cavi: submarinecablemap.com (nessun account), da mostrare alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Vicino al cavo c'è un grosso motore elettrico che crea forti disturbi. Quale mezzo non ne risente?</h2></div>
+  <div class="poll" data-id="tlc-fibra" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il doppino intrecciato</li><li>Il cavo coassiale schermato</li><li>Il Wi-Fi a 5 GHz</li><li>La fibra ottica</li></ol>
+    <p class="why">La fibra porta luce, non corrente: i campi elettromagnetici non la disturbano. Il coassiale è schermato e resiste meglio del doppino, ma resta un cavo elettrico. Anche le onde radio subiscono interferenze.</p>
+  </div>
+  <aside class="notes">Risposta D. Il tranello è la B: "schermato" fa pensare a "immune". La schermatura riduce i disturbi ma non li elimina. Per questo nelle fabbriche e tra edifici diversi si usa spesso la fibra.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="tlc-storia">
+    <li>Samuel Morse invia il primo messaggio sulla linea telegrafica Washington-Baltimora</li>
+    <li>Alexander Graham Bell brevetta il telefono</li>
+    <li>Guglielmo Marconi trasmette via radio la lettera S oltre l'Atlantico</li>
+    <li>Il satellite Telstar porta la TV in diretta tra America ed Europa</li>
+    <li>Entrano in servizio le prime linee telefoniche in fibra ottica</li>
+    <li>Viene inviato il primo SMS: "Merry Christmas"</li>
+    <li>Partono le prime reti 5G commerciali</li>
+  </ol>
+  <aside class="notes">Date: telegrafo di Morse 1844; brevetto di Bell 1876 (l'italiano Antonio Meucci aveva sperimentato il suo "telettrofono" anni prima e nel 1871 depositò un avviso di brevetto provvisorio, che non riuscì a rinnovare); Marconi 12 dicembre 1901, da Poldhu in Cornovaglia a Signal Hill in Terranova (Nobel per la fisica nel 1909); Telstar 1962; prime linee commerciali in fibra 1977 negli USA; primo SMS 3 dicembre 1992, inviato da un computer a un telefono; 5G commerciale nel 2019. Si può fare a squadre: vince chi sbaglia meno posizioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Hai una connessione da 100 Mbps. Quanto serve, al minimo, per scaricare un file da 100 MB?</h2></div>
+  <div class="poll" data-id="tlc-bit-byte" data-tipo="quiz" data-risposta="B">
+    <ol><li>1 secondo</li><li>8 secondi</li><li>0,8 secondi</li><li>100 secondi</li></ol>
+    <p class="why">Mbps sono megabit al secondo, MB sono megabyte, e 1 byte = 8 bit. 100 MB = 800 Mb, e 800 : 100 = 8 secondi. Nella realtà ci vuole anche un po' di più.</p>
+  </div>
+  <aside class="notes">Risposta B. Quasi tutti rispondono A: la b minuscola (bit) e la B maiuscola (byte) fanno la differenza. Gli operatori indicano la velocità in bit al secondo, i file sono misurati in byte. Collegare al laboratorio successivo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quanto è veloce la nostra linea?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>fast.com</b> (nessun account) e annota la velocità in Mbps.</li>
+      <li>In Calc: in A1 <b>Velocità (Mbps)</b> e in B1 il tuo valore; in A2 <b>File (GB)</b> e in B2 4.</li>
+      <li>In B3 scrivi <code>=B2*8*1000</code> (megabit del file), in B4 <code>=B3/B1</code> (secondi).</li>
+      <li>In B5 scrivi <code>=B4/60</code> (minuti). Prova anche con un film da 1,5 GB e un gioco da 50 GB.</li>
+      <li>Salva come <b>velocita.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 100 Mbps un file da 4 GB richiede 320 secondi, cioè circa 5,3 minuti. Se misurate tutti insieme la velocità cala: il canale è condiviso.</div>
+  </div>
+  <aside class="notes">Soluzione: 4 GB × 8 = 32 Gb = 32 000 Mb; 32 000 : 100 = 320 s = 5,33 min. Gioco da 50 GB a 100 Mbps: 4000 s, circa 67 minuti. Qui usiamo 1 GB = 1000 MB come fanno gli operatori (Windows a volte conta 1024). Far confrontare i risultati delle postazioni: se 25 PC misurano insieme, la linea della scuola si divide tra tutti. fast.com misura la velocità verso i server di Netflix: è una stima, non un valore assoluto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3158" data-aiuto="la terza cifra viene dal grafico a scalini del laboratorio in Calc">
+    <ul class="points">
+      <li>1ª cifra: quanti punti ha la lettera S, il segnale di Marconi del 1901</li>
+      <li>2ª cifra: su quanti fili viaggiano i dati in una trasmissione seriale, in una direzione</li>
+      <li>3ª cifra: quanti livelli aveva il segnale digitale del laboratorio in Calc</li>
+      <li>4ª cifra: i secondi minimi per scaricare 100 MB con una linea da 100 Mbps</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> S = ··· (3), seriale = 1 filo, 5 livelli, 8 secondi.</div>
+  </div>
+  <aside class="notes">Codice: 3158. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>I disturbi che sporcano il segnale lungo il canale si chiamano <span class="blank" data-risposta="rumore"></span>.</p>
+    <p>Un segnale che assume solo pochi valori distinti, come 0 e 1, è <span class="blank" data-risposta="digitale"></span>.</p>
+    <p>Se i bit viaggiano uno dopo l'altro su un solo filo, la trasmissione è <span class="blank" data-risposta="seriale"></span>.</p>
+    <p>Nella fibra ottica i bit viaggiano come impulsi di <span class="blank" data-risposta="luce"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: rumore, digitale, seriale, luce.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sorgente, trasmettitore, canale, ricevitore, destinazione</li>
+      <li>Il segnale porta l'informazione, il rumore la disturba</li>
+      <li>Il digitale vince perché si può rigenerare</li>
+    </ul>
+    <ul class="points">
+      <li>Seriale o parallela, sincrona o asincrona</li>
+      <li>Doppino, coassiale, fibra, onde radio</li>
+      <li>Mbps sono bit, MB sono byte: ×8</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: che cosa sono le reti.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

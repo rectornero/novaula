@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La tecnologia dell'informazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 1 · Il mondo dell'informatica</p>
+  <h1>La tecnologia<br>dell'informazione</h1>
+  <p class="lead">Dai calcolatori grandi come una stanza all'intelligenza artificiale nel tuo telefono: che cosa fa davvero un computer?</p>
+  <aside class="notes">Obiettivi: distinguere dato e informazione, conoscere il ciclo input-elaborazione-output, riconoscere i tipi di computer e i nuovi dispositivi. Durata indicativa: 2 ore. Tenere la LIM collegata a Novaula da docente se si vuole il voto dal telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quante ore al giorno passi davanti a uno schermo?</h2></div>
+  <div class="poll" data-id="schermo">
+    <ol><li>Meno di 2</li><li>Da 2 a 4</li><li>Da 4 a 6</li><li>Più di 6</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, senza giudizio. Far notare che contano anche TV, console e PC di scuola. Chiedere: "in quelle ore, quante informazioni avete prodotto voi?" Ponte verso il concetto di dato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è l'informatica</p><h2>Informazione + automatica</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">L'informatica è la scienza che studia il <mark>trattamento automatico dell'informazione</mark>: raccoglierla, conservarla, elaborarla e trasmetterla con le macchine.</p>
+      <p>La parola francese <i>informatique</i> nasce nel 1962 dall'ingegnere Philippe Dreyfus, unendo <b>infor</b>mation e auto<b>matique</b>.</p>
+    </div>
+    <div class="card soft"><p class="num">4</p><h3>verbi da ricordare</h3><ul class="points"><li>raccogliere</li><li>conservare</li><li>elaborare</li><li>trasmettere</li></ul></div>
+  </div>
+  <aside class="notes">Far ripetere i quattro verbi e chiedere un esempio quotidiano per ognuno (foto scattata, salvata in galleria, ritoccata con un filtro, inviata su WhatsApp).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dati e informazioni</p><h2>Un dato da solo non dice niente</h2></div>
+  <p class="lead">Il <b>dato</b> è un valore grezzo. Diventa <b>informazione</b> quando ha un contesto e un significato. Tocca le carte.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>38,2</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Temperatura corporea: 38,2 °C.</b></p><p class="muted">Informazione: hai la febbre, oggi resti a casa.</p></div></div>
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>9:05</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Ora di arrivo del treno: 9:05.</b></p><p class="muted">Informazione: la prima ora la perdi.</p></div></div>
+    <div class="flip" style="--h:300px"><div class="fronte"><h3>12 000</h3><p>Che cos'è?</p></div><div class="retro"><p><b>Passi fatti oggi: 12 000.</b></p><p class="muted">Informazione: obiettivo di 10 000 passi raggiunto.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare ogni carta, chiedere alla classe di indovinare il contesto. Sottolineare: lo stesso numero può significare cose diverse in contesti diversi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale di queste è un'informazione completa?</h2></div>
+  <div class="poll" data-id="dato-info" data-tipo="quiz" data-risposta="C">
+    <ol><li>1984</li><li>37, 41, 39, 40</li><li>La verifica di informatica è lunedì alla seconda ora</li><li>#FF0000</li></ol>
+    <p class="why">Solo la C ha un contesto chiaro (cosa, quando) e permette di decidere qualcosa. Le altre sono dati: 1984 può essere un anno o un codice, #FF0000 è il rosso solo se sai che è un colore web.</p>
+  </div>
+  <aside class="notes">La D è il tranello: chi conosce l'HTML la riconosce come colore, ma senza contesto resta un dato. Buona occasione per anticipare la lezione sull'esadecimale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dai dati alle informazioni</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1 scrivi <b>Giorno</b>, in B1 <b>Temperatura</b>.</li>
+      <li>Da A2 ad A8 i giorni della settimana; da B2 a B8 queste temperature: 14, 17, 15, 19, 21, 18, 16.</li>
+      <li>In B10 scrivi <code>=MEDIA(B2:B8)</code>, in B11 <code>=MAX(B2:B8)</code>, in B12 <code>=MIN(B2:B8)</code>.</li>
+      <li>In A14 scrivi una frase che trasforma questi dati in un'informazione utile.</li>
+      <li>Salva come <b>dati-informazioni.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> media 17,14 (con due decimali), massima 21, minima 14. La frase deve dire qualcosa di utile, per esempio quale giorno era il migliore per la gita.</div>
+  </div>
+  <aside class="notes">Soluzione: MEDIA = 120/7 = 17,142857… Se gli studenti non ricordano le funzioni, rimandare alla lezione su Calc. Frase esempio: "Il giorno più caldo è venerdì con 21 gradi: la gita va fatta venerdì".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli strumenti dell'informatica</p><h2>Ogni computer fa sempre tre cose</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Input</h3><p>I dati entrano: tastiera, microfono, fotocamera, sensori.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Elaborazione</h3><p>La CPU esegue le istruzioni del programma sui dati.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Output</h3><p>I risultati escono: schermo, casse, stampante, rete.</p></div>
+  </div>
+  <div class="callout">Sotto tutto c'è la <b>memoria</b>: la RAM tiene i dati mentre si lavora, il disco li conserva quando spegni.</div>
+  <aside class="notes">Esempio da far analizzare: un messaggio vocale. Input microfono, elaborazione compressione audio, output invio in rete e casse del destinatario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Premi un tasto: cosa succede, in ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="tasto">
+    <li>Premi il tasto A sulla tastiera</li>
+    <li>La tastiera invia un codice al computer</li>
+    <li>Il sistema operativo lo passa al programma aperto</li>
+    <li>La CPU esegue le istruzioni del programma</li>
+    <li>La scheda video disegna la lettera</li>
+    <li>La A compare sullo schermo</li>
+  </ol>
+  <aside class="notes">Tutto questo avviene in pochi millisecondi. Ordine corretto: tasto, codice, sistema operativo, CPU, scheda video, schermo. Molti mettono la CPU prima del sistema operativo: discuterne, entrambi lavorano insieme ma è il sistema operativo a smistare l'input al programma giusto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="storia">
+    <li>Charles Babbage progetta la macchina analitica</li>
+    <li>Negli USA entra in funzione l'ENIAC</li>
+    <li>Nei Bell Labs nasce il transistor</li>
+    <li>Intel mette in vendita il primo microprocessore, il 4004</li>
+    <li>Tim Berners-Lee inventa il World Wide Web</li>
+    <li>Esce il primo iPhone</li>
+    <li>ChatGPT viene aperto al pubblico</li>
+  </ol>
+  <aside class="notes">Date: macchina analitica 1837 (progetto, mai costruita), ENIAC 1946, transistor 1947, Intel 4004 1971 (progettato anche dall'italiano Federico Faggin), Web 1989-1991, iPhone 2007, ChatGPT novembre 2022. Il tranello: il transistor arriva DOPO l'ENIAC, che funzionava con circa 18 000 valvole termoioniche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Ada Lovelace, la prima programmatrice</h2></div>
+  <figure class="citazione">
+    <blockquote>La macchina analitica non ha alcuna pretesa di creare qualcosa. Può fare tutto ciò che sappiamo ordinarle di fare.</blockquote>
+    <figcaption><b>Ada Lovelace</b>, matematica inglese, nelle sue Note sulla macchina di Babbage, 1843</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 1950 Alan Turing chiamò questa idea <b>"l'obiezione di Lady Lovelace"</b> e si chiese se una macchina potesse sorprenderci. Oggi un'intelligenza artificiale scrive testi e disegna immagini: sta creando o sta eseguendo ordini?</p></div>
+  <aside class="notes">Ada Lovelace scrisse nelle Note il primo algoritmo pensato per una macchina (calcolo dei numeri di Bernoulli). La traduzione è nostra dall'inglese. Il riferimento di Turing è nell'articolo "Computing Machinery and Intelligence" (1950). Lasciare 2 minuti di discussione prima del sondaggio successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Un'AI che scrive una poesia è creativa?</h2></div>
+  <div class="poll" data-id="ai-creativa">
+    <ol><li>Sì, la poesia prima non esisteva</li><li>No, rimescola testi scritti da persone</li><li>Dipende da cosa intendiamo per creatività</li></ol>
+  </div>
+  <aside class="notes">Non c'è una risposta giusta: far argomentare almeno uno studente per opzione. Spunto: i modelli linguistici imparano da enormi quantità di testi scritti da persone; la scelta delle parole è statistica ma il risultato può essere nuovo. Collegare alla UDA 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipi di computer</p><h2>Abbina ogni computer al suo lavoro</h2></div>
+  <dl class="puzzle-abbina" data-id="tipi">
+    <dt>Supercomputer</dt><dd>Leonardo, al Cineca di Bologna, simula il clima e le molecole</dd>
+    <dt>Server</dt><dd>Risponde giorno e notte alle richieste di siti e app</dd>
+    <dt>Personal computer</dt><dd>Il PC del laboratorio, con cui scrivi e programmi</dd>
+    <dt>Smartphone</dt><dd>Computer tascabile pieno di sensori e sempre connesso</dd>
+    <dt>Sistema embedded</dt><dd>Il piccolo computer nascosto nella lavatrice</dd>
+  </dl>
+  <aside class="notes">Leonardo è uno dei supercomputer più potenti d'Europa, inaugurato nel 2022 al Cineca. Far notare che i computer embedded sono di gran lunga i più numerosi: auto, elettrodomestici, semafori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi oggetti NON contiene un computer?</h2></div>
+  <div class="poll" data-id="no-computer" data-tipo="quiz" data-risposta="C">
+    <ol><li>La carta di credito con il chip</li><li>Il telecomando della TV</li><li>Il vecchio termometro a mercurio</li><li>La chiavetta USB</li></ol>
+    <p class="why">Il termometro a mercurio funziona solo con la dilatazione del liquido. Il chip della carta, il telecomando e la chiavetta hanno invece un piccolo processore: sono sistemi embedded.</p>
+  </div>
+  <aside class="notes">Quasi tutti sbagliano sulla carta di credito o sulla chiavetta: il chip della carta è un microcontrollore che esegue la crittografia, la chiavetta ha un controller che gestisce la memoria flash.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La carta d'identità del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Impostazioni</b> di Windows, poi <b>Sistema</b> e in fondo <b>Informazioni</b>.</li>
+      <li>Annota: nome del dispositivo, processore, RAM installata, versione di Windows.</li>
+      <li>Apri Writer e crea una tabella di 2 colonne: <b>Caratteristica</b> e <b>Valore</b>.</li>
+      <li>Aggiungi una riga: a quale tipo di computer appartiene e perché.</li>
+      <li>Salva come <b>identita-pc.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la RAM è indicata in GB (per esempio 8 GB) e il processore ha un nome e una frequenza in GHz. Se trovi "64 bit", annotalo: ci tornerà utile.</div>
+  </div>
+  <aside class="notes">Il percorso esatto può cambiare leggermente tra Windows 10 e 11; in alternativa tasto Windows + Pausa, oppure cercare "Informazioni sul PC". Confrontare i risultati tra due postazioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I nuovi dispositivi digitali</p><h2>Il computer è uscito dalla scrivania</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="icon">⌚</p><h3>Indossabili</h3><p class="muted">Smartwatch e braccialetti misurano battito e passi.</p></div>
+    <div class="card"><p class="icon">🏠</p><h3>Internet delle cose</h3><p class="muted">Lampadine, termostati e sensori collegati in rete.</p></div>
+    <div class="card"><p class="icon">🥽</p><h3>Visori</h3><p class="muted">Realtà virtuale e aumentata per giochi, studio e lavoro.</p></div>
+    <div class="card"><p class="icon">🚗</p><h3>Auto connesse</h3><p class="muted">Sensori e telecamere aiutano a frenare e a restare in corsia.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti smartphone hanno un chip dedicato all'AI, la <b>NPU</b> (Neural Processing Unit): riconosce i volti nelle foto e traduce la voce senza mandare i dati su internet.</p></div>
+  <aside class="notes">Chiedere quanti dispositivi "smart" hanno in casa. Collegare la NPU alla privacy: elaborare sul dispositivo significa che i dati non lasciano il telefono.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un'AI che indovina i tuoi disegni</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser e vai su <b>quickdraw.withgoogle.com</b>. Non serve un account.</li>
+      <li>Gioca una partita: l'AI prova a indovinare 6 disegni in 20 secondi ciascuno.</li>
+      <li>In un documento annota quali disegni ha indovinato e quali no.</li>
+      <li>Rispondi: quali <b>dati</b> ha usato l'AI per imparare? Perché alcuni disegni li sbaglia?</li>
+      <li>Salva come <b>quickdraw.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Quick, Draw! ha imparato da decine di milioni di disegni fatti da persone di tutto il mondo. Se il tuo disegno è molto diverso da quelli, l'AI sbaglia.</div>
+  </div>
+  <aside class="notes">Il dataset pubblico di Quick, Draw! contiene circa 50 milioni di disegni in 345 categorie. Messaggio chiave: un'AI è brava quanto i dati con cui è stata addestrata. Anticipa la UDA 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3622" data-aiuto="la seconda cifra viene dall'anno 1946">
+    <ul class="points">
+      <li>1ª cifra: quante fasi ha il ciclo input, elaborazione, output</li>
+      <li>2ª cifra: l'ultima cifra dell'anno in cui entrò in funzione l'ENIAC</li>
+      <li>3ª cifra: quante volte compare la lettera A nella parola INFORMATICA</li>
+      <li>4ª cifra: quante cifre usa il sistema binario</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 fasi, 1946, inform<b>A</b>tic<b>A</b>, 0 e 1.</div>
+  </div>
+  <aside class="notes">Codice: 3622. Si può fare a squadre: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'informatica è il trattamento <span class="blank" data-risposta="automatico"></span> dell'informazione.</p>
+    <p>Un dato con un contesto e un significato diventa un'<span class="blank" data-risposta="informazione"></span>.</p>
+    <p>Le tre fasi di ogni computer sono input, <span class="blank" data-risposta="elaborazione"></span> e output.</p>
+    <p>Il piccolo computer nascosto in un elettrodomestico si chiama sistema <span class="blank" data-risposta="embedded|integrato"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti di tempo. Soluzioni: automatico, informazione, elaborazione, embedded (accettato anche integrato).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Informatica = trattamento automatico dell'informazione</li>
+      <li>Dato grezzo + contesto = informazione</li>
+      <li>Ogni computer: input, elaborazione, output, memoria</li>
+    </ul>
+    <ul class="points">
+      <li>Dai supercomputer ai sistemi embedded</li>
+      <li>Nuovi dispositivi: indossabili, IoT, visori, auto</li>
+      <li>L'AI impara dai dati che le diamo</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

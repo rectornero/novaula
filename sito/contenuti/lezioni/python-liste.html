@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python: le liste · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Python:<br>le liste</h1>
+  <p class="lead">Playlist, classifiche, registri di voti: tanti dati in una sola variabile. E il motivo per cui, per un'intelligenza artificiale, anche una frase è una lista di numeri.</p>
+  <aside class="notes">Obiettivi: creare liste, accedere agli elementi con indici positivi e negativi, usare len, append, in, sum, max, min, modificare un elemento, scorrere una lista con for (per elemento e per indice), usare liste parallele. Durata indicativa: 2-3 ore. Prerequisiti: i vettori in C (UDA 7), il ciclo for. Ultima lezione della UDA 8: alla fine ricordare la simulazione della verifica su Novaula. Software: IDLE o un interprete online senza account (OnlineGDB, lingua Python 3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale lista ti piacerebbe gestire con un programma?</h2></div>
+  <div class="poll" data-id="liste-quale">
+    <ol><li>La mia playlist preferita</li><li>La classifica del torneo di classe</li><li>I miei voti di tutte le materie</li><li>La lista della spesa di casa</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Tutte e quattro sono liste nel senso di Python: una sequenza ordinata di valori sotto un unico nome. Chiedere: in quali di queste conta l'ordine? (Classifica e playlist sì, la spesa meno.) In una lista Python l'ordine viene sempre conservato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Introduzione alle liste</p><h2>Trenta voti, trenta variabili? No: una lista</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Senza liste</h3><pre class="code">voto1 = 7
+voto2 = 5
+voto3 = 8
+<span class="c"># ...e altre 27 righe</span></pre></div>
+    <div class="card ok"><h3>Con una lista</h3><pre class="code">voti = [7, 5, 8, 6, 9]
+nomi = [<span class="s">"Ada"</span>, <span class="s">"Alan"</span>]
+vuota = []</pre></div>
+  </div>
+  <div class="callout">Parentesi quadre, elementi separati da virgole. A differenza dei vettori del C, una lista Python <b>non ha una dimensione fissa</b>: può crescere e accorciarsi.</div>
+  <aside class="notes">Collegamento con la UDA 7: il vettore del C ha dimensione e tipo fissi (int voti[30]). La lista Python è più flessibile: può contenere anche tipi diversi, per esempio ["Ada", 14, 1.62], anche se di solito si tengono dati dello stesso tipo. Gli array "veri" a dimensione fissa in Python esistono nelle librerie, come NumPy, molto usata nell'AI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli indici</p><h2>Ogni elemento ha un numero di posto, a partire da 0</h2></div>
+  <p><code>voti = [7, 5, 8, 6, 9]</code> <span class="small muted">· sotto ogni casella: indice positivo e negativo</span></p>
+  <div class="bits">
+    <span><b class="on">7</b><small style="text-align:center">0<br>-5</small></span>
+    <span><b>5</b><small style="text-align:center">1<br>-4</small></span>
+    <span><b>8</b><small style="text-align:center">2<br>-3</small></span>
+    <span><b>6</b><small style="text-align:center">3<br>-2</small></span>
+    <span><b class="on">9</b><small style="text-align:center">4<br>-1</small></span>
+  </div>
+  <div class="cols-3">
+    <div class="card"><p><code>voti[0]</code> vale <b>7</b></p><p class="muted small">il primo</p></div>
+    <div class="card"><p><code>voti[-1]</code> vale <b>9</b></p><p class="muted small">l'ultimo, contando da destra</p></div>
+    <div class="card"><p><code>voti[5]</code></p><p class="muted small">IndexError: non esiste!</p></div>
+  </div>
+  <aside class="notes">Con 5 elementi gli indici vanno da 0 a 4: l'ultimo indice è sempre len - 1. Gli indici negativi sono comodi: voti[-1] è sempre l'ultimo elemento, qualunque sia la lunghezza. Come in C, dove il primo elemento era voti[0]. IndexError: "list index out of range".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">voti = [6, 8, 7, 9]
+print(voti[2])</pre>
+    <div class="poll" data-id="liste-indice" data-tipo="quiz" data-risposta="C">
+      <ol><li>8</li><li>9</li><li>7</li><li>Un errore</li></ol>
+      <p class="why">Si conta da 0: voti[0] è 6, voti[1] è 8, voti[2] è 7. Chi risponde 8 conta da 1.</p>
+    </div>
+  </div>
+  <aside class="notes">La A è l'errore classico di chi conta da 1. Anche chi conosce il C a volte ci ricasca. La B è di chi confonde l'indice 2 con "il penultimo" (voti[-2]).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lavorare con le liste</p><h2>Le operazioni da sapere</h2></div>
+  <table class="data compact">
+    <tr><th>Scrivo</th><th>Che cosa fa</th><th>Con <code>v = [7, 5, 8]</code></th></tr>
+    <tr><td class="mono">len(v)</td><td>quanti elementi ci sono</td><td class="mono">3</td></tr>
+    <tr><td class="mono">v.append(6)</td><td>aggiunge in fondo</td><td class="mono">[7, 5, 8, 6]</td></tr>
+    <tr><td class="mono">v[1] = 10</td><td>cambia un elemento</td><td class="mono">[7, 10, 8]</td></tr>
+    <tr><td class="mono">8 in v</td><td>c'è oppure no?</td><td class="mono">True</td></tr>
+    <tr><td class="mono">sum(v)  max(v)  min(v)</td><td>somma, massimo, minimo</td><td class="mono">20  8  5</td></tr>
+  </table>
+  <p class="small muted"><code>append</code> si scrive dopo un punto: è un <b>metodo</b>, una funzione che appartiene alla lista.</p>
+  <aside class="notes">Ogni riga parte dalla lista originale v = [7, 5, 8]. Altri metodi utili da citare se chiedono: v.remove(5) toglie il primo 5, v.sort() ordina (collegamento con l'ordinamento della UDA 7), v.insert(0, 3) inserisce in posizione 0. Non serve impararli tutti: si cercano nella documentazione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La mia playlist</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>File <b>playlist.py</b>: crea una lista <code>playlist</code> con 5 titoli di canzoni (stringhe).</li>
+      <li>Stampa il primo titolo, l'ultimo (con <code>-1</code>) e quanti sono con <code>len</code>.</li>
+      <li>Chiedi un titolo con <code>input</code> e aggiungilo con <code>append</code>.</li>
+      <li>Sostituisci il secondo titolo con un altro, poi stampa tutta la lista.</li>
+      <li>Chiedi un titolo e di' se è nella playlist, con <code>in</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dopo l'append <code>len(playlist)</code> vale 6. Il secondo titolo è <code>playlist[1]</code>, non <code>playlist[2]</code>. La ricerca con <code>in</code> distingue maiuscole e minuscole.</div>
+  </div>
+  <aside class="notes">Soluzione:
+playlist = ["Titolo A", "Titolo B", "Titolo C", "Titolo D", "Titolo E"]
+print(playlist[0], playlist[-1], len(playlist))
+nuovo = input("Canzone da aggiungere: ")
+playlist.append(nuovo)
+playlist[1] = "Titolo nuovo"
+print(playlist)
+cerca = input("Cerca: ")
+if cerca in playlist:
+    print("C'è!")
+else:
+    print("Non c'è")
+print(lista) mostra la lista con parentesi quadre e apici: va bene così.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scorrere una lista</p><h2>Due modi di fare il giro con il <code>for</code></h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>Per elemento</b>: comodo quando ti serve solo il valore.</p>
+<pre class="code">somma = 0
+<span class="k">for</span> v <span class="k">in</span> voti:
+    somma += v
+print(somma / len(voti))</pre>
+    </div>
+    <div class="stack">
+      <p class="small"><b>Per indice</b>: serve quando ti interessa anche la posizione.</p>
+<pre class="code"><span class="k">for</span> i <span class="k">in</span> range(len(voti)):
+    print(i, voti[i])</pre>
+    </div>
+  </div>
+  <div class="callout small">Scorciatoia: <code>sum(voti) / len(voti)</code> dà la stessa media. Ma saper scrivere il ciclo serve quando la funzione pronta non c'è.</div>
+  <aside class="notes">Con voti = [7, 5, 8, 6, 9] la media è 7.0. range(len(voti)) produce 0, 1, 2, 3, 4: proprio gli indici validi. Il for per elemento è più "pythonico"; quello per indice servirà per le liste parallele. Per i curiosi: esiste anche enumerate(voti), che dà insieme indice e valore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Con <code>n = [3, 1, 4, 1, 5, 9]</code>, abbina</h2></div>
+  <dl class="puzzle-abbina" data-id="liste-abbina">
+    <dt><code>n[0]</code></dt><dd>3</dd>
+    <dt><code>n[2]</code></dt><dd>4</dd>
+    <dt><code>n[-1]</code></dt><dd>9</dd>
+    <dt><code>len(n)</code></dt><dd>6</dd>
+    <dt><code>sum(n)</code></dt><dd>23</dd>
+    <dt><code>1 in n</code></dt><dd>True</dd>
+  </dl>
+  <aside class="notes">A squadre, 2 minuti. Curiosità: sono le prime cifre di pi greco. Tranelli: n[2] vale 4 (terzo elemento) e non 1; 1 in n è True anche se l'1 compare due volte: in dice solo se c'è. Chiedere anche quanto vale n[-2] (5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa l'ultima riga?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)</pre>
+    <div class="poll" data-id="liste-alias" data-tipo="quiz" data-risposta="B">
+      <ol><li>[1, 2, 3]</li><li>[1, 2, 3, 4]</li><li>[4]</li><li>Un errore</li></ol>
+      <p class="why">b = a non copia la lista: le dà un secondo nome. a e b sono la stessa lista, quindi l'append si vede da tutti e due. Per una copia vera: b = a.copy().</p>
+    </div>
+  </div>
+  <aside class="notes">Il trabocchetto più famoso delle liste: quasi tutti rispondono A, perché con i numeri (x = 5; y = x; y = y + 1) la x non cambia. Analogia: una playlist condivisa con un amico. Se lui aggiunge una canzone, la vedi anche tu: è la stessa playlist, non una copia. Far verificare in IDLE, poi provare con b = a.copy().</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le statistiche della pagella</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>File <b>statistiche.py</b>: scrivi <code>voti = [7, 5, 8, 6, 4, 9]</code>.</li>
+      <li>Con <b>un solo</b> ciclo <code>for v in voti:</code> calcola la somma, il massimo, il minimo e quante insufficienze ci sono (contatore).</li>
+      <li>Stampa media, massimo, minimo e insufficienze.</li>
+      <li>Verifica con <code>sum</code>, <code>max</code> e <code>min</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> media 6.5, massimo 9, minimo 4, insufficienze 2. Suggerimento: massimo e minimo partono da <code>voti[0]</code>.</div>
+  </div>
+  <aside class="notes">Soluzione:
+voti = [7, 5, 8, 6, 4, 9]
+somma = 0
+massimo = voti[0]
+minimo = voti[0]
+insufficienze = 0
+for v in voti:
+    somma += v
+    if v > massimo:
+        massimo = v
+    if v < minimo:
+        minimo = v
+    if v < 6:
+        insufficienze += 1
+print(somma / len(voti), massimo, minimo, insufficienze)
+Perché partire da voti[0] e non da 0? Con il minimo, partendo da 0 nessun voto sarebbe mai più piccolo. Chi finisce prima: leggere i voti con input e append finché non si scrive 0 (valore sentinella).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le liste parallele</p><h2>Stesso indice, stessa persona</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Indice</th><th><code>nomi</code></th><th><code>voti</code></th></tr>
+      <tr><td class="mono">0</td><td>Ada</td><td class="mono">8</td></tr>
+      <tr><td class="mono">1</td><td>Alan</td><td class="mono">7</td></tr>
+      <tr><td class="mono hl">2</td><td class="hl">Grace</td><td class="mono hl">9</td></tr>
+    </table>
+<pre class="code">nomi = [<span class="s">"Ada"</span>, <span class="s">"Alan"</span>, <span class="s">"Grace"</span>]
+voti = [8, 7, 9]
+<span class="k">for</span> i <span class="k">in</span> range(len(nomi)):
+    print(nomi[i], voti[i])</pre>
+  </div>
+  <div class="callout">Due (o più) liste della stessa lunghezza: l'elemento <code>i</code> di una corrisponde all'elemento <code>i</code> dell'altra. Se ne ordini o modifichi una sola, l'abbinamento si rompe.</div>
+  <aside class="notes">È lo stesso schema dei vettori paralleli del C. Rischio tipico: aggiungere un nome con append e dimenticare il voto, così le liste hanno lunghezze diverse e gli indici non corrispondono più. Più avanti negli studi si useranno strutture che tengono insieme i dati (dizionari, oggetti), ma l'idea delle liste parallele resta utile, per esempio nei fogli di calcolo: una colonna è una lista.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine: chi ha il voto più alto?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Le liste <code>nomi</code> e <code>voti</code> sono già pronte. Il programma deve trovare la <b>posizione</b> del voto più alto e stampare il nome.</p>
+      <p class="small muted">Attenzione ai rientri: indicano che cosa sta dentro il for e dentro l'if.</p>
+    </div>
+    <ol class="puzzle-ordina" data-id="liste-migliore">
+      <li><code>migliore = 0</code></li>
+      <li><code>for i in range(len(voti)):</code></li>
+      <li><code>&nbsp;&nbsp;&nbsp;&nbsp;if voti[i] &gt; voti[migliore]:</code></li>
+      <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;migliore = i</code></li>
+      <li><code>print(nomi[migliore], "è il migliore")</code></li>
+    </ol>
+  </div>
+  <aside class="notes">Ordine come nella lista. Con i dati della slide precedente stampa "Grace è il migliore". Il trucco è salvare l'indice e non il voto: con l'indice si recupera il nome dall'altra lista. Con max(voti) avremmo il 9 ma non sapremmo di chi è (si potrebbe usare voti.index(max(voti)), da mostrare ai più curiosi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>I dati contano quanto le istruzioni</h2></div>
+  <figure class="citazione">
+    <blockquote>Algoritmi + strutture dati = programmi</blockquote>
+    <figcaption><b>Niklaus Wirth</b>, informatico svizzero, creatore del linguaggio Pascal, titolo del suo libro del 1976</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per un modello linguistico una frase è una <b>lista di numeri</b>: ogni token (un pezzo di parola) ha il suo numero nel vocabolario del modello. Una foto, invece, è una lista di righe di pixel: una lista di liste.</p></div>
+  <aside class="notes">Il titolo originale è "Algorithms + Data Structures = Programs" (Prentice-Hall, 1976). Wirth ha ricevuto il premio Turing nel 1984. La lista è la prima struttura dati che incontriamo in Python. Sui token: per esempio una frase di 10 parole può diventare una lista di una quindicina di numeri, a seconda di come il modello spezza le parole; il modello lavora solo su quei numeri e alla fine li ritrasforma in testo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Liste e intelligenza artificiale</p><h2>Canzoni simili, liste di numeri simili</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="c"># energia, ballabilità, malinconia</span>
+a = [9, 8, 1]
+b = [8, 9, 2]
+c = [2, 1, 9]
+<span class="k">def</span> distanza(x, y):
+    d = 0
+    <span class="k">for</span> i <span class="k">in</span> range(len(x)):
+        d += abs(x[i] - y[i])
+    <span class="k">return</span> d
+print(distanza(a, b))  <span class="c"># 3</span>
+print(distanza(a, c))  <span class="c"># 22</span></pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti sistemi che consigliano canzoni o video rappresentano ogni brano come una <b>lista di numeri</b>, calcolata da un modello di AI. Brani con liste vicine sono "simili": se ti piace <b>a</b>, ti propongono <b>b</b>, non <b>c</b>.</p><p class="small">Attenzione: i numeri dell'esempio sono inventati e sono solo 3. Nei sistemi veri sono centinaia per ogni brano, e il loro significato non lo sceglie una persona.</p></div>
+  </div>
+  <aside class="notes">Queste liste di numeri si chiamano embedding. L'esempio è volutamente semplice: i sistemi reali non usano 3 caratteristiche scelte a mano ma vettori lunghi imparati dai dati, e misure di distanza un po' diverse. La funzione distanza riusa tutto quello che abbiamo visto: funzione, for per indice, liste parallele (x[i] e y[i] sono la stessa caratteristica), accumulatore e abs.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La classifica della corsa</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>File <b>corsa.py</b> con due liste parallele: <code>nomi = ["Luca", "Sara", "Omar", "Giulia", "Marco"]</code> e <code>tempi = [12.4, 11.8, 12.9, 11.5, 13.1]</code> (secondi).</li>
+      <li>Stampa ogni atleta con il suo tempo, usando <code>for i in range(len(nomi))</code>.</li>
+      <li>Trova il vincitore: l'indice del tempo <b>più basso</b>.</li>
+      <li>Stampa il tempo medio e quanti hanno corso sotto i 12 secondi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> vince <b>Giulia</b> con 11.5; tempo medio 12.34; sotto i 12 secondi corrono in 2 (Sara e Giulia).</div>
+  </div>
+  <aside class="notes">Soluzione:
+nomi = ["Luca", "Sara", "Omar", "Giulia", "Marco"]
+tempi = [12.4, 11.8, 12.9, 11.5, 13.1]
+vincitore = 0
+veloci = 0
+for i in range(len(nomi)):
+    print(nomi[i], tempi[i])
+    if tempi[i] < tempi[vincitore]:
+        vincitore = i
+    if tempi[i] < 12:
+        veloci += 1
+print("Vince", nomi[vincitore], "con", tempi[vincitore])
+print("Media:", sum(tempi) / len(tempi), "Sotto i 12 s:", veloci)
+Differenza con il puzzle: qui vince il valore più basso, quindi il confronto è con <. Chi finisce prima: aggiungere un atleta con input (append su entrambe le liste) o mettere tutto in funzioni con main.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con la lista <code>n = [2, 7, 1, 8, 2, 8]</code></h2></div>
+  <div class="puzzle-codice" data-risposta="6725" data-aiuto="la terza cifra: -1 è l'ultimo, -2 il penultimo">
+    <ul class="points">
+      <li>1ª cifra: il valore di <code>len(n)</code></li>
+      <li>2ª cifra: il valore di <code>n[1]</code></li>
+      <li>3ª cifra: il valore di <code>n[-2]</code></li>
+      <li>4ª cifra: dopo <code>n.append(5)</code>, il valore di <code>n[-1]</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 6 elementi; n[1] è il secondo, 7; il penultimo è 2; dopo l'append l'ultimo è 5. (Sono le prime cifre del numero di Nepero e.)</div>
+  </div>
+  <aside class="notes">Codice: 6725. Errori tipici: 2 per la seconda cifra (si conta da 1) e 8 per la terza (si confonde -2 con -1). A squadre, poi verifica in IDLE.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il primo elemento di una lista ha indice <span class="blank" data-risposta="0|zero"></span>.</p>
+    <p>Per aggiungere un elemento in fondo alla lista uso il metodo <span class="blank" data-risposta="append"></span>.</p>
+    <p>Il numero di elementi di una lista si ottiene con la funzione <span class="blank" data-risposta="len"></span>.</p>
+    <p>Due liste in cui lo stesso indice indica la stessa persona si chiamano liste <span class="blank" data-risposta="parallele"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 0, append, len, parallele.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>[ ]</code> per creare, indici da 0, <code>-1</code> è l'ultimo</li>
+      <li><code>len</code>, <code>append</code>, <code>in</code>, <code>sum</code>, <code>max</code>, <code>min</code></li>
+      <li><code>b = a</code> non copia: usa <code>a.copy()</code></li>
+    </ul>
+    <ul class="points">
+      <li>Scorri per elemento o per indice con <code>range(len(…))</code></li>
+      <li>Liste parallele: stesso indice, stessa persona</li>
+      <li>Per l'AI testi, immagini e canzoni sono liste di numeri</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Fine della UDA 8: per prepararsi alla verifica scritta c'è la simulazione con le soluzioni su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

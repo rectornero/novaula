@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I database: Access e Base · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>I database:<br>Access e Base</h1>
+  <p class="lead">Dietro ogni app c'è una base di dati. Costruiamo quella della biblioteca di classe e impariamo a farle domande.</p>
+  <aside class="notes">Lezione del libro "I database Access e Base". Obiettivi: distinguere archivio e base di dati, conoscere tabelle, record, campi, chiave primaria e tipi di dato, creare una tabella in LibreOffice Base, inserire, ordinare e filtrare dati, creare query di selezione con criteri, intuire le relazioni tra tabelle, conoscere le differenze con Access. Durata: 3 ore. Base usa il motore integrato Firebird: verificare prima della lezione che su un PC del laboratorio si possa creare un database nuovo senza messaggi su Java.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Delle app che usi ogni giorno, quante secondo te usano un database?</h2></div>
+  <div class="poll" data-id="app-database">
+    <ol><li>Nessuna</li><li>Una o due</li><li>Circa la metà</li><li>Praticamente tutte</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione, ma la risposta realistica è la D: chat, playlist, giochi online, registro elettronico, mappe, negozi online conservano i dati in basi di dati. Chiedere un esempio per ogni app citata: che cosa conserva? (Messaggi, brani, punteggi, voti, ordini.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Archivi e basi di dati</p><h2>Dallo schedario alla base di dati</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Archivio</h3><p>Una raccolta ordinata di informazioni sullo stesso argomento: lo schedario della biblioteca, la rubrica, l'elenco degli iscritti.</p></div>
+    <div class="card soft"><h3>Base di dati (database)</h3><p>Un archivio <b>elettronico</b>, organizzato in tabelle, in cui i dati si cercano, si ordinano e si collegano in un attimo.</p></div>
+  </div>
+  <div class="callout">Il programma che gestisce il database si chiama <b>DBMS</b> (<i>DataBase Management System</i>): Microsoft <b>Access</b> e LibreOffice <b>Base</b> sono due DBMS.</div>
+  <aside class="notes">Esempio storico da citare: gli schedari a cassetti delle biblioteche, con una scheda di cartone per ogni libro, ordinate per autore. Per cercare per titolo serviva un secondo schedario. Con un database lo stesso dato si cerca in qualunque ordine. I grandi siti usano DBMS come MySQL, PostgreSQL, Oracle; Access e Base sono adatti a database piccoli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Foglio o database?</p><h2>Sembrano uguali, ma non lo sono</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Foglio di calcolo</h3>
+      <ul class="points small">
+        <li>Ogni cella può contenere qualsiasi cosa</li>
+        <li>Ottimo per <b>calcolare</b> e fare grafici</li>
+        <li>Con molti dati diventa fragile</li>
+      </ul>
+    </div>
+    <div class="card soft">
+      <h3>Database</h3>
+      <ul class="points small">
+        <li>Ogni campo ha un <b>tipo</b>: in Anno non entra "boh"</li>
+        <li>Ottimo per <b>conservare e cercare</b></li>
+        <li>Molte tabelle collegate, milioni di righe</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Collegamento con la lezione sui moduli: il tipo di campo fa la stessa cosa del campo data in un modulo, impedisce i dati sbagliati. Esempio: in un foglio qualcuno scrive "2010 circa" nella colonna dell'anno e le formule si rompono; in un database il campo Intero lo rifiuta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'organizzazione di un database</p><h2>Tabelle, record e campi</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>ID</th><th>Titolo</th><th class="hl">Autore</th><th>Anno</th></tr>
+      <tr><td class="mono">1</td><td>Lo Hobbit</td><td class="hl">J.R.R. Tolkien</td><td class="mono">1937</td></tr>
+      <tr><td class="mono hl">2</td><td class="hl">Io, robot</td><td class="hl">Isaac Asimov</td><td class="mono hl">1950</td></tr>
+      <tr><td class="mono">3</td><td>Il GGG</td><td class="hl">Roald Dahl</td><td class="mono">1982</td></tr>
+    </table>
+    <ul class="points small">
+      <li><b>Tabella</b>: i dati su un argomento, i libri</li>
+      <li><b>Record</b>: una riga, tutti i dati di un libro</li>
+      <li><b>Campo</b>: una colonna, per esempio Autore</li>
+      <li><b>Chiave primaria</b>: il campo che distingue ogni record, qui ID</li>
+    </ul>
+  </div>
+  <aside class="notes">Nella tabella sono evidenziati un record (la riga di Io, robot) e un campo (la colonna Autore). La chiave primaria non può ripetersi né restare vuota: due libri possono avere lo stesso titolo (edizioni diverse) ma non lo stesso ID.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parola al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="termini-db">
+    <dt>Tabella</dt><dd>Dati sullo stesso argomento, in righe e colonne</dd>
+    <dt>Record</dt><dd>Una riga: tutti i dati di un libro</dd>
+    <dt>Campo</dt><dd>Una colonna: per esempio Autore</dd>
+    <dt>Chiave primaria</dt><dd>Il campo che identifica ogni record in modo unico</dd>
+    <dt>Query</dt><dd>Una domanda al database per estrarre dati</dd>
+    <dt>DBMS</dt><dd>Il programma che gestisce il database</dd>
+  </dl>
+  <aside class="notes">Tranello classico: record e campo. Trucco per ricordare: il record è "orizzontale" come una riga di un registro; il campo è la colonna con il nome in alto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Tabella Studenti di tutta la scuola: quale campo è la chiave primaria migliore?</h2></div>
+  <div class="poll" data-id="chiave-primaria" data-tipo="quiz" data-risposta="C">
+    <ol><li>Cognome</li><li>Cognome e nome insieme</li><li>Un ID numerico assegnato in automatico</li><li>La classe</li></ol>
+    <p class="why">Un ID automatico è unico per costruzione e non cambia mai. Cognome e nome possono ripetersi: in una scuola grande due Marco Rossi capitano davvero. La classe è condivisa da tutti i compagni.</p>
+  </div>
+  <aside class="notes">La B è il tranello: sembra unica, ma gli omonimi esistono. Domanda di approfondimento: e il codice fiscale? È unico, ma è un dato personale delicato e può essere scritto male: per questo spesso si preferisce un ID interno e il codice fiscale resta un campo normale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Creare tabelle</p><h2>Ogni campo ha un nome e un tipo</h2></div>
+  <table class="data compact">
+    <tr><th>Campo</th><th>Tipo in Base</th><th>Tipo in Access</th><th>Esempio</th></tr>
+    <tr><td><b>ID</b></td><td>Intero, valore automatico</td><td>Numerazione automatica</td><td class="mono">1, 2, 3…</td></tr>
+    <tr><td><b>Titolo</b>, <b>Autore</b>, <b>Genere</b></td><td>Testo [VARCHAR]</td><td>Testo breve</td><td>Lo Hobbit</td></tr>
+    <tr><td><b>Anno</b>, <b>Copie</b></td><td>Intero [INTEGER]</td><td>Numero</td><td class="mono">1937</td></tr>
+    <tr><td><b>Disponibile</b></td><td>Sì/No [BOOLEAN]</td><td>Sì/No</td><td>✓</td></tr>
+  </table>
+  <div class="callout">Nomi dei campi brevi, senza spazi né accenti: <code>Anno</code>, non <code>Anno di pubblicazione</code>.</div>
+  <aside class="notes">Esistono anche i tipi Data e Decimale (per i prezzi). In Base la chiave primaria si imposta con clic destro sul quadratino a sinistra della riga del campo › Chiave primaria; la proprietà Valore automatico si trova in basso, nelle proprietà del campo. In Access: Crea › Struttura tabella, e la chiave con il pulsante Chiave primaria.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il database della biblioteca</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>LibreOffice Base</b>: <b>Crea un nuovo database</b>, motore integrato <b>Firebird</b>. Avanti, Fine, salva come <b>biblioteca.odb</b>.</li>
+      <li>In <b>Tabelle</b> scegli <b>Crea tabella in vista struttura</b>.</li>
+      <li>Crea i campi della slide precedente: ID, Titolo, Autore, Genere, Anno, Copie, Disponibile.</li>
+      <li>Su ID: clic destro a sinistra della riga › <b>Chiave primaria</b>; in basso <b>Valore automatico: Sì</b>.</li>
+      <li>Salva la tabella con il nome <b>Libri</b> e chiudi la vista struttura.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel riquadro Tabelle compare <b>Libri</b>. Riaprendola in modifica, accanto a ID c'è il simbolo di una chiave e i campi sono 7.</div>
+  </div>
+  <aside class="notes">Se all'avvio compare la richiesta di un ambiente Java, scegliere il motore Firebird integrato (non HSQLDB) e usare solo le "viste struttura", non le procedure guidate. Il file .odb contiene tutto: tabelle, query, moduli. Errore tipico: dimenticare la chiave primaria; Base al salvataggio propone di crearla, ma meglio farlo consapevolmente. In Access: File › Nuovo › Database vuoto, poi Crea › Struttura tabella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I dati</p><h2>La biblioteca di classe</h2></div>
+  <table class="data compact">
+    <tr><th>Titolo</th><th>Autore</th><th>Genere</th><th>Anno</th><th>Copie</th><th>Disp.</th></tr>
+    <tr><td>Harry Potter e la pietra filosofale</td><td>J.K. Rowling</td><td>Fantasy</td><td class="mono">1997</td><td class="mono">3</td><td>Sì</td></tr>
+    <tr><td>Lo Hobbit</td><td>J.R.R. Tolkien</td><td>Fantasy</td><td class="mono">1937</td><td class="mono">2</td><td>No</td></tr>
+    <tr><td>Il GGG</td><td>Roald Dahl</td><td>Fantasy</td><td class="mono">1982</td><td class="mono">1</td><td>Sì</td></tr>
+    <tr><td>L'isola del tesoro</td><td>R.L. Stevenson</td><td>Avventura</td><td class="mono">1883</td><td class="mono">2</td><td>Sì</td></tr>
+    <tr><td>Il mastino dei Baskerville</td><td>Arthur Conan Doyle</td><td>Giallo</td><td class="mono">1902</td><td class="mono">1</td><td>No</td></tr>
+    <tr><td>E poi non rimase nessuno</td><td>Agatha Christie</td><td>Giallo</td><td class="mono">1939</td><td class="mono">2</td><td>Sì</td></tr>
+    <tr><td>Io, robot</td><td>Isaac Asimov</td><td>Fantascienza</td><td class="mono">1950</td><td class="mono">2</td><td>Sì</td></tr>
+    <tr><td>Hunger Games</td><td>Suzanne Collins</td><td>Fantascienza</td><td class="mono">2008</td><td class="mono">3</td><td>No</td></tr>
+  </table>
+  <aside class="notes">L'ID non si scrive: lo assegna Base. Anni della prima edizione in lingua originale. Totale copie: 16. Libri disponibili: 5. Questi dati servono per l'esercizio e per le query.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Riempi, ordina, filtra</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Doppio clic sulla tabella <b>Libri</b>: si apre la vista dei dati.</li>
+      <li>Inserisci gli 8 libri della slide precedente. Salta la colonna ID e spunta Disponibile solo dove c'è Sì.</li>
+      <li>Clic su una cella della colonna Anno e usa il pulsante <b>Ordina in modo crescente</b>.</li>
+      <li>Clic su una cella con Giallo e usa il pulsante <b>Filtro automatico</b>; poi togli il filtro.</li>
+      <li>Chiudi la tabella: i dati si salvano da soli, riga per riga.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ordinando per anno il primo libro è <b>L'isola del tesoro</b> (1883) e l'ultimo <b>Hunger Games</b> (2008). Con il filtro sul Giallo restano 2 record.</div>
+  </div>
+  <aside class="notes">In Base ogni record si salva quando si passa alla riga successiva: non c'è un "Salva" per i dati, ma il file .odb va comunque salvato per le modifiche alla struttura. Se ID resta vuoto, la proprietà Valore automatico non è attiva: riaprire la tabella in modifica. Il filtro automatico e l'ordinamento non cambiano i dati, solo come li vediamo. In Access: Home › Crescente e Home › Filtro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>L'idea che sta sotto tutti i database</h2></div>
+  <figure class="citazione">
+    <blockquote>I futuri utenti di grandi banche dati devono essere protetti dal dover sapere come i dati sono organizzati nella macchina.</blockquote>
+    <figcaption><b>Edgar F. Codd</b>, informatico britannico all'IBM, nell'articolo che inventò il modello relazionale, 1970</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molte app salvano i dati sul telefono in un piccolo database chiamato <b>SQLite</b>: messaggi, contatti, impostazioni. È probabilmente il motore di database più diffuso al mondo, e tu lo usi decine di volte al giorno senza saperlo.</p></div>
+  <aside class="notes">Traduzione nostra dalla prima frase di "A Relational Model of Data for Large Shared Data Banks", Communications of the ACM, 1970. Codd ricevette il premio Turing nel 1981. "Protetti dal dover sapere" significa: chi usa il database chiede che cosa vuole (una query), non come trovarlo sul disco. È proprio quello che faremo con le query. SQLite è incluso in Android e iOS e in tutti i principali browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cercare i dati</p><h2>La query di selezione: una domanda al database</h2></div>
+  <table class="data compact">
+    <tr><th>Campo</th><td class="mono">Titolo</td><td class="mono">Autore</td><td class="mono">Genere</td><td class="mono">Anno</td></tr>
+    <tr><th>Tabella</th><td>Libri</td><td>Libri</td><td>Libri</td><td>Libri</td></tr>
+    <tr><th>Ordinamento</th><td></td><td></td><td></td><td>crescente</td></tr>
+    <tr><th>Visibile</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><th>Criterio</th><td></td><td></td><td class="mono hl">'Fantasy'</td><td></td></tr>
+  </table>
+  <div class="callout"><b>Domanda:</b> "quali libri sono fantasy, dal più vecchio al più recente?" <b>Risposta:</b> Lo Hobbit, Il GGG, Harry Potter. Il testo nel criterio va tra apici; i numeri no: <code>&gt;1950</code>.</div>
+  <aside class="notes">È la griglia della vista struttura delle query di Base; Access ha una griglia quasi identica (Crea › Struttura query). Criteri nella stessa riga si combinano con E (entrambi veri); su righe diverse ("oppure") con O. La query non copia i dati: ogni volta che la apri, li cerca di nuovo nella tabella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Query sulla biblioteca con criterio <code>&gt;1950</code> nel campo Anno. Quanti record escono?</h2></div>
+  <div class="poll" data-id="maggiore-1950" data-tipo="quiz" data-risposta="B">
+    <ol><li>4</li><li>3</li><li>5</li><li>8</li></ol>
+    <p class="why">Escono Il GGG (1982), Harry Potter (1997) e Hunger Games (2008). Io, robot è del 1950: "maggiore di 1950" lo esclude. Per includerlo serve <code>&gt;=1950</code>, e allora sarebbero 4.</p>
+  </div>
+  <aside class="notes">La A è il tranello del maggiore contro maggiore o uguale: lo stesso visto in Calc con SE e CONTA.SE. Far scrivere alla lavagna il criterio per "libri del Novecento": &gt;=1901 e &lt;=2000 nella stessa riga (Il mastino, Lo Hobbit, E poi non rimase nessuno, Io robot, Il GGG, Harry Potter: 6).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine: una query in vista struttura</h2></div>
+  <ol class="puzzle-ordina" data-id="passi-query">
+    <li>Apri biblioteca.odb e scegli Query</li>
+    <li>Crea query in vista struttura</li>
+    <li>Aggiungi la tabella Libri</li>
+    <li>Doppio clic sui campi da mostrare</li>
+    <li>Scrivi il criterio e l'ordinamento</li>
+    <li>Esegui la query con F5 e controlla il risultato</li>
+    <li>Salva la query con un nome chiaro</li>
+  </ol>
+  <aside class="notes">Errore comune: salvare prima di eseguire e scoprire dopo che il criterio era sbagliato. In Base, Esegui query è anche un pulsante nella barra degli strumenti della vista struttura.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Fai domande alla biblioteca</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>biblioteca.odb</b>: <b>Query › Crea query in vista struttura</b>, aggiungi Libri.</li>
+      <li>Query <b>Fantasy</b>: campi Titolo, Autore, Genere, Anno; criterio <code>'Fantasy'</code> in Genere, ordinamento crescente su Anno. Esegui con F5 e salva.</li>
+      <li>Query <b>Recenti</b>: Titolo e Anno, criterio <code>&gt;1950</code>. Salva.</li>
+      <li>Query <b>Da prestare</b>: Titolo e Disponibile, criterio <code>TRUE</code> in Disponibile. Salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Fantasy dà 3 libri, da Lo Hobbit a Harry Potter; Recenti dà 3 libri; Da prestare dà 5 libri. Nel riquadro Query ci sono 3 query.</div>
+  </div>
+  <aside class="notes">Da prestare: Harry Potter, Il GGG, L'isola del tesoro, E poi non rimase nessuno, Io robot. Per il campo Sì/No, nella griglia si può scrivere TRUE (o 1); se la versione di Base non lo accetta, provare con =1. Chi finisce prima: query Gialli o avventura con criteri su due righe ('Giallo' nella riga Criterio, 'Avventura' nella riga Oppure): 3 libri. Per vedere la query in linguaggio SQL: Visualizza › Attiva/disattiva vista struttura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Più tabelle collegate</p><h2>Chi ha preso in prestito che cosa?</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Studenti</h3><p class="small"><b>ID</b> · Nome · Classe</p></div>
+    <div class="card fill"><h3>Prestiti</h3><p class="small"><b>ID</b> · ID_Studente · ID_Libro · Data</p></div>
+    <div class="card"><h3>Libri</h3><p class="small"><b>ID</b> · Titolo · Autore · …</p></div>
+  </div>
+  <ul class="points">
+    <li>Nella tabella Prestiti non si riscrivono nome e titolo: si usano gli <b>ID</b>, le <b>chiavi esterne</b></li>
+    <li>Ogni dato si scrive <b>una volta sola</b>: se cambia, lo correggi in un punto</li>
+  </ul>
+  <aside class="notes">È il cuore del modello relazionale di Codd: tabelle collegate tramite chiavi. In Base i collegamenti si disegnano in Strumenti › Relazioni; in Access in Strumenti database › Relazioni. Non serve farlo in laboratorio: basta capire l'idea. Domanda: se un libro viene prestato 30 volte, quante volte compare il suo titolo nel database? (Una sola, nella tabella Libri.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le differenze in Base</p><h2>Access e Base a confronto</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>Microsoft Access</th><th>LibreOffice Base</th></tr>
+    <tr><td><b>File</b></td><td><code>.accdb</code></td><td><code>.odb</code></td></tr>
+    <tr><td><b>Dove gira</b></td><td>solo Windows, con alcune versioni di Office</td><td>Windows, macOS, Linux, gratis</td></tr>
+    <tr><td><b>Costruire</b></td><td>Visualizzazione Struttura</td><td>Vista struttura</td></tr>
+    <tr><td><b>Vedere i dati</b></td><td>Visualizzazione Foglio dati</td><td>doppio clic sulla tabella</td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcuni assistenti AI trasformano una domanda in italiano in una query in linguaggio <b>SQL</b>: <code style="background:rgba(255,255,255,.14);color:#fff">SELECT Titolo FROM Libri WHERE Genere = 'Fantasy'</code>. Comodo, ma va controllata: basta un &gt; al posto di un &gt;= per cambiare il risultato.</p></div>
+  <aside class="notes">SQL (Structured Query Language) è il linguaggio standard dei database, nato negli anni Settanta all'IBM proprio dalle idee di Codd. Sia Base sia Access traducono la griglia della vista struttura in SQL. Con i 13+ anni e il consenso dei genitori uno studente potrebbe provarlo a casa; in classe meglio una demo del docente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una riga di una tabella si chiama <span class="blank" data-risposta="record"></span>, una colonna si chiama campo.</p>
+    <p>Il campo che identifica ogni record in modo unico è la chiave <span class="blank" data-risposta="primaria"></span>.</p>
+    <p>Una domanda al database per estrarre dati è una <span class="blank" data-risposta="query|interrogazione"></span>.</p>
+    <p>Per avere i libri dal 1950 in poi il criterio sull'Anno è <span class="blank" data-risposta="&gt;=1950|&gt;= 1950"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: record, primaria, query (accettato interrogazione), &gt;=1950.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Database = archivio elettronico, gestito da un DBMS</li>
+      <li>Tabella, record, campo, chiave primaria</li>
+      <li>Ogni campo ha un tipo che blocca i dati sbagliati</li>
+    </ul>
+    <ul class="points">
+      <li>Ordinare e filtrare non cambiano i dati</li>
+      <li>Query di selezione: campi, criteri, ordinamento</li>
+      <li>Tabelle collegate da chiavi: ogni dato una volta</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Con questa lezione si chiude la UDA 3: ricordare la simulazione della verifica su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

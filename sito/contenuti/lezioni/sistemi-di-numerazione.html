@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Binario, ottale ed esadecimale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 1 · Il mondo dell'informatica</p>
+  <h1>Binario, ottale<br>ed esadecimale</h1>
+  <p class="lead">Musica, foto, messaggi e colori: dentro il computer tutto diventa un numero. Impariamo le lingue con cui contano le macchine.</p>
+  <aside class="notes">Obiettivi: distinguere analogico e digitale, capire come testo, immagini e suoni diventano numeri, conoscere i sistemi di numerazione posizionali (2, 8, 10, 16), convertire tra le basi e leggere un colore #RRGGBB. Durata indicativa: 2–3 ore. Se la classe ha già fatto le lezioni "numeri-binari", "conversioni-con-calc" o "esadecimale", le slide 9–10 diventano un ripasso veloce: dedicare più tempo a laboratori e giochi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Disco in vinile o file in streaming: quale suona meglio?</h2></div>
+  <div class="poll" data-id="vinile">
+    <ol><li>Il disco in vinile</li><li>Il file in streaming</li><li>Non si sente nessuna differenza</li><li>Dipende dall'impianto e dalle cuffie</li></ol>
+  </div>
+  <p class="muted">Il vinile conserva il suono come un solco continuo, lo streaming come una lista di numeri. Oggi scopriamo che cosa cambia.</p>
+  <aside class="notes">Sondaggio rompighiaccio: non c'è una risposta giusta, la qualità dipende da molti fattori (registrazione, compressione, impianto). Serve a introdurre la differenza tra analogico (solco continuo) e digitale (numeri). Chiedere se qualcuno in famiglia ha ancora un giradischi o delle musicassette.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analogico e digitale</p><h2>Una rampa o una scala?</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <svg viewBox="-10 0 620 220" style="width:100%;height:210px" aria-hidden="true"><line x1="0" y1="110" x2="600" y2="110" stroke="#dcdfe8" stroke-width="3"/><polyline fill="none" stroke="var(--accent)" stroke-width="7" stroke-linejoin="round" points="0,110 10,91 20,73 30,57 40,43 50,32 60,24 70,20 80,20 90,24 100,32 110,43 120,57 130,73 140,91 150,110 160,129 170,147 180,163 190,177 200,188 210,196 220,200 230,200 240,196 250,188 260,177 270,163 280,147 290,129 300,110 310,91 320,73 330,57 340,43 350,32 360,24 370,20 380,20 390,24 400,32 410,43 420,57 430,73 440,91 450,110 460,129 470,147 480,163 490,177 500,188 510,196 520,200 530,200 540,196 550,188 560,177 570,163 580,147 590,129 600,110"/></svg>
+      <h3>Analogico</h3>
+      <p>La grandezza varia con <b>continuità</b>, come una rampa: può assumere infiniti valori.</p>
+      <p class="muted">Lancette dell'orologio, termometro a mercurio, solco del vinile.</p>
+    </div>
+    <div class="card soft">
+      <svg viewBox="-10 0 620 220" style="width:100%;height:210px" aria-hidden="true"><line x1="0" y1="110" x2="600" y2="110" stroke="#c7d5f2" stroke-width="3"/><polyline fill="none" stroke="var(--ink)" stroke-width="7" stroke-linejoin="round" points="0,65 40,65 40,20 80,20 80,42 120,42 120,88 160,88 160,155 200,155 200,200 240,200 240,178 280,178 280,110 320,110 320,42 360,42 360,20 400,20 400,65 440,65 440,132 480,132 480,178 520,178 520,200 560,200 560,155 600,155"/></svg>
+      <h3>Digitale</h3>
+      <p>La grandezza è misurata a <b>gradini</b>, come una scala: un numero finito di valori, scritti con cifre.</p>
+      <p class="muted">Orologio a cifre, file MP3, foto dello smartphone.</p>
+    </div>
+  </div>
+  <aside class="notes">Digitale viene dall'inglese digit, cifra (a sua volta dal latino digitus, dito: si contava con le dita). Far notare che il segnale digitale perde un po' di dettaglio, ma ha un grande vantaggio: un numero si copia e si trasmette senza degradarsi, mentre una cassetta copiata più volte peggiora a ogni copia. Domanda: un'altalena che oscilla è analogica o digitale?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal mondo ai numeri</p><h2>Come una canzone diventa un file</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Il suono</h3><p>Il microfono trasforma l'onda sonora in una tensione elettrica che varia con continuità.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Campionamento</h3><p>Il convertitore misura la tensione a intervalli regolari: nei CD audio <b>44 100 volte al secondo</b>.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Quantizzazione</h3><p>Ogni misura diventa un numero intero. Nei CD ogni campione usa <b>16 bit</b>.</p></div>
+  </div>
+  <div class="callout">Più campioni e più bit = suono più fedele, ma file più grande. Ogni formato digitale è un <b>compromesso</b> tra qualità e spazio.</div>
+  <aside class="notes">I valori del CD audio (44,1 kHz, 16 bit, stereo) sono quelli dello standard Red Book di Philips e Sony (1980). Con 16 bit ci sono 2^16 = 65 536 livelli possibili per ogni campione. Calcolo da proporre: un minuto di CD stereo occupa 44 100 × 2 byte × 2 canali × 60 s = 10 584 000 byte, circa 10 MB. Un MP3 occupa circa un decimo perché elimina i suoni che l'orecchio percepisce meno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il microfono del tuo telefono produce un segnale…</h2></div>
+  <div class="poll" data-id="microfono" data-tipo="quiz" data-risposta="B">
+    <ol><li>Digitale, perché il telefono è un dispositivo digitale</li><li>Analogico, poi un convertitore lo trasforma in numeri</li><li>Fatto di 0 e 1 già dentro la membrana</li><li>Digitale, ma solo se registri in alta qualità</li></ol>
+    <p class="why">Il suono è un'onda continua e la membrana del microfono vibra con continuità: il segnale è analogico. Un convertitore analogico-digitale (ADC), spesso nello stesso chip, lo campiona e lo trasforma in numeri.</p>
+  </div>
+  <aside class="notes">Il tranello è pensare che in un dispositivo digitale tutto sia digitale. Il confine tra mondo e computer è sempre analogico: microfoni, sensori della fotocamera, touch screen misurano grandezze continue; poi un ADC le converte. Al contrario, l'altoparlante riceve numeri e un DAC (convertitore digitale-analogico) li ritrasforma in un'onda. Chiedere un altro esempio di ADC: il sensore della fotocamera.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dati digitali nei computer</p><h2>Per il computer tutto è numero</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Testo</h3><p class="muted">Ogni carattere ha un codice: in ASCII la A è 65. Unicode ne conta oltre 150 000, emoji comprese.</p></div>
+    <div class="card"><h3>Immagini</h3><p class="muted">Una griglia di pixel. Ogni pixel è fatto di 3 numeri: rosso, verde, blu.</p></div>
+    <div class="card"><h3>Suoni</h3><p class="muted">Una lunga lista di campioni, cioè di misure dell'onda.</p></div>
+    <div class="card"><h3>Video</h3><p class="muted">Tante immagini al secondo, più la traccia audio.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche l'intelligenza artificiale vede solo numeri. Una foto da 12 megapixel è una tabella di <b>36 milioni di numeri</b> (12 milioni di pixel × 3 colori): è da questi numeri che un'AI impara a riconoscere un gatto.</p></div>
+  <aside class="notes">ASCII (1963) usa 7 bit, quindi 128 caratteri. Unicode è lo standard che comprende tutti gli alfabeti del mondo e le emoji: dalla versione 16.0 (2024) supera i 150 000 caratteri (fonte: unicode.org). Per l'AI: le reti neurali per le immagini ricevono in ingresso proprio i valori RGB dei pixel, spesso dopo aver ridotto la foto a poche centinaia di pixel per lato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Indovina il dato</p><h2>Che cosa si nasconde dietro questi numeri?</h2></div>
+  <p class="lead">Prima di girare la carta, ogni squadra scrive la sua ipotesi.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:320px"><div class="fronte"><h3>01000001</h3><p>Un byte in un file di testo</p></div><div class="retro"><p><b>È la lettera A.</b></p><p class="muted">01000001 = 64 + 1 = 65, il codice ASCII della A maiuscola.</p></div></div>
+    <div class="flip" style="--h:320px"><div class="fronte"><h3>255, 0, 0</h3><p>Un pixel di una foto</p></div><div class="retro"><p><b>È un pixel rosso puro.</b></p><p class="muted">Rosso al massimo, verde e blu spenti. In esadecimale: #FF0000.</p></div></div>
+    <div class="flip" style="--h:320px"><div class="fronte"><h3>U+1F600</h3><p>Un carattere in un messaggio</p></div><div class="retro"><p><b>È la faccina che sorride.</b></p><p class="muted">Il codice Unicode dell'emoji è scritto in esadecimale: 1F600 = 128 512.</p></div></div>
+  </div>
+  <aside class="notes">Gioco a squadre: un punto a chi indovina il tipo di dato, due a chi indovina esattamente. Verifica 1F600: 1×65536 + 15×4096 + 6×256 = 65536 + 61440 + 1536 = 128512. Mostrare alla LIM che la stessa emoji può apparire diversa su Android e iPhone: il numero è lo stesso, cambia il disegno scelto dal sistema.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il messaggio segreto in ASCII</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Converti in decimale questi 4 byte: <code>01000010</code> <code>01011001</code> <code>01010100</code> <code>01000101</code>.</li>
+      <li>Trova le lettere: in ASCII A = 65, B = 66, C = 67 e così via.</li>
+      <li>Apri <b>Blocco note</b>. Tieni premuto <b>Alt</b> e digita 66 sul tastierino numerico: compare una lettera. Verifica così tutto il messaggio.</li>
+      <li>Sotto, scrivi il tuo nome in binario, un byte per lettera.</li>
+      <li>Salva come <b>messaggio-ascii.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il primo byte vale 66. La parola nascosta ha 4 lettere ed è un'unità di misura dell'informazione.</div>
+  </div>
+  <aside class="notes">Soluzione: 66 = B, 89 = Y, 84 = T, 69 = E: BYTE. Il trucco Alt + codice funziona con il tastierino numerico (Bloc Num attivo); sui portatili senza tastierino usare Mappa caratteri di Windows (cercare "Mappa caratteri" nel menu Start): selezionando un carattere, in basso compare il suo codice, ad esempio U+0042 per la B (in esadecimale: 42 = 66). Per il nome: la lettera maiuscola vale 64 + posizione nell'alfabeto inglese (per esempio M = 77 = 01001101).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I sistemi di numerazione</p><h2>Stessa idea, basi diverse</h2></div>
+  <p>In un sistema <b>posizionale</b> ogni cifra vale di più se sta più a sinistra: <code>2026 = 2·10³ + 0·10² + 2·10¹ + 6·10⁰</code>. La <b>base</b> dice quante cifre si usano.</p>
+  <table class="data compact">
+    <tr><th>Sistema</th><th>Base</th><th>Cifre</th><th>Dove lo incontri</th></tr>
+    <tr><td>Decimale</td><td class="mono">10</td><td class="mono">0 1 2 3 4 5 6 7 8 9</td><td>Nella vita di tutti i giorni</td></tr>
+    <tr><td>Binario</td><td class="mono">2</td><td class="mono">0 1</td><td>Dentro i circuiti: acceso o spento</td></tr>
+    <tr><td>Ottale</td><td class="mono">8</td><td class="mono">0 1 2 3 4 5 6 7</td><td>Permessi dei file in Linux, per esempio <code>755</code></td></tr>
+    <tr><td>Esadecimale</td><td class="mono">16</td><td class="mono">0 … 9 A B C D E F</td><td>Colori, indirizzi di rete, codici Unicode</td></tr>
+  </table>
+  <aside class="notes">Riprendere le lezioni "numeri-binari" ed "esadecimale" se già svolte. Ricordare la notazione con la base in pedice: 101₂, 17₈, 2F₁₆. Domanda trappola da fare a voce: "in base 8 esiste la cifra 8?" No, le cifre vanno da 0 a base − 1. Nei permessi Linux 755 ogni cifra ottale raccoglie 3 bit: lettura, scrittura, esecuzione (7 = 111 = tutti e tre).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Conversioni</p><h2>Tre strade per passare da una base all'altra</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Verso il decimale</h3><p>Moltiplica ogni cifra per il suo peso e somma.</p><p class="mono small">1011₂ = 8 + 2 + 1 = 11<br>17₈ = 8 + 7 = 15<br>2F₁₆ = 32 + 15 = 47</p></div>
+    <div class="card"><p class="num">2</p><h3>Dal decimale</h3><p>Dividi per la base finché il quoziente è 0. Leggi i resti <b>dal basso</b>.</p><p class="mono small">13 : 2 = 6 r 1<br>6 : 2 = 3 r 0<br>3 : 2 = 1 r 1<br>1 : 2 = 0 r 1 → 1101₂</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Scorciatoia</h3><p>Raggruppa i bit da destra: <b>3</b> per l'ottale, <b>4</b> per l'esadecimale.</p><p class="mono small">101 101₂ = 55₈<br>0010 1101₂ = 2D₁₆<br>tutti valgono 45</p></div>
+  </div>
+  <aside class="notes">Una slide di sintesi: il dettaglio è nelle lezioni "numeri-binari" ed "esadecimale". Far verificare la terza colonna: 101101₂ = 32 + 8 + 4 + 1 = 45; 55₈ = 5·8 + 5 = 45; 2D₁₆ = 2·16 + 13 = 45. La scorciatoia funziona perché 8 = 2³ e 16 = 2⁴. Esercizio lampo: 1110₂ in esadecimale? E (14).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale numero è il più grande?</h2></div>
+  <div class="poll" data-id="piu-grande" data-tipo="quiz" data-risposta="D">
+    <ol><li><span class="mono">1010₂</span></li><li><span class="mono">11₈</span></li><li><span class="mono">100₂</span></li><li><span class="mono">F₁₆</span></li></ol>
+    <p class="why">1010₂ = 10, 11₈ = 9, 100₂ = 4, F₁₆ = 15. Vince la cifra singola F: una cifra esadecimale vale fino a 15, mentre quattro cifre binarie arrivano al massimo a 15 solo se sono tutte 1.</p>
+  </div>
+  <aside class="notes">Tranello: la A sembra il numero più grande perché ha più cifre. Morale: non si confrontano numeri scritti in basi diverse senza convertirli. Lasciare 1 minuto per i calcoli sul quaderno, poi voto dal telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni numero al suo valore decimale</h2></div>
+  <dl class="puzzle-abbina" data-id="valori">
+    <dt><span class="mono">1100100₂</span></dt><dd>100</dd>
+    <dt><span class="mono">777₈</span></dt><dd>511</dd>
+    <dt><span class="mono">1F₁₆</span></dt><dd>31</dd>
+    <dt><span class="mono">100₁₆</span></dt><dd>256</dd>
+    <dt><span class="mono">10000000₂</span></dt><dd>128</dd>
+  </dl>
+  <aside class="notes">Soluzioni: 1100100₂ = 64 + 32 + 4 = 100; 777₈ = 7·64 + 7·8 + 7 = 511; 1F₁₆ = 16 + 15 = 31; 100₁₆ = 16² = 256; 10000000₂ = 2⁷ = 128. A squadre: ogni squadra prende una coppia e la giustifica alla lavagna. Curiosità: 777₈ = 511 = 2⁹ − 1, cioè 9 bit tutti a 1 (tre gruppi da 111).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La calcolatrice da programmatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri la <b>Calcolatrice</b> di Windows, apri il menu ☰ e scegli <b>Programmatore</b>.</li>
+      <li>Scrivi 2026: leggi le righe HEX, DEC, OCT e BIN.</li>
+      <li>Converti <b>a mano</b> l'anno della tua nascita in binario, ottale ed esadecimale. Poi verifica con la calcolatrice.</li>
+      <li>Clicca su HEX e scrivi <b>CAFE</b>: quanto vale in decimale?</li>
+      <li>Riporta tutto in una tabella di Calc e salva come <b>calcolatrice-basi.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 2026 = 7EA in esadecimale e 3752 in ottale. Se un tuo calcolo a mano non coincide, rifai le divisioni e cerca il resto sbagliato.</div>
+  </div>
+  <aside class="notes">Soluzioni: 2026 = 7EA₁₆ = 3752₈ = 111 1110 1010₂. CAFE₁₆ = 12·4096 + 10·256 + 15·16 + 14 = 51 966. Anni di nascita tipici: 2011 = 7DB₁₆ = 3733₈ = 11111011011₂; 2012 = 7DC₁₆ = 3734₈ = 11111011100₂. La modalità Programmatore esiste nella Calcolatrice di Windows 10 e 11. Sfida extra: trovare altre "parole" esadecimali (BEE, FACE, C1A0).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Claude Shannon, il padre del bit</h2></div>
+  <figure class="citazione">
+    <blockquote>Il problema fondamentale della comunicazione è riprodurre in un punto, in modo esatto o approssimato, un messaggio scelto in un altro punto.</blockquote>
+    <figcaption><b>Claude Shannon</b>, matematico e ingegnere statunitense, "A Mathematical Theory of Communication", 1948</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>In quell'articolo compare per la prima volta in stampa la parola <b>bit</b>. Oggi i chatbot come ChatGPT non leggono lettere: spezzano il testo in pezzetti chiamati <b>token</b> e ogni token diventa un numero. Per un'AI anche questa frase è una lista di numeri.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point" (Bell System Technical Journal, 1948). Shannon scrive che la parola bit (binary digit) gli fu suggerita dal collega John W. Tukey. I token: per esempio una parola comune può essere un solo token, una rara viene spezzata in più pezzi; il modello lavora solo sui numeri che identificano i token. Collegamento con la UDA 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La rappresentazione dei colori</p><h2>Tre luci, un byte ciascuna</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Ogni pixel mescola luce <b>R</b>ossa, <b>G</b>reen (verde) e <b>B</b>lu. Ogni luce va da 0 a 255: un byte, cioè <b>due cifre esadecimali</b>.</p>
+      <div class="formula"><small>Codice di un colore</small><span class="hl">#FF</span>80<span class="hl">00</span><br>R 255 · G 128 · B 0</div>
+      <p class="muted">256 × 256 × 256 = <b>16 777 216</b> colori possibili.</p>
+    </div>
+    <div class="stack">
+      <div class="row"><span style="width:96px;height:96px;border-radius:18px;background:#FF8000;flex:none"></span><p class="mono">#FF8000<br><span class="small muted">arancione</span></p></div>
+      <div class="row"><span style="width:96px;height:96px;border-radius:18px;background:#1E90FF;flex:none"></span><p class="mono">#1E90FF<br><span class="small muted">azzurro</span></p></div>
+      <div class="row"><span style="width:96px;height:96px;border-radius:18px;background:#808080;flex:none"></span><p class="mono">#808080<br><span class="small muted">grigio: R = G = B</span></p></div>
+    </div>
+  </div>
+  <aside class="notes">FF = 255, 80 = 128, 00 = 0. 1E = 30, 90 = 144, FF = 255. Quando R, G e B sono uguali si ottiene un grigio (da #000000 nero a #FFFFFF bianco). Il sistema RGB è additivo: rosso + verde a piena intensità danno il giallo (#FFFF00), cosa che sorprende chi pensa ai colori a tempera. Il gioco "Indovina il colore" della lezione "esadecimale" può essere ripreso qui.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Dipingi con i numeri in Paint</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Sul quaderno converti in decimale R, G e B di <code>#FF8000</code>, <code>#1E90FF</code> e <code>#8A2BE2</code>.</li>
+      <li>Apri <b>Paint</b> e clicca su <b>Modifica colori</b>.</li>
+      <li>Inserisci i tre valori di Rosso, Verde e Blu del primo colore e disegna un rettangolo pieno. Ripeti per gli altri due.</li>
+      <li>Sotto ogni rettangolo scrivi il codice esadecimale con lo strumento Testo.</li>
+      <li>Salva come <b>colori-rgb.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> #FF8000 è un arancione (255, 128, 0). Se il tuo #1E90FF non è un azzurro intenso, ricontrolla il 90: vale 9 × 16 = 144.</div>
+  </div>
+  <aside class="notes">Soluzioni: #FF8000 = 255, 128, 0; #1E90FF = 30, 144, 255 (azzurro "dodger blue"); #8A2BE2 = 138, 43, 226 (viola "blue violet"). Nel Paint di Windows 11 la finestra Modifica colori permette di scrivere anche direttamente il codice esadecimale: usarlo solo per verificare i conti fatti a mano. Errore tipico: leggere 2B come 2 + 11 = 13 invece di 2·16 + 11 = 43.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine, dal più piccolo al più grande</h2></div>
+  <ol class="puzzle-ordina" data-id="ordine-basi">
+    <li><span class="mono">1111₂</span></li>
+    <li><span class="mono">20₈</span></li>
+    <li><span class="mono">11₁₆</span></li>
+    <li><span class="mono">10010₂</span></li>
+    <li><span class="mono">23₈</span></li>
+    <li><span class="mono">14₁₆</span></li>
+  </ol>
+  <p class="muted">Converti tutto in decimale sul quaderno: alla fine c'è una sorpresa.</p>
+  <aside class="notes">Valori: 1111₂ = 15, 20₈ = 16, 11₁₆ = 17, 10010₂ = 18, 23₈ = 19, 14₁₆ = 20. Sono sei numeri consecutivi, da 15 a 20: farlo notare solo dopo il controllo, è la sorpresa finale. Si può giocare a coppie con 3 minuti di tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="8345" data-aiuto="la seconda cifra è il valore decimale di 11 in binario">
+    <ul class="points">
+      <li>1ª cifra: quante cifre diverse usa il sistema ottale</li>
+      <li>2ª cifra: quanto vale in decimale il numero binario 11</li>
+      <li>3ª cifra: quanti bit servono per scrivere una cifra esadecimale</li>
+      <li>4ª cifra: quanto vale in decimale il numero binario 101</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Ottale: 8 cifre (da 0 a 7). 11₂ = 3. Una cifra esadecimale = 4 bit. 101₂ = 5.</div>
+  </div>
+  <aside class="notes">Codice: 8345. Tranello sulla prima cifra: molti scrivono 7 perché la cifra più grande è 7, ma le cifre sono 8 (da 0 a 7). A squadre: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una grandezza che varia con continuità si dice <span class="blank" data-risposta="analogica|analogico"></span>.</p>
+    <p>Misurare un segnale a intervalli regolari si chiama <span class="blank" data-risposta="campionamento"></span>.</p>
+    <p>Il sistema esadecimale ha base <span class="blank" data-risposta="16|sedici"></span>.</p>
+    <p>Una cifra ottale corrisponde a <span class="blank" data-risposta="3|tre"></span> bit.</p>
+    <p>Nel codice #RRGGBB ogni colore va da 0 a <span class="blank" data-risposta="255"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti di tempo. Soluzioni: analogica (accettato analogico), campionamento, 16, 3, 255. Chi finisce prima: scrivere 255 in binario e in esadecimale (11111111, FF).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Analogico = continuo, digitale = a gradini, fatto di numeri</li>
+      <li>Campionamento e quantizzazione trasformano un suono in numeri</li>
+      <li>Testo, immagini, suoni e video sono tutti numeri</li>
+    </ul>
+    <ul class="points">
+      <li>Basi 2, 8, 10, 16: cambia il numero di cifre, non l'idea</li>
+      <li>Gruppi di 3 bit = ottale, gruppi di 4 bit = esadecimale</li>
+      <li>Un colore è #RRGGBB: tre byte, tre luci</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "La mia palette in esadecimale" (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

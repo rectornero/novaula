@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flowgorithm: il flow chart prende vita · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 5 · Dal problema al programma</p>
+  <h1>Flowgorithm:<br>il flow chart prende vita</h1>
+  <p class="lead">Disegni il diagramma, premi Esegui e il computer lo segue blocco per blocco. Poi, con un clic, lo trasforma in codice vero.</p>
+  <aside class="notes">Obiettivi: usare Flowgorithm per creare ed eseguire i primi programmi (Ciao mondo, la velocità per andare a scuola), dichiarare variabili con il tipo giusto, osservare la memoria durante l'esecuzione e vedere il codice generato. Durata indicativa: 2 ore. Prerequisito tecnico: Flowgorithm installato sui PC del laboratorio (gratuito, per Windows, da flowgorithm.org).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai scritto un programma che gira davvero?</h2></div>
+  <div class="poll" data-id="fg-programma">
+    <ol><li>Sì, con Scratch o App Inventor</li><li>Sì, in un linguaggio scritto (Python, C…)</li><li>No, mai</li><li>Non so se conta quello che ho fatto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Tutti hanno già programmato in UDA 4 con Scratch: farlo notare a chi risponde "mai". Flowgorithm è il ponte tra i blocchi colorati di Scratch e il codice scritto di C (UDA 6) e Python (UDA 8).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>Che cos'è Flowgorithm</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Disegni</h3><p class="muted">Costruisci il flow chart scegliendo i blocchi da un menu: le forme sono sempre giuste.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Esegui</h3><p class="muted">Il programma parte: vedi il blocco attivo illuminarsi e i messaggi comparire nella console.</p></div>
+    <div class="card"><p class="num">3</p><h3>Traduci</h3><p class="muted">Lo stesso diagramma diventa codice in tanti linguaggi, tra cui C++, Java e Python.</p></div>
+  </div>
+  <div class="callout">Gratuito, per Windows, si scarica da <b>flowgorithm.org</b>. L'ha creato Devin Cook, docente di informatica alla Sacramento State University, per aiutare i suoi studenti a imparare.</div>
+  <aside class="notes">Flowgorithm si può impostare in italiano dalle opzioni; alcuni nomi dei blocchi restano in inglese o cambiano leggermente con la lingua: nelle slide li indichiamo in inglese con la traduzione. A casa: chi non ha un PC Windows può usare il laboratorio o disegnare il diagramma su carta e fare la tabella di traccia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'ambiente di lavoro</p><h2>Tre finestre da conoscere</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Il diagramma</h3><p>Un programma nuovo contiene solo <b>Main</b> e <b>End</b>. Fai clic sulla <b>freccia</b> tra i due: si apre il menu dei blocchi da inserire.</p></div>
+    <div class="card"><h3>La console</h3><p>Si apre quando il programma parte: mostra i messaggi del programma e le tue risposte, come in una chat.</p></div>
+    <div class="card"><h3>Le variabili</h3><p>La finestra <b>Variable Watch</b> mostra in diretta il valore di ogni variabile: è come guardare dentro la memoria.</p></div>
+  </div>
+  <div class="callout hl">Doppio clic su un blocco per modificarlo, tasto Canc per eliminarlo. Il programma parte con il pulsante <b>Esegui</b>, il triangolo verde.</div>
+  <aside class="notes">Mostrare tutto sulla LIM prima di farli lavorare: creare un programma nuovo, cliccare sulla freccia, inserire un blocco, eseguirlo. La finestra delle variabili si apre dalla barra degli strumenti o dal menu degli strumenti (Tools). Con il cursore della velocità si può rallentare l'esecuzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I blocchi</p><h2>I blocchi di Flowgorithm</h2></div>
+  <table class="data">
+    <tr><th>Blocco</th><th>Forma</th><th>Che cosa fa</th></tr>
+    <tr><td><b>Declare</b> (Dichiara)</td><td>rettangolo con due righe</td><td>crea una variabile: nome e tipo</td></tr>
+    <tr><td><b>Input</b></td><td>parallelogramma</td><td>legge un valore dalla tastiera e lo mette in una variabile</td></tr>
+    <tr><td><b>Output</b></td><td>parallelogramma</td><td>scrive un messaggio o un risultato nella console</td></tr>
+    <tr><td><b>Assign</b> (Assegna)</td><td>rettangolo</td><td>calcola un'espressione e mette il risultato in una variabile</td></tr>
+    <tr><td><b>If</b> (Se)</td><td>rombo</td><td>sceglie tra due strade: lezione sulla selezione</td></tr>
+    <tr><td><b>While, For, Do</b></td><td>rombo o esagono</td><td>ripetono dei blocchi: lezione sull'iterazione</td></tr>
+  </table>
+  <aside class="notes">In Flowgorithm i blocchi hanno anche colori diversi a seconda del tipo: aiuta a riconoscerli a colpo d'occhio. Esistono anche Comment (commento), Call (richiama una funzione) e Breakpoint: per ora non servono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ciao mondo!</p><h2>Il primo programma di tutti</h2></div>
+  <div class="cols-2 wide-left">
+    <figure class="citazione">
+      <blockquote style="font-size:46px">L'unico modo per imparare un nuovo linguaggio di programmazione è scrivere programmi in quel linguaggio. Il primo programma è lo stesso per tutti: stampa le parole hello, world.</blockquote>
+      <figcaption><b>Brian Kernighan e Dennis Ritchie</b>, <i>Il linguaggio C</i>, 1978</figcaption>
+    </figure>
+    <div class="card soft"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-231.8 0 463.7 332" width="560" height="401" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Flowgorithm: Ciao mondo"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Main</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-171.8,118 215.8,118 171.8,184 -215.8,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Output "Ciao mondo!"</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><rect x="-85" y="220" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">End</text></svg><p class="small">In Flowgorithm basta un blocco <b>Output</b> con il testo tra virgolette.</p></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'inglese, dal capitolo 1 di "The C Programming Language" (1978): "The only way to learn a new programming language is by writing programs in it. The first program to write is the same for all languages: Print the words hello, world". Ritchie è il creatore del linguaggio C, che studieremo nella UDA 6. Kernighan aveva già usato "hello, world" in un tutorial del 1972 sul linguaggio B. Da allora è il primo programma in quasi tutti i corsi del mondo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Ciao mondo! in Flowgorithm</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Flowgorithm. Fai clic sulla freccia tra <b>Main</b> e <b>End</b> e scegli <b>Output</b>.</li>
+      <li>Nel riquadro scrivi <code>"Ciao mondo!"</code> con le virgolette e premi OK.</li>
+      <li>Premi <b>Esegui</b> e guarda la console.</li>
+      <li>Aggiungi un secondo Output: <code>"Mi chiamo "</code> seguito dal tuo nome, tutto tra virgolette.</li>
+      <li>Salva come <b>ciao-mondo.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la console mostra due messaggi, uno sotto l'altro: Ciao mondo! e la tua presentazione. Il diagramma ha 4 blocchi: Main, due Output, End.</div>
+  </div>
+  <aside class="notes">Errori tipici: virgolette dimenticate (vedi il quiz successivo), virgolette "curve" incollate da Word, Output inserito dopo End. I file di Flowgorithm hanno estensione .fprg. Chi finisce prima prova a scrivere "Ciao " &amp; "mondo!": la &amp; unisce due testi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel blocco Output scrivi Ciao mondo! senza virgolette. Che cosa succede?</h2></div>
+  <div class="poll" data-id="fg-virgolette" data-tipo="quiz" data-risposta="D">
+    <ol><li>Stampa Ciao mondo! come prima</li><li>Stampa il testo tutto in maiuscolo</li><li>Stampa solo la parola Ciao</li><li>Segnala un errore: senza virgolette, Ciao e mondo sembrano nomi di variabili</li></ol>
+    <p class="why">Le virgolette dicono: "questo è un testo da copiare così com'è". Senza, Flowgorithm prova a interpretare le parole come nomi di variabili e un'espressione, e segnala che non è valida.</p>
+  </div>
+  <aside class="notes">È il primo errore di quasi tutti i principianti, in ogni linguaggio. Distinzione da fissare: "velocita" tra virgolette è la parola, velocita senza virgolette è il valore contenuto nella variabile. Farlo provare dal vivo sulla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La dichiarazione delle variabili</p><h2>Prima di usare una variabile, dichiarala</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Tipo</th><th>Contiene</th><th>Esempi</th></tr>
+      <tr><td><b>Integer</b> (Intero)</td><td>numeri interi</td><td class="mono">15, -3, 0</td></tr>
+      <tr><td><b>Real</b> (Reale)</td><td>numeri con la virgola</td><td class="mono">4.8, 3.14</td></tr>
+      <tr><td><b>String</b> (Stringa)</td><td>testo</td><td class="mono">"Luca"</td></tr>
+      <tr><td><b>Boolean</b> (Booleano)</td><td>vero o falso</td><td class="mono">true, false</td></tr>
+    </table>
+    <ul class="points">
+      <li>Dichiarare = dare a una variabile un <b>nome</b> e un <b>tipo</b>.</li>
+      <li>Il nome inizia con una lettera, senza spazi né accenti: <code>velocita</code>, non <code>velocità</code>.</li>
+      <li>Nei numeri si usa il <b>punto</b> decimale: <code>4.8</code>.</li>
+    </ul>
+  </div>
+  <aside class="notes">Flowgorithm, come C, vuole la dichiarazione prima dell'uso; Python invece la deduce da solo. Il tipo serve al computer per sapere quanta memoria riservare e quali operazioni sono permesse (non si può moltiplicare un testo). Il punto decimale è la convenzione di quasi tutti i linguaggi di programmazione, diversa dalla virgola dell'italiano e di Calc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni valore al suo tipo. Attenzione ai dettagli!</h2></div>
+  <dl class="puzzle-abbina" data-id="fg-tipi">
+    <dt class="mono">"15"</dt><dd>String: è tra virgolette, quindi è un testo</dd>
+    <dt class="mono">15.0</dt><dd>Real: ha la parte decimale, anche se vale zero</dd>
+    <dt class="mono">-15</dt><dd>Integer: intero, anche se negativo</dd>
+    <dt class="mono">false</dt><dd>Boolean: uno dei due valori logici</dd>
+  </dl>
+  <aside class="notes">Tutte le trappole sono volute: "15" tra virgolette è un testo (non si può sommare come numero), 15.0 è un reale anche se il valore è intero, il segno meno non cambia il tipo. Chiedere: che tipo daresti all'età? (Integer) Al prezzo di un panino? (Real) Al nome della scuola? (String)</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <div class="stack">
+      <div class="head"><p class="kicker">Il problema del libro</p><h2>Con quale velocità andiamo a scuola?</h2></div>
+      <ul class="points">
+        <li><b>Input:</b> distanza in km, tempo in minuti</li>
+        <li><b>Output:</b> velocità media in km/h</li>
+        <li><b>Procedimento:</b> i minuti diventano ore dividendo per 60, poi distanza ÷ ore</li>
+      </ul>
+      <div class="formula" style="font-size:44px"><small>6 km in 15 minuti</small>6 / (15 / 60) = <span class="hl">24</span> km/h</div>
+    </div>
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-334.9 0 669.8 740" width="751" height="830" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Flowgorithm: velocità verso scuola"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Main</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><rect x="-240.4" y="118" width="480.9" height="66" fill="#eef1fa" stroke="#172033" stroke-width="3"/><path d="M-226.4 118 V184 M226.4 118 V184" stroke="#172033" stroke-width="2"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Real distanza, tempo, velocita</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><polygon points="-119.8,220 163.8,220 119.8,286 -163.8,286" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Input distanza</text><path d="M0 286 L0 307" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,322 -9,305 9,305" fill="#172033"/><polygon points="-104.9,322 148.9,322 104.9,388 -148.9,388" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="355" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Input tempo</text><path d="M0 388 L0 409" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,424 -9,407 9,407" fill="#172033"/><rect x="-263.5" y="424" width="527" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="457" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">velocita = distanza / (tempo / 60)</text><path d="M0 490 L0 511" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,526 -9,509 9,509" fill="#172033"/><polygon points="-274.9,526 318.9,526 274.9,592 -318.9,592" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="559" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Output "Vai a " &amp; velocita &amp; " km/h"</text><path d="M0 592 L0 613" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,628 -9,611 9,611" fill="#172033"/><rect x="-85" y="628" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="661" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">End</text></svg>
+  </div>
+  <aside class="notes">Far stimare prima a voce: chi va a piedi (circa 4-5 km/h), in bici (15-20 km/h), in autobus? Le parentesi sono essenziali: 6 / 15 / 60 darebbe un risultato diverso. Nel programma vero prima di ogni Input conviene un Output con la domanda: nel diagramma qui sono omessi per spazio, nel laboratorio ci sono.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il tachimetro della mattina</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo programma. Inserisci un <b>Declare</b>: nomi <code>distanza, tempo, velocita</code>, tipo <b>Real</b>.</li>
+      <li>Output <code>"Quanti km da casa a scuola?"</code>, poi Input <code>distanza</code>.</li>
+      <li>Output <code>"Quanti minuti impieghi?"</code>, poi Input <code>tempo</code>.</li>
+      <li>Assign: variabile <code>velocita</code>, espressione <code>distanza / (tempo / 60)</code>.</li>
+      <li>Output <code>"Vai a " &amp; velocita &amp; " km/h"</code>. Salva come <b>velocita-scuola.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 6 km e 15 minuti esce 24 km/h. Con 1.2 km e 15 minuti (a piedi) esce 4.8 km/h.</div>
+  </div>
+  <aside class="notes">Errori tipici: dimenticare il Declare (Flowgorithm segnala che la variabile non esiste), dichiarare Integer e inserire 1.2, scrivere la virgola al posto del punto, dimenticare gli spazi dentro le virgolette ("Vai a" senza spazio finale attacca il numero). Far confrontare i risultati veri della classe: chi è il più veloce?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale tipo deve avere la variabile velocita?</h2></div>
+  <div class="poll" data-id="fg-tipo-velocita" data-tipo="quiz" data-risposta="B">
+    <ol><li>Integer, perché nell'esempio esce 24</li><li>Real, perché può uscire 4.8</li><li>String, perché la scriviamo con "km/h"</li><li>Boolean, perché è veloce o lenta</li></ol>
+    <p class="why">Il programma deve funzionare per tutti i dati, non solo per l'esempio: con 1.2 km in 15 minuti la velocità è 4.8 km/h, un numero con la virgola. Il testo "km/h" è aggiunto solo nell'Output.</p>
+  </div>
+  <aside class="notes">Il distrattore A riprende l'esempio "comodo": ricollegare alla proprietà di generalità dell'algoritmo. La C confonde il valore con il modo in cui lo stampiamo: la &amp; unisce un numero a un testo solo al momento della scrittura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Guardare dentro la memoria</p><h2>Esegui piano e osserva le variabili</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Apri la finestra <b>Variable Watch</b> e sposta il cursore della velocità verso il minimo.</li>
+      <li>Esegui: il blocco attivo si illumina e i valori cambiano uno alla volta.</li>
+      <li>Prima dell'Input, <code>distanza</code> non ha ancora un valore: la scatola esiste, ma è vuota.</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>I programmatori professionisti fanno la stessa cosa con il <b>debugger</b>: fermano il programma su una riga e guardano le variabili. Siti come <b>pythontutor.com</b> mostrano così, passo passo, anche il codice Python.</p></div>
+  </div>
+  <aside class="notes">La parola "bug" per indicare un errore si diffuse anche grazie a una storia vera: nel 1947 il gruppo di Grace Hopper trovò una falena incastrata in un relè del calcolatore Harvard Mark II e la incollò nel registro con la nota "first actual case of bug being found". Python Tutor è gratuito e non richiede account.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dal diagramma al codice vero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Riapri <b>velocita-scuola.fprg</b>.</li>
+      <li>Apri il <b>visualizzatore del codice sorgente</b> (Source Code Viewer) dal menu degli strumenti.</li>
+      <li>Scegli <b>Python</b>, poi <b>C++</b>: fai clic su un blocco e guarda quale riga si evidenzia.</li>
+      <li>In Writer incolla il codice Python e scrivi accanto a ogni riga da quale blocco viene.</li>
+      <li>Salva come <b>codice-generato.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in Python gli Output diventano <code>print</code> e gli Input usano <code>input</code>; in C++ trovi <code>cout</code> e <code>cin</code>. Il Declare in Python spesso sparisce: non serve.</div>
+  </div>
+  <aside class="notes">Il nome del menu può cambiare con la lingua dell'interfaccia (Tools, Strumenti). Messaggio chiave: il diagramma è la parte difficile (l'algoritmo); la traduzione in codice segue regole precise. C++ è il cugino del C che useremo nella UDA 6.</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">Traduttori a confronto</p><h2>Regole fisse o intelligenza artificiale?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Flowgorithm</h3><p>Traduce con <b>regole fisse</b>: lo stesso diagramma produce sempre lo stesso codice. Se il diagramma è giusto, il codice è giusto.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli <b>assistenti AI</b> per programmatori scrivono codice partendo da una descrizione in italiano o in inglese. Sono velocissimi, ma <b>prevedono</b> il codice più probabile: a volte sbagliano. Chi sa leggere un algoritmo se ne accorge.</p></div>
+  </div>
+  <aside class="notes">Esempi di assistenti: GitHub Copilot e i chatbot generalisti. Domanda per la classe: se un'AI ti scrive il programma della velocità, come verifichi che è giusto? (Con i casi di prova: 6 km in 15 minuti deve dare 24.) Il collaudo resta compito nostro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine i blocchi del tachimetro</h2></div>
+  <ol class="puzzle-ordina" data-id="fg-ordina">
+    <li>Declare: Real distanza, tempo, velocita</li>
+    <li>Output "Quanti km da casa a scuola?"</li>
+    <li>Input distanza</li>
+    <li>Output "Quanti minuti impieghi?"</li>
+    <li>Input tempo</li>
+    <li>Assign: velocita = distanza / (tempo / 60)</li>
+    <li>Output "Vai a " &amp; velocita &amp; " km/h"</li>
+  </ol>
+  <aside class="notes">Ordine: dichiarazione, domanda e lettura della distanza, domanda e lettura del tempo, calcolo, risultato. Discutere: le due coppie domanda/lettura si possono scambiare? Sì, il risultato non cambia (il pulsante Controlla accetta però solo l'ordine del laboratorio: distanza prima, tempo dopo). Il Declare invece deve stare prima di tutto, e il calcolo dopo entrambi gli Input.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Esegui a mente e apri il lucchetto</h2></div>
+  <div class="cols-2">
+    <pre class="code">a = 4
+b = a + 3
+a = b * 2
+c = a - b</pre>
+    <div class="puzzle-codice" data-risposta="1477" data-aiuto="alla fine a vale 14">
+      <p>Il codice è il valore finale di <b>a</b>, seguito da quello di <b>b</b> e di <b>c</b>, scritti uno dopo l'altro.</p>
+      <div class="premio"><b>Aperto!</b> a = 14, b = 7, c = 7: codice 1477.</div>
+    </div>
+  </div>
+  <aside class="notes">Codice: 1477. Tabella di traccia: a = 4; b = 7; a = 14 (il 4 si perde); c = 14 - 7 = 7. Errore tipico: usare il vecchio valore di a nell'ultima riga (c = 4 - 7). Si può verificare costruendo il programma in Flowgorithm con quattro Assign e la finestra delle variabili aperta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il blocco che crea una variabile con nome e tipo si chiama <span class="blank" data-risposta="declare|dichiara"></span>.</p>
+    <p>Per un numero con la virgola si usa il tipo <span class="blank" data-risposta="real|reale"></span>.</p>
+    <p>Un testo scritto tra virgolette è di tipo <span class="blank" data-risposta="string|stringa"></span>.</p>
+    <p>I programmi di Flowgorithm si salvano con l'estensione <span class="blank" data-risposta="fprg|.fprg"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Declare (o Dichiara), Real (o Reale), String (o Stringa), fprg.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Flowgorithm esegue i flow chart: Main, blocchi, End</li>
+      <li>Output scrive, Input legge, Assign calcola</li>
+      <li>I testi vanno tra virgolette, la &amp; li unisce</li>
+    </ul>
+    <ul class="points">
+      <li>Ogni variabile va dichiarata: Integer, Real, String, Boolean</li>
+      <li>Variable Watch mostra la memoria mentre il programma gira</li>
+      <li>Lo stesso diagramma diventa Python o C++</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (richiede Flowgorithm: chi non ha un PC Windows a casa può farlo in laboratorio). Prossima lezione: la selezione, il blocco If.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

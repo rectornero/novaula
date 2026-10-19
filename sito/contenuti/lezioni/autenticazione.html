@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'autenticazione dell'utente · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 10 · La sicurezza e la protezione dei dati</p>
+  <h1>L'autenticazione<br>dell'utente</h1>
+  <p class="lead">Password, passphrase, codici che durano trenta secondi: come fa un sistema a sapere che sei proprio tu?</p>
+  <aside class="notes">Obiettivi: distinguere identificazione, autenticazione e autorizzazione; conoscere i tre tipi di fattori; capire perché i siti conservano l'impronta (hash) e non la password; calcolare la resistenza alla forza bruta; scegliere una passphrase; capire come funziona un codice OTP. Si parte da quanto visto nella lezione "Competenze digitali" (password lunga, unica, segreta e verifica in due passaggi) e si va sotto il cofano. Durata: 2-3 ore. Servono Calc e un browser (CyberChef, senza account).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Sii sincero: quante password diverse usi davvero?</h2></div>
+  <div class="poll" data-id="quante-password">
+    <ol><li>Una sola, per tutto</li><li>Due o tre, a rotazione</li><li>Una diversa per ogni account importante</li><li>Le genera e le ricorda un gestore di password</li></ol>
+  </div>
+  <aside class="notes">Il voto è anonimo: chiedere sincerità. Di solito vince la B. Domanda: "Se un sito di giochi dove usate quella password viene violato, quali altri account sono in pericolo?". È il problema del riutilizzo: chi ruba le password di un sito le prova automaticamente su molti altri (credential stuffing).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre parole diverse</p><h2>Chi sei, dimostralo, che cosa puoi fare</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Identificazione</h3><p>Dichiari chi sei.</p><p class="muted small">Il nome utente: <code>m.rossi</code></p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Autenticazione</h3><p>Lo <b>dimostri</b>.</p><p class="small">Password, codice, impronta.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Autorizzazione</h3><p>Il sistema decide che cosa puoi fare.</p><p class="muted small">Leggere i voti sì, cambiarli no.</p></div>
+  </div>
+  <div class="callout">Nel registro elettronico tu e il docente vi autenticate allo stesso modo, ma siete <b>autorizzati</b> a fare cose diverse.</div>
+  <aside class="notes">Errore comune: confondere autenticazione e autorizzazione. Esempio del cinema: la carta d'identità all'ingresso è l'autenticazione, il biglietto per la sala 3 è l'autorizzazione. Chiedere altri esempi: Wi-Fi della scuola, account Google della scuola, console di gioco con il controllo parentale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I fattori di autenticazione</p><h2>Tre modi per dimostrare chi sei</h2></div>
+  <p class="lead">Tocca le carte: per ognuna, trova almeno due esempi prima di girarla.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Qualcosa che sai</h3><p>Conoscenza</p></div><div class="retro"><p><b>Password, passphrase, PIN</b>, la risposta a una domanda di sicurezza.</p><p class="muted small">Si può dimenticare o farsi rubare con un inganno.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Qualcosa che hai</h3><p>Possesso</p></div><div class="retro"><p><b>Smartphone con l'app</b>, la carta d'identità elettronica, una chiavetta di sicurezza.</p><p class="muted small">Si può perdere, ma serve averlo in mano.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Qualcosa che sei</h3><p>Biometria</p></div><div class="retro"><p><b>Impronta digitale, volto</b>, iride, voce.</p><p class="muted small">Comoda, ma non si può cambiare come una password.</p></div></div>
+  </div>
+  <aside class="notes">Autenticazione a più fattori (MFA) significa usare fattori di tipo DIVERSO. La biometria del telefono di solito sblocca una chiave salvata nel dispositivo: l'impronta non viene mandata al sito. Domanda: "Se vi rubano la password la cambiate; se vi copiano l'impronta?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di queste è una vera autenticazione a due fattori?</h2></div>
+  <div class="poll" data-id="due-fattori" data-tipo="quiz" data-risposta="B">
+    <ol><li>Password + domanda di sicurezza</li><li>Password + codice dall'app sul telefono</li><li>Due password diverse, una dopo l'altra</li><li>PIN + data di nascita</li></ol>
+    <p class="why">Servono due fattori di tipo diverso. Password e codice dell'app sono "qualcosa che sai" e "qualcosa che hai". Nelle altre risposte sono tutte cose che sai: chi ti ha spiato le può scoprire tutte insieme.</p>
+  </div>
+  <aside class="notes">Il trabocchetto è la A: sembra doppia protezione, ma la domanda di sicurezza è un altro "qualcosa che sai", spesso facile da scoprire sui social (nome del cane, città di nascita). Lo stesso vale per la D.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>La prima password... e il primo furto</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1961</p><h3>MIT, Stati Uniti</h3><p>Fernando Corbató e il suo gruppo creano CTSS, un computer usato a turno da molti utenti. Per separare file e tempo di calcolo di ciascuno introducono la <b>password</b>.</p></div>
+    <div class="card bad"><p class="num">1962</p><h3>Il primo furto</h3><p>Il ricercatore Allan Scherr voleva più ore di calcolo. Fece <b>stampare il file con tutte le password</b>, che erano salvate in chiaro.</p></div>
+  </div>
+  <div class="callout hl">La lezione vale ancora oggi: un sistema non dovrebbe <b>mai</b> conservare le password in chiaro.</div>
+  <aside class="notes">CTSS (Compatible Time-Sharing System) era uno dei primi sistemi a condivisione di tempo. Corbató ricevette il premio Turing nel 1990. Scherr raccontò l'episodio pubblicamente solo decenni dopo; distribuì anche le password ad altri colleghi. Domanda ponte: "Se il sito non deve sapere la tua password, come fa a controllarla?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sotto il cofano</p><h2>Il sito conserva l'impronta, non la password</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Password</h3><p><code>ciao</code></p></div>
+    <div class="card fill"><h3>Funzione di hash</h3><p>SHA-256: un calcolo a senso unico</p></div>
+    <div class="card night"><h3>Impronta</h3><p class="small" style="font-family:var(--mono)">b133a0c0e9be…</p></div>
+  </div>
+  <ul class="points">
+    <li>Dalla stessa password esce <b>sempre</b> la stessa impronta.</li>
+    <li>Basta cambiare una lettera e l'impronta cambia del tutto: <code>Ciao</code> → <code>25c73520e69f…</code></li>
+    <li>Dall'impronta <b>non</b> si torna indietro alla password.</li>
+  </ul>
+  <aside class="notes">Quando fai l'accesso, il sito calcola l'impronta di ciò che scrivi e la confronta con quella salvata. Hash non è cifratura: non esiste una chiave per tornare indietro. I siti seri aggiungono anche un "sale" (salt), un valore casuale diverso per ogni utente, e usano funzioni lente apposta (bcrypt, Argon2), così due utenti con la stessa password hanno impronte diverse e la forza bruta rallenta. Impronte complete: SHA-256("ciao") = b133a0c0…0fc75ae2; SHA-256("Ciao") = 25c73520…be4115ad.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un sito fatto bene come conserva la tua password?</h2></div>
+  <div class="poll" data-id="come-conserva" data-tipo="quiz" data-risposta="C">
+    <ol><li>In chiaro, in un database ben protetto</li><li>Cifrata con una chiave segreta del sito</li><li>Come impronta (hash) con un valore casuale</li><li>Non la conserva: te la chiede ogni volta via email</li></ol>
+    <p class="why">Il sito salva l'impronta della password, con un "sale" casuale diverso per ogni utente. Se fosse cifrata, chi ruba anche la chiave del sito potrebbe decifrarle tutte. Per questo, quando la dimentichi, un sito serio non può rimandartela: ti fa crearne una nuova.</p>
+  </div>
+  <aside class="notes">Il tranello è la B: "cifrata" sembra la risposta più sicura. Ma la cifratura è reversibile, l'hash no. Indizio pratico da ricordare: se un sito con "Password dimenticata" vi rimanda la vostra vecchia password, la conserva in modo sbagliato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>L'impronta delle password</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>gchq.github.io/CyberChef</b> e trascina l'operazione <b>SHA2</b> in Recipe (Size: 256).</li>
+      <li>Scrivi in Input <code>ciao</code>, poi <code>Ciao</code>, poi <code>ciao!</code>: annota i primi 8 caratteri di ogni impronta.</li>
+      <li>Calcola l'impronta di <code>password</code> e cercala con un motore di ricerca: che cosa trovi?</li>
+      <li>Scrivi tutto in Writer con una frase di spiegazione. Salva come <b>impronte.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>ciao</code> dà un'impronta che inizia con <b>b133a0c0</b>, <code>Ciao</code> con <b>25c73520</b>. L'impronta di <code>password</code> inizia con <b>5e884898</b> e compare in moltissime pagine: le password comuni sono già "schedate".</div>
+  </div>
+  <aside class="notes">Mai scrivere in strumenti online le proprie password vere: qui si usano solo parole di prova. Il punto 3 mostra perché il "sale" è necessario: senza, le impronte delle password più comuni si trovano in enormi tabelle già calcolate. CyberChef funziona tutto dentro il browser. Chi finisce prima: provare SHA2 con un testo lunghissimo, l'impronta ha sempre 64 caratteri esadecimali (256 bit, collegamento alla lezione sull'esadecimale).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si attacca una password</p><h2>Forza bruta: provarle tutte</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula"><small>combinazioni possibili</small>simboli<span class="hl"><sup>lunghezza</sup></span></div>
+      <table class="data compact">
+        <tr><th>Password</th><th>Combinazioni</th></tr>
+        <tr><td>PIN di 4 cifre</td><td class="mono">10<sup>4</sup> = 10 000</td></tr>
+        <tr><td>4 lettere minuscole</td><td class="mono">26<sup>4</sup> = 456 976</td></tr>
+        <tr><td>8 lettere minuscole</td><td class="mono">26<sup>8</sup> ≈ 209 miliardi</td></tr>
+      </table>
+      <p class="small">Prima ancora, l'attaccante prova le parole del <b>dizionario</b> e le password più usate.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2017 alcuni ricercatori hanno addestrato una rete neurale, <b>PassGAN</b>, su milioni di password rubate: ha imparato a "inventare" password come le inventano le persone. Le password prevedibili, del tipo <b>Nome2010!</b>, cadono per prime.</p></div>
+  </div>
+  <aside class="notes">Ogni simbolo in più moltiplica le combinazioni, ogni carattere in più le eleva: per questo la lunghezza conta più della complessità. PassGAN: Hitaj e altri, "PassGAN: A Deep Learning Approach for Password Guessing", 2017, addestrata sulle password trapelate dal sito RockYou. Non citare percentuali di successo: dipendono molto dalle prove fatte. Messaggio: un'AI impara dalle abitudini umane, quindi una password "umana" è prevedibile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Quanto resiste la tua password?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc, intestazioni da A1 a E1: <b>Tipo</b>, <b>Simboli</b>, <b>Lunghezza</b>, <b>Combinazioni</b>, <b>Anni</b>.</li>
+      <li>Righe: PIN (10; 4), 8 minuscole (26; 8), 8 lettere e cifre (62; 8), 12 lettere e cifre (62; 12), 6 parole da un elenco di 7776 (7776; 6).</li>
+      <li>In D2 <code>=POTENZA(B2;C2)</code>. In E2 <code>=D2/10000000000/31536000</code>. Trascina in giù.</li>
+      <li>Aggiungi un grafico a barre degli anni. Salva come <b>forza-bruta.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 8 minuscole cadono in circa <b>21 secondi</b>; 12 lettere e cifre resistono più di <b>10 000 anni</b>; 6 parole a caso circa <b>700 000 anni</b>.</div>
+  </div>
+  <aside class="notes">Ipotesi del foglio: un attaccante prova 10 miliardi di password al secondo (31 536 000 sono i secondi in un anno). La velocità reale dipende molto dalla funzione di hash usata dal sito: con funzioni veloci le schede grafiche moderne vanno anche più forte, con funzioni lente (bcrypt, Argon2) molto più piano. Risultati: PIN 1 milionesimo di secondo; 26^8 ≈ 2,09 × 10^11, circa 21 s; 62^8 ≈ 2,18 × 10^14, circa 6 ore; 62^12 ≈ 3,2 × 10^21, circa 10 230 anni; 7776^6 ≈ 2,2 × 10^23, circa 701 000 anni. Il grafico a barre con scala normale schiaccia tutto: chi vuole provi l'asse logaritmico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Password e passphrase</p><h2>Una frase lunga batte una parola complicata</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Password complicata</h3><p style="font-family:var(--mono)">Tr0ub4dor&amp;3</p><p class="small">Corta, difficile da ricordare, con sostituzioni (o → 0, a → 4) che i programmi di attacco conoscono benissimo.</p></div>
+    <div class="card ok"><h3>Passphrase</h3><p style="font-family:var(--mono)">falco-ombrello-gelato-marte-sei</p><p class="small">Parole <b>scelte a caso</b>, non una frase famosa. Lunga, facile da ricordare, facile da digitare.</p></div>
+  </div>
+  <div class="callout">Le parole vanno estratte davvero a caso, per esempio con i <b>dadi</b>. "Nel mezzo del cammin di nostra vita" è lunga, ma è in tutti i dizionari di attacco.</div>
+  <aside class="notes">L'esempio Tr0ub4dor&amp;3 viene dalla vignetta 936 di xkcd (Randall Munroe, 2011), che lo confronta con la passphrase "correct horse battery staple". Il metodo Diceware (Arnold Reinhold, 1995) usa 5 lanci di dado per scegliere ogni parola da un elenco di 7776 (6^5) parole. Non usare l'esempio della slide come password vera. Per gli account più importanti la scelta migliore resta un gestore di password con una passphrase principale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Quale resiste più a lungo a un attacco?</h2></div>
+  <div class="poll" data-id="piu-forte" data-tipo="quiz" data-risposta="D">
+    <ol><li><code>Giulia2010!</code></li><li><code>X7#q!z</code></li><li><code>Password123456</code></li><li><code>lampone-treno-nuvola-sette-faro</code></li></ol>
+    <p class="why">La D è lunga 31 caratteri ed è fatta di parole casuali: ha moltissime combinazioni. La B ha simboli strani ma solo 6 caratteri: la forza bruta la prova tutta in pochi secondi. A e C seguono schemi umani (nome + anno, parola + numeri) che i dizionari di attacco provano per primi.</p>
+  </div>
+  <aside class="notes">Il trabocchetto è la B: sembra "da hacker", ma 94^6 ≈ 6,9 × 10^11 combinazioni, poco più di un minuto con l'ipotesi del foglio di calcolo. Password123456 è lunga 14 caratteri ma è tra le più comuni al mondo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">One-Time Password</p><h2>Un codice che vale una volta sola</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nell'app di autenticazione e nel server c'è la <b>stessa chiave segreta</b>, scambiata una volta sola con un codice QR. Ogni 30 secondi entrambi calcolano:</p>
+      <div class="formula" style="font-size:46px"><small>codice TOTP di 6 cifre</small>chiave segreta + <span class="hl">ora attuale</span></div>
+      <p class="small">Il codice arriva anche per <b>SMS</b>: comodo, ma meno sicuro, perché il numero si può dirottare.</p>
+    </div>
+    <div class="card soft"><h3>SPID e CIE</h3><p class="small">Con SPID di livello 2 servono password <b>e</b> un codice OTP o una conferma sull'app. La CIE usa la carta (che hai) e il PIN (che sai).</p></div>
+  </div>
+  <div class="callout hl">Un codice OTP <b>non si detta a nessuno</b>: né all'amico, né a chi al telefono dice di essere la banca o l'assistenza.</div>
+  <aside class="notes">TOTP (Time-based One-Time Password) è descritto nello standard RFC 6238 (2011). L'app e il server non si parlano: arrivano allo stesso numero perché hanno la stessa chiave e lo stesso orologio. Per questo il codice funziona anche con il telefono offline. SMS: rischio di "SIM swap", quando un truffatore si fa intestare un duplicato della SIM. SPID ha tre livelli: 1 solo password, 2 password più OTP o notifica, 3 con dispositivo fisico. Regola d'oro (già vista): un codice che non hai chiesto non si conferma e non si comunica a nessuno, nemmeno a chi dice di essere la banca.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Accesso con verifica in due passaggi: metti in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="accesso-otp">
+    <li>Scrivi nome utente e password</li>
+    <li>Il server confronta l'impronta della password con quella salvata</li>
+    <li>Il server ti chiede il codice a 6 cifre</li>
+    <li>Apri l'app di autenticazione e leggi il codice</li>
+    <li>Il server calcola il codice con la stessa chiave e la stessa ora</li>
+    <li>I due codici coincidono: puoi entrare</li>
+  </ol>
+  <aside class="notes">Molti mettono il punto 5 prima del 3: in realtà il server può calcolare il codice in qualsiasi momento, ma lo confronta solo quando glielo mandi. Far notare che la password non viaggia mai "nuda" nel database: si confrontano impronte.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Due computer, lo stesso codice</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In coppia: ognuno apre <b>CyberChef</b> e trascina l'operazione <b>Generate TOTP</b> in Recipe.</li>
+      <li>Tutti e due scrivete in Input la stessa chiave di prova, per esempio <code>NOVAULA1D2026</code>.</li>
+      <li>Premete <b>BAKE!</b> insieme e confrontate la Password a 6 cifre.</li>
+      <li>Aspettate 30 secondi e ripremete. Poi uno dei due cambia una lettera della chiave.</li>
+      <li>Annota i risultati in <b>totp.txt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con la stessa chiave nello stesso momento esce lo <b>stesso codice</b>, anche senza collegarsi tra loro. Dopo 30 secondi il codice cambia; con una chiave diversa esce un codice diverso.</div>
+  </div>
+  <aside class="notes">È esattamente ciò che fanno l'app di autenticazione e il server. Se i codici sono diversi con la stessa chiave, controllare che gli orologi dei due PC siano sincronizzati (ora automatica di Windows) e di essere nella stessa finestra di 30 secondi. L'operazione restituisce anche un indirizzo otpauth:// : è quello che di solito viene trasformato nel codice QR da inquadrare. Usare solo chiavi di prova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La fine delle password?</h2></div>
+  <figure class="citazione">
+    <blockquote>Non c'è dubbio che, col tempo, le persone si affideranno sempre meno alle password.</blockquote>
+    <figcaption><b>Bill Gates</b>, cofondatore di Microsoft, RSA Conference, San Francisco, 2004</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Vent'anni dopo arrivano le <b>passkey</b>: al posto della password il telefono conserva una chiave privata e la sblocchi con impronta o PIN. Al sito va solo la chiave pubblica, quindi un sito falso non può rubarti niente da riusare.</p></div>
+  <aside class="notes">Traduzione nostra; originale: "There is no doubt that over time, people are going to rely less and less on passwords", riportata da CNET e altre testate nel febbraio 2004. Le passkey sono uno standard della FIDO Alliance, supportato da Apple, Google e Microsoft dal 2022-2023. Usano la crittografia asimmetrica della lezione precedente. Domanda: "Avete mai visto la proposta 'Crea una passkey'?". Discutere perché, venti anni dopo, le password esistono ancora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="3630" data-aiuto="le ultime due cifre sono i secondi di mezzo minuto">
+    <ul class="points">
+      <li>1ª cifra: quanti sono i tipi di fattori di autenticazione</li>
+      <li>2ª cifra: quante cifre ha di solito un codice OTP</li>
+      <li>3ª e 4ª cifra: per quanti secondi vale un codice TOTP</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 fattori (sai, hai, sei), 6 cifre, 30 secondi.</div>
+  </div>
+  <aside class="notes">Codice: 3630. Gara a squadre: la prima squadra che apre prende 2 punti. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Dimostrare di essere chi dici di essere si chiama <span class="blank" data-risposta="autenticazione"></span>.</p>
+    <p>Lo smartphone con l'app è un fattore di tipo "qualcosa che <span class="blank" data-risposta="hai"></span>".</p>
+    <p>Un sito serio conserva l'<span class="blank" data-risposta="impronta|hash"></span> della password, non la password.</p>
+    <p>Un PIN di 4 cifre ha <span class="blank" data-risposta="10000|10.000|diecimila"></span> combinazioni.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: autenticazione; hai; impronta (accettato hash); 10000.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Identificazione, autenticazione, autorizzazione</li>
+      <li>Tre fattori: sai, hai, sei</li>
+      <li>I siti salvano l'impronta, non la password</li>
+    </ul>
+    <ul class="points">
+      <li>Lunghezza batte complessità: meglio una passphrase</li>
+      <li>OTP: stessa chiave + stessa ora = stesso codice</li>
+      <li>Il futuro: passkey e chiavi asimmetriche</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Consiglio pratico finale: attivare la verifica in due passaggi sugli account personali più importanti (email, social, giochi), con l'aiuto di un genitore. Assegnare il compito collegato su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

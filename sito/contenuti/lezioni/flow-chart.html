@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Disegnare gli algoritmi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 5 · Dal problema al programma</p>
+  <h1>Disegnare<br>gli algoritmi</h1>
+  <p class="lead">Ovali, rettangoli, rombi e frecce: con i flow chart un algoritmo si vede tutto in un colpo d'occhio, prima ancora di scrivere il codice.</p>
+  <aside class="notes">Obiettivi: conoscere i blocchi dei diagrammi di flusso e le regole per disegnarli, costruire i primi diagrammi in sequenza, distinguere variabili e costanti, capire l'assegnazione (e il classico scambio di due variabili). Durata indicativa: 2 ore. Prerequisito: lezione "Algoritmi e linguaggi".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per capire come si monta un mobile, cosa preferisci?</h2></div>
+  <div class="poll" data-id="fc-disegno">
+    <ol><li>Le istruzioni scritte, passo dopo passo</li><li>I disegni, anche senza parole</li><li>Un video tutorial</li><li>Provo da solo e vedo che succede</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Le istruzioni dei mobili svedesi sono quasi solo disegni: funzionano in tutte le lingue. Il flow chart è la stessa idea applicata agli algoritmi: un disegno con poche regole che tutti possono leggere. Chi ha scelto "provo da solo" sta facendo collaudo per tentativi: utile, ma costoso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Un'idea che ha più di cent'anni</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1921</p><h3>In fabbrica</h3><p class="muted">Gli ingegneri Frank e Lillian Gilbreth presentano i "process chart": diagrammi per descrivere e migliorare il lavoro.</p></div>
+    <div class="card soft"><p class="num">1947</p><h3>Nei computer</h3><p class="muted">Herman Goldstine e John von Neumann usano i diagrammi di flusso per progettare i programmi dei primi calcolatori elettronici.</p></div>
+    <div class="card"><p class="num">1985</p><h3>Le regole comuni</h3><p class="muted">La norma ISO 5807 fissa i simboli: lo stesso diagramma si legge uguale in tutto il mondo.</p></div>
+  </div>
+  <aside class="notes">I Gilbreth presentarono i "process charts" all'American Society of Mechanical Engineers nel 1921. Goldstine e von Neumann descrissero i "flow diagrams" nei rapporti "Planning and Coding of Problems for an Electronic Computing Instrument" (1947). La norma ISO 5807:1985 è ancora il riferimento per i simboli. Chiedere: perché serve uno standard? (lavorare insieme a persone che non conosciamo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I diagrammi a blocchi</p><h2>I blocchi del flow chart</h2></div>
+  <div class="cols-3">
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-101 0 202 128" width="221" height="140" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text></svg><h3>Terminale</h3></div><p class="muted small">Ovale: Inizio e Fine. Uno solo per tipo.</p></div>
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-143 0 286 128" width="313" height="140" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><polygon points="-83,16 127,16 83,82 -127,82" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi x</text></svg><h3>Input / output</h3></div><p class="muted small">Parallelogramma: leggere un dato o scrivere un risultato.</p></div>
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-111 0 222 128" width="243" height="140" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><rect x="-95" y="16" width="190" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">y ← x × 2</text></svg><h3>Elaborazione</h3></div><p class="muted small">Rettangolo: un calcolo o un'assegnazione.</p></div>
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-116 0 232 174" width="200" height="150" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><polygon points="0,16 100,72 0,128 -100,72" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="72" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">x &gt; 0</text></svg><h3>Decisione</h3></div><p class="muted small">Rombo: una domanda con risposta vero o falso.</p></div>
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-106 0 212 142" width="209" height="140" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><path d="M-80 56 L65 56" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="80,56 63,65 63,47" fill="#172033"/></svg><h3>Freccia</h3></div><p class="muted small">Porta al blocco successivo: l'ordine di esecuzione.</p></div>
+    <div class="card"><div class="row"><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-56 0 112 142" width="110" height="140" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><path d="M-40 26 L0 26 L0 71" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,86 -9,69 9,69" fill="#172033"/><circle cx="0" cy="26" r="9" fill="#172033"/></svg><h3>Connettore</h3></div><p class="muted small">Il punto dove due percorsi si riuniscono.</p></div>
+  </div>
+  <aside class="notes">Il rombo lo useremo con la selezione e l'iterazione: per oggi basta riconoscerlo. Nei libri si trovano piccole varianti (ovale o rettangolo arrotondato per i terminali, cerchio per il connettore): l'importante è essere coerenti dentro un diagramma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole</p><h2>Come si disegna un buon flow chart</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un solo <b>Inizio</b> e una sola <b>Fine</b></li>
+      <li>Le frecce vanno dall'alto in basso</li>
+      <li>Ogni blocco ha <b>una</b> freccia che entra e <b>una</b> che esce</li>
+      <li>Il rombo è l'unico con <b>due</b> uscite: Vero e Falso</li>
+    </ul>
+    <div class="stack">
+      <div class="card bad"><h3>Da evitare</h3><p>Frecce che si incrociano o tornano indietro senza motivo: il diagramma diventa un piatto di spaghetti.</p></div>
+      <div class="card ok"><h3>Un trucco</h3><p>Scrivi nei blocchi frasi brevi, una sola azione per blocco.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Eccezioni: Inizio ha solo una freccia in uscita, Fine solo una in entrata; il connettore riceve due frecce. Il termine "spaghetti code" è usato davvero dai programmatori per il codice con salti disordinati: lo ritroveremo con la citazione di Dijkstra.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="head"><p class="kicker">I primi diagrammi</p><h2>L'area del rettangolo</h2></div>
+      <p>Il diagramma più semplice è una <b>sequenza</b>: i blocchi si eseguono uno dopo l'altro, dall'alto in basso.</p>
+      <table class="data compact">
+        <tr><th>Blocco</th><th>Che cosa succede</th></tr>
+        <tr><td>Leggi</td><td>arrivano base = 7 e altezza = 3</td></tr>
+        <tr><td>Calcola</td><td>area prende il valore 21</td></tr>
+        <tr><td>Scrivi</td><td>sullo schermo compare 21</td></tr>
+      </table>
+    </div>
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-212.2 0 424.5 536" width="570" height="720" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Flow chart: area del rettangolo"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-152.2,118 196.2,118 152.2,184 -196.2,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi base, altezza</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><rect x="-172.8" y="220" width="345.5" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">area ← base × altezza</text><path d="M0 286 L0 307" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,322 -9,305 9,305" fill="#172033"/><polygon points="-98.5,322 142.5,322 98.5,388 -142.5,388" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="355" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi area</text><path d="M0 388 L0 409" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,424 -9,407 9,407" fill="#172033"/><rect x="-85" y="424" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="457" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+  </div>
+  <aside class="notes">Far "eseguire" il diagramma a uno studente alla lavagna con altri dati (base 2,5 e altezza 4: area 10). Sottolineare che il diagramma è generale: vale per qualunque base e altezza. Il simbolo ← è l'assegnazione: "area prende il valore di base per altezza".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il blocco "Scrivi area" che forma deve avere?</h2></div>
+  <div class="poll" data-id="fc-forma" data-tipo="quiz" data-risposta="C">
+    <ol><li>Rettangolo, perché fa qualcosa</li><li>Rombo, perché dà una risposta</li><li>Parallelogramma, perché è un output</li><li>Ovale, perché è l'ultimo passo</li></ol>
+    <p class="why">Scrivere un risultato è un'operazione di output: si usa il parallelogramma, come per leggere un dato (input). Il rettangolo è per i calcoli, l'ovale solo per Inizio e Fine.</p>
+  </div>
+  <aside class="notes">Il distrattore più scelto è la A: "scrivere" sembra un'azione come un calcolo. Fissare la regola: tutto ciò che entra o esce dal computer (tastiera, schermo) va nel parallelogramma.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il perimetro con LibreOffice Draw</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Draw. Dalla barra Disegno apri il menu <b>Diagrammi di flusso</b>.</li>
+      <li>Disegna i 5 blocchi: Inizio, Leggi base e altezza, perimetro ← 2 × (base + altezza), Scrivi perimetro, Fine.</li>
+      <li>Scrivi dentro ogni blocco con un doppio clic.</li>
+      <li>Collega i blocchi con le frecce dei <b>Connettori</b>, così restano attaccate se sposti i blocchi.</li>
+      <li>Salva come <b>perimetro.odg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 5 blocchi in colonna, 4 frecce, due parallelogrammi. Eseguilo a mano con base 7 e altezza 3: deve uscire <b>20</b>.</div>
+  </div>
+  <aside class="notes">Se la barra Disegno non è visibile: menu Visualizza, Barre degli strumenti, Disegno. In alternativa al programma installato si può usare diagrams.net nel browser (libreria "Flowchart", salvataggio sul dispositivo, senza account). Errore frequente: perimetro ← 2 × base + altezza (manca la parentesi: con 7 e 3 darebbe 17).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Variabili</p><h2>Una variabile è una scatola con un nome</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="kicker">base</p><p class="big">7</p></div>
+    <div class="card soft"><p class="kicker">altezza</p><p class="big">3</p></div>
+    <div class="card fill"><p class="kicker" style="color:#fff">area</p><p class="big" style="color:#fff">21</p></div>
+  </div>
+  <ul class="points">
+    <li>Ha un <b>nome</b>, un <b>tipo</b> (numero, testo…) e un <b>valore</b> che può cambiare.</li>
+    <li><code>area ← base × altezza</code>: calcola a destra, metti il risultato nella scatola a sinistra. Il valore vecchio si perde.</li>
+  </ul>
+  <aside class="notes">In memoria (RAM) una variabile è una zona con un indirizzo: il nome serve a noi. Chiedere: che cosa fa x ← x + 1? In matematica "x = x + 1" è impossibile; in informatica significa "prendi x, aggiungi 1, rimettilo in x". È il primo passo verso i contatori della lezione sull'iterazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Costanti</p><h2>Una costante non cambia mai</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Una <b>costante</b> ha un nome e un valore fissato all'inizio, che il programma non può modificare. Per riconoscerle si scrivono in MAIUSCOLO.</p>
+      <table class="data compact">
+        <tr><th>Costante</th><th>Valore</th><th>A che serve</th></tr>
+        <tr><td class="mono">PI_GRECO</td><td class="mono">3,14</td><td>cerchi e circonferenze</td></tr>
+        <tr><td class="mono">IVA</td><td class="mono">22</td><td>prezzi con le tasse</td></tr>
+        <tr><td class="mono">GIORNI_ANNO</td><td class="mono">365</td><td>calcoli sulle date</td></tr>
+      </table>
+    </div>
+    <div class="formula" style="font-size:50px"><small>Circonferenza di raggio 5</small>c ← 2 × <span class="hl">PI_GRECO</span> × r<small style="margin-top:14px">r = 5 → c = 31,4</small></div>
+  </div>
+  <aside class="notes">Perché usare una costante invece di scrivere 3,14 ovunque? Se un giorno serve più precisione (3,14159) si cambia in un solo punto. Stesso discorso per l'IVA: se la legge cambia, si aggiorna una riga. Verifica: 2 × 3,14 × 5 = 31,4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>a ← 5, b ← 8, poi a ← b e infine b ← a. Quanto valgono alla fine?</h2></div>
+  <div class="poll" data-id="fc-scambio" data-tipo="quiz" data-risposta="B">
+    <ol><li>a = 8, b = 5</li><li>a = 8, b = 8</li><li>a = 5, b = 8</li><li>a = 5, b = 5</li></ol>
+    <p class="why">Con a ← b, a diventa 8 e il 5 si perde per sempre. Poi b ← a copia in b il valore attuale di a, cioè 8. Per scambiare due variabili serve una terza scatola di appoggio.</p>
+  </div>
+  <aside class="notes">Quasi tutta la classe sceglie la A: è il misconcetto classico, si pensa all'assegnazione come a uno scambio. Far simulare con due bicchieri d'acqua colorata: per scambiarli serve un terzo bicchiere vuoto. Questo prepara la slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="head"><p class="kicker">Lo scambio di due variabili</p><h2>Serve una scatola d'appoggio</h2></div>
+      <table class="data compact">
+        <tr><th>Istruzione</th><th>a</th><th>b</th><th>aux</th></tr>
+        <tr><td>Leggi a, b</td><td class="mono">5</td><td class="mono">8</td><td class="mono">–</td></tr>
+        <tr><td class="mono">aux ← a</td><td class="mono">5</td><td class="mono">8</td><td class="mono hl">5</td></tr>
+        <tr><td class="mono">a ← b</td><td class="mono hl">8</td><td class="mono">8</td><td class="mono">5</td></tr>
+        <tr><td class="mono">b ← aux</td><td class="mono">8</td><td class="mono hl">5</td><td class="mono">5</td></tr>
+      </table>
+      <p class="small muted">Questa è una <b>tabella di traccia</b>: una riga per istruzione, una colonna per variabile.</p>
+    </div>
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-151.8 0 303.5 740" width="320" height="780" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Flow chart: scambio di due variabili"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-87.6,118 131.6,118 87.6,184 -131.6,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi a, b</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><rect x="-95" y="220" width="190" height="66" rx="4" fill="#fbe1ec" stroke="#c8326f" stroke-width="5"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">aux ← a</text><path d="M0 286 L0 307" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,322 -9,305 9,305" fill="#172033"/><rect x="-95" y="322" width="190" height="66" rx="4" fill="#fbe1ec" stroke="#c8326f" stroke-width="5"/><text x="0" y="355" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">a ← b</text><path d="M0 388 L0 409" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,424 -9,407 9,407" fill="#172033"/><rect x="-95" y="424" width="190" height="66" rx="4" fill="#fbe1ec" stroke="#c8326f" stroke-width="5"/><text x="0" y="457" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">b ← aux</text><path d="M0 490 L0 511" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,526 -9,509 9,509" fill="#172033"/><polygon points="-91.8,526 135.8,526 91.8,592 -135.8,592" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="559" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi a, b</text><path d="M0 592 L0 613" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,628 -9,611 9,611" fill="#172033"/><rect x="-85" y="628" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="661" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+  </div>
+  <aside class="notes">La tabella di traccia è lo strumento per "eseguire a mano" un algoritmo: la useremo in tutta la UDA e nelle verifiche. Evidenziare in ogni riga solo la variabile che cambia. Lo scambio tornerà in C (UDA 6) e in Python (UDA 8), dove esiste anche la scorciatoia a, b = b, a.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La tabella di traccia che si calcola da sola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc scrivi in A1:D1 <b>Istruzione</b>, <b>a</b>, <b>b</b>, <b>aux</b>. In riga 2: Leggi a, b, poi 5 e 8.</li>
+      <li>Riga 3, <code>aux ← a</code>: B3 <code>=B2</code>, C3 <code>=C2</code>, D3 <code>=B2</code>.</li>
+      <li>Riga 4, <code>a ← b</code>: B4 <code>=C3</code>, C4 <code>=C3</code>, D4 <code>=D3</code>.</li>
+      <li>Riga 5, <code>b ← aux</code>: completa tu le tre formule.</li>
+      <li>Cambia B2 in 100 e guarda l'ultima riga. Salva come <b>traccia-scambio.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 5 e 8 l'ultima riga dà a = 8, b = 5. Con a = 100 e b = 8 deve dare a = 8, b = 100.</div>
+  </div>
+  <aside class="notes">Soluzione riga 5: B5 =B4, C5 =D4, D5 =D4. Regola da far scoprire: ogni variabile copia il valore della riga sopra, tranne quella assegnata, che prende il nuovo valore. Chi finisce prima prova lo scambio "sbagliato" (a ← b, b ← a) in un altro foglio e verifica che dà 8 e 8.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i blocchi: la media di tre voti</h2></div>
+  <ol class="puzzle-ordina" data-id="fc-media">
+    <li>Inizio</li>
+    <li>Leggi v1, v2, v3</li>
+    <li>somma ← v1 + v2 + v3</li>
+    <li>media ← somma / 3</li>
+    <li>Scrivi media</li>
+    <li>Fine</li>
+  </ol>
+  <aside class="notes">Ordine: Inizio, Leggi, somma, media, Scrivi, Fine. Discussione: si può calcolare la media prima della somma? No, perché la media usa la somma: l'ordine nella sequenza conta. Domanda bonus: che forma ha ciascun blocco? (ovale, parallelogramma, rettangolo, rettangolo, parallelogramma, ovale). Il 3 qui potrebbe diventare una costante NUMERO_VOTI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Abbina ogni forma al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="fc-forme">
+    <dt>Ovale</dt><dd>L'inizio o la fine dell'algoritmo</dd>
+    <dt>Parallelogramma</dt><dd>Leggere un dato o scrivere un risultato</dd>
+    <dt>Rettangolo</dt><dd>Un calcolo che assegna un valore a una variabile</dd>
+    <dt>Rombo</dt><dd>Una domanda con due uscite, vero o falso</dd>
+    <dt>Freccia</dt><dd>Il blocco da eseguire subito dopo</dd>
+  </dl>
+  <aside class="notes">Gara a coppie con il timer del telefono: 90 secondi. Chi finisce spiega alla classe la differenza tra rettangolo e parallelogramma con un esempio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Meno salti, programmi migliori</h2></div>
+  <figure class="citazione">
+    <blockquote>La qualità dei programmatori è una funzione decrescente della densità di istruzioni go to nei programmi che producono.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, lettera "Go To Statement Considered Harmful", 1968</figcaption>
+  </figure>
+  <div class="cols-3">
+    <div class="card"><p class="kicker">Sequenza</p><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-126 0 252.1 266" width="190" height="200" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><rect x="-110" y="16" width="220.1" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">istruzione 1</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><rect x="-110" y="118" width="220.1" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">istruzione 2</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/></svg></div>
+    <div class="card"><p class="kicker">Selezione</p><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-307.7 0 615.4 364" width="338" height="200" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><polygon points="0,16 122.7,72 0,128 -122.7,72" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="72" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">condizione</text><text x="132.7" y="54" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M122.7 72 L192.7 72 L192.7 157" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="192.7,172 183.7,155 201.7,155" fill="#172033"/><rect x="97.7" y="172" width="190" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="192.7" y="205" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">A</text><path d="M192.7 238 L192.7 282 L24 282" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="9,282 26,273 26,291" fill="#172033"/><text x="-132.7" y="54" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M-122.7 72 L-192.7 72 L-192.7 157" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-192.7,172 -201.7,155 -183.7,155" fill="#172033"/><rect x="-287.7" y="172" width="190" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="-192.7" y="205" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">B</text><path d="M-192.7 238 L-192.7 282 L-24 282" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,282 -26,291 -26,273" fill="#172033"/><circle cx="0" cy="282" r="7" fill="#172033"/><path d="M0 282 L0 303" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,318 -9,301 9,301" fill="#172033"/></svg></div>
+    <div class="card"><p class="kicker">Iterazione</p><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-192.7 0 425.4 430" width="198" height="200" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Diagramma di flusso"><circle cx="0" cy="16" r="7" fill="#172033"/><path d="M0 16 L0 35" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,50 -9,33 9,33" fill="#172033"/><polygon points="0,50 122.7,106 0,162 -122.7,106" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="106" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">condizione</text><path d="M0 162 L0 193" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,208 -9,191 9,191" fill="#172033"/><text x="12" y="182" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><rect x="-95" y="208" width="190" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="241" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">A</text><path d="M0 274 L0 304 L-172.7 304 L-172.7 16 L-24 16" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,16 -26,25 -26,7" fill="#172033"/><text x="132.7" y="88" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M122.7 106 L212.7 106 L212.7 348 L0 348" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><path d="M0 348 L0 369" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,384 -9,367 9,367" fill="#172033"/></svg></div>
+  </div>
+  <aside class="notes">Traduzione nostra dall'inglese, dalla lettera pubblicata su Communications of the ACM nel marzo 1968: in pratica "più salti, peggiori programmi". Due italiani, Corrado Böhm e Giuseppe Jacopini, avevano dimostrato nel 1966 che ogni algoritmo si può disegnare usando solo tre strutture: sequenza, selezione e iterazione (teorema di Böhm-Jacopini). È la base della programmazione strutturata: le prossime lezioni sono proprio su queste tre strutture.</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">Flow chart e intelligenza artificiale</p><h2>Un diagramma che si disegna da solo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Gli alberi di decisione</h3><p>Un <b>albero di decisione</b> è una catena di domande sì/no, come i rombi di un flow chart: "il messaggio contiene un link?", "il mittente è in rubrica?". Nel machine learning non lo disegna una persona: un algoritmo lo costruisce da solo guardando migliaia di esempi già classificati.</p></div>
+    <div class="card soft"><h3>Il bello</h3><p>A differenza di altre AI, un albero di decisione si può leggere: puoi seguire le frecce e capire <b>perché</b> ha deciso così.</p></div>
+  </div>
+  <aside class="notes">Gli alberi di decisione sono usati davvero, per esempio nei filtri antispam e nelle diagnosi assistite, spesso combinati in "foreste" di molti alberi. Il punto da far emergere: la forma del ragionamento (domande con due uscite) è la stessa dei rombi, ma le domande le ha scelte l'algoritmo a partire dai dati. Collegamento con UDA 2.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Un flow chart scritto come testo</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Apri <b>mermaid.live</b> (senza account), cancella l'esempio a sinistra e scrivi:</p>
+      <pre class="code" style="font-size:24px">flowchart TD
+  A([<span class="s">"Inizio"</span>]) --> K[<span class="s">"SCONTO ← 20"</span>]
+  K --> B[/<span class="s">"Leggi prezzo"</span>/]
+  B --> C[<span class="s">"finale ← prezzo - prezzo * SCONTO / 100"</span>]
+  C --> D[/<span class="s">"Scrivi finale"</span>/]
+  D --> E([<span class="s">"Fine"</span>])</pre>
+      <p class="small">Esporta l'immagine PNG con <b>Actions</b> e salvala come <b>sconto.png</b>.</p>
+    </div>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> a destra compaiono 6 blocchi in colonna: 2 ovali, 2 parallelogrammi e 2 rettangoli. Con prezzo 50 il risultato a mano è 40.</div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p class="small">Molti chatbot scrivono codice Mermaid partendo da una descrizione: comodo, ma il diagramma va sempre ricontrollato da te.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Mermaid è una libreria open source usata anche su GitHub per i diagrammi nella documentazione. Simboli: ([ ]) ovale, [/ /] parallelogramma, [ ] rettangolo, { } rombo; le virgolette evitano errori con parentesi e simboli. SCONTO è una costante: la si fissa in un blocco all'inizio. Se il menu di esportazione cambia nome, basta uno screenshot (Win + Maiusc + S). Eventuale demo con un chatbot solo da parte del docente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per leggere un dato o scrivere un risultato si usa il <span class="blank" data-risposta="parallelogramma"></span>.</p>
+    <p>Il blocco a forma di <span class="blank" data-risposta="rombo"></span> ha due uscite, vero e falso.</p>
+    <p>Un valore che il programma non può modificare è una <span class="blank" data-risposta="costante"></span>.</p>
+    <p>Per scambiare a e b serve una terza variabile, detta di <span class="blank" data-risposta="appoggio|aux|ausiliaria"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: parallelogramma, rombo, costante, appoggio (accettati anche aux e ausiliaria).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ovale, parallelogramma, rettangolo, rombo, frecce</li>
+      <li>Un Inizio, una Fine, frecce dall'alto in basso</li>
+      <li>Sequenza: i blocchi si eseguono uno dopo l'altro</li>
+    </ul>
+    <ul class="points">
+      <li>Variabile: nome, tipo, valore che cambia</li>
+      <li>Costante: valore fisso, nome in MAIUSCOLO</li>
+      <li>Scambio con la variabile d'appoggio e tabella di traccia</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: Flowgorithm, dove i flow chart diventano programmi che si eseguono davvero.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

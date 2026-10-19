@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Funzioni e procedure · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 7 · Funzioni e array in C e C++</p>
+  <h1>Funzioni<br>e procedure</h1>
+  <p class="lead">Un problema grande fa paura, tanti problemi piccoli no. Impariamo a dare un nome a un pezzo di programma e a usarlo tutte le volte che serve.</p>
+  <aside class="notes">Obiettivi: scomporre un problema in sottoproblemi (top-down), distinguere funzione e procedura, scrivere e chiamare funzioni in C e C++ con prototipo, parametri e return. Durata indicativa: 2-3 ore con i laboratori. Prerequisiti: UDA 6 (printf/scanf, cout/cin, if, for, while). Per i laboratori basta OnlineGDB (onlinegdb.com, nessun account per eseguire) oppure l'IDE della scuola (Code::Blocks o Dev-C++).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi programmare un videogioco intero. Da dove parti?</h2></div>
+  <div class="poll" data-id="videogioco">
+    <ol><li>Scrivo tutto il codice di fila, dall'inizio alla fine</li><li>Divido il gioco in parti: personaggio, livelli, punteggio</li><li>Cerco pezzi di codice già pronti da riusare</li><li>Chiedo a un'AI di scriverlo tutto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di apertura, non c'è una risposta giusta. Far notare che la B e la C sono proprio le due idee della lezione: scomporre il problema e riusare codice. Sulla D: anche un'AI, per scrivere un programma lungo, lo spezza in funzioni; e il programmatore deve comunque capirle e controllarle.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La scomposizione di un problema</p><h2>Dall'alto verso il basso: top-down</h2></div>
+  <p class="lead">Si parte dal problema intero e lo si divide in <mark>sottoproblemi</mark> più semplici, finché ognuno è facile da risolvere.</p>
+  <div class="org">
+    <div class="org-box top">Programma "Pagella": dai voti al giudizio</div>
+    <div class="org-row" style="--l:14%;--r:17%">
+      <div class="org-box">1 · Leggi i tre voti</div>
+      <div class="org-box acc">2 · Calcola la media</div>
+      <div class="org-box">3 · Stampa il giudizio</div>
+    </div>
+  </div>
+  <div class="callout">Già nel 1637 il filosofo <b>Cartesio</b> consigliava di dividere ogni difficoltà in tante parti quante servono per risolverla meglio.</div>
+  <aside class="notes">Il riferimento è alla seconda regola del "Discorso sul metodo" di Cartesio (1637), qui parafrasata. Chiedere alla classe di scomporre un problema quotidiano (preparare lo zaino, organizzare la gita) e poi tornare al programma Pagella: lo scriveremo davvero più avanti nella lezione. Ogni riquadro diventerà un sottoprogramma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sottoprogrammi e funzioni</p><h2>Due tipi di sottoprogramma</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Funzione</h3><p>Fa un calcolo e <b>restituisce un valore</b> a chi l'ha chiamata.</p><p class="muted">Come <code>=MEDIA(B2:B8)</code> in Calc: le dai dei dati, ti torna un numero.</p></div>
+    <div class="card"><h3>Procedura</h3><p>Esegue delle azioni e <b>non restituisce niente</b>.</p><p class="muted">In C è una funzione di tipo <code>void</code> ("vuoto"), per esempio una che disegna una cornice.</p></div>
+  </div>
+  <p>Gira le carte: funzione o procedura?</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:200px"><div class="fronte"><h3>Calcola l'area di un rettangolo</h3></div><div class="retro"><p><b>Funzione:</b> restituisce un numero, l'area.</p></div></div>
+    <div class="flip" style="--h:200px"><div class="fronte"><h3>Stampa il menu del gioco</h3></div><div class="retro"><p><b>Procedura:</b> scrive sullo schermo, non restituisce niente.</p></div></div>
+    <div class="flip" style="--h:200px"><div class="fronte"><h3>Dice se un numero è pari</h3></div><div class="retro"><p><b>Funzione:</b> restituisce 1 (vero) o 0 (falso).</p></div></div>
+  </div>
+  <aside class="notes">In C tecnicamente sono tutte "funzioni": la procedura è una funzione con tipo di ritorno void. Il libro usa entrambi i nomi. Per ogni carta chiedere prima la risposta per alzata di mano. La terza è la più discussa: "dire" sembra stampare, ma una funzione ben fatta restituisce il valore e lascia a main la decisione di cosa stampare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni in C</p><h2>Com'è fatta una funzione</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="k">int</span> quadrato(<span class="k">int</span> n)  <span class="c">// intestazione</span>
+{
+    <span class="k">int</span> q = n * n;     <span class="c">// corpo</span>
+    <span class="k">return</span> q;          <span class="c">// risultato</span>
+}
+
+<span class="c">// chiamata, per esempio nel main:</span>
+<span class="k">int</span> r = <span class="hl">quadrato(5)</span>;  <span class="c">// r vale 25</span></pre>
+    <ul class="points small">
+      <li><b>Tipo di ritorno</b>: <code>int</code>, il tipo del valore restituito</li>
+      <li><b>Nome</b>: <code>quadrato</code>, scelto da te</li>
+      <li><b>Parametri</b>: <code>int n</code>, i dati in ingresso</li>
+      <li><b>Corpo</b>: le istruzioni tra graffe</li>
+      <li><b>return</b>: restituisce il valore ed esce subito</li>
+    </ul>
+  </div>
+  <aside class="notes">Far leggere ad alta voce l'intestazione: "quadrato è una funzione che riceve un intero n e restituisce un intero". Nella chiamata quadrato(5) il 5 è l'argomento (parametro attuale), n è il parametro formale: il valore 5 viene copiato in n. Lo approfondiremo nella prossima lezione sul passaggio dei parametri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un programma con una funzione</p><h2>Prototipo, main, definizione</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px"><span class="k">#include</span> <span class="s">&lt;stdio.h&gt;</span>
+<span class="hl">int quadrato(int n);</span>     <span class="c">// prototipo</span>
+
+<span class="k">int</span> main() {
+    <span class="k">int</span> x;
+    printf(<span class="s">"Numero: "</span>);
+    scanf(<span class="s">"%d"</span>, &amp;x);
+    printf(<span class="s">"Quadrato: %d\n"</span>, quadrato(x));
+    <span class="k">return</span> 0;
+}
+
+<span class="k">int</span> quadrato(<span class="k">int</span> n) {   <span class="c">// definizione</span>
+    <span class="k">return</span> n * n;
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Il prototipo</h3><p>È la "promessa" al compilatore: più sotto troverai una funzione con questo nome, questi parametri e questo tipo.</p></div>
+      <div class="callout small">Senza prototipo, la funzione va scritta <b>prima</b> del <code>main</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Il compilatore legge il file dall'alto in basso: se in main incontra quadrato senza averlo mai visto, segnala un errore o un avviso. Due soluzioni equivalenti: prototipo in alto e definizione in fondo, oppure definizione prima del main. Con input 7 il programma stampa "Quadrato: 49". Nei prossimi esempi, per risparmiare spazio, scriveremo spesso le funzioni prima del main.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La tua prima procedura: una cornice</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>onlinegdb.com</b> (o l'IDE della scuola) e scegli il linguaggio <b>C</b>.</li>
+      <li>Scrivi la procedura <code>void linea(int n)</code> che con un ciclo <code>for</code> stampa <code>n</code> asterischi e poi va a capo.</li>
+      <li>Nel <code>main</code> chiama <code>linea(10)</code>, poi stampa <code>  CIAO!</code>, poi di nuovo <code>linea(10)</code>.</li>
+      <li>Esegui, poi prova con <code>linea(20)</code>: quante righe hai dovuto cambiare?</li>
+      <li>Salva il file come <b>cornice.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> l'output è<br><code>**********</code><br><code>  CIAO!</code><br><code>**********</code><br>Il ciclo <code>for</code> è scritto una volta sola, dentro la procedura.</div>
+  </div>
+  <aside class="notes">Soluzione:
+void linea(int n) { for (int i = 0; i &lt; n; i++) printf("*"); printf("\n"); }
+int main() { linea(10); printf("  CIAO!\n"); linea(10); return 0; }
+Per chi finisce prima: aggiungere un secondo parametro char c, linea(int n, char c), e stampare con printf("%c", c), così da disegnare la cornice con il carattere scelto. Su OnlineGDB per salvare serve un account: in alternativa copiare il codice in un file di testo cornice.c con il Blocco note.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che cosa succede quando main chiama quadrato(x)?</h2></div>
+  <ol class="puzzle-ordina" data-id="chiamata">
+    <li>Il main arriva all'istruzione che contiene <code>quadrato(x)</code></li>
+    <li>Il valore di <code>x</code> viene copiato nel parametro <code>n</code></li>
+    <li>L'esecuzione salta alla prima istruzione della funzione</li>
+    <li>La funzione calcola <code>n * n</code></li>
+    <li><code>return</code> restituisce il risultato e chiude la funzione</li>
+    <li>Il main riprende dal punto della chiamata e usa il valore</li>
+  </ol>
+  <aside class="notes">Ordine giusto come scritto. Errore tipico: mettere il salto alla funzione prima della copia del valore. In realtà i valori dei parametri vengono preparati al momento della chiamata, prima di entrare nel corpo. Far fare il puzzle a squadre di 3 con il timer mentale di 2 minuti, poi un portavoce spiega l'ordine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">int</span> doppio(<span class="k">int</span> n) {
+    printf(<span class="s">"%d "</span>, n * 2);
+    <span class="k">return</span> n * 2;
+}
+<span class="k">int</span> main() {
+    <span class="k">int</span> a = doppio(3);
+    printf(<span class="s">"%d"</span>, doppio(a));
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="poll" data-id="doppio" data-tipo="quiz" data-risposta="B">
+      <ol><li>6 12</li><li>6 12 12</li><li>12</li><li>6 6 12</li></ol>
+      <p class="why">doppio(3) stampa "6 " e restituisce 6. Poi doppio(6) stampa "12 " e restituisce 12, che il main stampa: 6 12 12.</p>
+    </div>
+  </div>
+  <aside class="notes">Programma verificato con gcc: stampa "6 12 12". Il trabocchetto è dimenticare che anche la funzione stampa: chi risponde A pensa solo ai valori restituiti. Morale: una funzione che calcola di solito non dovrebbe stampare; meglio restituire e lasciare la stampa al main.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Costruire su ciò che altri hanno fatto</h2></div>
+  <figure class="citazione">
+    <blockquote>Le funzioni spezzano i grandi compiti di calcolo in compiti più piccoli e permettono di costruire su ciò che altri hanno già fatto, invece di ripartire da zero.</blockquote>
+    <figcaption><b>Brian Kernighan e Dennis Ritchie</b>, autori del libro "The C Programming Language" (Ritchie ha creato il C), capitolo 4</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Chi crea un'intelligenza artificiale non riparte da zero: usa librerie come <b>PyTorch</b>, enormi raccolte di funzioni già pronte per fare i calcoli delle reti neurali. È la stessa idea di Kernighan e Ritchie.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "Functions break large computing tasks into smaller ones, and enable people to build on what others have done instead of starting over from scratch" (The C Programming Language, 2ª edizione 1988, inizio del capitolo 4; la prima edizione è del 1978). Storia da raccontare: le prime "subroutine" nascono nel 1949-51 a Cambridge sul calcolatore EDSAC; David Wheeler inventò il modo di saltare a un sottoprogramma e tornare indietro, e nel 1951 Wilkes, Wheeler e Gill pubblicarono il primo libro con una libreria di sottoprogrammi pronti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni in C++</p><h2>Stessa funzione, input e output diversi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="chip">C</p>
+      <pre class="code" style="font-size:26px"><span class="k">#include</span> <span class="s">&lt;stdio.h&gt;</span>
+
+<span class="hl">int massimo(int a, int b) {</span>
+<span class="hl">    if (a &gt; b) return a;</span>
+<span class="hl">    return b;</span>
+<span class="hl">}</span>
+<span class="k">int</span> main() {
+    printf(<span class="s">"%d\n"</span>, massimo(4, 9));
+    <span class="k">return</span> 0;
+}</pre>
+    </div>
+    <div class="stack">
+      <p class="chip">C++</p>
+      <pre class="code" style="font-size:26px"><span class="k">#include</span> <span class="s">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="hl">int massimo(int a, int b) {</span>
+<span class="hl">    if (a &gt; b) return a;</span>
+<span class="hl">    return b;</span>
+<span class="hl">}</span>
+<span class="k">int</span> main() {
+    cout &lt;&lt; massimo(4, 9) &lt;&lt; endl;
+    <span class="k">return</span> 0;
+}</pre>
+    </div>
+  </div>
+  <p class="small muted">La funzione evidenziata è identica: cambiano solo la libreria e il modo di scrivere sullo schermo.</p>
+  <aside class="notes">Entrambi i programmi stampano 9 (verificati con gcc e g++). Ricordare la differenza vista nella UDA 6: in C si usa printf/scanf con stdio.h, in C++ cout/cin con iostream. In C++ i file hanno estensione .cpp. Domanda: perché massimo ha due return? Perché il primo che viene eseguito chiude la funzione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il massimo di tre numeri, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB scegli il linguaggio <b>C++</b>.</li>
+      <li>Scrivi la funzione <code>int massimo(int a, int b)</code> della slide precedente.</li>
+      <li>Nel <code>main</code> leggi tre numeri con <code>cin</code>.</li>
+      <li>Trova il massimo dei tre <b>chiamando due volte</b> <code>massimo</code>, senza scrivere altri <code>if</code>.</li>
+      <li>Stampa il risultato con <code>cout</code>. Salva come <b>massimo3.cpp</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 4 9 2 stampa 9; con -5 -2 -8 stampa -2. Il trucco è una chiamata dentro l'altra.</div>
+  </div>
+  <aside class="notes">Soluzione: int m = massimo(massimo(a, b), c); cout &lt;&lt; "Il massimo e' " &lt;&lt; m &lt;&lt; endl; Verificato con g++. Il caso con numeri negativi smaschera chi inizializza il massimo a 0. Per chi finisce prima: scrivere anche int minimo(int a, int b) e stampare il minimo dei tre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa printf("%d", massimo(4, 9))?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:30px"><span class="k">int</span> massimo(<span class="k">int</span> a, <span class="k">int</span> b) {
+    <span class="k">if</span> (a &gt; b) <span class="k">return</span> a;
+    <span class="k">return</span> b;
+    printf(<span class="s">"fine"</span>);
+}</pre>
+    <div class="poll" data-id="dopo-return" data-tipo="quiz" data-risposta="C">
+      <ol><li>9fine</li><li>4</li><li>9</li><li>fine9</li></ol>
+      <p class="why">return b restituisce 9 e chiude subito la funzione: la printf("fine") non viene mai eseguita.</p>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: stampa 9. Misconcezione classica: pensare che return "salvi" il valore e poi la funzione continui. Il codice dopo un return che viene sempre eseguito si chiama codice irraggiungibile: alcuni compilatori e IDE lo segnalano con un avviso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Funzioni già pronte: le librerie</p><h2>Abbina la funzione a quello che fa</h2></div>
+  <dl class="puzzle-abbina" data-id="librerie">
+    <dt><code>sqrt(x)</code> · math.h</dt><dd>Radice quadrata di x</dd>
+    <dt><code>pow(b, e)</code> · math.h</dt><dd>b elevato alla potenza e</dd>
+    <dt><code>abs(n)</code> · stdlib.h</dt><dd>Valore assoluto di un intero: abs(-7) vale 7</dd>
+    <dt><code>rand()</code> · stdlib.h</dt><dd>Un numero intero pseudocasuale</dd>
+    <dt><code>printf(...)</code> · stdio.h</dt><dd>Scrive testo e numeri sullo schermo</dd>
+  </dl>
+  <aside class="notes">Tutte queste sono funzioni scritte da altri e raccolte in librerie: per usarle basta il #include giusto. rand() l'avete già usata nella UDA 6 per i numeri casuali. Domanda: quale di queste è in realtà quasi una procedura? printf restituisce il numero di caratteri scritti, ma di solito quel valore si ignora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un esempio completo</p><h2>Il programma Pagella, pezzo per pezzo</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:23px"><span class="k">#include</span> <span class="s">&lt;stdio.h&gt;</span>
+<span class="k">float</span> media(<span class="k">float</span> a, <span class="k">float</span> b, <span class="k">float</span> c) {
+    <span class="k">return</span> (a + b + c) / 3;
+}
+<span class="k">void</span> giudizio(<span class="k">float</span> m) {
+    <span class="k">if</span> (m &gt;= 6) printf(<span class="s">"Sufficiente\n"</span>);
+    <span class="k">else</span> printf(<span class="s">"Da recuperare\n"</span>);
+}
+<span class="k">int</span> main() {
+    <span class="k">float</span> v1, v2, v3;
+    printf(<span class="s">"Tre voti: "</span>);
+    scanf(<span class="s">"%f %f %f"</span>, &amp;v1, &amp;v2, &amp;v3);
+    <span class="k">float</span> m = <span class="hl">media(v1, v2, v3)</span>;
+    printf(<span class="s">"Media: %.2f\n"</span>, m);
+    <span class="hl">giudizio(m)</span>;
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="stack">
+      <div class="card"><h3>1 · Leggi i voti</h3><p>Lo fa il <code>main</code> con <code>scanf</code>.</p></div>
+      <div class="card soft"><h3>2 · media</h3><p>Funzione: restituisce un <code>float</code>.</p></div>
+      <div class="card"><h3>3 · giudizio</h3><p>Procedura <code>void</code>: stampa e basta.</p></div>
+      <p class="small muted">Il <b>main</b> si legge come lo schema top-down.</p>
+    </div>
+  </div>
+  <aside class="notes">Riprende lo schema top-down della slide 3. Con 5 6,5 7 stampa "Media: 6.17" e "Sufficiente"; con 5 5,5 6 stampa "Media: 5.50" e "Da recuperare" (verificato con gcc). Attenzione: nella console i decimali si scrivono con il punto (6.5). Domanda: perché /3 e non /3.0? Perché a+b+c è già float, quindi la divisione è decimale; con tre int servirebbe /3.0.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il convertitore di temperature</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C scrivi la funzione <code>float fahrenheit(float c)</code> che restituisce <code>c * 9 / 5 + 32</code>.</li>
+      <li>Scrivi la procedura <code>void tabella()</code>: con un <code>for</code> da 0 a 100, passo 20, stampa i gradi Celsius e i Fahrenheit corrispondenti.</li>
+      <li>Il <code>main</code> deve contenere solo la chiamata <code>tabella();</code> e <code>return 0;</code>.</li>
+      <li>Salva come <b>temperature.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> la tabella ha 6 righe, da <code>0 C = 32.0 F</code> a <code>100 C = 212.0 F</code>. A metà trovi <code>40 C = 104.0 F</code>.</div>
+  </div>
+  <aside class="notes">Soluzione:
+float fahrenheit(float c) { return c * 9 / 5 + 32; }
+void tabella() { for (int c = 0; c &lt;= 100; c += 20) printf("%d C = %.1f F\n", c, fahrenheit(c)); }
+Righe attese: 0→32.0, 20→68.0, 40→104.0, 60→140.0, 80→176.0, 100→212.0 (verificato con gcc). Il simbolo dei gradi può dare problemi nella console di Windows: per questo si scrive solo C e F. Per chi finisce prima: aggiungere la funzione inversa float celsius(float f).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Funzioni e intelligenza artificiale</p><h2>Anche un chatbot chiama funzioni</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Domanda</h3><p>"Che tempo fa a Bari?"</p></div>
+    <div class="card"><h3>Il modello</h3><p>sceglie e chiama <code>meteo("Bari")</code></p></div>
+    <div class="card"><h3>Il programma</h3><p>esegue e restituisce "sole, 24"</p></div>
+    <div class="card fill"><h3>Risposta</h3><p>"A Bari c'è il sole, 24 gradi."</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI possono usare funzioni scritte da programmatori (si chiama <b>function calling</b>): il modello decide <b>quale</b> funzione chiamare e <b>con quali parametri</b>, il programma la esegue e il risultato torna al modello, che scrive la risposta.</p></div>
+  <aside class="notes">Esempio illustrativo: i dati del meteo sono inventati per l'esempio. È così che un assistente può dare informazioni aggiornate o fare azioni (impostare una sveglia): il modello linguistico da solo non conosce il meteo di domani, ma sa "chiamare" una funzione che lo recupera. Collegamento: i parametri devono essere del tipo giusto, proprio come in C. Domanda: che cosa succederebbe se il modello sbagliasse il parametro e scrivesse "Bali"?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con le funzioni</h2></div>
+  <div class="puzzle-codice" data-risposta="3907" data-aiuto="la quarta cifra: prima calcola massimo(1, 7), poi il massimo tra quel valore e 5">
+    <ul class="points">
+      <li>1ª cifra: quanti parametri ha <b>float media(float a, float b, float c)</b></li>
+      <li>2ª cifra: il valore restituito da <b>quadrato(3)</b></li>
+      <li>3ª cifra: quante istruzioni dopo un <b>return</b> eseguito vengono eseguite</li>
+      <li>4ª cifra: il valore di <b>massimo(massimo(1, 7), 5)</b></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 parametri, 3 × 3 = 9, nessuna istruzione dopo return, il massimo è 7.</div>
+  </div>
+  <aside class="notes">Codice: 3907. Gioco a squadre: la prima squadra che apre il lucchetto spiega a voce ogni cifra. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Dividere un problema in sottoproblemi più semplici si chiama progettazione <span class="blank" data-risposta="top-down|top down|topdown"></span>.</p>
+    <p>Una funzione che non restituisce niente in C ha tipo <span class="blank" data-risposta="void"></span>.</p>
+    <p>Il valore viene restituito con l'istruzione <span class="blank" data-risposta="return"></span>.</p>
+    <p>La dichiarazione della funzione scritta prima del main si chiama <span class="blank" data-risposta="prototipo"></span>.</p>
+    <p>I dati che la funzione riceve tra parentesi si chiamano <span class="blank" data-risposta="parametri|argomenti"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: top-down, void, return, prototipo, parametri (accettato anche argomenti).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Top-down: problema grande, sottoproblemi piccoli</li>
+      <li>Funzione: restituisce un valore con return</li>
+      <li>Procedura: tipo void, fa azioni</li>
+    </ul>
+    <ul class="points">
+      <li>Intestazione: tipo, nome, parametri</li>
+      <li>Prototipo prima del main, definizione dopo</li>
+      <li>In C e in C++ le funzioni si scrivono uguali</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: che cosa succede davvero ai parametri quando chiamiamo una funzione (passaggio per valore e per indirizzo).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

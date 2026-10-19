@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Algoritmi e linguaggi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 5 · Dal problema al programma</p>
+  <h1>Algoritmi<br>e linguaggi</h1>
+  <p class="lead">Dalla ricetta della nonna al navigatore del telefono: come si spiega a una macchina, passo dopo passo, che cosa deve fare?</p>
+  <aside class="notes">Obiettivi: riconoscere le fasi della soluzione di un problema (dati, risultati, procedimento), definire l'algoritmo e le sue proprietà, distinguere i linguaggi che lo descrivono (naturale, pseudocodice, flow chart, linguaggi di programmazione) e il ruolo di compilatore e interprete. Durata indicativa: 2 ore. Collegamento: in UDA 4 hanno già "programmato" con Scratch senza chiamarlo algoritmo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un amico deve venire a casa tua da scuola. Come gli spieghi la strada?</h2></div>
+  <div class="poll" data-id="alg-strada">
+    <ol><li>Gli mando la posizione sul telefono</li><li>Gli scrivo i passi: esci, a destra, dritto fino al semaforo…</li><li>Gli disegno una piantina</li><li>Faccio la strada con lui la prima volta</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Ogni risposta è un modo diverso di descrivere un procedimento: la lista di passi è il linguaggio naturale, la piantina è un disegno (anticipa i flow chart), la posizione affida il lavoro a un algoritmo del navigatore. Chiedere: "che cosa serve sapere prima di spiegare la strada?" (da dove parte, dove deve arrivare: i dati e il risultato).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I problemi e la loro soluzione</p><h2>Prima di risolvere, capisci il problema</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>Leggi e comprendi</b>: che cosa ti si chiede davvero?</li>
+      <li>Individua i <b>dati</b> che hai (input) e i <b>risultati</b> che cerchi (output).</li>
+      <li>Trova il <b>procedimento</b> che porta dai dati ai risultati.</li>
+      <li><b>Verifica</b> con qualche esempio, anche strano.</li>
+    </ol>
+    <div class="card soft">
+      <h3>Pizza in compagnia</h3>
+      <p>Il conto è 54 € e siete in 6. Quanto paga ognuno?</p>
+      <p><b>Dati:</b> totale, numero di persone<br><b>Risultato:</b> quota a testa<br><b>Procedimento:</b> totale ÷ persone</p>
+      <p class="muted">Verifica: 54 ÷ 6 = 9 €. E se le persone fossero 0?</p>
+    </div>
+  </div>
+  <aside class="notes">Insistere sulla fase 4: il caso "0 persone" è un dato che rende il procedimento impossibile (divisione per zero). Un buon risolutore pensa anche ai casi limite. Chiedere un altro esempio quotidiano agli studenti e far individuare dati e risultati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Input e output</p><h2>Che cosa entra e che cosa esce? Tocca le carte</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Calcolare l'area di un rettangolo</h3><p>Input? Output?</p></div><div class="retro"><p><b>Input:</b> base e altezza.</p><p><b>Output:</b> l'area.</p><p class="muted">Procedimento: base × altezza.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Sapere se un anno è bisestile</h3><p>Input? Output?</p></div><div class="retro"><p><b>Input:</b> l'anno.</p><p><b>Output:</b> sì oppure no.</p><p class="muted">Anche una risposta sì/no è un risultato.</p></div></div>
+    <div class="flip" style="--h:360px"><div class="fronte"><h3>Trovare la strada più breve per la scuola</h3><p>Input? Output?</p></div><div class="retro"><p><b>Input:</b> la mappa, la partenza, l'arrivo.</p><p><b>Output:</b> il percorso da seguire.</p><p class="muted">I dati possono essere tanti e complessi.</p></div></div>
+  </div>
+  <aside class="notes">Prima di girare ogni carta, far rispondere un paio di studenti. Per il bisestile si può anticipare la regola (divisibile per 4, ma non per 100, salvo se divisibile per 400): ci tornerà utile con la selezione. Per la strada: il navigatore riceve come dati anche il traffico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il concetto di algoritmo</p><h2>Che cos'è un algoritmo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un <mark>algoritmo</mark> è una sequenza <b>finita</b> di istruzioni <b>chiare</b> che un <b>esecutore</b> segue per risolvere un problema.</p>
+      <p>L'esecutore può essere una persona, un robot o un computer. Il computer è l'esecutore più veloce, ma anche il più "letterale": fa solo e soltanto quello che c'è scritto.</p>
+    </div>
+    <div class="card soft">
+      <p class="kicker">Da dove viene la parola</p>
+      <p>Da <b>al-Khwarizmi</b>, matematico persiano che lavorava a Baghdad nel IX secolo. Il suo libro sui numeri indiani, tradotto in latino, iniziava con <i>"Dixit Algorizmi"</i>: "così disse al-Khwarizmi".</p>
+    </div>
+  </div>
+  <aside class="notes">Al-Khwarizmi (circa 780-850) lavorò alla Casa della Sapienza di Baghdad; dal titolo di un altro suo libro deriva anche la parola "algebra". La traduzione latina del trattato sui numeri indiani (XII secolo) è nota come "Algoritmi de numero Indorum". Far notare che i numeri che usiamo (0-9) sono arrivati in Europa anche grazie a lui.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le proprietà</p><h2>Le regole di un buon algoritmo</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Finito</h3><p class="muted">Ha un numero finito di passi e prima o poi termina.</p></div>
+    <div class="card"><p class="num">2</p><h3>Non ambiguo</h3><p class="muted">Ogni istruzione ha un solo significato. Niente "un po'" o "quanto basta".</p></div>
+    <div class="card"><p class="num">3</p><h3>Eseguibile</h3><p class="muted">Ogni passo si può davvero fare con i mezzi dell'esecutore.</p></div>
+    <div class="card"><p class="num">4</p><h3>Generale</h3><p class="muted">Funziona per tutti i dati dello stesso tipo, non per un caso solo.</p></div>
+  </div>
+  <div class="callout">E ancora: riceve dei <b>dati in ingresso</b> e produce almeno un <b>risultato in uscita</b>.</div>
+  <aside class="notes">Donald Knuth, in "The Art of Computer Programming" (vol. 1, 1968), elenca cinque proprietà: finitezza, definitezza, input, output, efficacia. Esempio di non generalità: un procedimento che calcola solo l'area del rettangolo 3×4. Chiedere: una ricetta di cucina è un algoritmo? Quasi: spesso contiene "q.b.", non accettabile per un computer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale istruzione NON può stare in un algoritmo per un computer?</h2></div>
+  <div class="poll" data-id="alg-ambiguo" data-tipo="quiz" data-risposta="D">
+    <ol><li>Ripeti: mescola, finché l'acqua bolle</li><li>Se piove, prendi l'ombrello</li><li>Somma 3 al numero x</li><li>Aggiungi sale quanto basta</li></ol>
+    <p class="why">"Quanto basta" è ambiguo: due esecutori metterebbero quantità diverse e un computer non saprebbe che cosa fare. La A sembra non finire mai, ma l'acqua prima o poi bolle: è un ciclo con una condizione di uscita.</p>
+  </div>
+  <aside class="notes">Molti scelgono la A pensando che un "ripeti" sia infinito: è il tranello. La B è una selezione, la A un'iterazione, la C un'assegnazione: sono i mattoni delle prossime lezioni. Chiedere come correggere la D: "aggiungi 10 grammi di sale".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>L'algoritmo a prova di robot</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Writer. Scegli una cosa che sai fare bene: preparare un tè, allacciare le scarpe, fare uno zaino.</li>
+      <li>Scrivi l'algoritmo come elenco numerato: <b>un'azione per riga</b>, al massimo 15 righe.</li>
+      <li>Usa almeno una volta <b>SE</b> e una volta <b>RIPETI</b>. L'ultima riga è <b>FINE</b>.</li>
+      <li>Scambia il posto con il vicino: lui fa il "robot" e sottolinea in rosso ogni parola ambigua.</li>
+      <li>Correggi e salva come <b>algoritmo-robot.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dopo la correzione non resta nessuna parola sottolineata (un po', circa, quanto basta, eccetera) e il robot arriva sempre alla FINE.</div>
+  </div>
+  <aside class="notes">Gioco del robot: chi controlla deve "eseguire" alla lettera, senza buon senso. Errori tipici: passi saltati ("versa l'acqua" senza aver preso la tazza), quantità vaghe, cicli senza condizione di uscita. Chiedere a due coppie di leggere l'algoritmo corretto alla classe.</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Spiegare a un computer è il test più severo</h2></div>
+  <figure class="citazione">
+    <blockquote>La scienza è ciò che capiamo abbastanza bene da spiegarlo a un computer. L'arte è tutto il resto che facciamo.</blockquote>
+    <figcaption><b>Donald Knuth</b>, informatico statunitense, autore di <i>The Art of Computer Programming</i>, 1996</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando scrivi una richiesta a un chatbot dai istruzioni in <b>linguaggio naturale</b>, che è pieno di ambiguità. Se la richiesta è vaga, anche la risposta lo sarà: chi sa scrivere algoritmi chiari scrive anche richieste migliori.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "Science is what we understand well enough to explain to a computer. Art is everything else we do." Dalla prefazione di Knuth al libro "A=B" di Petkovšek, Wilf e Zeilberger (1996). Discussione di 2 minuti: cucinare un piatto della nonna è scienza o arte, secondo Knuth? Sui chatbot: uso guidato dal docente (età minima e consenso dei genitori).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un algoritmo di 2300 anni fa</p><h2>L'algoritmo di Euclide per il MCD</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Prendi due numeri, <b>a</b> e <b>b</b>.</li>
+      <li>Se b è 0, il MCD è <b>a</b>: fine.</li>
+      <li>Altrimenti calcola il <b>resto</b> di a diviso b.</li>
+      <li>Ora a diventa b, e b diventa il resto. Torna al passo 2.</li>
+    </ol>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>a</th><th>b</th><th>resto di a ÷ b</th></tr>
+        <tr><td class="mono">84</td><td class="mono">36</td><td class="mono">12</td></tr>
+        <tr><td class="mono">36</td><td class="mono">12</td><td class="mono">0</td></tr>
+        <tr><td class="mono hl">12</td><td class="mono">0</td><td class="mono">fine</td></tr>
+      </table>
+      <p class="small muted">MCD(84, 36) = 12. Euclide lo descrisse negli <i>Elementi</i>, intorno al 300 a.C.</p>
+    </div>
+  </div>
+  <aside class="notes">È uno degli algoritmi più antichi ancora in uso: lo usano anche i programmi di crittografia. Far eseguire a mano MCD(48, 18): 48 resto 18 = 12; 18 resto 12 = 6; 12 resto 6 = 0; MCD = 6. Notare le proprietà: finito (i resti diminuiscono), generale (vale per ogni coppia di interi positivi), non ambiguo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Euclide gira in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1, B1, C1 scrivi <b>a</b>, <b>b</b>, <b>resto</b>.</li>
+      <li>In A2 scrivi 252, in B2 scrivi 105, in C2 <code>=RESTO(A2;B2)</code>.</li>
+      <li>In A3 scrivi <code>=B2</code>, in B3 <code>=C2</code>, poi copia C2 in C3.</li>
+      <li>Seleziona A3:C3 e trascina in basso fino alla riga in cui b vale 0.</li>
+      <li>In E1 verifica con <code>=MCD(252;105)</code>. Salva come <b>euclide.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> i resti sono 42, 21, 0. Nella riga in cui b vale 0, a vale <b>21</b>: è il MCD, e anche la funzione MCD dà 21.</div>
+  </div>
+  <aside class="notes">Soluzione: riga 2: 252, 105, 42; riga 3: 105, 42, 21; riga 4: 42, 21, 0; riga 5: 21, 0, #DIV/0! (il resto di una divisione per zero non esiste: lì l'algoritmo deve fermarsi). Ottimo spunto: il foglio "esegue" l'algoritmo, ma il passo "se b è 0, fermati" lo abbiamo fatto noi guardando. Chi finisce prima cambia i numeri in A2 e B2: il foglio si aggiorna, l'algoritmo è generale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il linguaggio che descrive l'algoritmo</p><h2>Lo stesso algoritmo, tre modi di scriverlo</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="kicker">Linguaggio naturale</p><p>Chiedi la base e l'altezza del rettangolo, moltiplicale tra loro e comunica il risultato.</p><p class="small muted">Comodo per le persone, ma può essere ambiguo.</p></div>
+    <div class="stack"><p class="kicker">Pseudocodice</p><pre class="code"><span class="k">INIZIO</span>
+<span class="k">LEGGI</span> base, altezza
+area ← base × altezza
+<span class="k">SCRIVI</span> area
+<span class="k">FINE</span></pre><p class="small muted">Italiano "strutturato", con parole chiave fisse.</p></div>
+    <div class="stack"><p class="kicker">Flow chart</p><svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-212.2 0 424.5 536" width="412" height="520" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Flow chart: area del rettangolo"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-152.2,118 196.2,118 152.2,184 -196.2,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi base, altezza</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><rect x="-172.8" y="220" width="345.5" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">area ← base × altezza</text><path d="M0 286 L0 307" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,322 -9,305 9,305" fill="#172033"/><polygon points="-98.5,322 142.5,322 98.5,388 -142.5,388" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="355" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi area</text><path d="M0 388 L0 409" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,424 -9,407 9,407" fill="#172033"/><rect x="-85" y="424" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="457" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg></div>
+  </div>
+  <aside class="notes">Il pseudocodice non è un linguaggio di programmazione: nessun computer lo esegue, ma è vicino al codice. Il simbolo ← si legge "prende il valore di". Il flow chart (diagramma a blocchi) è l'argomento della prossima lezione: per ora basta notare le forme diverse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla nostra lingua a quella della CPU</p><h2>Chi traduce il programma?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="c"># lo stesso algoritmo in Python</span>
+base = <span class="k">float</span>(<span class="k">input</span>(<span class="s">"Base? "</span>))
+altezza = <span class="k">float</span>(<span class="k">input</span>(<span class="s">"Altezza? "</span>))
+area = base * altezza
+<span class="k">print</span>(<span class="s">"Area:"</span>, area)</pre>
+    <ul class="points">
+      <li>La CPU capisce solo il <b>linguaggio macchina</b>: sequenze di 0 e 1.</li>
+      <li>C e Python sono linguaggi <b>ad alto livello</b>, vicini alle parole umane.</li>
+      <li>Un <b>compilatore</b> traduce tutto il programma prima di eseguirlo (C).</li>
+      <li>Un <b>interprete</b> traduce ed esegue un'istruzione alla volta (Python).</li>
+    </ul>
+  </div>
+  <aside class="notes">In mezzo c'è l'assembly, a basso livello: una sigla per ogni istruzione della CPU (MOV, ADD). Python in realtà prima trasforma il codice in un formato intermedio (bytecode) e poi lo interpreta: per la classe basta la distinzione compilatore/interprete. C lo vedremo nella UDA 6, Python nella UDA 8.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="alg-linguaggi">
+    <dt>Linguaggio macchina</dt><dd>Sequenze di 0 e 1 che la CPU esegue direttamente</dd>
+    <dt>Assembly</dt><dd>Sigle come MOV e ADD, una per ogni istruzione della CPU</dd>
+    <dt>Alto livello</dt><dd>Parole quasi inglesi come print, if, while</dd>
+    <dt>Pseudocodice</dt><dd>Italiano strutturato, per le persone e non per la macchina</dd>
+    <dt>Compilatore</dt><dd>Traduce tutto il programma prima di eseguirlo</dd>
+    <dt>Interprete</dt><dd>Traduce ed esegue un'istruzione alla volta</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti. Le coppie più confuse di solito sono compilatore e interprete: un'analogia utile è la traduzione di un libro intero (compilatore) contro l'interprete simultaneo in una conferenza (interprete).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz da detective</p><h2>Penso un numero da 1 a 100. Ti dico solo "più alto" o "più basso". Con la strategia migliore, quanti tentativi ti servono al massimo?</h2></div>
+  <div class="poll" data-id="alg-dimezza" data-tipo="quiz" data-risposta="B">
+    <ol><li>10</li><li>7</li><li>50</li><li>100</li></ol>
+    <p class="why">Partendo sempre da metà (50, poi 25 o 75…) ogni risposta dimezza i numeri possibili: 100, 50, 25, 13, 7, 4, 2, 1. Bastano 7 tentativi, perché 2 alla settima fa 128, più di 100.</p>
+  </div>
+  <aside class="notes">Prima del quiz giocare una partita: il docente pensa un numero e la classe propone i tentativi. Chi dice 10 ragiona "a decine", chi dice 50 o 100 pensa di provare a caso o in ordine. Questa strategia si chiama ricerca binaria: un buon algoritmo può essere enormemente più veloce di uno ingenuo (fino a 100 tentativi provando 1, 2, 3…).</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">Algoritmi intorno a noi</p><h2>Venti minuti che guidano il mondo</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Il navigatore</h3><p>Nel 1956 l'olandese <b>Edsger Dijkstra</b> inventò, seduto al tavolino di un caffè di Amsterdam, un algoritmo per trovare il percorso più breve tra due città. Lo pensò in una ventina di minuti, senza carta né penna.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>I navigatori come Google Maps usano algoritmi di cammino minimo eredi di quell'idea, con il traffico come dato in più. Un'<b>AI</b> invece non riceve tutte le regole scritte da una persona: le ricava dagli esempi. Ma anche il suo addestramento è un algoritmo, eseguito passo passo da un computer.</p></div>
+  </div>
+  <aside class="notes">Il racconto è di Dijkstra stesso, nell'intervista di Philip Frana del 2001 (pubblicata su Communications of the ACM nel 2010): l'algoritmo fu pubblicato nel 1959. I navigatori moderni usano varianti più veloci (A*, gerarchie di contrazione), ma l'idea di base è quella. Distinzione chiave da far ripetere: algoritmo tradizionale = regole scritte da noi; machine learning = regole ricavate dai dati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il labirinto dei blocchi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser e vai su <b>blockly.games</b>. Non serve un account. Scegli la lingua italiana.</li>
+      <li>Apri il gioco <b>Labirinto</b> e risolvi più livelli che puoi.</li>
+      <li>Cerca la soluzione con il minor numero di blocchi: il gioco te lo segnala.</li>
+      <li>In Writer, scrivi in pseudocodice la soluzione dell'ultimo livello che hai superato.</li>
+      <li>Salva come <b>labirinto.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il tuo pseudocodice usa le stesse istruzioni dei blocchi (AVANTI, GIRA, RIPETI, SE). Se lo dai a un compagno, deve poter portare l'omino all'uscita senza guardare lo schermo.</div>
+  </div>
+  <aside class="notes">Blockly Games è un progetto open source di Google, gratuito e senza registrazione; i livelli introducono via via il ciclo e la selezione. Ricordare UDA 4 (Scratch): stessi blocchi, stessa logica. Gara a squadre facoltativa: vince chi arriva al livello più alto con meno blocchi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="6972" data-aiuto="la terza cifra è il numero massimo di tentativi per indovinare un numero da 1 a 100">
+    <ul class="points">
+      <li>1ª cifra: il MCD di 12 e 18, calcolato con Euclide</li>
+      <li>2ª cifra: il secolo in cui visse al-Khwarizmi</li>
+      <li>3ª cifra: i tentativi massimi per indovinare un numero da 1 a 100</li>
+      <li>4ª cifra: quante cifre diverse usa il linguaggio macchina</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> MCD 6, IX secolo, 7 tentativi, solo 0 e 1.</div>
+  </div>
+  <aside class="notes">Codice: 6972. MCD(12, 18): 12 resto 18 = 12, 18 resto 12 = 6, 12 resto 6 = 0, quindi 6 (chi parte da 18 e 12 ottiene lo stesso risultato). Sfida a squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un algoritmo è una sequenza <span class="blank" data-risposta="finita"></span> di istruzioni non ambigue.</p>
+    <p>Chi segue le istruzioni di un algoritmo si chiama <span class="blank" data-risposta="esecutore"></span>.</p>
+    <p>Il linguaggio con parole chiave come LEGGI e SCRIVI si chiama <span class="blank" data-risposta="pseudocodice|pseudo codice"></span>.</p>
+    <p>Il programma che traduce tutto il codice prima di eseguirlo è il <span class="blank" data-risposta="compilatore"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: finita, esecutore, pseudocodice, compilatore. Raccogliere a voce le risposte di chi ha sbagliato la quarta: confondere compilatore e interprete è normale a questo punto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Problema: dati in ingresso, risultati, procedimento</li>
+      <li>Algoritmo: finito, non ambiguo, eseguibile, generale</li>
+      <li>Euclide e la ricerca binaria: idee antiche, ancora utili</li>
+    </ul>
+    <ul class="points">
+      <li>Si descrive a parole, in pseudocodice o con un flow chart</li>
+      <li>La CPU capisce solo il linguaggio macchina</li>
+      <li>Compilatore e interprete traducono i nostri programmi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: i flow chart, per disegnare gli algoritmi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

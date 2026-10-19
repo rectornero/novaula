@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>if ed else: il programma sceglie · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 6 · La programmazione imperativa in C e C++</p>
+  <h1>if ed else:<br>il programma sceglie</h1>
+  <p class="lead">La selezione semplice e doppia in C e C++: condizioni, operatori logici, blocchi di istruzioni e l'arte di non fidarsi mai dell'input.</p>
+  <aside class="notes">Obiettivi: scrivere selezioni semplici e doppie con if ed else, usare gli operatori di confronto e gli operatori logici, delimitare i blocchi con le graffe, controllare i dati in input. Collegamento con la UDA 5: il rombo dei flow chart e la selezione in Flowgorithm. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il distributore ti dà il resto sbagliato. Di chi è la colpa?</h2></div>
+  <div class="poll" data-id="sel-colpa">
+    <ol><li>Del programmatore</li><li>Della macchina che si è rotta</li><li>Di chi ha inserito le monete</li><li>Di nessuno, sono cose che capitano</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, per aprire la discussione. Spunto: una macchina segue le istruzioni; se una situazione (una moneta falsa, un tasto premuto due volte) non era prevista da una condizione, il programma fa una cosa sbagliata. Oggi impariamo a scrivere le condizioni e a controllare i dati in ingresso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Percorsi alternativi</p><h2>Dal rombo del flow chart all'if</h2></div>
+  <div class="cols-2">
+    <svg viewBox="0 0 760 420" style="width:100%;height:auto" role="img" aria-label="Flow chart: se voto maggiore o uguale a 6 allora Promosso, altrimenti Insufficiente">
+      <polygon points="380,20 560,120 380,220 200,120" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="5"/>
+      <text x="380" y="132" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="34" style="font-variant-ligatures:none" fill="var(--ink)">voto &gt;= 6</text>
+      <line x1="560" y1="120" x2="650" y2="120" stroke="var(--ink)" stroke-width="4"/><line x1="650" y1="120" x2="650" y2="280" stroke="var(--ink)" stroke-width="4"/>
+      <line x1="200" y1="120" x2="110" y2="120" stroke="var(--ink)" stroke-width="4"/><line x1="110" y1="120" x2="110" y2="280" stroke="var(--ink)" stroke-width="4"/>
+      <text x="600" y="104" text-anchor="middle" font-size="30" font-weight="700" fill="var(--ok)">V</text>
+      <text x="160" y="104" text-anchor="middle" font-size="30" font-weight="700" fill="var(--bad)">F</text>
+      <rect x="540" y="280" width="220" height="90" rx="14" fill="var(--ok-soft)" stroke="var(--ok)" stroke-width="4"/>
+      <text x="650" y="336" text-anchor="middle" font-size="30" font-weight="700" fill="var(--ink)">Promosso</text>
+      <rect x="0" y="280" width="220" height="90" rx="14" fill="var(--bad-soft)" stroke="var(--bad)" stroke-width="4"/>
+      <text x="110" y="336" text-anchor="middle" font-size="28" font-weight="700" fill="var(--ink)">Insufficiente</text>
+    </svg>
+<pre class="code" style="align-self:center"><span class="k">if</span> (voto &gt;= 6) {
+    printf(<span class="s">"Promosso\n"</span>);
+} <span class="k">else</span> {
+    printf(<span class="s">"Insufficiente\n"</span>);
+}</pre>
+  </div>
+  <p class="small muted">La condizione va sempre tra parentesi tonde. Se è vera si esegue il primo blocco, altrimenti (<code>else</code>) il secondo.</p>
+  <aside class="notes">Mostrare la corrispondenza: rombo = if, ramo V = primo blocco, ramo F = else. Chi ha usato Flowgorithm ritrova la stessa struttura. In C++ cambia solo l'istruzione di stampa: la sintassi di if ed else è identica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Semplice e doppia</p><h2>Con o senza else?</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Selezione semplice</h3><p>Se la condizione è vera fa qualcosa; se è falsa <b>non fa niente</b> e prosegue.</p>
+<pre class="code" style="font-size:28px"><span class="k">if</span> (febbre &gt; 37.5) {
+    printf(<span class="s">"Resta a casa\n"</span>);
+}</pre></div>
+    <div class="card soft"><h3>Selezione doppia</h3><p>Due strade: una se la condizione è vera, l'altra se è falsa. <b>Sempre una delle due</b>.</p>
+<pre class="code" style="font-size:28px"><span class="k">if</span> (n % 2 == 0) {
+    printf(<span class="s">"pari\n"</span>);
+} <span class="k">else</span> {
+    printf(<span class="s">"dispari\n"</span>);
+}</pre></div>
+  </div>
+  <aside class="notes">Far inventare a voce un esempio per tipo. Semplice: "se ho finito i giga, avvisami". Doppia: "se la batteria è sotto il 20% luce rossa, altrimenti verde". Il test n % 2 == 0 riprende l'operatore resto della lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La condizione</p><h2>Gli operatori di confronto</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Operatore</th><th>Significa</th><th>Esempio vero</th></tr>
+      <tr><td class="mono">==</td><td>uguale a</td><td class="mono">5 == 5</td></tr>
+      <tr><td class="mono">!=</td><td>diverso da</td><td class="mono">5 != 3</td></tr>
+      <tr><td class="mono">&lt;  &gt;</td><td>minore, maggiore</td><td class="mono">3 &lt; 5</td></tr>
+      <tr><td class="mono">&lt;=  &gt;=</td><td>minore o uguale, maggiore o uguale</td><td class="mono">6 &gt;= 6</td></tr>
+    </table>
+    <div class="callout hl"><b>Attenzione!</b><br><code>=</code> mette un valore nella variabile.<br><code>==</code> confronta due valori.<br>Confonderli è l'errore più famoso del C.</div>
+  </div>
+  <aside class="notes">Una condizione in C vale 1 se è vera e 0 se è falsa; più in generale, qualsiasi valore diverso da 0 conta come vero. Questo spiega il quiz che segue. Far leggere ad alta voce: "doppio uguale si legge: è uguale a?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa questo programma?</h2></div>
+  <pre class="code" style="align-self:flex-start;font-size:30px"><span class="k">int</span> x = 3;
+<span class="k">if</span> (x = 5) printf(<span class="s">"cinque"</span>); <span class="k">else</span> printf(<span class="s">"non cinque"</span>);</pre>
+  <div class="poll" data-id="sel-assegna" data-tipo="quiz" data-risposta="D">
+    <ol><li>non cinque</li><li>Niente</li><li>Errore di compilazione</li><li>cinque</li></ol>
+    <p class="why"><code>x = 5</code> non confronta: mette 5 in x. Il valore dell'assegnazione è 5, che è diverso da 0, quindi per il C è <b>vero</b>. Si stampa "cinque" e intanto x è stato cambiato!</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono "non cinque" (pensano a un confronto) o "errore". Verificato con gcc: compila e stampa cinque; con l'opzione -Wall compare solo un avviso ("suggest parentheses around assignment used as truth value"). Morale: leggere sempre gli avvisi del compilatore.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Pari o dispari?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su OnlineGDB (o nell'IDE della scuola) scrivi in C un programma che chiede un numero intero.</li>
+      <li>Con <code>if (n % 2 == 0)</code> stampa che è pari, altrimenti (<code>else</code>) che è dispari.</li>
+      <li>Provalo con 14, 7, 0 e -3.</li>
+      <li>Salva come <b>pari-dispari-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b><br><code>14 e' pari</code><br><code>7 e' dispari</code><br><code>0 e' pari</code><br><code>-3 e' dispari</code></div>
+  </div>
+  <aside class="notes">Soluzione: int n; printf("Scrivi un numero intero: "); scanf("%d", &amp;n); if (n % 2 == 0) { printf("%d e' pari\n", n); } else { printf("%d e' dispari\n", n); } Approfondimento: chi scrive if (n % 2 == 1) sbaglia con i negativi, perché in C -3 % 2 vale -1. Il test con == 0 funziona sempre. Uscite verificate con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Blocchi di istruzioni</p><h2>Le graffe decidono che cosa sta dentro l'if</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Senza graffe</h3>
+<pre class="code" style="font-size:27px"><span class="k">if</span> (voto &lt; 6)
+    printf(<span class="s">"Insufficiente\n"</span>);
+    printf(<span class="s">"Studia di piu'!\n"</span>);</pre>
+      <p>Nell'if c'è solo la prima istruzione. "Studia di più!" esce <b>sempre</b>, anche con 8.</p></div>
+    <div class="card ok"><h3>Con le graffe</h3>
+<pre class="code" style="font-size:27px"><span class="k">if</span> (voto &lt; 6) {
+    printf(<span class="s">"Insufficiente\n"</span>);
+    printf(<span class="s">"Studia di piu'!\n"</span>);
+}</pre>
+      <p>Le due istruzioni formano un <b>blocco</b>: si eseguono insieme o per niente.</p></div>
+  </div>
+  <aside class="notes">Il rientro (indentazione) serve agli umani, il compilatore lo ignora: conta solo dove sono le graffe. Regola del corso: mettere SEMPRE le graffe, anche con una sola istruzione. Altro tranello da mostrare: if (voto &lt; 6); con il punto e virgola dopo la parentesi, l'if non controlla più niente. Verificato con gcc: la versione senza graffe stampa "Studia di piu'!" anche con voto 8.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori logici</p><h2>Due condizioni insieme: e, o, non</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">&amp;&amp;</p><h3>AND, "e"</h3><p>Vero solo se <b>tutte e due</b> sono vere.</p><p class="small"><code>eta &gt;= 14 &amp;&amp; eta &lt;= 18</code></p></div>
+    <div class="card soft"><p class="num">||</p><h3>OR, "o"</h3><p>Vero se <b>almeno una</b> è vera.</p><p class="small"><code>eta &lt; 12 || eta &gt;= 65</code></p></div>
+    <div class="card soft"><p class="num">!</p><h3>NOT, "non"</h3><p><b>Inverte</b>: il vero diventa falso e viceversa.</p><p class="small"><code>!(voto &gt;= 6)</code></p></div>
+  </div>
+  <div class="callout">Sono gli stessi connettivi della <b>logica</b> che hai visto nella UDA 1, scritti con i simboli del C.</div>
+  <aside class="notes">Il simbolo | si ottiene sulla tastiera italiana con il tasto a sinistra dell'1 insieme a Maiusc. Far tradurre a voce: "eta tra 14 e 18 compresi", "bambino o anziano", "non sufficiente". !(voto &gt;= 6) equivale a voto &lt; 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Vogliamo sapere se eta è tra 14 e 18. Quale condizione è giusta?</h2></div>
+  <div class="poll" data-id="sel-intervallo" data-tipo="quiz" data-risposta="C">
+    <ol><li><code>14 &lt;= eta &lt;= 18</code></li><li><code>eta &gt;= 14 || eta &lt;= 18</code></li><li><code>eta &gt;= 14 &amp;&amp; eta &lt;= 18</code></li><li><code>eta &gt;= 14 &amp;&amp; &lt;= 18</code></li></ol>
+    <p class="why">Servono due confronti completi uniti da <code>&amp;&amp;</code>. La A si scrive così in matematica, ma in C vale sempre vero: prima calcola <code>14 &lt;= eta</code> (0 o 1) e poi confronta quel risultato con 18. La B è vera per qualsiasi età. La D non compila.</p>
+  </div>
+  <aside class="notes">La A è il tranello: compila, e con eta = 40 la condizione risulta vera. Verificato con gcc, che con -Wall avvisa: "comparisons like 'X&lt;=Y&lt;=Z' do not have their mathematical meaning". Far trovare un'età per cui la B è falsa: non esiste.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni operatore al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="sel-operatori">
+    <dt><code>==</code></dt><dd>È uguale a?</dd>
+    <dt><code>!=</code></dt><dd>È diverso da?</dd>
+    <dt><code>&gt;=</code></dt><dd>È maggiore o uguale a?</dd>
+    <dt><code>&amp;&amp;</code></dt><dd>Vero se tutte e due le condizioni sono vere</dd>
+    <dt><code>||</code></dt><dd>Vero se almeno una condizione è vera</dd>
+    <dt><code>!</code></dt><dd>Trasforma il vero in falso e il falso in vero</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Distrattore naturale: confondere && e ||. Chiedere un esempio di vita reale per ciascuno.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La cassa del museo, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su OnlineGDB scegli <b>C++</b> e chiedi l'età del visitatore con <code>cin</code>.</li>
+      <li>Ridotto (5 euro) se ha <b>meno di 12</b> anni <b>o</b> almeno 65; altrimenti intero (9 euro).</li>
+      <li>Scrivi la condizione con <code>||</code> e usa if ed else con le graffe.</li>
+      <li>Prova i casi limite: 11, 12, 64, 65.</li>
+      <li>Salva come <b>museo-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 10 → ridotto, 12 → intero, 30 → intero, 64 → intero, 65 → ridotto, 70 → ridotto. Se 12 o 65 ti danno il risultato sbagliato, controlla <code>&lt;</code> e <code>&gt;=</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: int eta; cout &lt;&lt; "Quanti anni hai? "; cin &gt;&gt; eta; if (eta &lt; 12 || eta &gt;= 65) { cout &lt;&lt; "Biglietto ridotto: 5 euro" &lt;&lt; endl; } else { cout &lt;&lt; "Biglietto intero: 9 euro" &lt;&lt; endl; } Insistere sui casi limite: sono quelli in cui si nascondono gli errori (&lt; al posto di &lt;=). Uscite verificate con g++.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il controllo dei dati in input</p><h2>Regola d'oro: non fidarti mai dell'utente</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px">printf(<span class="s">"Voto (da 1 a 10): "</span>);
+scanf(<span class="s">"%d"</span>, &amp;voto);
+<span class="k">if</span> (voto &lt; 1 || voto &gt; 10) {
+    printf(<span class="s">"Errore: voto non valido\n"</span>);
+} <span class="k">else</span> {
+    printf(<span class="s">"Voto registrato\n"</span>);
+}</pre>
+    <ul class="points small"><li>Un voto deve stare tra 1 e 10.</li><li>Un divisore non può essere 0.</li><li>Un'età non può essere negativa.</li></ul>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I primi filtri antispam erano liste di if scritte a mano: "se il messaggio contiene <i>hai vinto</i>, è spam". Oggi i filtri usano il machine learning: imparano da milioni di email già etichettate quali caratteristiche rendono un messaggio sospetto.</p></div>
+  <aside class="notes">Il controllo dell'input è anche una questione di sicurezza: molti attacchi informatici sfruttano programmi che accettano dati non controllati (si vedrà nella UDA 10). Nel prossimo argomento, con il ciclo while, potremo anche richiedere il dato finché non è valido.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Scrivi semplice, perché poi dovrai correggere</h2></div>
+  <figure class="citazione">
+    <blockquote>Tutti sanno che il debug è due volte più difficile che scrivere un programma. Quindi, se lo scrivi nel modo più astuto possibile, come farai a correggerlo?</blockquote>
+    <figcaption><b>Brian Kernighan</b> (con P. J. Plauger), <i>The Elements of Programming Style</i>, 2ª edizione, 1978</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un <b>albero di decisione</b> è una catena di if ed else che un algoritmo di machine learning costruisce da solo, a partire dagli esempi: per esempio, se una mela è rossa e pesa più di 150 grammi, allora è matura.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese ("Everyone knows that debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, how will you ever debug it?"). Kernighan è il coautore, con Dennis Ritchie, del libro sul C citato nella prima lezione. Collegamento: condizioni semplici, graffe sempre, nomi chiari. L'esempio della mela è inventato a scopo didattico: un albero vero sceglie da solo le soglie a partire dai dati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La divisione a prova di errore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C dichiara due <code>float</code> e leggi dividendo e divisore con <code>scanf("%f", ...)</code>.</li>
+      <li>Se il divisore è 0 stampa <code>Impossibile dividere per zero!</code></li>
+      <li>Altrimenti stampa il risultato con 2 decimali.</li>
+      <li>Salva come <b>divisione-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 7 e 2 → <code>Risultato: 3.50</code>; 5 e 0 → <code>Impossibile dividere per zero!</code>; -9 e 4 → <code>Risultato: -2.25</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: float a, b; printf("Dividendo: "); scanf("%f", &amp;a); printf("Divisore: "); scanf("%f", &amp;b); if (b == 0) { printf("Impossibile dividere per zero!\n"); } else { printf("Risultato: %.2f\n", a / b); } Sfida: aggiungere il controllo del voto (1-10) della slide precedente in un altro programma. Uscite verificate con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto: segui gli if a mano</h2></div>
+  <div class="puzzle-codice" data-risposta="3926" data-aiuto="nella seconda riga 4 > 5 è falso, quindi tutta la condizione con && è falsa">
+    <ul class="points small">
+      <li>1ª cifra: <code style="background:rgba(255,255,255,.14)">a = 7; if (a &gt; 5) a = a - 4; else a = a + 4;</code></li>
+      <li>2ª cifra: <code style="background:rgba(255,255,255,.14)">b = 4; if (b % 2 == 0 &amp;&amp; b &gt; 5) b = 1; else b = 9;</code></li>
+      <li>3ª cifra: <code style="background:rgba(255,255,255,.14)">c = 0; if (c == 0 || c &gt; 100) c = 2;</code></li>
+      <li>4ª cifra: <code style="background:rgba(255,255,255,.14)">d = 6; if (d != 6) d = 0;</code></li>
+    </ul>
+    <p class="small">Ogni cifra è il valore finale della variabile.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> a = 3, b = 9 (4 non è maggiore di 5), c = 2, d resta 6.</div>
+  </div>
+  <aside class="notes">Codice: 3926 (verificato con gcc). A squadre, solo carta e penna. Tranelli: la seconda riga (con &amp;&amp; basta una condizione falsa) e la quarta (selezione semplice senza else: se la condizione è falsa la variabile non cambia).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per confrontare due valori si usa l'operatore <span class="blank" data-risposta="=="></span>, non il singolo uguale.</p>
+    <p>La parte che si esegue quando la condizione è falsa inizia con <span class="blank" data-risposta="else"></span>.</p>
+    <p>Per dire "tutte e due le condizioni sono vere" si usa <span class="blank" data-risposta="&amp;&amp;|and"></span>.</p>
+    <p>Per raggruppare più istruzioni in un blocco si usano le parentesi <span class="blank" data-risposta="graffe|{}"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: ==, else, &amp;&amp; (accettato anche "and"), graffe.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>if</code> semplice, <code>if ... else</code> doppia</li>
+      <li><code>==</code> confronta, <code>=</code> assegna</li>
+      <li>Graffe sempre: il blocco è tutto o niente</li>
+    </ul>
+    <ul class="points">
+      <li><code>&amp;&amp;</code> e, <code>||</code> o, <code>!</code> non</li>
+      <li>14 &lt;= eta &lt;= 18 non si scrive così in C</li>
+      <li>Controlla sempre i dati in input</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: ripetere le istruzioni con il ciclo for.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ordinare un vettore · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 7 · Funzioni e array in C e C++</p>
+  <h1>Ordinare<br>un vettore</h1>
+  <p class="lead">Classifiche, playlist, "ordina per prezzo": dietro ogni elenco in ordine c'è un algoritmo di ordinamento. Oggi ne impariamo due: selezione e inserzione.</p>
+  <aside class="notes">Obiettivi: capire e simulare a mano l'ordinamento per selezione e per inserzione, scriverli in C e C++, ordinare in modo crescente e decrescente, confrontare i due algoritmi contando i confronti. Durata indicativa: 3 ore. Prerequisiti: vettori, funzioni con i vettori, scambio di due variabili. Materiale utile: un mazzo di carte o 6-8 fogli con numeri grandi per le simulazioni dal vivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come metti in ordine le carte che hai in mano?</h2></div>
+  <div class="poll" data-id="carte">
+    <ol><li>Cerco la più piccola e la metto a sinistra, poi la più piccola delle rimaste, e così via</li><li>Prendo una carta alla volta e la infilo al posto giusto tra quelle già sistemate</li><li>Non le ordino: mi ricordo dove sono</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, ma le prime due opzioni sono esattamente i due algoritmi della lezione: A = selezione, B = inserzione. Annotare alla lavagna quante persone usano ognuno dei due metodi e tornarci alla fine. Chi gioca a carte di solito usa la B senza saperlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché ordinare</p><h2>Dati in ordine, vita più facile</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Crescente</h3><p>Dal più piccolo al più grande: <code>1 3 4 5 8</code></p><p class="muted">Prezzi, date, tempi di gara.</p></div>
+    <div class="card soft"><h3>Decrescente</h3><p>Dal più grande al più piccolo: <code>8 5 4 3 1</code></p><p class="muted">Classifiche, punteggi, voti.</p></div>
+    <div class="card"><h3>Cercare veloce</h3><p>Solo su dati ordinati si può fare la ricerca che <b>dimezza</b>: 20 confronti invece di un milione.</p></div>
+  </div>
+  <div class="callout">In questa lezione ordiniamo sempre lo stesso vettore di prova: <code>{5, 3, 8, 1, 4}</code>.</div>
+  <aside class="notes">Collegamento con la lezione sulla ricerca: la ricerca dicotomica funziona solo su dati ordinati. Chiedere esempi dalla vita quotidiana: rubrica in ordine alfabetico, file ordinati per data in Esplora file, la classifica del campionato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ordinamento per selezione</p><h2>Seleziona il minimo, mettilo al suo posto</h2></div>
+  <table class="data compact">
+    <tr><th>Passata</th><th>Cosa succede</th><th>Vettore dopo la passata</th></tr>
+    <tr><td>Inizio</td><td></td><td class="mono">5 3 8 1 4</td></tr>
+    <tr><td>1</td><td>Il minimo è 1: si scambia con il 5</td><td class="mono"><mark>1</mark> 3 8 5 4</td></tr>
+    <tr><td>2</td><td>Il minimo del resto è 3: è già al suo posto</td><td class="mono">1 <mark>3</mark> 8 5 4</td></tr>
+    <tr><td>3</td><td>Il minimo del resto è 4: si scambia con l'8</td><td class="mono">1 3 <mark>4</mark> 5 8</td></tr>
+    <tr><td>4</td><td>Il minimo del resto è 5: è già al suo posto</td><td class="mono">1 3 4 <mark>5</mark> 8</td></tr>
+  </table>
+  <p>Con 5 elementi bastano <b>4 passate</b>: l'ultimo elemento rimasto è per forza il più grande.</p>
+  <aside class="notes">Verificato con gcc stampando il vettore dopo ogni passata. Simulazione dal vivo: 5 studenti in fila con un foglio numerato; un "arbitro" cerca il più piccolo tra quelli non ancora sistemati e lo scambia con il primo della parte non sistemata. Far notare che a sinistra cresce una parte già ordinata che non si tocca più.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Selezione in C</p><h2>Due cicli e uno scambio</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px"><span class="k">void</span> selezione(<span class="k">int</span> v[], <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n - 1; i++) {
+        <span class="k">int</span> imin = i;
+        <span class="k">for</span> (<span class="k">int</span> j = i + 1; j &lt; n; j++)
+            <span class="k">if</span> (v[j] &lt; v[imin])
+                imin = j;
+        <span class="hl">int t = v[i];</span>
+        <span class="hl">v[i] = v[imin];</span>
+        <span class="hl">v[imin] = t;</span>
+    }
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Ciclo esterno</h3><p><code>i</code> è la posizione da sistemare.</p></div>
+      <div class="card"><h3>Ciclo interno</h3><p>Cerca l'indice del minimo tra le celle da <code>i+1</code> in poi.</p></div>
+      <div class="card soft"><h3>Scambio</h3><p>Il minimo va in posizione <code>i</code>.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc su {5, 3, 8, 1, 4}: risultato 1 3 4 5 8. Il ciclo interno è la ricerca del minimo della lezione sui vettori, ma conserva l'indice (imin) e non il valore: serve per sapere quale cella scambiare. Lo scambio con la variabile di appoggio t è quello della lezione sui parametri. Per l'ordine decrescente basta cercare il massimo: v[j] &gt; v[imin].</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Traccia la selezione</p><h2>Ordiniamo {6, 2, 9, 1} con la selezione</h2></div>
+  <div class="puzzle-completa">
+    <p>Alla prima passata il minimo è <span class="blank" data-risposta="1|uno"></span> e viene scambiato con il <span class="blank" data-risposta="6|sei"></span>.</p>
+    <p>Dopo la prima passata il vettore è {1, 2, 9, <span class="blank" data-risposta="6"></span>}.</p>
+    <p>Alla seconda passata il minimo è il <span class="blank" data-risposta="2|due"></span>, che resta al suo posto.</p>
+    <p>Alla terza passata si scambiano il 9 e il <span class="blank" data-risposta="6|sei"></span>.</p>
+    <p>Per 4 elementi servono in tutto <span class="blank" data-risposta="3|tre"></span> passate.</p>
+  </div>
+  <aside class="notes">Soluzioni: 1 e 6; 6; 2; 6; 3 passate. Sequenza verificata con gcc: 1 2 9 6, poi 1 2 9 6, poi 1 2 6 9. Far lavorare a coppie con carta e penna, scrivendo il vettore dopo ogni passata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Selezione su {7, 2, 9, 4, 1}: com'è il vettore dopo la prima passata?</h2></div>
+  <div class="poll" data-id="prima-passata" data-tipo="quiz" data-risposta="D">
+    <ol><li><code>{1, 7, 2, 9, 4}</code></li><li><code>{2, 7, 9, 4, 1}</code></li><li><code>{1, 2, 4, 7, 9}</code></li><li><code>{1, 2, 9, 4, 7}</code></li></ol>
+    <p class="why">Il minimo è 1, in ultima posizione: si scambia con il 7 in prima posizione. Gli altri restano dove sono: 1, 2, 9, 4, 7.</p>
+  </div>
+  <aside class="notes">Verificato con gcc. La A è l'errore di chi "fa scorrere" tutti a destra (è il movimento dell'inserzione, non della selezione). La B è il primo scambio tra vicini (bubble sort). La C è il vettore già ordinato: chi la sceglie pensa che una passata basti. Sottolineare: nella selezione ogni passata fa UN solo scambio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Guarda la selezione al lavoro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C scrivi <code>void stampa(int v[], int n)</code> e <code>void selezione(int v[], int n)</code>.</li>
+      <li>Dentro <code>selezione</code>, alla fine di ogni passata, chiama <code>stampa(v, n)</code>.</li>
+      <li>Nel <code>main</code> ordina <code>{5, 3, 8, 1, 4}</code>.</li>
+      <li>Poi ordina un vettore di 8 numeri letti da tastiera.</li>
+      <li>Salva come <b>selezione.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> le 4 righe stampate sono<br><code>1 3 8 5 4</code><br><code>1 3 8 5 4</code><br><code>1 3 4 5 8</code><br><code>1 3 4 5 8</code></div>
+  </div>
+  <aside class="notes">Output verificato con gcc. Domanda: perché due righe sono uguali alla precedente? Perché in quelle passate il minimo era già al suo posto e lo scambio è stato fatto "con sé stesso". Per chi finisce prima: ordinare in modo decrescente cambiando un solo simbolo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ordinamento per inserzione</p><h2>Come le carte in mano: inserisci al posto giusto</h2></div>
+  <table class="data compact">
+    <tr><th>Passo</th><th>Carta da inserire</th><th>Vettore dopo l'inserimento</th></tr>
+    <tr><td>Inizio</td><td>il 5 da solo è già "ordinato"</td><td class="mono"><mark>5</mark> 3 8 1 4</td></tr>
+    <tr><td>1</td><td>3: il 5 si sposta a destra</td><td class="mono"><mark>3 5</mark> 8 1 4</td></tr>
+    <tr><td>2</td><td>8: è già più grande di tutti</td><td class="mono"><mark>3 5 8</mark> 1 4</td></tr>
+    <tr><td>3</td><td>1: si spostano 8, 5 e 3</td><td class="mono"><mark>1 3 5 8</mark> 4</td></tr>
+    <tr><td>4</td><td>4: si spostano 8 e 5</td><td class="mono"><mark>1 3 4 5 8</mark></td></tr>
+  </table>
+  <p>La parte evidenziata è sempre <b>ordinata</b> e cresce di un elemento a ogni passo.</p>
+  <aside class="notes">Verificato con gcc stampando il vettore dopo ogni inserimento. Simulazione con le carte: tenere in mano solo le carte già sistemate e prenderne una nuova dal tavolo alla volta. Differenza con la selezione: qui la parte ordinata a sinistra può ancora cambiare (l'1 entra in testa e fa spostare tutti), nella selezione no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Inserzione in C</p><h2>Sposta a destra, poi inserisci</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px"><span class="k">void</span> inserzione(<span class="k">int</span> v[], <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt; n; i++) {
+        <span class="k">int</span> x = v[i];      <span class="c">// la carta</span>
+        <span class="k">int</span> j = i - 1;
+        <span class="k">while</span> (j &gt;= 0 &amp;&amp; v[j] &gt; x) {
+            v[j + 1] = v[j];  <span class="c">// a destra</span>
+            j--;
+        }
+        <span class="hl">v[j + 1] = x;</span>      <span class="c">// inserisco</span>
+    }
+}</pre>
+    <div class="stack">
+      <div class="card soft"><p><code>x</code> tiene da parte la carta, così il suo posto può essere occupato.</p></div>
+      <div class="card"><p>Il <code>while</code> si ferma all'inizio del vettore <b>oppure</b> quando trova un valore non più grande di x.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc e g++. Attenzione all'ordine delle condizioni nel while: prima j &gt;= 0, poi v[j] &gt; x. Se fossero invertite, con j = -1 si leggerebbe v[-1], fuori dal vettore. Con &amp;&amp; il C si ferma alla prima condizione falsa, quindi l'ordine scritto è sicuro. Il ciclo esterno parte da i = 1 perché il primo elemento da solo è già ordinato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi dell'inserzione</h2></div>
+  <ol class="puzzle-ordina" data-id="passi-inserzione">
+    <li>Considera il primo elemento come già ordinato</li>
+    <li>Prendi l'elemento successivo e mettilo da parte in x</li>
+    <li>Confrontalo con gli elementi alla sua sinistra, da destra verso sinistra</li>
+    <li>Sposta di un posto a destra ogni elemento più grande di x</li>
+    <li>Metti x nel posto che si è liberato</li>
+    <li>Ripeti finché non hai inserito tutti gli elementi</li>
+  </ol>
+  <aside class="notes">Ordine giusto come scritto. Errore tipico: invertire "sposta" e "metti x", come se si potesse inserire prima di aver fatto spazio. Collegare ogni passo a una riga del codice della slide precedente: x = v[i]; while; v[j + 1] = v[j]; v[j + 1] = x.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Inserzione: abbiamo {3, 5, 8, 1, 4} e tocca all'1. Dopo l'inserimento?</h2></div>
+  <div class="poll" data-id="inserisci-uno" data-tipo="quiz" data-risposta="B">
+    <ol><li><code>{1, 5, 8, 3, 4}</code></li><li><code>{1, 3, 5, 8, 4}</code></li><li><code>{3, 5, 1, 8, 4}</code></li><li><code>{1, 3, 4, 5, 8}</code></li></ol>
+    <p class="why">L'1 è più piccolo di 8, 5 e 3: tutti e tre si spostano di un posto a destra e l'1 va in testa. Il 4 non è ancora stato toccato.</p>
+  </div>
+  <aside class="notes">Verificato con gcc. La A è uno scambio alla maniera della selezione (1 con 3). La C è lo spostamento di un solo posto: il while si è fermato troppo presto. La D è il risultato finale: il 4 verrà inserito al passo successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Semplice è difficile</h2></div>
+  <figure class="citazione">
+    <blockquote>Ci sono due modi di progettare un software: renderlo così semplice che ovviamente non ha difetti, o così complicato che non ha difetti evidenti. Il primo è molto più difficile.</blockquote>
+    <figcaption><b>Tony Hoare</b>, inventore del Quicksort, discorso per il premio Turing, 1980</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2023 l'AI <b>AlphaDev</b> di Google DeepMind ha scoperto un modo più veloce di ordinare sequenze cortissime, di 3-5 numeri. Quel codice è stato aggiunto alla libreria standard del C++ del progetto LLVM, usata da moltissimi programmi.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult." C.A.R. Hoare, "The Emperor's Old Clothes", Turing Award Lecture 1980. Hoare inventò il Quicksort intorno al 1959-60, quando era studente a Mosca e lavorava a un programma di traduzione che doveva ordinare parole. AlphaDev: articolo su Nature, giugno 2023 ("Faster sorting algorithms discovered using deep reinforcement learning"); le nuove routine sono state integrate nella libreria libc++ del progetto LLVM.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>In fila per altezza, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB scegli <b>C++</b> e scrivi <code>int h[8] = {170, 155, 182, 160, 175, 149, 168, 190};</code></li>
+      <li>Scrivi <code>void inserzione(int v[], int n)</code> e ordina le altezze; stampale con <code>cout</code>.</li>
+      <li>Scrivi <code>void decrescente(int v[], int n)</code>, uguale ma cambiando un solo simbolo nel <code>while</code>.</li>
+      <li>Stampa anche l'ordine decrescente. Salva come <b>altezze.cpp</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b><br><code>149 155 160 168 170 175 182 190</code><br>e al contrario<br><code>190 182 175 170 168 160 155 149</code></div>
+  </div>
+  <aside class="notes">Soluzione: in decrescente la condizione diventa v[j] &lt; x. Verificato con g++. Domanda: con quale altro simbolo, &gt;= invece di &gt;, l'algoritmo funzionerebbe lo stesso? Sì, ma sposterebbe anche gli elementi uguali (si perde la "stabilità": in seconda si vedrà perché è importante).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Selezione contro inserzione</p><h2>Chi fa meno confronti?</h2></div>
+  <table class="data compact">
+    <tr><th>Vettore di 10 numeri</th><th>Selezione</th><th>Inserzione</th></tr>
+    <tr><td>Già ordinato</td><td class="mono">45</td><td class="mono hl">9</td></tr>
+    <tr><td>Ordinato al contrario</td><td class="mono">45</td><td class="mono">45</td></tr>
+  </table>
+  <div class="cols-2">
+    <div class="card soft"><p><b>Selezione</b>: sempre 45 confronti, ma al massimo 9 scambi.</p></div>
+    <div class="card soft"><p><b>Inserzione</b>: velocissima su dati <b>quasi ordinati</b>.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando apri YouTube o TikTok, un sistema di AI dà un <b>punteggio</b> a molti video candidati e poi li <b>ordina</b>: in cima finiscono quelli che, secondo il modello, guarderai più volentieri.</p></div>
+  <aside class="notes">Numeri verificati con gcc contando i confronti. Con n elementi la selezione fa sempre n(n-1)/2 confronti: per 10 fa 45. L'inserzione su un vettore già ordinato ne fa solo n-1 = 9. Storia: nel 2007, a Google, l'amministratore delegato Eric Schmidt chiese per scherzo al candidato presidente Barack Obama qual è il modo più efficiente di ordinare un milione di interi a 32 bit; Obama rispose che "il bubble sort sarebbe la strada sbagliata" (il video è pubblico). Per milioni di dati si usano algoritmi più veloci come Quicksort e Mergesort.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni termine alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="termini-ordinamento">
+    <dt>Selezione</dt><dd>Cerca il minimo del resto e lo scambia al suo posto</dd>
+    <dt>Inserzione</dt><dd>Infila ogni elemento tra quelli già ordinati</dd>
+    <dt>Scambio</dt><dd>Tre assegnazioni con una variabile di appoggio</dd>
+    <dt>Ordine decrescente</dt><dd>Dal più grande al più piccolo</dd>
+    <dt>Quicksort</dt><dd>Algoritmo veloce inventato da Tony Hoare</dd>
+  </dl>
+  <aside class="notes">Abbinamenti giusti come scritti. Si può fare a squadre con il timer di 2 minuti. Quicksort è solo citato: si studierà negli anni successivi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La classifica del torneo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C leggi i punteggi di 6 squadre in un vettore.</li>
+      <li>Ordinali in modo <b>decrescente</b> con la selezione: cerca il massimo invece del minimo.</li>
+      <li>Stampa la classifica: <code>1. 90 punti</code>, <code>2. 72 punti</code>...</li>
+      <li>Sfida: conta i confronti con una variabile e prova su un vettore già ordinato e su uno al contrario.</li>
+      <li>Salva come <b>classifica.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 45 72 38 90 61 72 la classifica è 90, 72, 72, 61, 45, 38. Con 6 squadre la selezione fa sempre 15 confronti.</div>
+  </div>
+  <aside class="notes">Soluzione: nel ciclo interno if (v[j] &gt; v[imax]) imax = j; poi lo scambio. Stampa: printf("%d. %d punti\n", i + 1, v[i]); Confronti: n(n-1)/2 = 6·5/2 = 15, qualunque sia l'ordine iniziale (verificato con gcc). In caso di parità le due squadre con 72 punti si possono mostrare entrambe al secondo posto: buon esercizio extra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con l'ordinamento</h2></div>
+  <div class="puzzle-codice" data-risposta="4736" data-aiuto="la seconda cifra: dopo la prima passata il 7 è finito dove c'era l'1">
+    <ul class="points">
+      <li>1ª cifra: le passate della selezione su un vettore di 5 elementi</li>
+      <li>2ª cifra: selezione su <b>{7, 2, 9, 4, 1}</b>, ultima cella dopo la prima passata</li>
+      <li>3ª cifra: inserzione su <b>{3, 5, 8, 1, 4}</b>, quanti elementi si spostano per inserire l'1</li>
+      <li>4ª cifra: i confronti dell'inserzione su un vettore già ordinato di 7 elementi</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 4 passate, il 7 scambiato con l'1 finisce in fondo, si spostano 8, 5 e 3, e su dati ordinati l'inserzione fa n-1 = 6 confronti.</div>
+  </div>
+  <aside class="notes">Codice: 4736 (tutti i valori verificati con gcc). La gara a squadre funziona bene: chi apre per primo spiega la quarta cifra, la più difficile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nella selezione, a ogni passata si cerca il <span class="blank" data-risposta="minimo|min"></span> e lo si mette al suo posto.</p>
+    <p>Nell'inserzione ogni elemento viene inserito tra quelli già <span class="blank" data-risposta="ordinati"></span>.</p>
+    <p>Per ordinare 6 elementi la selezione fa <span class="blank" data-risposta="5|cinque"></span> passate.</p>
+    <p>Per l'ordine decrescente nella selezione si cerca il <span class="blank" data-risposta="massimo|max"></span>.</p>
+    <p>Su dati quasi ordinati è più veloce l'ordinamento per <span class="blank" data-risposta="inserzione|inserimento"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: minimo, ordinati, 5, massimo, inserzione (accettato inserimento).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Selezione: trova il minimo, scambialo al suo posto</li>
+      <li>n elementi: n-1 passate, al massimo n-1 scambi</li>
+      <li>Decrescente: cerca il massimo</li>
+    </ul>
+    <ul class="points">
+      <li>Inserzione: sposta a destra, poi inserisci</li>
+      <li>Velocissima su dati quasi ordinati</li>
+      <li>Dati ordinati: ricerca che dimezza</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Tornare al sondaggio iniziale: chi metteva in ordine le carte "alla B" usava l'inserzione. Con questa lezione si chiude la UDA 7: preparare la verifica con la simulazione su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

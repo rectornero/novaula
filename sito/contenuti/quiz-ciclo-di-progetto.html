@@ -1,0 +1,522 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Quiz ciclo di progetto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one-screen "regia" for the interactive whiteboard: header bar, then a single stage (start → question → summary). Huge touch targets, readable from the back row. */
+:root{
+  --bg:#EEF0F5; --surface:#FFFFFF; --ink:#141B2D; --muted:#566079; --line:#D5DAE5;
+  --accent:#C2561C; --accent-soft:#F7E2D5;
+  --a:#2B5F9E; --b:#B8521B; --c:#1F7A4B; --d:#6E479E; --on-opt:#FFFFFF;
+  --good:#1F7A4B; --good-soft:#DDF0E5; --warn:#B8521B; --warn-soft:#F7E2D5;
+  --display:'Rubik', 'Trebuchet MS', Arial, sans-serif;
+  --body:'Nunito Sans', Verdana, Arial, sans-serif;
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1424; --surface:#182037; --ink:#EEF1F8; --muted:#A5AFC6; --line:#2B3656;
+  --accent:#F08A4F; --accent-soft:#3A2A24;
+  --a:#3970B4; --b:#C35E22; --c:#258A56; --d:#7D57AE; --on-opt:#FFFFFF;
+  --good:#5CC88E; --good-soft:#1C3A2C; --warn:#F08A4F; --warn-soft:#3A2A24;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1424; --surface:#182037; --ink:#EEF1F8; --muted:#A5AFC6; --line:#2B3656;
+  --accent:#F08A4F; --accent-soft:#3A2A24;
+  --a:#3970B4; --b:#C35E22; --c:#258A56; --d:#7D57AE; --on-opt:#FFFFFF;
+  --good:#5CC88E; --good-soft:#1C3A2C; --warn:#F08A4F; --warn-soft:#3A2A24;
+  color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:clamp(16px,1.25vw,22px);line-height:1.45}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+p{margin:0}
+
+.app{height:100%;display:grid;grid-template-rows:auto 1fr}
+.bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px clamp(16px,3vw,48px);border-bottom:1px solid var(--line);background:var(--surface)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:600;min-width:0;flex:1}
+.brand span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand .mark{display:grid;grid-template-columns:repeat(2,9px);gap:3px;flex:none}
+.brand .mark i{width:9px;height:9px;border-radius:2px}
+.progress{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+.tools{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;min-height:44px}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.primary:hover{opacity:.9}
+.btn.big{font-size:1.25em;padding:16px 32px;min-height:64px}
+.btn:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+.stage{overflow:auto;padding-block:clamp(16px,3vh,40px);padding-inline:clamp(16px,3vw,48px)}
+.eyebrow{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8em;color:var(--accent)}
+
+/* Start */
+.start{max-width:1200px;margin:0 auto;display:grid;gap:clamp(20px,3vh,36px)}
+.start h1{font-size:clamp(34px,4.6vw,80px);line-height:1.05;margin-top:8px}
+.lede{font-size:1.15em;max-width:62ch;color:var(--muted);margin-top:12px}
+.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.legend div{background:var(--c);color:var(--on-opt);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:14px}
+.legend b{font-family:var(--display);font-size:1.8em;line-height:1}
+.legend span{font-weight:700}
+.shape{width:1.6em;height:1.6em;flex:none}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(16px,2vw,28px);display:grid;gap:14px}
+.panel h2{font-size:1.3em}
+.panel .hint{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 10px 8px 16px;font-weight:700;background:var(--bg)}
+.chip button{border:0;background:transparent;cursor:pointer;width:32px;height:32px;border-radius:50%;font-size:1.1em;color:var(--muted)}
+.chip button:hover{background:var(--line);color:var(--ink)}
+.addteam{display:flex;gap:10px;flex-wrap:wrap}
+.addteam input{flex:1;min-width:0;font:inherit;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
+
+/* Question */
+.q{max-width:1600px;margin:0 auto;display:grid;gap:clamp(14px,2.4vh,28px)}
+.q-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.q-text{font-size:clamp(28px,3.6vw,62px);line-height:1.12;font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(10px,1.4vw,20px)}
+.opt{position:relative;background:var(--c);color:var(--on-opt);border-radius:var(--radius);transition:opacity .25s, transform .25s}
+.opt-hit{all:unset;box-sizing:border-box;cursor:pointer;width:100%;min-height:clamp(96px,15vh,190px);display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(12px,1.4vw,24px);padding:clamp(16px,2vw,28px) clamp(56px,4.5vw,76px) clamp(16px,2vw,28px) clamp(16px,2vw,28px);border-radius:var(--radius)}
+.opt-hit:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.opt-hit:disabled{cursor:default}
+.opt:not(.done) .opt-hit:active{transform:scale(.985)}
+.opt .badge{display:flex;align-items:center;gap:10px}
+.opt .badge b{font-family:var(--display);font-size:clamp(28px,2.6vw,48px);line-height:1}
+.opt-text{font-size:clamp(20px,2vw,36px);font-weight:700;line-height:1.2}
+.count{font-family:var(--display);font-variant-numeric:tabular-nums;font-size:clamp(26px,2.6vw,48px);font-weight:600;min-width:1.6em;text-align:right}
+.count.bump{animation:bump .25s ease-out}
+@keyframes bump{50%{transform:scale(1.3)}}
+.minus{position:absolute;top:10px;right:10px;width:clamp(36px,2.6vw,44px);height:clamp(36px,2.6vw,44px);border-radius:50%;border:2px solid rgba(255,255,255,.6);background:rgba(0,0,0,.18);color:#fff;font-size:1.3em;font-weight:800;cursor:pointer;line-height:1}
+.minus:hover{background:rgba(0,0,0,.32)}
+.meter{grid-column:1/-1;display:flex;align-items:center;gap:14px}
+.meter .track{flex:1;height:12px;border-radius:6px;background:rgba(255,255,255,.28);overflow:hidden}
+.meter .fill{display:block;height:100%;background:#fff;border-radius:6px;transition:width .6s ease-out}
+.meter em{font-style:normal;font-weight:800;font-variant-numeric:tabular-nums;min-width:3.2em;text-align:right}
+.opt.wrong{opacity:.4}
+.opt.right{box-shadow:0 0 0 5px var(--ink);transform:scale(1.01)}
+.tag-right{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--c);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.8em;margin-top:8px}
+
+.q-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.total{font-size:1.15em;color:var(--muted)}
+.total b{color:var(--ink);font-variant-numeric:tabular-nums;font-size:1.3em}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.explain{background:var(--surface);border:1px solid var(--line);border-left:8px solid var(--good);border-radius:var(--radius);padding:clamp(16px,2vw,28px);display:grid;gap:12px}
+.explain .verdict{font-family:var(--display);font-size:1.4em;font-weight:600}
+.explain .why{font-size:clamp(18px,1.6vw,28px);max-width:70ch}
+.award{display:grid;gap:10px;padding-top:6px;border-top:1px solid var(--line)}
+.award p{font-weight:700;color:var(--muted)}
+.tchip{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:10px 18px;font-weight:800;cursor:pointer;min-height:48px}
+.tchip[aria-pressed="true"]{background:var(--good);border-color:var(--good);color:var(--on-opt)}
+
+.timer{display:flex;align-items:center;gap:12px}
+.ring{--p:0;width:56px;height:56px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1turn), var(--line) 0);display:grid;place-items:center}
+.ring span{width:44px;height:44px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums}
+.ring.out span{color:var(--accent)}
+
+/* End */
+.end{max-width:1300px;margin:0 auto;display:grid;gap:clamp(18px,3vh,32px)}
+.end h1{font-size:clamp(34px,4vw,68px)}
+.board{display:grid;gap:10px}
+.row{display:grid;grid-template-columns:3em minmax(0,1fr) auto;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 20px}
+.row .pos{font-family:var(--display);font-size:1.6em;font-weight:600;color:var(--muted)}
+.row.first{border:2px solid var(--accent)}
+.row.first .pos{color:var(--accent)}
+.row .name{font-weight:800;font-size:1.2em}
+.row .pts{font-family:var(--display);font-size:1.6em;font-weight:600;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{text-align:left;padding:14px 18px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.8em;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;font-weight:800;white-space:nowrap}
+.pbar{display:flex;align-items:center;gap:10px;min-width:180px}
+.pbar .track{flex:1;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.pbar .fill{display:block;height:100%;background:var(--good)}
+.pbar.low .fill{background:var(--warn)}
+.status{display:inline-block;border-radius:999px;padding:4px 12px;font-weight:800;font-size:.85em;white-space:nowrap}
+.status.ok{background:var(--good-soft);color:var(--good)}
+.status.low{background:var(--warn-soft);color:var(--warn)}
+.status.none{background:var(--bg);color:var(--muted)}
+
+/* Editor */
+.modal{position:fixed;inset:0;background:rgba(10,14,25,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.sheet{background:var(--surface);color:var(--ink);border-radius:var(--radius);width:min(960px,100%);max-height:100%;overflow:auto;padding:clamp(16px,2.4vw,32px);display:grid;gap:14px}
+.sheet h2{font-size:1.5em}
+.sheet pre{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0;overflow-x:auto;font-size:.9em;line-height:1.5}
+.sheet textarea{width:100%;min-height:42vh;font:15px/1.5 ui-monospace,Consolas,'Courier New',monospace;padding:14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+.err{color:var(--warn);font-weight:800}
+.sheet .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.sheet .actions .spacer{flex:1}
+
+@media (max-width:760px){
+  .opts{grid-template-columns:1fr}
+  .legend{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools .btn{padding:8px 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <header class="bar">
+    <div class="brand"><span class="mark" aria-hidden="true"><i style="background:var(--a)"></i><i style="background:var(--b)"></i><i style="background:var(--c)"></i><i style="background:var(--d)"></i></span><span id="quizTitle">Quiz</span></div>
+    <div class="progress" id="progress"></div>
+    <div class="tools">
+      <button class="btn" data-action="edit" id="btnEdit">Domande</button>
+      <button class="btn" data-action="fullscreen" id="btnFull">Schermo intero</button>
+    </div>
+  </header>
+  <main class="stage" id="stage" aria-live="polite"></main>
+</div>
+
+<div class="modal" id="editor" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="edTitle">
+    <h2 id="edTitle">Modifica le domande</h2>
+    <p>Una riga per elemento. Il primo carattere dice cos'è: <b>#</b> titolo del quiz, <b>?</b> domanda, <b>*</b> risposta corretta, <b>-</b> risposta sbagliata, <b>&gt;</b> spiegazione. Da 2 a 4 risposte per domanda.</p>
+<pre># Titolo del quiz
+? Testo della domanda
+- risposta sbagliata
+* risposta corretta
+> spiegazione mostrata dopo la risposta</pre>
+    <textarea id="qtext" spellcheck="false" aria-label="Testo delle domande"></textarea>
+    <p class="err" id="edErr" hidden></p>
+    <div class="actions">
+      <button class="btn" data-action="ed-reset">Ripristina domande della lezione</button>
+      <span class="spacer"></span>
+      <button class="btn" data-action="ed-cancel">Annulla</button>
+      <button class="btn primary" data-action="ed-save">Salva domande</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_TEXT = `# Ciclo di vita del progetto
+? Quale fase decide se e perché fare un progetto?
+- Pianificazione
+* Avvio
+- Esecuzione
+- Chiusura
+> L'avvio valuta il bisogno e la fattibilità, e si chiude con il Project Charter firmato dallo sponsor.
+
+? Chi firma il Project Charter per dare il via al progetto?
+- Il project manager
+- Il team di progetto
+* Lo sponsor
+- Gli utenti finali
+> Lo sponsor è chi finanzia o autorizza il progetto. Con la sua firma il progetto parte ufficialmente.
+
+? Quale fase accompagna il progetto dall'inizio alla fine?
+* Monitoraggio e controllo
+- Avvio
+- Chiusura
+- Pianificazione
+> Si misura e si corregge per tutta la durata del progetto, non solo alla fine.
+
+? Quale di questi è un obiettivo scritto bene?
+- Migliorare il sito della scuola
+- Fare un giornalino bello e interessante
+- Coinvolgere più studenti possibile
+* Pubblicare 4 numeri online entro maggio
+> È misurabile (4 numeri) e ha una scadenza (maggio). Con gli altri non si può dire se l'obiettivo è stato raggiunto.
+
+? Perché nel Charter si scrive anche cosa resta FUORI dal progetto?
+- Perché lo richiede la legge
+* Per evitare lavoro non previsto e discussioni a progetto avviato
+- Per ridurre il budget
+- Per accontentare lo sponsor
+> Se nessuno scrive i confini, ognuno immagina un progetto diverso e il lavoro cresce senza controllo.
+
+? Che cosa significa la sigla WBS?
+- Weekly Budget Schedule
+- Web Build Standard
+* Work Breakdown Structure
+- Work Based System
+> Work Breakdown Structure: la scomposizione gerarchica di tutto il lavoro del progetto.
+
+? Che cosa dice la regola del 100% della WBS?
+- Ogni attività va finita prima di iniziare la successiva
+* La WBS contiene tutto il lavoro del progetto, e niente di più
+- Il budget va speso tutto
+- Il team lavora solo su questo progetto
+> Se manca qualcosa, qualcuno dovrà farlo senza che fosse previsto. Se c'è qualcosa in più, si lavora fuori ambito.
+
+? Come si chiamano i pezzi all'ultimo livello della WBS?
+- Milestone
+- Stakeholder
+- Sponsor
+* Work package
+> Un work package si può stimare, assegnare a una persona e verificare quando è finito.
+
+? Quale voce è scritta correttamente in una WBS?
+- Scrivere gli articoli
+* Articoli del numero 1
+- Lunedì: riunione di redazione
+- Chiedere al prof
+> La WBS si scrive per risultati (sostantivi), non per azioni o date. Il calendario arriva dopo, in pianificazione.
+
+? Nella matrice potere/interesse, dove si trova di solito lo sponsor?
+- Monitorare
+- Tenere informati
+* Gestire da vicino
+- Tenere soddisfatti
+> Lo sponsor ha molto potere e molto interesse nel progetto: va coinvolto spesso e direttamente.`;
+
+const LETTERS = ['A','B','C','D'];
+const FINGERS = ['1 dito','2 dita','3 dita','4 dita'];
+const COLORS = ['var(--a)','var(--b)','var(--c)','var(--d)'];
+const SHAPES = [
+  '<svg class="shape" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" fill="currentColor"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 20H2z" fill="currentColor"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="currentColor"/></svg>',
+  '<svg class="shape" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 22 12 12 22 2 12z" fill="currentColor"/></svg>'
+];
+const CHECK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const STORE_KEY = 'quiz-ciclo-progetto.text';
+
+function parse(text){
+  let title = 'Quiz di classe';
+  const qs = [];
+  let cur = null;
+  const fail = (n, msg) => { throw new Error('Riga ' + (n+1) + ': ' + msg); };
+  text.split(/\r?\n/).forEach((raw, n) => {
+    const line = raw.trim();
+    if (!line) return;
+    const mark = line[0], rest = line.slice(1).trim();
+    if (mark === '#') { if (rest) title = rest; }
+    else if (mark === '?') { if (!rest) fail(n, 'la domanda è vuota.'); cur = {q: rest, opts: [], correct: -1, exp: ''}; qs.push(cur); }
+    else if (mark === '-' || mark === '*') {
+      if (!cur) fail(n, 'una risposta deve stare sotto una domanda (riga che inizia con ?).');
+      if (cur.opts.length >= 4) fail(n, 'al massimo 4 risposte per domanda.');
+      if (!rest) fail(n, 'la risposta è vuota.');
+      if (mark === '*') { if (cur.correct >= 0) fail(n, 'una sola risposta corretta (*) per domanda.'); cur.correct = cur.opts.length; }
+      cur.opts.push(rest);
+    }
+    else if (mark === '>') { if (!cur) fail(n, 'la spiegazione deve stare sotto una domanda.'); cur.exp += (cur.exp ? ' ' : '') + rest; }
+    else fail(n, 'ogni riga deve iniziare con #, ?, -, * oppure >.');
+  });
+  if (!qs.length) throw new Error('Non c\'è nessuna domanda: aggiungi almeno una riga che inizia con ?');
+  qs.forEach((q, i) => {
+    if (q.opts.length < 2) throw new Error('Domanda ' + (i+1) + ' ("' + q.q.slice(0, 40) + '"): servono almeno 2 risposte.');
+    if (q.correct < 0) throw new Error('Domanda ' + (i+1) + ' ("' + q.q.slice(0, 40) + '"): segna la risposta corretta con *.');
+  });
+  return {title, qs};
+}
+
+function loadText(){
+  try { const t = localStorage.getItem(STORE_KEY); if (t) { parse(t); return t; } } catch (e) {}
+  return DEFAULT_TEXT;
+}
+function saveText(t){ try { localStorage.setItem(STORE_KEY, t); } catch (e) {} }
+
+let quizText = loadText();
+let quiz = parse(quizText);
+const state = { screen: 'start', i: 0, teams: [], results: [] };
+let timer = { end: 0, id: null, total: 30 };
+let lastBump = -1;
+
+function freshResults(){ state.results = quiz.qs.map(q => ({ votes: q.opts.map(() => 0), revealed: false, awarded: [] })); }
+freshResults();
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sum = a => a.reduce((x, y) => x + y, 0);
+const score = t => state.results.reduce((s, r) => s + (r.awarded.includes(t) ? 1 : 0), 0);
+const pctRight = i => { const r = state.results[i], tot = sum(r.votes); return tot ? Math.round(100 * r.votes[quiz.qs[i].correct] / tot) : null; };
+
+function render(){
+  $('#quizTitle').textContent = quiz.title;
+  document.title = 'Quiz ciclo di progetto';
+  const n = quiz.qs.length;
+  $('#progress').textContent = state.screen === 'question' ? 'Domanda ' + (state.i + 1) + ' di ' + n : (state.screen === 'end' ? 'Riepilogo' : n + ' domande');
+  const stage = $('#stage');
+  if (state.screen === 'start') stage.innerHTML = renderStart();
+  else if (state.screen === 'question') stage.innerHTML = renderQuestion();
+  else stage.innerHTML = renderEnd();
+  stage.scrollTop = 0;
+  if (state.screen === 'question') paintTimer();
+}
+
+function renderStart(){
+  const legend = LETTERS.map((L, k) => '<div style="--c:' + COLORS[k] + '">' + SHAPES[k] + '<b>' + L + '</b><span>' + FINGERS[k] + '</span></div>').join('');
+  const chips = state.teams.length
+    ? state.teams.map((t, k) => '<span class="chip">' + esc(t) + '<button data-action="rm-team" data-k="' + k + '" aria-label="Rimuovi la squadra ' + esc(t) + '">×</button></span>').join('')
+    : '<p class="hint">Nessuna squadra: il quiz conta solo le risposte della classe.</p>';
+  return '<section class="start">' +
+    '<div><p class="eyebrow">Quiz di classe · ' + quiz.qs.length + ' domande</p><h1>' + esc(quiz.title) + '</h1>' +
+    '<p class="lede">La classe risponde alzando da 1 a 4 dita, oppure con cartoncini colorati. Tocca la risposta sulla LIM per contare ogni voto, poi rivela quella giusta e la percentuale di classe.</p></div>' +
+    '<div class="legend">' + legend + '</div>' +
+    '<div class="panel"><h2>Squadre <span class="hint" style="font-weight:400;font-family:var(--body);font-size:.75em">facoltativo</span></h2>' +
+    '<p class="hint">Dopo ogni risposta segni quali squadre hanno indovinato: alla fine compare la classifica.</p>' +
+    '<div class="chips">' + chips + '</div>' +
+    '<form class="addteam" id="teamForm"><input id="teamName" maxlength="30" placeholder="Nome della squadra, es. Team Rosso" aria-label="Nome della squadra"><button class="btn" type="submit">Aggiungi squadra</button></form></div>' +
+    '<div><button class="btn primary big" data-action="begin">Inizia il quiz →</button></div>' +
+    '</section>';
+}
+
+function renderQuestion(){
+  const q = quiz.qs[state.i], r = state.results[state.i];
+  const tot = sum(r.votes);
+  const opts = q.opts.map((o, k) => {
+    const cls = r.revealed ? (k === q.correct ? 'right done' : 'wrong done') : '';
+    const pct = tot ? Math.round(100 * r.votes[k] / tot) : 0;
+    const meter = r.revealed ? '<span class="meter"><span class="track"><span class="fill" style="width:' + pct + '%"></span></span><em>' + pct + '%</em></span>' : '';
+    const tag = (r.revealed && k === q.correct) ? '<br><span class="tag-right">' + CHECK + ' Corretta</span>' : '';
+    return '<div class="opt ' + cls + '" style="--c:' + COLORS[k] + '">' +
+      '<button class="opt-hit" data-action="vote" data-k="' + k + '" ' + (r.revealed ? 'disabled' : '') + ' aria-label="Risposta ' + LETTERS[k] + ': ' + esc(o) + '. Tocca per contare un voto. Voti: ' + r.votes[k] + '">' +
+        '<span class="badge">' + SHAPES[k] + '<b>' + LETTERS[k] + '</b></span>' +
+        '<span class="opt-text">' + esc(o) + tag + '</span>' +
+        '<span class="count' + (lastBump === k ? ' bump' : '') + '">' + r.votes[k] + '</span>' +
+        meter +
+      '</button>' +
+      (r.revealed ? '' : '<button class="minus" data-action="unvote" data-k="' + k + '" aria-label="Togli un voto alla risposta ' + LETTERS[k] + '" ' + (r.votes[k] ? '' : 'disabled') + '>−</button>') +
+    '</div>';
+  }).join('');
+  lastBump = -1;
+  let explain = '';
+  if (r.revealed) {
+    const p = pctRight(state.i);
+    const verdict = 'Risposta corretta: ' + LETTERS[q.correct] + (p === null ? '' : ' · l\'ha scelta il ' + p + '% della classe');
+    const award = state.teams.length ? '<div class="award"><p>Quali squadre hanno indovinato?</p><div class="chips">' +
+      state.teams.map((t, k) => '<button class="tchip" data-action="award" data-k="' + k + '" aria-pressed="' + r.awarded.includes(k) + '">' + esc(t) + ' · ' + score(k) + ' pt</button>').join('') + '</div></div>' : '';
+    explain = '<div class="explain"><p class="verdict">' + esc(verdict) + '</p>' + (q.exp ? '<p class="why">' + esc(q.exp) + '</p>' : '') + award + '</div>';
+  }
+  const last = state.i === quiz.qs.length - 1;
+  const main = r.revealed
+    ? '<button class="btn primary big" data-action="next">' + (last ? 'Vai al riepilogo →' : 'Prossima domanda →') + '</button>'
+    : '<button class="btn primary big" data-action="reveal">Rivela la risposta</button>';
+  return '<section class="q">' +
+    '<div class="q-top"><p class="eyebrow">Domanda ' + (state.i + 1) + ' di ' + quiz.qs.length + '</p>' +
+      (r.revealed ? '' : '<div class="timer"><div class="ring" id="ring"><span id="ringNum">' + timer.total + '</span></div><button class="btn" data-action="timer" id="btnTimer">Avvia 30 s</button></div>') + '</div>' +
+    '<h1 class="q-text">' + esc(q.q) + '</h1>' +
+    '<div class="opts">' + opts + '</div>' +
+    explain +
+    '<div class="q-foot"><p class="total">Voti contati: <b>' + tot + '</b></p>' +
+      '<div class="nav"><button class="btn big" data-action="prev" ' + (state.i === 0 ? 'disabled' : '') + '>← Indietro</button>' + main + '</div></div>' +
+    '</section>';
+}
+
+function renderEnd(){
+  let board = '';
+  if (state.teams.length) {
+    const ranked = state.teams.map((t, k) => ({t, s: score(k)})).sort((a, b) => b.s - a.s);
+    const top = ranked[0].s;
+    board = '<div><p class="eyebrow">Classifica squadre</p></div><div class="board">' +
+      ranked.map((x, k) => '<div class="row' + (x.s === top && top > 0 ? ' first' : '') + '"><span class="pos">' + (k + 1) + '</span><span class="name">' + esc(x.t) + '</span><span class="pts">' + x.s + ' pt</span></div>').join('') + '</div>';
+  }
+  const rows = quiz.qs.map((q, i) => {
+    const p = pctRight(i);
+    const low = p !== null && p < 60;
+    const status = p === null ? '<span class="status none">Nessun voto</span>' : (low ? '<span class="status low">Da riprendere</span>' : '<span class="status ok">Capita</span>');
+    const bar = p === null ? '<span class="hint">—</span>' : '<span class="pbar' + (low ? ' low' : '') + '"><span class="track"><span class="fill" style="width:' + p + '%"></span></span><span>' + p + '%</span></span>';
+    return '<tr><td class="num">' + (i + 1) + '</td><td>' + esc(q.q) + '</td><td>' + bar + '</td><td>' + status + '</td></tr>';
+  }).join('');
+  const toReview = quiz.qs.filter((_, i) => { const p = pctRight(i); return p !== null && p < 60; }).length;
+  return '<section class="end"><div><p class="eyebrow">Fine del quiz</p><h1>Com\'è andata</h1>' +
+    '<p class="lede">' + (toReview ? toReview + (toReview === 1 ? ' domanda ha' : ' domande hanno') + ' avuto meno del 60% di risposte corrette: sono i punti da riprendere nella prossima lezione.' : 'Nessuna domanda sotto il 60% di risposte corrette.') + '</p></div>' +
+    board +
+    '<div class="tablewrap"><table><thead><tr><th>#</th><th>Domanda</th><th>Risposte corrette</th><th>Esito</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    '<div class="nav"><button class="btn big" data-action="back-last">← Torna all\'ultima domanda</button><button class="btn primary big" data-action="restart">Ricomincia il quiz</button></div>' +
+    '</section>';
+}
+
+/* Timer */
+function stopTimer(){ clearInterval(timer.id); timer.id = null; timer.end = 0; }
+function paintTimer(){
+  const ring = $('#ring'), num = $('#ringNum'), btn = $('#btnTimer');
+  if (!ring) return;
+  const left = timer.end ? Math.max(0, (timer.end - Date.now()) / 1000) : timer.total;
+  ring.style.setProperty('--p', (timer.end ? left / timer.total : 1).toFixed(3));
+  num.textContent = Math.ceil(left);
+  ring.classList.toggle('out', timer.end && left <= 0);
+  if (btn) btn.textContent = timer.end ? (left > 0 ? 'Ferma' : 'Tempo scaduto') : 'Avvia 30 s';
+  if (timer.end && left <= 0) { clearInterval(timer.id); timer.id = null; }
+}
+function toggleTimer(){
+  if (timer.id) { stopTimer(); paintTimer(); return; }
+  timer.end = Date.now() + timer.total * 1000;
+  timer.id = setInterval(paintTimer, 200);
+  paintTimer();
+}
+
+/* Actions */
+function go(i){ stopTimer(); state.i = i; state.screen = 'question'; render(); }
+function act(action, k){
+  const r = state.results[state.i];
+  switch (action) {
+    case 'begin': go(0); break;
+    case 'rm-team': state.teams.splice(k, 1); state.results.forEach(x => { x.awarded = x.awarded.filter(t => t !== k).map(t => t > k ? t - 1 : t); }); render(); break;
+    case 'vote': if (!r.revealed && k < r.votes.length) { r.votes[k]++; lastBump = k; render(); focusOpt(k); } break;
+    case 'unvote': if (!r.revealed && r.votes[k] > 0) { r.votes[k]--; render(); focusOpt(k); } break;
+    case 'reveal': stopTimer(); r.revealed = true; render(); break;
+    case 'next': if (state.i < quiz.qs.length - 1) go(state.i + 1); else { stopTimer(); state.screen = 'end'; render(); } break;
+    case 'prev': if (state.i > 0) go(state.i - 1); break;
+    case 'award': { const at = r.awarded.indexOf(k); if (at >= 0) r.awarded.splice(at, 1); else r.awarded.push(k); render(); break; }
+    case 'timer': toggleTimer(); break;
+    case 'back-last': go(quiz.qs.length - 1); break;
+    case 'restart': freshResults(); stopTimer(); state.i = 0; state.screen = 'start'; render(); break;
+    case 'fullscreen': {
+      const el = document.documentElement;
+      try {
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+      } catch (e) {}
+      break;
+    }
+    case 'edit': openEditor(); break;
+    case 'ed-cancel': closeEditor(); break;
+    case 'ed-reset': $('#qtext').value = DEFAULT_TEXT; $('#edErr').hidden = true; break;
+    case 'ed-save': saveEditor(); break;
+  }
+}
+function focusOpt(k){ const b = document.querySelector('.opt-hit[data-k="' + k + '"]'); if (b) b.focus({preventScroll: true}); }
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-action]');
+  if (!b || b.disabled) return;
+  act(b.dataset.action, b.dataset.k !== undefined ? +b.dataset.k : -1);
+});
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'teamForm') return;
+  e.preventDefault();
+  const name = $('#teamName').value.trim();
+  if (name && state.teams.length < 12) { state.teams.push(name); render(); const inp = $('#teamName'); if (inp) inp.focus(); }
+});
+document.addEventListener('fullscreenchange', () => { $('#btnFull').textContent = document.fullscreenElement ? 'Esci da schermo intero' : 'Schermo intero'; });
+
+document.addEventListener('keydown', e => {
+  if (!$('#editor').hidden) { if (e.key === 'Escape') closeEditor(); return; }
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (state.screen !== 'question') return;
+  const r = state.results[state.i];
+  const map = {'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};
+  const key = e.key.toLowerCase();
+  if (key in map && map[key] < r.votes.length) { act(e.shiftKey ? 'unvote' : 'vote', map[key]); e.preventDefault(); }
+  else if (map[e.code && e.code.replace('Digit','')] !== undefined && e.shiftKey) { act('unvote', map[e.code.replace('Digit','')]); e.preventDefault(); }
+  else if (key === 'r' || (key === ' ' && !r.revealed)) { if (!r.revealed) act('reveal'); e.preventDefault(); }
+  else if (key === 'arrowright' || key === 'enter') { if (r.revealed) act('next'); e.preventDefault(); }
+  else if (key === 'arrowleft') { act('prev'); e.preventDefault(); }
+  else if (key === 't') { if (!r.revealed) act('timer'); }
+});
+
+/* Editor */
+function openEditor(){ $('#qtext').value = quizText; $('#edErr').hidden = true; $('#editor').hidden = false; $('#qtext').focus(); }
+function closeEditor(){ $('#editor').hidden = true; $('#btnEdit').focus(); }
+function saveEditor(){
+  const t = $('#qtext').value;
+  try {
+    const parsed = parse(t);
+    quizText = t; quiz = parsed; saveText(t);
+    freshResults(); stopTimer(); state.i = 0; state.screen = 'start';
+    closeEditor(); render();
+  } catch (err) {
+    const el = $('#edErr'); el.textContent = err.message; el.hidden = false;
+  }
+}
+$('#editor').addEventListener('click', e => { if (e.target.id === 'editor') closeEditor(); });
+
+render();
+</script>
+
+</body></html>

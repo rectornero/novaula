@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App per cellulari con App Inventor · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 4 · Scratch e App Inventor</p>
+  <h1>App per cellulari<br>con App Inventor</h1>
+  <p class="lead">Dai blocchi di Scratch a un'app vera, che gira sul tuo telefono e parla con la sua voce.</p>
+  <aside class="notes">Obiettivi: conoscere App Inventor, fare le operazioni preliminari (account, progetto, Companion), progettare interfaccia e codice di una semplice app, collaudarla. App della lezione: "Parla con me" (casella di testo, pulsante, sintesi vocale). Preparazione del docente: account Google della scuola per ogni studente (Google Workspace for Education), app MIT AI2 Companion su alcuni telefoni, PC e telefoni sulla stessa rete Wi-Fi. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che telefono useresti per provare la tua app?</h2></div>
+  <div class="poll" data-id="telefono">
+    <ol><li>Un telefono Android</li><li>Un iPhone</li><li>Quello di un compagno o del docente</li><li>Nessuno: proverò sul computer</li></ol>
+  </div>
+  <aside class="notes">Serve al docente per organizzare le coppie: almeno un telefono ogni due studenti. L'app MIT AI2 Companion esiste per Android e per iPhone; su iPhone alcuni componenti hanno limitazioni. Chi non ha il telefono lavora in coppia o usa l'emulatore (se installato in laboratorio). Ricordare il regolamento della scuola sull'uso del telefono: oggi è uno strumento di lavoro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è App Inventor</p><h2>Come Scratch, ma per costruire app</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">App Inventor è un ambiente online del MIT per creare <mark>app per smartphone</mark> con i blocchi, senza scrivere codice.</p>
+      <ul class="points">
+        <li>Il <b>Designer</b> disegna l'aspetto: pulsanti, testi, immagini</li>
+        <li>L'editor dei <b>Blocks</b> decide il comportamento</li>
+        <li>Usa i sensori veri del telefono: GPS, fotocamera, accelerometro</li>
+      </ul>
+    </div>
+    <div class="card soft"><p class="num">ID</p><h3>Carta d'identità</h3><ul class="points"><li>Nato a Google nel 2010</li><li>Dal 2012 lo gestisce il MIT</li><li>Gratis, nel browser</li><li>Progetti in file <code>.aia</code>, app in file <code>.apk</code></li></ul></div>
+  </div>
+  <aside class="notes">App Inventor nasce nel 2010 a Google da un'idea di Hal Abelson, professore del MIT, con Mark Friedman; nel 2011-2012 passa al MIT, che lo gestisce tuttora. Dal 2013 (App Inventor 2) i blocchi si basano su Blockly, la stessa famiglia di blocchi da cui deriva anche l'editor di Scratch 3. Il file .aia contiene il progetto modificabile; il file .apk è l'app installabile su Android.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Inventare il futuro, un'app alla volta</h2></div>
+  <figure class="citazione">
+    <blockquote>Il modo migliore per prevedere il futuro è inventarlo.</blockquote>
+    <figcaption><b>Alan Kay</b>, informatico, durante una riunione allo Xerox PARC, 1971</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2021 Google ha annunciato più di <b>3 miliardi di dispositivi Android attivi</b> nel mondo. Un'app che fai oggi in classe può girare, in teoria, su uno qualunque di quei telefoni.</p></div>
+  <aside class="notes">Traduzione nostra. Alan Kay, pioniere della programmazione a oggetti e delle interfacce grafiche, ha raccontato più volte di aver pronunciato la frase nel 1971 allo Xerox PARC; negli anni Sessanta-Settanta immaginò il "Dynabook", un computer portatile per bambini che anticipava tablet e smartphone. Il dato dei 3 miliardi è stato annunciato da Google alla conferenza I/O di maggio 2021.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Operazioni preliminari</p><h2>Prima di cominciare: account, progetto, telefono</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Accedi a <b>ai2.appinventor.mit.edu</b> con l'account Google della scuola</li>
+      <li><b>Projects</b>, <b>Start new project</b>: nome senza spazi, per esempio <code>ParlaConMe</code></li>
+      <li>Sul telefono installa <b>MIT AI2 Companion</b></li>
+      <li>Sul PC: <b>Connect</b>, <b>AI Companion</b>; sul telefono inquadra il codice QR</li>
+    </ol>
+    <div class="callout small"><b>Niente telefono?</b> Si può usare l'emulatore sul PC (Connect, Emulator), se è installato in laboratorio, oppure lavorare in coppia con il telefono di un compagno.</div>
+  </div>
+  <aside class="notes">Il nome del progetto deve iniziare con una lettera e contenere solo lettere, numeri e trattino basso. Il Companion e il PC devono essere sulla stessa rete Wi-Fi; se la rete della scuola isola i dispositivi, si può usare il collegamento USB (Android) o l'emulatore, che richiede il programma aiStarter installato dall'amministratore. Alternativa sempre possibile: il docente collega il proprio telefono e lo proietta sulla LIM. La lingua dell'interfaccia si cambia dal menu della lingua in alto; nelle slide usiamo i nomi inglesi dei componenti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Primo collegamento</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Accedi ad App Inventor con l'account della scuola e accetta le condizioni d'uso.</li>
+      <li>Crea il progetto <b>ParlaConMe</b>.</li>
+      <li>Apri MIT AI2 Companion sul telefono (anche quello del compagno di banco).</li>
+      <li>Sul PC scegli Connect, AI Companion: inquadra il QR o scrivi il codice di 6 lettere.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> sul telefono compare una schermata bianca con in alto il titolo <b>Screen1</b>. Da ora ogni modifica sul PC si vede subito sul telefono.</div>
+  </div>
+  <aside class="notes">Problemi frequenti: telefono su rete dati mobile invece che sul Wi-Fi della scuola; firewall della rete che blocca il collegamento; versione vecchia del Companion (aggiornarla). Se dopo 2 tentativi non funziona, passare al piano B (coppia o LIM) per non perdere la lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Progetto dell'interfaccia</p><h2>Il Designer: dove si disegna l'app</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 1000 580" width="1000" height="580" role="img" aria-label="Schema del Designer di App Inventor con palette, visualizzatore, componenti e proprietà" font-family="DM Sans, sans-serif" font-size="18">
+      <rect x="2" y="2" width="996" height="576" rx="18" fill="#fff" stroke="#c9ced9" stroke-width="3"/>
+      <path d="M2,20 Q2,2 20,2 H980 Q998,2 998,20 V52 H2 Z" fill="#596179"/>
+      <text x="24" y="35" fill="#fff" font-weight="700" font-size="20">App Inventor</text>
+      <text x="180" y="35" fill="#fff">Projects</text><text x="262" y="35" fill="#fff">Connect</text><text x="342" y="35" fill="#fff">Build</text>
+      <rect x="760" y="62" width="110" height="34" rx="8" fill="#172033"/><text x="815" y="85" fill="#fff" text-anchor="middle" font-weight="700">Designer</text>
+      <rect x="878" y="62" width="100" height="34" rx="8" fill="#eef1fa"/><text x="928" y="85" fill="#172033" text-anchor="middle">Blocks</text>
+      <line x1="2" y1="104" x2="998" y2="104" stroke="#dcdfe8" stroke-width="2"/>
+      <text x="20" y="134" fill="#596179" font-weight="700">Palette</text>
+      <g fill="#172033"><rect x="20" y="150" width="170" height="30" rx="6" fill="#eef1fa"/><text x="32" y="171">Button</text><rect x="20" y="188" width="170" height="30" rx="6" fill="#eef1fa"/><text x="32" y="209">Label</text><rect x="20" y="226" width="170" height="30" rx="6" fill="#eef1fa"/><text x="32" y="247">TextBox</text><rect x="20" y="264" width="170" height="30" rx="6" fill="#eef1fa"/><text x="32" y="285">Image</text><rect x="20" y="302" width="170" height="30" rx="6" fill="#eef1fa"/><text x="32" y="323">Slider</text></g>
+      <line x1="210" y1="104" x2="210" y2="578" stroke="#dcdfe8" stroke-width="2"/>
+      <rect x="290" y="120" width="200" height="380" rx="26" fill="#172033"/>
+      <rect x="302" y="146" width="176" height="330" rx="6" fill="#fff"/>
+      <rect x="302" y="146" width="176" height="30" fill="#d0541f"/><text x="312" y="167" fill="#fff" font-size="16">Parla con me</text>
+      <text x="312" y="200" font-size="14" fill="#172033">Scrivi una frase…</text>
+      <rect x="312" y="212" width="156" height="30" rx="4" fill="#fff" stroke="#c9ced9" stroke-width="2"/>
+      <rect x="312" y="254" width="156" height="34" rx="6" fill="#eef1fa" stroke="#c9ced9"/><text x="390" y="277" text-anchor="middle" font-size="16" fill="#172033">Parla!</text>
+      <text x="300" y="530" font-size="15" fill="#596179">Non-visible components:</text>
+      <rect x="300" y="540" width="150" height="26" rx="6" fill="#fbe7dc"/><text x="310" y="558" font-size="14" fill="#172033">TextToSpeech1</text>
+      <line x1="580" y1="104" x2="580" y2="578" stroke="#dcdfe8" stroke-width="2"/>
+      <text x="598" y="134" fill="#596179" font-weight="700">Components</text>
+      <g font-size="16" fill="#172033"><text x="598" y="166">Screen1</text><text x="618" y="194">Label1</text><text x="618" y="222">TextBox1</text><text x="618" y="250">Button1</text><text x="618" y="278">TextToSpeech1</text></g>
+      <line x1="770" y1="104" x2="770" y2="578" stroke="#dcdfe8" stroke-width="2"/>
+      <text x="788" y="134" fill="#596179" font-weight="700">Properties</text>
+      <g font-size="16" fill="#172033"><text x="788" y="166">Text</text><rect x="788" y="174" width="190" height="26" rx="4" fill="#fff" stroke="#c9ced9"/><text x="796" y="192" font-size="14">Parla!</text><text x="788" y="226">FontSize</text><rect x="788" y="234" width="190" height="26" rx="4" fill="#fff" stroke="#c9ced9"/><text x="796" y="252" font-size="14">24</text><text x="788" y="286">BackgroundColor</text><rect x="788" y="294" width="190" height="26" rx="4" fill="#fbe7dc" stroke="#c9ced9"/></g>
+      <g font-size="28" font-weight="800" text-anchor="middle" fill="#fff">
+        <circle cx="160" cy="430" r="22" fill="#d0541f"/><text x="160" y="440">1</text>
+        <circle cx="520" cy="200" r="22" fill="#d0541f"/><text x="520" y="210">2</text>
+        <circle cx="680" cy="430" r="22" fill="#d0541f"/><text x="680" y="440">3</text>
+        <circle cx="900" cy="430" r="22" fill="#d0541f"/><text x="900" y="440">4</text>
+        <circle cx="730" cy="79" r="22" fill="#d0541f"/><text x="730" y="89">5</text>
+      </g>
+    </svg>
+    <ol class="steps small">
+      <li><b>Palette</b>: i componenti, divisi in gruppi</li>
+      <li><b>Viewer</b>: lo schermo del telefono</li>
+      <li><b>Components</b>: l'elenco di ciò che hai inserito</li>
+      <li><b>Properties</b>: colore, testo, dimensioni</li>
+      <li><b>Designer</b> e <b>Blocks</b>: passi da una vista all'altra</li>
+    </ol>
+  </div>
+  <aside class="notes">Far trovare le cinque zone sull'editor vero. I gruppi principali della palette sono User Interface, Layout, Media, Drawing and Animation, Sensors, Storage, Connectivity. I componenti si trascinano dalla palette nel Viewer. App Inventor dà ai componenti nomi automatici (Button1, Label1): conviene rinominarli (per esempio PulsanteParla) dal pulsante Rename nell'elenco Components.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I componenti</p><h2>Alcuni si vedono, altri lavorano dietro le quinte</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Visibili</h3><ul class="points"><li><b>Button</b>: un pulsante da toccare</li><li><b>Label</b>: un testo da leggere</li><li><b>TextBox</b>: una casella dove scrivere</li><li><b>Image</b>: un'immagine</li></ul></div>
+    <div class="card soft"><h3>Non visibili</h3><ul class="points"><li><b>TextToSpeech</b>: legge ad alta voce</li><li><b>Clock</b>: un timer</li><li><b>AccelerometerSensor</b>: sente gli scossoni</li><li><b>Sound</b>: riproduce un suono</li></ul></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le voci sintetiche di oggi sono quasi umane perché sono generate da <b>reti neurali</b> addestrate su ore di parlato registrato. Il tuo TextToSpeech usa il motore di sintesi vocale installato sul telefono.</p></div>
+  <aside class="notes">I componenti non visibili compaiono sotto il Viewer, nella riga "Non-visible components". La sintesi vocale neurale si è diffusa dopo il 2016 (per esempio il modello WaveNet di DeepMind): prima le voci erano costruite incollando pezzetti di parlato registrato e suonavano più "robotiche". La qualità della voce dipende dal telefono e dalla lingua installata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Dove compare TextToSpeech1 sullo schermo dell'app?</h2></div>
+  <div class="poll" data-id="non-visibile" data-tipo="quiz" data-risposta="B">
+    <ol><li>In alto, come una barra con l'altoparlante</li><li>Da nessuna parte: è un componente non visibile</li><li>Come un pulsante che l'utente deve toccare</li><li>Solo nell'emulatore, non sul telefono</li></ol>
+    <p class="why">TextToSpeech non ha un aspetto: è uno strumento che i blocchi usano. Nel Designer lo trovi sotto il Viewer, tra i componenti non visibili. Serve un pulsante (visibile) per farlo parlare.</p>
+  </div>
+  <aside class="notes">Il tranello è la C: molti pensano che ogni componente sia qualcosa da toccare. Collegamento con Scratch: è come un'estensione (Sintesi vocale) che non ha uno sprite suo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Disegna l'interfaccia di Parla con me</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Clicca <b>Screen1</b> e nelle Properties scrivi in <b>Title</b>: Parla con me.</li>
+      <li>Trascina da User Interface una <b>Label</b>, una <b>TextBox</b> e un <b>Button</b>; da Media un <b>TextToSpeech</b>.</li>
+      <li>Label1, Text: <i>Scrivi una frase e premi Parla!</i>. TextBox1, Hint: <i>Scrivi qui</i>.</li>
+      <li>Button1: Text <i>Parla!</i>, FontSize 24, Width <i>Fill parent</i>, un colore a scelta.</li>
+      <li>Guarda il telefono mentre lavori.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> sul telefono vedi titolo, testo, casella e pulsante largo quanto lo schermo. TextToSpeech1 compare solo sotto il Viewer. Toccando il pulsante non succede niente: mancano i blocchi.</div>
+  </div>
+  <aside class="notes">Il pulsante non fa niente perché il comportamento si programma nei Blocks: è voluto, serve a far capire la divisione tra aspetto e codice. Chi finisce prima: aggiunge un'immagine (Image, proprietà Picture) caricando un file dal PC, oppure cambia BackgroundColor di Screen1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Progetto del codice</p><h2>Nei Blocks tutto parte da un evento</h2></div>
+  <svg class="blocchi" role="img" aria-label="when Button1.Click do; call TextToSpeech1.Speak message TextBox1.Text; set Label1.Text to join "Hai scritto: " TextBox1.Text" viewBox="0 0 814 252" width="1018" height="315" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L318.0404052734375,4 Q326.0404052734375,4 326.0404052734375,12 L326.0404052734375,56 Q326.0404052734375,64 318.0404052734375,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,196 Q28,204 36,204 L44,204 L52,212 L72,212 L80,204 L318.0404052734375,204 Q326.0404052734375,204 326.0404052734375,212 L326.0404052734375,232 Q326.0404052734375,240 318.0404052734375,240 L10,240 Q2,240 2,232 Z" fill="#C88330" stroke="#A66A22" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">when Button1.Click do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L736.3324127197266,64 Q744.3324127197266,64 744.3324127197266,72 L744.3324127197266,120 Q744.3324127197266,128 736.3324127197266,128 L80,128 L72,136 L52,136 L44,128 L36,128 Q28,128 28,120 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="96" fill="#fff">call TextToSpeech1.Speak message</text><rect x="521.486572265625" y="72" width="208.84584045410156" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="537.486572265625" y="96" fill="#fff">TextBox1.Text</text><path d="M28,136 Q28,128 36,128 L44,128 L52,136 L72,136 L80,128 L801.2837219238281,128 Q809.2837219238281,128 809.2837219238281,136 L809.2837219238281,196 Q809.2837219238281,204 801.2837219238281,204 L80,204 L72,212 L52,212 L44,204 L36,204 Q28,204 28,196 Z" fill="#266643" stroke="#1B4A30" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="166" fill="#fff">set Label1.Text to</text><rect x="280.8498077392578" y="136" width="514.4339141845703" height="60" rx="30" fill="#B32D5E" stroke="#8A2047" stroke-width="1.5"/><text dominant-baseline="central" x="296.8498077392578" y="166" fill="#fff">join</text><rect x="355.5419921875" y="142" width="204.89588928222656" height="48" rx="24" fill="#B32D5E" stroke="#8A2047" stroke-width="1.5"/><text dominant-baseline="central" x="371.5419921875" y="166" fill="#fff">"Hai scritto: "</text><rect x="570.4378814697266" y="142" width="208.84584045410156" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="586.4378814697266" y="166" fill="#fff">TextBox1.Text</text></svg>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>when</b> (ocra): l'evento, come i blocchi gialli di Scratch</li>
+      <li><b>call</b> (viola): chiede a un componente di fare qualcosa</li>
+    </ul>
+    <ul class="points">
+      <li><b>set</b> (verde scuro): cambia una proprietà</li>
+      <li>verde chiaro: <b>legge</b> una proprietà</li>
+    </ul>
+  </div>
+  <aside class="notes">Si legge così: quando il pulsante viene toccato, la sintesi vocale pronuncia il testo della casella e l'etichetta mostra "Hai scritto:" seguito dallo stesso testo. I blocchi di un componente si trovano cliccando il suo nome a sinistra nell'editor dei Blocks; join e il blocco di testo vuoto sono nel gruppo Built-in, Text. Con l'interfaccia in italiano alcune parole dei blocchi vengono tradotte (per esempio when diventa quando). Le app di App Inventor sono "guidate dagli eventi": senza un evento non parte niente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Da Scratch ad App Inventor: abbina</h2></div>
+  <dl class="puzzle-abbina" data-id="scratch-ai">
+    <dt>Sprite</dt><dd>Componente (Button, Label…)</dd>
+    <dt>Stage</dt><dd>Screen1</dd>
+    <dt>quando si clicca questo sprite</dt><dd>when Button1.Click</dd>
+    <dt>dire Ciao!</dt><dd>set Label1.Text to "Ciao!"</dd>
+    <dt>quando si clicca la bandiera verde</dt><dd>when Screen1.Initialize</dd>
+    <dt>file .sb3</dt><dd>file .aia</dd>
+  </dl>
+  <aside class="notes">Screen1.Initialize è l'evento che scatta quando l'app si apre: è il posto giusto per inizializzare le variabili, come facevamo con la bandiera verde. Messaggio: le idee sono le stesse, cambia l'ambiente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale blocco copia ciò che hai scritto nella casella dentro l'etichetta?</h2></div>
+  <div class="poll" data-id="direzione-set" data-tipo="quiz" data-risposta="C">
+    <ol><li>set TextBox1.Text to Label1.Text</li><li>when Label1.Click do TextBox1.Text</li><li>set Label1.Text to TextBox1.Text</li><li>call TextBox1.Text to Label1</li></ol>
+    <p class="why">Il blocco <i>set</i> cambia la proprietà scritta a sinistra, usando il valore agganciato a destra. Per scrivere nell'etichetta, l'etichetta va a sinistra: è come <i>porta punti a …</i> in Scratch.</p>
+  </div>
+  <aside class="notes">La A fa l'opposto: sovrascrive la casella con il testo dell'etichetta. È lo stesso errore di chi in matematica legge "x = 5" da destra a sinistra. Ritornerà in Python e in C con l'assegnazione (punti = 0). B e D non esistono come blocchi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Fai parlare l'app</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Clicca <b>Blocks</b>, poi Button1: trascina <i>when Button1.Click</i>.</li>
+      <li>Da TextToSpeech1 prendi <i>call TextToSpeech1.Speak</i> e agganciagli <i>TextBox1.Text</i>.</li>
+      <li>Da Label1 prendi <i>set Label1.Text to</i>; da Text prendi <i>join</i> e un testo "Hai scritto: ".</li>
+      <li>Sul telefono scrivi <i>Ciao classe</i> e tocca Parla! (alza il volume).</li>
+      <li>Projects, <b>Export selected project (.aia) to my computer</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> il telefono pronuncia la frase e l'etichetta diventa "Hai scritto: Ciao classe". Nella cartella Download trovi <b>ParlaConMe.aia</b>.</div>
+  </div>
+  <aside class="notes">Se il telefono legge con accento inglese, impostare in TextToSpeech1 la proprietà Language a "it". Un blocco con un punto esclamativo o un triangolo giallo indica un errore o un avviso: di solito un incastro vuoto. Il file .aia si può reimportare con Projects, Import project. Chi finisce prima: aggiunge un secondo pulsante "Cancella" che svuota la casella (set TextBox1.Text to un testo vuoto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il collaudo</p><h2>Prova la tua app come se volessi romperla</h2></div>
+  <table class="data compact">
+    <tr><th>Prova</th><th>Cosa scrivo</th><th>Cosa mi aspetto</th></tr>
+    <tr><td>Caso normale</td><td>Ciao classe</td><td>La dice e la mostra</td></tr>
+    <tr><td>Casella vuota</td><td>(niente)</td><td>Nessun blocco dell'app, magari un avviso</td></tr>
+    <tr><td>Numeri</td><td>2026</td><td>Legge "duemilaventisei"</td></tr>
+    <tr><td>Testo lunghissimo</td><td>un paragrafo intero</td><td>Lo legge tutto, l'etichetta va a capo</td></tr>
+  </table>
+  <div class="callout hl small"><b>Il primo "bug".</b> Nel 1947 il gruppo di Grace Hopper trovò una falena incastrata in un relè del computer Harvard Mark II e la incollò nel registro: "primo caso reale di bug trovato".</div>
+  <aside class="notes">Il collaudo (testing) si fa con casi normali e casi limite. Far compilare la tabella con una colonna in più: "Cosa succede davvero". Per la casella vuota si può migliorare l'app con un blocco if: se TextBox1.Text è vuoto, mostrare "Scrivi qualcosa!" (il blocco "is empty" è nel gruppo Text). La pagina del registro con la falena (9 settembre 1947) è conservata allo Smithsonian; la parola bug per indicare un guasto era già usata dagli ingegneri prima di allora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Cambi il testo del pulsante sul PC, ma sul telefono non cambia nulla. Che cosa controlli per prima?</h2></div>
+  <div class="poll" data-id="companion" data-tipo="quiz" data-risposta="A">
+    <ol><li>Che il Companion sia ancora collegato, sulla stessa rete Wi-Fi</li><li>Di aver ricreato il file APK dopo ogni modifica</li><li>Di aver scritto prima i blocchi del pulsante</li><li>Di aver salvato il progetto con Export</li></ol>
+    <p class="why">Con il Companion le modifiche arrivano in tempo reale, senza creare l'APK e senza esportare. Se non arrivano, quasi sempre il collegamento si è interrotto: telefono in standby o rete cambiata.</p>
+  </div>
+  <aside class="notes">Il misconcetto è la B: si crede che ogni modifica richieda di ricostruire l'app. L'APK (menu Build) serve solo alla fine, per installare l'app senza Companion; con l'Android App Bundle (.aab) si pubblica sugli store. Rimedio pratico: Connect, Reset Connection, poi di nuovo AI Companion.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Dall'idea all'app: metti in ordine le fasi</h2></div>
+  <ol class="puzzle-ordina" data-id="fasi-app">
+    <li>Disegna su carta come sarà lo schermo</li>
+    <li>Crea il progetto in App Inventor</li>
+    <li>Inserisci i componenti nel Designer</li>
+    <li>Imposta le proprietà: testi, colori, dimensioni</li>
+    <li>Scrivi i blocchi per gli eventi</li>
+    <li>Collauda sul telefono con il Companion</li>
+    <li>Esporta il progetto o crea l'APK</li>
+  </ol>
+  <aside class="notes">Proprietà e componenti si possono anche alternare, ma l'ordine logico è questo: prima l'aspetto, poi il comportamento, poi il collaudo, infine la consegna. Il disegno su carta (mockup o wireframe) è quello che fanno anche i designer professionisti prima di toccare il computer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'aspetto dell'app si costruisce nel <span class="blank" data-risposta="designer" style="--w:8ch"></span>, il comportamento nei blocchi.</p>
+    <p>Per provare l'app sul telefono senza installarla uso l'app MIT AI2 <span class="blank" data-risposta="companion" style="--w:9ch"></span>.</p>
+    <p>TextToSpeech è un componente non <span class="blank" data-risposta="visibile" style="--w:8ch"></span>.</p>
+    <p>Il progetto si esporta in un file con estensione <span class="blank" data-risposta="aia|.aia" style="--w:4ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Designer; Companion; visibile; .aia (accettato anche aia).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>App Inventor: app con i blocchi, nel browser</li>
+      <li>Designer per l'aspetto, Blocks per il codice</li>
+      <li>Componenti visibili e non visibili</li>
+    </ul>
+    <ul class="points">
+      <li>Eventi when, azioni call, proprietà set</li>
+      <li>Collaudo con il Companion, anche dei casi limite</li>
+      <li>Progetto .aia, app installabile .apk</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (app "Il mio frasario"). Prossima lezione: un gioco con il touch screen, "Acchiappa il panino!".</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

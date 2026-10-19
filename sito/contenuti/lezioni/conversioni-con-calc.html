@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le conversioni con Calc · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>code,.mono,.formula,table.sheet{font-variant-ligatures:none}code{white-space:nowrap}</style>
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Sistemi di numerazione</p>
+  <h1>Le conversioni<br>con Calc</h1>
+  <p class="lead">Le divisioni successive e i pesi li sai già fare a mano. Oggi li facciamo fare al foglio di calcolo, e costruiamo un convertitore.</p>
+  <div class="meta"><span class="chip">LibreOffice Calc</span><span>file: conversioni.xlsx</span></div>
+  <aside class="notes">Prerequisiti: lezione "Numeri decimali e binari" (conversioni a mano) e "Calc: formule e funzioni" (riferimenti, trascinamento, SE). Tutti devono scaricare conversioni.xlsx e salvarlo come conversioni-cognome.ods. Per la 3G la lezione è un ripasso veloce con il mini-progetto e l'estensione alla base 16 (slide 14).</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">Da dove partiamo</p>
+  <h2>Il metodo lo conosci già: oggi lo <mark>insegniamo a Calc</mark>.</h2>
+  <div class="cols-2">
+    <div class="card"><h3>Decimale → binario</h3><p class="muted">Divisioni successive per 2, resti letti dal basso.</p></div>
+    <div class="card"><h3>Binario → decimale</h3><p class="muted">Somma dei pesi 128, 64, 32… dove c'è un 1.</p></div>
+  </div>
+  <p class="lead">Un foglio di calcolo non sbaglia i conti: se il metodo è giusto, funziona per qualsiasi numero.</p>
+  <aside class="notes">Ripasso a voce, senza rifare la teoria: chiedere a uno studente di convertire 13 alla lavagna (1101) e a un altro di convertire 101 in decimale (5). Poi: "quanto ci mettete a convertire 200? E 20 numeri?". Ecco perché automatizzare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due funzioni nuove</p><h2>QUOZIENTE e RESTO</h2></div>
+  <div class="cols-2">
+    <table class="data">
+      <tr><th>Formula</th><th>Risultato</th></tr>
+      <tr><td class="mono">=13/2</td><td class="mono">6,5</td></tr>
+      <tr><td class="mono hl">=QUOZIENTE(13;2)</td><td class="mono">6</td></tr>
+      <tr><td class="mono hl">=RESTO(13;2)</td><td class="mono">1</td></tr>
+      <tr><td class="mono">=RESTO(12;2)</td><td class="mono">0</td></tr>
+    </table>
+    <ul class="points">
+      <li>La barra <code>/</code> dà il risultato con la virgola: non ci serve.</li>
+      <li><b>QUOZIENTE</b> tiene solo la parte intera.</li>
+      <li><b>RESTO</b> dà quello che avanza: dividendo per 2 è sempre <b>0</b> o <b>1</b>.</li>
+    </ul>
+  </div>
+  <div class="callout">Argomenti: prima il <b>dividendo</b>, poi il <b>divisore</b>, separati da <code>;</code>.</div>
+  <aside class="notes">Verifica: 2·6 + 1 = 13. Il resto della divisione per 2 dice se un numero è pari (0) o dispari (1): è anche l'ultimo bit del numero in binario. Domanda: =QUOZIENTE(45;2) e =RESTO(45;2)? (22 e 1).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La tabella delle divisioni</p><h2>Ogni riga parte dal quoziente della riga sopra</h2></div>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th></tr>
+    <tr><th>1</th><td>Numero</td><td>45</td><td></td></tr>
+    <tr><th>2</th><td></td><td></td><td></td></tr>
+    <tr><th>3</th><td>Dividendo</td><td>Quoziente</td><td>Resto</td></tr>
+    <tr><th>4</th><td class="f">=B1</td><td class="f">=QUOZIENTE(A4;2)</td><td class="f">=RESTO(A4;2)</td></tr>
+    <tr><th>5</th><td class="f sel">=B4</td><td class="f">=QUOZIENTE(A5;2)</td><td class="f">=RESTO(A5;2)</td></tr>
+  </table>
+  <div class="cols-2">
+    <div class="callout"><b>A4</b> prende il numero da convertire. <b>A5</b> prende il quoziente di prima: <code>=B4</code>.</div>
+    <div class="callout hl">Dalla riga 5 in poi le formule sono tutte uguali: basta <b>trascinare</b>.</div>
+  </div>
+  <aside class="notes">Qui la tabella è mostrata con le formule visibili (Visualizza › Mostra formula). La riga 4 è diversa dalle altre perché parte da B1. Dalla riga 5 i riferimenti relativi fanno il lavoro: A6 diventa =B5, A7 =B6, eccetera. Far notare che non serve il $.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il risultato</p><h2>Otto righe, otto bit</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="sheet">
+      <tr><th></th><th>A</th><th>B</th><th>C</th></tr>
+      <tr><th>3</th><td>Dividendo</td><td>Quoziente</td><td>Resto</td></tr>
+      <tr><th>4</th><td>45</td><td>22</td><td class="sel">1</td></tr>
+      <tr><th>5</th><td>22</td><td>11</td><td class="sel">0</td></tr>
+      <tr><th>6</th><td>11</td><td>5</td><td class="sel">1</td></tr>
+      <tr><th>7</th><td>5</td><td>2</td><td class="sel">1</td></tr>
+      <tr><th>8</th><td>2</td><td>1</td><td class="sel">0</td></tr>
+      <tr><th>9</th><td>1</td><td>0</td><td class="sel">1</td></tr>
+      <tr><th>10</th><td>0</td><td>0</td><td class="sel">0</td></tr>
+      <tr><th>11</th><td>0</td><td>0</td><td class="sel">0</td></tr>
+    </table>
+    <div class="stack">
+      <p>Quando il quoziente arriva a 0, le righe successive danno resto <b>0</b>: sono gli zeri a sinistra.</p>
+      <div class="formula"><small>Resti dal basso</small><span class="hl">00101101</span></div>
+      <p class="small muted">Con 8 righe si convertono i numeri da 0 a 255.</p>
+    </div>
+  </div>
+  <aside class="notes">Controllo con i pesi: 32 + 8 + 4 + 1 = 45. È lo stesso esempio della lezione sui numeri binari. Domanda: cosa succede con 300? (servono 9 bit: con 8 righe il quoziente della riga 11 non è ancora 0, quindi il risultato è sbagliato; bisogna aggiungere righe).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La tabella delle divisioni</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scarica <b>conversioni.xlsx</b> dalla pagina dei materiali, aprilo con Calc e salvalo come <code>conversioni-cognome.ods</code>.</li>
+      <li>Foglio <b>Divisioni</b>: in A4 <code>=B1</code>, in B4 <code>=QUOZIENTE(A4;2)</code>, in C4 <code>=RESTO(A4;2)</code>.</li>
+      <li>In A5 <code>=B4</code>. Copia B4:C4 nella riga 5.</li>
+      <li>Seleziona <code>A5:C5</code> e trascina fino alla riga 11.</li>
+      <li>Cambia il numero in B1: prova <b>13</b>, <b>100</b> e <b>200</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Ricorda</h4><p>I resti si leggono <b>dal basso verso l'alto</b>: da C11 a C4.</p></div>
+      <div class="check"><b>Controllo:</b> con 45 la colonna C, dall'alto, è 1 0 1 1 0 1 0 0. Con 100 si legge <b>01100100</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni (resti letti dal basso): 13 = 00001101; 100 = 01100100; 200 = 11001000. Errore tipico: in A5 scrivere =A4 invece di =B4 (la tabella non avanza: il dividendo resta sempre lo stesso). Altro errore: trascinare anche la riga 4, così A5 diventa =B2 (vuota). Chi finisce prima: aggiungere due righe e provare con 1000.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Leggere i resti</p><h2>Il simbolo &amp; attacca i pezzi uno dopo l'altro</h2></div>
+  <div class="formula"><small>In E4: resti dal basso verso l'alto</small>=C11&amp;C10&amp;C9&amp;C8&amp;C7&amp;C6&amp;C5&amp;C4 → <span class="hl">00101101</span></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Cos'è &amp;</h3><p><code>="ciao"&amp;"!"</code> dà <b>ciao!</b>. Con i numeri: <code>=1&amp;0</code> dà <b>10</b>.</p></div>
+    <div class="card soft"><h3>L'ordine conta</h3><p>Si parte da <b>C11</b>, l'ultimo resto, e si sale fino a <b>C4</b>.</p></div>
+    <div class="card soft"><h3>È un testo</h3><p>Il risultato si allinea a sinistra e tiene gli <b>zeri iniziali</b>.</p></div>
+  </div>
+  <aside class="notes">Il simbolo &amp; si ottiene con Maiusc + 6. Il risultato è testo, non un numero: per questo gli zeri a sinistra restano. Se si sbaglia l'ordine (C4&amp;C5&amp;...) si ottiene il numero scritto al contrario: 10110100. Far provare entrambi e confrontare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La verifica</p><h2>Calc ha già le funzioni di conversione</h2></div>
+  <table class="data">
+    <tr><th>Formula</th><th>Risultato</th><th>Note</th></tr>
+    <tr><td class="mono">=DECIMALE.BINARIO(45)</td><td class="mono">101101</td><td>senza zeri iniziali</td></tr>
+    <tr><td class="mono hl">=DECIMALE.BINARIO(45;8)</td><td class="mono">00101101</td><td>sempre 8 cifre</td></tr>
+    <tr><td class="mono">=BINARIO.DECIMALE(101101)</td><td class="mono">45</td><td>il contrario</td></tr>
+    <tr><td class="mono">=BINARIO.DECIMALE("00101101")</td><td class="mono">45</td><td>anche tra virgolette</td></tr>
+  </table>
+  <div class="callout hl">Limiti: <b>DECIMALE.BINARIO</b> arriva fino a 511, <b>BINARIO.DECIMALE</b> accetta al massimo 10 cifre. Per i nostri byte (0–255) bastano.</div>
+  <aside class="notes">Se in una cella si scrive 00101101, Calc la considera il numero 101101 e toglie gli zeri: per BINARIO.DECIMALE non è un problema. Per vedere gli zeri si può scrivere un apostrofo davanti ('00101101), così diventa testo. Perché costruire la tabella se c'è già la funzione? Perché la tabella mostra il procedimento, la funzione serve a controllare. Limiti esatti di DECIMALE.BINARIO: da −512 a 511 (10 bit, i negativi in complemento a due: argomento da riprendere in terza).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Controlla i tuoi conti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nel tuo file vai sul foglio <b>Verifica</b>: in colonna A ci sono 7, 20, 42, 99, 200.</li>
+      <li>Colonna B: scrivi il binario che hai calcolato a mano nella lezione scorsa.</li>
+      <li>C2: <code>=DECIMALE.BINARIO(A2;8)</code>, trascina fino a C6.</li>
+      <li>D2: <code>=SE(BINARIO.DECIMALE(B2)=A2;"OK";"Controlla")</code>, trascina fino a D6.</li>
+      <li>Dove compare Controlla, trova l'errore e correggi a mano.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Perché funziona</h4><p>Il tuo binario viene riconvertito in decimale e confrontato con il numero di partenza.</p></div>
+      <div class="check"><b>Controllo:</b> C4 = <b>00101010</b> (42), C6 = <b>11001000</b> (200). Alla fine la colonna D è tutta <b>OK</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni colonna C: 00000111, 00010100, 00101010, 01100011, 11001000. La verifica in D funziona anche se lo studente scrive il binario senza zeri iniziali, perché confronta i valori in decimale. Se in B si lascia una cella vuota, la colonna D mostra un errore: è normale. Chi non ha fatto l'esercizio della lezione scorsa lo fa ora a mano, con la tabella delle divisioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Binario → decimale</p><h2>La tabella dei pesi con POTENZA</h2></div>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+    <tr><th>1</th><td>Posizione</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+    <tr><th>2</th><td>Peso</td><td class="f">128</td><td class="f">64</td><td class="f">32</td><td class="f">16</td><td class="f">8</td><td class="f">4</td><td class="f">2</td><td class="f">1</td></tr>
+    <tr><th>3</th><td>Bit</td><td>0</td><td class="sel">1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="sel">1</td></tr>
+    <tr><th>4</th><td>Bit × peso</td><td class="f">0</td><td class="f">64</td><td class="f">0</td><td class="f">0</td><td class="f">0</td><td class="f">0</td><td class="f">0</td><td class="f">1</td></tr>
+    <tr><th>5</th><td>Totale</td><td class="f">65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <div class="cols-3">
+    <div class="card soft"><h4>Riga 2</h4><p><code>=POTENZA(2;B1)</code> e trascina a destra.</p></div>
+    <div class="card soft"><h4>Riga 4</h4><p><code>=B3*B2</code> e trascina a destra.</p></div>
+    <div class="card soft"><h4>Totale</h4><p><code>=SOMMA(B4:I4)</code></p></div>
+  </div>
+  <aside class="notes">POTENZA(2;7) è uguale a 2^7 = 128: si può usare anche l'operatore ^. I numeri della riga 1 sono le posizioni dei bit, contate da destra a partire da 0. Il bit vale 0 o 1, quindi "bit per peso" è il peso oppure 0: è esattamente la regola "somma i pesi dove c'è un 1". 01000001 = 64 + 1 = 65, il codice della lettera A.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>I pesi al lavoro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Foglio <b>Pesi</b>: in B2 scrivi <code>=POTENZA(2;B1)</code> e trascina fino a I2.</li>
+      <li>In B4 scrivi <code>=B3*B2</code> e trascina fino a I4.</li>
+      <li>In B5 scrivi <code>=SOMMA(B4:I4)</code>.</li>
+      <li>In B6 verifica: <code>=BINARIO.DECIMALE(B3&amp;C3&amp;D3&amp;E3&amp;F3&amp;G3&amp;H3&amp;I3)</code>.</li>
+      <li>Cambia i bit della riga 3: prova <b>00010010</b>, <b>11111111</b>, <b>10101010</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Un bit per cella</h4><p>Nella riga 3 scrivi una sola cifra, 0 o 1, in ogni cella da B3 a I3.</p></div>
+      <div class="check"><b>Controllo:</b> con 01000001 B5 e B6 valgono <b>65</b>. Con 11111111 valgono <b>255</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: 00010010 = 18; 11111111 = 255; 10101010 = 128 + 32 + 8 + 2 = 170. Nella verifica di B6 il simbolo &amp; rimette insieme gli 8 bit in un testo, che BINARIO.DECIMALE converte. Se B5 e B6 sono diversi, di solito c'è un errore nella riga dei pesi (per esempio POTENZA(2;B1) scritto con $ e quindi non trascinato bene). Domanda: perché 11111111 dà 255 e non 256? (la somma 1+2+...+128 = 255).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mini-progetto</p><h2>Il convertitore: scrivi un numero, leggi il binario</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Input</h3><p>Il numero da 0 a 255 in <b>B3</b>.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Divisioni</h3><p>La tabella in <b>D3:F10</b> lavora da sola.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Risultato</h3><p>I resti dal basso, uniti con <b>&amp;</b>, in <b>B5</b>.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Verifica</h3><p>Confronto con DECIMALE.BINARIO: <b>OK</b>.</p></div>
+  </div>
+  <p class="lead">E nella direzione opposta: un binario in <b>B10</b>, il decimale in <b>B11</b>.</p>
+  <div class="stack">
+    <p class="small muted">Nel progetto ripassi tutto quello che hai usato oggi:</p>
+    <div class="chips"><span class="chip">QUOZIENTE</span><span class="chip">RESTO</span><span class="chip">riferimenti relativi</span><span class="chip">&amp;</span><span class="chip">DECIMALE.BINARIO</span><span class="chip">SE</span><span class="chip">BINARIO.DECIMALE</span></div>
+  </div>
+  <aside class="notes">Il foglio Convertitore di conversioni.xlsx ha già etichette, celle di input gialle e celle grigie da riempire. È un riassunto di tutto: QUOZIENTE, RESTO, riferimenti relativi, &amp;, DECIMALE.BINARIO, SE, BINARIO.DECIMALE. Far progettare prima a voce: quali celle dipendono da quali?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Costruisci il convertitore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Foglio <b>Convertitore</b>: D3 <code>=B3</code>, E3 <code>=QUOZIENTE(D3;2)</code>, F3 <code>=RESTO(D3;2)</code>.</li>
+      <li>D4 <code>=E3</code>, copia E3:F3 in riga 4, poi trascina D4:F4 fino alla riga 10.</li>
+      <li>B5: <code>=F10&amp;F9&amp;F8&amp;F7&amp;F6&amp;F5&amp;F4&amp;F3</code></li>
+      <li>B6: <code>=DECIMALE.BINARIO(B3;8)</code></li>
+      <li>B7: <code>=SE(B5=B6;"OK";"Errore")</code></li>
+      <li>B11: <code>=BINARIO.DECIMALE(B10)</code>. Salva come <code>convertitore-cognome.ods</code>.</li>
+    </ol>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> con 45 in B3 leggi <b>00101101</b> e <b>OK</b>. Con 101101 in B10 leggi <b>45</b>.</div>
+      <div class="card soft"><h4>Prova estrema</h4><p>Scrivi in B3 i numeri 0, 1, 128 e 255: B7 deve dire sempre OK.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Risultati attesi: 0 → 00000000; 1 → 00000001; 128 → 10000000; 255 → 11111111. Con 256 o più la tabella a 8 righe non basta: B5 mostra un risultato sbagliato, mentre B6 e B7 mostrano un codice di errore, perché il numero non sta in 8 cifre. È lo spunto per la slide successiva (controllo dell'input). Valutazione suggerita: tabella corretta, risultato corretto, verifica, ordine e formattazione (celle di input colorate, bordi). Consegna del file .ods su Classroom.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un passo in più · per la 3G e per chi finisce prima</p><h2>Proteggere l'input e passare alla base 16</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Input fuori intervallo</h3><p>In B5, invece della sola unione dei resti:</p><p class="mono small">=SE(B3&gt;255;"Max 255";F10&amp;…&amp;F3)</p><p class="small muted">Se il numero è troppo grande, il foglio avvisa invece di sbagliare.</p></div>
+    <div class="card"><h3>Esadecimale</h3>
+      <table class="data compact">
+        <tr><td class="mono">=DECIMALE.HEX(45)</td><td class="mono">2D</td></tr>
+        <tr><td class="mono">=HEX.DECIMALE("FF")</td><td class="mono">255</td></tr>
+        <tr><td class="mono">=BINARIO.HEX(11001000)</td><td class="mono">C8</td></tr>
+        <tr><td class="mono">=HEX.BINARIO("2D";8)</td><td class="mono">00101101</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout">Sfida: nella tabella delle divisioni metti <b>16</b> al posto di 2. Che valori possono avere i resti?</div>
+  <aside class="notes">Conti: 45 = 2·16 + 13 → 2D; 200 = 12·16 + 8 → C8 = 11001000; FF = 15·16 + 15 = 255. Nella sfida i resti vanno da 0 a 15: per scriverli come cifre esadecimali servono le lettere da A a F (10 = A ... 15 = F), quindi la semplice unione con &amp; non basta. Per la 3G: collegare a ogni cifra esadecimale = 4 bit (2D = 0010 1101).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>1 · Divisioni</h3><p class="muted">QUOZIENTE e RESTO; ogni riga parte dal quoziente di sopra.</p></div>
+    <div class="card"><h3>2 · Resti</h3><p class="muted">Si uniscono con &amp; dal basso verso l'alto: C11&amp;…&amp;C4.</p></div>
+    <div class="card"><h3>3 · Pesi</h3><p class="muted">POTENZA(2;posizione), bit per peso, poi SOMMA.</p></div>
+    <div class="card"><h3>4 · Verifica</h3><p class="muted">DECIMALE.BINARIO(n;8) e BINARIO.DECIMALE controllano i conti.</p></div>
+    <div class="card"><h3>5 · Limiti</h3><p class="muted">8 righe = 8 bit = numeri da 0 a 255.</p></div>
+    <div class="card"><h3>6 · Il metodo</h3><p class="muted">Prima capisci il procedimento a mano, poi lo automatizzi.</p></div>
+  </div>
+  <aside class="notes">Domande finali: quante righe servono per convertire 1000? (10, perché 2^10 = 1024). Perché nel convertitore il risultato in B5 è un testo? (è fatto con &amp;, e così tiene gli zeri iniziali). Consegna: convertitore-cognome.ods su Classroom.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

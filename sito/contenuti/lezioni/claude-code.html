@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">TPSI · Strumenti di sviluppo con l'intelligenza artificiale</p>
+  <h1>Claude Code</h1>
+  <p class="lead">Un assistente AI che non si limita a rispondere: legge il progetto, modifica i file ed esegue i comandi. Come funziona e come usarlo con giudizio.</p>
+  <aside class="notes">Aprire chiedendo: "chi ha già usato un chatbot per farsi aiutare con il codice? Cosa dovevate fare voi a mano dopo?". Obiettivo: capire la differenza tra chatbot e agente, saper scrivere una buona richiesta, saper controllare il codice generato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di partenza</p><h2>Da chi risponde a chi agisce</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Chatbot</h3>
+      <ul class="points">
+        <li>Vede solo ciò che incolli nella chat.</li>
+        <li>Ti suggerisce il codice.</li>
+        <li>Copi, incolli, compili e provi <b>tu</b>.</li>
+      </ul>
+    </div>
+    <div class="card fill"><h3>Agente</h3>
+      <ul class="points">
+        <li>Esplora da solo i file del progetto.</li>
+        <li>Modifica direttamente il codice.</li>
+        <li>Esegue compilazione e test, legge gli errori e corregge.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="lead">Un <b>agente</b> è un modello di linguaggio che può usare <mark>strumenti</mark> e decidere da solo il passo successivo.</p>
+  <aside class="notes">Sottolineare che il modello sottostante può essere lo stesso: cambia ciò che gli permettiamo di fare. Più potere significa anche più attenzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cos'è</p><h2>Claude Code in breve</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Strumento di programmazione <b>agentico</b> sviluppato da Anthropic.</li>
+      <li>Lavora dentro la cartella del tuo progetto.</li>
+      <li>Legge e scrive file, esegue comandi da terminale, usa <code>git</code>.</li>
+      <li>Si comanda in linguaggio naturale, anche in italiano.</li>
+      <li>Richiede un account Claude o una chiave API.</li>
+    </ul>
+    <div class="card soft"><h4>Dove si usa</h4>
+      <div class="chips"><span class="chip">Terminale</span><span class="chip">VS Code</span><span class="chip">JetBrains</span><span class="chip">App desktop</span><span class="chip">Browser</span></div>
+    </div>
+  </div>
+  <aside class="notes">Installazione (solo da mostrare, non far fare in classe senza account): da terminale, poi si entra nella cartella del progetto e si scrive "claude". Ricordare che servono un account e, per i minorenni, il rispetto dei termini d'uso del servizio e delle regole della scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come ragiona</p><h2>Il ciclo dell'agente</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Capisce</h3><p class="small">Legge la richiesta e i file utili del progetto.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Pianifica</h3><p class="small">Decide quali file cambiare e in che ordine.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Agisce</h3><p class="small">Modifica il codice ed esegue i comandi.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Verifica</h3><p class="small">Compila, lancia i test, legge gli errori.</p></div>
+  </div>
+  <div class="callout hl">Se la verifica fallisce, il ciclo <b>ricomincia</b>: è lo stesso modo di lavorare di un buon programmatore.</div>
+  <aside class="notes">Chiedere: "che cosa fate voi quando il compilatore vi dà un errore?". Leggere, capire, correggere, riprovare: l'agente automatizza questo giro. Senza test, il passo 4 è debole: ecco perché i test contano ancora di più.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un esempio</p><h2>Una richiesta, tanti passi</h2></div>
+  <pre class="code"><span class="c">$</span> claude
+<span class="hl">&gt; Il server della chat si blocca quando un client si disconnette.
+  Trova la causa, correggila e verifica con un test.</span>
+
+<span class="k">●</span> Leggo <span class="s">ServerChat.java</span> e <span class="s">GestoreClient.java</span>
+<span class="k">●</span> Causa: l'eccezione di <span class="s">readLine()</span> non viene gestita
+<span class="k">●</span> Modifico <span class="s">GestoreClient.java</span>   <span class="c">← chiede il permesso</span>
+<span class="k">●</span> Eseguo i test: <span class="s">3 superati, 0 falliti</span></pre>
+  <p class="muted small">Esempio illustrativo: l'aspetto reale dello schermo cambia con la versione del programma.</p>
+  <aside class="notes">Collegare al programma di TPSI: socket e server multi-thread. Far notare che la richiesta contiene il problema, l'obiettivo e il modo di verificarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi decide</p><h2>Tu resti al comando</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="icon">?</p><h3>Permessi</h3><p class="muted">Prima di modificare file o eseguire comandi chiede conferma. Puoi accettare, rifiutare o correggere la rotta.</p></div>
+    <div class="card"><p class="icon">≡</p><h3>Modalità piano</h3><p class="muted">Con <b>Maiusc + Tab</b> si passa alla modalità piano: l'agente analizza e propone, senza toccare nulla.</p></div>
+    <div class="card"><p class="icon">■</p><h3>Interruzione</h3><p class="muted">Con <b>Esc</b> lo fermi in qualsiasi momento e gli dai nuove indicazioni.</p></div>
+  </div>
+  <div class="callout">Buona abitudine: chiedi prima il <b>piano</b>, leggilo, e solo dopo lascia che scriva il codice.</div>
+  <aside class="notes">Le modalità di permesso si scorrono con Maiusc+Tab (normale, accetta modifiche, piano). Insistere sul fatto che "accetta tutto" senza leggere è il modo più rapido per perdere il controllo del proprio progetto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Scrivi una buona richiesta</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Questa richiesta è troppo vaga: <b>"sistema il login del sito"</b>.</p>
+      <p>Apri un editor di testo e riscrivila in un file <code>richiesta.txt</code> con quattro parti:</p>
+      <ol class="steps">
+        <li><b>Contesto</b>: che progetto è, quali file.</li>
+        <li><b>Problema</b>: cosa succede ora.</li>
+        <li><b>Obiettivo</b>: cosa deve succedere.</li>
+        <li><b>Verifica</b>: come capire che funziona.</li>
+      </ol>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Suggerimento</h4><p>Immagina di scrivere a un collega bravo che non ha mai visto il tuo progetto.</p></div>
+      <div class="check"><b>Controllo:</b> scambia il file con il compagno. Riesce a capire cosa fare senza farti domande?</div>
+    </div>
+  </div>
+  <aside class="notes">Esempio di soluzione: "Progetto: sito PHP della biblioteca, file login.php e db.php. Problema: con password corretta compare 'credenziali errate'. Obiettivo: login riuscito con utente e password validi, errore con password sbagliata. Verifica: provare entrambi i casi con l'utente di prova e mostrare l'esito." Discutere 2-3 richieste alla lavagna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La memoria del progetto</p><h2>Il file CLAUDE.md</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Un file di testo nella cartella del progetto che l'agente <b>legge all'inizio di ogni sessione</b>.</p>
+      <ul class="points">
+        <li>Come si compila e come si lanciano i test.</li>
+        <li>Regole di stile del codice.</li>
+        <li>Cose da non fare.</li>
+      </ul>
+      <p class="muted small">Il comando <code>/init</code> ne crea una prima versione analizzando il progetto.</p>
+    </div>
+    <pre class="code"><span class="hl"># Chat TCP in Java</span>
+
+<span class="k">## Comandi</span>
+- Compila: <span class="s">javac -d out src/*.java</span>
+- Server:  <span class="s">java -cp out ServerChat</span>
+
+<span class="k">## Regole</span>
+- Nomi di classi e metodi in italiano
+- Porta di default: 5000
+- Non modificare Protocollo.java</pre>
+  </div>
+  <aside class="notes">Paragone: è il foglio che lasceresti a un supplente. Il file usa il formato Markdown: # per i titoli, - per gli elenchi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il CLAUDE.md del tuo progetto</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Scegli un progetto che hai già sviluppato in TPSI (ad esempio il client/server con i socket). Nella sua cartella crea il file <code>CLAUDE.md</code> con:</p>
+      <ul class="points">
+        <li>una riga che descrive il progetto;</li>
+        <li>i comandi esatti per compilare ed eseguire;</li>
+        <li>almeno tre regole del progetto;</li>
+        <li>almeno una cosa da <b>non</b> fare.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Prova sul campo</h4><p>Apri un terminale nuovo e copia i tuoi comandi uno a uno: devono funzionare così come sono scritti.</p></div>
+      <div class="check"><b>Controllo:</b> un compagno, leggendo solo il tuo file, riesce a compilare e avviare il progetto.</div>
+    </div>
+  </div>
+  <aside class="notes">Il file è utile anche senza AI: è documentazione per chi riprende il progetto. Raccogliere i file su Classroom; valutare chiarezza e correttezza dei comandi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Comandi da conoscere</p><h2>Scorciatoie della sessione</h2></div>
+  <table class="data">
+    <tr><th>Comando</th><th>A cosa serve</th></tr>
+    <tr><td class="mono">/init</td><td>Crea un primo <code>CLAUDE.md</code> dal progetto</td></tr>
+    <tr><td class="mono">/clear</td><td>Ricomincia da zero, dimenticando la conversazione</td></tr>
+    <tr><td class="mono">/compact</td><td>Riassume la conversazione per liberare spazio</td></tr>
+    <tr><td class="mono">/help</td><td>Elenca tutti i comandi disponibili</td></tr>
+    <tr><td class="mono">Maiusc + Tab</td><td>Cambia modalità di permesso, compresa la modalità piano</td></tr>
+    <tr><td class="mono">Esc</td><td>Interrompe l'agente</td></tr>
+  </table>
+  <aside class="notes">Spiegare il "contesto": il modello ha una memoria di lavoro limitata. Quando si cambia argomento conviene /clear; nelle sessioni lunghe /compact.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oltre le basi</p><h2>Si può estendere</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">MCP</p><h3>Strumenti esterni</h3><p class="small">Il Model Context Protocol è uno standard aperto per collegare l'agente a database, GitHub, documentazione e altri servizi.</p></div>
+    <div class="card soft"><p class="num">Sub</p><h3>Subagenti</h3><p class="small">Agenti specializzati a cui delegare un compito, ad esempio cercare nel codice o fare una revisione.</p></div>
+    <div class="card soft"><p class="num">Hook</p><h3>Automatismi</h3><p class="small">Comandi che partono da soli in certi momenti, ad esempio formattare il codice dopo ogni modifica.</p></div>
+  </div>
+  <p class="lead">Idea chiave: l'agente diventa più utile quanto più <mark>contesto e strumenti</mark> gli dai.</p>
+  <aside class="notes">Solo panoramica. Collegamento con i sistemi distribuiti: MCP funziona con un modello client-server, l'agente è il client e ogni servizio collegato espone strumenti come server.</aside>
+</section>
+
+<section class="slide statement accent">
+  <p class="kicker">Ricordatelo sempre</p>
+  <h2>L'AI scrive il codice.<br>La responsabilità resta tua.</h2>
+  <aside class="notes">Il codice consegnato porta il vostro nome: dovete saperlo spiegare riga per riga. All'interrogazione o all'esame nessun agente vi aiuta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Revisiona il codice generato</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un agente ha scritto questo metodo per calcolare la media dei voti. Copialo in un progetto Java e provalo con <code>{6, 7, 8}</code>.</p>
+      <pre class="code"><span class="k">public static double</span> media(<span class="k">int</span>[] voti) {
+    <span class="k">int</span> somma = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt; voti.length; i++) {
+        somma += voti[i];
+    }
+    <span class="k">return</span> somma / voti.length;
+}</pre>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Consegna</h4><p>Trova gli errori, correggili e scrivi in un commento perché erano sbagliati.</p></div>
+      <div class="check"><b>Controllo:</b> ci sono almeno due errori. Corretto, il metodo restituisce <b>7.0</b>; com'è ora restituisce 5.0.</div>
+    </div>
+  </div>
+  <aside class="notes">Errori: 1) il ciclo parte da 1 e salta il primo voto; 2) somma / voti.length è una divisione intera, serve (double) somma / voti.length. Bonus: con array vuoto la divisione intera lancia ArithmeticException; gestire il caso. Con gli errori: somma = 15, 15 / 3 = 5, restituito come 5.0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Usarlo bene</p><h2>Buone pratiche e rischi</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Da fare</h3>
+      <ul class="points">
+        <li>Usa <code>git</code> e fai commit spesso: puoi sempre tornare indietro.</li>
+        <li>Chiedi il piano prima del codice.</li>
+        <li>Leggi ogni modifica e lancia i test.</li>
+      </ul>
+    </div>
+    <div class="card bad"><h3>Da evitare</h3>
+      <ul class="points">
+        <li>Inserire password, chiavi o dati personali.</li>
+        <li>Accettare comandi che non capisci.</li>
+        <li>Consegnare codice che non sai spiegare.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Collegare alla sicurezza: i file .env con le chiavi non vanno mai condivisi. Ricordare il regolamento della scuola sull'uso dell'AI nelle verifiche.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le tre cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Agente</h3><p class="muted">Capisce, pianifica, agisce e verifica dentro il tuo progetto.</p></div>
+    <div class="card"><p class="num">2</p><h3>Contesto</h3><p class="muted">Richieste precise e un buon <code>CLAUDE.md</code> fanno la differenza.</p></div>
+    <div class="card"><p class="num">3</p><h3>Controllo</h3><p class="muted">Permessi, piano, revisione e test: il responsabile sei tu.</p></div>
+  </div>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

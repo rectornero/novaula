@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Competenze digitali di base · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Cittadinanza digitale</p>
+  <h1>Competenze digitali<br>di base</h1>
+  <p class="lead">File ordinati, password sicure, email scritte bene, cloud e privacy: gli attrezzi per lavorare al computer per tutto l'anno.</p>
+  <aside class="notes">Aprire chiedendo: "Avete mai perso un file o non trovato più un compito?". Obiettivo: alla fine della lezione ognuno ha la propria struttura di cartelle, sa riconoscere le estensioni, sa scrivere un'email al docente con allegato e sa condividere un file da Drive. Lezione pensata per 2-3 ore, con 4 esercizi al computer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le basi</p><h2>File e cartelle</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card soft"><h3>File</h3><p>Un documento salvato: un testo, una foto, una canzone, un programma. Ha un <b>nome</b> e un <b>tipo</b>.</p></div>
+      <div class="card soft"><h3>Cartella</h3><p>Un contenitore che raccoglie file e altre cartelle, come un raccoglitore con dei divisori.</p></div>
+    </div>
+    <div class="stack">
+<pre class="code">Documenti
+└─ Scuola
+   ├─ Italiano
+   ├─ Matematica
+   └─ Informatica
+      └─ <span class="hl">relazione.odt</span></pre>
+      <p class="small muted">Il <b>percorso</b> dice dove si trova un file: <code>Documenti\Scuola\Informatica</code></p>
+      <div class="callout hl small">Regola d'oro: ogni file ha <b>un solo posto</b>, e sai qual è.</div>
+    </div>
+  </div>
+  <aside class="notes">Far notare la struttura ad albero: ogni cartella può contenere altre cartelle. Domanda: "Dove salvate di solito i file? Sul Desktop?". Spiegare che il Desktop pieno di file rallenta la ricerca e non è un archivio. In Windows le parti del percorso sono separate dalla barra rovesciata \.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cognome del file</p><h2>L'estensione dice che tipo di file è</h2></div>
+  <p>Dopo il punto finale nel nome: <code>tema<b>.odt</b></code>. Windows la usa per scegliere il programma che apre il file.</p>
+  <table class="data compact">
+    <tr><th>Estensione</th><th>Tipo di file</th><th>Si apre con</th></tr>
+    <tr><td class="mono">.odt  .docx</td><td>Documento di testo</td><td>LibreOffice Writer, Word</td></tr>
+    <tr><td class="mono">.ods  .xlsx</td><td>Foglio di calcolo</td><td>LibreOffice Calc, Excel</td></tr>
+    <tr><td class="mono">.pdf</td><td>Documento da leggere o stampare</td><td>Browser, lettore PDF</td></tr>
+    <tr><td class="mono">.jpg  .png</td><td>Immagine</td><td>Foto, editor di immagini</td></tr>
+    <tr><td class="mono">.mp3  .mp4</td><td>Audio, video</td><td>Lettore multimediale</td></tr>
+    <tr><td class="mono">.zip</td><td>Archivio compresso</td><td>Esplora file</td></tr>
+  </table>
+  <aside class="notes">Spiegare che l'estensione non cambia il contenuto: rinominare foto.jpg in foto.pdf non la trasforma in un PDF, la rende solo illeggibile al programma sbagliato. Citare anche .exe: è un programma, attenzione a quelli ricevuti per email. Windows di solito nasconde le estensioni: nel prossimo esercizio le rendiamo visibili.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: le cartelle della scuola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Esplora file</b> (tasti <code>Win + E</code>) e vai in <b>Documenti</b>.</li>
+      <li>Crea la cartella <b>Scuola</b> (tasto destro &gt; Nuovo &gt; Cartella).</li>
+      <li>Dentro <b>Scuola</b> crea una cartella per ogni materia: Italiano, Matematica, Inglese, Informatica, Storia…</li>
+      <li>Mostra le estensioni: menu <b>Visualizza</b> &gt; <b>Mostra</b> &gt; <b>Estensioni nomi file</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Windows 10</h4><p>Scheda <b>Visualizza</b>, spunta la casella <b>Estensioni nomi file</b>.</p></div>
+      <div class="check"><b>Controllo:</b> nella barra in alto leggi <code>Documenti &gt; Scuola</code> e vedi almeno 6 cartelle-materia.</div>
+    </div>
+  </div>
+  <aside class="notes">Se i profili dei PC del laboratorio si azzerano allo spegnimento, far creare la struttura su una chiavetta o in Google Drive (la ritroveremo più avanti). Scorciatoia per una nuova cartella: Ctrl + Maiusc + N. Controllare che tutti abbiano attivato le estensioni: serve per il prossimo esercizio. Domanda: "Che estensione hanno i file che vedete in Download?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Organizzarsi</p><h2>Un nome che si capisce anche fra un mese</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Così no</h3>
+      <p class="mono small">documento1.docx<br>tema FINALE (2) def.docx<br>Senza titolo.png</p>
+      <p class="small">Non dicono cosa contengono, né di chi sono, né quando sono stati fatti.</p>
+    </div>
+    <div class="card ok"><h3>Così sì</h3>
+      <p class="mono small">2026-10-12_informatica_<br>rossi_relazione.odt</p>
+      <p class="small">Data, materia, cognome, contenuto. La data scritta <b>anno-mese-giorno</b> mette i file in ordine da sola.</p>
+    </div>
+  </div>
+  <ul class="points small">
+    <li>Niente caratteri vietati: <code>\ / : * ? " &lt; &gt; |</code></li>
+    <li>Una versione sola: aggiorna il file, non creare "finale2", "finale3"…</li>
+  </ul>
+  <aside class="notes">Far provare a ordinare per nome tre file con date scritte in modo diverso (12-10-2026, 3-11-2026…) e vedere che solo il formato AAAA-MM-GG si ordina bene. Lo spazio nel nome è permesso, ma il trattino basso evita problemi quando il file viaggia sul web.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: crea, rinomina, sposta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Blocco note</b>, scrivi tre cose che hai imparato oggi e salva in <b>Documenti</b> come <code>appunti.txt</code>.</li>
+      <li>In Esplora file seleziona il file, premi <code>F2</code> e rinominalo come nell'esempio qui a destra.</li>
+      <li>Spostalo in <b>Scuola\Informatica</b>: <code>Ctrl + X</code>, apri la cartella, <code>Ctrl + V</code>.</li>
+      <li>Fai una copia in <b>Scuola\Italiano</b> con <code>Ctrl + C</code> e <code>Ctrl + V</code>, poi eliminala.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Nome nuovo</h4><p class="mono small">2026-10-12_informatica_<br>rossi_appunti.txt</p><p class="tiny muted">Con la data di oggi e il tuo cognome. Non cancellare il <b>.txt</b> finale.</p></div>
+      <div class="check"><b>Controllo:</b> in Documenti il file non c'è più; in Scuola\Informatica c'è, con la data davanti.</div>
+    </div>
+  </div>
+  <aside class="notes">Differenza da far emergere: Taglia + Incolla sposta (il file sparisce dall'origine), Copia + Incolla duplica. Se uno studente cancella l'estensione, Windows chiede conferma: far vedere il messaggio e annullare. Il file eliminato va nel Cestino e si può ripristinare. Questo file servirà come allegato dell'email.</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">Account e password</p>
+  <h2>Il tuo account è la tua identità digitale: chi ha la password <mark>è te</mark>.</h2>
+  <aside class="notes">Chiedere: "Che cosa potrebbe fare qualcuno che entra nel vostro account della scuola? E in quello dei social?". Risposte attese: leggere i messaggi, scrivere a nome vostro, cancellare compiti, pubblicare foto. Da qui la necessità di password robuste.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Password sicure</p><h2>Lunga, unica, segreta</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Almeno <b>12 caratteri</b>: la lunghezza conta più dei simboli.</li>
+      <li>Una password <b>diversa</b> per ogni account importante.</li>
+      <li>Niente nome, data di nascita, squadra del cuore.</li>
+      <li>Non si presta, nemmeno all'amico del cuore.</li>
+      <li>Nessun servizio serio te la chiede per email o messaggio.</li>
+    </ul>
+    <div class="stack">
+      <div class="card bad"><h4>Debole</h4><p class="mono">marco2012</p></div>
+      <div class="card ok"><h4>Robusta e facile da ricordare</h4><p class="mono small">Pizza-Viola-Salta-sul-Treno-38</p><p class="tiny muted">Una frase strana di più parole (non usare questa!)</p></div>
+    </div>
+  </div>
+  <aside class="notes">Spiegare la passphrase: quattro o cinque parole a caso, unite da trattini, sono lunghe e si ricordano. Il riuso è il rischio più grande: se un sito viene violato, chi ruba la password la prova anche sugli altri account. Si può citare il gestore di password (es. quello del browser) per non doverle ricordare tutte. Messaggi che chiedono la password o di "verificare l'account" con un link sono phishing.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un lucchetto in più</p><h2>La verifica in due passaggi</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Password</h3><p>Una cosa che <b>sai</b>.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Codice o conferma</h3><p>Sul telefono: una cosa che <b>hai</b>.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">ok</p><h3>Accesso</h3><p>Solo con tutte e due.</p></div>
+  </div>
+  <p class="lead">Anche se qualcuno scopre la password, senza il tuo telefono <b>non entra</b>. Su Google si chiama <b>Verifica in due passaggi</b>.</p>
+  <div class="callout hl">Ti arriva un codice che <b>non hai chiesto</b>? Qualcuno sta provando a entrare: non confermare e cambia subito la password.</div>
+  <aside class="notes">Detta anche autenticazione a due fattori (2FA). Il secondo fattore può essere un SMS, un'app di autenticazione o una notifica "Sei tu?" sul telefono. Regola d'oro: se arriva un codice o una notifica che non avete chiesto voi, qualcuno sta provando a entrare: non confermare e cambiare la password. Per gli account della scuola l'attivazione dipende dalle regole dell'istituto; consigliarla per gli account personali (email, social, giochi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Email</p><h2>Com'è fatta un'email scritta bene</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="card">
+      <p class="small"><b>A:</b> <span class="muted">indirizzo del docente</span></p>
+      <p class="small"><b>Oggetto:</b> 1D · Rossi Marco · Appunti di informatica</p>
+      <p class="small">Gentile professoressa,<br>le invio in allegato gli appunti della lezione di oggi.<br>Cordiali saluti,<br>Marco Rossi, classe 1D</p>
+      <p class="chip" style="align-self:flex-start">2026-10-12_informatica_rossi_appunti.txt</p>
+    </div>
+    <ul class="points small">
+      <li><b>Oggetto</b> chiaro: classe, nome, argomento.</li>
+      <li><b>Saluto</b>: "Gentile professore / professoressa", non "Ciao" o "Ehi".</li>
+      <li><b>Testo</b> breve: cosa mandi e perché.</li>
+      <li><b>Firma</b> con nome, cognome e classe.</li>
+      <li><b>Allegato</b>: controlla che ci sia davvero.</li>
+    </ul>
+  </div>
+  <div class="callout hl">Rileggi <b>prima</b> di premere Invia: dopo pochi secondi l'email non si può più ritirare.</div>
+  <aside class="notes">Far notare il registro formale con il "lei". Errori tipici: oggetto vuoto, email senza testo con solo l'allegato, "ho allegato il file" e poi il file manca. Usare sempre l'indirizzo della scuola, non quello personale. Spiegare anche Cc (copia per conoscenza) se qualcuno lo chiede.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: email al docente con allegato</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Accedi a <b>Gmail</b> con l'account della scuola e premi <b>Scrivi</b>.</li>
+      <li>In <b>A</b> metti l'indirizzo che il docente scrive alla lavagna.</li>
+      <li>Oggetto: <code>classe · Cognome Nome · Esercizio email</code></li>
+      <li>Scrivi saluto, due righe di testo, chiusura e firma.</li>
+      <li>Allega il file degli appunti con la graffetta e premi <b>Invia</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Prima di inviare</h4><p class="small">Rileggi: oggetto, "Gentile…", firma, allegato. Mancano? Correggi.</p></div>
+      <div class="check"><b>Controllo:</b> in <b>Posta inviata</b> la tua email ha l'oggetto giusto e il simbolo della graffetta.</div>
+    </div>
+  </div>
+  <aside class="notes">Il docente proietta la casella di arrivo e commenta insieme due o tre email (con il permesso degli autori): cosa funziona e cosa no. Il file si trova in Documenti\Scuola\Informatica: è un buon modo per verificare che sappiano ritrovarlo. Chi finisce prima risponde a un'email del docente usando "Rispondi" e non "Scrivi".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cloud</p><h2>I tuoi file su un computer lontano</h2></div>
+  <p class="lead">Il <b>cloud</b> è spazio su server su internet. <b>Google Drive</b> è il cloud del tuo account della scuola.</p>
+  <div class="cols-3">
+    <div class="card ok"><h3>Ovunque</h3><p class="small">Apri i file da scuola, da casa e dal telefono.</p></div>
+    <div class="card ok"><h3>Condivisione</h3><p class="small">Dai l'accesso a chi vuoi: <b>Visualizzatore</b>, <b>Commentatore</b> o <b>Editor</b>.</p></div>
+    <div class="card bad"><h3>Attenzione</h3><p class="small">Serve internet, e un link condiviso male fa vedere il file a persone sbagliate.</p></div>
+  </div>
+  <div class="callout small"><b>Il mio Drive</b>: i file che hai creato o caricato tu. <b>Condivisi con me</b>: i file che altri hanno condiviso con te.</div>
+  <aside class="notes">"Il cloud è il computer di qualcun altro": i file stanno nei server di Google. In Drive: "Il mio Drive" contiene i propri file, "Condivisi con me" quelli degli altri. Spiegare i tre livelli: Visualizzatore legge, Commentatore lascia commenti, Editor modifica. Evitare "Chiunque abbia il link" per i lavori personali.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: carica e condividi in Drive</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Google Drive</b> con l'account della scuola.</li>
+      <li><b>+ Nuovo</b> &gt; <b>Nuova cartella</b>: chiamala <code>Informatica classe</code>.</li>
+      <li>Aprila e trascina dentro il file degli appunti dal computer.</li>
+      <li>Tasto destro sul file &gt; <b>Condividi</b>: aggiungi un compagno come <b>Visualizzatore</b>.</li>
+      <li>Dopo la prova, cambia il ruolo del compagno in <b>Editor</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Scambio</h4><p class="small">Il compagno controlla in <b>Condivisi con me</b> e prova a modificare il file.</p></div>
+      <div class="check"><b>Controllo:</b> da Visualizzatore il compagno <b>non</b> può modificare il file; da Editor sì.</div>
+    </div>
+  </div>
+  <aside class="notes">Il passo 5 fa vedere la differenza tra i ruoli: da Editor il compagno può scrivere nel file. Mostrare dove si toglie l'accesso (stessa finestra Condividi). Chi ha la struttura Scuola sul PC può caricare l'intera cartella con + Nuovo &gt; Caricamento cartella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Comportamento online</p><h2>Privacy: quello che metti in rete resta</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>I tuoi dati</h3>
+      <ul class="points small">
+        <li>Indirizzo, telefono, scuola, posizione: <b>non</b> in pubblico.</li>
+        <li>Profili social: imposta chi può vederli.</li>
+        <li>Esci dall'account sui computer condivisi.</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Gli altri</h3>
+      <ul class="points small">
+        <li>Foto e video di altri solo <b>con il loro permesso</b>.</li>
+        <li>Scrivi come se parlassi di persona.</li>
+        <li>Prese in giro e offese online sono <b>cyberbullismo</b>: parlane con un adulto.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout small">Un post si può cancellare, ma qualcuno può averne già fatto uno screenshot.</div>
+  <aside class="notes">In Italia dai 14 anni si può dare da soli il consenso al trattamento dei propri dati per i servizi online: è un'occasione per parlare di responsabilità. Ricordare di fare "Esci" (logout) dall'account Google sui PC del laboratorio a fine lezione. Indicare il referente per il cyberbullismo della scuola.</aside>
+</section>
+
+<section class="slide accent center">
+  <p class="kicker">Prima di pubblicare o inviare</p>
+  <h2>Tre domande</h2>
+  <div class="cols-3">
+    <div class="card night"><p class="num">1</p><p>Mi andrebbe bene se lo vedessero i miei genitori o un insegnante?</p></div>
+    <div class="card night"><p class="num">2</p><p>Sto mostrando qualcuno che non mi ha dato il permesso?</p></div>
+    <div class="card night"><p class="num">3</p><p>Lo pubblicherei anche fra cinque anni?</p></div>
+  </div>
+  <aside class="notes">Far discutere a coppie un caso concreto: "Un compagno ti manda una foto buffa di un altro compagno e ti chiede di girarla nel gruppo della classe. Che cosa fai?". Raccogliere le risposte e collegarle alle tre domande.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Ordine</h3><p class="muted small">Cartelle per materia, nomi con data AAAA-MM-GG, estensioni visibili.</p></div>
+    <div class="card"><p class="num">2</p><h3>Sicurezza</h3><p class="muted small">Password lunga e unica, verifica in due passaggi, mai la password a nessuno.</p></div>
+    <div class="card"><p class="num">3</p><h3>Comunicare</h3><p class="muted small">Email con oggetto, saluto, firma e allegato; in rete rispetto per sé e per gli altri.</p></div>
+  </div>
+  <p class="lead">Domanda per te: che cosa succede se rinomini <code>foto.jpg</code> in <code>foto.txt</code>?</p>
+  <aside class="notes">Domande di uscita: "Che cosa succede se rinomino foto.jpg in foto.txt?", "Che differenza c'è tra Taglia e Copia?", "Perché la verifica in due passaggi protegge anche se ti rubano la password?". Ricordare a tutti di uscire dall'account Google.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

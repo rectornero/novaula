@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'intelligenza artificiale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 2 · Basi di intelligenza artificiale</p>
+  <h1>L'intelligenza<br>artificiale</h1>
+  <p class="lead">Come fa una macchina a riconoscere un volto, un disegno o una voce? Non legge regole scritte da qualcuno: impara dagli esempi.</p>
+  <aside class="notes">Obiettivi: capire la differenza tra programmare e addestrare; distinguere AI, machine learning e deep learning; costruire a mano un neurone artificiale; provare due strumenti che riconoscono immagini; riflettere su privacy, copyright ed errori dell'AI. Durata indicativa: 3 ore (si può dividere dopo il lab del neurone). Collega la lezione Quick, Draw! della UDA 1 (tecnologia-informazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quante volte hai usato un'intelligenza artificiale ieri?</h2></div>
+  <div class="poll" data-id="ia-ieri">
+    <ol><li>Mai</li><li>Da 1 a 5 volte</li><li>Più di 5 volte</li><li>Non saprei proprio dirlo</li></ol>
+  </div>
+  <p class="muted small">Pensaci bene prima di votare: l'AI spesso lavora senza farsi vedere.</p>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto, far emergere gli usi nascosti: i video suggeriti su YouTube o TikTok, lo sblocco del telefono con il volto, il filtro antispam, la tastiera che suggerisce la parola, le foto migliorate dalla fotocamera, la navigazione con il traffico. Di solito chi ha risposto "Mai" cambia idea: è il messaggio della lezione. La risposta D è la più onesta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il computer che imita l'uomo</p><h2>1956: nasce un nome</h2></div>
+  <figure class="citazione">
+    <blockquote>Ogni aspetto dell'apprendimento, o qualsiasi altra caratteristica dell'intelligenza, può in linea di principio essere descritto in modo così preciso da costruire una macchina che lo simuli.</blockquote>
+    <figcaption><b>John McCarthy, Marvin Minsky, Nathaniel Rochester e Claude Shannon</b>, proposta per il seminario estivo di Dartmouth, 1955</figcaption>
+  </figure>
+  <p class="callout">In quella proposta compare per la prima volta l'espressione <b>intelligenza artificiale</b>. Sei anni prima Alan Turing si era chiesto: <i>«Le macchine possono pensare?»</i></p>
+  <aside class="notes">Traduzione nostra dall'inglese. Fonte: "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence", 31 agosto 1955; il seminario si tenne a Dartmouth (USA) nell'estate del 1956. Claude Shannon è il padre della teoria dell'informazione, collegare al bit della UDA 1. La domanda di Turing è la prima frase dell'articolo "Computing Machinery and Intelligence" (1950), dove propone il "gioco dell'imitazione", oggi detto test di Turing: se in una chat non riesci a capire se parli con una persona o con una macchina, la macchina supera il test. Chiedere: secondo voi un chatbot di oggi lo supera? Ci torniamo nella lezione sui chatbot.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-ia">
+    <li>Alan Turing propone il "gioco dell'imitazione"</li>
+    <li>Al seminario di Dartmouth nasce il nome "intelligenza artificiale"</li>
+    <li>Frank Rosenblatt presenta il Perceptron, una rete neurale elementare</li>
+    <li>Il computer Deep Blue di IBM batte il campione di scacchi Garry Kasparov</li>
+    <li>Una rete neurale profonda stravince la gara di riconoscimento di ImageNet</li>
+    <li>AlphaGo batte il campione di Go Lee Sedol</li>
+    <li>Geoffrey Hinton e John Hopfield vincono il Nobel per la fisica</li>
+  </ol>
+  <aside class="notes">Date: Turing 1950; Dartmouth 1956; Perceptron 1958 (Cornell, finanziato dalla marina USA); Deep Blue 1997; AlexNet vince ImageNet 2012 (Krizhevsky, Sutskever e Hinton); AlphaGo 4 a 1 contro Lee Sedol, marzo 2016; Nobel per la fisica 2024 "per le scoperte che permettono il machine learning con reti neurali artificiali". Il tranello: le reti neurali sembrano una novità, invece il Perceptron arriva quasi 40 anni prima di Deep Blue. Deep Blue non imparava: calcolava milioni di mosse con regole scritte da esperti. AlphaGo invece ha imparato anche giocando contro se stesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Machine learning</p><h2>Programmare o insegnare?</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Programmazione classica</h3>
+      <p class="formula" style="font-size:40px;padding:24px 32px">regole + dati<br>→ <span class="hl">risposte</span></p>
+      <p class="muted">Il programmatore scrive: «se la mail contiene <i>HAI VINTO</i>, è spam». Ma lo spammer scrive <i>H4I V1NTO</i> e la regola salta.</p>
+    </div>
+    <div class="card soft">
+      <h3>Machine learning</h3>
+      <p class="formula" style="font-size:40px;padding:24px 32px">dati + risposte<br>→ <span class="hl">regole</span></p>
+      <p>Dai al programma migliaia di mail già etichettate «spam» o «non spam»: le regole le trova da solo. Il risultato si chiama <b>modello</b>.</p>
+    </div>
+  </div>
+  <div class="callout">Dentro un modello non ci sono frasi come «se… allora»: ci sono migliaia, a volte miliardi, di <b>numeri</b> regolati durante l'addestramento.</div>
+  <aside class="notes">Il concetto chiave della lezione. Nel machine learning le "regole" non sono frasi leggibili ma migliaia o miliardi di numeri (i pesi) regolati durante l'addestramento. Chiedere: quando premete "segnala come spam" in Gmail, chi state aiutando? (State etichettando un esempio.) Questo schema è reso famoso dal libro di François Chollet "Deep Learning with Python".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa vuol dire che un modello è stato «addestrato»?</h2></div>
+  <div class="poll" data-id="addestrato" data-tipo="quiz" data-risposta="B">
+    <ol>
+      <li>Un programmatore ha scritto a mano tutte le sue regole</li>
+      <li>Ha regolato i suoi numeri interni guardando moltissimi esempi</li>
+      <li>Ha imparato a capire il mondo come lo capisce una persona</li>
+      <li>È collegato a internet e cerca lì ogni risposta</li>
+    </ol>
+    <p class="why">Addestrare significa correggere poco alla volta i numeri interni del modello (i pesi) finché sbaglia il meno possibile sugli esempi. Non c'è comprensione umana e non serve internet: un modello addestrato può funzionare anche offline.</p>
+  </div>
+  <aside class="notes">C e D sono i fraintendimenti più comuni. La C attribuisce all'AI una comprensione umana; la D confonde il modello con un motore di ricerca. Esempio da citare: la tastiera del telefono suggerisce le parole anche in modalità aereo. Chiedere a chi ha scelto C di spiegare perché: buona occasione per discutere il verbo "capire".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">AI, machine learning, deep learning</p><h2>Una scatola dentro l'altra</h2></div>
+  <div class="cols-2" style="align-items:center">
+    <svg viewBox="0 0 760 520" width="760" height="520" role="img" aria-label="Tre insiemi uno dentro l'altro: intelligenza artificiale, machine learning, deep learning">
+      <rect x="4" y="4" width="752" height="512" rx="60" fill="#eee4fb" stroke="#7e45cc" stroke-width="4"/>
+      <rect x="110" y="120" width="620" height="370" rx="50" fill="#d9c4f5" stroke="#7e45cc" stroke-width="4"/>
+      <rect x="230" y="250" width="470" height="210" rx="40" fill="#7e45cc"/>
+      <text x="40" y="72" font-family="Bricolage Grotesque, sans-serif" font-size="40" font-weight="700" fill="#172033">Intelligenza artificiale</text>
+      <text x="146" y="184" font-family="Bricolage Grotesque, sans-serif" font-size="40" font-weight="700" fill="#172033">Machine learning</text>
+      <text x="266" y="330" font-family="Bricolage Grotesque, sans-serif" font-size="40" font-weight="700" fill="#ffffff">Deep learning</text>
+      <text x="266" y="385" font-family="DM Sans, sans-serif" font-size="28" fill="#ffffff">reti neurali con</text>
+      <text x="266" y="420" font-family="DM Sans, sans-serif" font-size="28" fill="#ffffff">molti strati</text>
+    </svg>
+    <ul class="points">
+      <li><b>AI</b>: ogni macchina che svolge compiti "intelligenti", anche con regole scritte a mano</li>
+      <li><b>Machine learning</b>: l'AI che impara dagli esempi</li>
+      <li><b>Deep learning</b>: machine learning con <b>reti neurali</b> fatte di molti strati di neuroni artificiali</li>
+    </ul>
+  </div>
+  <aside class="notes">Ogni deep learning è machine learning, ogni machine learning è AI, ma non il contrario. Esempio: Deep Blue (1997) è AI ma non machine learning; il filtro antispam statistico è machine learning ma non per forza deep; il riconoscimento dei volti nel telefono è deep learning. In una rete per le immagini i primi strati riconoscono bordi e macchie di colore, quelli intermedi forme e parti (un occhio, una ruota), gli ultimi oggetti interi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Reti neurali</p><h2>Un neurone artificiale fa solo tre cose</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps">
+        <li>Riceve degli <b>ingressi</b> (qui 0 = no, 1 = sì)</li>
+        <li>Moltiplica ognuno per il suo <b>peso</b> e somma tutto</li>
+        <li>Se la somma raggiunge la <b>soglia</b>, risponde 1</li>
+      </ol>
+      <p class="formula" style="font-size:44px"><small>Vado al campetto? Soglia 5</small>1·2 + 1·3 + 0·4 = <span class="hl">5</span> → sì!</p>
+    </div>
+    <table class="data compact" style="align-self:start">
+      <tr><th>Ingresso</th><th>Valore</th><th>Peso</th></tr>
+      <tr><td>C'è il sole</td><td class="mono">1</td><td class="mono">2</td></tr>
+      <tr><td>Vengono gli amici</td><td class="mono">1</td><td class="mono">3</td></tr>
+      <tr><td>Ho finito i compiti</td><td class="mono">0</td><td class="mono">4</td></tr>
+    </table>
+  </div>
+  <div class="callout hl"><b>Addestrare</b> la rete vuol dire cambiare i pesi finché le sue risposte coincidono con quelle degli esempi.</div>
+  <aside class="notes">Questo è il Perceptron di Rosenblatt (1958) semplificato. I pesi dicono quanto conta ogni ingresso: qui i compiti finiti contano più del sole. Addestrare la rete significa cambiare i pesi (e la soglia) finché le risposte coincidono con gli esempi. Una rete neurale moderna ha milioni o miliardi di questi neuroni collegati a strati. Chiedere: se ho finito i compiti ma non c'è nessuno, vado? (0·2 + 0·3 + 1·4 = 4, sotto la soglia: no.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Costruisci il tuo neurone in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1, B1, C1 scrivi <b>Ingresso</b>, <b>Valore</b>, <b>Peso</b>.</li>
+      <li>Copia la tabella della slide precedente nelle righe da 2 a 4.</li>
+      <li>In B6 scrivi <code>=B2*C2+B3*C3+B4*C4</code>: è la somma pesata.</li>
+      <li>In B7 scrivi <code>=SE(B6&gt;=5;"Vado";"Resto a casa")</code>.</li>
+      <li>Prova altre combinazioni di 0 e 1 e salva come <b>neurone.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 1, 1, 0 ottieni 5 e "Vado". Con 0, 0, 1 ottieni 4 e "Resto a casa". Con 0, 1, 1 ottieni 7 e "Vado".</div>
+  </div>
+  <aside class="notes">Estensione per chi finisce prima: "addestrate" il neurone. Scrivete 4 situazioni con la decisione che prendereste voi e cambiate i pesi finché il neurone decide come voi in tutti e 4 i casi. È esattamente ciò che fa l'addestramento, solo che lo fa il computer, con milioni di esempi. Errori tipici: virgola al posto del punto e virgola nella funzione SE, virgolette mancanti attorno al testo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Insegnare a vedere</p><h2>Fei-Fei Li e le 15 milioni di immagini</h2></div>
+  <p>Nel 2009 il gruppo di Fei-Fei Li pubblica <b>ImageNet</b>: 15 milioni di foto in 22 000 categorie, etichettate a mano da migliaia di persone. Nel 2012 una rete neurale profonda vince la gara di ImageNet con un distacco mai visto: inizia l'era del deep learning.</p>
+  <figure class="citazione">
+    <blockquote>Quando le macchine sapranno vedere, medici e infermieri avranno un paio di occhi in più, instancabili, per aiutarli a diagnosticare e curare i pazienti.</blockquote>
+    <figcaption><b>Fei-Fei Li</b>, informatica dell'Università di Stanford, TED Talk "Come insegniamo ai computer a capire le immagini", 2015</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra dall'inglese (TED2015, "How we're teaching computers to understand pictures"). I numeri (15 milioni di immagini, 22 000 classi, 2009) sono quelli citati da Fei-Fei Li nello stesso talk. Le etichette furono messe da lavoratori online pagati a compito (Amazon Mechanical Turk). La rete del 2012 è AlexNet di Krizhevsky, Sutskever e Hinton: nella gara principale sbagliò circa il 15% delle immagini contro il 26% del secondo classificato. Messaggio: senza dati etichettati da persone, niente deep learning.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'AI nella scienza</p><h2>Dalle foto alle proteine</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Perché conta</h3>
+      <p>Una proteina è una lunga catena che si ripiega in una forma 3D. La forma decide che cosa fa: digerire, difendere dai virus, trasportare ossigeno.</p>
+      <p>Scoprire la forma in laboratorio poteva richiedere anni.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>AlphaFold e il Nobel 2024</h3><p>AlphaFold di Google DeepMind prevede la forma di una proteina dalla sequenza dei suoi mattoncini. Nel 2022 ha pubblicato le previsioni per oltre 200 milioni di proteine. Nel 2024 Demis Hassabis e John Jumper hanno vinto il Nobel per la chimica.</p></div>
+  </div>
+  <div class="callout">Nello stesso anno l'AI ha portato a casa due Nobel: chimica per AlphaFold, fisica per le reti neurali di Hinton e Hopfield.</div>
+  <aside class="notes">Fonti: Nobel per la chimica 2024, metà a David Baker (progettazione di proteine al computer) e metà a Demis Hassabis e John Jumper (previsione della struttura con AlphaFold); AlphaFold Protein Structure Database, ampliato nel 2022 a oltre 200 milioni di strutture previste (EMBL-EBI e DeepMind). Stesso anno, Nobel per la fisica a Hinton e Hopfield: due Nobel all'AI nello stesso anno. Sottolineare: le previsioni vanno comunque verificate dagli scienziati, ma fanno risparmiare anni di lavoro e aiutano a progettare farmaci.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>AutoDraw: l'AI che completa i tuoi scarabocchi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>autodraw.com</b> e clicca <b>Start Drawing</b>. Non serve un account.</li>
+      <li>Con lo strumento AutoDraw disegna a mano libera un oggetto: in alto l'AI propone dei disegni, clicca quello giusto.</li>
+      <li>Crea un poster "La mia scuola" con almeno 5 oggetti e un titolo.</li>
+      <li>In <b>autodraw.odt</b> annota quali oggetti ha riconosciuto subito e quali no.</li>
+      <li>Dal menu scegli Download e salva come <b>poster-ai.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> AutoDraw usa la stessa tecnologia di Quick, Draw! della UDA 1. Gli oggetti con forme tipiche (sole, casa, bici) vengono riconosciuti in 2 o 3 tratti; quelli rari o astratti spesso no.</div>
+  </div>
+  <aside class="notes">AutoDraw è un esperimento di Google del 2017: confronta lo scarabocchio con i modelli addestrati sui disegni di Quick, Draw! e propone icone disegnate da illustratori. Discussione: perché "computer" lo riconosce bene e "libertà" no? (I concetti astratti non hanno un disegno tipico nei dati.) Se il sito non fosse raggiungibile, usare quickdraw.withgoogle.com come nella UDA 1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni capacità dell'AI a un esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="capacita-ia">
+    <dt>Visione artificiale</dt><dd>Il telefono si sblocca riconoscendo il tuo volto</dd>
+    <dt>Riconoscimento vocale</dt><dd>Detti un messaggio e diventa testo scritto</dd>
+    <dt>Sistema di raccomandazione</dt><dd>La piattaforma ti propone il prossimo video</dd>
+    <dt>Traduzione automatica</dt><dd>Un menu in giapponese diventa italiano</dd>
+    <dt>AI generativa</dt><dd>Scrivi una frase e nasce un'immagine nuova</dd>
+  </dl>
+  <aside class="notes">Tutte e cinque sono machine learning, quasi sempre deep learning. Far notare che il sistema di raccomandazione è quello che vedono di più ma riconoscono di meno: decide cosa guardano per ore. L'AI generativa sarà il tema delle prossime due lezioni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Addestra un modello che riconosce le immagini</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>teachablemachine.withgoogle.com</b>, scegli <b>Progetto immagine</b> e il modello standard. Non serve accedere.</li>
+      <li>Chiama le due classi <b>Pollice su</b> e <b>Pollice giù</b>.</li>
+      <li>Con la webcam registra circa 50 foto per classe, muovendo un po' la mano.</li>
+      <li>Avvia l'addestramento e prova l'anteprima.</li>
+      <li>Cambia sfondo, luce o mano e annota in <b>modello.odt</b> quando sbaglia.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con la mano ben visibile il modello supera il 90% di sicurezza. Se gli esempi mostrano sempre la stessa mano sullo stesso sfondo, con un compagno o un'altra luce può sbagliare: dipende dai dati.</div>
+  </div>
+  <aside class="notes">Teachable Machine (Google) addestra il modello direttamente nel browser: le immagini non vengono caricate su un server finché non si sceglie di salvare il progetto, quindi non si salva nulla. Se i PC non hanno webcam: usare il pulsante per caricare immagini da file (per esempio 20 disegni di cerchi e 20 di triangoli fatti in Paint), oppure fare la prova sul PC della LIM chiamando a turno gli studenti. Domanda finale: se aggiungete una terza classe "Niente" (sfondo vuoto), il modello migliora? Sì, perché impara anche quando non c'è una mano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Privacy</p><h2>Un volto è un dato personale</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Trova</h3><p>Un modello di visione individua dove sono volti e targhe nella foto.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Sfoca</h3><p>Un filtro rende quelle zone irriconoscibili.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Pubblica</h3><p>La foto va online senza identificare le persone.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Google Street View sfoca in automatico volti e targhe dal 2008. Oggi anche alcune app di messaggistica, come Signal, sfocano i volti <b>sul telefono stesso</b>, senza inviare la foto a un server: utile prima di condividere una foto di classe.</p></div>
+  <aside class="notes">Per il GDPR l'immagine di una persona riconoscibile è un dato personale: pubblicarla richiede il consenso. Lo strumento di Signal per sfocare i volti è del 2020 e lavora sul dispositivo. Nessun sistema è perfetto: un volto di profilo o in ombra può sfuggire, quindi controllare sempre prima di pubblicare. Collegare alla NPU vista nella UDA 1: elaborare sul telefono protegge la privacy.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Copyright</p><h2>È giusto addestrare un'AI con le opere degli artisti senza chiedere?</h2></div>
+  <p class="small muted">Molti modelli imparano da testi e immagini presi dal web. Nel 2023 il New York Times ha fatto causa a OpenAI e Microsoft; in Europa l'AI Act obbliga a pubblicare una sintesi dei dati usati.</p>
+  <div class="poll" data-id="copyright-ia">
+    <ol><li>Sì, se le opere sono pubbliche online</li><li>Sì, ma gli autori vanno pagati</li><li>No, serve sempre il permesso</li><li>Dipende dall'uso che si fa del modello</li></ol>
+  </div>
+  <aside class="notes">Non c'è una risposta giusta: è una questione aperta anche nei tribunali. Far argomentare una persona per opzione. Fatti utili: la causa del New York Times è del dicembre 2023; l'AI Act europeo chiede ai fornitori di modelli di uso generale una sintesi pubblica dei contenuti usati per l'addestramento e il rispetto di chi ha negato il permesso (obblighi in vigore da agosto 2025). Domanda di rilancio: se un pittore studia i quadri di Van Gogh e dipinge nel suo stile, è diverso da un'AI che fa lo stesso? Perché?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Anche l'AI può sbagliare</p><h2>Un modello distingue husky e lupi. Poi chiama «lupo» un husky sulla neve. Perché?</h2></div>
+  <div class="poll" data-id="husky" data-tipo="quiz" data-risposta="C">
+    <ol>
+      <li>Husky e lupi sono geneticamente identici</li>
+      <li>Le foto di addestramento erano in bianco e nero</li>
+      <li>Ha imparato a guardare la neve dello sfondo, non l'animale</li>
+      <li>Il modello era troppo piccolo per riconoscere i cani</li>
+    </ol>
+    <p class="why">Nelle foto di addestramento i lupi erano quasi sempre sulla neve: il modello ha imparato la scorciatoia sbagliata. Un'AI impara ciò che c'è nei dati, anche ciò che non volevamo insegnarle.</p>
+  </div>
+  <aside class="notes">Esperimento di Ribeiro, Singh e Guestrin, articolo "Why Should I Trust You?" (2016). Precisazione onesta: i ricercatori scelsero apposta foto di lupi sulla neve per mostrare come il loro strumento rivela su quale parte dell'immagine guarda il modello. Lo stesso problema però succede davvero: dati sbilanciati portano a pregiudizi (bias), per esempio sistemi di riconoscimento facciale che sbagliano di più con le persone poco rappresentate nei dati. La A è il distrattore "biologico": sono parenti stretti ma non identici. Collegare al lab di Teachable Machine: stessa mano, stesso sfondo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="6531" data-aiuto="la seconda cifra è 1·2 + 1·3 + 0·4">
+    <ul class="points">
+      <li>1ª cifra: l'ultima cifra dell'anno del seminario di Dartmouth</li>
+      <li>2ª cifra: la somma pesata del neurone con sole e amici, ma compiti non finiti</li>
+      <li>3ª cifra: quante "scatole" ci sono tra AI, machine learning e deep learning</li>
+      <li>4ª cifra: che cosa risponde il neurone con quella somma (0 o 1)</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1956, somma 5, tre scatole una dentro l'altra, e 5 raggiunge la soglia: 1.</div>
+  </div>
+  <aside class="notes">Codice: 6531. Pesi del neurone: sole 2, amici 3, compiti 4; soglia 5. Gioco a squadre di 3 o 4: la prima squadra che apre vince. Dopo tre tentativi sbagliati compare un aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nel machine learning le regole non si scrivono: il modello le ricava dagli <span class="blank" data-risposta="esempi|dati" style="--w:8ch"></span>.</p>
+    <p>Un neurone artificiale moltiplica ogni ingresso per il suo <span class="blank" data-risposta="peso"></span>.</p>
+    <p>Il deep learning usa reti neurali con molti <span class="blank" data-risposta="strati|livelli" style="--w:8ch"></span>.</p>
+    <p>Se i dati sono sbilanciati, l'AI impara anche i loro <span class="blank" data-risposta="pregiudizi|bias|errori" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: esempi (accettato dati), peso, strati (accettato livelli), pregiudizi (accettati bias ed errori).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>L'AI nasce come nome nel 1956, a Dartmouth</li>
+      <li>Machine learning: il modello impara dagli esempi</li>
+      <li>Un neurone: ingressi × pesi, somma, soglia</li>
+    </ul>
+    <ul class="points">
+      <li>Deep learning: reti con molti strati</li>
+      <li>Volti, dati e opere altrui vanno rispettati</li>
+      <li>L'AI sbaglia quando i dati la ingannano</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: i chatbot AI.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

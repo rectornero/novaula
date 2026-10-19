@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python: il ciclo for · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Python:<br>il ciclo for</h1>
+  <p class="lead">Quando sai quante volte ripetere: tabelline, disegni con la tartaruga, cicli dentro i cicli e una scacchiera piena di chicchi di riso.</p>
+  <aside class="notes">Obiettivi: usare for con range (uno, due e tre argomenti, anche con passo negativo), scorrere una stringa, usare accumulatori nel for, scrivere cicli annidati, risolvere un problema con l'iterazione definita. Durata indicativa: 2-3 ore. Prerequisiti: il for in C (UDA 6), la lezione sul while. Software: IDLE (necessario per il modulo turtle del terzo laboratorio: negli interpreti online di solito la grafica non funziona); per gli altri esercizi va bene anche OnlineGDB, lingua Python 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Punizione: scrivi 100 volte "Non devo chiacchierare in classe". Come fai?</h2></div>
+  <div class="poll" data-id="for-punizione">
+    <ol><li>A mano, con pazienza</li><li>Copia e incolla finché arrivo a 100</li><li>Scrivo un programma con un ciclo</li><li>Lo chiedo a un'AI</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto mostrare la soluzione in due righe: for i in range(100): print("Non devo chiacchierare in classe"). Con il copia-incolla si sbaglia facilmente il conto; con il ciclo il numero è garantito. Anche un'AI, per contare bene, spesso scrive ed esegue proprio un piccolo programma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il costrutto for</p><h2><code>for</code> + <code>range</code>: ripeti un numero preciso di volte</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">for</span> i <span class="k">in</span> range(5):
+    print(<span class="s">"Giro"</span>, i)
+<span class="c"># Giro 0, Giro 1, ..., Giro 4</span></pre>
+    <div class="card soft"><h3>La variabile del ciclo</h3><p><code>i</code> prende da sola i valori 0, 1, 2, 3, 4: niente <code>i += 1</code>, niente rischio di ciclo infinito.</p></div>
+  </div>
+  <table class="data compact">
+    <tr><th>Forma</th><th>Valori prodotti</th><th>Regola</th></tr>
+    <tr><td class="mono">range(5)</td><td class="mono">0 1 2 3 4</td><td>da 0 a 5 escluso</td></tr>
+    <tr><td class="mono">range(2, 6)</td><td class="mono">2 3 4 5</td><td>dall'inizio alla fine esclusa</td></tr>
+    <tr><td class="mono">range(0, 10, 3)</td><td class="mono">0 3 6 9</td><td>con il passo</td></tr>
+  </table>
+  <aside class="notes">La regola d'oro: il secondo numero è sempre escluso. range(5) fa 5 giri ma parte da 0. Confronto con il C: for (i = 0; i < 5; i++) corrisponde a for i in range(5). Nella shell list(range(2, 6)) mostra i valori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa questo ciclo?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">for</span> i <span class="k">in</span> range(1, 10, 3):
+    print(i)</pre>
+    <div class="poll" data-id="for-range" data-tipo="quiz" data-risposta="A">
+      <ol><li>1 4 7</li><li>1 4 7 10</li><li>3 6 9</li><li>0 3 6 9</li></ol>
+      <p class="why">Si parte da 1 e si sale di 3: 1, 4, 7. Il 10 non c'è perché la fine è esclusa (e comunque supera 10). La C confonde il passo con un "multiplo di".</p>
+    </div>
+  </div>
+  <aside class="notes">La B è il tranello più forte: chi pensa che range arrivi fino alla fine inclusa. La C è di chi legge il 3 come "multipli di 3". La D di chi pensa che si parta sempre da 0. Far verificare con list(range(1, 10, 3)).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>La tabellina su richiesta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In IDLE apri <b>File, New File</b> e leggi un numero <code>n</code>.</li>
+      <li>Con <code>for i in range(1, 11):</code> stampa le righe nella forma <code>7 x 3 = 21</code>.</li>
+      <li>Salva come <b>tabellina.py</b> e prova con 7 e con 12.</li>
+      <li>Modifica: chiedi anche fino a quale numero arrivare (per esempio 20).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 7 l'ultima riga è <code>7 x 10 = 70</code>. Se l'ultima è <code>7 x 9 = 63</code>, hai scritto <code>range(1, 10)</code>: la fine è esclusa!</div>
+  </div>
+  <aside class="notes">Soluzione:
+n = int(input("Tabellina del: "))
+for i in range(1, 11):
+    print(n, "x", i, "=", n * i)
+Per la modifica: fine = int(input("Fino a: ")) e range(1, fine + 1). Il + 1 è il punto chiave: far spiegare perché serve.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Altri modi di usare il for</p><h2>All'indietro e lettera per lettera</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code"><span class="k">for</span> i <span class="k">in</span> range(10, 0, -1):
+    print(i)
+print(<span class="s">"Via!"</span>)</pre>
+      <p class="small">Con il <b>passo negativo</b> si scende: 10, 9, …, 1. Lo 0 è escluso.</p>
+    </div>
+    <div class="stack">
+<pre class="code"><span class="k">for</span> lettera <span class="k">in</span> <span class="s">"PYTHON"</span>:
+    print(lettera)</pre>
+      <p class="small">Il for scorre anche una <b>stringa</b>: a ogni giro la variabile prende un carattere. Senza <code>range</code>!</p>
+    </div>
+  </div>
+  <aside class="notes">Il conto alla rovescia della lezione sul while, ora in una riga di for. In Python il for scorre qualsiasi sequenza: range, stringhe e, nella prossima lezione, le liste. Domanda: come contare quante volte compare la lettera "a" in una parola? Contatore + if dentro il for. Si può far provare con la parola "abracadabra" (5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni range ai numeri che produce</h2></div>
+  <dl class="puzzle-abbina" data-id="for-abbina">
+    <dt><code>range(4)</code></dt><dd>0 1 2 3</dd>
+    <dt><code>range(1, 4)</code></dt><dd>1 2 3</dd>
+    <dt><code>range(1, 8, 2)</code></dt><dd>1 3 5 7</dd>
+    <dt><code>range(0, 10, 5)</code></dt><dd>0 5</dd>
+    <dt><code>range(3, 0, -1)</code></dt><dd>3 2 1</dd>
+    <dt><code>range(2, 2)</code></dt><dd>nessun numero</dd>
+  </dl>
+  <aside class="notes">A squadre, 2 minuti. I tranelli: range(0, 10, 5) non arriva a 10; range(3, 0, -1) non arriva a 0; range(2, 2) è vuoto, quindi un for su di esso non fa nessun giro (come un while con la condizione falsa subito).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accumulare con il for</p><h2>La somma da 1 a 100, come il giovane Gauss</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">somma = 0
+<span class="k">for</span> i <span class="k">in</span> range(1, 101):
+    somma += i
+print(somma)   <span class="c"># 5050</span></pre>
+    <div class="card"><h3>La storia</h3><p class="muted">Si racconta che il maestro di Carl Friedrich Gauss, per tenere occupata la classe, chiese di sommare i numeri da 1 a 100. Gauss, ancora bambino, rispose quasi subito: 50 coppie da 101, cioè 5050.</p></div>
+  </div>
+  <div class="callout">Il computer fa 100 somme in un istante; Gauss trovò la formula <code>n * (n + 1) // 2</code>. Un buon algoritmo batte la forza bruta.</div>
+  <aside class="notes">L'aneddoto è riportato dal biografo di Gauss, Wolfgang Sartorius von Waltershausen, nel 1856; i dettagli (i numeri esatti, l'età) variano nelle versioni, quindi presentarlo come "si racconta". Il trucco: 1 + 100, 2 + 99, 3 + 98… fanno sempre 101, e le coppie sono 50. Verificare in Python: 100 * 101 // 2 = 5050.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La media di quanti voti vuoi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Chiedi quanti voti inserire: <code>quanti = int(input(…))</code>.</li>
+      <li>Metti <code>somma = 0</code> e <code>massimo = 0</code>.</li>
+      <li>Con <code>for i in range(quanti):</code> leggi ogni voto, sommalo e, se supera <code>massimo</code>, aggiornalo.</li>
+      <li>Stampa media e voto più alto. Salva come <b>media-for.py</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 4 voti 6, 7.5, 9, 5.5 ottieni media 7.0 e massimo 9.0. Confronta con il programma media3.py della prima lezione: quante righe hai risparmiato?</div>
+  </div>
+  <aside class="notes">Soluzione:
+quanti = int(input("Quanti voti? "))
+somma = 0
+massimo = 0
+for i in range(quanti):
+    voto = float(input("Voto: "))
+    somma += voto
+    if voto > massimo:
+        massimo = voto
+print("Media:", somma / quanti, "Massimo:", massimo)
+Il massimo parte da 0 perché i voti sono positivi; in generale si parte dal primo valore letto. Per mostrare "Voto 1, Voto 2…" si può scrivere input("Voto " + str(i + 1) + ": "). Differenza con il while della lezione precedente: qui sappiamo prima quanti voti sono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cicli annidati</p><h2>Un ciclo dentro un altro ciclo</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code"><span class="k">for</span> riga <span class="k">in</span> range(1, 4):
+    <span class="k">for</span> col <span class="k">in</span> range(1, 5):
+        print(riga * col, end=<span class="s">" "</span>)
+    print()</pre>
+<pre class="code">1 2 3 4
+2 4 6 8
+3 6 9 12</pre>
+    </div>
+    <div class="stack">
+      <p class="small">Per <b>ogni</b> giro del ciclo esterno, quello interno fa <b>tutti</b> i suoi giri: 3 × 4 = 12 stampe. <code>end=" "</code> non va a capo; <code>print()</code> da solo va a capo.</p>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Una foto è una griglia di pixel: righe e colonne. I filtri delle app scorrono l'immagine con due cicli annidati, e le reti neurali che riconoscono le immagini fanno scorrere piccoli filtri allo stesso modo.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Come le lancette dell'orologio: la lancetta dei minuti (ciclo interno) fa un giro completo per ogni scatto delle ore (ciclo esterno). Le reti convoluzionali (CNN) applicano a ogni zona dell'immagine lo stesso piccolo filtro: in pratica, con librerie che fanno i conti in parallelo sulla scheda video, ma l'idea è un doppio ciclo su righe e colonne.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quanti asterischi stampa?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">for</span> i <span class="k">in</span> range(4):
+    <span class="k">for</span> j <span class="k">in</span> range(i):
+        print(<span class="s">"*"</span>)</pre>
+    <div class="poll" data-id="for-annidati" data-tipo="quiz" data-risposta="C">
+      <ol><li>16</li><li>10</li><li>6</li><li>12</li></ol>
+      <p class="why">Il ciclo interno dipende da i: per i = 0, 1, 2, 3 fa 0, 1, 2 e 3 giri. Totale 0 + 1 + 2 + 3 = 6.</p>
+    </div>
+  </div>
+  <aside class="notes">16 è di chi fa 4 × 4 senza guardare range(i). 10 è di chi parte da 1 (1 + 2 + 3 + 4). 12 è di chi fa 4 × 3. Il primo giro (i = 0) è range(0): vuoto. Far scrivere la tabella dei giri alla lavagna.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Disegna con la tartaruga</h2>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">import</span> turtle
+t = turtle.Turtle()
+<span class="k">for</span> i <span class="k">in</span> range(4):
+    t.forward(150)
+    t.left(90)
+turtle.done()</pre>
+    <ol class="steps small">
+      <li>Ricopia in IDLE, salva come <b>tartaruga.py</b> e premi F5: è un quadrato.</li>
+      <li>Fai un triangolo e un esagono: l'angolo è <code>360 / lati</code>.</li>
+      <li>Stella: 5 lati, <code>right(144)</code>.</li>
+      <li>Annida il quadrato in un <code>for k in range(36):</code> girando di 10 gradi dopo ogni quadrato.</li>
+    </ol>
+  </div>
+  <div class="check"><b>Controllo:</b> ogni figura si chiude esattamente nel punto di partenza. Il fiore finale ha 36 quadrati: 36 × 10 = 360 gradi, un giro completo.</div>
+  <aside class="notes">Il modulo turtle è incluso in Python ma ha bisogno di una finestra grafica: usare IDLE sui PC del laboratorio. Chi è su un interprete online senza grafica può fare la versione a caratteri: for i in range(1, 6): print("*" * i) (triangolo di asterischi), oppure con due for annidati. Soluzione del fiore:
+for k in range(36):
+    for i in range(4):
+        t.forward(100)
+        t.left(90)
+    t.left(10)
+t.speed(0) rende il disegno velocissimo. Si chiude la finestra per tornare a IDLE.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La tartaruga viene da lontano</h2></div>
+  <figure class="citazione">
+    <blockquote>Nella mia visione è il bambino che programma il computer e, così facendo, acquisisce un senso di padronanza su una delle tecnologie più moderne e potenti.</blockquote>
+    <figcaption><b>Seymour Papert</b>, matematico e informatico, MIT, nel libro <i>Mindstorms</i>, 1980</figcaption>
+  </figure>
+  <p class="small">Papert creò con altri il linguaggio <b>Logo</b> (1967), dove i bambini comandavano una tartaruga che disegna. Il modulo <code>turtle</code> di Python discende da lì, e anche Scratch.</p>
+  <aside class="notes">Traduzione nostra dall'inglese ("In my vision, the child programs the computer and, in doing so, both acquires a sense of mastery over a piece of the most modern and powerful technology..."), da Mindstorms: Children, Computers, and Powerful Ideas (1980). Logo nacque nel 1967 da Wally Feurzeig, Seymour Papert e Cynthia Solomon. Scratch è stato sviluppato al MIT Media Lab dal gruppo di Mitchel Resnick, allievo di Papert: un filo diretto con la UDA 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un problema con l'iterazione definita</p><h2>La leggenda della scacchiera</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small">Un chicco di riso sulla prima casella, 2 sulla seconda, 4 sulla terza… raddoppiando fino alla 64ª. Quanti chicchi in tutto?</p>
+<pre class="code">chicchi = 1
+totale = 0
+<span class="k">for</span> casella <span class="k">in</span> range(64):
+    totale += chicchi
+    chicchi *= 2
+print(totale)</pre>
+    </div>
+    <div class="stack">
+      <div class="card night"><p class="small">Risultato:</p><p class="mono" style="font-family:var(--mono);font-size:34px;word-break:break-all">18446744073709551615</p><p class="small muted">Più di 18 miliardi di miliardi. In Python gli interi non hanno limite; in C serve il tipo intero più grande.</p></div>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Addestrare un'AI è un for dentro un for: per ogni passata sui dati, per ogni gruppo di esempi, il modello sbaglia, misura l'errore e si corregge un po'.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il totale è 2 alla 64 meno 1: in C sta esattamente nel massimo di un unsigned long long a 64 bit, collegamento con i numeri binari. Leggenda di origine indiana o persiana sull'inventore degli scacchi, raccontata in molte versioni: presentarla come leggenda. Per l'AI: un'epoca (epoch) è una passata completa su tutti gli esempi di addestramento; ogni gruppo di esempi è un batch. Il ciclo esterno conta le epoche, quello interno i gruppi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con i cicli for</h2></div>
+  <div class="puzzle-codice" data-risposta="4691" data-aiuto="la quarta cifra: 10, 7, 4 e poi?">
+    <ul class="points">
+      <li>1ª cifra: quanti numeri produce <code>range(2, 9, 2)</code>?</li>
+      <li>2ª cifra: il valore di <code>s</code> dopo <code>s = 0</code> e <code>for i in range(4): s += i</code></li>
+      <li>3ª cifra: quante volte si esegue il blocco di due <code>for</code> annidati con <code>range(3)</code> ciascuno?</li>
+      <li>4ª cifra: l'ultimo numero stampato da <code>for i in range(10, 0, -3): print(i)</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2, 4, 6, 8 sono 4 numeri; 0 + 1 + 2 + 3 = 6; 3 × 3 = 9; 10, 7, 4, 1.</div>
+  </div>
+  <aside class="notes">Codice: 4691. Errori tipici: 5 per la prima cifra (si conta il 9, che è escluso), 10 per la seconda (si somma anche il 4), 0 per l'ultima (si pensa che arrivi a zero). A squadre, poi verifica in IDLE.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p><code>range(5)</code> produce i numeri da 0 a <span class="blank" data-risposta="4|quattro"></span>.</p>
+    <p>Il ciclo <code>for i in range(1, 11)</code> fa <span class="blank" data-risposta="10|dieci"></span> giri.</p>
+    <p>Per contare all'indietro uso un passo <span class="blank" data-risposta="negativo|-1"></span>.</p>
+    <p>Un ciclo scritto dentro un altro ciclo si chiama ciclo <span class="blank" data-risposta="annidato|nidificato"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 4, 10, negativo (accettato -1), annidato (accettato nidificato).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>for i in range(n)</code>: n giri, da 0 a n-1</li>
+      <li><code>range(inizio, fine, passo)</code>: la fine è esclusa</li>
+      <li>Passo negativo per scendere; il for scorre anche le stringhe</li>
+    </ul>
+    <ul class="points">
+      <li>Accumulatori e contatori funzionano come nel while</li>
+      <li>Annidati: l'interno fa tutti i giri per ogni giro esterno</li>
+      <li>Il raddoppio cresce in fretta: 2<sup>64</sup> - 1 chicchi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: le funzioni, per non riscrivere mai due volte lo stesso codice.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

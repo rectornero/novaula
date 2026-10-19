@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calc: formule e funzioni · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>code,.mono,.formula,table.sheet{font-variant-ligatures:none}code{white-space:nowrap}</style>
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Foglio di calcolo</p>
+  <h1>Calc: formule<br>e funzioni</h1>
+  <p class="lead">Facciamo calcolare il foglio: operatori, riferimenti alle celle, formule da trascinare e le funzioni più usate.</p>
+  <div class="meta"><span class="chip">LibreOffice Calc</span><span>file: calc-esercizi.xlsx</span></div>
+  <aside class="notes">Prerequisiti: lezione "Calc: primi passi" (indirizzi, intervalli, formati). Prima di iniziare tutti devono avere scaricato calc-esercizi.xlsx e salvato una copia in .ods con il proprio cognome. Domanda d'apertura: "quanto costa la spesa se compro 4 pacchi di pasta da 0,99 €? E se cambia il prezzo?".</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">La regola numero uno</p>
+  <h2>Ogni formula comincia con il segno <mark>=</mark></h2>
+  <div class="cols-2">
+    <div class="card bad"><h3>Scrivi <code>5+3</code></h3><p>Calc lo tratta come testo e mostra <b>5+3</b>.</p></div>
+    <div class="card ok"><h3>Scrivi <code>=5+3</code></h3><p>Calc fa il calcolo e mostra <b>8</b>.</p></div>
+  </div>
+  <p class="lead">Nella cella vedi il <b>risultato</b>, nella barra della formula vedi la <b>formula</b>.</p>
+  <aside class="notes">Farlo alla LIM: scrivere 5+3 in una cella e =5+3 in un'altra, poi selezionarle una alla volta e guardare la barra della formula. Domanda: cosa succede se scrivo = 5+3 con uno spazio dopo l'uguale? (funziona lo stesso). E se dimentico l'uguale? (resta testo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori</p><h2>Le quattro operazioni, più una</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data">
+      <tr><th>Simbolo</th><th>Operazione</th><th>Esempio</th><th>Risultato</th></tr>
+      <tr><td class="mono">+</td><td>addizione</td><td class="mono">=7+2</td><td class="mono">9</td></tr>
+      <tr><td class="mono">-</td><td>sottrazione</td><td class="mono">=7-2</td><td class="mono">5</td></tr>
+      <tr><td class="mono">*</td><td>moltiplicazione</td><td class="mono">=7*2</td><td class="mono">14</td></tr>
+      <tr><td class="mono">/</td><td>divisione</td><td class="mono">=7/2</td><td class="mono">3,5</td></tr>
+      <tr><td class="mono">^</td><td>potenza</td><td class="mono">=7^2</td><td class="mono">49</td></tr>
+    </table>
+    <div class="stack">
+      <h3>Prima le moltiplicazioni</h3>
+      <p>L'ordine è quello della matematica: <b>^</b>, poi <b>*</b> e <b>/</b>, poi <b>+</b> e <b>-</b>.</p>
+      <div class="card soft"><p class="mono">=2+3*4 → <b>14</b></p><p class="mono">=(2+3)*4 → <b>20</b></p></div>
+    </div>
+  </div>
+  <aside class="notes">Il segno di moltiplicazione è l'asterisco, non la x. La divisione è la barra /, non i due punti (i due punti servono per gli intervalli). Sulla tastiera italiana il simbolo ^ si ottiene con Maiusc + ì. Far calcolare a mente =10-2*3 (4) e =(10-2)*3 (24).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Riferimenti di cella</p><h2>Nelle formule usa gli indirizzi, non i numeri</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="row"><span class="chip">C1</span><code>=A1*B1</code></div>
+      <table class="sheet">
+        <tr><th></th><th>A</th><th>B</th><th>C</th></tr>
+        <tr><th>1</th><td style="text-align:right">12</td><td style="text-align:right">5</td><td class="sel f" style="text-align:right">60</td></tr>
+        <tr><th>2</th><td></td><td></td><td></td></tr>
+      </table>
+    </div>
+    <ul class="points">
+      <li><code>=A1*B1</code> vuol dire: <i>prendi quello che c'è in A1 e moltiplicalo per quello che c'è in B1</i>.</li>
+      <li>Se cambi A1 in <b>20</b>, C1 diventa subito <b>100</b>.</li>
+      <li>Puoi anche <b>cliccare</b> sulle celle mentre scrivi la formula, invece di digitarne l'indirizzo.</li>
+    </ul>
+  </div>
+  <div class="callout hl">Scrivere <code>=12*5</code> dà lo stesso risultato, ma se cambi un dato <b>non si aggiorna</b>.</div>
+  <aside class="notes">Questo è il cuore del foglio di calcolo: la formula lavora sulle celle, non sui numeri. Far vedere alla LIM che, mentre si scrive la formula, cliccando su una cella Calc inserisce il suo indirizzo e la colora. Domanda: se in A1 scrivo "dodici" in lettere, cosa succede? (errore #VALORE!: non si può moltiplicare un testo).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Gli operatori in azione</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scarica <b>calc-esercizi.xlsx</b> dalla pagina dei materiali, aprilo con Calc e salvalo come <code>calc-esercizi-cognome.ods</code>.</li>
+      <li>Vai sul foglio <b>Operatori</b>: in A e B ci sono due numeri per riga.</li>
+      <li>In C2 scrivi <code>=A2+B2</code>, in D2 <code>=A2-B2</code>, poi E2, F2 e G2 con <code>*</code>, <code>/</code> e <code>^</code>.</li>
+      <li>Riempi anche le righe da 3 a 6 e salva.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Osserva la riga 6</h4><p>In F6 compare un messaggio strano. Perché? Ne parliamo tra poco.</p></div>
+      <div class="check"><b>Controllo:</b> nella riga 2 (12 e 4) ottieni 16, 8, 48, 3 e <b>20736</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni. Riga 2 (12; 4): 16, 8, 48, 3, 20736. Riga 3 (7; 2): 9, 5, 14, 3,5, 49. Riga 4 (10; 5): 15, 5, 50, 2, 100000. Riga 5 (3; 3): 6, 0, 9, 1, 27. Riga 6 (9; 0): 9, 9, 0, #DIV/0!, 1. Chi conosce già il trascinamento può usarlo: è il tema della prossima slide. Se 100000 appare come ###, allargare la colonna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Copiare una formula</p><h2>Scrivi una volta, trascina in giù</h2></div>
+  <div class="cols-2">
+    <table class="sheet">
+      <tr><th></th><th>B</th><th>C</th><th>D</th></tr>
+      <tr><th>1</th><td>Quantità</td><td>Prezzo</td><td>Totale</td></tr>
+      <tr><th>2</th><td>1</td><td>3,2</td><td class="f sel">=B2*C2</td></tr>
+      <tr><th>3</th><td>2</td><td>1,29</td><td class="f">=B3*C3</td></tr>
+      <tr><th>4</th><td>1</td><td>2,9</td><td class="f">=B4*C4</td></tr>
+      <tr><th>5</th><td>4</td><td>0,99</td><td class="f">=B5*C5</td></tr>
+    </table>
+    <ol class="steps small">
+      <li>Scrivi la formula nella prima cella, D2.</li>
+      <li>Seleziona D2: in basso a destra c'è un <b>quadratino</b>.</li>
+      <li>Trascina il quadratino verso il basso.</li>
+      <li>Calc adatta gli indirizzi a ogni riga: sono <mark>riferimenti relativi</mark>.</li>
+    </ol>
+  </div>
+  <div class="callout">La formula non dice "B2 per C2", ma "le due celle <b>alla mia sinistra</b> sulla stessa riga".</div>
+  <aside class="notes">Il quadratino si chiama maniglia di riempimento. In alternativa: copia (Ctrl+C) e incolla (Ctrl+V) nelle celle di destinazione, il risultato è lo stesso. Far vedere con Visualizza › Mostra formula che le formule sono cambiate riga per riga (stesso comando per tornare ai risultati).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Riferimenti assoluti</p><h2>Il dollaro blocca una cella</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small">Lo sconto è in <b>una sola</b> cella, H2. Se trascino <code>=D2*(1-H2)</code>, la riga sotto diventa <code>=D3*(1-H3)</code>: H3 è vuota e lo sconto sparisce.</p>
+      <div class="formula"><small>La formula giusta in E2</small>=D2*(1-<span class="hl">$H$2</span>)</div>
+      <p class="small">Il <b>$</b> davanti alla lettera e al numero tiene ferma la cella quando trascini.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Scrivo</th><th>Trascinando…</th></tr>
+      <tr><td class="mono">H2</td><td>cambiano colonna e riga</td></tr>
+      <tr><td class="mono hl">$H$2</td><td>resta sempre H2</td></tr>
+      <tr><td class="mono">$H2</td><td>la colonna resta H</td></tr>
+      <tr><td class="mono">H$2</td><td>la riga resta 2</td></tr>
+    </table>
+  </div>
+  <div class="callout hl">Scorciatoia: mentre scrivi la formula, metti il cursore sull'indirizzo e premi <b>Maiusc + F4</b>.</div>
+  <aside class="notes">Spiegare 1-H2: se lo sconto è 10% (0,1), si paga il 90% (0,9) del totale. In LibreOffice Calc la scorciatoia per passare da relativo ad assoluto è Maiusc+F4 (in Excel è F4). Le ultime due righe della tabella (riferimenti misti) sono solo da conoscere: per ora basta $H$2. Domanda: in quale cella devo mettere il $ se voglio usare un tasso di cambio euro-dollaro scritto in B1? ($B$1).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La lista della spesa</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nel tuo file vai sul foglio <b>Spesa</b>.</li>
+      <li>In D2 scrivi <code>=B2*C2</code> e trascina fino a D9.</li>
+      <li>In E2 scrivi <code>=D2*(1-$H$2)</code> e trascina fino a E9.</li>
+      <li>In D11 scrivi <code>=SOMMA(D2:D9)</code>, poi trascinala in E11.</li>
+      <li>Formatta le colonne C, D, E in valuta. Cambia lo sconto in H2 in <b>20%</b> e guarda cosa succede.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>SOMMA</h4><p>È la prima funzione: somma tutte le celle dell'intervallo. La vediamo meglio tra poco.</p></div>
+      <div class="check"><b>Controllo:</b> E2 = <b>2,88 €</b>, D11 = <b>26,64 €</b>, E11 = <b>23,98 €</b>. Con sconto 20%, E11 = <b>21,31 €</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Totali D2:D9: 3,20; 2,58; 2,90; 3,96; 3,60; 4,30; 3,50; 2,60. Somma 26,64 €. Scontati al 10%: 2,88; 2,322; 2,61; 3,564; 3,24; 3,87; 3,15; 2,34; somma 23,976 (23,98 € in formato valuta). Con 20%: 21,312. Errore tipico: dimenticare il $ e ottenere in E3:E9 gli stessi valori di D (sconto nullo). Far notare che, trascinando D11 in E11, la SOMMA diventa SOMMA(E2:E9): anche qui riferimenti relativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni</p><h2>Una funzione è un calcolo già pronto</h2></div>
+  <div class="formula"><small>Come si scrive</small>=<span class="hl">SOMMA</span>(B2:B9)</div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Il nome</h3><p>In maiuscolo o minuscolo, Calc lo corregge. In italiano: SOMMA, MEDIA…</p></div>
+    <div class="card soft"><h3>Le parentesi</h3><p>Contengono gli <b>argomenti</b>: i dati su cui lavorare.</p></div>
+    <div class="card soft"><h3><code>:</code> e <code>;</code></h3><p><code>B2:B9</code> = da B2 a B9. <code>B2;B9</code> = solo B2 e B9.</p></div>
+  </div>
+  <p class="small muted">Non ricordi una funzione? Clicca il pulsante <b>fx</b> accanto alla barra della formula: la procedura guidata le elenca tutte e spiega gli argomenti.</p>
+  <aside class="notes">In Calc in italiano gli argomenti si separano con il punto e virgola, perché la virgola serve per i decimali. Esempio alla lavagna: =SOMMA(A1:A3) somma A1, A2, A3; =SOMMA(A1;A3) somma solo A1 e A3. Mostrare la procedura guidata fx una volta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cinque funzioni da sapere</p><h2>SOMMA, MEDIA, MIN, MAX, CONTA.NUMERI</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Formula</th><th>Risultato</th><th>Cosa fa</th></tr>
+      <tr><td class="mono">=SOMMA(B2:B6)</td><td class="mono">26</td><td>somma i numeri</td></tr>
+      <tr><td class="mono">=MEDIA(B2:B6)</td><td class="mono">6,5</td><td>media dei numeri</td></tr>
+      <tr><td class="mono">=MIN(B2:B6)</td><td class="mono">5</td><td>il più piccolo</td></tr>
+      <tr><td class="mono">=MAX(B2:B6)</td><td class="mono">8</td><td>il più grande</td></tr>
+      <tr><td class="mono">=CONTA.NUMERI(B2:B6)</td><td class="mono">4</td><td>quante celle con numeri</td></tr>
+    </table>
+    <div class="stack">
+      <table class="sheet">
+        <tr><th></th><th>B</th></tr>
+        <tr><th>1</th><td>Voti</td></tr>
+        <tr><th>2</th><td style="text-align:right">7</td></tr>
+        <tr><th>3</th><td style="text-align:right">5</td></tr>
+        <tr><th>4</th><td style="text-align:right">8</td></tr>
+        <tr><th>5</th><td>ass.</td></tr>
+        <tr><th>6</th><td style="text-align:right">6</td></tr>
+      </table>
+      <p class="small muted">Il testo "ass." viene ignorato.</p>
+    </div>
+  </div>
+  <aside class="notes">Conti: 7+5+8+6 = 26; 26/4 = 6,5. MEDIA divide per 4, non per 5, perché la cella con il testo non conta: è quello che si vuole quando uno studente era assente. Attenzione: una cella con 0 invece conta. CONTA.NUMERI conta solo le celle con numeri; esiste anche CONTA.VALORI che conta tutte le celle non vuote (qui darebbe 5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">ARROTONDA</p><h2>Arrotondare davvero, non solo nascondere i decimali</h2></div>
+  <div class="formula"><small>=ARROTONDA(numero; quanti decimali)</small>=ARROTONDA(5,75;1) → <span class="hl">5,8</span></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Funzione dentro funzione</h3><p class="mono">=ARROTONDA(MEDIA(B2:F2);1)</p><p>Prima Calc fa la media, poi la arrotonda a un decimale.</p></div>
+    <div class="card"><h3>E il formato numero?</h3><p>Il formato <b>nasconde</b> i decimali ma il valore resta 5,75. ARROTONDA <b>cambia</b> il valore in 5,8.</p></div>
+  </div>
+  <aside class="notes">Con 0 decimali: =ARROTONDA(6,5;0) = 7, =ARROTONDA(6,49;0) = 6. Le funzioni annidate si leggono dall'interno verso l'esterno. Errore tipico: dimenticare una parentesi chiusa; Calc spesso propone di correggerla. Domanda: =ARROTONDA(6,125;1)? (6,1).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La funzione SE</p><h2>Il foglio prende una decisione</h2></div>
+  <div class="formula"><small>=SE(condizione; valore se vera; valore se falsa)</small>=SE(G2&gt;=6;<span class="hl">"Sufficiente"</span>;<span class="hl">"Insufficiente"</span>)</div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Simbolo</th><th>Significa</th></tr>
+      <tr><td class="mono">=  &lt;&gt;</td><td>uguale · diverso</td></tr>
+      <tr><td class="mono">&lt;  &gt;</td><td>minore · maggiore</td></tr>
+      <tr><td class="mono">&lt;=  &gt;=</td><td>minore o uguale · maggiore o uguale</td></tr>
+    </table>
+    <ul class="points small">
+      <li>Il <b>testo</b> nelle formule va tra <b>virgolette</b>.</li>
+      <li>Se G2 vale 6,1 il risultato è <b>Sufficiente</b>.</li>
+      <li>Se G2 vale 5,8 il risultato è <b>Insufficiente</b>.</li>
+    </ul>
+  </div>
+  <div class="callout hl">E con 6 esatto? Esce <b>Sufficiente</b>, perché <code>&gt;=</code> comprende anche l'uguale. Con <code>&gt;</code> uscirebbe Insufficiente.</div>
+  <aside class="notes">Leggere la formula ad alta voce: "se G2 è maggiore o uguale a 6, scrivi Sufficiente, altrimenti scrivi Insufficiente". Chiedere: con 6 esatto cosa esce? (Sufficiente, perché c'è l'uguale). E se scrivessi G2&gt;6? (con 6 esce Insufficiente). Senza virgolette Calc cerca una cella o una funzione con quel nome e dà #NOME?.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il registro dei voti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nel tuo file vai sul foglio <b>Voti</b>.</li>
+      <li>G2: <code>=ARROTONDA(MEDIA(B2:F2);1)</code>, trascina fino a G11.</li>
+      <li>H2: <code>=SE(G2&gt;=6;"Sufficiente";"Insufficiente")</code>, trascina fino a H11.</li>
+      <li>Colonna B, righe 13–16: media arrotondata, <b>MIN</b>, <b>MAX</b> e <b>CONTA.NUMERI</b> di <code>B2:B11</code>.</li>
+      <li>Seleziona <code>B13:B16</code> e trascina verso destra fino alla colonna F. Salva.</li>
+    </ol>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> Alice ha media <b>7,4</b>, Irene <b>5,8</b> (Insufficiente). In Inglese i voti inseriti sono <b>9</b>; la media di Informatica è <b>7,6</b>.</div>
+      <div class="card soft"><h4>In più</h4><p>Quanti insufficienti ci sono? Contali con lo sguardo, poi cerca nella procedura guidata fx una funzione che li conti.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Medie (G): Alice 7,4; Bruno 5,3; Carla 8,4; Davide 6,1 (6,125, un assente); Elena 8,6; Filippo 4,8; Giulia 7; Hamza 7; Irene 5,8 (5,75, un assente); Luca 6. Insufficienti: Bruno, Filippo, Irene (3). Righe 13–16 per Italiano, Matematica, Inglese, Informatica, Storia: media 6,3 · 6,4 · 6,7 · 7,6 · 6,3; minimo 4 · 4,5 · 5 · 6 · 4; massimo 9 · 9 · 9 · 10 · 9; voti inseriti 10 · 10 · 9 · 10 · 9. Formule in B13:B16: =ARROTONDA(MEDIA(B2:B11);1), =MIN(B2:B11), =MAX(B2:B11), =CONTA.NUMERI(B2:B11). Per il punto "in più": =CONTA.SE(H2:H11;"Insufficiente") dà 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Errori comuni</p><h2>Quando la cella mostra un messaggio strano</h2></div>
+  <div class="cols-3">
+    <div class="card bad"><h3>#DIV/0!</h3><p>Divisione per zero, o per una cella <b>vuota</b>.</p><p class="small muted">Controlla il divisore: è la cella giusta? È riempita?</p></div>
+    <div class="card bad"><h3>#NOME?</h3><p>Calc non riconosce un nome: funzione scritta male (<code>=SOMA</code>) o testo senza virgolette.</p></div>
+    <div class="card bad"><h3>###</h3><p>Non è un errore di calcolo: la colonna è troppo <b>stretta</b>.</p><p class="small muted">Doppio clic sul bordo della colonna.</p></div>
+  </div>
+  <div class="callout">Per capire un errore, seleziona la cella e leggi la formula nella <b>barra della formula</b>: l'errore è quasi sempre lì.</div>
+  <aside class="notes">Tornare alla riga 6 del foglio Operatori: 9/0 dà #DIV/0!. Altri messaggi possibili: #VALORE! (si fa un calcolo con un testo, es. ="ciao"+1) ed Err:5xx (formula scritta in modo errato, es. parentesi mancanti). Esercizio veloce a voce: cosa mostra =MEDIA(B2:B6) se B2:B6 contiene solo testo? (#DIV/0!, perché non ci sono numeri da dividere).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>1 · Il segno =</h3><p class="muted">Senza = è solo testo. Operatori: + - * / ^.</p></div>
+    <div class="card"><h3>2 · Riferimenti</h3><p class="muted">Usa gli indirizzi: la formula si aggiorna da sola.</p></div>
+    <div class="card"><h3>3 · Trascinare</h3><p class="muted">Gli indirizzi si adattano. Con $H$2 la cella resta ferma.</p></div>
+    <div class="card"><h3>4 · Funzioni</h3><p class="muted">SOMMA, MEDIA, MIN, MAX, CONTA.NUMERI, con <code>:</code> per gli intervalli.</p></div>
+    <div class="card"><h3>5 · ARROTONDA e SE</h3><p class="muted">Argomenti separati da <code>;</code>, testo tra virgolette.</p></div>
+    <div class="card"><h3>6 · Errori</h3><p class="muted">#DIV/0! divisore zero, #NOME? nome sbagliato, ### colonna stretta.</p></div>
+  </div>
+  <aside class="notes">Verifica veloce a voce: cosa calcola =MAX(A1:A10)-MIN(A1:A10)? (la differenza tra il valore più grande e il più piccolo). Perché in E2 della spesa serve $H$2? Consegna: il file calc-esercizi-cognome.ods su Classroom.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

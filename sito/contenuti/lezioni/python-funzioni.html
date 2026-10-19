@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python: le funzioni · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Python:<br>le funzioni</h1>
+  <p class="lead">Scrivi una volta, usa mille volte. Con def, return e un punto di ingresso i programmi diventano mattoncini che si incastrano, come fanno i professionisti.</p>
+  <aside class="notes">Obiettivi: usare le funzioni predefinite, definire funzioni con parametri e return, distinguere print e return, capire la visibilità di variabili e funzioni (locale e globale), scrivere il punto di ingresso con main e if __name__ == "__main__". Durata indicativa: 2-3 ore. Prerequisiti: funzioni e procedure in C (UDA 7), le lezioni precedenti su Python. Software: IDLE o un interprete online senza account (OnlineGDB, lingua Python 3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nel tuo videogioco preferito, quale azione fai più spesso?</h2></div>
+  <div class="poll" data-id="fun-azione">
+    <ol><li>Saltare</li><li>Attaccare o sparare</li><li>Raccogliere monete e oggetti</li><li>Costruire</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto: nel codice del gioco ognuna di queste azioni è una funzione, scritta una volta sola, per esempio salta(), e chiamata migliaia di volte, ogni volta che premi il tasto. Se il salto ha un difetto, si corregge in un punto solo. È l'idea della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni predefinite</p><h2>Le usi già: abbina ogni chiamata al suo risultato</h2></div>
+  <dl class="puzzle-abbina" data-id="fun-predefinite">
+    <dt><code>len("ciao")</code></dt><dd>4</dd>
+    <dt><code>abs(-7)</code></dt><dd>7</dd>
+    <dt><code>max(3, 9, 2)</code></dt><dd>9</dd>
+    <dt><code>round(3.14159, 2)</code></dt><dd>3.14</dd>
+    <dt><code>int("42")</code></dt><dd>il numero 42</dd>
+    <dt><code>str(42)</code></dt><dd>la stringa "42"</dd>
+  </dl>
+  <aside class="notes">print, input, int, float e range sono funzioni: un nome, gli argomenti tra parentesi e, spesso, un valore restituito. len conta i caratteri, abs dà il valore assoluto, round arrotonda al numero di decimali indicato. Le ultime due coppie sono il tranello: 42 e "42" sembrano uguali ma uno è un numero e l'altro una stringa (ricordare il quiz "7" + "3" = "73").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni in Python</p><h2>Crea la tua funzione con <code>def</code></h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> saluta(nome):
+    print(<span class="s">"Ciao"</span>, nome + <span class="s">"!"</span>)
+
+saluta(<span class="s">"Ada"</span>)
+saluta(<span class="s">"Alan"</span>)</pre>
+    <div class="card soft"><h3>Le parole giuste</h3><ul class="points small"><li><b>definizione</b>: <code>def</code>, nome, parametri, due punti</li><li><b>corpo</b>: le righe rientrate</li><li><b>parametro</b>: <code>nome</code></li><li><b>chiamata</b>: <code>saluta("Ada")</code></li><li><b>argomento</b>: <code>"Ada"</code></li></ul></div>
+  </div>
+  <div class="callout small">Definire una funzione non la esegue: il corpo parte solo quando la <b>chiami</b>.</div>
+  <aside class="notes">Output: Ciao Ada! e Ciao Alan!. È la scomposizione del problema vista nella UDA 7: un compito grande diviso in sottoprogrammi. In C si scriveva void saluta(char nome[]) con i tipi; in Python niente tipi e niente graffe. I nomi delle funzioni si scrivono in minuscolo con il trattino basso: area_rettangolo, non AreaRettangolo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Restituire un valore</p><h2><code>return</code>: la funzione ti dà indietro un risultato</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> area_rettangolo(base, altezza):
+    <span class="k">return</span> base * altezza
+
+a = area_rettangolo(3, 4)
+print(a)                          <span class="c"># 12</span>
+print(area_rettangolo(5, 2) + 1)  <span class="c"># 11</span></pre>
+    <div class="stack">
+      <div class="card ok"><h3>return</h3><p>consegna il valore a chi ha chiamato, che può salvarlo o usarlo in un calcolo</p></div>
+      <div class="card bad"><h3>print</h3><p>mostra sullo schermo, ma il valore poi è perso per il programma</p></div>
+    </div>
+  </div>
+  <aside class="notes">La chiamata area_rettangolo(5, 2) viene sostituita dal valore 10, quindi + 1 dà 11. return fa anche uscire subito dalla funzione: le righe dopo return non vengono eseguite. Regola pratica: le funzioni che calcolano devono restituire con return; a stampare ci pensa il programma principale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa compare sullo schermo?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> doppio(x):
+    print(x * 2)
+
+y = doppio(5)
+print(y)</pre>
+    <div class="poll" data-id="fun-none" data-tipo="quiz" data-risposta="B">
+      <ol><li>10 e poi 10</li><li>10 e poi None</li><li>Solo 10</li><li>Un errore</li></ol>
+      <p class="why">La funzione stampa 10, ma non ha return: restituisce il valore speciale None. Così y vale None e la seconda print lo mostra.</p>
+    </div>
+  </div>
+  <aside class="notes">È la confusione più frequente tra print e return. La A è la risposta di chi pensa che "stampare" e "restituire" siano la stessa cosa. None in Python significa "nessun valore". Correzione: return x * 2 al posto di print(x * 2); allora compare un solo 10, dalla print finale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il kit del matematico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo file <b>kit.py</b>. Definisci <code>perimetro_quadrato(lato)</code> e <code>area_quadrato(lato)</code>: entrambe con <code>return</code>.</li>
+      <li>Definisci <code>e_pari(n)</code> che restituisce <code>True</code> o <code>False</code>.</li>
+      <li>Sotto le definizioni, chiama le funzioni con <code>print(…)</code> e controlla i risultati.</li>
+      <li>Salva ed esegui con F5.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> <code>perimetro_quadrato(5)</code> dà 20, <code>area_quadrato(5)</code> dà 25, <code>e_pari(7)</code> dà False, <code>e_pari(10)</code> dà True.</div>
+  </div>
+  <aside class="notes">Soluzione:
+def perimetro_quadrato(lato):
+    return 4 * lato
+def area_quadrato(lato):
+    return lato * lato
+def e_pari(n):
+    return n % 2 == 0
+print(perimetro_quadrato(5), area_quadrato(5), e_pari(7), e_pari(10))
+e_pari può restituire direttamente il confronto, senza if: n % 2 == 0 è già True o False. Chi scrive if n % 2 == 0: return True else: return False fa la cosa giusta in modo più lungo. Dopo l'esecuzione con F5 le funzioni restano disponibili nella shell: si può scrivere area_quadrato(12).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che cosa succede quando scrivi <code>a = area_rettangolo(3, 4)</code>?</h2></div>
+  <ol class="puzzle-ordina" data-id="fun-chiamata">
+    <li>Python incontra la chiamata e sospende la riga</li>
+    <li>Copia 3 e 4 nei parametri base e altezza</li>
+    <li>Esegue il corpo della funzione</li>
+    <li>return calcola 12 ed esce dalla funzione</li>
+    <li>Torna al punto in cui era stata fatta la chiamata</li>
+    <li>Il valore 12 viene assegnato ad a</li>
+  </ol>
+  <aside class="notes">Ordine corretto come nella lista. È il "salto e ritorno" visto in C nella UDA 7. Alcuni mettono l'assegnazione ad a prima del ritorno: a non esiste finché la funzione non ha consegnato il risultato. A coppie, 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La visibilità delle variabili</p><h2>Ciò che nasce nella funzione resta nella funzione</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> prova():
+    x = 5          <span class="c"># x locale</span>
+    print(<span class="s">"dentro:"</span>, x)
+
+x = 1              <span class="c"># x globale</span>
+prova()
+print(<span class="s">"fuori:"</span>, x)</pre>
+    <ul class="points small">
+      <li>Le variabili create in una funzione, parametri compresi, sono <b>locali</b>: esistono solo lì</li>
+      <li>Le variabili del programma principale sono <b>globali</b></li>
+      <li>Due variabili con lo stesso nome possono convivere</li>
+      <li>Una funzione si può chiamare solo <b>dopo</b> il suo <code>def</code></li>
+    </ul>
+  </div>
+  <p class="small muted">Output: <code>dentro: 5</code> e poi <code>fuori: 1</code>.</p>
+  <aside class="notes">Analogia: due studenti di nome Luca in due classi diverse; dentro la classe "Luca" indica quello presente. La x della funzione è un'altra variabile rispetto alla x globale. Esiste la parola chiave global per modificare una variabile globale da dentro una funzione, ma va evitata: meglio passare i dati con i parametri e restituirli con return. Visibilità delle funzioni: se si chiama prova() prima del def, Python dà NameError, perché legge il file dall'alto in basso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> aggiungi(n):
+    n = n + 1
+    <span class="k">return</span> n
+
+a = 5
+aggiungi(a)
+print(a)</pre>
+    <div class="poll" data-id="fun-locale" data-tipo="quiz" data-risposta="D">
+      <ol><li>6</li><li>None</li><li>Un errore</li><li>5</li></ol>
+      <p class="why">La funzione lavora su n, una copia locale: a resta 5. In più il valore restituito (6) non viene salvato da nessuna parte. Serviva a = aggiungi(a).</p>
+    </div>
+  </div>
+  <aside class="notes">Errore doppio molto comune: credere che la funzione modifichi a e dimenticare di usare il valore restituito. Collegamento con il passaggio per valore in C (UDA 7): anche lì la funzione riceveva una copia. Chi risponde B confonde con il quiz precedente: qui il return c'è.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il convertitore di temperature</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo file <b>temperature.py</b>. Definisci <code>celsius_a_fahrenheit(c)</code> che restituisce <code>c * 9 / 5 + 32</code>.</li>
+      <li>Con un <code>for c in range(-10, 41, 10):</code> stampa una tabella con i gradi Celsius e Fahrenheit.</li>
+      <li>Aggiungi <code>fahrenheit_a_celsius(f)</code>, cioè la formula inversa, e verificala.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 0 °C = 32.0 °F, 30 °C = 86.0 °F, 100 °C = 212.0 °F. Curiosità: a -40 i due valori coincidono.</div>
+  </div>
+  <aside class="notes">Soluzione:
+def celsius_a_fahrenheit(c):
+    return c * 9 / 5 + 32
+def fahrenheit_a_celsius(f):
+    return (f - 32) * 5 / 9
+for c in range(-10, 41, 10):
+    print(c, "°C =", celsius_a_fahrenheit(c), "°F")
+La tabella: -10 → 14.0, 0 → 32.0, 10 → 50.0, 20 → 68.0, 30 → 86.0, 40 → 104.0. Verifica dell'inversa: fahrenheit_a_celsius(212) dà 100.0. Errore tipico: dimenticare le parentesi in (f - 32).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di ingresso</p><h2>Da dove parte il programma? Da <code>main</code></h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">def</span> saluta(nome):
+    print(<span class="s">"Ciao"</span>, nome)
+
+<span class="k">def</span> main():
+    nome = input(<span class="s">"Nome? "</span>)
+    saluta(nome)
+
+<span class="k">if</span> __name__ == <span class="s">"__main__"</span>:
+    main()</pre>
+    <div class="stack">
+      <p class="small">In C il programma parte sempre da <code>main()</code>. In Python si usa la stessa idea per ordine: prima tutte le funzioni, poi un'unica chiamata a <code>main()</code>.</p>
+      <div class="card soft"><p class="small"><code>__name__</code> vale <code>"__main__"</code> quando esegui il file con F5. Se un altro programma lo <b>importa</b> per usarne le funzioni, <code>main()</code> non parte.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il doppio trattino basso si legge "dunder" (double underscore). Non serve capire ogni dettaglio: è una formula fissa da copiare in fondo ai programmi. Vantaggio pratico: il file diventa un modulo riutilizzabile, come random o math. Esempio da mostrare: in un altro file nella stessa cartella, import nomefile e poi nomefile.saluta("Ada").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Scrivi per chi leggerà</h2></div>
+  <figure class="citazione">
+    <blockquote>Il codice viene letto molto più spesso di quanto venga scritto.</blockquote>
+    <figcaption>Un'intuizione chiave di <b>Guido van Rossum</b>, creatore di Python, riportata nella PEP 8, la guida di stile ufficiale di Python, 2001</figcaption>
+  </figure>
+  <div class="cols-2">
+    <div class="card ok"><h3>Così sì</h3><p><code>area_rettangolo(base, altezza)</code></p></div>
+    <div class="card bad"><h3>Così no</h3><p><code>f(a, b)</code> oppure <code>AREA(x,y)</code></p></div>
+  </div>
+  <aside class="notes">Traduzione nostra; l'originale nella PEP 8 (Style Guide for Python Code, scritta da Guido van Rossum con altri due autori) dice: "One of Guido's key insights is that code is read much more often than it is written." Le funzioni con nomi chiari rendono il programma leggibile come un racconto: main() → leggi_voto() → giudizio(). Storia: la prima libreria di sottoprogrammi nacque a Cambridge per il calcolatore EDSAC (1949-1951), con Maurice Wilkes e David Wheeler: già allora l'idea era non riscrivere due volte lo stesso codice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Funzioni pronte da importare</p><h2>Le librerie: scatole piene di funzioni</h2></div>
+  <div class="cols-2">
+<pre class="code"><span class="k">import</span> math
+<span class="k">import</span> random
+
+print(math.sqrt(16))        <span class="c"># 4.0</span>
+print(random.randint(1, 6)) <span class="c"># un dado</span></pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le librerie di AI come PyTorch sono enormi raccolte di funzioni. Chi addestra una rete neurale non scrive tutto da zero: <b>chiama</b> funzioni già pronte, scritte e controllate da migliaia di persone.</p></div>
+  </div>
+  <p class="small muted">Prima <code>import</code>, poi <code>modulo.funzione(…)</code>. Python ne include centinaia: math, random, time, turtle…</p>
+  <aside class="notes">Abbiamo già usato random (indovina il numero), time (il razzo) e turtle (i disegni). math.sqrt calcola la radice quadrata e restituisce un float. Python è famoso per la frase "batteries included": molte librerie sono già comprese nell'installazione. Le librerie di AI invece si installano a parte (non serve farlo a scuola).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Funzioni e intelligenza artificiale</p><h2>Anche un chatbot può chiamare le tue funzioni</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un modello linguistico non sa che tempo fa adesso. Il programmatore allora gli descrive una funzione, per esempio <b>meteo(città)</b>. Quando chiedi "Piove a Bari?", il modello risponde con la chiamata da fare e gli argomenti; il programma la esegue e restituisce il risultato al modello, che scrive la risposta.</p></div>
+<pre class="code"><span class="k">def</span> meteo(citta):
+    <span class="c"># chiede i dati a un</span>
+    <span class="c"># servizio meteo</span>
+    ...
+    <span class="k">return</span> <span class="s">"pioggia"</span></pre>
+  </div>
+  <p class="small muted">Si chiama <b>function calling</b> o uso di strumenti: nomi chiari e parametri precisi servono anche all'AI per capire quando usare una funzione.</p>
+  <aside class="notes">Il funzionamento è proprio questo: il modello non esegue codice da solo, produce il nome della funzione e gli argomenti in un formato strutturato; è il programma dell'azienda o dello sviluppatore che esegue davvero la funzione. I tre puntini ... in Python sono un'istruzione valida che non fa niente (segnaposto). Domanda: quali altre funzioni dareste a un assistente per la scuola? (orario(classe, giorno), compiti(materia)...).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un programma fatto a mattoncini</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>File <b>voti-funzioni.py</b>. Scrivi <code>leggi_voto()</code>: chiede un voto e, con un <code>while</code>, lo richiede finché non è tra 1 e 10. Poi lo restituisce.</li>
+      <li>Scrivi <code>giudizio(voto)</code>: restituisce "sufficiente" o "insufficiente".</li>
+      <li>Scrivi <code>main()</code>: legge un voto e stampa il giudizio.</li>
+      <li>In fondo: <code>if __name__ == "__main__":</code> e, rientrato, <code>main()</code>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> scrivendo 12 e poi 7 il programma chiede di riprovare e poi stampa <code>Il voto 7.0 è sufficiente</code>. Nessuna funzione deve contenere <code>print</code> tranne <code>main</code>.</div>
+  </div>
+  <aside class="notes">Soluzione:
+def leggi_voto():
+    voto = float(input("Voto (1-10): "))
+    while voto < 1 or voto > 10:
+        voto = float(input("Non valido, riprova: "))
+    return voto
+def giudizio(voto):
+    if voto >= 6:
+        return "sufficiente"
+    else:
+        return "insufficiente"
+def main():
+    v = leggi_voto()
+    print("Il voto", v, "è", giudizio(v))
+if __name__ == "__main__":
+    main()
+Riunisce tutta la UDA: input, selezione, while, funzioni. Chi finisce prima: main che legge 3 voti con un for e stampa la media, riusando leggi_voto().</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto chiamando funzioni a mente</h2></div>
+  <div class="puzzle-codice" data-risposta="5619" data-aiuto="la terza cifra: la x dentro prova() è un'altra variabile">
+    <ul class="points">
+      <li>1ª cifra: con <code>def f(x): return x * 2 - 1</code>, quanto vale <code>f(3)</code>?</li>
+      <li>2ª cifra: il valore di <code>len("Python")</code></li>
+      <li>3ª cifra: dopo <code>x = 1</code>, <code>def prova(): x = 7</code> e <code>prova()</code>, che cosa stampa <code>print(x)</code>?</li>
+      <li>4ª cifra: il valore di <code>round(8.6)</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 × 2 - 1 = 5; Python ha 6 lettere; la x globale resta 1; 8.6 arrotondato è 9.</div>
+  </div>
+  <aside class="notes">Codice: 5619. Il tranello è la terza cifra: chi risponde 7 pensa che la funzione modifichi la x globale. A squadre senza computer, poi verifica nella shell.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una funzione si definisce con la parola chiave <span class="blank" data-risposta="def"></span>.</p>
+    <p>Per consegnare un risultato a chi ha chiamato la funzione si usa <span class="blank" data-risposta="return"></span>.</p>
+    <p>Una variabile creata dentro una funzione è <span class="blank" data-risposta="locale"></span>.</p>
+    <p>Una funzione senza return restituisce il valore <span class="blank" data-risposta="None"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: def, return, locale, None.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>def nome(parametri):</code> poi il corpo rientrato</li>
+      <li><code>return</code> restituisce, <code>print</code> mostra soltanto</li>
+      <li>Senza return la funzione restituisce <code>None</code></li>
+    </ul>
+    <ul class="points">
+      <li>Variabili locali e globali: ognuna nel suo ambito</li>
+      <li>Punto di ingresso: <code>main()</code> e <code>__name__</code></li>
+      <li>Librerie e AI: tutto passa da chiamate di funzione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: le liste, per tenere tanti dati in una sola variabile.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

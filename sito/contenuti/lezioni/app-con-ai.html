@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Applicazioni con l'intelligenza artificiale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 4 · Scratch e App Inventor</p>
+  <h1>App con<br>l'intelligenza artificiale</h1>
+  <p class="lead">Non scriviamo più le regole: diamo esempi a un modello e lo facciamo imparare. Poi lo mettiamo dentro Scratch e dentro un'app.</p>
+  <aside class="notes">Obiettivi: capire la differenza tra programmazione classica e machine learning, addestrare un classificatore di testi con Machine Learning for Kids e usarlo in Scratch, collaudarlo e riconoscere i limiti (dati sbilanciati, sarcasmo), costruire un'app App Inventor che classifica immagini. Strumenti: machinelearningforkids.co.uk in modalità "Try it now" (nessun account; i progetti non restano salvati a lungo), oppure account di classe creati dal docente senza email degli studenti; per l'ultimo laboratorio servono webcam e il sito del Personal Image Classifier del MIT. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Un'AI legge la chat di classe e blocca gli insulti. Sei d'accordo?</h2></div>
+  <div class="poll" data-id="ai-chat">
+    <ol><li>Sì, sempre</li><li>Sì, ma deve avvisare e un umano deve controllare</li><li>No: la privacy viene prima</li><li>Non lo so</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta: far argomentare almeno uno studente per opzione. Domande di rilancio: chi decide che cosa è un insulto? cosa succede se l'AI sbaglia e blocca un messaggio innocente? Oggi costruiremo proprio un piccolo classificatore di messaggi gentili e cattivi e vedremo da vicino quanto può sbagliare. Collegamento con la scheda di cittadinanza su cyberbullismo e privacy.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cambio di idea</p><h2>Regole scritte da te o regole imparate dagli esempi?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Programmazione classica</h3><p>Tu scrivi le regole: <i>se il messaggio contiene "stupido" allora è cattivo</i>.</p><p class="muted">Funziona finché qualcuno scrive "stup1do".</p></div>
+    <div class="card soft"><h3>Machine learning</h3><p>Tu dai <b>esempi con l'etichetta giusta</b>; il computer costruisce da solo un <b>modello</b> che li separa.</p><p class="muted">Riconosce anche frasi mai viste, ma può sbagliare.</p></div>
+  </div>
+  <div class="callout"><b>Regole + dati → risposte</b> nella programmazione classica. <b>Dati + risposte → regole</b> nel machine learning.</div>
+  <aside class="notes">Schema reso popolare da François Chollet nel libro "Deep Learning with Python". Collegamento con la UDA 2 (l'intelligenza artificiale e il machine learning). Chiedere alla classe di inventare altre regole per riconoscere un insulto e trovare subito un controesempio: si scopre che le regole a mano non bastano mai.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Alan Turing e la macchina bambina</h2></div>
+  <figure class="citazione">
+    <blockquote>Invece di cercare di produrre un programma che simuli la mente adulta, perché non provare a produrne uno che simuli quella di un bambino?</blockquote>
+    <figcaption><b>Alan Turing</b>, "Computing Machinery and Intelligence", 1950</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il filtro antispam della tua email è un <b>classificatore di testi</b>: ha imparato da milioni di messaggi etichettati come "spam" o "non spam". Ogni volta che segni un messaggio come spam, gli dai un nuovo esempio.</p></div>
+  <aside class="notes">Traduzione nostra dalla sezione 7, "Learning Machines", dell'articolo pubblicato sulla rivista Mind. Turing prosegue: se la si sottoponesse a un'educazione adeguata, si otterrebbe il cervello adulto. È l'idea alla base del machine learning, più di 70 anni prima di ChatGPT. Domanda: "che cosa vuol dire educare una macchina?" (darle esempi e correggerla).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Machine Learning for Kids con Scratch</p><h2>Tre schede: Train, Learn &amp; Test, Make</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Train</h3><p>Crei le <b>etichette</b> (per esempio gentile e cattivo) e scrivi gli esempi.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Learn &amp; Test</h3><p>Il sito <b>addestra</b> il modello; tu lo provi con frasi nuove.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Make</h3><p>Apri <b>Scratch</b>: compaiono blocchi nuovi che usano il tuo modello.</p></div>
+  </div>
+  <div class="callout small">Sito: <b>machinelearningforkids.co.uk</b>, pulsante <b>Get started</b> e poi <b>Try it now</b>: non serve un account. Per l'addestramento servono almeno 5 esempi per etichetta.</div>
+  <aside class="notes">Machine Learning for Kids è stato creato da Dale Lane, sviluppatore di IBM, ed è gratuito per le scuole. In modalità "Try it now" i progetti sono temporanei: se si chiude il browser si perdono. Per lavorare su più giorni il docente può registrarsi come insegnante e creare account per gli studenti senza usare le loro email. Il sito può essere mostrato in italiano o in inglese: i nomi delle schede possono cambiare con la lingua.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il lavoro di chi addestra un modello</h2></div>
+  <ol class="puzzle-ordina" data-id="ciclo-ml">
+    <li>Decidi le categorie da riconoscere</li>
+    <li>Raccogli gli esempi</li>
+    <li>Dai a ogni esempio la sua etichetta</li>
+    <li>Addestra il modello</li>
+    <li>Provalo con esempi nuovi, mai visti</li>
+    <li>Aggiungi esempi dove sbaglia e riaddestra</li>
+  </ol>
+  <aside class="notes">È un ciclo: dopo l'ultimo passo si torna a provare. Far notare che il lavoro più lungo, anche nelle aziende, è raccogliere ed etichettare i dati, non scrivere l'algoritmo. Discussione: chi etichetta i dati delle grandi AI? (spesso lavoratori pagati a cottimo, un tema etico importante).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il gatto permaloso</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>machinelearningforkids.co.uk</b>, Try it now: nuovo progetto di tipo <b>testo</b> in italiano.</li>
+      <li>Train: etichette <b>gentile</b> e <b>cattivo</b>, almeno <b>8 frasi per ciascuna</b>, inventate da te.</li>
+      <li>Learn &amp; Test: addestra e prova 3 frasi nuove.</li>
+      <li>Make, Scratch 3: lo sprite chiede "Dimmi qualcosa" e cambia costume, felice o triste, secondo l'etichetta.</li>
+      <li>File, Salva sul tuo computer: <b>gatto-permaloso.sb3</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> "Sei un grande amico" fa comparire il gatto felice, "Sei inutile" quello triste. Il modello funziona anche con frasi che non hai mai scritto negli esempi.</div>
+  </div>
+  <aside class="notes">Regola della classe: negli esempi cattivi niente parolacce né riferimenti a persone reali o compagni; bastano frasi come "non vali niente", "sei noioso". Il costume triste si può creare duplicando quello del gatto e modificandolo. Lo script è nella slide successiva. Se il sito è lento, l'addestramento può richiedere qualche minuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dentro Scratch</p><h2>Il modello risponde con un'etichetta e una confidenza</h2></div>
+  <div class="cols-2 wide-left">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; chiedi Dimmi qualcosa e attendi; se recognise text risposta label = gentile allora; passa al costume felice; altrimenti; passa al costume triste" viewBox="0 0 872 480" width="828" height="456" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L485.4551086425781,106 Q493.4551086425781,106 493.4551086425781,114 L493.4551086425781,158 Q493.4551086425781,166 485.4551086425781,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">chiedi</text><rect x="109.13232421875" y="114" width="238.89688110351562" height="44" rx="22" fill="#fff" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="228.5807647705078" y="136" fill="#575E75" font-weight="500" text-anchor="middle">Dimmi qualcosa</text><text dominant-baseline="central" x="358.0292053222656" y="136" fill="#fff">e attendi</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L859.2532806396484,166 Q867.2532806396484,166 867.2532806396484,174 L867.2532806396484,246 Q867.2532806396484,254 859.2532806396484,254 L80,254 L72,262 L52,262 L44,254 L36,254 Q28,254 28,262 L28,306 Q28,314 36,314 L44,314 L52,322 L72,322 L80,314 L859.2532806396484,314 Q867.2532806396484,314 867.2532806396484,322 L867.2532806396484,366 Q867.2532806396484,374 859.2532806396484,374 L80,374 L72,382 L52,382 L44,374 L36,374 Q28,374 28,382 L28,426 Q28,434 36,434 L44,434 L52,442 L72,442 L80,434 L859.2532806396484,434 Q867.2532806396484,434 867.2532806396484,442 L867.2532806396484,462 Q867.2532806396484,470 859.2532806396484,470 L54,470 L46,478 L26,478 L18,470 L10,470 Q2,470 2,462 Z" fill="#FFAB19" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="210" fill="#fff">se</text><path d="M57.220123291015625,210 L93.22012329101562,174 H732.8569793701172 L768.8569793701172,210 L732.8569793701172,246 H93.22012329101562 Z" fill="#59C059" stroke="#389438" stroke-width="1.5"/><rect x="97.22012329101562" y="180" width="478.3564147949219" height="60" rx="30" fill="#0FBD8C" stroke="#0B8E69" stroke-width="1.5"/><text dominant-baseline="central" x="113.22012329101562" y="210" fill="#fff">recognise text</text><rect x="316.50877380371094" y="186" width="142.20748901367188" height="48" rx="24" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="332.50877380371094" y="210" fill="#fff">risposta</text><rect x="468.7162628173828" y="188" width="90.86027526855469" height="44" rx="22" fill="#fff" stroke="#0B8E69" stroke-width="1.5"/><text dominant-baseline="central" x="514.1464004516602" y="210" fill="#575E75" font-weight="500" text-anchor="middle">label</text><text dominant-baseline="central" x="585.5765380859375" y="210" fill="#fff">=</text><rect x="611.5646057128906" y="188" width="117.29237365722656" height="44" rx="22" fill="#fff" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="670.2107925415039" y="210" fill="#575E75" font-weight="500" text-anchor="middle">gentile</text><text dominant-baseline="central" x="778.8569793701172" y="210" fill="#fff">allora</text><text dominant-baseline="central" x="16" y="344" fill="#fff">altrimenti</text><path d="M28,262 Q28,254 36,254 L44,254 L52,262 L72,262 L80,254 L419.2602996826172,254 Q427.2602996826172,254 427.2602996826172,262 L427.2602996826172,306 Q427.2602996826172,314 419.2602996826172,314 L80,314 L72,322 L52,322 L44,314 L36,314 Q28,314 28,306 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="284" fill="#fff">passa al costume</text><rect x="287.31199645996094" y="262" width="125.94830322265625" height="44" rx="22" fill="#774DCB" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="303.31199645996094" y="284" fill="#fff">felice</text><path d="M383.2602996826172,280 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M28,382 Q28,374 36,374 L44,374 L52,382 L72,382 L80,374 L417.79852294921875,374 Q425.79852294921875,374 425.79852294921875,382 L425.79852294921875,426 Q425.79852294921875,434 417.79852294921875,434 L80,434 L72,442 L52,442 L44,434 L36,434 Q28,434 28,426 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="404" fill="#fff">passa al costume</text><rect x="287.31199645996094" y="382" width="124.48652648925781" height="44" rx="22" fill="#774DCB" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="303.31199645996094" y="404" fill="#fff">triste</text><path d="M381.79852294921875,400 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <ul class="points">
+      <li><b>label</b>: l'etichetta più probabile</li>
+      <li><b>confidence</b>: quanto è sicuro, da 0 a 100</li>
+      <li>Sotto 60? Meglio dire "Non ho capito"</li>
+    </ul>
+  </div>
+  <aside class="notes">I blocchi nuovi compaiono in fondo alla palette, in una categoria con il nome del progetto; i nomi esatti possono essere in inglese (recognise text … label / confidence) anche con Scratch in italiano. Estensione proposta: un "se" annidato che controlla la confidence prima di decidere, con un terzo costume "confuso". La soglia di 60 è una scelta nostra: si può discutere in classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Addestri il modello con 20 frasi gentili e solo 5 cattive. Che cosa è più probabile?</h2></div>
+  <div class="poll" data-id="dati-sbilanciati" data-tipo="quiz" data-risposta="A">
+    <ol><li>Tende a dire "gentile" anche quando non lo è</li><li>Diventa più preciso proprio sulle frasi cattive</li><li>Non cambia niente: conta solo l'algoritmo</li><li>Riconosce meglio le frasi cattive perché sono più rare</li></ol>
+    <p class="why">Un modello impara dagli esempi che vede: se una categoria è molto più rappresentata, la favorisce. Si chiama <b>sbilanciamento dei dati</b>, una delle cause dei pregiudizi (bias) delle AI.</p>
+  </div>
+  <aside class="notes">La C è il misconcetto più diffuso: pensare che l'AI sia "oggettiva" perché è un programma. Esempio reale da raccontare: sistemi di riconoscimento facciale che sbagliavano molto di più con le persone dalla pelle scura perché addestrati soprattutto su volti chiari (studio "Gender Shades" di Joy Buolamwini e Timnit Gebru, 2018).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>"Ma che bravo, hai rotto di nuovo il PC!" Il modello dice gentile, confidenza 95. Perché?</h2></div>
+  <div class="poll" data-id="sarcasmo" data-tipo="quiz" data-risposta="D">
+    <ol><li>Con il 95% la risposta è sicuramente giusta</li><li>Il modello capisce il sarcasmo ma lo ignora</li><li>È un errore di Scratch, non del modello</li><li>Ha imparato che parole come "bravo" stanno negli esempi gentili, non il significato</li></ol>
+    <p class="why">Il modello trova regolarità nelle parole degli esempi. Il sarcasmo dice il contrario di quello che le parole sembrano dire: per lui è quasi invisibile. E la confidenza misura quanto è sicuro, non quanto ha ragione.</p>
+  </div>
+  <aside class="notes">La A è il tranello: alta confidenza non vuol dire risposta corretta. Anche i grandi modelli linguistici possono rispondere con sicurezza cose sbagliate. Far provare in classe altre frasi sarcastiche e vedere come risponde il modello di ognuno.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Collauda il tuo modello</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc crea le colonne: <b>Frase</b>, <b>Atteso</b>, <b>Ottenuto</b>, <b>Confidenza</b>, <b>Giusto?</b></li>
+      <li>Prova 10 frasi nuove, tra cui 2 sarcastiche e 2 con errori di battitura.</li>
+      <li>In E2 scrivi <code>=SE(B2=C2;"sì";"no")</code> e copia in basso; in E13 <code>=CONTA.SE(E2:E11;"sì")</code>.</li>
+      <li>Aggiungi esempi dove sbaglia, riaddestra e riprova le frasi sbagliate.</li>
+      <li>Salva come <b>collaudo-ai.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> in E13 c'è il numero di risposte giuste su 10: per esempio 7 vuol dire un'accuratezza del 70%. Dopo il riaddestramento, almeno una frase sbagliata ora deve risultare giusta.</div>
+  </div>
+  <aside class="notes">CONTA.SE in Calc usa il punto e virgola come separatore. L'accuratezza (risposte giuste diviso risposte totali) è la misura più semplice di qualità di un modello. Collegamento con le lezioni su Calc e con la funzione SE. Discussione finale: in quali casi un errore del modello sarebbe grave (bloccare un messaggio innocente) e in quali no?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La classificazione delle immagini</p><h2>Per un computer una foto è una tabella di numeri</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ogni pixel è fatto di tre numeri: rosso, verde, blu</li>
+      <li>Una <b>rete neurale</b> trasforma milioni di numeri in un'etichetta: "matita"</li>
+      <li>Si parte da un modello già addestrato su milioni di foto e lo si specializza con poche immagini tue: <b>transfer learning</b></li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando cerchi "cane" nella galleria del telefono e trovi le foto del tuo cane senza averle mai etichettate, è un classificatore di immagini al lavoro. Nel 2009 la ricercatrice Fei-Fei Li presentò ImageNet, un archivio di milioni di foto etichettate a mano che ha fatto decollare questa tecnologia.</p></div>
+  </div>
+  <aside class="notes">Collegamento con la UDA 1: la rappresentazione dei colori RGB in binario ed esadecimale. ImageNet contiene oltre 14 milioni di immagini; la sfida annuale ImageNet (dal 2010) ha visto nel 2012 la vittoria della rete neurale AlexNet, l'inizio dell'esplosione del deep learning. Il Personal Image Classifier del MIT usa proprio il transfer learning da un modello pre-addestrato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La classificazione con App Inventor</p><h2>Dal modello all'app in quattro passi</h2></div>
+  <ol class="steps">
+    <li>Su <b>classifier.appinventor.mit.edu</b> fotografa con la webcam 2 o 3 oggetti, almeno 10 foto ciascuno; addestra e scarica <code>model.mdl</code></li>
+    <li>In App Inventor: <b>Extension</b>, <b>Import extension</b>, il file dell'estensione <b>PersonalImageClassifier</b></li>
+    <li>Interfaccia: <b>WebViewer</b> (la fotocamera), <b>PersonalImageClassifier</b> con Model = model.mdl, un <b>Button</b> e una <b>Label</b></li>
+    <li>Codice e collaudo: si tocca il pulsante e l'app scrive che cosa vede</li>
+  </ol>
+  <aside class="notes">Il file dell'estensione (.aix) si scarica dalla pagina del Personal Image Classifier sul sito di MIT App Inventor: prepararlo prima nella cartella condivisa. Nelle proprietà dell'estensione va indicato anche quale WebViewer usare. Il classificatore funziona sul telefono, senza mandare le foto a un server. Se le webcam del laboratorio mancano, il docente addestra il modello sulla LIM con la sua e lo condivide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Interfaccia e codice</p><h2>Due eventi: chiedo, e ricevo la risposta</h2></div>
+<svg class="blocchi" role="img" aria-label="when ButtonRiconosci.Click do; call PersonalImageClassifier1.ClassifyVideoData" viewBox="0 0 701 172" width="911" height="224" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L439.33685302734375,4 Q447.33685302734375,4 447.33685302734375,12 L447.33685302734375,56 Q447.33685302734375,64 439.33685302734375,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,116 Q28,124 36,124 L44,124 L52,132 L72,132 L80,124 L439.33685302734375,124 Q447.33685302734375,124 447.33685302734375,132 L447.33685302734375,152 Q447.33685302734375,160 439.33685302734375,160 L10,160 Q2,160 2,152 Z" fill="#C88330" stroke="#A66A22" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">when ButtonRiconosci.Click do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L688.0739135742188,64 Q696.0739135742188,64 696.0739135742188,72 L696.0739135742188,116 Q696.0739135742188,124 688.0739135742188,124 L80,124 L72,132 L52,132 L44,124 L36,124 Q28,124 28,116 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="94" fill="#fff">call PersonalImageClassifier1.ClassifyVideoData</text></svg>
+<svg class="blocchi" role="img" aria-label="when PersonalImageClassifier1.GotClassification result do; set LabelRisultato.Text to get result" viewBox="0 0 811 176" width="1054" height="229" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L798.3185424804688,4 Q806.3185424804688,4 806.3185424804688,12 L806.3185424804688,56 Q806.3185424804688,64 798.3185424804688,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,120 Q28,128 36,128 L44,128 L52,136 L72,136 L80,128 L798.3185424804688,128 Q806.3185424804688,128 806.3185424804688,136 L806.3185424804688,156 Q806.3185424804688,164 798.3185424804688,164 L10,164 Q2,164 2,156 Z" fill="#C88330" stroke="#A66A22" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">when PersonalImageClassifier1.GotClassification result do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L557.0893402099609,64 Q565.0893402099609,64 565.0893402099609,72 L565.0893402099609,120 Q565.0893402099609,128 557.0893402099609,128 L80,128 L72,136 L52,136 L44,128 L36,128 Q28,128 28,120 Z" fill="#266643" stroke="#1B4A30" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="96" fill="#fff">set LabelRisultato.Text to</text><rect x="390.4876708984375" y="72" width="160.60166931152344" height="48" rx="24" fill="#D05F2D" stroke="#A84B22" stroke-width="1.5"/><text dominant-baseline="central" x="406.4876708984375" y="96" fill="#fff">get result</text></svg>
+  <p class="small"><b>result</b> è una lista di coppie etichetta e confidenza, dalla più probabile: per esempio <code>((matita 0.91) (gomma 0.07) (mano 0.02))</code>.</p>
+  <aside class="notes">La classificazione è asincrona: il primo evento chiede, il secondo arriva quando il modello ha finito. È lo stesso schema dei messaggi in Scratch. Miglioramento: mostrare solo la prima etichetta con "select list item" due volte (prima la coppia di indice 1, poi il suo elemento 1). I nomi esatti di metodi ed eventi possono cambiare con la versione dell'estensione: controllarli nel cassetto dei blocchi del componente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti, a coppie</span></p>
+  <h2>Un'app che riconosce gli oggetti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Addestra un modello con 3 oggetti dell'astuccio, almeno 10 foto ciascuno, da angolazioni diverse.</li>
+      <li>Nuovo progetto <b>CheCosE</b>: importa l'estensione e inserisci i componenti della slide.</li>
+      <li>Scrivi i due eventi della slide precedente.</li>
+      <li>Collaudo: 5 prove per oggetto, anche con poca luce e con un oggetto mai visto.</li>
+      <li>Export: <b>CheCosE.aia</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> inquadrando la matita, la prima coppia della lista è matita con confidenza alta. Con un oggetto mai visto il modello risponde comunque una delle sue 3 etichette: non sa dire "non lo so".</div>
+  </div>
+  <aside class="notes">Il punto chiave del collaudo è l'ultimo: un classificatore sceglie sempre tra le etichette che conosce, anche davanti a qualcosa di completamente nuovo. Per questo spesso si aggiunge un'etichetta "niente" con foto dello sfondo vuoto. Se il Companion non riesce a usare la fotocamera, controllare i permessi dell'app sul telefono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina le parole del machine learning</h2></div>
+  <dl class="puzzle-abbina" data-id="parole-ml">
+    <dt>Etichetta</dt><dd>La categoria a cui appartiene un esempio</dd>
+    <dt>Modello</dt><dd>Ciò che si ottiene dall'addestramento</dd>
+    <dt>Confidenza</dt><dd>Quanto il modello è sicuro della risposta</dd>
+    <dt>Dati di test</dt><dd>Esempi nuovi, mai usati per addestrare</dd>
+    <dt>Bias</dt><dd>Errore sistematico dovuto a dati sbilanciati</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Sui dati di test: se si prova il modello con gli stessi esempi usati per addestrarlo, i risultati sembrano ottimi ma non dicono niente. È come studiare solo le domande che usciranno alla verifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nel machine learning il computer impara da <span class="blank" data-risposta="esempi|dati" style="--w:7ch"></span> con l'etichetta giusta.</p>
+    <p>Il risultato dell'addestramento si chiama <span class="blank" data-risposta="modello" style="--w:8ch"></span>.</p>
+    <p>Un modello con confidenza alta può comunque <span class="blank" data-risposta="sbagliare" style="--w:9ch"></span>.</p>
+    <p>Se una categoria ha molti più esempi delle altre, i dati sono <span class="blank" data-risposta="sbilanciati" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: esempi (accettato dati); modello; sbagliare; sbilanciati.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Machine learning: dati + risposte → modello</li>
+      <li>ML for Kids: Train, Learn &amp; Test, Make</li>
+      <li>Etichetta e confidenza dentro Scratch</li>
+    </ul>
+    <ul class="points">
+      <li>Collaudo con dati nuovi e accuratezza</li>
+      <li>Dati sbilanciati = bias</li>
+      <li>Immagini: transfer learning e App Inventor</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (diario di addestramento di un modello a tema libero). Prossima lezione: Arduino e Tinkercad, quando il codice esce dallo schermo e accende le luci.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

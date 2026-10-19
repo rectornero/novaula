@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il foglio che ragiona · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>Il foglio<br>che ragiona</h1>
+  <p class="lead">Excel e Calc al livello successivo: percentuali, colori che si accendono da soli, conteggi e somme con una condizione.</p>
+  <aside class="notes">Lezione del libro "I fogli elettronici Excel e Calc". Le classi hanno già fatto Calc: primi passi (celle, formati, bordi) e Calc: formule e funzioni (SOMMA, MEDIA, riferimenti assoluti, SE). Qui si va oltre: incidenza percentuale, formattazione condizionale, CONTA.SE, SOMMA.SE, SE con testo, differenze tra Calc ed Excel. Durata: 3 ore. Un solo file per tutta la lezione: mercatino.ods. Nomi delle funzioni in italiano, separatore punto e virgola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Indovina prima di calcolare</p><h2>Al mercatino della classe, quale prodotto ha incassato di più?</h2></div>
+  <div class="poll" data-id="indovina-incasso">
+    <ol><li>I biscotti: ne abbiamo venduti 40</li><li>Le fette di torta: 2,50 € l'una</li><li>I calendari: costano 5 €</li><li>I succhi: sono finiti subito</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di previsione: non si rivela la risposta. Si scopre nel primo esercizio (vince la torta: 30 × 2,50 = 75 €, contro i 60 € dei biscotti). Messaggio: l'intuito sbaglia spesso, i calcoli no. Riprendere il risultato del voto quando la colonna Incasso è pronta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove eravamo rimasti</p><h2>Quello che sai già, quello che impari oggi</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Già fatto</h3>
+      <div class="chips"><span class="chip">contenuto: testo, numero, formula</span><span class="chip">formati e bordi</span><span class="chip">SOMMA, MEDIA</span><span class="chip">riferimento assoluto $</span><span class="chip">SE con due risposte</span></div>
+    </div>
+    <div class="card soft">
+      <h3>Oggi</h3>
+      <ul class="points">
+        <li>Incidenza percentuale</li>
+        <li>Formattazione condizionale</li>
+        <li>CONTA.SE e SOMMA.SE</li>
+        <li>SE per etichettare i dati</li>
+        <li>Calc ed Excel: le differenze</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Ripasso lampo a voce: che differenza c'è tra E10 ed $E$10 quando trascini? (Il secondo resta fermo.) In una cella con scritto =SOMMA(E2:E9), il contenuto è la formula e il valore mostrato è il risultato. Se serve, riaprire per due minuti la lezione Calc: formule e funzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I dati della lezione</p><h2>Il mercatino della classe</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="sheet" style="white-space:nowrap">
+      <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+      <tr><th>1</th><td><b>Prodotto</b></td><td><b>Categoria</b></td><td><b>Pezzi</b></td><td><b>Prezzo</b></td><td><b>Incasso</b></td></tr>
+      <tr><th>2</th><td>Biscotti</td><td>Dolci</td><td>40</td><td>1,50 €</td><td class="f">60,00 €</td></tr>
+      <tr><th>3</th><td>Muffin</td><td>Dolci</td><td>25</td><td>2,00 €</td><td class="f">50,00 €</td></tr>
+      <tr><th>4</th><td>Torta</td><td>Dolci</td><td>30</td><td>2,50 €</td><td class="f">75,00 €</td></tr>
+      <tr><th>5</th><td>Succo</td><td>Bevande</td><td>35</td><td>1,00 €</td><td class="f">35,00 €</td></tr>
+      <tr><th>6</th><td>Tè freddo</td><td>Bevande</td><td>20</td><td>1,50 €</td><td class="f">30,00 €</td></tr>
+      <tr><th>7</th><td>Segnalibro</td><td>Oggetti</td><td>15</td><td>1,00 €</td><td class="f">15,00 €</td></tr>
+      <tr><th>8</th><td>Portachiavi</td><td>Oggetti</td><td>12</td><td>2,50 €</td><td class="f">30,00 €</td></tr>
+      <tr><th>9</th><td>Calendario</td><td>Oggetti</td><td>9</td><td>5,00 €</td><td class="f">45,00 €</td></tr>
+      <tr><th>10</th><td></td><td></td><td></td><td><b>Totale</b></td><td class="f sel">340,00 €</td></tr>
+    </table>
+    <div class="stack">
+      <p class="small">In <b>E2</b>: <code>=C2*D2</code>, poi trascina fino a E9.</p>
+      <p class="small">In <b>E10</b>: <code>=SOMMA(E2:E9)</code></p>
+      <p class="small muted">Il simbolo € non si scrive: è il <b>formato valuta</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Verifica dei conti: 60 + 50 + 75 + 35 + 30 + 15 + 30 + 45 = 340. La torta incassa più dei biscotti anche se se ne vendono meno pezzi: risposta al sondaggio iniziale. Ricordare la differenza tra contenuto (la formula) e valore visualizzato (il risultato formattato).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prepara il foglio del mercatino</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Calc e copia la tabella della slide precedente da A1 a D9 (senza il simbolo €).</li>
+      <li>In E2 scrivi <code>=C2*D2</code> e trascina fino a E9. In D10 scrivi <b>Totale</b>, in E10 <code>=SOMMA(E2:E9)</code>.</li>
+      <li>Seleziona D2:E10 e applica il <b>formato valuta</b>.</li>
+      <li>Seleziona A1:E10: <b>Formato › Celle › Bordi</b>, tutti i bordi. Prima riga in grassetto con uno sfondo.</li>
+      <li>Salva come <b>mercatino.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> E4 mostra 75,00 € ed E10 mostra 340,00 €. Se in E10 leggi 0 o un errore, controlla di non aver scritto il simbolo € a mano nei prezzi.</div>
+  </div>
+  <aside class="notes">Errore tipico: scrivere "1.50" con il punto. In Calc in italiano il separatore decimale è la virgola: "1.50" viene letto come testo o come data. Trucco: Visualizza › Evidenziazione valori (Ctrl+F8) mostra i numeri in blu e il testo in nero, così si vede subito se un prezzo è stato letto come testo. In Excel: Home › Formato numeri › Valuta e Home › Bordi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Incidenza percentuale</p><h2>Che fetta della torta è tua?</h2></div>
+  <div class="formula"><small>Incidenza = parte ÷ totale · in F2, poi trascina fino a F9</small>=E2/<span class="hl">$E$10</span></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il risultato è un numero tra 0 e 1: la torta fa 0,2206…</li>
+      <li>Con il <b>formato percentuale</b> diventa <b>22,1%</b></li>
+    </ul>
+    <ul class="points">
+      <li>Il totale è uno solo: serve il <b>$</b></li>
+      <li>Prova del nove: la somma delle incidenze fa <b>100%</b></li>
+    </ul>
+  </div>
+  <aside class="notes">75 / 340 = 0,22058… cioè 22,1% con un decimale. Non si moltiplica per 100: lo fa il formato percentuale. Se si moltiplica per 100 e poi si applica il formato percentuale, compare 2205,9%: errore frequente da far scoprire. Collegamento con matematica: è la stessa proporzione parte : totale = x : 100.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>In F2 c'è <code>=E2/E10</code> senza dollari. Trascini in F3: che cosa compare?</h2></div>
+  <div class="poll" data-id="div-zero" data-tipo="quiz" data-risposta="B">
+    <ol><li>14,7%, l'incidenza dei muffin</li><li>#DIV/0!</li><li>0%</li><li>Lo stesso valore di F2</li></ol>
+    <p class="why">Trascinando, E10 diventa E11, che è vuota: Calc divide per zero e mostra #DIV/0!. Con $E$10 il totale resta fermo e il risultato è 14,7%.</p>
+  </div>
+  <aside class="notes">Chi risponde A ha capito la matematica ma non il riferimento relativo. Far verificare dal vivo: cliccare F3 e leggere la formula nella barra in alto (=E3/E11). In Excel l'errore ha lo stesso nome, #DIV/0!.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Formattazione condizionale</p><h2>Le celle che si colorano da sole</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Scegli una <b>regola</b> e uno <b>stile</b>: se il valore rispetta la regola, la cella cambia aspetto. Se il valore cambia, il colore si aggiorna.</p>
+      <ul class="points small">
+        <li><b>Calc</b>: Formato › Condizionale › Condizione</li>
+        <li><b>Excel</b>: Home › Formattazione condizionale</li>
+        <li>Anche <b>scale di colori</b> e <b>barre dei dati</b></li>
+      </ul>
+    </div>
+    <table class="sheet">
+      <tr><th></th><th>F</th></tr>
+      <tr><th>1</th><td><b>Incidenza</b></td></tr>
+      <tr><th>2</th><td class="sel">17,6%</td></tr>
+      <tr><th>3</th><td>14,7%</td></tr>
+      <tr><th>4</th><td class="sel">22,1%</td></tr>
+      <tr><th>5</th><td>10,3%</td></tr>
+    </table>
+  </div>
+  <div class="callout">Regola dell'esempio: <b>il valore della cella è maggiore di 0,15</b>, cioè del 15%.</div>
+  <aside class="notes">Nell'esempio le celle evidenziate sono quelle sopra il 15%. Far notare che la condizione si scrive 0,15 e non 15: il valore vero della cella è 0,147, il 14,7% è solo il formato. È lo stesso concetto della lezione su Calc: primi passi (il valore resta, cambia come lo vedi). In Calc lo stile si sceglie dall'elenco (per esempio uno stile con sfondo colorato) o si crea con Nuovo stile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Percentuali che si accendono</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riapri <b>mercatino.ods</b>. In F1 scrivi <b>Incidenza</b>, in F2 <code>=E2/$E$10</code> e trascina fino a F9.</li>
+      <li>Formato percentuale con <b>un decimale</b>. In F10 calcola la somma della colonna.</li>
+      <li>Seleziona F2:F9: <b>Formato › Condizionale › Condizione</b>. Regola: <i>il valore della cella è maggiore di</i> <b>0,15</b>, con uno stile a sfondo colorato.</li>
+      <li>Cambia i pezzi di Muffin da 25 a 27 e guarda che cosa succede. Poi rimetti 25 e salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> F10 mostra 100,0%. Con 25 muffin si colorano solo Biscotti (17,6%) e Torta (22,1%). Con 27 muffin anche i Muffin superano il 15% e si colorano da soli.</div>
+  </div>
+  <aside class="notes">Con 27 muffin: incasso 54 €, totale 344 €, incidenza 54/344 = 15,7%: supera la soglia. Biscotti scendono a 60/344 = 17,4%, torta a 21,8%. Chi scrive 15 invece di 0,15 non vede nessuna cella colorata: ottimo momento per ripetere la differenza tra valore e formato. In Excel: Home › Formattazione condizionale › Regole evidenziazione celle › Maggiore di.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il primo foglio elettronico nacque da un compito di scuola</h2></div>
+  <figure class="citazione">
+    <blockquote>L'idea del foglio elettronico mi venne mentre ero studente alla Harvard Business School, nella primavera del 1978.</blockquote>
+    <figcaption><b>Dan Bricklin</b>, che con Bob Frankston creò VisiCalc (1979), dal racconto sul suo sito</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>La regola "se il valore supera una soglia, cambia colore" è ovunque: l'icona della batteria che diventa rossa quando è quasi scarica, le mappe del traffico che passano dal verde al rosso, il semaforo della qualità dell'aria nelle app meteo.</p></div>
+  <aside class="notes">Traduzione nostra del racconto di Bricklin sul sito bricklin.com: durante le esercitazioni di economia doveva rifare a mano interi tabelloni di calcoli ogni volta che cambiava un numero, e immaginò una "lavagna magica" che ricalcolasse da sola. VisiCalc uscì nel 1979 per l'Apple II e convinse molte aziende a comprare un personal computer. Domanda: quale dato della vostra vita colorereste con una regola? (Media dei voti, tempo di schermo, risparmi.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contare e sommare con una condizione</p><h2>CONTA.SE e SOMMA.SE</h2></div>
+  <div class="formula"><small>Quanti prodotti sono Dolci?</small>=CONTA.SE(B2:B9;<span class="hl">"Dolci"</span>) <small>risultato: 3</small></div>
+  <div class="formula"><small>Quanto hanno incassato i Dolci? (dove cerco; che cosa cerco; che cosa sommo)</small>=SOMMA.SE(B2:B9;<span class="hl">"Dolci"</span>;E2:E9) <small>risultato: 185,00 €</small></div>
+  <aside class="notes">CONTA.SE ha due argomenti: l'intervallo e il criterio. SOMMA.SE ne ha tre: l'intervallo in cui cercare, il criterio, l'intervallo da sommare (righe corrispondenti). Verifica: 60 + 50 + 75 = 185. Il criterio può essere anche un confronto tra virgolette: =CONTA.SE(C2:C9;">=30") conta i prodotti con almeno 30 pezzi venduti (Biscotti, Torta, Succo: 3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che risultato dà <code>=SOMMA.SE(B2:B9;"Bevande";C2:C9)</code>?</h2></div>
+  <div class="poll" data-id="somma-se-pezzi" data-tipo="quiz" data-risposta="C">
+    <ol><li>2</li><li>65,00 €</li><li>55</li><li>35</li></ol>
+    <p class="why">La formula somma la colonna C, i <b>pezzi</b>, non l'incasso: 35 succhi + 20 tè freddi = 55. Il 2 sarebbe CONTA.SE, i 65 € la somma della colonna E.</p>
+  </div>
+  <aside class="notes">Il terzo argomento decide che cosa si somma: è l'errore più frequente leggere solo il criterio. Chiedere: come cambio la formula per avere 65 €? (Terzo argomento E2:E9.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La funzione SE</p><h2>Un'etichetta per ogni riga</h2></div>
+  <div class="formula"><small>In G2, poi trascina: il prodotto ha raggiunto l'obiettivo di 40 €?</small>=SE(E2&gt;=40;<span class="hl">"Obiettivo"</span>;<span class="hl">"Sotto"</span>)</div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Poi si conta</h3><p><code>=CONTA.SE(G2:G9;"Obiettivo")</code> dice quanti prodotti ce l'hanno fatta: <b>4</b>.</p></div>
+    <div class="card"><h3>Livello pro</h3><p class="small">Un SE dentro un altro SE dà tre risposte:<br><code>=SE(F2&gt;0,15;"Top";SE(F2&gt;0,1;"Medio";"Basso"))</code></p></div>
+  </div>
+  <aside class="notes">Obiettivo raggiunto: Biscotti 60, Muffin 50, Torta 75, Calendario 45 (4 prodotti). Sotto: Succo, Tè, Segnalibro, Portachiavi. Il SE annidato è facoltativo: Top per Biscotti, Torta; Medio per Muffin (14,7%), Succo (10,3%) e Calendario (13,2%); Basso per Tè (8,8%), Segnalibro (4,4%) e Portachiavi (8,8%). Il testo nelle formule va tra virgolette; il maggiore o uguale si scrive con due simboli, &gt;=.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni strumento a ciò che fa</h2></div>
+  <dl class="puzzle-abbina" data-id="strumenti-calc">
+    <dt>CONTA.SE</dt><dd>Conta le celle che rispettano un criterio</dd>
+    <dt>SOMMA.SE</dt><dd>Somma i valori delle righe che rispettano un criterio</dd>
+    <dt>SE</dt><dd>Sceglie tra due risultati in base a una condizione</dd>
+    <dt><code>$E$10</code></dt><dd>Riferimento che non cambia quando trascini</dd>
+    <dt>Formattazione condizionale</dt><dd>Cambia l'aspetto della cella in base al valore</dd>
+  </dl>
+  <aside class="notes">A squadre, due minuti. Tranello: CONTA.SE e SOMMA.SE hanno descrizioni simili, distinguono "conta le celle" e "somma i valori". Domanda bonus: quale di questi strumenti non cambia il valore della cella? (La formattazione condizionale: cambia solo l'aspetto.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il riepilogo per categoria</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>mercatino.ods</b>, in G2 scrivi <code>=SE(E2&gt;=40;"Obiettivo";"Sotto")</code> e trascina fino a G9.</li>
+      <li>In I1:K1 scrivi <b>Categoria</b>, <b>Prodotti</b>, <b>Incasso</b>; in I2:I4 Dolci, Bevande, Oggetti.</li>
+      <li>In J2 <code>=CONTA.SE($B$2:$B$9;I2)</code>, in K2 <code>=SOMMA.SE($B$2:$B$9;I2;$E$2:$E$9)</code>. Trascina fino alla riga 4.</li>
+      <li>In K5 somma gli incassi delle categorie. Salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Dolci 3 prodotti e 185,00 €; Bevande 2 e 65,00 €; Oggetti 3 e 90,00 €. K5 dà 340,00 €, come E10. Nella colonna G ci sono 4 "Obiettivo".</div>
+  </div>
+  <aside class="notes">Qui il criterio è una cella (I2) invece di un testo tra virgolette: così la stessa formula, trascinata, funziona per tutte le categorie. I $ servono a tenere fermi gli intervalli. Se K5 non coincide con E10, c'è una categoria scritta in modo diverso (per esempio "Dolci " con uno spazio): il criterio deve essere identico. Chi finisce prima: in L2 l'incidenza di ogni categoria, =K2/$K$5 (Dolci 54,4%).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le differenze in Calc</p><h2>Stesso foglio, due programmi</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>LibreOffice Calc</th><th>Microsoft Excel</th></tr>
+    <tr><td><b>Formato del file</b></td><td><code>.ods</code></td><td><code>.xlsx</code></td></tr>
+    <tr><td><b>Cella di un altro foglio</b></td><td><code>=Foglio2.A1</code> (punto)</td><td><code>=Foglio2!A1</code> (punto esclamativo)</td></tr>
+    <tr><td><b>Formattazione condizionale</b></td><td>Formato › Condizionale</td><td>Home › Formattazione condizionale</td></tr>
+    <tr><td><b>Funzioni in italiano</b></td><td colspan="2">uguali: SE, CONTA.SE, SOMMA.SE, separatore <code>;</code></td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un assistente AI scrive formule in un attimo, ma spesso nella versione <b>inglese</b>: <code style="background:rgba(255,255,255,.14);color:#fff">=COUNTIF(B2:B9,"Dolci")</code>. Nel Calc italiano non funziona: serve <code style="background:rgba(255,255,255,.14);color:#fff">=CONTA.SE(B2:B9;"Dolci")</code>. Capire la formula resta il tuo lavoro.</p></div>
+  <aside class="notes">Calc apre e salva anche i file .xlsx, ma alcune funzioni avanzate o formattazioni possono cambiare aspetto: per consegnare un file a chi usa Excel, provare ad aprirlo prima. In Excel per Microsoft 365 esistono funzioni di AI (Copilot, Analizza dati) che suggeriscono formule e grafici; servono abbonamento e account. Lo stesso controllo vale per i separatori decimali: in inglese 1.5, in italiano 1,5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con il foglio del mercatino</h2></div>
+  <div class="puzzle-codice" data-risposta="3222" data-aiuto="la Torta incassa 75 € su 340 €">
+    <ul class="points">
+      <li>1ª cifra: il risultato di <code style="background:rgba(255,255,255,.14);color:#fff">=CONTA.SE(B2:B9;"Oggetti")</code></li>
+      <li>2ª cifra: quante celle colora la regola "maggiore di 0,15" con i dati originali</li>
+      <li>3ª e 4ª cifra: l'incidenza della Torta, arrotondata all'intero</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 3 oggetti, 2 celle colorate (Biscotti e Torta), 75 ÷ 340 = 22%.</div>
+  </div>
+  <aside class="notes">Codice: 3222. A squadre, con il foglio aperto: vince chi apre per primo. Chi ha lasciato i muffin a 27 trova 3 celle colorate: buona occasione per ricordare di rimettere i dati originali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>L'incidenza percentuale si calcola dividendo la parte per il <span class="blank" data-risposta="totale"></span>.</p>
+    <p>Per tenere fermo il totale quando trascini scrivi E10 come <span class="blank" data-risposta="$E$10"></span>.</p>
+    <p>Per contare le celle che contengono "Dolci" si usa la funzione <span class="blank" data-risposta="CONTA.SE|contase"></span>.</p>
+    <p>La formattazione <span class="blank" data-risposta="condizionale"></span> colora una cella in base al suo valore.</p>
+    <p>Per scrivere "Obiettivo" o "Sotto" accanto a ogni prodotto si usa la funzione <span class="blank" data-risposta="SE"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: totale, $E$10, CONTA.SE, condizionale, SE.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Incidenza = parte ÷ totale (con il $), formato %</li>
+      <li>La formattazione condizionale cambia l'aspetto, non il valore</li>
+      <li>CONTA.SE conta, SOMMA.SE somma</li>
+    </ul>
+    <ul class="points">
+      <li>SE mette un'etichetta a ogni riga</li>
+      <li>Calc ed Excel: stesse funzioni in italiano</li>
+      <li>Le formule dell'AI vanno capite e adattate</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Conservare mercatino.ods: nella prossima lezione diventa un grafico.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

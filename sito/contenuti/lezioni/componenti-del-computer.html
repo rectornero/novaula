@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Com'è fatto un computer · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Architettura del computer</p>
+  <h1>Com'è fatto<br>un computer</h1>
+  <p class="lead">Dentro la scatola: processore, memorie, periferiche e i programmi che le fanno lavorare insieme.</p>
+  <aside class="notes">Aprire chiedendo: "Se doveste comprare un computer, quali caratteristiche guardereste?". Annotare alla lavagna le parole che escono (giga, processore, RAM, SSD…): alla fine della lezione le riprendiamo e sapremo cosa vogliono dire. Obiettivo: riconoscere i componenti principali e leggere le specifiche del proprio PC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due mondi</p><h2>Hardware e software</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Hardware</h3><p>La parte <b>fisica</b>: tutto ciò che puoi toccare.</p><p class="muted small">Processore, memoria, schermo, tastiera, cavi.</p></div>
+    <div class="card soft"><h3>Software</h3><p>I <b>programmi</b>: istruzioni che dicono all'hardware cosa fare.</p><p class="muted small">Windows, il browser, Calc, i videogiochi, le app del telefono.</p></div>
+  </div>
+  <div class="callout">Un'immagine: l'hardware è il <b>pianoforte</b>, il software è lo <b>spartito</b>. Servono tutti e due per sentire la musica.</div>
+  <div class="stack"><p><b>Hardware o software?</b> Classifica a voce:</p><div class="chips"><span class="chip">mouse</span><span class="chip">Google Chrome</span><span class="chip">stampante</span><span class="chip">Windows</span><span class="chip">chiavetta USB</span><span class="chip">Calc</span><span class="chip">webcam</span></div></div>
+  <aside class="notes">Soluzioni dei chip: hardware mouse, stampante, chiavetta USB, webcam; software Chrome, Windows, Calc. Domanda: "Un videogioco su DVD è hardware o software?". Il disco è hardware, il gioco registrato sopra è software. Altra domanda: "Lo smartphone ha hardware e software?". Sì: ogni dispositivo digitale li ha entrambi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo schema di base</p><h2>Entra, si elabora, esce</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Input</h3><p class="small">I dati entrano: tastiera, mouse, microfono.</p></div>
+    <div class="card fill"><h3>Elaborazione</h3><p class="small"><b>CPU</b> e <b>RAM</b> lavorano sui dati.</p></div>
+    <div class="card soft"><h3>Output</h3><p class="small">I risultati escono: schermo, stampante, casse.</p></div>
+  </div>
+  <div class="card night"><h3>Memoria di massa</h3><p class="small">Disco (HDD o SSD): conserva programmi e file anche a computer spento.</p></div>
+  <div class="callout">Esempio: premi il tasto <b>A</b> (input), la CPU lo elabora, la lettera compare sullo schermo (output). Quando salvi, finisce sul disco.</div>
+  <aside class="notes">Far ripetere l'esempio del tasto A con altri casi: una foto scattata con la webcam, un documento stampato. Tutti i componenti sono collegati dalla scheda madre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il processore</p><h2>La CPU esegue le istruzioni</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>CPU</b> = unità centrale di elaborazione: fa i calcoli e prende le decisioni.</li>
+      <li>Esegue le istruzioni dei programmi, una dopo l'altra, velocissima.</li>
+      <li>I <b>core</b> sono "processori dentro il processore": lavorano in parallelo.</li>
+      <li>Scalda: per questo ha sopra un dissipatore con ventola.</li>
+    </ul>
+    <div class="stack">
+      <div class="card soft"><p class="num">3 GHz</p><p class="small">3 miliardi di cicli al secondo: è la <b>frequenza</b> del clock.</p></div>
+      <div class="card soft"><p class="num">8 core</p><p class="small">8 unità di calcolo che lavorano insieme.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Hz = una volta al secondo; giga = miliardo. La frequenza da sola non dice tutto: processori più recenti fanno più lavoro per ciclo. Marchi da citare se chiedono: Intel, AMD, nei telefoni chip ARM (Qualcomm, Apple, MediaTek…). Nel prossimo esercizio troveranno nome e frequenza del processore del loro PC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le memorie</p><h2>RAM e disco: scrivania e armadio</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>RAM · la scrivania</h3>
+      <ul class="points small">
+        <li>Contiene i programmi e i file <b>aperti adesso</b>.</li>
+        <li>Velocissima, ma più piccola: oggi di solito 8–16 GB.</li>
+        <li><b>Volatile</b>: si svuota quando spegni.</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Disco · l'armadio</h3>
+      <ul class="points small">
+        <li>Conserva sistema, programmi e file <b>salvati</b>.</li>
+        <li>Più lento, ma molto più grande: centinaia di GB.</li>
+        <li><b>Permanente</b>: resta anche a computer spento.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout hl">Con poca RAM la scrivania è piccola: con troppi programmi aperti il computer rallenta.</div>
+  <aside class="notes">Domanda chiave: "Se va via la corrente mentre scrivete il tema e non avete salvato, che cosa perdete? Perché?". Il testo era solo in RAM. "Salvare" vuol dire copiare dalla RAM al disco. Il valore 8–16 GB è indicativo per i PC recenti; i PC del laboratorio possono averne meno: lo vedremo nell'esercizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Memoria di massa</p><h2>HDD e SSD</h2></div>
+  <table class="data">
+    <tr><th></th><th>HDD · disco rigido</th><th>SSD · disco a stato solido</th></tr>
+    <tr><td><b>Com'è fatto</b></td><td>Piatti magnetici che girano e una testina</td><td>Chip di memoria flash, nessuna parte in movimento</td></tr>
+    <tr><td><b>Velocità</b></td><td>Più lento</td><td class="hl">Molto più veloce</td></tr>
+    <tr><td><b>Urti e rumore</b></td><td>Teme gli urti, si sente girare</td><td>Più resistente, silenzioso</td></tr>
+    <tr><td><b>Prezzo</b></td><td class="hl">Costa meno a parità di spazio</td><td>Costa di più a parità di spazio</td></tr>
+  </table>
+  <p class="muted">Anche chiavette USB e schede di memoria sono memorie flash, come gli SSD.</p>
+  <aside class="notes">Oggi quasi tutti i portatili hanno un SSD: il computer si accende e apre i programmi molto più in fretta. Gli HDD si usano ancora per archivi grandi e backup. Nell'esercizio, Gestione attività dice se il disco del PC è un SSD o un HDD.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prova tu: la carta d'identità del tuo PC</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>Impostazioni</b> &gt; <b>Sistema</b> &gt; <b>Informazioni</b>: leggi processore, RAM installata, versione di Windows.</li>
+      <li><code>Ctrl + Maiusc + Esc</code> apre <b>Gestione attività</b>: scheda <b>Prestazioni</b>, guarda CPU (core, velocità) e Disco (SSD o HDD).</li>
+      <li>In <b>Esplora file</b> &gt; <b>Questo PC</b> leggi spazio libero e totale del disco.</li>
+      <li>Scrivi tutto in <b>Calc</b> e salva come <code>specifiche_cognome.ods</code>.</li>
+    </ol>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Voce</th><th>Valore</th></tr>
+        <tr><td>Processore</td><td>?</td></tr>
+        <tr><td>Core</td><td>?</td></tr>
+        <tr><td>RAM</td><td>? GB</td></tr>
+        <tr><td>Disco</td><td>SSD / HDD</td></tr>
+        <tr><td>Spazio</td><td>? GB</td></tr>
+      </table>
+      <div class="check small"><b>Controllo:</b> la RAM di solito è 4, 8 o 16 GB; lo spazio libero è minore del totale; il PC accanto, se è uguale, ha gli stessi valori.</div>
+    </div>
+  </div>
+  <aside class="notes">Le risposte dipendono dai PC del laboratorio: preparare in anticipo i valori di una macchina da usare come confronto. In Windows 10 Gestione attività può aprirsi compatto: cliccare "Più dettagli". Far notare la differenza tra RAM installata e RAM in uso, e tra spazio totale e spazio libero. Aggiungere anche la riga "Sistema operativo" se avanza tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dentro il case</p><h2>La scheda madre collega tutto</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><h3>Scheda madre</h3><p class="small">Il circuito principale: su di essa si innestano CPU, RAM e schede.</p></div>
+    <div class="card soft"><h3>Alimentatore</h3><p class="small">Trasforma la corrente di casa in quella che serve ai componenti.</p></div>
+    <div class="card soft"><h3>Scheda video</h3><p class="small">GPU: disegna le immagini sullo schermo. A volte è dentro la CPU.</p></div>
+    <div class="card soft"><h3>Rete</h3><p class="small">Wi-Fi o cavo: collega il computer a internet.</p></div>
+  </div>
+  <p class="lead">Nei portatili e negli smartphone gli stessi componenti sono piccoli e saldati su un'unica scheda.</p>
+  <div class="callout hl">Regola di sicurezza: un computer si apre solo <b>spento e scollegato</b> dalla corrente, e con un adulto.</div>
+  <aside class="notes">Se possibile, portare in classe un PC da aprire o mostrare una scheda madre vecchia: individuare lo zoccolo della CPU, gli slot della RAM, i connettori del disco e le porte USB. Ricordare: mai aprire un computer acceso o collegato alla corrente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Periferiche</p><h2>Dispositivi di input e di output</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Input</h3><p class="small muted">Mandano dati al computer</p><ul class="points small"><li>Tastiera, mouse</li><li>Microfono, webcam</li><li>Scanner</li></ul></div>
+    <div class="card soft"><h3>Output</h3><p class="small muted">Ricevono dati dal computer</p><ul class="points small"><li>Monitor, proiettore</li><li>Stampante</li><li>Casse, cuffie</li></ul></div>
+    <div class="card fill"><h3>Input e output</h3><p class="small">Fanno tutte e due le cose</p><ul class="points small"><li>Touchscreen, LIM</li><li>Chiavetta USB</li><li>Cuffie con microfono</li></ul></div>
+  </div>
+  <div class="callout hl">Il punto di vista è sempre quello del <b>computer</b>: input = dati che entrano, output = dati che escono.</div>
+  <aside class="notes">Domanda: "La LIM è input o output?". Tutte e due: proietta (output) e riceve il tocco (input). La chiavetta: il computer ci scrive e ci legge. Far trovare tre esempi di input e output anche nello smartphone (fotocamera, sensore di impronte, vibrazione…).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: confronta due dispositivi</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nel file <code>specifiche_cognome.ods</code> aggiungi un secondo foglio chiamato <b>Confronto</b> e completa la tabella.</p>
+      <table class="data compact">
+        <tr><th>Caratteristica</th><th>PC del laboratorio</th><th>Secondo dispositivo</th></tr>
+        <tr><td>Processore</td><td></td><td></td></tr>
+        <tr><td>RAM (GB)</td><td></td><td></td></tr>
+        <tr><td>Memoria (GB)</td><td></td><td></td></tr>
+        <tr><td>Sistema operativo</td><td></td><td></td></tr>
+        <tr><td>3 input · 3 output</td><td></td><td></td></tr>
+      </table>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Secondo dispositivo</h4><p class="small">Il PC di casa, un tablet, oppure la scheda che il docente mostra alla LIM.</p></div>
+      <div class="check small"><b>Controllo:</b> per ogni riga sai dire quale dei due vince, e perché.</div>
+    </div>
+  </div>
+  <aside class="notes">Se in classe non si usa il telefono, proiettare la scheda tecnica di un dispositivo reale preso dal sito di un produttore. Sul telefono: Android, Impostazioni &gt; Informazioni sul telefono (la voce cambia da modello a modello); iPhone, Impostazioni &gt; Generali &gt; Info. Discutere: più RAM e SSD contano più dei GHz nell'uso di tutti i giorni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Unità di misura</p><h2>Dal bit al terabyte</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Unità</th><th>Quanto vale</th></tr>
+      <tr><td><b>bit</b></td><td>0 oppure 1</td></tr>
+      <tr><td><b>byte</b> (B)</td><td>8 bit</td></tr>
+      <tr><td><b>kilobyte</b> (KB)</td><td>1000 byte</td></tr>
+      <tr><td><b>megabyte</b> (MB)</td><td>1000 KB</td></tr>
+      <tr><td><b>gigabyte</b> (GB)</td><td>1000 MB</td></tr>
+      <tr><td><b>terabyte</b> (TB)</td><td>1000 GB</td></tr>
+    </table>
+    <table class="data compact">
+      <tr><th>Esempio</th><th>Circa</th></tr>
+      <tr><td>Una lettera in un testo</td><td>1 byte</td></tr>
+      <tr><td>Una pagina di testo</td><td>2 KB</td></tr>
+      <tr><td>Una canzone MP3</td><td>4 MB</td></tr>
+      <tr><td>Un film in alta definizione</td><td>alcuni GB</td></tr>
+      <tr><td>Il disco di un PC</td><td>da 256 GB a qualche TB</td></tr>
+    </table>
+  </div>
+  <div class="callout small">Windows conta a gruppi di <b>1024</b>: per questo un disco da 1 TB nel PC appare come circa <b>931 GB</b>.</div>
+  <aside class="notes">Per i calcoli in classe usiamo 1000, come fanno i produttori di dischi. 1024 = 2 alla 10: chi ha fatto la lezione sui numeri binari riconosce la potenza di 2. Calcolo del 931: 1.000.000.000.000 : (1024 × 1024 × 1024) = 931,3. Pagina di testo: circa 2000 caratteri, quindi circa 2 KB in un testo semplice. Canzone MP3 di 4 minuti a qualità standard: circa 4 MB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Facciamo i conti</p><h2>Quante foto entrano in un disco?</h2></div>
+  <ol class="steps">
+    <li>Porta tutto nella stessa unità: 256 GB = 256 × 1000 = <b>256.000 MB</b>.</li>
+    <li>Supponiamo che una foto del telefono occupi <b>4 MB</b>.</li>
+    <li>Dividi lo spazio per la dimensione di una foto.</li>
+  </ol>
+  <div class="formula"><small>Disco da 256 GB, foto da 4 MB</small>256.000 MB : 4 MB = <span class="hl">64.000 foto</span></div>
+  <p class="muted">Nella realtà un po' di spazio è già occupato da sistema operativo e programmi.</p>
+  <aside class="notes">Verifica a ritroso: 64.000 × 4 = 256.000 MB = 256 GB. Altre domande a voce: e con un disco da 1 TB? 1.000.000 : 4 = 250.000 foto. E una chiavetta da 32 GB? 32.000 : 4 = 8.000 foto. La dimensione di una foto varia molto (risoluzione, formato): 4 MB è un'ipotesi di lavoro.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prova tu: quanto ci sta?</h2>
+  <p>In <code>specifiche_cognome.ods</code> crea il foglio <b>Spazio</b>: scrivi i dati in A, B, C, la formula in D2 e copiala in basso.</p>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+    <tr><th>1</th><td>Supporto</td><td>Spazio GB</td><td>Foto MB</td><td>Quante foto</td></tr>
+    <tr><th>2</th><td>Chiavetta</td><td>32</td><td>4</td><td class="f sel">=QUOZIENTE(B2*1000;C2)</td></tr>
+    <tr><th>3</th><td>Disco piccolo</td><td>256</td><td>4</td><td></td></tr>
+    <tr><th>4</th><td>Disco grande</td><td>1000</td><td>4</td><td></td></tr>
+  </table>
+  <div class="cols-2">
+    <div class="card soft"><p class="small"><b>Poi prova tu:</b> aggiungi lo spazio libero del tuo PC e un video da <b>100 MB</b> al posto della foto.</p></div>
+    <div class="check"><b>Controllo:</b> chiavetta 8.000 foto, disco da 256 GB 64.000, disco da 1 TB 250.000.</div>
+  </div>
+  <aside class="notes">B2*1000 porta i GB in MB; QUOZIENTE dà solo la parte intera della divisione: non si salva mezza foto. Soluzioni: D2 = 8000, D3 = 64000, D4 = 250000. Copiando la formula, i riferimenti si aggiornano da soli (B3, C3…): buona occasione per anticipare i riferimenti relativi. Con video da 100 MB: chiavetta 320 video, disco 256 GB 2560 video. Salvare sempre nel file specifiche_cognome.ods.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il software</p><h2>Sistema operativo e applicazioni</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="card soft"><h4>Tu, l'utente</h4></div>
+      <div class="card"><h4>Applicazioni</h4><p class="small muted">Browser, Calc, Writer, giochi, app: servono a fare qualcosa.</p></div>
+      <div class="card fill"><h4>Sistema operativo</h4><p class="small">Windows, macOS, Linux, Android, iOS.</p></div>
+      <div class="card night"><h4>Hardware</h4></div>
+    </div>
+    <ul class="points small">
+      <li>Il <b>sistema operativo</b> si avvia per primo e gestisce l'hardware.</li>
+      <li>Fa partire le applicazioni e divide tra loro CPU e RAM.</li>
+      <li>Organizza file e cartelle sul disco.</li>
+      <li>Gestisce utenti, password e periferiche.</li>
+    </ul>
+  </div>
+  <aside class="notes">Il disegno a strati: l'utente parla con le applicazioni, le applicazioni chiedono al sistema operativo, il sistema operativo comanda l'hardware. Un'app per Android non funziona su Windows perché si appoggia a un sistema operativo diverso. Domanda: "Quale sistema operativo ha il vostro telefono?".</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Componenti</h3><p class="muted small">CPU calcola, RAM tiene il lavoro aperto, disco conserva. La scheda madre collega tutto.</p></div>
+    <div class="card"><p class="num">2</p><h3>Misure</h3><p class="muted small">8 bit = 1 byte. KB, MB, GB, TB: ogni gradino vale circa 1000 volte il precedente.</p></div>
+    <div class="card"><p class="num">3</p><h3>Software</h3><p class="muted small">Il sistema operativo gestisce l'hardware; le applicazioni ci lavorano sopra.</p></div>
+  </div>
+  <p class="lead">Ora rileggi le parole scritte alla lavagna all'inizio: sai spiegarle tutte?</p>
+  <aside class="notes">Riprendere la lista di parole raccolte all'inizio e farle spiegare agli studenti. Domande di uscita: "Perché bisogna salvare?", "SSD o HDD per un portatile da scuola?", "Quanti MB sono 2 GB?" (2000).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

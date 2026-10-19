@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grafici che parlano · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>Grafici<br>che parlano</h1>
+  <p class="lead">Colonne, linee, torte: scegliere il grafico giusto, costruirlo in Calc ed Excel e non farsi ingannare da quello sbagliato.</p>
+  <aside class="notes">Lezione del libro "I grafici dei fogli di calcolo". Obiettivi: conoscere i tipi di grafico e quando usarli, riconoscere le parti di un grafico, creare e modificare grafici in Calc (con i nomi equivalenti di Excel), riconoscere un grafico ingannevole. Durata: 2-3 ore. Si riparte dal file mercatino.ods della lezione sui fogli elettronici: chi non lo ha può ricrearlo dalla slide 4 di quella lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove ti capita più spesso di vedere un grafico?</h2></div>
+  <div class="poll" data-id="dove-grafici">
+    <ol><li>Nell'app del meteo</li><li>Nelle statistiche di un gioco o di uno sport</li><li>Al telegiornale o nelle notizie</li><li>Nel tempo di utilizzo del telefono</li></ol>
+  </div>
+  <aside class="notes">Qualunque risposta va bene: i grafici sono ovunque. Chiedere a chi ha scelto D di descrivere il grafico del tempo di utilizzo (di solito colonne, una per giorno della settimana): è esattamente il primo grafico che costruiremo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché un grafico</p><h2>Quale prodotto ha incassato di più? Rispondi in 3 secondi</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 920 620" width="920" height="620" role="img">
+<line x1="70" y1="560.0" x2="900" y2="560.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="567.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="25" fill="#596179">0</text>
+<line x1="70" y1="427.5" x2="900" y2="427.5" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="434.5" text-anchor="end" font-family="DM Sans, sans-serif" font-size="25" fill="#596179">20</text>
+<line x1="70" y1="295.0" x2="900" y2="295.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="302.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="25" fill="#596179">40</text>
+<line x1="70" y1="162.5" x2="900" y2="162.5" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="169.5" text-anchor="end" font-family="DM Sans, sans-serif" font-size="25" fill="#596179">60</text>
+<line x1="70" y1="30.0" x2="900" y2="30.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="37.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="25" fill="#596179">80</text>
+<rect x="89.7" y="162.5" width="64.3" height="397.5" rx="6" fill="#11845f"/>
+<text x="121.9" y="154.5" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">60</text>
+<text x="121.9" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Bisc.</text>
+<rect x="193.5" y="228.8" width="64.3" height="331.2" rx="6" fill="#11845f"/>
+<text x="225.6" y="220.8" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">50</text>
+<text x="225.6" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Muffin</text>
+<rect x="297.2" y="63.1" width="64.3" height="496.9" rx="6" fill="#e0b400"/>
+<text x="329.4" y="55.1" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">75</text>
+<text x="329.4" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Torta</text>
+<rect x="401.0" y="328.1" width="64.3" height="231.9" rx="6" fill="#11845f"/>
+<text x="433.1" y="320.1" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">35</text>
+<text x="433.1" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Succo</text>
+<rect x="504.7" y="361.2" width="64.3" height="198.8" rx="6" fill="#11845f"/>
+<text x="536.9" y="353.2" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">30</text>
+<text x="536.9" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Tè</text>
+<rect x="608.5" y="460.6" width="64.3" height="99.4" rx="6" fill="#11845f"/>
+<text x="640.6" y="452.6" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">15</text>
+<text x="640.6" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Segn.</text>
+<rect x="712.2" y="361.2" width="64.3" height="198.8" rx="6" fill="#11845f"/>
+<text x="744.4" y="353.2" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">30</text>
+<text x="744.4" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Port.</text>
+<rect x="816.0" y="261.9" width="64.3" height="298.1" rx="6" fill="#11845f"/>
+<text x="848.1" y="253.9" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" font-weight="700" fill="#172033">45</text>
+<text x="848.1" y="590" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="25" fill="#172033">Cal.</text>
+<line x1="70" y1="560" x2="900" y2="560" stroke="#172033" stroke-width="3"/>
+</svg>
+    <div class="stack">
+      <p>Nella tabella devi <b>leggere e confrontare</b> otto numeri. Nel grafico la colonna più alta <b>salta all'occhio</b>.</p>
+      <p class="muted small">Dati: incassi in euro del mercatino della classe.</p>
+    </div>
+  </div>
+  <aside class="notes">Mostrare per pochi secondi prima la tabella della lezione precedente, poi questo grafico. Il cervello confronta le lunghezze molto più in fretta dei numeri. Ma attenzione: il grafico mostra il confronto, la tabella il valore preciso. Servono entrambi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I tipi di grafici</p><h2>Ogni domanda ha il suo grafico</h2></div>
+  <table class="data">
+    <tr><th>Tipo</th><th>Risponde alla domanda</th><th>Esempio</th></tr>
+    <tr><td><b>Colonne</b> (istogramma)</td><td>Chi ha di più? Confronto tra categorie</td><td>Incasso di ogni prodotto</td></tr>
+    <tr><td><b>Barre</b> orizzontali</td><td>Come le colonne, con nomi lunghi</td><td>Classifica delle squadre</td></tr>
+    <tr><td><b>Linee</b></td><td>Come cambia nel tempo?</td><td>Temperatura giorno per giorno</td></tr>
+    <tr><td><b>Torta</b></td><td>Come si divide un intero?</td><td>Incasso per categoria, in %</td></tr>
+    <tr><td><b>Dispersione</b> (XY)</td><td>Due misure sono collegate?</td><td>Altezza e numero di scarpe</td></tr>
+  </table>
+  <aside class="notes">In Calc i nomi nella procedura guidata sono Colonna, Barra, Torta, Area, Linea, XY (dispersione) e altri; in Excel Istogramma, Barre, Linee, Torta, Dispersione. Regola pratica per la torta: poche fette (al massimo 5 o 6) e parti di un totale che fa 100%.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Per quale di questi dati un grafico a torta è una cattiva idea?</h2></div>
+  <div class="poll" data-id="torta-no" data-tipo="quiz" data-risposta="A">
+    <ol><li>I voti delle tue 5 verifiche di matematica, da settembre a gennaio</li><li>Come si dividono i 340 € del mercatino tra le tre categorie</li><li>Le risposte di un sondaggio di classe con 4 opzioni</li><li>Come si divide la tua giornata: sonno, scuola, studio, svago</li></ol>
+    <p class="why">I voti non sono parti di un intero: sommarli non ha senso, e ciò che interessa è come cambiano nel tempo. Serve un grafico a linee. Le altre tre sono proprio parti di un totale.</p>
+  </div>
+  <aside class="notes">Molti esitano sulla D, ma le 24 ore della giornata sono un intero perfetto per una torta. La C funziona se ogni studente dà una sola risposta: se le risposte multiple sono ammesse, le percentuali non sommano a 100 e la torta non va più bene.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni situazione al grafico più adatto</h2></div>
+  <dl class="puzzle-abbina" data-id="situazione-grafico">
+    <dt>I follower di un canale, mese per mese</dt><dd>Linee</dd>
+    <dt>Ore di studio e voto di ogni studente</dt><dd>Dispersione (XY)</dd>
+    <dt>Come si divide il budget della gita</dt><dd>Torta</dd>
+    <dt>Gol segnati da 4 squadre</dt><dd>Colonne</dd>
+    <dt>Le 12 nazioni più visitate, con il nome</dt><dd>Barre orizzontali</dd>
+  </dl>
+  <aside class="notes">Il più difficile è la dispersione: ogni punto è uno studente, con la x alle ore di studio e la y al voto. Se i punti salgono da sinistra a destra, le due misure sono collegate. Discutere: collegate non vuol dire che una sia la causa dell'altra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parti di un grafico</p><h2>Cinque elementi da controllare sempre</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 860 560" width="860" height="560" role="img">
+<text x="375.0" y="44" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="30" font-weight="700" fill="#172033">Incasso per categoria</text>
+<line x1="90" y1="490.0" x2="660" y2="490.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="78" y="497.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="20" fill="#596179">0</text>
+<line x1="90" y1="390.0" x2="660" y2="390.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="78" y="397.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="20" fill="#596179">50</text>
+<line x1="90" y1="290.0" x2="660" y2="290.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="78" y="297.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="20" fill="#596179">100</text>
+<line x1="90" y1="190.0" x2="660" y2="190.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="78" y="197.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="20" fill="#596179">150</text>
+<line x1="90" y1="90.0" x2="660" y2="90.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="78" y="97.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="20" fill="#596179">200</text>
+<rect x="132.8" y="120.0" width="104.5" height="370.0" rx="6" fill="#11845f"/>
+<text x="185.0" y="110.0" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="700" fill="#172033">185 €</text>
+<text x="185.0" y="522" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" fill="#172033">Dolci</text>
+<rect x="322.8" y="360.0" width="104.5" height="130.0" rx="6" fill="#11845f"/>
+<text x="375.0" y="350.0" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="700" fill="#172033">65 €</text>
+<text x="375.0" y="522" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" fill="#172033">Bevande</text>
+<rect x="512.8" y="310.0" width="104.5" height="180.0" rx="6" fill="#11845f"/>
+<text x="565.0" y="300.0" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="700" fill="#172033">90 €</text>
+<text x="565.0" y="522" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" fill="#172033">Oggetti</text>
+<line x1="90" y1="490" x2="660" y2="490" stroke="#172033" stroke-width="3"/>
+<line x1="90" y1="90" x2="90" y2="490" stroke="#172033" stroke-width="3"/>
+<text x="24" y="290.0" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="20" fill="#596179" transform="rotate(-90 24 290.0)">Euro</text>
+<rect x="690" y="110" width="22" height="22" rx="4" fill="#11845f"/><text x="722" y="129" font-family="DM Sans, sans-serif" font-size="22" fill="#172033">Incasso</text>
+<circle cx="175.0" cy="36" r="20" fill="#e0b400"/><text x="175.0" y="44" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#172033">1</text>
+<circle cx="52" cy="130" r="20" fill="#e0b400"/><text x="52" y="138" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#172033">2</text>
+<circle cx="495.0" cy="514" r="20" fill="#e0b400"/><text x="495.0" y="522" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#172033">3</text>
+<circle cx="267.25" cy="102.0" r="20" fill="#e0b400"/><text x="267.25" y="110.0" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#172033">4</text>
+<circle cx="840" cy="120" r="20" fill="#e0b400"/><text x="840" y="128" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#172033">5</text>
+</svg>
+    <ol class="steps">
+      <li><b>Titolo</b>: di che cosa parla</li>
+      <li><b>Asse Y</b>: i valori, con l'unità di misura</li>
+      <li><b>Asse X</b>: le categorie o il tempo</li>
+      <li><b>Etichette dati</b>: il valore sopra la colonna</li>
+      <li><b>Legenda</b>: che cosa è ogni colore</li>
+    </ol>
+  </div>
+  <aside class="notes">Con una sola serie di dati la legenda è inutile e si può togliere: ruba spazio. Diventa indispensabile con due o più serie (per esempio temperature minime e massime). La serie di dati è l'insieme dei valori disegnati con lo stesso colore.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il grafico degli incassi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>mercatino.ods</b>. Seleziona A1:A9, poi tieni premuto <b>Ctrl</b> e seleziona E1:E9.</li>
+      <li><b>Inserisci › Grafico</b>. Tipo: <b>Colonna</b>, normale.</li>
+      <li>Nel passo Elementi del grafico: titolo <b>Incassi del mercatino</b>, asse Y <b>Euro</b>, togli la legenda. Fine.</li>
+      <li>Con il grafico in modifica: <b>Inserisci › Etichette dati</b>, mostra il valore come numero.</li>
+      <li>Clic fuori dal grafico e salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 8 colonne, la più alta è la Torta con 75; sopra ogni colonna c'è il suo valore. Se compaiono anche le colonne dei pezzi o dei prezzi, hai selezionato troppe colonne.</div>
+  </div>
+  <aside class="notes">Un doppio clic sul grafico entra in modalità modifica (bordo grigio): solo così si cambiano titolo, assi ed etichette. Un clic fuori torna al foglio. In Excel: selezione uguale, poi Inserisci › Grafici consigliati oppure Inserisci › Istogramma; titolo ed etichette con il pulsante + accanto al grafico. Se il grafico mostra euro con decimali, va bene lo stesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calc ed Excel</p><h2>La procedura in breve</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>LibreOffice Calc</h3><ul class="points small"><li>Inserisci › Grafico: procedura guidata in 4 passi</li><li>Tipo, Area dati, Serie di dati, Elementi</li><li>Doppio clic per modificare</li></ul></div>
+    <div class="card"><h3>Microsoft Excel</h3><ul class="points small"><li>Inserisci › Grafici consigliati</li><li>Schede Struttura grafico e Formato</li><li>Pulsanti accanto al grafico: elementi, stili, filtri</li></ul></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcuni assistenti AI ricevono una tabella e <b>disegnano il grafico</b> da soli, ed Excel con Microsoft 365 suggerisce grafici con <b>Analizza dati</b>. Il controllo resta umano: il tipo è adatto? L'asse parte da zero? I numeri sono quelli giusti?</p></div>
+  <aside class="notes">Se il docente dispone di un assistente AI con analisi dei dati, una demo veloce: incollare la tabella del mercatino e chiedere "un grafico degli incassi". Poi far controllare alla classe i tre punti del riquadro. Spesso la scelta automatica è sensata, ma non sempre: per esempio una torta con 8 fette.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi per creare un grafico in Calc</h2></div>
+  <ol class="puzzle-ordina" data-id="passi-grafico">
+    <li>Seleziona i dati, comprese le intestazioni</li>
+    <li>Scegli Inserisci › Grafico</li>
+    <li>Scegli il tipo di grafico</li>
+    <li>Controlla l'area dati e le serie</li>
+    <li>Aggiungi titolo, nomi degli assi e legenda</li>
+    <li>Premi Fine e sistema dimensioni e posizione</li>
+  </ol>
+  <aside class="notes">Il primo passo è il più dimenticato: se le intestazioni non sono selezionate, il grafico mostra "Colonna B" e "Serie 1" invece dei nomi veri. I passi 3, 4 e 5 corrispondono alle schermate della procedura guidata di Calc.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La torta delle categorie</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>mercatino.ods</b> usa il riepilogo per categoria (I1:I4 e K1:K4). Se non c'è, crealo con SOMMA.SE.</li>
+      <li>Seleziona I1:I4, poi con <b>Ctrl</b> K1:K4. <b>Inserisci › Grafico › Torta</b>.</li>
+      <li>Titolo: <b>Incasso per categoria</b>. Lascia la legenda.</li>
+      <li>In modifica: <b>Inserisci › Etichette dati</b>, spunta <b>Mostra valore come percentuale</b>.</li>
+      <li>Salva.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 3 fette. I Dolci occupano più di metà torta (circa 54%), gli Oggetti circa 26%, le Bevande circa 19%. Le percentuali le calcola il grafico: non servono nel foglio.</div>
+  </div>
+  <aside class="notes">Valori: Dolci 185, Bevande 65, Oggetti 90, totale 340. Percentuali: 54,4%, 19,1%, 26,5%; il grafico può mostrarle arrotondate. Domanda: perché la torta qui funziona e per gli 8 prodotti sarebbe peggio? (8 fette, molte piccole e simili, difficili da confrontare.) In Excel: Inserisci › Torta, poi Elementi grafico › Etichette dati › Altre opzioni › Percentuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un grafico serve a sorprenderci</h2></div>
+  <figure class="citazione">
+    <blockquote>Il valore più grande di un'immagine si ha quando ci costringe a notare ciò che non ci aspettavamo di vedere.</blockquote>
+    <figcaption><b>John W. Tukey</b>, statistico statunitense, in <i>Exploratory Data Analysis</i>, 1977</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il <b>tempo di utilizzo</b> del telefono (Benessere digitale su Android, Tempo di utilizzo su iPhone) è un grafico a colonne: un giorno per colonna. Spesso è proprio il grafico a farci notare la domenica da sei ore.</p></div>
+  <aside class="notes">Traduzione nostra dalla prefazione di Exploratory Data Analysis (1977). Tukey è anche l'inventore del termine "bit" (1947), la contrazione di binary digit, come riconobbe Claude Shannon nel 1948. Domanda: quale grafico del vostro telefono vi ha sorpreso?</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>L'infermiera che salvò vite con un grafico</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Durante la guerra di Crimea <b>Florence Nightingale</b> raccolse i dati dei soldati morti negli ospedali militari britannici.</p>
+      <p>Nel 1858 li mostrò con un <mark>diagramma circolare a settori</mark>: si vedeva che molti più soldati morivano di malattie evitabili che per le ferite. Il governo migliorò l'igiene degli ospedali.</p>
+    </div>
+    <div class="card"><h3>Le origini</h3><p>Il grafico a colonne e quello a linee li aveva inventati <b>William Playfair</b> nel 1786; la torta arrivò nel 1801.</p></div>
+  </div>
+  <aside class="notes">Il diagramma di Nightingale è noto come "diagramma polare" o "coxcomb" ed è nel rapporto sulla salute dell'esercito britannico del 1858. Nightingale fu la prima donna eletta nella Royal Statistical Society (1858). Playfair pubblicò colonne e linee in The Commercial and Political Atlas (1786) e la torta nello Statistical Breviary (1801). Messaggio: un grafico ben fatto convince più di pagine di numeri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In questo grafico il succo sembra aver incassato tre volte il tè freddo. È così?</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="poll" data-id="asse-ingannevole" data-tipo="quiz" data-risposta="D">
+      <ol><li>Sì: la sua colonna è più del triplo</li><li>Sì: Calc disegna sempre in scala</li><li>Non si può dire senza la legenda</li><li>No: l'asse parte da 28, la differenza è di 5 €</li></ol>
+      <p class="why">35 € contro 30 €: il succo ha incassato circa il 17% in più, non il triplo. Facendo partire l'asse verticale da 28 si mostrano solo le "punte" delle colonne e la differenza sembra enorme.</p>
+    </div>
+    <svg viewBox="0 0 560 460" width="560" height="460" role="img">
+<line x1="70" y1="400.0" x2="540" y2="400.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="407.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="22" fill="#596179">28</text>
+<line x1="70" y1="307.5" x2="540" y2="307.5" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="314.5" text-anchor="end" font-family="DM Sans, sans-serif" font-size="22" fill="#596179">30</text>
+<line x1="70" y1="215.0" x2="540" y2="215.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="222.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="22" fill="#596179">32</text>
+<line x1="70" y1="122.5" x2="540" y2="122.5" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="129.5" text-anchor="end" font-family="DM Sans, sans-serif" font-size="22" fill="#596179">34</text>
+<line x1="70" y1="30.0" x2="540" y2="30.0" stroke="#dcdfe8" stroke-width="2"/>
+<text x="58" y="37.0" text-anchor="end" font-family="DM Sans, sans-serif" font-size="22" fill="#596179">36</text>
+<rect x="122.9" y="76.2" width="129.2" height="323.8" rx="6" fill="#11845f"/>
+<text x="187.5" y="432" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="24" fill="#172033">Succo</text>
+<rect x="357.9" y="307.5" width="129.2" height="92.5" rx="6" fill="#11845f"/>
+<text x="422.5" y="432" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="24" fill="#172033">Tè freddo</text>
+<line x1="70" y1="400" x2="540" y2="400" stroke="#172033" stroke-width="3"/>
+</svg>
+  </div>
+  <aside class="notes">È il trucco più usato nei grafici ingannevoli, anche in pubblicità e politica. Regola: nei grafici a colonne l'asse Y deve partire da zero, perché confrontiamo le lunghezze. Nei grafici a linee si può partire da un altro valore, se lo si vede bene. Nel prossimo esercizio lo provano con le proprie mani.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Le temperature della settimana</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo foglio: in A1:C1 <b>Giorno</b>, <b>Minima</b>, <b>Massima</b>. Da lunedì a domenica, minime 6, 8, 7, 10, 12, 9, 8 e massime 14, 17, 15, 19, 21, 18, 16.</li>
+      <li>Seleziona A1:C8. <b>Inserisci › Grafico › Linea</b>, punti e linee. Titolo <b>Temperature della settimana</b>, asse Y <b>°C</b>.</li>
+      <li>Copia il grafico. Nella copia, doppio clic sull'asse Y, scheda <b>Scala</b>: togli Automatico al Minimo e scrivi <b>5</b>.</li>
+      <li>Salva come <b>temperature.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> due linee con la legenda Minima e Massima; il punto più alto è venerdì, 21 °C. Nella copia con l'asse da 5 le differenze sembrano più grandi, anche se i dati sono gli stessi.</div>
+  </div>
+  <aside class="notes">Qui le serie sono due: la legenda serve. Se compaiono i giorni come serie, nella procedura guidata scegliere "Serie di dati in colonne" e "Prima riga come etichetta". Per modificare l'asse: doppio clic sul grafico per entrare in modifica, poi doppio clic sui numeri dell'asse. In Excel: clic destro sull'asse › Formato asse › Limiti › Minimo. Discussione finale: in quale dei due grafici la settimana sembra più "pazza"?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con la torta delle categorie</h2></div>
+  <div class="puzzle-codice" data-risposta="5426" data-aiuto="calcola 185 diviso 340 e 90 diviso 340">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la percentuale dei Dolci, arrotondata all'intero</li>
+      <li>3ª e 4ª cifra: la percentuale degli Oggetti, arrotondata all'intero</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 185 ÷ 340 = 54,4% e 90 ÷ 340 = 26,5%, che si arrotonda a 26. Le Bevande fanno il resto: 19,1%.</div>
+  </div>
+  <aside class="notes">Codice: 5426. Attenzione: 26,47% si arrotonda a 26, non a 27; chi scrive 5427 ha arrotondato due volte (26,47 → 26,5 → 27). Ottimo spunto sugli arrotondamenti a catena.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per mostrare come cambia un valore nel tempo si usa il grafico a <span class="blank" data-risposta="linee|linea"></span>.</p>
+    <p>Per mostrare come si divide un intero si usa il grafico a <span class="blank" data-risposta="torta"></span>.</p>
+    <p>Il riquadro che spiega che cosa rappresenta ogni colore è la <span class="blank" data-risposta="legenda"></span>.</p>
+    <p>In un grafico a colonne l'asse Y deve partire da <span class="blank" data-risposta="zero|0"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: linee, torta, legenda, zero.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Colonne per confrontare, linee per il tempo</li>
+      <li>Torta solo per le parti di un intero</li>
+      <li>Titolo, assi, etichette, legenda</li>
+    </ul>
+    <ul class="points">
+      <li>Calc: Inserisci › Grafico, doppio clic per modificare</li>
+      <li>Asse da zero nei grafici a colonne</li>
+      <li>Anche il grafico dell'AI va controllato</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

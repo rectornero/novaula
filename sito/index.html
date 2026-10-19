@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Novaula</title>
+<meta name="description" content="Materiali, compiti e chat della classe.">
+<meta name="theme-color" content="#2343a8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Novaula">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="helpdesk.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/" id="brand">Novaula</a>
+  <a class="teacher-link" href="#/docente" id="teacherLink">Area docente</a>
+</header>
+<div class="demo" id="demoBanner" hidden>Modalità demo: i dati restano solo su questo dispositivo.</div>
+<main id="app" aria-live="polite"></main>
+<script src="config.js"></script>
+<script src="seed.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="helpdesk.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

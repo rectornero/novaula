@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python: il ciclo while · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Python:<br>il ciclo while</h1>
+  <p class="lead">Ripeti finché serve: password, giochi, conti che non sai quanto dureranno. E un problema che nessun matematico al mondo ha ancora risolto.</p>
+  <aside class="notes">Obiettivi: distinguere iterazione definita e indefinita, scrivere cicli while con contatore, accumulatore e valore sentinella, controllare l'input con un ciclo, riconoscere ed evitare i cicli infiniti. Durata indicativa: 2-3 ore. Prerequisiti: l'iterazione nei flow chart (UDA 5) e il while in C (UDA 6), le lezioni precedenti su Python. Software: IDLE o un interprete online senza account (OnlineGDB, lingua Python 3). Ricordare agli studenti che un programma bloccato in IDLE si ferma con Ctrl+C.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Che cosa ripeti "finché" non ti riesce?</h2></div>
+  <div class="poll" data-id="while-ripeti">
+    <ol><li>Un livello di un videogioco</li><li>Un esercizio di matematica</li><li>Un trick con lo skate o con il pallone</li><li>Un pezzo con uno strumento musicale</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Far notare la struttura comune: non sai in anticipo quante volte riproverai, sai solo quando smettere (quando ti riesce). È esattamente il ciclo while: ripeti finché una condizione è vera. Chiedere quante volte al massimo qualcuno ha rifatto un livello.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due modi di ripetere</p><h2>Iterazione definita e indefinita</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Definita</h3><p>Sai <b>prima</b> quante volte ripetere.</p><p class="muted">"Fai 10 flessioni." "Stampa la tabellina del 7." In Python di solito si usa <code>for</code> (prossima lezione).</p></div>
+    <div class="card fill"><h3>Indefinita</h3><p>Ripeti <b>finché</b> una condizione è vera: il numero di giri lo scopri solo alla fine.</p><p>"Mescola finché lo zucchero non si scioglie." "Chiedi la password finché non è giusta." In Python: <b>while</b>.</p></div>
+  </div>
+  <aside class="notes">Gli stessi concetti visti nei flow chart della UDA 5 e in C nella UDA 6. Un ciclo while può fare anche un'iterazione definita (con un contatore), ma il for è più comodo. Il contrario non vale: un ciclo indefinito non si può scrivere con un for semplice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Quale di queste è un'iterazione <mark>indefinita</mark>?</h2></div>
+  <div class="poll" data-id="while-indef" data-tipo="quiz" data-risposta="B">
+    <ol><li>Stampare la tabellina del 7</li><li>Chiedere un voto finché non è tra 1 e 10</li><li>Sommare i voti dei 25 studenti della classe</li><li>Controllare una per una le lettere di una parola</li></ol>
+    <p class="why">Solo nella B non sai quante volte l'utente sbaglierà. Nella D sembra di non saperlo, ma la parola ha una lunghezza precisa: il numero di giri è noto prima di iniziare.</p>
+  </div>
+  <aside class="notes">La D è il distrattore più forte: "dipende dalla parola", ma una volta data la parola il numero di giri è fissato prima di partire, quindi è definita. Anche la C è definita anche se 25 lo scopri dal registro. Chiedere un altro esempio di ciclo indefinito dalla vita reale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo while</p><h2>Finché la condizione è vera, ripeti il blocco</h2></div>
+  <div class="cols-2">
+<pre class="code">conta = 1
+<span class="k">while</span> conta &lt;= 5:
+    print(conta)
+    conta += 1
+print(<span class="s">"Fine"</span>)</pre>
+    <table class="data compact">
+      <tr><th>Giro</th><th>conta</th><th>conta &lt;= 5</th><th>Stampa</th></tr>
+      <tr><td>1</td><td class="mono">1</td><td class="mono">True</td><td class="mono">1</td></tr>
+      <tr><td>2</td><td class="mono">2</td><td class="mono">True</td><td class="mono">2</td></tr>
+      <tr><td>…</td><td class="mono">…</td><td class="mono">…</td><td class="mono">…</td></tr>
+      <tr><td>5</td><td class="mono">5</td><td class="mono">True</td><td class="mono">5</td></tr>
+      <tr><td>esce</td><td class="mono hl">6</td><td class="mono hl">False</td><td class="mono">Fine</td></tr>
+    </table>
+  </div>
+  <div class="callout small">La condizione si controlla <b>prima</b> di ogni giro: se è falsa subito, il blocco non viene eseguito neanche una volta.</div>
+  <aside class="notes">Far costruire la tabella di traccia alla lavagna, riga per riga. Tre ingredienti di ogni while: inizializzazione (conta = 1), condizione (conta <= 5), aggiornamento (conta += 1). Se manca l'aggiornamento il ciclo non finisce mai. Dopo il ciclo conta vale 6, non 5: domanda utile per verificare chi ha capito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">n = 10
+<span class="k">while</span> n &gt; 0:
+    n = n - 3
+print(n)</pre>
+    <div class="poll" data-id="while-traccia" data-tipo="quiz" data-risposta="C">
+      <ol><li>1</li><li>0</li><li>-2</li><li>-3</li></ol>
+      <p class="why">n vale 10, 7, 4, 1 e poi -2. Solo a quel punto n &gt; 0 diventa falsa e il ciclo si ferma: print è fuori dal ciclo e stampa -2.</p>
+    </div>
+  </div>
+  <aside class="notes">Il tranello è la A: chi si ferma "all'ultimo numero positivo" dimentica che il controllo si fa prima del giro, e quando n vale 1 il giro si fa ancora. La B è di chi pensa che il ciclo si fermi esattamente a 0. Far scrivere la tabella di traccia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Il conto alla rovescia del razzo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In IDLE apri <b>File, New File</b>.</li>
+      <li>Chiedi da quale numero partire, con <code>int(input(…))</code>.</li>
+      <li>Con un <code>while</code> stampa il numero e diminuiscilo di 1, finché è maggiore di 0.</li>
+      <li>Dopo il ciclo stampa "Decollo!". Salva come <b>razzo.py</b>.</li>
+      <li>Bonus: scrivi <code>import time</code> in cima e <code>time.sleep(1)</code> nel ciclo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> partendo da 5 compaiono 5, 4, 3, 2, 1 e poi Decollo!. Se parti da 0 compare solo Decollo!: il ciclo non fa neanche un giro.</div>
+  </div>
+  <aside class="notes">Soluzione:
+n = int(input("Da quanto parto? "))
+while n > 0:
+    print(n)
+    n -= 1
+print("Decollo!")
+time.sleep(1) aspetta un secondo: il conto alla rovescia diventa realistico. Se qualcuno dimentica n -= 1 il programma stampa 5 all'infinito: farlo fermare con Ctrl+C e farne tesoro per il quiz più avanti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Controllo dei dati</p><h2>Insisti finché il dato non è valido</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">voto = int(input(<span class="s">"Voto (1-10): "</span>))
+<span class="k">while</span> voto &lt; 1 <span class="k">or</span> voto &gt; 10:
+    print(<span class="s">"Non valido, riprova"</span>)
+    voto = int(input(<span class="s">"Voto (1-10): "</span>))
+print(<span class="s">"Voto accettato:"</span>, voto)</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Lo schema</h3><ol class="steps small"><li>chiedi una volta</li><li>finché è sbagliato: avvisa e richiedi</li><li>dopo il ciclo il dato è buono</li></ol></div>
+    </div>
+  </div>
+  <aside class="notes">Nella lezione sulla selezione un if poteva solo dire "non valido" e finire. Con il while l'utente riprova quante volte serve. Errore classico: dimenticare di richiedere il voto dentro il ciclo, così il programma stampa "Non valido" all'infinito. La condizione del while descrive il caso SBAGLIATO (si ripete finché il dato è sbagliato).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che cosa fa Python a ogni giro di un while?</h2></div>
+  <ol class="puzzle-ordina" data-id="while-passi">
+    <li>Prepara le variabili prima del ciclo</li>
+    <li>Valuta la condizione del while</li>
+    <li>Se è vera, esegue tutte le righe rientrate</li>
+    <li>Torna su e valuta di nuovo la condizione</li>
+    <li>Quando è falsa, salta il blocco rientrato</li>
+    <li>Esegue la prima istruzione dopo il ciclo</li>
+  </ol>
+  <aside class="notes">Ordine corretto: preparazione, condizione, blocco, ritorno alla condizione, uscita, istruzione successiva. Chi mette "esegue il blocco" prima di "valuta la condizione" sta descrivendo il ciclo a condizione finale (do-while del C), che in Python non esiste. Ottima occasione per ricordarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contatore, accumulatore, sentinella</p><h2>Somma i voti finché non scrivi 0</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">somma = 0
+conta = 0
+voto = float(input(<span class="s">"Voto (0 = fine): "</span>))
+<span class="k">while</span> voto != 0:
+    somma += voto
+    conta += 1
+    voto = float(input(<span class="s">"Voto (0 = fine): "</span>))
+print(<span class="s">"Media:"</span>, somma / conta)</pre>
+    <div class="stack">
+      <div class="card"><h3>Valore sentinella</h3><p class="muted">Un valore speciale, come lo 0, che non è un dato vero ma un segnale: "ho finito".</p></div>
+      <p class="small">Con 7, 8, 6 e poi 0: Media 7.0</p>
+    </div>
+  </div>
+  <aside class="notes">Riprende contatore e accumulatore della prima lezione: ora i voti possono essere quanti si vuole. Domanda trabocchetto: che cosa succede se l'utente scrive subito 0? conta resta 0 e somma / conta dà ZeroDivisionError. Correzione: prima del print un if conta > 0. Si può far scrivere come esercizio extra.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Indovina il numero segreto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In cima: <code>import random</code> e <code>segreto = random.randint(1, 100)</code>.</li>
+      <li>Metti <code>tentativo = 0</code> e <code>tentativi = 0</code>.</li>
+      <li><code>while tentativo != segreto:</code> leggi un tentativo, aumenta il contatore, stampa "Più alto!" o "Più basso!".</li>
+      <li>Dopo il ciclo stampa in quanti tentativi hai indovinato. Salva come <b>indovina.py</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> se parti da 50 e dimezzi ogni volta l'intervallo, indovini sempre in <b>7 tentativi al massimo</b>. Sfida il compagno di banco!</div>
+  </div>
+  <aside class="notes">Soluzione:
+import random
+segreto = random.randint(1, 100)
+tentativo = 0
+tentativi = 0
+while tentativo != segreto:
+    tentativo = int(input("Prova: "))
+    tentativi += 1
+    if tentativo < segreto:
+        print("Più alto!")
+    elif tentativo > segreto:
+        print("Più basso!")
+print("Indovinato in", tentativi, "tentativi")
+random.randint(1, 100) include sia 1 sia 100. Perché 7? Ogni tentativo dimezza i numeri possibili: 100, 50, 25, 12, 6, 3, 1; e 2 alla 7 = 128 è la prima potenza di 2 maggiore di 100. È la ricerca binaria, collegata ai numeri binari. Torneo: chi indovina con meno tentativi su tre partite.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">i = 0
+<span class="k">while</span> i &lt; 3:
+    print(i)
+i += 1</pre>
+    <div class="poll" data-id="while-infinito" data-tipo="quiz" data-risposta="D">
+      <ol><li>0 1 2</li><li>0 1 2 3</li><li>Niente</li><li>0 all'infinito</li></ol>
+      <p class="why">i += 1 non è rientrato: è fuori dal ciclo. Dentro, i resta sempre 0, la condizione è sempre vera e il programma stampa 0 per sempre. Si ferma con Ctrl+C.</p>
+    </div>
+  </div>
+  <aside class="notes">Quasi tutti rispondono A: leggono il programma come vorrebbero che fosse. Il rientro decide che cosa sta nel ciclo. Far provare in IDLE e fermare con Ctrl+C (KeyboardInterrupt). Ciclo infinito: errore più comune con il while.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo infinito voluto</p><h2><code>while True</code> e <code>break</code></h2></div>
+  <div class="cols-2">
+<pre class="code"><span class="k">while</span> True:
+    parola = input(<span class="s">"Scrivi: "</span>)
+    <span class="k">if</span> parola == <span class="s">"esci"</span>:
+        <span class="k">break</span>
+    print(parola.upper())
+print(<span class="s">"Ciao!"</span>)</pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Ogni videogioco gira dentro un ciclo così: <b>leggi i comandi, aggiorna il mondo, disegna lo schermo</b>. Molti giochi lo ripetono 60 volte al secondo: sono i famosi 60 fps. Il ciclo finisce solo quando chiudi il gioco.</p></div>
+  </div>
+  <p class="small muted"><code>break</code> esce subito dal ciclo. Usalo con giudizio: un ciclo con una condizione chiara è più facile da leggere.</p>
+  <aside class="notes">upper() trasforma in maiuscolo: "ciao" diventa "CIAO". Il game loop è lo schema reale dei motori di gioco (Unity, Godot, Unreal): fps = frame al secondo, cioè giri del ciclo che ridisegnano lo schermo. In Python esiste la libreria pygame per scriverne uno. Anche app e siti aspettano eventi in un ciclo che non finisce mai.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché si scrive <code>while</code> e non "salta alla riga 10"</h2></div>
+  <figure class="citazione">
+    <blockquote>La qualità dei programmatori è una funzione decrescente della densità di istruzioni go to nei programmi che producono.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, lettera <i>Go To Statement Considered Harmful</i>, 1968</figcaption>
+  </figure>
+  <p class="small">I primi linguaggi ripetevano con "salta a": i programmi diventavano un groviglio. Dijkstra propose cicli e selezioni con un solo ingresso e una sola uscita. Python non ha nemmeno l'istruzione <code>goto</code>.</p>
+  <aside class="notes">Traduzione nostra dall'inglese; la frase apre la lettera di Dijkstra pubblicata nel marzo 1968 su Communications of the ACM ("the quality of programmers is a decreasing function of the density of go to statements in the programs they produce"). Il titolo provocatorio fu scelto dal direttore della rivista, Niklaus Wirth. È l'inizio della programmazione strutturata: sequenza, selezione e iterazione bastano per scrivere qualsiasi algoritmo (teorema di Böhm-Jacopini, 1966, di due ricercatori italiani). Collegare alla UDA 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un mistero matematico</p><h2>Questo ciclo finisce sempre? Nessuno lo sa</h2></div>
+  <div class="cols-2">
+<pre class="code"><span class="k">while</span> n != 1:
+    <span class="k">if</span> n % 2 == 0:
+        n = n // 2
+    <span class="k">else</span>:
+        n = 3 * n + 1
+    passi += 1</pre>
+    <div class="stack">
+      <p class="small">È la <b>congettura di Collatz</b> (1937): partendo da qualsiasi intero positivo si arriverebbe sempre a 1. Il computer l'ha verificata per numeri enormi, ma nessuno l'ha mai dimostrata.</p>
+      <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche un chatbot risponde con un ciclo: sceglie un <b>token</b> alla volta e continua finché non produce un token speciale di "fine" o raggiunge una lunghezza massima.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Lothar Collatz, matematico tedesco, propose il problema nel 1937. Nel 1936 Alan Turing aveva dimostrato un fatto più profondo: non può esistere un programma che, dato un programma qualsiasi, dica sempre se prima o poi si fermerà (oggi lo chiamiamo "problema della fermata"). Sul chatbot: i modelli linguistici generano il testo un pezzo alla volta; il limite di lunghezza serve proprio a evitare un ciclo senza fine.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia ai numeri di Collatz</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Leggi <code>n</code> con <code>int(input(…))</code> e metti <code>passi = 0</code>.</li>
+      <li>Ricopia il ciclo della slide precedente e, dentro, stampa anche <code>n</code> a ogni giro.</li>
+      <li>Dopo il ciclo stampa il numero di passi. Salva come <b>collatz.py</b>.</li>
+      <li>Gara: chi trova il numero sotto il 30 con più passi?</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 6 arriva a 1 in <b>8 passi</b> (6, 3, 10, 5, 16, 8, 4, 2, 1). Il 7 ne fa 16. Il vincitore sotto il 30 sale fino a 9232!</div>
+  </div>
+  <aside class="notes">Soluzione:
+n = int(input("Numero: "))
+passi = 0
+while n != 1:
+    if n % 2 == 0:
+        n = n // 2
+    else:
+        n = 3 * n + 1
+    print(n)
+    passi += 1
+print("Passi:", passi)
+Il vincitore sotto il 30 è 27, con 111 passi: arriva fino a 9232 prima di scendere. Usare // e non /, altrimenti n diventa un float (3.0) e la stampa è meno leggibile. Con n = 0 il ciclo è infinito (0 è pari e resta 0): ottimo spunto per aggiungere un while di controllo dell'input (n deve essere almeno 1).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto contando i giri</h2></div>
+  <div class="puzzle-codice" data-risposta="3687" data-aiuto="la seconda cifra: 100, 50, 25, 12, 6, 3, 1">
+    <ul class="points">
+      <li>1ª cifra: quante volte gira <code>i = 0</code> / <code>while i &lt; 6: i += 2</code>?</li>
+      <li>2ª cifra: quanti giri fa <code>while x &gt; 1: x = x // 2</code> partendo da <code>x = 100</code>?</li>
+      <li>3ª cifra: in quanti passi il numero 6 arriva a 1 con la regola di Collatz?</li>
+      <li>4ª cifra: tentativi massimi per indovinare un numero da 1 a 100 dimezzando</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> i vale 2, 4, 6: 3 giri. 100 si dimezza 6 volte. Collatz di 6: 8 passi. Ricerca binaria: 7.</div>
+  </div>
+  <aside class="notes">Codice: 3687. A squadre, senza computer, poi verificare in IDLE. Errore tipico sulla prima cifra: 6 o 4. Sulla seconda: 7 (contando anche l'1 iniziale come un giro).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un ciclo in cui non so prima quante volte ripetere è un'iterazione <span class="blank" data-risposta="indefinita|non definita"></span>.</p>
+    <p>Il ciclo <code>while</code> si ripete finché la condizione è <span class="blank" data-risposta="vera|true"></span>.</p>
+    <p>Un valore speciale che segnala la fine dei dati si chiama <span class="blank" data-risposta="sentinella"></span>.</p>
+    <p>Per uscire subito da un ciclo si usa l'istruzione <span class="blank" data-risposta="break"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: indefinita (accettato non definita), vera (accettato True), sentinella, break.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Definita: sai quante volte. Indefinita: ripeti finché</li>
+      <li><code>while</code> condizione<code>:</code> controllata prima di ogni giro</li>
+      <li>Inizializza, controlla, aggiorna: o il ciclo non finisce</li>
+    </ul>
+    <ul class="points">
+      <li>Controllo dell'input e valore sentinella</li>
+      <li><code>while True</code> con <code>break</code>: il ciclo dei videogiochi</li>
+      <li>Collatz: un ciclo che nessuno sa se finisce sempre</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: il ciclo for, l'iterazione definita.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

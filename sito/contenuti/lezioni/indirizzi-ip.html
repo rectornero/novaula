@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Indirizzi IP e sottoreti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 9 · Le reti di computer</p>
+  <h1>Indirizzi IP<br>e sottoreti</h1>
+  <p class="lead">Miliardi di dispositivi, e ogni pacchetto arriva a quello giusto. Il segreto è un numero di 32 bit: impariamo a leggerlo e a dividerlo.</p>
+  <aside class="notes">Obiettivi: leggere un indirizzo IPv4 in decimale e in binario, distinguere parte di rete e parte host, usare la subnet mask, riconoscere le classi A, B, C, gli indirizzi privati e pubblici, capire il ruolo del DNS e di IPv6, dividere una rete /24 in sottoreti /26. Durata indicativa: 3 ore. Prerequisito: conversioni binario-decimale (lezione sui numeri binari). Servono: Prompt dei comandi (ipconfig, nslookup, ping, senza diritti di amministratore) e LibreOffice Calc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo te, il tuo telefono ha sempre lo stesso indirizzo IP?</h2></div>
+  <div class="poll" data-id="ip-telefono">
+    <ol><li>Sì, sempre lo stesso</li><li>No, cambia quando cambio rete</li><li>Non ne ha uno: ce l'hanno solo i PC</li><li>Non so che cos'è un indirizzo IP</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di partenza, senza svelare subito la risposta. Alla fine della lezione tornare qui: il telefono riceve un indirizzo diverso a casa, a scuola e in 4G/5G, di solito assegnato in automatico dal router o dall'operatore (servizio DHCP). Ogni dispositivo collegato a una rete IP ha un indirizzo, anche la TV e la console.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'indirizzo IPv4</p><h2>Quattro numeri, 32 bit</h2></div>
+  <p class="lead">Ogni dispositivo in rete ha un <b>indirizzo IP</b>. Nella versione 4 è fatto di <mark>4 ottetti</mark>: 4 gruppi di 8 bit, scritti in decimale da 0 a 255.</p>
+  <table class="data">
+    <tr><th></th><th>1° ottetto</th><th>2° ottetto</th><th>3° ottetto</th><th>4° ottetto</th></tr>
+    <tr><td><b>Decimale</b></td><td class="mono">192</td><td class="mono">168</td><td class="mono">1</td><td class="mono">10</td></tr>
+    <tr><td><b>Binario</b></td><td class="mono">11000000</td><td class="mono">10101000</td><td class="mono">00000001</td><td class="mono">00001010</td></tr>
+  </table>
+  <div class="callout">Con 8 bit il numero più grande è 11111111 = <b>255</b>. Con 32 bit si hanno 2<sup>32</sup>, circa 4,3 miliardi di indirizzi.</div>
+  <aside class="notes">Far verificare una conversione alla lavagna: 168 = 128 + 32 + 8 = 10101000. Si possono usare le funzioni di Calc DECIMALE.BINARIO e BINARIO.DECIMALE già viste. 2^32 = 4 294 967 296. IP = Internet Protocol, il livello 3 (Rete) del modello OSI, livello Internet del TCP/IP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di questi è un indirizzo IPv4 valido?</h2></div>
+  <div class="poll" data-id="ip-valido" data-tipo="quiz" data-risposta="C">
+    <ol><li>192.168.1.256</li><li>172.16.300.4</li><li>10.20.30.40</li><li>192.168.1</li></ol>
+    <p class="why">Ogni ottetto va da 0 a 255: 256 e 300 non stanno in 8 bit. La D ha solo 3 numeri invece di 4. Solo 10.20.30.40 è valido.</p>
+  </div>
+  <aside class="notes">Risposta C. La A è il tranello: sembra "quasi giusto" perché 192.168.1.x è familiare a chi ha visto il router di casa. Domanda di rilancio: "qual è l'indirizzo IPv4 più grande possibile?" (255.255.255.255).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rete e host</p><h2>Come una via e un numero civico</h2></div>
+  <div class="formula"><small>Indirizzo 192.168.1.10 con subnet mask 255.255.255.0 (cioè /24)</small><span class="hl">192.168.1</span>.10</div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Parte di rete</h3><p>È la "via": uguale per tutti i dispositivi della stessa LAN.</p></div>
+    <div class="card soft"><h3>Parte host</h3><p>È il "civico": diverso per ogni dispositivo della rete.</p></div>
+  </div>
+  <div class="callout">La <b>subnet mask</b> dice dove finisce la rete: i bit a 1 sono di rete, quelli a 0 sono dell'host. 255.255.255.0 = 24 uni, per questo si scrive <b>/24</b>.</div>
+  <aside class="notes">255.255.255.0 in binario: 11111111.11111111.11111111.00000000. Il computer fa un AND bit a bit tra indirizzo e mask per ricavare l'indirizzo di rete (collegare alla lezione sulla logica). Se il destinatario ha la stessa parte di rete, il pacchetto va diretto nella LAN; altrimenti va al gateway, cioè al router.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il tuo indirizzo nel laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il Prompt dei comandi e scrivi <code>ipconfig</code>.</li>
+      <li>Annota <b>Indirizzo IPv4</b>, <b>Subnet mask</b> e <b>Gateway predefinito</b>.</li>
+      <li>Usando la subnet mask, separa la parte di rete e la parte host del tuo indirizzo.</li>
+      <li>Confronta con due compagni: siete nella stessa rete? Gli host sono diversi?</li>
+      <li>Scrivi tutto in Writer e salva come <b>indirizzi-lab.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con mask 255.255.255.0 i primi tre numeri sono uguali per te, i compagni e il gateway; cambia solo l'ultimo. Due PC con lo stesso IP nella stessa rete non possono esistere: sarebbe un conflitto.</div>
+  </div>
+  <aside class="notes">La rete della scuola potrebbe usare un'altra mask (per esempio 255.255.0.0, cioè /16): in quel caso sono uguali i primi due numeri. Verificarlo prima della lezione. Gli indirizzi sono quasi sempre assegnati in automatico dal servizio DHCP del router o del server della scuola. Se un PC ha un indirizzo che inizia con 169.254, non ha ricevuto un indirizzo dal DHCP: buon esempio di guasto da far notare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le classi di indirizzi</p><h2>Il primo numero dice la classe</h2></div>
+  <table class="data compact">
+    <tr><th>Classe</th><th>Primo numero</th><th>Subnet mask</th><th>Host per rete</th></tr>
+    <tr><td><b>A</b></td><td class="mono">1 – 126</td><td class="mono">255.0.0.0 (/8)</td><td class="mono">16 777 214</td></tr>
+    <tr><td><b>B</b></td><td class="mono">128 – 191</td><td class="mono">255.255.0.0 (/16)</td><td class="mono">65 534</td></tr>
+    <tr><td><b>C</b></td><td class="mono">192 – 223</td><td class="mono">255.255.255.0 (/24)</td><td class="mono">254</td></tr>
+    <tr><td><b>D</b></td><td class="mono">224 – 239</td><td>Multicast: un pacchetto a un gruppo</td><td class="mono">–</td></tr>
+    <tr><td><b>E</b></td><td class="mono">240 – 255</td><td>Riservati per esperimenti</td><td class="mono">–</td></tr>
+  </table>
+  <div class="callout">Il 127 è speciale: <b>127.0.0.1</b> è il tuo stesso computer (localhost). Oggi le classi sono superate dal sistema CIDR, ma aiutano a capire.</div>
+  <aside class="notes">Host per rete: 2^24 − 2 = 16 777 214; 2^16 − 2 = 65 534; 2^8 − 2 = 254. Si tolgono 2 indirizzi: quello della rete (host tutto a 0) e quello di broadcast (host tutto a 1). Le classi si riconoscono anche dai primi bit: A inizia con 0, B con 10, C con 110. Dal 1993 si usa il CIDR (Classless Inter-Domain Routing): la mask può essere di qualunque lunghezza, per esempio /26.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Privati e pubblici</p><h2>Dentro casa e fuori casa</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Indirizzi privati</h3><p>Si usano dentro le LAN e non escono su internet. Si ripetono in milioni di case.</p><p class="mono small">10.x.x.x<br>172.16.x.x – 172.31.x.x<br>192.168.x.x</p></div>
+    <div class="card soft"><h3>Indirizzi pubblici</h3><p>Unici al mondo, assegnati dall'operatore. Il router di casa ne ha uno e, con il <b>NAT</b>, lo fa condividere a tutti i dispositivi.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli indirizzi IPv4 sono finiti. In 4G e 5G spesso molti telefoni escono su internet con lo <b>stesso indirizzo pubblico</b>: l'operatore usa un grande NAT, chiamato CGNAT.</p></div>
+  <aside class="notes">Gli intervalli privati sono fissati dalla RFC 1918 (1996): 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16. NAT = Network Address Translation: il router sostituisce l'indirizzo privato con il suo pubblico e si ricorda a chi rimandare la risposta. Per vedere il proprio indirizzo pubblico basta cercare "qual è il mio IP" nel browser: sarà diverso da quello di ipconfig. CGNAT = Carrier-Grade NAT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni indirizzo alla sua carta d'identità</h2></div>
+  <dl class="puzzle-abbina" data-id="ip-abbina">
+    <dt>127.0.0.1</dt><dd>Il tuo stesso computer (localhost)</dd>
+    <dt>192.168.1.1</dt><dd>Classe C privato: spesso il router di casa</dd>
+    <dt>10.0.0.5</dt><dd>Classe A privato: una grande rete aziendale</dd>
+    <dt>8.8.8.8</dt><dd>Pubblico: il DNS di Google</dd>
+    <dt>224.0.0.1</dt><dd>Classe D: multicast</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. 8.8.8.8 è davvero il servizio DNS pubblico di Google. 224.0.0.1 è l'indirizzo multicast "tutti gli host della rete locale". Domanda trabocchetto da aggiungere a voce: "e 191.0.0.1 di che classe è?" (B: la C inizia da 192).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Tim Berners-Lee e il Web, al CERN</h2></div>
+  <p>Nel 1989, al CERN di Ginevra, Tim Berners-Lee propone un sistema di documenti collegati da link, sopra Internet. Il suo capo scrive sulla proposta: <i>"Vago, ma entusiasmante"</i>. Nel 1991 il primo sito, info.cern.ch, è online.</p>
+  <figure class="citazione">
+    <blockquote>Questo è per tutti.</blockquote>
+    <figcaption><b>Tim Berners-Lee</b>, inventore del World Wide Web, alla cerimonia di apertura delle Olimpiadi di Londra, 2012</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gran parte dei testi usati per addestrare i chatbot AI viene da pagine del Web raccolte in automatico. Per questo si discute di diritti d'autore: chi può usare quello che abbiamo scritto "per tutti"?</p></div>
+  <aside class="notes">Il capo era Mike Sendall: a matita sulla proposta "Information Management: A Proposal" scrisse "Vague but exciting...". Berners-Lee inventò HTML, HTTP e gli indirizzi URL; il CERN rese il Web libero da diritti nel 1993. Alla cerimonia del 2012 scrisse in diretta "This is for everyone" su un computer NeXT, la stessa marca di computer su cui aveva creato il primo server web; la frase apparve con le luci sugli spalti dello stadio. Traduzione nostra. Sul box Oggi: collegare alla UDA 2 (il copyright nei dati di addestramento); un esempio noto di raccolta di pagine web usata per addestrare modelli linguistici è l'archivio pubblico Common Crawl.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Internet e il Web: quale frase è corretta?</h2></div>
+  <div class="poll" data-id="ip-internet-web" data-tipo="quiz" data-risposta="A">
+    <ol><li>Il Web è un servizio che funziona sopra Internet, come l'email</li><li>Sono due nomi della stessa cosa</li><li>Internet è nato dopo il Web, per farlo funzionare</li><li>Il Web è la parte di Internet che passa nel Wi-Fi</li></ol>
+    <p class="why">Internet è la rete di reti (anni '70-'80, TCP/IP). Il Web (1989-1991) è uno dei servizi che la usano, con pagine e link. Anche email, videochiamate e giochi online usano Internet senza essere il Web.</p>
+  </div>
+  <aside class="notes">Risposta A. La B è il misconcetto più comune. La C rovescia la storia: ARPANET è del 1969, il passaggio al TCP/IP del 1983, il Web del 1989-1991. Esempio: WhatsApp usa Internet ma non è una pagina web.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il DNS</p><h2>La rubrica di Internet</h2></div>
+  <p class="lead">Noi ricordiamo i nomi, i router capiscono solo numeri. Il <b>DNS</b> (Domain Name System) traduce i nomi in indirizzi IP.</p>
+  <div class="flow">
+    <div class="card soft"><h3>1. Chiedi</h3><p>Scrivi <b>www.wikipedia.org</b> nel browser.</p></div>
+    <div class="card soft"><h3>2. Il DNS risponde</h3><p>Un server DNS restituisce un indirizzo IP, per esempio <span class="mono">185.15.59.224</span>.</p></div>
+    <div class="card fill"><h3>3. Ti colleghi</h3><p>Il browser contatta quell'indirizzo e scarica la pagina.</p></div>
+  </div>
+  <aside class="notes">L'indirizzo restituito può cambiare a seconda del paese e del momento: i grandi siti hanno molti server. Il DNS è un servizio del livello Applicazione. Senza DNS dovremmo ricordare numeri come numeri di telefono. Domanda: "se il DNS della scuola non funziona, internet c'è ancora?" Sì, ma i nomi non si traducono: si potrebbe raggiungere un sito solo con il suo numero.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Interroga il DNS</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel Prompt dei comandi scrivi <code>nslookup www.wikipedia.org</code> e annota gli indirizzi.</li>
+      <li>Ripeti con <code>www.google.it</code> e <code>www.istruzione.it</code>.</li>
+      <li>Scrivi <code>ping 127.0.0.1</code>: chi ti risponde?</li>
+      <li>In Calc fai una tabella: <b>Nome</b>, <b>Indirizzo IPv4</b>, <b>Classe</b> (dal primo numero), <b>Ha anche IPv6?</b></li>
+      <li>Salva come <b>dns.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni nome restituisce almeno un indirizzo a 4 numeri; alcuni anche un indirizzo IPv6 con i due punti. 127.0.0.1 risponde in meno di 1 ms: è il tuo stesso PC.</div>
+  </div>
+  <aside class="notes">nslookup mostra prima il server DNS usato (quello della scuola), poi la risposta, di solito indicata come "non autorevole": significa che viene dalla memoria di un server intermedio. Gli indirizzi dei siti possono cambiare tra una postazione e l'altra: è normale. Per la classe: 185 è classe B (128-191), 142 classe B, 216 classe C. Se il DNS della scuola filtra alcuni nomi, scegliere altri siti istituzionali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">IPv6</p><h2>Quando 4 miliardi non bastano</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>IPv4</h3><p class="mono">192.168.1.10</p><p>32 bit: circa <b>4,3 miliardi</b> di indirizzi. Meno delle persone sulla Terra.</p></div>
+    <div class="card"><h3>IPv6</h3><p class="mono">2001:db8::1</p><p>128 bit, scritti in esadecimale: circa <b>3,4 × 10<sup>38</sup></b> indirizzi.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Robot aspirapolvere, telecamere, auto connesse, assistenti vocali con l'AI: gli oggetti in rete sono miliardi. Con IPv6 ognuno può avere il suo indirizzo, senza NAT.</p></div>
+  <aside class="notes">2^128 = 340 282 366 920 938 463 463 374 607 431 768 211 456, circa 3,4 × 10^38. Nel 2011 l'ente centrale IANA ha distribuito gli ultimi blocchi di indirizzi IPv4. I gruppi IPv6 sono 8 gruppi di 4 cifre esadecimali; "::" sostituisce una serie di gruppi a zero. Il prefisso 2001:db8:: è riservato agli esempi nella documentazione. Collegare alla lezione sull'esadecimale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La subnet mask in binario</p><h2>Quanti host ci stanno?</h2></div>
+  <div class="formula"><small>Con un prefisso /n restano 32 − n bit per gli host</small>host = 2<sup class="hl">(32−n)</sup> − 2</div>
+  <table class="data compact">
+    <tr><th>Prefisso</th><th>Subnet mask</th><th>Ultimo ottetto in binario</th><th>Host</th></tr>
+    <tr><td class="mono">/24</td><td class="mono">255.255.255.0</td><td class="mono">00000000</td><td class="mono">254</td></tr>
+    <tr><td class="mono">/25</td><td class="mono">255.255.255.128</td><td class="mono">10000000</td><td class="mono">126</td></tr>
+    <tr><td class="mono hl">/26</td><td class="mono hl">255.255.255.192</td><td class="mono hl">11000000</td><td class="mono hl">62</td></tr>
+  </table>
+  <div class="callout">Perché <b>−2</b>? L'indirizzo con l'host tutto a 0 è il nome della rete, quello con l'host tutto a 1 è il <b>broadcast</b>, il messaggio a tutti.</div>
+  <aside class="notes">Il −2: l'indirizzo con l'host tutto a 0 è il nome della rete, quello con l'host tutto a 1 è il broadcast (un messaggio a tutti). Calcoli: /24: 2^8 − 2 = 254; /25: 2^7 − 2 = 126; /26: 2^6 − 2 = 62. 128 = 10000000, 192 = 128 + 64 = 11000000. Sfida orale: quanti host con /27? (2^5 − 2 = 30, mask 255.255.255.224).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Subnetting</p><h2>Una rete /24 per quattro laboratori</h2></div>
+  <p>La scuola ha la rete <b class="mono">192.168.10.0/24</b> e vuole separare 4 laboratori. Con <b>/26</b> ottiene 4 sottoreti da 64 indirizzi.</p>
+  <table class="data compact">
+    <tr><th>Sottorete</th><th>Indirizzo di rete</th><th>Primo host</th><th>Ultimo host</th><th>Broadcast</th></tr>
+    <tr><td><b>Lab 1</b></td><td class="mono">192.168.10.0</td><td class="mono">.1</td><td class="mono">.62</td><td class="mono">.63</td></tr>
+    <tr><td><b>Lab 2</b></td><td class="mono">192.168.10.64</td><td class="mono">.65</td><td class="mono">.126</td><td class="mono">.127</td></tr>
+    <tr><td><b>Lab 3</b></td><td class="mono">192.168.10.128</td><td class="mono">.129</td><td class="mono">.190</td><td class="mono">.191</td></tr>
+    <tr><td><b>Lab 4</b></td><td class="mono">192.168.10.192</td><td class="mono">.193</td><td class="mono">.254</td><td class="mono">.255</td></tr>
+  </table>
+  <aside class="notes">Regola pratica: blocco = 256 − 192 = 64, quindi le reti partono da 0, 64, 128, 192. Ogni sottorete ha 62 host utilizzabili. Perché dividere? Ordine (ogni laboratorio ha la sua rete), sicurezza (si possono mettere regole tra una sottorete e l'altra) e meno traffico di broadcast. Domanda: "il PC 192.168.10.70 in che laboratorio è?" (Lab 2).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il calcolatore di sottoreti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc scrivi in A1 <b>Prefisso</b> e in B1 26.</li>
+      <li>In B2 <code>=POTENZA(2;32-B1)</code> (indirizzi), in B3 <code>=B2-2</code> (host), in B4 <code>=POTENZA(2;B1-24)</code> (sottoreti).</li>
+      <li>In A6:A9 scrivi 0, 1, 2, 3. In B6 <code>=A6*$B$2</code> (rete) e in C6 <code>=B6+$B$2-1</code> (broadcast).</li>
+      <li>Copia B6:C6 fino alla riga 9, poi prova con B1 = 25 e B1 = 27.</li>
+      <li>Salva come <b>sottoreti.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con /26 ottieni 64 indirizzi, 62 host, 4 sottoreti; la riga di A8 dà rete 128 e broadcast 191. Con /27: 32 indirizzi, 30 host, 8 sottoreti.</div>
+  </div>
+  <aside class="notes">Soluzioni: /25 → 128 indirizzi, 126 host, 2 sottoreti (righe 0-127 e 128-255; le righe 2 e 3 escono oltre 255 e vanno ignorate: buona occasione per discutere). /27 → 32, 30, 8 (le righe 6-9 mostrano solo le prime 4 sottoreti: 0-31, 32-63, 64-95, 96-127). Il $ blocca il riferimento a B2 quando si copia la formula (riferimento assoluto, visto nelle lezioni su Calc). Sfida: aggiungere le colonne Primo host (=B6+1) e Ultimo host (=C6-1).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="6242" data-aiuto="le prime due cifre: 2 elevato a 6, meno 2">
+    <ul class="points">
+      <li>1ª e 2ª cifra: quanti host utilizzabili ha una sottorete /26</li>
+      <li>3ª cifra: quanti ottetti ha un indirizzo IPv4</li>
+      <li>4ª cifra: quante sottoreti /25 si ricavano da una rete /24</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> /26 = 62 host, 4 ottetti, una /24 si divide in 2 reti /25.</div>
+  </div>
+  <aside class="notes">Codice: 6242. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un indirizzo IPv4 è lungo <span class="blank" data-risposta="32|trentadue"></span> bit.</p>
+    <p>Il servizio che traduce i nomi dei siti in indirizzi IP si chiama <span class="blank" data-risposta="DNS"></span>.</p>
+    <p>L'indirizzo 172.20.5.1 appartiene alla classe <span class="blank" data-risposta="B"></span>.</p>
+    <p>La subnet mask /26 si scrive 255.255.255.<span class="blank" data-risposta="192"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 32, DNS, B (172 è tra 128 e 191; è anche un indirizzo privato), 192.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>IPv4: 4 ottetti, 32 bit, numeri da 0 a 255</li>
+      <li>Parte di rete + parte host, divise dalla subnet mask</li>
+      <li>Classi A, B, C; indirizzi privati, pubblici e NAT</li>
+    </ul>
+    <ul class="points">
+      <li>Il DNS traduce i nomi in indirizzi</li>
+      <li>IPv6: 128 bit per miliardi di oggetti</li>
+      <li>Host = 2<sup>32 − n</sup> − 2: una /24 diventa 4 reti /26</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Tornare al sondaggio iniziale: il telefono cambia indirizzo quando cambia rete. Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: la sicurezza nelle reti.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

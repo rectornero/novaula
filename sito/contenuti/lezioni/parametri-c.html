@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il passaggio dei parametri · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 7 · Funzioni e array in C e C++</p>
+  <h1>Il passaggio<br>dei parametri</h1>
+  <p class="lead">Una funzione riceve una copia dei tuoi dati o gli originali? Oggi scopriamo indirizzi e puntatori, senza paura.</p>
+  <aside class="notes">Obiettivi: distinguere variabili locali e globali, capire il passaggio per valore (copia), conoscere indirizzi e puntatori (&amp; e *), usare il passaggio per indirizzo in C (puntatori) e in C++ (riferimenti). Durata indicativa: 2-3 ore. I puntatori vanno introdotti con calma: l'obiettivo è capire lo scambio di due variabili e il perché della &amp; in scanf, non l'aritmetica dei puntatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un amico deve sistemare la tua presentazione. Che cosa gli mandi?</h2></div>
+  <div class="poll" data-id="copia-link">
+    <ol><li>Una copia del file come allegato</li><li>Il link al file originale su Drive</li><li>Dipende da chi deve vedere le modifiche</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, ma è la metafora di tutta la lezione. Allegato = copia: le sue modifiche non toccano il tuo file (passaggio per valore). Link condiviso = indirizzo dell'originale: le sue modifiche le vedi anche tu (passaggio per indirizzo). Tenere la metafora alla lavagna per tutta la lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Condivisione di memoria</p><h2>Variabili locali e globali</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:30px"><span class="k">int</span> <span class="hl">punti</span> = 0;      <span class="c">// globale</span>
+
+<span class="k">void</span> bonus() {
+    punti = punti + 10;
+}
+<span class="k">int</span> main() {
+    bonus();
+    bonus();
+    printf(<span class="s">"Punti: %d\n"</span>, punti);
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Locale</h3><p>Dichiarata dentro una funzione: nasce e muore lì, le altre non la vedono.</p></div>
+      <div class="card"><h3>Globale</h3><p>Dichiarata fuori da tutte le funzioni: la <b>condividono tutte</b>. Comoda, ma chiunque può cambiarla.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il programma stampa "Punti: 20" (verificato con gcc). La variabile globale è un primo modo di condividere memoria tra funzioni. Perché è rischiosa? In un programma di migliaia di righe non sai più chi l'ha modificata. Per questo si preferisce passare i dati come parametri: è chiaro chi riceve che cosa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa il main?</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:30px"><span class="k">int</span> x = 5;           <span class="c">// globale</span>
+
+<span class="k">void</span> cambia() {
+    <span class="k">int</span> x = 99;      <span class="c">// locale</span>
+}
+<span class="k">int</span> main() {
+    cambia();
+    printf(<span class="s">"%d"</span>, x);
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="poll" data-id="ombra" data-tipo="quiz" data-risposta="D">
+      <ol><li>99</li><li>0</li><li>Errore di compilazione</li><li>5</li></ol>
+      <p class="why">Dentro cambia, int x crea una nuova variabile locale che "copre" quella globale e sparisce alla fine della funzione. La x globale resta 5.</p>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: stampa 5 (il compilatore avvisa solo che la x locale non viene usata). Chi risponde 99 non ha notato la parola int davanti a x: senza int, cambia modificherebbe la globale. La C è un dubbio legittimo: nello stesso blocco due variabili con lo stesso nome sono un errore, in blocchi diversi no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il passaggio per valore</p><h2>La funzione riceve una copia</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">void</span> raddoppia(<span class="k">int</span> n) {
+    n = n * 2;
+    printf(<span class="s">"dentro: %d\n"</span>, n);
+}
+<span class="k">int</span> main() {
+    <span class="k">int</span> voto = 4;
+    raddoppia(<span class="hl">voto</span>);
+    printf(<span class="s">"fuori: %d\n"</span>, voto);
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="stack">
+      <div class="bits">
+        <span><b class="on">4</b><small>voto</small></span>
+        <span><b>8</b><small>n</small></span>
+      </div>
+      <p>Stampa <b>dentro: 8</b> e poi <b>fuori: 4</b>.</p>
+      <div class="callout small">Il valore di <code>voto</code> viene <b>copiato</b> in <code>n</code>. La funzione lavora sulla copia: l'originale non cambia.</div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc. È come l'allegato del sondaggio iniziale. In C il passaggio per valore è il modo normale: tutti i parametri visti nella lezione precedente erano passati per valore. Se vogliamo che il main riceva il nuovo valore, la via più semplice è restituirlo con return: voto = raddoppia(voto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Lo scambio funziona?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">void</span> scambia(<span class="k">int</span> a, <span class="k">int</span> b) {
+    <span class="k">int</span> t = a;
+    a = b;
+    b = t;
+}
+<span class="k">int</span> main() {
+    <span class="k">int</span> x = 1, y = 2;
+    scambia(x, y);
+    printf(<span class="s">"%d %d"</span>, x, y);
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="poll" data-id="scambia-valore" data-tipo="quiz" data-risposta="B">
+      <ol><li>2 1</li><li>1 2</li><li>2 2</li><li>1 1</li></ol>
+      <p class="why">scambia scambia le sue copie a e b, non x e y. Quando la funzione finisce le copie spariscono: il main stampa ancora 1 2.</p>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: stampa "1 2". È la misconcezione più diffusa sulle funzioni: il codice dello scambio con la variabile di appoggio t (visto nella UDA 6) è giusto, ma lavora sulle copie. Lasciare la domanda aperta: "come facciamo a scambiare davvero x e y?" La risposta arriva tra poco con i puntatori.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia alla copia</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB (linguaggio C) scrivi il programma <code>raddoppia</code> della slide 5 ed eseguilo.</li>
+      <li>Aggiungi in <code>main</code> e in <code>raddoppia</code> una <code>printf</code> che stampa il valore <b>prima</b> e <b>dopo</b> il calcolo.</li>
+      <li>Ora trasformala in funzione: <code>int raddoppia(int n)</code> con <code>return n * 2;</code></li>
+      <li>Nel <code>main</code> scrivi <code>voto = raddoppia(voto);</code> e stampa di nuovo.</li>
+      <li>Salva come <b>valore.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con la prima versione il main stampa <code>fuori: 4</code>; con la seconda stampa <code>8</code>. Il valore torna al main solo grazie al <code>return</code>.</div>
+  </div>
+  <aside class="notes">Soluzione della seconda versione:
+int raddoppia(int n) { return n * 2; }
+int main() { int voto = 4; voto = raddoppia(voto); printf("fuori: %d\n", voto); return 0; }
+Stampa "fuori: 8". Far osservare che return restituisce un solo valore: per "restituire" due valori (come nello scambio) serve un'altra strada.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tipo puntatore</p><h2>Ogni variabile abita a un indirizzo</h2></div>
+  <p class="lead">La memoria è come una lunga via: ogni cella ha un <b>numero civico</b>, l'<mark>indirizzo</mark>, e dentro c'è un valore.</p>
+  <div class="bits">
+    <span><b>4</b><small>1000</small></span>
+    <span><b class="on">7</b><small>1004</small></span>
+    <span><b>0</b><small>1008</small></span>
+    <span><b>1</b><small>1012</small></span>
+    <span><b class="on">2</b><small>1016</small></span>
+  </div>
+  <div class="cols-2">
+    <div class="card soft"><h3><code>&amp;a</code></h3><p>"Indirizzo di a": dove abita la variabile, per esempio 1004.</p></div>
+    <div class="card"><h3><code>int *p</code></h3><p>Un <b>puntatore</b>: una variabile che contiene un indirizzo.</p></div>
+  </div>
+  <aside class="notes">Gli indirizzi 1000, 1004... sono inventati per semplicità; un int occupa di solito 4 byte, per questo crescono di 4. Gli indirizzi veri sono numeri molto grandi scritti in esadecimale, per esempio 0x7ffd5e8c (si possono vedere con printf("%p", &amp;a)): collegamento con la lezione sull'esadecimale. Metafora: il puntatore è un bigliettino con scritto un indirizzo di casa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tipo puntatore</p><h2>Due simboli da ricordare: &amp; e *</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:31px"><span class="k">int</span> a = 7;
+<span class="k">int</span> *p = <span class="hl">&amp;a</span>;   <span class="c">// p punta ad a</span>
+
+printf(<span class="s">"%d"</span>, <span class="hl">*p</span>); <span class="c">// stampa 7</span>
+
+*p = 3;          <span class="c">// cambia a!</span>
+printf(<span class="s">"%d"</span>, a);  <span class="c">// stampa 3</span></pre>
+    <div class="stack">
+      <div class="flip" style="--h:150px"><div class="fronte"><h3>Che cosa fa &amp;?</h3></div><div class="retro"><p><b>&amp;a</b> dà l'indirizzo della variabile a.</p></div></div>
+      <div class="flip" style="--h:150px"><div class="fronte"><h3>Che cosa fa * davanti a p?</h3></div><div class="retro"><p><b>*p</b> è il valore che si trova all'indirizzo contenuto in p.</p></div></div>
+      <div class="flip" style="--h:150px"><div class="fronte"><h3>Perché a diventa 3?</h3></div><div class="retro"><p>Perché <b>*p</b> e <b>a</b> sono la stessa cella di memoria.</p></div></div>
+    </div>
+  </div>
+  <aside class="notes">Leggere ad alta voce: "int *p" = "p è un puntatore a int"; "&amp;a" = "indirizzo di a"; "*p" = "il contenuto puntato da p". Attenzione alla doppia vita dell'asterisco: nella dichiarazione (int *p) dice "è un puntatore", nelle istruzioni (*p = 3) vuol dire "vai all'indirizzo e usa il contenuto". Far girare le carte una alla volta chiedendo prima la risposta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina il codice al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="simboli">
+    <dt><code>int *p;</code></dt><dd>p è un puntatore a un intero</dd>
+    <dt><code>&amp;a</code></dt><dd>L'indirizzo della variabile a</dd>
+    <dt><code>*p</code></dt><dd>Il valore che si trova all'indirizzo contenuto in p</dd>
+    <dt><code>p = &amp;a;</code></dt><dd>Da ora p punta alla variabile a</dd>
+    <dt><code>p = NULL;</code></dt><dd>p non punta a niente</dd>
+  </dl>
+  <aside class="notes">Abbinamenti giusti come scritti. NULL è un valore speciale: un puntatore che non punta a nessuna cella. Usare *p quando p vale NULL fa andare in crash il programma: è l'errore di cui parla Tony Hoare nella prossima slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>L'errore da un miliardo di dollari</h2></div>
+  <figure class="citazione">
+    <blockquote>Lo chiamo il mio errore da un miliardo di dollari: l'invenzione del riferimento nullo, nel 1965.</blockquote>
+    <figcaption><b>Tony Hoare</b>, informatico britannico, inventore del Quicksort, in una conferenza a Londra nel 2009</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli errori con puntatori e memoria sono ancora tra i più pericolosi: Microsoft ha raccontato che circa il <b>70%</b> delle falle di sicurezza corrette ogni anno nei suoi prodotti nasce da problemi di memoria. Per questo crescono linguaggi "sicuri per la memoria" come <b>Rust</b>.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "I call it my billion-dollar mistake. It was the invention of the null reference in 1965." Tony Hoare, conferenza QCon London 2009. Il dato del 70% è di Matt Miller (Microsoft Security Response Center), presentazione al BlueHat IL 2019; anche il team di Chromium (Google) ha riportato una percentuale simile per i bug gravi. Nel 2024 un rapporto della Casa Bianca (ONCD) ha invitato a preferire linguaggi sicuri per la memoria. Messaggio: i puntatori sono potentissimi, per questo vanno usati con attenzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il passaggio per indirizzo in C</p><h2>Ora lo scambio funziona</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">void</span> scambia(<span class="k">int</span> <span class="hl">*a</span>, <span class="k">int</span> <span class="hl">*b</span>) {
+    <span class="k">int</span> t = *a;
+    *a = *b;
+    *b = t;
+}
+<span class="k">int</span> main() {
+    <span class="k">int</span> x = 1, y = 2;
+    scambia(<span class="hl">&amp;x</span>, <span class="hl">&amp;y</span>);
+    printf(<span class="s">"%d %d"</span>, x, y);  <span class="c">// 2 1</span>
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="stack">
+      <p>La funzione riceve gli <b>indirizzi</b> di x e y, quindi lavora sugli <b>originali</b>.</p>
+      <div class="callout hl small">Ecco perché scrivi <code>scanf("%d", &amp;x)</code>: scanf deve sapere <b>dove</b> mettere il numero letto!</div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: stampa "2 1". È come il link condiviso del sondaggio. Far notare le tre differenze con la versione sbagliata: int *a nei parametri, *a nel corpo, &amp;x nella chiamata. Il collegamento con scanf di solito produce un "aaah" in classe: la &amp; che usavano dalla UDA 6 ora ha un senso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine: che cosa succede con scambia(&amp;x, &amp;y)?</h2></div>
+  <ol class="puzzle-ordina" data-id="scambia-passi">
+    <li>Il main passa a scambia gli indirizzi di x e y</li>
+    <li><code>a</code> riceve l'indirizzo di x, <code>b</code> quello di y</li>
+    <li><code>t = *a</code> copia in t il valore di x, cioè 1</li>
+    <li><code>*a = *b</code> scrive in x il valore di y, cioè 2</li>
+    <li><code>*b = t</code> scrive in y il vecchio valore di x</li>
+    <li>Tornato nel main, x vale 2 e y vale 1</li>
+  </ol>
+  <aside class="notes">Ordine giusto come scritto. Per chi è in difficoltà: disegnare alla lavagna le celle x e y con le frecce che partono da a e b. Variante a squadre: due studenti fanno x e y con un foglio in mano, un terzo fa la funzione e può solo "andare all'indirizzo" e cambiare il foglio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Metti in ordine due numeri</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C scrivi la funzione <code>void scambia(int *a, int *b)</code> della slide 12.</li>
+      <li>Scrivi <code>void ordina2(int *a, int *b)</code>: se <code>*a &gt; *b</code> chiama <code>scambia(a, b)</code>.</li>
+      <li>Nel <code>main</code> leggi due numeri con <code>scanf</code>, chiama <code>ordina2(&amp;x, &amp;y)</code> e stampali.</li>
+      <li>Prova anche con due numeri uguali e con due negativi.</li>
+      <li>Salva come <b>indirizzo.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 9 4 stampa <code>4 9</code>; con 3 8 stampa <code>3 8</code>; con -1 -5 stampa <code>-5 -1</code>.</div>
+  </div>
+  <aside class="notes">Soluzione:
+void ordina2(int *a, int *b) { if (*a &gt; *b) scambia(a, b); }
+int main() { int x, y; scanf("%d %d", &amp;x, &amp;y); ordina2(&amp;x, &amp;y); printf("%d %d\n", x, y); return 0; }
+Verificato con gcc. Domanda chiave: perché dentro ordina2 si scrive scambia(a, b) e non scambia(&amp;a, &amp;b)? Perché a e b sono già indirizzi. Questo è il primo mattone degli algoritmi di ordinamento che vedremo a fine UDA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il passaggio per indirizzo in C++</p><h2>In C++ basta una &amp; nel parametro</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:28px"><span class="k">void</span> scambia(<span class="k">int</span> <span class="hl">&amp;a</span>, <span class="k">int</span> <span class="hl">&amp;b</span>) {
+    <span class="k">int</span> t = a;
+    a = b;
+    b = t;
+}
+<span class="c">// nel main:</span>
+scambia(x, y);   <span class="c">// niente &amp; qui</span></pre>
+    <p>Il parametro <code>int &amp;a</code> è un <b>riferimento</b>: un altro nome per la stessa variabile. Niente asterischi.</p>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando condividi il <b>link</b> di un Google Doc, tutti lavorano sullo stesso file: è un passaggio per indirizzo. Quando mandi un <b>allegato</b>, ognuno modifica la sua copia: è un passaggio per valore.</p></div>
+  <aside class="notes">Verificato con g++: con x = 1 e y = 2 dopo scambia(x, y) stampa "2 1". Il riferimento del C++ fa la stessa cosa del puntatore, ma il compilatore si occupa degli indirizzi al posto nostro. Attenzione: la &amp; nel parametro (int &amp;a) significa "riferimento", la &amp; davanti a una variabile in un'istruzione (&amp;x) significa "indirizzo di".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il salvadanaio, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB scegli <b>C++</b>.</li>
+      <li>Scrivi <code>void deposita(float &amp;saldo, float importo)</code> che aggiunge l'importo al saldo.</li>
+      <li>Scrivi <code>void preleva(float &amp;saldo, float importo)</code>: toglie l'importo solo se basta il saldo, altrimenti stampa <code>Saldo insufficiente</code>.</li>
+      <li>Nel <code>main</code>: saldo 0, deposita 20, preleva 5, preleva 50, poi stampa il saldo.</li>
+      <li>Salva come <b>salvadanaio.cpp</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> compare una volta <code>Saldo insufficiente</code> e alla fine <code>Saldo: 15</code>. Prova a togliere la <code>&amp;</code> da deposita: che cosa succede al saldo?</div>
+  </div>
+  <aside class="notes">Soluzione:
+void deposita(float &amp;saldo, float importo) { saldo = saldo + importo; }
+void preleva(float &amp;saldo, float importo) { if (importo &lt;= saldo) saldo = saldo - importo; else cout &lt;&lt; "Saldo insufficiente" &lt;&lt; endl; }
+Verificato con g++. Senza la &amp; in deposita il saldo resta 0 (passaggio per valore) e il prelievo di 5 diventa "Saldo insufficiente": ottimo per far vedere la differenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con i parametri</h2></div>
+  <div class="puzzle-codice" data-risposta="1824" data-aiuto="la seconda cifra: *p e a sono la stessa cella, quindi 7 + 1">
+    <ul class="points">
+      <li>1ª cifra: dopo lo scambio <b>per valore</b> della slide 6, quanto vale x</li>
+      <li>2ª cifra: <b>int a = 7; int *p = &amp;a; *p = *p + 1;</b> quanto vale a</li>
+      <li>3ª cifra: quante &amp; scrivi nella chiamata <b>scambia(&amp;x, &amp;y)</b></li>
+      <li>4ª cifra: il valore di voto dopo <b>raddoppia(voto)</b> per valore, se voto era 4</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Lo scambio per valore non cambia x (1), *p modifica a (8), due indirizzi (2), la copia non tocca voto (4).</div>
+  </div>
+  <aside class="notes">Codice: 1824 (seconda cifra verificata con gcc: a vale 8). Gioco a squadre: chi apre per primo spiega la cifra più difficile, di solito la seconda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Nel passaggio per valore la funzione riceve una <span class="blank" data-risposta="copia"></span> del dato.</p>
+    <p>L'operatore &amp; restituisce l'<span class="blank" data-risposta="indirizzo"></span> di una variabile.</p>
+    <p>Una variabile che contiene un indirizzo si chiama <span class="blank" data-risposta="puntatore"></span>.</p>
+    <p>Una variabile dichiarata fuori da tutte le funzioni si chiama <span class="blank" data-risposta="globale"></span>.</p>
+    <p>In C++ il parametro <code>int &amp;a</code> si chiama <span class="blank" data-risposta="riferimento|reference"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: copia, indirizzo, puntatore, globale, riferimento (accettato anche reference).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Locali dentro la funzione, globali condivise da tutte</li>
+      <li>Per valore: la funzione lavora su una copia</li>
+      <li><code>&amp;a</code> è l'indirizzo, <code>*p</code> il contenuto puntato</li>
+    </ul>
+    <ul class="points">
+      <li>Per indirizzo in C: <code>int *a</code> e chiamata con <code>&amp;x</code></li>
+      <li>In C++: riferimento <code>int &amp;a</code></li>
+      <li>La &amp; di scanf ora ha un senso</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: i vettori, tante variabili sotto un unico nome. Scopriremo che il nome di un vettore è proprio un indirizzo.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

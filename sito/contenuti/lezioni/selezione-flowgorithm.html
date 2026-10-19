@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La selezione: se… altrimenti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 5 · Dal problema al programma</p>
+  <h1>La selezione:<br>se… altrimenti</h1>
+  <p class="lead">Promosso o da recuperare, pari o dispari, biglietto intero o ridotto: ogni volta che un programma deve scegliere, entra in scena il rombo.</p>
+  <aside class="notes">Obiettivi: scrivere condizioni con gli operatori di confronto, usare la selezione doppia (se… allora… altrimenti) e semplice (solo se… allora), costruire un esempio riepilogativo con selezioni annidate (l'equazione di primo grado), realizzare tutto in Flowgorithm con il blocco If. Durata indicativa: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Prima di uscire di casa, controlli il meteo?</h2></div>
+  <div class="poll" data-id="sel-meteo">
+    <ol><li>Sempre, sul telefono</li><li>Solo se il cielo è grigio</li><li>Mai: guardo fuori dalla finestra</li><li>Ci pensa qualcun altro per me</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Far notare la risposta B: è già un algoritmo con una selezione ("se il cielo è grigio, allora controllo il meteo"). Chiedere quante decisioni del genere prendiamo prima delle 8 del mattino: ognuna è un rombo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla sequenza alla selezione</p><h2>La vita è piena di bivi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Finora i nostri algoritmi erano <b>sequenze</b>: sempre gli stessi passi, nello stesso ordine. Con la <mark>selezione</mark> l'esecutore valuta una <b>condizione</b> e sceglie quale strada seguire.</p>
+      <p class="muted">La condizione è una domanda che ha solo due risposte: <b>vero</b> o <b>falso</b>.</p>
+    </div>
+    <pre class="code"><span class="k">SE</span> piove <span class="k">ALLORA</span>
+    prendi l'ombrello
+<span class="k">ALTRIMENTI</span>
+    prendi gli occhiali da sole
+<span class="k">FINE SE</span>
+esci di casa</pre>
+  </div>
+  <aside class="notes">Sottolineare l'ultima riga: dopo FINE SE le due strade si ricongiungono e l'algoritmo continua uguale per tutti. Nel flow chart è il connettore. Collegamento con Scratch (UDA 4): il blocco "se… allora… altrimenti".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le condizioni</p><h2>Gli operatori di confronto</h2></div>
+  <table class="data compact">
+    <tr><th>In matematica</th><th>In Flowgorithm, C, Python</th><th>Esempio</th><th>Si legge</th></tr>
+    <tr><td class="mono">=</td><td class="mono">==</td><td class="mono">risposta == "si"</td><td>risposta è uguale a "si"</td></tr>
+    <tr><td class="mono">≠</td><td class="mono">!=</td><td class="mono">x != 0</td><td>x è diverso da 0</td></tr>
+    <tr><td class="mono">&lt;  &gt;</td><td class="mono">&lt;  &gt;</td><td class="mono">eta &lt; 12</td><td>eta è minore di 12</td></tr>
+    <tr><td class="mono">≤</td><td class="mono">&lt;=</td><td class="mono">velocita &lt;= 50</td><td>velocita è al massimo 50</td></tr>
+    <tr><td class="mono">≥</td><td class="mono">&gt;=</td><td class="mono">voto &gt;= 6</td><td>voto è almeno 6</td></tr>
+  </table>
+  <div class="callout hl"><b>Attenzione:</b> un solo <code>=</code> assegna un valore, due <code>==</code> confrontano. Confonderli è l'errore più famoso della programmazione.</div>
+  <aside class="notes">In Flowgorithm il confronto si può scrivere anche con un solo =, ma abituiamoci subito a == perché in C e in Python è obbligatorio. Esempio: la condizione voto >= 6 è vera con 6, 7, 8…, falsa con 5,5. Far dire a voce il contrario di ogni condizione (il contrario di eta &lt; 12 è eta &gt;= 12, non eta &gt; 12).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>La variabile x vale 5. Quale condizione è VERA?</h2></div>
+  <div class="poll" data-id="sel-vera" data-tipo="quiz" data-risposta="C">
+    <ol><li class="mono">x &gt; 5</li><li class="mono">x != 5</li><li class="mono">x &gt;= 5</li><li class="mono">x &lt; 5</li></ol>
+    <p class="why">x &gt;= 5 si legge "x è maggiore o uguale a 5": con x = 5 la parte "uguale" è vera. x &gt; 5 invece è falsa, perché 5 non è più grande di se stesso.</p>
+  </div>
+  <aside class="notes">Molti scelgono A per fretta. Il "caso limite" (il valore esattamente sulla soglia) è la fonte di errori più frequente nei programmi con la selezione: ci torneremo con il biglietto ridotto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La selezione doppia</p><h2>Due strade, una sola percorsa</h2></div>
+  <div class="cols-2 wide-left">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-430.5 0 801 668" width="779" height="650" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Selezione doppia"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-94.3,118 138.3,118 94.3,184 -138.3,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi voto</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><polygon points="0,220 117.5,276 0,332 -117.5,276" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="276" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">voto &gt;= 6</text><text x="127.5" y="258" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M117.5 276 L198.3 276 L198.3 361" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="198.3,376 189.3,359 207.3,359" fill="#172033"/><polygon points="90,376 350.6,376 306.6,476 46,476" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="198.3" y="408.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi</text><text x="198.3" y="443.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">"Promosso"</text><path d="M198.3 476 L198.3 520 L24 520" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="9,520 26,511 26,529" fill="#172033"/><text x="-127.5" y="258" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M-117.5 276 L-228.2 276 L-228.2 361" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-228.2,376 -237.2,359 -219.2,359" fill="#172033"/><polygon points="-366.5,376 -46,376 -90,476 -410.5,476" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="-228.2" y="408.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi</text><text x="-228.2" y="443.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">"Da recuperare"</text><path d="M-228.2 476 L-228.2 520 L-24 520" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,520 -26,529 -26,511" fill="#172033"/><circle cx="0" cy="520" r="7" fill="#172033"/><path d="M0 520 L0 541" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,556 -9,539 9,539" fill="#172033"/><rect x="-85" y="556" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="589" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+    <div class="stack">
+      <pre class="code"><span class="k">LEGGI</span> voto
+<span class="k">SE</span> voto &gt;= 6 <span class="k">ALLORA</span>
+  <span class="k">SCRIVI</span> <span class="s">"Promosso"</span>
+<span class="k">ALTRIMENTI</span>
+  <span class="k">SCRIVI</span> <span class="s">"Da recuperare"</span>
+<span class="k">FINE SE</span></pre>
+      <p class="small muted">Vero a destra, Falso a sinistra, come in Flowgorithm. Le due strade si riuniscono nel connettore.</p>
+    </div>
+  </div>
+  <aside class="notes">Far eseguire il diagramma con 7, con 6 e con 5,5. Ogni volta viene eseguito uno solo dei due blocchi Scrivi, mai entrambi, mai nessuno: è questo che rende la selezione "doppia".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Pari o dispari?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Flowgorithm: Declare <code>n</code> di tipo <b>Integer</b>. Output <code>"Scrivi un numero intero"</code>, poi Input <code>n</code>.</li>
+      <li>Inserisci un blocco <b>If</b> con la condizione <code>n % 2 == 0</code>.</li>
+      <li>Nel ramo <b>True</b>: Output <code>n &amp; " è pari"</code>.</li>
+      <li>Nel ramo <b>False</b>: Output <code>n &amp; " è dispari"</code>.</li>
+      <li>Prova con 10, 7, 0 e -3. Salva come <b>pari-dispari.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 10 è pari, 7 è dispari, 0 è pari, -3 è dispari. Il diagramma ha un solo rombo con due Output, uno per ramo.</div>
+  </div>
+  <aside class="notes">Il simbolo % è il resto della divisione intera (come RESTO in Calc): un numero è pari se il resto della divisione per 2 è 0. In Flowgorithm si può scrivere anche mod. Con -3, n % 2 vale -1: la condizione "== 0" funziona lo stesso, mentre "== 1" sbaglierebbe con i negativi. Ottimo spunto per chi finisce prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-195.7 0 489.7 872" width="472" height="840" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Selezione semplice"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><rect x="-99.7" y="118" width="199.4" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">prezzo ← 8</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><polygon points="-86.7,220 130.7,220 86.7,286 -130.7,286" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="253" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi eta</text><path d="M0 286 L0 307" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,322 -9,305 9,305" fill="#172033"/><polygon points="0,322 105.7,378 0,434 -105.7,378" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="378" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">eta &lt; 12</text><text x="115.7" y="360" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M105.7 378 L175.7 378 L175.7 463" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="175.7,478 166.7,461 184.7,461" fill="#172033"/><rect x="77.4" y="478" width="196.6" height="100" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="175.7" y="510.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">prezzo ←</text><text x="175.7" y="545.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">prezzo / 2</text><path d="M175.7 578 L175.7 622 L24 622" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="9,622 26,613 26,631" fill="#172033"/><text x="-115.7" y="360" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M-105.7 378 L-175.7 378 L-175.7 622 L-6 622" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="9,622 -8,631 -8,613" fill="#172033"/><circle cx="0" cy="622" r="7" fill="#172033"/><path d="M0 622 L0 643" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,658 -9,641 9,641" fill="#172033"/><polygon points="-113.6,658 157.6,658 113.6,724 -157.6,724" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="691" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi prezzo</text><path d="M0 724 L0 745" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,760 -9,743 9,743" fill="#172033"/><rect x="-85" y="760" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="793" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+    <div class="stack">
+      <div class="head"><p class="kicker">La selezione semplice</p><h2>Se serve, fai qualcosa in più</h2></div>
+      <p>A volte il ramo Falso è <b>vuoto</b>: se la condizione è falsa non si fa niente di speciale e si va avanti.</p>
+      <pre class="code">prezzo ← 8
+<span class="k">LEGGI</span> eta
+<span class="k">SE</span> eta &lt; 12 <span class="k">ALLORA</span>
+  prezzo ← prezzo / 2
+<span class="k">FINE SE</span>
+<span class="k">SCRIVI</span> prezzo</pre>
+    </div>
+  </div>
+  <aside class="notes">Biglietto del museo: intero 8 euro, metà prezzo sotto i 12 anni. Nel diagramma il ramo Falso è solo una freccia che porta al connettore. Far notare che Scrivi prezzo sta dopo il connettore: si esegue in tutti e due i casi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz sul confine</p><h2>Con il programma del museo, Giulia ha esattamente 12 anni. Quanto paga?</h2></div>
+  <div class="poll" data-id="sel-giulia" data-tipo="quiz" data-risposta="B">
+    <ol><li>4 euro</li><li>8 euro</li><li>6 euro</li><li>Il programma va in errore</li></ol>
+    <p class="why">La condizione è eta &lt; 12: con 12 è falsa, perché 12 non è minore di 12. Si salta il ramo e Giulia paga l'intero, 8 euro. Se il museo voleva lo sconto anche a 12 anni, la condizione giusta era eta &lt;= 12.</p>
+  </div>
+  <aside class="notes">Il tranello è il caso limite. Discussione: chi decide se a 12 anni c'è lo sconto? Il cliente (il museo), non il programmatore: per questo l'analisi del problema va fatta bene e i casi limite vanno sempre provati.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La biglietteria del museo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Declare <code>eta</code> di tipo Integer e <code>prezzo</code> di tipo Real. Assign <code>prezzo = 8</code>.</li>
+      <li>Output <code>"Quanti anni hai?"</code>, poi Input <code>eta</code>.</li>
+      <li>If <code>eta &lt; 12</code>: nel ramo True un Assign <code>prezzo = prezzo / 2</code>. Il ramo False resta vuoto.</li>
+      <li>Dopo l'If: Output <code>"Paghi " &amp; prezzo &amp; " euro"</code>.</li>
+      <li>Salva come <b>biglietto.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 10 anni paghi 4 euro, con 12 e con 40 anni paghi 8 euro. <b>Sfida:</b> anche chi ha 65 anni o più paga metà. Con 70 anni devi ottenere 4.</div>
+  </div>
+  <aside class="notes">Soluzione della sfida: condizione eta &lt; 12 or eta &gt;= 65 (in Flowgorithm vanno bene or e ||). Gli operatori logici and, or, not li approfondiremo in C nella UDA 6. Errore tipico: mettere l'Output dentro il ramo True, così chi paga l'intero non vede nulla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni condizione al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="sel-condizioni">
+    <dt class="mono">eta &gt;= 18</dt><dd>ha almeno 18 anni</dd>
+    <dt class="mono">eta &gt; 18</dt><dd>ha più di 18 anni, quindi almeno 19</dd>
+    <dt class="mono">voto &lt; 6</dt><dd>il voto è insufficiente</dd>
+    <dt class="mono">n % 2 == 0</dt><dd>n è un numero pari</dd>
+    <dt class="mono">x != 0</dt><dd>x è diverso da zero</dd>
+  </dl>
+  <aside class="notes">Le prime due coppie sono il tranello: differiscono solo per il caso 18. Chiedere quale delle due serve per "è maggiorenne" (eta &gt;= 18). Variante a squadre: ogni squadra inventa una condizione e l'altra la traduce in italiano.</aside>
+</section>
+
+<section class="slide statement">
+  <figure class="citazione">
+    <blockquote>Due strade divergevano in un bosco, e io… io presi quella meno battuta, e questo ha fatto tutta la differenza.</blockquote>
+    <figcaption><b>Robert Frost</b>, poeta statunitense, <i>La strada non presa</i>, 1916</figcaption>
+  </figure>
+  <p class="lead">Nella vita un bivio si decide con mille ragioni. In un algoritmo, con una sola condizione: <b>vero</b> o <b>falso</b>.</p>
+  <aside class="notes">Traduzione nostra dall'inglese, ultimi versi di "The Road Not Taken" (raccolta "Mountain Interval", 1916): "Two roads diverged in a wood, and I— / I took the one less traveled by, / And that has made all the difference." Spunto: la poesia è spesso letta come elogio della scelta coraggiosa, ma Frost nel resto del testo dice che le due strade erano quasi uguali. Anche nei programmi due rami possono differire per poco (un &lt; o un &lt;=), con conseguenze grandi. Storia italiana da raccontare: nel 1966 Corrado Böhm e Giuseppe Jacopini dimostrarono che sequenza, selezione e iterazione bastano per ogni algoritmo.</aside>
+</section>
+
+<section class="slide">
+  <div class="cols-2 wide-left">
+    <svg class="fc" xmlns="http://www.w3.org/2000/svg" viewBox="-850.2 0 1170.2 868" width="1000" height="742" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Equazione di primo grado"><rect x="-85" y="16" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="49" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Inizio</text><path d="M0 82 L0 103" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,118 -9,101 9,101" fill="#172033"/><polygon points="-87.6,118 131.6,118 87.6,184 -131.6,184" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="0" y="151" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Leggi a, b</text><path d="M0 184 L0 205" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,220 -9,203 9,203" fill="#172033"/><polygon points="0,220 100,276 0,332 -100,276" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="0" y="276" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">a != 0</text><text x="110" y="258" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M100 276 L173 276 L173 361" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="173,376 164,359 182,359" fill="#172033"/><rect x="78" y="376" width="190" height="66" rx="4" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="173" y="409" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">x ← -b / a</text><path d="M173 442 L173 463" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="173,478 164,461 182,461" fill="#172033"/><polygon points="90,478 300,478 256,544 46,544" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="173" y="511" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi x</text><path d="M173 544 L173 720 L24 720" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="9,720 26,711 26,729" fill="#172033"/><text x="-110" y="258" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M-100 276 L-459.9 276 L-459.9 361" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-459.9,376 -468.9,359 -450.9,359" fill="#172033"/><polygon points="-459.9,376 -359.9,432 -459.9,488 -559.9,432" fill="#fff7cc" stroke="#c99a00" stroke-width="3" stroke-linejoin="round"/><text x="-459.9" y="432" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">b == 0</text><text x="-349.9" y="414" text-anchor="start" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Vero</text><path d="M-359.9 432 L-232 432 L-232 517" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-232,532 -241,515 -223,515" fill="#172033"/><polygon points="-369.9,532 -50,532 -94,632 -413.9,632" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="-232" y="564.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi</text><text x="-232" y="599.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">"Indeterminata"</text><path d="M-232 632 L-232 676 L-435.9 676" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-450.9,676 -433.9,667 -433.9,685" fill="#172033"/><text x="-569.9" y="414" text-anchor="end" dominant-baseline="central" font-size="23" font-weight="700" fill="#c8326f">Falso</text><path d="M-559.9 432 L-666 432 L-666 517" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-666,532 -675,515 -657,515" fill="#172033"/><polygon points="-782.2,532 -505.9,532 -549.9,632 -826.2,632" fill="#fbe1ec" stroke="#c8326f" stroke-width="3" stroke-linejoin="round"/><text x="-666" y="564.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">Scrivi</text><text x="-666" y="599.5" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#172033">"Impossibile"</text><path d="M-666 632 L-666 676 L-483.9 676" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-468.9,676 -485.9,685 -485.9,667" fill="#172033"/><circle cx="-459.9" cy="676" r="7" fill="#172033"/><path d="M-459.9 676 L-459.9 720 L-24 720" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="-9,720 -26,729 -26,711" fill="#172033"/><circle cx="0" cy="720" r="7" fill="#172033"/><path d="M0 720 L0 741" fill="none" stroke="#172033" stroke-width="3" stroke-linejoin="round"/><polygon points="0,756 -9,739 9,739" fill="#172033"/><rect x="-85" y="756" width="170" height="66" rx="33" fill="#172033"/><text x="0" y="789" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="600" fill="#fff">Fine</text></svg>
+    <div class="stack">
+      <div class="head"><p class="kicker">Un esempio riepilogativo</p><h2>L'equazione a · x + b = 0</h2></div>
+      <ul class="points">
+        <li>Se a ≠ 0, la soluzione è <b>x = -b / a</b>.</li>
+        <li>Se a = 0 e b = 0, va bene ogni x: <b>indeterminata</b>.</li>
+        <li>Se a = 0 e b ≠ 0, nessuna x funziona: <b>impossibile</b>.</li>
+      </ul>
+      <p class="small muted">Un If dentro un altro If forma una <b>selezione annidata</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Esempi: 2x + 6 = 0 dà x = -3; 0x + 5 = 0 è impossibile (5 = 0 è falso); 0x + 0 = 0 è vera per ogni x. Il secondo rombo sta nel ramo Falso del primo: si arriva a chiedersi "b == 0?" solo se a è zero. Con la matematica che conoscono, l'esempio è perfetto per vedere che il programma deve prevedere TUTTI i casi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il risolutore di equazioni</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Declare <code>a, b, x</code> di tipo Real. Chiedi e leggi <code>a</code> e <code>b</code>.</li>
+      <li>If <code>a != 0</code>. Ramo True: Assign <code>x = -b / a</code> e Output <code>"x = " &amp; x</code>.</li>
+      <li>Ramo False: un altro If <code>b == 0</code>.</li>
+      <li>Nel suo True: Output <code>"Indeterminata"</code>; nel suo False: Output <code>"Impossibile"</code>.</li>
+      <li>Salva come <b>equazione.fprg</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a = 2, b = 6 dà x = -3; a = 4, b = -2 dà x = 0.5; a = 0, b = 5 dà Impossibile; a = 0, b = 0 dà Indeterminata.</div>
+  </div>
+  <aside class="notes">Per inserire il secondo If nel ramo False basta cliccare sulla freccia di quel ramo. Chiedere a chi finisce prima: che cosa succederebbe senza il primo If, con a = 0? Divisione per zero: Flowgorithm si fermerebbe con un errore. La selezione serve anche a proteggere il programma dai dati che non vanno bene.</aside>
+</section>
+
+<section class="slide center">
+  <div class="head"><p class="kicker">La selezione nella tecnologia di oggi</p><h2>Una soglia, una decisione</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Il filtro antispam</h3><p>Un modello di AI legge un messaggio e calcola quanto è probabile che sia spam. Poi decide una semplice selezione: <b>se</b> la probabilità supera una soglia, <b>allora</b> il messaggio va nella cartella Spam.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>La frenata automatica</h3><p>Le auto nuove hanno sensori che misurano la distanza dall'ostacolo davanti. <b>Se</b> l'urto è troppo vicino e il guidatore non frena, <b>allora</b> l'auto frena da sola.</p></div>
+  </div>
+  <aside class="notes">Il calcolo della probabilità è la parte "intelligente" (imparata dai dati); la decisione finale è una selezione scritta da persone, e la soglia la scelgono loro: più alta significa meno messaggi buoni finiti per errore nello spam, ma più spam che passa. La frenata automatica d'emergenza (AEB) è obbligatoria sulle auto nuove immatricolate nell'Unione europea dal luglio 2024 (regolamento UE 2019/2144); i sistemi reali stimano il tempo all'urto con radar e telecamere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gioca con le carte</p><h2>Che cosa scrive il programma?</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><p class="mono">x ← 10<br>SE x &gt; 10 ALLORA<br>&nbsp;&nbsp;SCRIVI "A"<br>ALTRIMENTI<br>&nbsp;&nbsp;SCRIVI "B"</p></div><div class="retro"><p><b>Scrive B.</b></p><p class="muted">10 non è maggiore di 10: la condizione è falsa.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p class="mono">t ← 37.5<br>SE t &gt;= 37.5 ALLORA<br>&nbsp;&nbsp;SCRIVI "Febbre"<br>SCRIVI "Fine"</p></div><div class="retro"><p><b>Scrive Febbre e poi Fine.</b></p><p class="muted">Con &gt;= il valore sulla soglia rende la condizione vera.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><p class="mono">n ← -4<br>SE n % 2 == 0 ALLORA<br>&nbsp;&nbsp;SCRIVI "pari"<br>ALTRIMENTI<br>&nbsp;&nbsp;SCRIVI "dispari"</p></div><div class="retro"><p><b>Scrive pari.</b></p><p class="muted">-4 diviso 2 dà resto 0: anche i negativi possono essere pari.</p></div></div>
+  </div>
+  <aside class="notes">Far votare con le dita (1 = prima risposta, 2 = seconda) prima di girare ogni carta. Nella seconda carta l'ultima riga è fuori dalla selezione: si esegue sempre. È una buona verifica di chi ha capito la selezione semplice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Ogni programma dà una cifra del codice</h2></div>
+  <div class="puzzle-codice" data-risposta="3891" data-aiuto="la seconda cifra è il prezzo pagato da chi ha esattamente 12 anni">
+    <ul class="points">
+      <li>1ª: x ← 7. SE x % 2 == 0 ALLORA y ← 2 ALTRIMENTI y ← 3. Quanto vale y?</li>
+      <li>2ª: eta ← 12, prezzo ← 8. SE eta &lt; 12 ALLORA prezzo ← prezzo / 2. Quanto vale prezzo?</li>
+      <li>3ª: a ← 4, b ← 9. SE a &gt; b ALLORA m ← a ALTRIMENTI m ← b. Quanto vale m?</li>
+      <li>4ª: voto ← 6. SE voto &gt;= 6 ALLORA r ← 1 ALTRIMENTI r ← 0. Quanto vale r?</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 7 è dispari (3), 12 non è minore di 12 (8), il massimo tra 4 e 9 (9), 6 è sufficiente (1).</div>
+  </div>
+  <aside class="notes">Codice: 3891. Il terzo programma calcola il massimo tra due numeri: chiedere come si potrebbe trovare il massimo tra tre numeri (selezioni annidate, oppure due selezioni in sequenza). Sfida a squadre con tre tentativi prima dell'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una condizione può essere solo vera o <span class="blank" data-risposta="falsa"></span>.</p>
+    <p>Nella selezione <span class="blank" data-risposta="semplice"></span> il ramo Falso è vuoto.</p>
+    <p>Per confrontare due valori si scrive <span class="blank" data-risposta="=="></span>, non un solo uguale.</p>
+    <p>Un If dentro il ramo di un altro If forma una selezione <span class="blank" data-risposta="annidata"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: falsa, semplice, == (due uguali), annidata.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>La condizione è vera o falsa: ==, !=, &lt;, &gt;, &lt;=, &gt;=</li>
+      <li>Selezione doppia: se… allora… altrimenti</li>
+      <li>Selezione semplice: il ramo Falso è vuoto</li>
+    </ul>
+    <ul class="points">
+      <li>Le strade si riuniscono nel connettore</li>
+      <li>Selezioni annidate per i casi multipli</li>
+      <li>Prova sempre i casi limite, come 12 con eta &lt; 12</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: l'iterazione, per ripetere i blocchi senza riscriverli.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Introduzione a Python · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Introduzione<br>a Python</h1>
+  <p class="lead">Il linguaggio nato per hobby durante le vacanze di Natale e diventato la lingua dell'intelligenza artificiale. Oggi scriviamo i nostri primi programmi.</p>
+  <aside class="notes">Obiettivi: scrivere ed eseguire il primo programma, usare variabili, print e input, assegnazioni ed espressioni, scambiare due variabili, usare contatore e accumulatore. Durata indicativa: 2-3 ore. Prerequisiti: flow chart e Flowgorithm (UDA 5), primi programmi in C (UDA 6). Software: Python 3 con IDLE sui PC del laboratorio (verificare prima che sia installato); in alternativa un interprete online senza account, per esempio OnlineGDB scegliendo la lingua "Python 3".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Se sapessi già programmare in Python, che cosa costruiresti?</h2></div>
+  <div class="poll" data-id="py-sogno">
+    <ol><li>Un videogioco</li><li>Un bot che risponde ai messaggi</li><li>Un programma che analizza i miei dati (sport, musica, voti)</li><li>Una piccola intelligenza artificiale</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, nessuna risposta giusta. Far notare che tutte e quattro le cose si fanno davvero in Python: giochi con la libreria pygame, bot per Telegram e Discord, analisi dei dati con pandas, AI con PyTorch. Annotare il risultato: si può riprendere alla fine della UDA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Natale 1989: un progetto per le vacanze</h2></div>
+  <figure class="citazione">
+    <blockquote>Cercavo un progetto "per hobby" che mi tenesse occupato nella settimana di Natale. […] Scelsi Python come nome provvisorio: ero di umore un po' irriverente (e grande fan dei Monty Python).</blockquote>
+    <figcaption><b>Guido van Rossum</b>, informatico olandese, creatore di Python, prefazione al libro <i>Programming Python</i>, 1996</figcaption>
+  </figure>
+  <div class="chips"><span class="chip">1989 · inizia il progetto ad Amsterdam</span><span class="chip">1991 · prima versione pubblica</span><span class="chip">2008 · esce Python 3</span></div>
+  <aside class="notes">Traduzione nostra dall'inglese; l'originale è nella prefazione di Guido van Rossum al libro di Mark Lutz "Programming Python" (O'Reilly, 1996): "I chose Python as a working title for the project, being in a slightly irreverent mood (and a big fan of Monty Python's Flying Circus)". Il nome quindi non viene dal serpente ma dal gruppo comico inglese Monty Python: per questo negli esempi della documentazione ufficiale compaiono spesso "spam" e "eggs", da un loro sketch. Van Rossum lavorava al CWI, centro di ricerca di Amsterdam. Python 0.9.0 fu pubblicato nel febbraio 1991; Python 3.0 nel dicembre 2008. Noi usiamo Python 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché Python</p><h2>Lo stesso programma, due linguaggi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small muted">In C (UDA 6)</p>
+<pre class="code"><span class="k">#include</span> &lt;stdio.h&gt;
+<span class="k">int</span> main() {
+    printf(<span class="s">"Ciao, mondo!\n"</span>);
+    <span class="k">return</span> 0;
+}</pre>
+    </div>
+    <div class="stack">
+      <p class="small muted">In Python</p>
+<pre class="code">print(<span class="s">"Ciao, mondo!"</span>)</pre>
+      <ul class="points small">
+        <li>niente punto e virgola, niente graffe</li>
+        <li>niente <code>main</code> obbligatorio</li>
+        <li>è un linguaggio <mark>interpretato</mark>: l'interprete legge ed esegue le istruzioni una dopo l'altra</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Il C va compilato: il compilatore traduce tutto il programma in linguaggio macchina e poi lo si esegue. Python è interpretato: si scrive e si esegue subito, anche una riga alla volta nella shell. (Per precisione: l'interprete CPython traduce prima il codice in un formato intermedio, il bytecode, e poi lo esegue; ai ragazzi basta l'idea di "esecuzione immediata".) Chiedere: quale dei due è più facile da leggere? Il prezzo da pagare è la velocità: Python è in genere più lento del C.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Python e intelligenza artificiale</p><h2>La lingua comune di chi fa ricerca sull'AI</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Python fa da regista</h3><p>Le librerie più usate per addestrare le reti neurali, come <b>PyTorch</b> e <b>TensorFlow</b>, si usano da Python. I calcoli pesanti li fanno parti scritte in C++ che girano sulle schede video; il ricercatore scrive in Python le istruzioni che dicono cosa fare. Gran parte degli articoli scientifici sull'AI pubblica il proprio codice proprio in Python.</p></div>
+  <div class="cols-3">
+    <div class="card"><h3>Leggibile</h3><p class="muted">Si capisce anche il codice scritto da altri.</p></div>
+    <div class="card"><h3>Librerie</h3><p class="muted">Migliaia di pacchetti pronti: grafici, dati, AI.</p></div>
+    <div class="card"><h3>Gratuito</h3><p class="muted">Open source, gira su Windows, Mac, Linux.</p></div>
+  </div>
+  <aside class="notes">Dati verificabili, da citare se chiedono: secondo il rapporto GitHub Octoverse 2024 Python è diventato il linguaggio più usato su GitHub, superando JavaScript; l'indice TIOBE lo mette al primo posto dal 2021. Evitare di dire che "l'AI è scritta in Python": le parti veloci sono in C++ e CUDA, Python è il linguaggio con cui le si comanda. Domanda alla classe: perché conviene a un ricercatore un linguaggio facile da leggere? (Lavora in squadra, deve verificare il codice degli altri.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Python come calcolatrice</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>IDLE</b> (o un interprete online come OnlineGDB, lingua Python 3). Si apre la shell con il prompt <code>&gt;&gt;&gt;</code>.</li>
+      <li>Scrivi e premi Invio: <code>print("Ciao, mondo!")</code>, poi <code>2 + 3 * 4</code>, <code>7 / 2</code>, <code>7 // 2</code>, <code>7 % 2</code>, <code>2 ** 10</code>.</li>
+      <li>Ora <b>File, New File</b>: scrivi un programma di 3 <code>print</code> che si presenta (nome, classe, una passione).</li>
+      <li>Salva come <b>presentazione.py</b> e premi <b>F5</b> per eseguirlo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella shell devi ottenere 14, 3.5, 3, 1 e 1024. Il programma stampa 3 righe. Se compare un errore in rosso, controlla virgolette e parentesi.</div>
+  </div>
+  <aside class="notes">Risultati: 2 + 3 * 4 = 14 (la moltiplicazione ha la precedenza), 7 / 2 = 3.5 (divisione con la virgola, Python usa il punto), 7 // 2 = 3 (divisione intera), 7 % 2 = 1 (resto), 2 ** 10 = 1024 (potenza: un kibibyte, collegamento alla lezione sui numeri binari). Errore tipico: Print con la P maiuscola, che dà NameError. Python distingue maiuscole e minuscole. In OnlineGDB si clicca Run invece di F5 e il file si scarica con l'icona Download.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le variabili</p><h2>Una variabile è un nome attaccato a un valore</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">nome = <span class="s">"Ada"</span>      <span class="c"># stringa (str)</span>
+eta = 14           <span class="c"># intero (int)</span>
+altezza = 1.62     <span class="c"># con la virgola (float)</span>
+eta = eta + 1      <span class="c"># ora vale 15</span>
+print(nome, <span class="s">"ha"</span>, eta, <span class="s">"anni"</span>)</pre>
+    <div class="card soft"><h3>Regole per i nomi</h3><ul class="points"><li>lettere, cifre e <code>_</code></li><li>non iniziano con una cifra</li><li><code>Eta</code> e <code>eta</code> sono diverse</li><li>niente parole riservate come <code>if</code></li></ul></div>
+  </div>
+  <div class="callout"><b>Differenza con il C:</b> in Python non si dichiara il tipo. Il tipo lo decide il valore, e <code>=</code> vuol dire "assegna", non "è uguale".</div>
+  <aside class="notes">Output: Ada ha 15 anni (print separa gli argomenti con uno spazio). In C si scriveva int eta = 14; qui basta eta = 14. La funzione type() mostra il tipo: type(1.62) restituisce float. Leggere eta = eta + 1 da destra a sinistra: "calcola eta + 1 e metti il risultato in eta". In matematica sarebbe un'equazione impossibile: ottimo spunto per chiarire che = è un'assegnazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">x = 5
+x = x + 2
+y = x * 2
+x = 1
+print(y)</pre>
+    <div class="poll" data-id="py-assegna" data-tipo="quiz" data-risposta="C">
+      <ol><li>2</li><li>12</li><li>14</li><li>10</li></ol>
+      <p class="why">y vale 14: è stato calcolato quando x valeva 7. Cambiare x dopo non modifica y.</p>
+    </div>
+  </div>
+  <aside class="notes">Il tranello è la A: molti pensano che y sia "collegato" a x come una formula di Calc, e quindi che diventi 1 * 2 = 2. In un programma l'assegnazione si fa una volta sola, nel momento in cui la riga viene eseguita. La D (10) è di chi dimentica la seconda riga, la B di chi somma male. Far ripercorrere il programma riga per riga, con una tabella delle variabili alla lavagna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Espressioni</p><h2>Gli operatori aritmetici</h2></div>
+  <table class="data compact">
+    <tr><th>Operatore</th><th>Significato</th><th>Esempio</th><th>Risultato</th></tr>
+    <tr><td class="mono">+  -  *</td><td>somma, differenza, prodotto</td><td class="mono">3 * 4 - 2</td><td class="mono">10</td></tr>
+    <tr><td class="mono">/</td><td>divisione (sempre con la virgola)</td><td class="mono">6 / 3</td><td class="mono hl">2.0</td></tr>
+    <tr><td class="mono">//</td><td>divisione intera</td><td class="mono">17 // 5</td><td class="mono">3</td></tr>
+    <tr><td class="mono">%</td><td>resto della divisione</td><td class="mono">17 % 5</td><td class="mono">2</td></tr>
+    <tr><td class="mono">**</td><td>potenza</td><td class="mono">2 ** 5</td><td class="mono">32</td></tr>
+  </table>
+  <div class="callout hl">Precedenze come in matematica: prima <code>**</code>, poi <code>* / // %</code>, poi <code>+ -</code>. Nel dubbio, usa le parentesi tonde.</div>
+  <aside class="notes">Differenza importante con il C: in C 7 / 2 tra interi fa 3, in Python fa 3.5. Per la divisione intera Python usa //. Il resto % servirà per capire se un numero è pari (n % 2 == 0) nella lezione sulla selezione. Esempio di precedenza: 2 + 3 ** 2 = 11, (2 + 3) ** 2 = 25.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni espressione al suo risultato</h2></div>
+  <dl class="puzzle-abbina" data-id="py-espressioni">
+    <dt><code>17 // 5</code></dt><dd>3</dd>
+    <dt><code>17 % 5</code></dt><dd>2</dd>
+    <dt><code>17 / 5</code></dt><dd>3.4</dd>
+    <dt><code>10 / 5</code></dt><dd>2.0</dd>
+    <dt><code>2 ** 5</code></dt><dd>32</dd>
+    <dt><code>"ab" * 3</code></dt><dd>ababab</dd>
+  </dl>
+  <aside class="notes">A squadre, 2 minuti. I due tranelli: 10 / 5 dà 2.0 e non 2 (la divisione / restituisce sempre un float), e "ab" * 3 ripete la stringa tre volte. Dopo il controllo, farle verificare tutte nella shell di IDLE.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scambio di due variabili</p><h2>Come si scambia il contenuto di due bicchieri?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Se scrivi <code>a = b</code> e poi <code>b = a</code>, il valore di <code>a</code> è perso. Serve un terzo bicchiere: <code>temp</code>.</p>
+      <p class="small muted">Rimetti in ordine le righe: alla fine il programma stampa <code>8 3</code>.</p>
+      <div class="callout small">In Python c'è anche la scorciatoia <code>a, b = b, a</code></div>
+    </div>
+    <ol class="puzzle-ordina" data-id="py-scambio">
+      <li><code>a, b = 3, 8</code></li>
+      <li><code>temp = a</code></li>
+      <li><code>a = b</code></li>
+      <li><code>b = temp</code></li>
+      <li><code>print(a, b)</code></li>
+    </ol>
+  </div>
+  <aside class="notes">Lo stesso problema fatto in C nella UDA 6. Ordine corretto: a, b = 3, 8; temp = a; a = b; b = temp; print(a, b). Far provare anche la versione sbagliata a = b; b = a: stampa 8 8. La scorciatoia a, b = b, a è tipica di Python: a destra si costruisce prima la coppia (8, 3), poi la si assegna. In C non esiste.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'input</p><h2><code>input()</code> chiede, l'utente risponde</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">nome = input(<span class="s">"Come ti chiami? "</span>)
+anno = int(input(<span class="s">"Anno di nascita? "</span>))
+print(<span class="s">"Ciao"</span>, nome)
+print(<span class="s">"Nel 2030 avrai"</span>, 2030 - anno, <span class="s">"anni"</span>)</pre>
+    <div class="card soft"><h3>Attenzione</h3><p><code>input()</code> restituisce <b>sempre una stringa</b>. Per fare i conti la trasformi con <code>int()</code> o <code>float()</code>.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche il messaggio che scrivi a un chatbot arriva al programma come stringa. Prima di elaborarlo, il modello lo spezza in <b>token</b> (pezzi di parola) e trasforma ogni token in un numero: anche per l'AI il testo diventa conti.</p></div>
+  <aside class="notes">Con anno 2012 il programma stampa "Nel 2030 avrai 18 anni". Se l'utente scrive "ciao" invece di un numero, int() dà ValueError: lo gestiremo con la selezione e i cicli. I token: un modello linguistico non legge lettera per lettera né parola per parola, ma a pezzi; ogni pezzo ha un numero identificativo nel suo vocabolario. Ci torneremo nella lezione sulle liste.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>L'utente scrive 7 e poi 3. Che cosa compare?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">a = input(<span class="s">"Primo numero: "</span>)
+b = input(<span class="s">"Secondo numero: "</span>)
+print(a + b)</pre>
+    <div class="poll" data-id="py-input" data-tipo="quiz" data-risposta="B">
+      <ol><li>10</li><li>73</li><li>Un errore</li><li>a + b</li></ol>
+      <p class="why">a e b sono stringhe, e + tra stringhe le attacca: "7" + "3" = "73". Per avere 10 serve int(input(…)).</p>
+    </div>
+  </div>
+  <aside class="notes">È l'errore più frequente di chi inizia con Python. La C (errore) è plausibile: chi viene dal C si aspetta un problema di tipi, ma il + tra due stringhe è lecito (concatenazione). Errore vero si avrebbe con "7" + 3 (TypeError: stringa più intero). La D è di chi confonde la variabile con il testo tra virgolette.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il convertitore di paghette</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In IDLE apri <b>File, New File</b>.</li>
+      <li>Chiedi il nome e la paghetta settimanale in euro (usa <code>float(input(…))</code>).</li>
+      <li>Calcola quanto mette da parte in un anno (52 settimane) e quanti mesi servono per una cuffia da 60 euro, supponendo 4 settimane al mese.</li>
+      <li>Stampa i risultati con una frase. Salva come <b>paghetta.py</b> e premi F5.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 5 euro a settimana ottieni 260.0 euro in un anno e 3.0 mesi per la cuffia. Se ottieni un errore TypeError, hai dimenticato <code>float()</code>.</div>
+  </div>
+  <aside class="notes">Soluzione:
+nome = input("Come ti chiami? ")
+paghetta = float(input("Paghetta settimanale? "))
+anno = paghetta * 52
+mesi = 60 / (paghetta * 4)
+print(nome, "in un anno metti da parte", anno, "euro")
+print("Per la cuffia servono", mesi, "mesi")
+Con 5 euro: 260.0 e 3.0. Con 7 euro i mesi sono 2.142857142857143: buona occasione per anticipare round(mesi, 1), che dà 2.1. Chi finisce prima può aggiungere quanto risparmia in 3 anni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contatore e accumulatore</p><h2>Due variabili che lavorano sempre</h2></div>
+  <div class="cols-2">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Contatore</h3><p>Che cosa fa?</p></div><div class="retro"><p><b>Conta quante volte succede qualcosa.</b></p><p><code>conta = conta + 1</code></p><p class="muted">Parte da 0 e cresce sempre di 1. Esempio: quanti voti ho inserito.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Accumulatore</h3><p>Che cosa fa?</p></div><div class="retro"><p><b>Somma valori diversi uno dopo l'altro.</b></p><p><code>somma = somma + voto</code></p><p class="muted">Parte da 0 e cresce del valore letto. Esempio: la somma dei voti.</p></div></div>
+  </div>
+  <div class="callout">Forma breve: <code>conta += 1</code> e <code>somma += voto</code>. Prima di usarli, ricorda di metterli a <b>0</b>.</div>
+  <aside class="notes">Prima di girare le carte, chiedere alla classe di indovinare la differenza. Collegare ai flow chart della UDA 5, dove contatore e accumulatore comparivano nei cicli. Se si dimentica di inizializzare (conta = 0), Python dà NameError: la variabile non esiste ancora. Nella lezione sul while li useremo dentro un ciclo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La media di tre voti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Crea un nuovo file e scrivi <code>somma = 0</code> e <code>conta = 0</code>.</li>
+      <li>Tre volte: leggi un voto con <code>float(input(…))</code>, poi <code>somma += voto</code> e <code>conta += 1</code>.</li>
+      <li>Calcola <code>media = somma / conta</code> e stampa somma, numero di voti e media.</li>
+      <li>Salva come <b>media3.py</b> ed esegui con F5.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con i voti 7, 8 e 6 il programma stampa somma 21.0, voti 3 e media 7.0.</div>
+  </div>
+  <aside class="notes">Soluzione:
+somma = 0
+conta = 0
+voto = float(input("Voto: "))
+somma += voto
+conta += 1
+(ripetuto tre volte)
+media = somma / conta
+print("Somma", somma, "voti", conta, "media", media)
+Far notare che abbiamo copiato tre volte le stesse righe: con 30 voti sarebbe scomodo. Il ciclo while e il ciclo for risolveranno il problema. Chi finisce prima: con 7.5, 8 e 6 la media è 7.166666666666667, usare round(media, 2).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto eseguendo il codice a mente</h2></div>
+  <div class="puzzle-codice" data-risposta="2834" data-aiuto="la quarta cifra: dopo lo scambio b prende il vecchio valore di a">
+    <ul class="points">
+      <li>1ª cifra: il valore di <code>17 % 5</code></li>
+      <li>2ª cifra: il valore di <code>2 ** 3</code></li>
+      <li>3ª cifra: il valore di <code>7 // 2</code></li>
+      <li>4ª cifra: dopo <code>a, b = 4, 9</code> e <code>a, b = b, a</code>, quanto vale <code>b</code>?</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Resto 2, potenza 8, divisione intera 3, scambio: b = 4.</div>
+  </div>
+  <aside class="notes">Codice: 2834. A squadre senza computer: vince la prima squadra che apre. Dopo tre tentativi sbagliati compare l'aiuto. Alla fine verificare tutto nella shell di IDLE.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Per mostrare un testo sullo schermo uso la funzione <span class="blank" data-risposta="print|print()"></span>.</p>
+    <p>La funzione <code>input()</code> restituisce sempre una <span class="blank" data-risposta="stringa|str"></span>.</p>
+    <p>In Python <code>7 // 2</code> vale <span class="blank" data-risposta="3|tre"></span>.</p>
+    <p>Per scambiare a e b in una riga scrivo <code>a, b =</code> <span class="blank" data-risposta="b, a|b,a"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: print, stringa (accettato str), 3, b, a. Chi sbaglia la seconda rivede il quiz "73".</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Python: interpretato, leggibile, nato nel 1989</li>
+      <li><code>print()</code> per l'output, <code>input()</code> per l'input</li>
+      <li>Le variabili non si dichiarano: il tipo lo dà il valore</li>
+    </ul>
+    <ul class="points">
+      <li><code>/</code> con la virgola, <code>//</code> intera, <code>%</code> resto</li>
+      <li>Scambio: <code>temp</code> oppure <code>a, b = b, a</code></li>
+      <li>Contatore <code>+= 1</code>, accumulatore <code>+= valore</code></li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: la selezione, cioè come un programma prende decisioni.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

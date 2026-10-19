@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programmiamo in C e C++ · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 6 · La programmazione imperativa in C e C++</p>
+  <h1>Programmiamo<br>in C e C++</h1>
+  <p class="lead">Dai diagrammi a blocchi al codice vero: scriviamo i primi programmi nei linguaggi che fanno girare sistemi operativi, videogiochi e intelligenze artificiali.</p>
+  <aside class="notes">Obiettivi: conoscere l'origine di C e C++, il percorso sorgente, compilatore, eseguibile, la struttura di un programma, i tipi di dato, le variabili e lo scambio di due variabili. Durata indicativa: 2-3 ore. Prima della lezione verificare che OnlineGDB (onlinegdb.com) sia raggiungibile dai PC del laboratorio, oppure che Code::Blocks o Dev-C++ siano installati. Collegamento con la UDA 5: gli algoritmi e i flow chart diventano ora codice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai scritto codice fatto di testo?</h2></div>
+  <div class="poll" data-id="c1-esperienza">
+    <ol><li>Mai, solo blocchi (Scratch, App Inventor)</li><li>Un po' di HTML o Python</li><li>Sì, anche in C o C++</li><li>Mai, e mi fa un po' paura</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Rassicurare: chi ha usato Scratch e Flowgorithm conosce già sequenza, selezione e ciclo; cambia solo il modo di scriverli. Chi ha già esperienza può fare da tutor nei lab.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I linguaggi C e C++</p><h2>Due linguaggi, una famiglia</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><p class="num">1972</p><h3>Il C</h3><p>Nasce ai Bell Labs (USA) per opera di <b>Dennis Ritchie</b>, per scrivere il sistema operativo Unix. È veloce, compatto e vicino all'hardware.</p></div>
+    <div class="card soft"><p class="num">1983</p><h3>Il C++</h3><p><b>Bjarne Stroustrup</b>, sempre ai Bell Labs, aggiunge al C le classi e molto altro. Il nome C++ significa "il C, un passo avanti".</p></div>
+  </div>
+  <div class="callout">Sono linguaggi <b>imperativi</b>: il programma è una sequenza di ordini che il computer esegue uno dopo l'altro. Quasi tutto ciò che scrivi in C funziona anche in C++.</div>
+  <aside class="notes">Stroustrup iniziò nel 1979 con "C with Classes"; il nome C++ è del 1983 e la prima versione commerciale del 1985. L'operatore ++ in C significa "aumenta di uno": da qui la battuta del nome. Chiedere: quali altri linguaggi conoscete? Molti (Java, C#, JavaScript, PHP) hanno preso dal C la sintassi con graffe e punto e virgola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dove si usano oggi</p><h2>Sono ovunque, anche se non li vedi</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Sistemi operativi</h3><p class="muted">Il cuore di Linux e di Android è scritto in C.</p></div>
+    <div class="card"><h3>Videogiochi</h3><p class="muted">Motori grafici come Unreal Engine sono in C++.</p></div>
+    <div class="card"><h3>Microcontrollori</h3><p class="muted">La scheda Arduino si programma in C++.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando un'AI riconosce una foto, i calcoli pesanti li fa codice C e C++: le librerie usate per addestrare le reti neurali, come PyTorch, hanno il motore scritto in C++. E l'interprete Python più usato è scritto in C.</p></div>
+  <aside class="notes">Fonti verificabili: il kernel Linux è scritto quasi tutto in C (da poco anche qualche parte in Rust); Unreal Engine è in C++; il linguaggio di Arduino è C++ con alcune librerie; il nucleo di PyTorch (libtorch) è in C++; CPython, l'interprete Python ufficiale, è in C. Collegamento con Arduino e Tinkercad della UDA 4: chi ha visto il codice testuale di Tinkercad ha già visto del C++.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'ambiente di sviluppo</p><h2>Dal testo al programma che gira</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Editor</h3><p>Scrivi il <b>codice sorgente</b> e lo salvi come <code>ciao.c</code>.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Compilatore</h3><p>Controlla la sintassi e traduce tutto in linguaggio macchina.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Eseguibile</h3><p>Nasce <code>ciao.exe</code>: il computer lo esegue.</p></div>
+  </div>
+  <div class="callout">Un <b>IDE</b> mette tutto insieme in un solo programma: <b>Code::Blocks</b> e <b>Dev-C++</b> sul PC, <b>OnlineGDB</b> nel browser. Il primo compilatore lo progettò <b>Grace Hopper</b> nel 1952.</div>
+  <aside class="notes">Semplificazione accettabile: tra compilatore ed eseguibile c'è anche il linker, che unisce il nostro codice alle librerie (per esempio quella di printf). In Code::Blocks il tasto F9 compila ed esegue; in Dev-C++ il tasto F11. Grace Hopper realizzò il sistema A-0 per l'UNIVAC I nel 1952, considerato uno dei primi compilatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa fa il compilatore?</h2></div>
+  <div class="poll" data-id="c1-compilatore" data-tipo="quiz" data-risposta="B">
+    <ol><li>Esegue il programma riga per riga mentre lo legge</li><li>Traduce tutto il sorgente in linguaggio macchina e segnala gli errori di sintassi</li><li>Trova tutti gli errori del programma, anche quelli di logica</li><li>Salva il file .c sul disco fisso</li></ol>
+    <p class="why">Il compilatore traduce il sorgente tutto insieme, prima dell'esecuzione. Se un programma calcola la media sbagliata ma è scritto con la sintassi giusta, il compilatore non se ne accorge: gli errori di logica li trovi solo provando il programma.</p>
+  </div>
+  <aside class="notes">Tranelli: A descrive un interprete (come Python in modalità interattiva), C è il malinteso più diffuso: "se compila, è giusto". Far ripetere la frase: compila non vuol dire funziona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo programma</p><h2>Ciao, mondo! In C e in C++</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="chip" style="align-self:flex-start">C · ciao.c</p>
+<pre class="code" style="font-size:29px"><span class="k">#include</span> &lt;stdio.h&gt;
+
+<span class="k">int</span> main() {
+    printf(<span class="s">"Ciao, mondo!\n"</span>);
+    <span class="k">return</span> 0;
+}</pre>
+    </div>
+    <div class="stack">
+      <p class="chip" style="align-self:flex-start">C++ · ciao.cpp</p>
+<pre class="code" style="font-size:29px"><span class="k">#include</span> &lt;iostream&gt;
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    cout &lt;&lt; <span class="s">"Ciao, mondo!"</span> &lt;&lt; endl;
+    <span class="k">return</span> 0;
+}</pre>
+    </div>
+  </div>
+  <p class="small muted">Stesso risultato, due strade: in C si stampa con <code>printf</code>, in C++ con <code>cout</code>. <code>\n</code> ed <code>endl</code> vanno a capo.</p>
+  <aside class="notes">Leggere il codice ad alta voce, riga per riga. Far notare le parti uguali (main, graffe, return 0, punto e virgola) e quelle diverse (libreria, istruzione di stampa). Le stringhe vanno tra virgolette doppie. In C++ "using namespace std;" evita di scrivere std::cout ogni volta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il libro che ha insegnato il C al mondo</h2></div>
+  <figure class="citazione">
+    <blockquote>L'unico modo per imparare un nuovo linguaggio di programmazione è scrivere programmi in quel linguaggio.</blockquote>
+    <figcaption><b>Brian Kernighan e Dennis Ritchie</b>, <i>The C Programming Language</i>, 1978</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un assistente AI può scriverti un programma in pochi secondi. Ma se non sai leggerlo, non sai se è giusto: le AI sbagliano, e il compilatore non trova gli errori di logica. Per controllare il codice serve qualcuno che sappia programmare. Tu.</p></div>
+  <aside class="notes">La frase apre il capitolo 1 del libro (traduzione nostra dall'inglese: "The only way to learn a new programming language is by writing programs in it"). Subito dopo il libro propone di stampare "hello, world": la tradizione del primo programma nasce lì e in un tutorial di Kernighan del 1972. Discussione di 2 minuti: vi fidereste di un compito fatto dall'AI senza saperlo controllare?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Anatomia di un programma: abbina ogni pezzo</h2></div>
+  <dl class="puzzle-abbina" data-id="c1-anatomia">
+    <dt><code>#include &lt;stdio.h&gt;</code></dt><dd>Aggiunge la libreria per l'input e l'output</dd>
+    <dt><code>int main()</code></dt><dd>Il punto da cui parte il programma</dd>
+    <dt><code>{ }</code></dt><dd>Racchiudono un blocco di istruzioni</dd>
+    <dt><code>;</code></dt><dd>Chiude ogni istruzione</dd>
+    <dt><code>return 0;</code></dt><dd>Dice al sistema che è andato tutto bene</dd>
+    <dt><code>// nota</code></dt><dd>Commento: il compilatore lo ignora</dd>
+  </dl>
+  <aside class="notes">Si può fare a coppie in 3 minuti. Precisazione: le direttive come #include non finiscono con il punto e virgola. Il commento con // vale fino a fine riga; /* ... */ può occupare più righe.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il tuo primo programma (e il tuo primo errore)</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>onlinegdb.com</b> (non serve un account) e in alto a destra scegli il linguaggio <b>C</b>. Oppure apri Code::Blocks o Dev-C++.</li>
+      <li>Scrivi il programma Ciao, mondo, ma fai stampare <b>Ciao, sono</b> seguito dal tuo nome. Premi <b>Run</b>.</li>
+      <li>Ora cancella il <code>;</code> dopo la printf e riesegui: leggi l'errore.</li>
+      <li>Rimetti il <code>;</code>, passa a <b>C++</b> e riscrivilo con <code>cout</code>.</li>
+      <li>Salva il file come <b>ciao-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nella console compare <code>Ciao, sono Giulia</code>. Senza il punto e virgola il compilatore dice <b>expected ';' before 'return'</b>: l'errore è segnalato sulla riga dopo!</div>
+  </div>
+  <aside class="notes">Soluzione C: printf("Ciao, sono Giulia\n"); Soluzione C++: cout &lt;&lt; "Ciao, sono Giulia" &lt;&lt; endl; Messaggio di gcc verificato: "error: expected ';' before 'return'". Far notare che il compilatore indica il punto in cui si accorge dell'errore, spesso la riga successiva. Salvataggio: su OnlineGDB il pulsante Download scarica il file (da rinominare); in Code::Blocks e Dev-C++ File, Salva con nome. Evitare le lettere accentate nelle stringhe: la console di Windows può mostrarle male.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dati e variabili</p><h2>Una variabile è una scatola con un nome</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Tipo</th><th>Contiene</th><th>Esempio</th></tr>
+      <tr><td class="mono">int</td><td>numeri interi</td><td class="mono">int eta = 14;</td></tr>
+      <tr><td class="mono">float</td><td>numeri con la virgola</td><td class="mono">float h = 1.65;</td></tr>
+      <tr><td class="mono">double</td><td>decimali più precisi</td><td class="mono">double pi = 3.14159;</td></tr>
+      <tr><td class="mono">char</td><td>un solo carattere</td><td class="mono">char voto = 'A';</td></tr>
+    </table>
+    <div class="card soft"><h3>Regole per i nomi</h3><ul class="points small"><li>lettere, cifre e <code>_</code></li><li>non iniziano con una cifra</li><li>niente spazi né accenti</li><li><code>Voto</code> e <code>voto</code> sono diversi</li></ul></div>
+  </div>
+  <div class="callout">Prima si <b>dichiara</b> la variabile (tipo e nome), poi la si usa. Nei decimali si usa il <b>punto</b>, non la virgola: <code>1.65</code>.</div>
+  <aside class="notes">La variabile occupa celle della RAM (collegamento con la lezione sui componenti del computer). Un int occupa di solito 4 byte, un char 1 byte. Le parole riservate (int, return, if, for...) non si possono usare come nomi. I caratteri si scrivono tra apici singoli, le stringhe tra virgolette doppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale nome di variabile è valido in C?</h2></div>
+  <div class="poll" data-id="c1-nomi" data-tipo="quiz" data-risposta="D">
+    <ol><li><code>2anni</code></li><li><code>voto finale</code></li><li><code>int</code></li><li><code>media_2</code></li></ol>
+    <p class="why"><code>media_2</code> usa solo lettere, cifre e trattino basso e non inizia con una cifra. <code>2anni</code> inizia con una cifra, <code>voto finale</code> contiene uno spazio, <code>int</code> è una parola riservata del linguaggio.</p>
+  </div>
+  <aside class="notes">Il tranello è C: "int" è fatto solo di lettere, ma è una parola riservata. Molti scelgono anche B perché in italiano è naturale. Convenzione utile: usare nomi parlanti in minuscolo con il trattino basso (media_voti) oppure con la maiuscola interna (mediaVoti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'assegnazione</p><h2>Quanto vale la variabile alla fine?</h2></div>
+  <p class="lead">In C il segno <code>=</code> non vuol dire "è uguale": vuol dire <b>"metti nella scatola"</b>. Prima si calcola a destra, poi si scrive a sinistra.</p>
+  <div class="cols-3">
+    <div class="flip" style="--h:320px"><div class="fronte"><p style="font-family:var(--mono)">int a = 5;<br>a = a * 2;</p><p>Quanto vale a?</p></div><div class="retro"><p><b>a vale 10.</b></p><p class="muted">Prende il 5, lo moltiplica per 2 e lo rimette in a.</p></div></div>
+    <div class="flip" style="--h:320px"><div class="fronte"><p style="font-family:var(--mono)">int b = 7;<br>b = b - 10;</p><p>Quanto vale b?</p></div><div class="retro"><p><b>b vale -3.</b></p><p class="muted">Un int può essere anche negativo.</p></div></div>
+    <div class="flip" style="--h:320px"><div class="fronte"><p style="font-family:var(--mono)">int c = 3;<br>c = c + c;<br>c = c + 1;</p><p>Quanto vale c?</p></div><div class="retro"><p><b>c vale 7.</b></p><p class="muted">Prima 3 + 3 = 6, poi 6 + 1 = 7.</p></div></div>
+  </div>
+  <aside class="notes">In matematica a = a * 2 sarebbe vera solo per a = 0; in C è un'istruzione che cambia il valore. Far scrivere su un foglio la "tabella di traccia" con il valore dopo ogni riga prima di girare le carte.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Area e perimetro di un rettangolo</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>In C dichiara <code>int base = 7;</code> e <code>int altezza = 4;</code></li>
+      <li>Dichiara <code>area</code> e <code>perimetro</code> e calcolali con <code>*</code> e <code>+</code>.</li>
+      <li>Stampali con <code>printf("Area: %d\n", area);</code></li>
+      <li>Cambia i valori in 12 e 5 e riesegui.</li>
+      <li>Salva come <b>rettangolo-cognome.c</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> con 7 e 4 esce <code>Area: 28</code> e <code>Perimetro: 22</code>. Con 12 e 5: area 60, perimetro 34.</div>
+      <p class="small muted"><code>%d</code> è il posto in cui printf scrive un intero: lo vedremo bene nella prossima lezione.</p>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: int base = 7; int altezza = 4; int area, perimetro; area = base * altezza; perimetro = 2 * (base + altezza); printf("Area: %d\n", area); printf("Perimetro: %d\n", perimetro); Errore tipico: perimetro = 2 * base + altezza (dà 18): ricordare le precedenze, servono le parentesi. Chi finisce prima scrive la versione C++ con cout.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scambiare due variabili</p><h2>Come scambi il succo con l'acqua?</h2></div>
+  <p class="lead">Partenza: <code>a = 3</code> e <code>b = 8</code>. Obiettivo: <code>a = 8</code> e <code>b = 3</code>.</p>
+  <div class="cols-2">
+    <div class="card bad"><h3>Così non funziona</h3>
+<pre class="code" style="font-size:29px">a = b;  <span class="c">// a = 8, b = 8</span>
+b = a;  <span class="c">// b = 8 ancora</span></pre>
+      <p>Il valore 3 di <code>a</code> è stato sovrascritto: è perso per sempre.</p></div>
+    <div class="card ok"><h3>Serve un terzo bicchiere</h3>
+<pre class="code" style="font-size:29px">aux = a;  <span class="c">// aux = 3</span>
+a = b;    <span class="c">// a = 8</span>
+b = aux;  <span class="c">// b = 3</span></pre>
+      <p>La variabile di appoggio <code>aux</code> salva il valore prima di perderlo.</p></div>
+  </div>
+  <aside class="notes">Analogia: due bicchieri, uno di succo e uno d'acqua; per scambiare i contenuti serve un terzo bicchiere vuoto. Far provare a voce prima di mostrare la soluzione. Lo scambio sarà fondamentale nella UDA 7 per ordinare i vettori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine il programma dello scambio</h2></div>
+  <ol class="puzzle-ordina" data-id="c1-scambio">
+    <li><code>int a = 3, b = 8, aux;</code></li>
+    <li><code>aux = a;</code></li>
+    <li><code>a = b;</code></li>
+    <li><code>b = aux;</code></li>
+    <li><code>printf("a=%d b=%d\n", a, b);</code></li>
+    <li><code>return 0;</code></li>
+  </ol>
+  <aside class="notes">Unico ordine che funziona con queste righe: dichiarazione, aux = a, a = b, b = aux, stampa, return. Se si mette a = b prima di aux = a, alla fine entrambe valgono 8. Far verificare l'ordine scelto con una tabella di traccia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Lo scambio, in C e in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Scrivi in C il programma dello scambio con <code>a = 3</code> e <code>b = 8</code>.</li>
+      <li>Stampa i valori <b>prima</b> e <b>dopo</b> lo scambio.</li>
+      <li>Prova la versione sbagliata (senza <code>aux</code>) e guarda cosa succede.</li>
+      <li>Riscrivi la versione giusta in C++ con <code>cout</code>.</li>
+      <li>Salva come <b>scambio-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b><br><code>Prima: a=3 b=8</code><br><code>Dopo: a=8 b=3</code><br>La versione senza aux stampa <code>a=8 b=8</code>.</div>
+  </div>
+  <aside class="notes">Soluzione C++: int a = 3, b = 8, aux; cout &lt;&lt; "Prima: a=" &lt;&lt; a &lt;&lt; " b=" &lt;&lt; b &lt;&lt; endl; aux = a; a = b; b = aux; cout &lt;&lt; "Dopo: a=" &lt;&lt; a &lt;&lt; " b=" &lt;&lt; b &lt;&lt; endl; Sfida per i più veloci: scambiare tre variabili a, b, c "in giro" (a prende b, b prende c, c prende a) con una sola aux.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il linguaggio C è stato creato da Dennis <span class="blank" data-risposta="Ritchie"></span> ai Bell Labs.</p>
+    <p>Il programma che traduce il sorgente in linguaggio macchina è il <span class="blank" data-risposta="compilatore" style="--w:9ch"></span>.</p>
+    <p>Per memorizzare un numero intero si usa il tipo <span class="blank" data-risposta="int"></span>.</p>
+    <p>Per scambiare due variabili serve una variabile di <span class="blank" data-risposta="appoggio|aux|supporto"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Ritchie, compilatore, int, appoggio (accettati anche aux e supporto).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>C (Ritchie, 1972) e C++ (Stroustrup, 1983)</li>
+      <li>Sorgente, compilatore, eseguibile</li>
+      <li>main, graffe, punto e virgola, return 0</li>
+    </ul>
+    <ul class="points">
+      <li>Tipi: int, float, double, char</li>
+      <li><code>=</code> vuol dire "metti nella scatola"</li>
+      <li>Scambio con la variabile <code>aux</code></li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: printf, scanf, cin e cout per far parlare il programma con l'utente.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

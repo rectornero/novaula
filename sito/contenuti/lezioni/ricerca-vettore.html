@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La ricerca in un vettore · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 7 · Funzioni e array in C e C++</p>
+  <h1>La ricerca<br>in un vettore</h1>
+  <p class="lead">C'è o non c'è? Dove si trova? Quante volte compare? Impariamo a cercare come fa un computer: una cella alla volta.</p>
+  <aside class="notes">Obiettivi: capire e scrivere la ricerca sequenziale (con for e return, o con while e variabile trovato), contare i confronti, analizzare un vettore (conteggio delle occorrenze, posizioni) e modificarne i dati (sostituzione). Assaggio della ricerca dicotomica come sfida. Durata indicativa: 2-3 ore. Prerequisiti: vettori e funzioni con i vettori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai perso le chiavi in casa. Come le cerchi?</h2></div>
+  <div class="poll" data-id="chiavi">
+    <ol><li>Stanza per stanza, senza saltarne nessuna</li><li>Prima nei posti dove le lascio di solito</li><li>Chiedo a qualcuno di casa</li><li>Aspetto che saltino fuori da sole</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. La A è la ricerca sequenziale: lenta ma sicura, se le chiavi ci sono le trovi. La B funziona solo se c'è un ordine o un'abitudine: è l'idea della ricerca "furba" su dati ordinati (dicotomica), che assaggeremo alla fine. Il computer, senza informazioni sui dati, fa come nella A.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La ricerca sequenziale</p><h2>Cerchiamo il 9, una cella alla volta</h2></div>
+  <div class="bits">
+    <span><b>4</b><small>i = 0</small></span>
+    <span><b>7</b><small>i = 1</small></span>
+    <span><b>1</b><small>i = 2</small></span>
+    <span><b class="on">9</b><small>i = 3</small></span>
+    <span><b>3</b><small>i = 4</small></span>
+    <span><b>8</b><small>i = 5</small></span>
+  </div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Trovato</h3><p>Al quarto confronto <code>v[3] == 9</code>: ci si <b>ferma</b> e si restituisce la posizione.</p></div>
+    <div class="card bad"><h3>Non trovato</h3><p>Se cerchi il 5 arrivi in fondo: 6 confronti, poi la risposta "non c'è".</p></div>
+  </div>
+  <aside class="notes">Far fare la ricerca a voce: uno studente "è" il computer e può guardare una sola cella alla volta (si possono usare 6 fogli girati sul banco). Domanda: se il valore cercato è nel vettore due volte, quale posizione trova la ricerca? La prima, perché si ferma subito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i passi della ricerca sequenziale</h2></div>
+  <ol class="puzzle-ordina" data-id="passi-ricerca">
+    <li>Leggi il valore x da cercare</li>
+    <li>Parti dalla prima cella, i = 0, con trovato = falso</li>
+    <li>Confronta v[i] con x</li>
+    <li>Se sono uguali, trovato diventa vero e ti fermi</li>
+    <li>Altrimenti passa alla cella successiva, i++</li>
+    <li>Se arrivi in fondo senza trovarlo, stampa "non presente"</li>
+  </ol>
+  <aside class="notes">Ordine giusto come scritto. Errore tipico: mettere "non presente" subito dopo il primo confronto sbagliato. Si può dire che non c'è solo dopo aver controllato TUTTE le celle: è lo stesso errore del quiz che vedremo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La ricerca in C</p><h2>Due modi di scriverla</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="chip">Funzione con for e return</p>
+      <pre class="code" style="font-size:25px"><span class="k">int</span> cerca(<span class="k">int</span> v[], <span class="k">int</span> n, <span class="k">int</span> x) {
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++)
+        <span class="k">if</span> (v[i] == x)
+            <span class="k">return</span> i;  <span class="c">// trovato</span>
+    <span class="k">return</span> <span class="hl">-1</span>;        <span class="c">// non c'è</span>
+}</pre>
+    </div>
+    <div class="stack">
+      <p class="chip">Ciclo while con "trovato"</p>
+      <pre class="code" style="font-size:25px"><span class="k">int</span> i = 0, trovato = 0;
+<span class="k">while</span> (i &lt; N &amp;&amp; !trovato) {
+    <span class="k">if</span> (v[i] == x) trovato = 1;
+    <span class="k">else</span> i++;
+}
+<span class="k">if</span> (trovato) printf(<span class="s">"Posizione %d"</span>, i);
+<span class="k">else</span> printf(<span class="s">"Non presente"</span>);</pre>
+    </div>
+  </div>
+  <div class="callout small">Perché <b>-1</b>? Perché nessuna cella ha indice -1: chi chiama la funzione capisce subito che il valore non c'è.</div>
+  <aside class="notes">Entrambe le versioni sono state verificate con gcc. La prima è più compatta: return esce subito dalla funzione (ricordate il quiz sul return). La seconda è quella "da diagramma di flusso": la condizione del while ha due parti, ci si ferma se si arriva in fondo OPPURE se si è trovato. !trovato si legge "non trovato". In C++ il codice è identico, cambia solo l'output con cout.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Traccia la ricerca</p><h2>v = {5, 2, 8, 2, 6} e cerchiamo x = 8</h2></div>
+  <div class="puzzle-completa">
+    <p>Al primo confronto i vale <span class="blank" data-risposta="0"></span> e v[i] vale <span class="blank" data-risposta="5"></span>.</p>
+    <p>La ricerca si ferma quando i vale <span class="blank" data-risposta="2"></span>.</p>
+    <p>In tutto si fanno <span class="blank" data-risposta="3|tre"></span> confronti.</p>
+    <p>Se cercassimo il 7 i confronti sarebbero <span class="blank" data-risposta="5|cinque"></span> e cerca restituirebbe <span class="blank" data-risposta="-1"></span>.</p>
+    <p>Se cercassimo il 2, cerca restituirebbe <span class="blank" data-risposta="1|uno"></span>.</p>
+  </div>
+  <aside class="notes">Soluzioni: 0 e 5; 2; 3 confronti; 5 confronti e -1; il 2 compare in posizione 1 e in posizione 3, ma la ricerca si ferma alla prima, quindi 1. Verificato con gcc. Far lavorare a coppie: uno legge il codice, l'altro aggiorna una tabellina i, v[i], uguale?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il buttafuori della festa</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C crea la lista degli invitati: <code>int lista[8] = {105, 230, 318, 422, 507, 615, 733, 849};</code> (sono i numeri dei biglietti).</li>
+      <li>Scrivi la funzione <code>int cerca(int v[], int n, int x)</code>.</li>
+      <li>Nel <code>main</code> leggi un numero di biglietto e chiama <code>cerca</code>.</li>
+      <li>Se c'è, stampa <code>Benvenuto! Sei in lista, posizione</code> seguito dalla posizione (indice + 1); se no, <code>Non sei in lista</code>.</li>
+      <li>Salva come <b>buttafuori.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> 422 dà posizione 4; 105 dà posizione 1; 500 dà <code>Non sei in lista</code>.</div>
+  </div>
+  <aside class="notes">Soluzione nel main: int p = cerca(lista, 8, x); if (p &gt;= 0) printf("Benvenuto! Sei in lista, posizione %d\n", p + 1); else printf("Non sei in lista\n"); Verificato con gcc. Per chi finisce prima: ripetere la domanda con un ciclo finché non si inserisce 0, e contare quanti ospiti sono entrati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Con v = {4, 7, 1, 9}, quanto vale cerca(v, 4, 9)?</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:28px"><span class="k">int</span> cerca(<span class="k">int</span> v[], <span class="k">int</span> n, <span class="k">int</span> x) {
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++) {
+        <span class="k">if</span> (v[i] == x) <span class="k">return</span> i;
+        <span class="k">else</span> <span class="k">return</span> -1;
+    }
+    <span class="k">return</span> -1;
+}</pre>
+    <div class="poll" data-id="else-return" data-tipo="quiz" data-risposta="C">
+      <ol><li>3</li><li>4</li><li>-1</li><li>9</li></ol>
+      <p class="why">Al primo giro v[0] = 4 è diverso da 9: parte l'else e return -1 chiude subito la funzione. Le altre celle non vengono mai guardate.</p>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: restituisce -1. È il bug più comune nella ricerca: decidere "non c'è" dopo un solo confronto. Correzione: togliere l'else; il return -1 va solo DOPO il ciclo. Chi risponde 3 legge il codice come dovrebbe essere, non come è scritto: ottima occasione per dire "il computer fa quello che scrivi, non quello che pensi".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Vettore di 1000 numeri: quanti confronti, nel caso peggiore?</h2></div>
+  <div class="poll" data-id="caso-peggiore" data-tipo="quiz" data-risposta="A">
+    <ol><li>1000</li><li>500</li><li>10</li><li>1</li></ol>
+    <p class="why">Il caso peggiore è quando il valore è nell'ultima cella o non c'è: bisogna confrontarle tutte. In media, se il valore c'è, ne servono circa la metà.</p>
+  </div>
+  <aside class="notes">500 è la media (se il valore è presente in una posizione a caso), non il caso peggiore. 10 è il numero di confronti della ricerca dicotomica su 1000 elementi ordinati: lo vedremo nella sfida finale. Il caso migliore è 1 confronto: il valore è nella prima cella. Dire che la ricerca sequenziale ha un costo "proporzionale a n": se i dati raddoppiano, raddoppia il tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analisi dei dati</p><h2>Contare: quante volte compare?</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:29px"><span class="k">int</span> conta(<span class="k">int</span> v[], <span class="k">int</span> n, <span class="k">int</span> x) {
+    <span class="k">int</span> c = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++)
+        <span class="k">if</span> (v[i] == x)
+            c++;
+    <span class="k">return</span> c;
+}</pre>
+    <div class="stack">
+      <div class="card soft"><p>Qui <b>non ci si ferma</b> al primo trovato: bisogna guardare tutte le celle.</p></div>
+      <div class="card"><p>Con <code>{2, 5, 2, 8}</code> la chiamata <code>conta(v, 4, 2)</code> restituisce <b>2</b>.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc. È il contatore della UDA 5 e 6 applicato a un vettore. Varianti da chiedere a voce: contare i voti sufficienti (v[i] &gt;= 6), contare i numeri pari (v[i] % 2 == 0), trovare l'ultima posizione di x (si scorre tutto e si aggiorna una variabile pos a ogni trovato).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Modifica dei dati</p><h2>Cerca e sostituisci</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:26px"><span class="k">void</span> sostituisci(<span class="k">int</span> v[], <span class="k">int</span> n,
+                 <span class="k">int</span> vecchio, <span class="k">int</span> nuovo) {
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++)
+        <span class="k">if</span> (v[i] == vecchio)
+            <span class="hl">v[i] = nuovo;</span>
+}
+<span class="c">// sostituisci(a, 6, 0, 1);</span></pre>
+    <div class="stack">
+      <p class="small"><b>Prima</b></p>
+      <div class="bits"><span><b>3</b></span><span><b class="on">0</b></span><span><b>5</b></span><span><b class="on">0</b></span><span><b class="on">0</b></span><span><b>2</b></span></div>
+      <p class="small"><b>Dopo</b></p>
+      <div class="bits"><span><b>3</b></span><span><b class="on">1</b></span><span><b>5</b></span><span><b class="on">1</b></span><span><b class="on">1</b></span><span><b>2</b></span></div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: {3, 0, 5, 0, 0, 2} diventa {3, 1, 5, 1, 1, 2}. È proprio il "Trova e sostituisci" di Writer applicato ai numeri. La funzione è void ma il vettore cambia davvero: il vettore passa per indirizzo (lezione precedente).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il registro della verifica</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C scrivi <code>int voti[12] = {6, 7, 4, 8, 6, 5, 9, 6, 4, 7, 6, 10};</code></li>
+      <li>Con la funzione <code>conta</code> stampa quanti 6 ci sono.</li>
+      <li>Con un ciclo stampa il numero di ogni studente che ha preso 4 (indice + 1).</li>
+      <li>La prof alza i 4 a 5: usa <code>sostituisci</code> e stampa il vettore aggiornato.</li>
+      <li>Salva come <b>registro-ricerca.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> i 6 sono 4; hanno preso 4 gli studenti 3 e 9; dopo la modifica il vettore è <code>6 7 5 8 6 5 9 6 5 7 6 10</code>.</div>
+  </div>
+  <aside class="notes">Tutti i risultati sono stati verificati con gcc. Per il punto 3: for (int i = 0; i &lt; 12; i++) if (voti[i] == 4) printf("Studente %d\n", i + 1); Per chi finisce prima: scrivere int ultima(int v[], int n, int x) che restituisce l'ultima posizione di x (per il 6 deve dare l'indice 10, cioè lo studente 11).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Gli algoritmi si capiscono provandoli</h2></div>
+  <figure class="citazione">
+    <blockquote>Un algoritmo bisogna vederlo per crederci, e il modo migliore per capire che cos'è un algoritmo è provarlo.</blockquote>
+    <figcaption><b>Donald Knuth</b>, informatico statunitense, The Art of Computer Programming, volume 1, 1968</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando premi <b>Ctrl+F</b> in una pagina web, il browser cerca il testo pezzo per pezzo, proprio come la ricerca sequenziale. Un motore di ricerca invece non può scorrere tutto il web a ogni domanda: prepara prima un <b>indice</b>, come quello in fondo a un libro.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "An algorithm must be seen to be believed, and the best way to learn what an algorithm is all about is to try it." D. Knuth, The Art of Computer Programming, vol. 1, sezione 1.1 (1968). Il volume 3 della stessa opera (1973) si intitola proprio "Sorting and Searching", ordinare e cercare: i due argomenti di queste ultime lezioni. Sui motori di ricerca: l'indice dice, per ogni parola, in quali pagine compare, così la risposta arriva in una frazione di secondo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina la domanda all'algoritmo giusto</h2></div>
+  <dl class="puzzle-abbina" data-id="domande-algoritmi">
+    <dt>C'è almeno un 10?</dt><dd>Ricerca: mi fermo al primo trovato</dd>
+    <dt>Quanti 10 ci sono?</dt><dd>Conteggio: scorro tutto il vettore</dd>
+    <dt>Dov'è l'ultimo 10?</dt><dd>Scorro tutto e ricordo l'ultima posizione</dd>
+    <dt>Trasforma i 4 in 5</dt><dd>Modifica: v[i] = 5 quando v[i] == 4</dd>
+    <dt>Qual è il voto più alto?</dt><dd>Ricerca del massimo</dd>
+  </dl>
+  <aside class="notes">Abbinamenti giusti come scritti. Domanda di discussione: per "dov'è l'ultimo 10?" esiste un modo più veloce? Sì: scorrere il vettore al contrario, da N-1 a 0, e fermarsi al primo 10 trovato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Andiamo oltre: il computer indovina il tuo numero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB scegli <b>C++</b>. Usa <code>basso = 1</code> e <code>alto = 100</code>.</li>
+      <li>In un ciclo <code>while</code> il computer prova <code>(basso + alto) / 2</code> e chiede: 0 = giusto, 1 = più grande, 2 = più piccolo.</li>
+      <li>Se è più grande: <code>basso = prova + 1</code>; se è più piccolo: <code>alto = prova - 1</code>.</li>
+      <li>Conta i tentativi e stampali alla fine. Salva come <b>indovino.cpp</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> qualunque numero da 1 a 100 viene indovinato in <b>7 tentativi al massimo</b>. Pensa 63: le prove sono 50, 75, 62, 68, 65, 63.</div>
+  </div>
+  <aside class="notes">È la ricerca dicotomica (o binaria): a ogni domanda si scarta metà dei numeri rimasti. 7 tentativi bastano perché 2^7 = 128 è più di 100 (verificato provando tutti i numeri da 1 a 100). Funziona solo perché i numeri da 1 a 100 sono ORDINATI: in un vettore disordinato non si può fare, ed è uno dei motivi per cui nella prossima lezione impariamo a ordinare. Collegamento con il gioco "indovina il numero" della UDA 6, dove era l'utente a indovinare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto costa cercare?</p><h2>Sequenziale contro dicotomica</h2></div>
+  <table class="data compact">
+    <tr><th>Elementi</th><th>Sequenziale: confronti nel caso peggiore</th><th>Dicotomica (dati ordinati)</th></tr>
+    <tr><td class="mono">100</td><td class="mono">100</td><td class="mono hl">7</td></tr>
+    <tr><td class="mono">1 000</td><td class="mono">1 000</td><td class="mono hl">10</td></tr>
+    <tr><td class="mono">1 000 000</td><td class="mono">1 000 000</td><td class="mono hl">20</td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Alcuni assistenti AI, prima di rispondere, <b>cercano</b> nei documenti i pezzi più adatti alla domanda e poi scrivono la risposta usandoli. Si chiama <b>RAG</b>: senza una ricerca veloce, su milioni di documenti, sarebbe impossibile.</p></div>
+  <aside class="notes">I numeri della dicotomica sono le potenze di 2: 2^7 = 128 ≥ 100, 2^10 = 1024 ≥ 1000, 2^20 = 1 048 576 ≥ 1 000 000. RAG sta per Retrieval-Augmented Generation (generazione aumentata dal recupero di informazioni): per trovare i pezzi simili si confrontano i vettori di numeri (embedding) visti nella lezione sui vettori, con indici speciali molto più veloci della ricerca sequenziale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con la ricerca</h2></div>
+  <div class="puzzle-codice" data-risposta="3217" data-aiuto="la quarta cifra: 2 alla 7 fa 128, che supera 100">
+    <ul class="points">
+      <li>1ª cifra: con <b>v = {4, 7, 1, 9, 3}</b>, il valore restituito da <b>cerca(v, 5, 9)</b></li>
+      <li>2ª cifra: quante volte compare il 2 in <b>{2, 5, 2, 8}</b></li>
+      <li>3ª cifra: quanti confronti servono per trovare il 7 in <b>{7, 1, 4}</b></li>
+      <li>4ª cifra: i tentativi massimi per indovinare un numero da 1 a 100 dimezzando</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Il 9 ha indice 3, il 2 compare 2 volte, il 7 è nella prima cella (1 confronto), la dicotomica ne usa al massimo 7.</div>
+  </div>
+  <aside class="notes">Codice: 3217. Tranello sulla prima cifra: la funzione restituisce l'indice (3), non la posizione "umana" (4).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La ricerca che controlla una cella dopo l'altra si chiama ricerca <span class="blank" data-risposta="sequenziale|lineare"></span>.</p>
+    <p>Se il valore non c'è, la funzione cerca restituisce <span class="blank" data-risposta="-1"></span>.</p>
+    <p>Per contare le occorrenze bisogna scorrere <span class="blank" data-risposta="tutto|tutte"></span> il vettore.</p>
+    <p>Su 50 elementi, nel caso peggiore, la ricerca sequenziale fa <span class="blank" data-risposta="50|cinquanta"></span> confronti.</p>
+    <p>La ricerca che dimezza a ogni passo funziona solo su dati <span class="blank" data-risposta="ordinati"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: sequenziale (accettato lineare), -1, tutto, 50, ordinati.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ricerca sequenziale: una cella alla volta</li>
+      <li>Trovato: mi fermo e restituisco l'indice</li>
+      <li>Non trovato: solo alla fine, restituisco -1</li>
+    </ul>
+    <ul class="points">
+      <li>Contare e sostituire: si scorre tutto</li>
+      <li>Caso peggiore: n confronti</li>
+      <li>Dati ordinati: si può dimezzare</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: come mettere in ordine un vettore (ordinamento per selezione e per inserzione).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

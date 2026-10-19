@@ -1,0 +1,4 @@
+# Netlify pubblica la cartella "sito" a ogni push sul ramo main.
+[build]
+  publish = "sito"
+  command = ""

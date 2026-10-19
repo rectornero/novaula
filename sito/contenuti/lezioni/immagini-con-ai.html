@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Creare immagini con l'AI · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 2 · Basi di intelligenza artificiale</p>
+  <h1>Creare immagini<br>con l'AI</h1>
+  <p class="lead">Scrivi una frase, e nasce un'immagine che prima non esisteva. Come lavora Stable Diffusion, come si scrive un buon prompt e quali regole valgono per tutti.</p>
+  <aside class="notes">Obiettivi: capire che cos'è l'AI generativa; conoscere l'idea della diffusione (partire dal rumore e toglierlo passo dopo passo); conoscere i parametri di Stable Diffusion; scrivere prompt efficaci; riflettere su deepfake, diritti e consenso. Durata indicativa: 3 ore. Preparazione del docente: provare la sera prima il generatore che si userà sulla LIM (per esempio uno Space di Stable Diffusion su Hugging Face oppure una versione installata sul PC della LIM con una buona scheda video); i servizi gratuiti online cambiano spesso. Gli studenti non usano generatori con account personali: le immagini le genera il docente dai prompt scritti dalla classe, con prompt adatti alla scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Ti è mai capitato di credere vera un'immagine fatta con l'AI?</h2></div>
+  <div class="poll" data-id="creduta-vera">
+    <ol><li>Sì, e l'ho scoperto dopo</li><li>No, le riconosco sempre</li><li>Non lo so, ed è proprio questo il punto</li></ol>
+  </div>
+  <aside class="notes">Caso famoso da raccontare: marzo 2023, la foto di papa Francesco con un piumino bianco lunghissimo fece il giro del mondo; era stata creata con Midjourney e tantissimi la credettero vera. Chi risponde B: chiedere come fa. Gli indizi di una volta (mani con sei dita, scritte senza senso) nei modelli recenti sono quasi spariti: non bastano più gli occhi, servono fonti e contesto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'AI generativa</p><h2>Dal riconoscere al creare</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="icon">🔍</p><h3>AI che riconosce</h3><p>Riceve un'immagine e risponde: «è un gatto».</p><p class="muted">Teachable Machine, lo sblocco con il volto.</p></div>
+    <div class="card soft"><p class="icon">🎨</p><h3>AI generativa</h3><p>Riceve la frase «un gatto» e crea un'immagine nuova.</p><p class="muted">Stable Diffusion, i chatbot che scrivono.</p></div>
+  </div>
+  <div class="chips"><span class="chip">testi</span><span class="chip">immagini</span><span class="chip">musica</span><span class="chip">voci</span><span class="chip">video</span><span class="chip">codice</span></div>
+  <aside class="notes">Generativa = che genera contenuti nuovi, simili a quelli visti durante l'addestramento ma non copiati. I chatbot della lezione precedente sono AI generativa per il testo. Chiedere: nella vostra vita avete già visto musica o voci generate? (Cover con voci clonate, doppiaggi automatici.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Ada Lovelace l'aveva immaginato nel 1843</h2></div>
+  <figure class="citazione">
+    <blockquote>La macchina potrebbe comporre brani musicali elaborati e scientifici, di qualsiasi complessità o lunghezza.</blockquote>
+    <figcaption><b>Ada Lovelace</b>, matematica inglese, nelle Note sulla macchina analitica di Charles Babbage, 1843</figcaption>
+  </figure>
+  <p class="callout">Bastava una condizione: riuscire a tradurre i suoni in <b>simboli e numeri</b>. Oggi facciamo lo stesso con i pixel delle immagini.</p>
+  <aside class="notes">Traduzione nostra dalla Nota A di Ada Lovelace alla traduzione dell'articolo di Luigi Federico Menabrea sulla macchina analitica (1843). La frase completa premette: "supponendo, per esempio, che i rapporti fondamentali tra i suoni nella scienza dell'armonia e della composizione musicale potessero essere espressi e adattati in questo modo". Nella UDA 1 abbiamo letto l'altra sua frase famosa: "la macchina non ha pretese di creare". Domanda: Ada si contraddice? (No: la macchina compone seguendo regole, ma le regole e i simboli li dà l'uomo. Con l'AI generativa le regole le ricava dai dati.)</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe dell'arte con le macchine</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-immagini">
+    <li>Il pittore Harold Cohen crea AARON, un programma che disegna</li>
+    <li>Ian Goodfellow inventa le GAN, due reti neurali che si sfidano</li>
+    <li>Un ritratto fatto da una GAN viene venduto all'asta da Christie's</li>
+    <li>OpenAI presenta DALL·E, che crea immagini dal testo</li>
+    <li>Stable Diffusion viene pubblicato e chiunque può scaricarlo</li>
+    <li>OpenAI mostra Sora, che genera video da una frase</li>
+  </ol>
+  <aside class="notes">Date: AARON dai primi anni '70 (Cohen ci lavorò fino alla morte, 2016); GAN 2014 (Generative Adversarial Network: una rete genera, l'altra giudica se è falso); "Edmond de Belamy" del collettivo francese Obvious, venduto nell'ottobre 2018 per 432 500 dollari; DALL·E gennaio 2021; Stable Diffusion agosto 2022, con i pesi del modello pubblici; Sora presentato nel febbraio 2024. Il tranello: l'arte con il computer non nasce oggi, AARON ha più di 50 anni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona la diffusione</p><h2>Dal rumore all'immagine, un passo alla volta</h2></div>
+  <div class="flow">
+    <div class="card night"><p class="num" style="color:#fff">1</p><h3>Rumore</h3><p class="muted">Si parte da puntini casuali, come una TV senza segnale.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Togli un po'</h3><p>Il modello toglie un po' di rumore, guidato dal tuo testo.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Ripeti</h3><p>Lo fa 20, 30, 50 volte: le forme emergono.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Immagine</h3><p>Alla fine resta un'immagine nuova.</p></div>
+  </div>
+  <div class="callout"><b>Come l'ha imparato?</b> Durante l'addestramento ha visto miliardi di immagini con la loro didascalia, a cui veniva aggiunto rumore: ha imparato a toglierlo.</div>
+  <aside class="notes">Analogia: uno scultore che toglie marmo finché resta la statua; qui si toglie rumore. Il testo viene trasformato in numeri da un codificatore (per Stable Diffusion, CLIP) e a ogni passo "spinge" la pulizia verso immagini che corrispondono alla descrizione. Stable Diffusion è stato addestrato su sottoinsiemi del dataset pubblico LAION-5B, che contiene circa 5,85 miliardi di coppie immagine-testo raccolte dal web: da qui le questioni di copyright della lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Scrivi «un gatto astronauta». Che cosa fa Stable Diffusion?</h2></div>
+  <div class="poll" data-id="collage" data-tipo="quiz" data-risposta="C">
+    <ol>
+      <li>Cerca su internet una foto di gatto e la ritocca</li>
+      <li>Incolla pezzi di immagini salvate nel suo archivio</li>
+      <li>Parte da rumore casuale e lo trasforma, passo dopo passo</li>
+      <li>Sceglie l'immagine più simile tra quelle che ha già</li>
+    </ol>
+    <p class="why">Il modello non contiene un archivio di foto: contiene circa un miliardo di numeri (i pesi) che sanno come togliere il rumore. Ogni immagine viene costruita da zero partendo da puntini casuali.</p>
+  </div>
+  <aside class="notes">La B (il collage) è il fraintendimento più diffuso, anche tra gli adulti. Ordine di grandezza: il file del modello Stable Diffusion 1.5 pesa qualche GB, mentre le immagini di addestramento occuperebbero centinaia di terabyte: non possono starci dentro. Precisazione onesta: in rari casi, per immagini ripetute moltissime volte nei dati (per esempio quadri famosi), il modello può produrre copie molto simili all'originale; è uno dei temi delle cause sul copyright.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Aggiungi rumore a un'immagine in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Calc. In A1:H8 disegna una faccina con <b>1</b> (pixel acceso) e <b>0</b> (spento).</li>
+      <li>Seleziona A1:H8, scegli <b>Formato › Condizionale › Condizione</b>: se il valore è uguale a 1, applica uno stile nuovo con sfondo nero.</li>
+      <li>In J1 scrivi <code>=SE(CASUALE()&lt;0,2;1-A1;A1)</code>, trascina fino a Q1 e poi fino alla riga 8. Dai la stessa formattazione.</li>
+      <li>Premi <b>F9</b> più volte, poi prova con 0,5 al posto di 0,2. Salva come <b>rumore.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 0,2 cambia circa un pixel su cinque e la faccina si riconosce ancora. Con 0,5 è puro rumore: è il punto di partenza di Stable Diffusion, che sa fare il percorso al contrario.</div>
+  </div>
+  <aside class="notes">CASUALE() dà un numero tra 0 e 1; se è minore di 0,2 il pixel viene invertito (1-A1). Con 0,5 ogni pixel ha metà delle probabilità di essere invertito: il risultato non ha più nessuna relazione con il disegno. F9 ricalcola il foglio (anche qualsiasi modifica di una cella rigenera il rumore). Per avere celle quadrate: selezionare le colonne e impostare la larghezza con Formato › Colonne › Larghezza. Estensione: mostrare a fianco più livelli di rumore (0,05, 0,1, 0,2, 0,5) come i passi della diffusione al contrario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Stable Diffusion</p><h2>Un modello aperto, che può girare sul tuo PC</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Pubblicato nel 2022 da Stability AI con ricercatori dell'Università di Monaco e di Runway</li>
+      <li>I pesi del modello sono scaricabili: funziona anche offline, con una buona scheda video</li>
+      <li>Si usa con programmi gratuiti o siti che lo ospitano</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>I generatori più recenti non solo creano: <b>modificano</b> una foto con istruzioni a parole («togli la persona sullo sfondo») e generano <b>video</b> con il suono a partire da una frase. Lo stesso principio della diffusione, applicato a molte immagini una dopo l'altra.</p></div>
+  </div>
+  <aside class="notes">Stable Diffusion nasce dal lavoro del gruppo CompVis della LMU di Monaco (articolo sui "latent diffusion models", 2022) con Stability AI e Runway. A differenza di DALL·E o Midjourney, che si usano solo online, i pesi sono pubblici: chiunque può eseguirlo, modificarlo e addestrarlo su nuove immagini. È un vantaggio (ricerca, privacy, niente account) e un rischio (nessun filtro obbligatorio). Esempi di modelli video: Sora di OpenAI, Veo di Google.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni impostazione di Stable Diffusion al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="parametri-sd">
+    <dt>Prompt</dt><dd>La descrizione di ciò che vuoi vedere</dd>
+    <dt>Prompt negativo</dt><dd>Ciò che NON vuoi vedere nell'immagine</dd>
+    <dt>Passi</dt><dd>Quante volte il modello toglie rumore</dd>
+    <dt>Seed</dt><dd>Il numero che decide il rumore di partenza</dd>
+    <dt>Guidance (CFG)</dt><dd>Quanto seguire alla lettera il testo</dd>
+  </dl>
+  <aside class="notes">Valori tipici: passi tra 20 e 50 (di più non sempre migliora, ma è più lento); guidance intorno a 7 (troppo alta dà colori bruciati, troppo bassa ignora il prompt). Seed significa "seme": dallo stesso seme nasce sempre lo stesso rumore. Se il docente ha un generatore sulla LIM, mostrare la stessa richiesta con 5 e con 30 passi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il prompt per le immagini</p><h2>Descrivi come un regista</h2></div>
+  <div class="chips"><span class="chip">soggetto</span><span class="chip">azione</span><span class="chip">ambientazione</span><span class="chip">stile</span><span class="chip">luce</span><span class="chip">inquadratura</span></div>
+  <div class="cols-2 wide-left">
+    <div class="card ok"><h3>Prompt</h3><p>Un gatto astronauta che galleggia in una stazione spaziale, stile acquerello, luce calda dal finestrino, inquadratura dal basso</p></div>
+    <div class="card bad"><h3>Prompt negativo</h3><p>scritte, sfocato, colori spenti, zampe deformi</p></div>
+  </div>
+  <p class="muted small">Molti modelli capiscono meglio l'inglese: se il risultato è strano, prova a tradurre il prompt.</p>
+  <aside class="notes">Far individuare le sei parti nel prompt d'esempio. Lo stile può essere una tecnica (acquerello, fumetto, pixel art, fotografia) ma attenzione a chiedere "nello stile di" un artista vivente: è legale in molti casi, ma è proprio ciò di cui gli artisti si lamentano. Consiglio: stili e tecniche sì, nomi di artisti viventi no.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Atelier dei prompt</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Writer. Scegli un tema per la copertina del diario di classe.</li>
+      <li>Scrivi <b>3 prompt</b> con tutte e sei le parti, ognuno in uno stile diverso.</li>
+      <li>Per ciascuno aggiungi un <b>prompt negativo</b>.</li>
+      <li>Sotto ogni prompt disegna a mano o descrivi in due righe l'immagine che ti aspetti.</li>
+      <li>Salva come <b>prompt-immagini.odt</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni prompt ha soggetto, azione, ambientazione, stile, luce, inquadratura. Nessun prompt nomina persone reali, compagni o docenti.</div>
+  </div>
+  <aside class="notes">Il docente raccoglie i file, sceglie 5 o 6 prompt e li genera sulla LIM; la classe vota quello più vicino all'immagine che l'autore si aspettava. Discussione: che cosa ha ignorato il modello? Quale parola ha cambiato di più il risultato? Tenere un tema neutro e scolastico; scartare i prompt non adatti prima di proiettarli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Stesso prompt, stesso seed, stesse impostazioni, stesso modello. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="seed" data-tipo="quiz" data-risposta="A">
+    <ol>
+      <li>La stessa immagine di prima</li>
+      <li>Un'immagine diversa: l'AI è creativa</li>
+      <li>Un'immagine simile ma con colori diversi</li>
+      <li>Un errore: non si può chiedere due volte</li>
+    </ol>
+    <p class="why">Il «caso» del computer parte dal seed: con lo stesso seed il rumore iniziale è identico, e ogni passo successivo è un calcolo. Per questo chi lavora con Stable Diffusion annota il seed delle immagini riuscite.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono B o C: pensano che l'AI sia imprevedibile per natura. In realtà è un calcolo deterministico; il "caso" è un numero pseudocasuale generato dal seed. Precisazione: su schede video o versioni di software diverse possono comparire piccolissime differenze. Collegamento al lab sul rumore: CASUALE() in Calc dà numeri nuovi a ogni F9 perché cambia il seed ogni volta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Perché Stable Diffusion lavora «in piccolo»</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc, in A1 scrivi <b>Immagine 512×512 RGB</b> e in B1 <code>=512*512*3</code>.</li>
+      <li>In A2 scrivi <b>Spazio latente 64×64×4</b> e in B2 <code>=64*64*4</code>.</li>
+      <li>In B3 calcola <code>=B1/B2</code>: quante volte è più piccolo?</li>
+      <li>Rifai i conti per un'immagine 1024×1024 con spazio latente 128×128×4.</li>
+      <li>Salva come <b>latente.ods</b> con una frase che spiega il vantaggio.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 786 432 numeri contro 16 384: lo spazio latente è <b>48 volte</b> più piccolo. Anche a 1024×1024 il rapporto resta 48 (3 145 728 contro 65 536).</div>
+  </div>
+  <aside class="notes">Ogni pixel RGB ha 3 numeri (rosso, verde, blu), come visto nella UDA 1. Stable Diffusion non toglie il rumore sui pixel ma su una versione compressa dell'immagine (spazio latente): un'altra rete, il VAE, comprime ogni blocco di 8×8 pixel in 4 numeri e alla fine ridecomprime. Lavorare su 48 volte meno numeri è ciò che permette di generare immagini su un normale PC con scheda video, e non solo su supercomputer. Frase attesa: "meno numeri da calcolare, quindi più veloce e serve meno memoria".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Regole per tutti</p><h2>Potere creativo, responsabilità reale</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Deepfake</h3><p class="small">In Italia diffondere senza consenso immagini, video o voci falsificati con l'AI che causano un danno è reato, dal 2025.</p></div>
+    <div class="card"><h3>Consenso</h3><p class="small">Non creare immagini di persone reali, compagni o docenti, senza il loro permesso. Mai.</p></div>
+    <div class="card"><h3>Trasparenza</h3><p class="small">Se pubblichi un'immagine generata, dichiaralo. Le regole europee lo chiedono per i contenuti realistici.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti generatori nascondono nelle immagini una <b>filigrana invisibile</b> (per esempio SynthID di Google) o aggiungono le <b>Content Credentials</b>, un'etichetta che racconta come è nata l'immagine. Aiutano, ma si possono perdere con uno screenshot.</p></div>
+  <aside class="notes">Fonti: legge 23 settembre 2025, n. 132, che introduce nel codice penale l'art. 612-quater "Illecita diffusione di contenuti generati o alterati con sistemi di intelligenza artificiale" (reclusione da 1 a 5 anni se si cagiona un danno ingiusto). La stessa legge precisa che il diritto d'autore protegge le opere dell'ingegno umano, anche se create con l'aiuto dell'AI, purché siano frutto del lavoro intellettuale dell'autore. AI Act europeo, art. 50: obbligo di dichiarare i deepfake. SynthID è di Google DeepMind (2023); le Content Credentials seguono lo standard aperto C2PA. Collegare al cyberbullismo (scheda di cittadinanza): un'immagine falsa di un compagno può fare danni enormi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">E tu cosa ne pensi?</p><h2>Un'immagine generata con l'AI vince un concorso d'arte. È giusto?</h2></div>
+  <div class="poll" data-id="concorso-ai">
+    <ol><li>Sì: idea, prompt e scelte sono dell'autore</li><li>Sì, ma solo se lo dichiara</li><li>No: servono categorie separate</li><li>No: senza mano umana non è arte</li></ol>
+  </div>
+  <aside class="notes">Storia vera: nel 2022 Jason Allen vinse la categoria di arte digitale della fiera statale del Colorado con "Théâtre D'opéra Spatial", creata con Midjourney e poi ritoccata; nell'iscrizione aveva scritto "via Midjourney", ma i giudici non sapevano che cosa fosse. Nel 2023 l'Ufficio del copyright degli Stati Uniti rifiutò di registrarla perché la parte generata dall'AI non era opera umana. Far argomentare una persona per opzione; ricordare che la fotografia nell'Ottocento subì critiche simili ("non è arte, la fa la macchina").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con quello che hai imparato</h2></div>
+  <div class="puzzle-codice" data-risposta="4823" data-aiuto="le prime due cifre vengono da 786 432 diviso 16 384">
+    <ul class="points">
+      <li>1ª e 2ª cifra: quante volte lo spazio latente è più piccolo dell'immagine 512×512</li>
+      <li>3ª cifra: l'ultima cifra dell'anno in cui fu pubblicato Stable Diffusion</li>
+      <li>4ª cifra: quanti numeri servono per il colore di un pixel RGB</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 48 volte più piccolo, 2022, e 3 numeri per rosso, verde e blu.</div>
+  </div>
+  <aside class="notes">Codice: 4823. A squadre: la prima squadra che apre il lucchetto vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Stable Diffusion parte da un'immagine di puro <span class="blank" data-risposta="rumore" style="--w:8ch"></span>.</p>
+    <p>Il testo che descrive l'immagine da creare si chiama <span class="blank" data-risposta="prompt" style="--w:8ch"></span>.</p>
+    <p>Con lo stesso <span class="blank" data-risposta="seed|seme"></span> e le stesse impostazioni ottieni la stessa immagine.</p>
+    <p>Un video falso e realistico di una persona vera si chiama <span class="blank" data-risposta="deepfake|deep fake" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: rumore; prompt; seed (accettato seme); deepfake.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>L'AI generativa crea contenuti nuovi</li>
+      <li>Diffusione: dal rumore all'immagine, a passi</li>
+      <li>Prompt, negativo, passi, seed, guidance</li>
+    </ul>
+    <ul class="points">
+      <li>Non è un collage: niente archivio di foto</li>
+      <li>Consenso e trasparenza, sempre</li>
+      <li>I deepfake dannosi sono reato</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Fine della UDA 2: annunciare la verifica e la simulazione disponibile su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

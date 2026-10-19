@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'input e l'output dei dati · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 6 · La programmazione imperativa in C e C++</p>
+  <h1>L'input e<br>l'output dei dati</h1>
+  <p class="lead">Un programma che non ascolta e non risponde serve a poco: insegniamo al computer a fare domande, leggere le risposte e stampare i risultati in ordine.</p>
+  <aside class="notes">Obiettivi: usare printf con i segnaposto e scanf con l'operatore &amp; in C, cout e cin in C++; conoscere la divisione intera e il resto. Prerequisito: lezione "Programmiamo in C e C++" (struttura del programma, tipi, variabili). Durata indicativa: 2-3 ore. Strumenti: OnlineGDB (nessun account) o Code::Blocks / Dev-C++.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Con quale input "parli" di più al tuo telefono?</h2></div>
+  <div class="poll" data-id="io-input">
+    <ol><li>Tocco sullo schermo</li><li>Tastiera (scrivo messaggi)</li><li>Microfono (vocali, assistenti)</li><li>Fotocamera (foto, video, QR)</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Ricordare la lezione della UDA 1: ogni computer fa input, elaborazione, output. Oggi i nostri programmi useranno l'input più semplice, la tastiera, e l'output più semplice, il testo sullo schermo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La comunicazione con l'elaboratore</p><h2>Il programma fa domande e dà risposte</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Input</h3><p>L'utente scrive alla tastiera.</p><p class="small"><code>scanf</code> · <code>cin</code></p></div>
+    <div class="card fill"><h3>Elaborazione</h3><p>I valori finiscono nelle variabili e il programma calcola.</p></div>
+    <div class="card soft"><h3>Output</h3><p>Il risultato compare nella console.</p><p class="small"><code>printf</code> · <code>cout</code></p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando parli a un assistente vocale, l'input è il microfono: prima un modello di AI trasforma la tua voce in testo (riconoscimento vocale), poi quel testo viene elaborato come qualsiasi altro input.</p></div>
+  <aside class="notes">La console (o terminale) è la finestra di testo in cui girano i nostri programmi. In C la tastiera è lo "standard input" e lo schermo lo "standard output": da qui il nome della libreria stdio.h (standard input output).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'output in C</p><h2>printf: un modulo con gli spazi da riempire</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code">printf(<span class="s">"Ho <span class="hl">%d</span> anni\n"</span>, eta);
+printf(<span class="s">"Media: <span class="hl">%.2f</span>\n"</span>, media);
+printf(<span class="s">"%d + %d = %d\n"</span>, 2, 3, 2+3);</pre>
+      <p class="small">Ogni segnaposto <code>%</code> viene sostituito, in ordine, dai valori dopo la virgola. Con <code>eta = 14</code> e <code>media = 7.25</code> la console mostra:</p>
+<pre class="code" style="font-size:30px;background:#05070d">Ho 14 anni
+Media: 7.25
+2 + 3 = 5</pre>
+    </div>
+    <table class="data compact" style="align-self:start">
+      <tr><th>Scrivi</th><th>Per stampare</th></tr>
+      <tr><td class="mono">%d</td><td>un int</td></tr>
+      <tr><td class="mono">%f</td><td>un float (6 decimali)</td></tr>
+      <tr><td class="mono">%.2f</td><td>con 2 decimali</td></tr>
+      <tr><td class="mono">%c</td><td>un char</td></tr>
+      <tr><td class="mono">\n</td><td>vai a capo</td></tr>
+    </table>
+  </div>
+  <aside class="notes">printf("%f", 1.5) stampa 1.500000: per questo si usa quasi sempre %.2f o %.1f. Il numero di segnaposto deve corrispondere al numero di valori: se mancano valori, il programma stampa numeri a caso. Altri caratteri utili: \t (tabulazione). Per stampare il simbolo % si scrive %%.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa stampa questa istruzione?</h2></div>
+  <pre class="code" style="align-self:flex-start">printf(<span class="s">"%d\n"</span>, 7 / 2);</pre>
+  <div class="poll" data-id="io-divisione" data-tipo="quiz" data-risposta="B">
+    <ol><li>3.5</li><li>3</li><li>4</li><li>3.50</li></ol>
+    <p class="why">7 e 2 sono due interi, quindi il C fa la <b>divisione intera</b>: la parte decimale viene buttata via (non arrotondata). Per avere 3.5 serve almeno un decimale nel calcolo, come <code>7.0 / 2</code>, e il segnaposto <code>%f</code>.</p>
+  </div>
+  <aside class="notes">Il tranello classico: quasi tutti rispondono 3.5. Chi risponde 4 pensa a un arrotondamento: in C la divisione tra interi tronca. Mostrare in OnlineGDB: printf("%.1f\n", 7.0 / 2) stampa 3.5. Verificato con gcc.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Lo scontrino del bar</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C dichiara <code>int cornetti = 2;</code> e <code>float cornetto = 1.30, cappuccino = 1.50;</code></li>
+      <li>Stampa la riga dei cornetti: quanti, prezzo e spesa, con <code>%d</code> e <code>%.2f</code>.</li>
+      <li>Stampa la riga del cappuccino e poi il totale.</li>
+      <li>Prova a usare <code>%f</code> invece di <code>%.2f</code>: che cosa cambia?</li>
+      <li>Salva come <b>scontrino-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b><br><code>Cornetti: 2 x 1.30 = 2.60 euro</code><br><code>Cappuccino: 1.50 euro</code><br><code>Totale: 4.10 euro</code><br>Con <code>%f</code> esce <code>4.100000</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: printf("Cornetti: %d x %.2f = %.2f euro\n", cornetti, cornetto, cornetti * cornetto); printf("Cappuccino: %.2f euro\n", cappuccino); printf("Totale: %.2f euro\n", cornetti * cornetto + cappuccino); Evitare il simbolo dell'euro e le lettere accentate nelle stringhe: la console di Windows può mostrarli male. Uscita verificata con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni simbolo al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="io-simboli">
+    <dt><code>%d</code></dt><dd>Segnaposto per un numero intero</dd>
+    <dt><code>%.2f</code></dt><dd>Numero con la virgola, 2 cifre decimali</dd>
+    <dt><code>%c</code></dt><dd>Segnaposto per un singolo carattere</dd>
+    <dt><code>\n</code></dt><dd>Fa andare a capo</dd>
+    <dt><code>&amp;</code></dt><dd>Indirizzo della variabile, si usa in scanf</dd>
+    <dt><code>%</code> tra due numeri</dt><dd>Resto della divisione intera</dd>
+  </dl>
+  <aside class="notes">Il tranello: il simbolo % ha due usi diversi. Dentro le virgolette di printf introduce un segnaposto; tra due numeri interi (17 % 5) è l'operatore resto. L'operatore &amp; lo vediamo nella prossima slide: si può fare il puzzle prima e verificare dopo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'input in C</p><h2>scanf: leggi un valore e mettilo nella scatola</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:30px"><span class="k">int</span> eta;
+printf(<span class="s">"Quanti anni hai? "</span>);
+scanf(<span class="s">"%d"</span>, <span class="hl">&amp;</span>eta);
+printf(<span class="s">"Tra 10 anni ne avrai %d\n"</span>,
+       eta + 10);</pre>
+    <div class="card soft"><h3>Perché la <code>&amp;</code>?</h3><p><code>&amp;eta</code> vuol dire "l'<b>indirizzo</b> di eta": scanf deve sapere <b>dove</b> si trova la scatola in memoria per metterci dentro il valore.</p></div>
+  </div>
+  <ul class="points small">
+    <li>Prima la printf con la domanda, poi la scanf: l'utente deve sapere cosa scrivere.</li>
+    <li>Per un <code>float</code> si usa <code>scanf("%f", &amp;x);</code></li>
+  </ul>
+  <aside class="notes">Per un double in scanf serve %lf (in printf basta %f). Si possono leggere più valori insieme: scanf("%d %d", &amp;a, &amp;b); l'utente li separa con uno spazio o con Invio. L'indirizzo ci servirà ancora nella UDA 7 (passaggio per indirizzo, puntatori).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trova l'errore</p><h2>Quale riga contiene un errore grave?</h2></div>
+  <div class="poll" data-id="io-errore" data-tipo="quiz" data-risposta="C">
+    <ol><li><code>int n;</code></li><li><code>printf("Numero: ");</code></li><li><code>scanf("%d", n);</code></li><li><code>printf("%d\n", n * 2);</code></li></ol>
+    <p class="why">Manca la <code>&amp;</code>: scanf riceve il valore di n invece del suo indirizzo e prova a scrivere in un punto a caso della memoria. Il compilatore dà solo un avviso, ma quando esegui il programma va in crash o stampa valori strani.</p>
+  </div>
+  <aside class="notes">Errore tra i più frequenti in assoluto. Con gcc il programma compila e compare solo un warning ("format '%d' expects argument of type 'int *'"): ottima occasione per dire di leggere SEMPRE anche gli avvisi, non solo gli errori. Le altre righe sono corrette.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine il programma del doppio</h2></div>
+  <ol class="puzzle-ordina" data-id="io-ordina">
+    <li><code>#include &lt;stdio.h&gt;</code></li>
+    <li><code>int main() {</code></li>
+    <li><code>int n;</code></li>
+    <li><code>printf("Scrivi un numero: ");</code></li>
+    <li><code>scanf("%d", &amp;n);</code></li>
+    <li><code>printf("Il doppio: %d\n", 2 * n);</code></li>
+    <li><code>return 0; }</code></li>
+  </ol>
+  <aside class="notes">Ordine: libreria, main, dichiarazione, domanda, lettura, risposta, fine. Il punto critico è mettere la printf della domanda prima della scanf: al contrario il programma funziona lo stesso, ma l'utente vede un cursore che lampeggia senza sapere cosa scrivere.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Da minuti a ore e minuti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C chiedi all'utente un numero di minuti e leggilo con <code>scanf</code>.</li>
+      <li>Le ore sono <code>minuti / 60</code> (divisione intera).</li>
+      <li>I minuti che avanzano sono <code>minuti % 60</code>: l'operatore <code>%</code> dà il <b>resto</b>.</li>
+      <li>Stampa: <code>Sono 2 ore e 15 minuti</code>.</li>
+      <li>Salva come <b>minuti-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 135 esce <code>Sono 2 ore e 15 minuti</code>; con 59 esce <code>0 ore e 59 minuti</code>; con 600 esce <code>10 ore e 0 minuti</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: int minuti; printf("Quanti minuti? "); scanf("%d", &amp;minuti); printf("Sono %d ore e %d minuti\n", minuti / 60, minuti % 60); Qui la divisione intera è un vantaggio, non un difetto. Sfida: convertire i secondi in ore, minuti e secondi (3725 secondi = 1 ora, 2 minuti, 5 secondi). Uscite verificate con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Input e output in C++</p><h2>cout e cin: le frecce indicano dove vanno i dati</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:29px"><span class="k">int</span> eta;
+cout <span class="hl">&lt;&lt;</span> <span class="s">"Quanti anni hai? "</span>;
+cin <span class="hl">&gt;&gt;</span> eta;
+cout <span class="hl">&lt;&lt;</span> <span class="s">"Tra 10 anni ne avrai "</span>
+     <span class="hl">&lt;&lt;</span> eta + 10 <span class="hl">&lt;&lt;</span> endl;</pre>
+    <div class="stack">
+      <div class="card soft"><p><code>cout &lt;&lt;</code> i dati <b>escono</b> verso lo schermo.</p><p><code>cin &gt;&gt;</code> i dati <b>entrano</b> nella variabile.</p></div>
+      <p class="small">Niente segnaposto e niente <code>&amp;</code>: il C++ capisce da solo il tipo della variabile.</p>
+    </div>
+  </div>
+  <aside class="notes">Serve #include &lt;iostream&gt; e using namespace std; Confrontare con la slide di scanf: stesso programma, scrittura diversa. In C++ si possono usare anche printf e scanf, ma in questo corso usiamo cout e cin nei file .cpp. endl va a capo come \n.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>printf o cout? Il papà del C++ risponde così</h2></div>
+  <figure class="citazione">
+    <blockquote>Ci sono solo due tipi di linguaggi: quelli di cui la gente si lamenta e quelli che nessuno usa.</blockquote>
+    <figcaption><b>Bjarne Stroustrup</b>, creatore del C++, dalle domande frequenti sul suo sito</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche un chatbot è input, elaborazione, output. La risposta compare un pezzo alla volta perché il modello genera il testo un <b>token</b> (un pezzetto di parola) dopo l'altro, e il programma lo stampa man mano: come tante piccole printf.</p></div>
+  <aside class="notes">La frase si trova nelle FAQ di Bjarne Stroustrup (stroustrup.com), dove lui stesso la conferma; traduzione nostra dall'inglese ("There are only two kinds of languages: the ones people complain about and the ones nobody uses"). Spunto: tutti i linguaggi hanno difetti, conta saperli usare. Sul chatbot: non spiegare oltre il necessario, l'idea chiave è che la risposta è un output generato a pezzi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Quanto tempo passi sul telefono? In C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su OnlineGDB scegli <b>C++</b>. Chiedi le ore passate al telefono in un giorno (un intero) e leggile con <code>cin</code>.</li>
+      <li>Calcola e stampa con <code>cout</code> le ore in un anno: <code>ore * 365</code>.</li>
+      <li>Stampa quanti <b>giorni interi</b> sono: dividi per 24.</li>
+      <li>Salva come <b>telefono-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 3 ore al giorno esce <code>In un anno: 1095 ore</code> e <code>Cioe' 45 giorni interi</code>. Un mese e mezzo all'anno!</div>
+  </div>
+  <aside class="notes">Soluzione: int ore; cout &lt;&lt; "Ore al giorno sul telefono: "; cin &gt;&gt; ore; cout &lt;&lt; "In un anno: " &lt;&lt; ore * 365 &lt;&lt; " ore" &lt;&lt; endl; cout &lt;&lt; "Cioe' " &lt;&lt; ore * 365 / 24 &lt;&lt; " giorni interi" &lt;&lt; endl; 1095 / 24 = 45 con la divisione intera. Nessun giudizio sui numeri inseriti: basta un valore inventato. Uscita verificata con g++.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto: ragiona come il compilatore</h2></div>
+  <div class="puzzle-codice" data-risposta="3238" data-aiuto="nella divisione tra interi la parte decimale si butta via: 9 / 2 fa 4">
+    <ul class="points">
+      <li>1ª cifra: che cosa stampa <code style="background:rgba(255,255,255,.14)">printf("%d", 17 / 5);</code></li>
+      <li>2ª cifra: che cosa stampa <code style="background:rgba(255,255,255,.14)">printf("%d", 17 % 5);</code></li>
+      <li>3ª cifra: quanti segnaposto ci sono in <code style="background:rgba(255,255,255,.14)">"%d:%d:%d"</code></li>
+      <li>4ª cifra: che cosa stampa <code style="background:rgba(255,255,255,.14)">printf("%d", 9 / 2 * 2);</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 17 / 5 = 3, resto 2, tre segnaposto, e 9 / 2 * 2 fa 8 e non 9.</div>
+  </div>
+  <aside class="notes">Codice: 3238. Si gioca a squadre senza computer: vince la prima squadra che apre. L'ultima cifra è il tranello: 9 / 2 vale 4, e 4 * 2 = 8. Dopo la sfida si può verificare tutto in OnlineGDB.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>In C per stampare sullo schermo si usa la funzione <span class="blank" data-risposta="printf"></span>.</p>
+    <p>Per stampare un numero con due decimali si scrive il segnaposto <span class="blank" data-risposta="%.2f"></span>.</p>
+    <p>In scanf, prima del nome della variabile, va il simbolo <span class="blank" data-risposta="&amp;|e commerciale"></span>.</p>
+    <p>In C++, per leggere dalla tastiera, si usa <span class="blank" data-risposta="cin"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: printf, %.2f, &amp; (accettato anche "e commerciale"), cin.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>printf</code> con i segnaposto <code>%d</code>, <code>%f</code>, <code>%.2f</code></li>
+      <li><code>scanf("%d", &amp;n)</code>: non dimenticare la <code>&amp;</code></li>
+      <li>7 / 2 fa 3: divisione intera, <code>%</code> dà il resto</li>
+    </ul>
+    <ul class="points">
+      <li>In C++: <code>cout &lt;&lt;</code> e <code>cin &gt;&gt;</code></li>
+      <li>Prima la domanda, poi la lettura</li>
+      <li>Leggi anche gli avvisi del compilatore</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: il programma impara a scegliere con if ed else.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

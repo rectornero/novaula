@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tipi di attacchi informatici · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Sistemi e reti · Sicurezza informatica</p>
+  <h1>Tipi di attacchi<br>informatici</h1>
+  <p class="lead">Conoscere come si attacca un sistema serve a una cosa sola: saperlo difendere.</p>
+  <aside class="notes">Premessa da dire chiaramente: tutto ciò che vediamo oggi si studia per difendersi. Provare queste tecniche su sistemi altrui, compresi quelli della scuola, senza autorizzazione scritta è un reato (accesso abusivo a un sistema informatico, art. 615-ter del Codice penale). Prerequisito: i sei principi della sicurezza della lezione precedente; ogni attacco verrà collegato al principio che viola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole giuste</p><h2>Vulnerabilità, minaccia, attacco, rischio</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Vulnerabilità</h3><p class="small">Una debolezza: un bug, una configurazione sbagliata, una password debole.</p></div>
+    <div class="card soft"><h3>Minaccia</h3><p class="small">Chi o che cosa può causare un danno: un criminale, un malware, un guasto.</p></div>
+    <div class="card soft"><h3>Attacco</h3><p class="small">L'azione concreta che sfrutta una vulnerabilità per causare un danno.</p></div>
+    <div class="card fill"><h3>Rischio</h3><p class="small">Quanto è probabile l'attacco e quanto danno farebbe.</p></div>
+  </div>
+  <div class="callout hl">Ogni attacco che vediamo oggi <b>viola almeno uno</b> dei sei principi: riservatezza, integrità, disponibilità, autenticazione, autorizzazione, non ripudio.</div>
+  <aside class="notes">Esempio per fissare le parole: la finestra del pianterreno lasciata aperta è la vulnerabilità, il ladro è la minaccia, entrare dalla finestra è l'attacco, il rischio dipende da quanto è frequentata la strada e da che cosa c'è in casa. In inglese: vulnerability, threat, attack, risk; il programma che sfrutta una vulnerabilità si chiama exploit.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Malware · software malevolo</p><h2>Cinque famiglie da riconoscere</h2></div>
+  <table class="data compact">
+    <tr><th>Tipo</th><th>Come arriva</th><th>Che cosa fa</th><th>Viola</th></tr>
+    <tr><td><b>Virus</b></td><td>Si attacca a un file e parte quando lo apri</td><td>Infetta altri file, può danneggiarli</td><td>Integrità</td></tr>
+    <tr><td><b>Worm</b></td><td>Da solo, attraverso la rete</td><td>Si copia su altri computer senza nessun clic</td><td>Disponibilità</td></tr>
+    <tr><td><b>Trojan</b></td><td>Finge di essere un programma utile</td><td>Apre un accesso nascosto all'attaccante</td><td>Riservatezza, autorizzazione</td></tr>
+    <tr><td><b>Ransomware</b></td><td>Phishing, vulnerabilità, accessi deboli</td><td>Cifra i file e chiede un riscatto</td><td>Disponibilità</td></tr>
+    <tr><td><b>Spyware</b></td><td>Nascosto in app o estensioni</td><td>Registra ciò che fai e lo invia</td><td>Riservatezza</td></tr>
+  </table>
+  <p class="muted small">Molti malware moderni combinano più comportamenti: un trojan può installare uno spyware o un ransomware.</p>
+  <aside class="notes">Differenza chiave virus/worm: il virus ha bisogno di un'azione dell'utente (aprire il file), il worm si diffonde da solo sfruttando una vulnerabilità di rete. Il nome trojan viene dal cavallo di Troia. Esempi tipici di trojan: giochi o programmi "craccati", finti aggiornamenti del browser. Domanda: "perché un keylogger è uno spyware?"</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Il più temuto dalle aziende</p><h2>Come lavora un ransomware</h2></div>
+  <div class="flow">
+    <div class="card"><p class="num">1</p><h3>Entra</h3><p class="muted small">Allegato di phishing, password debole, programma non aggiornato.</p></div>
+    <div class="card"><p class="num">2</p><h3>Si diffonde</h3><p class="muted small">Passa ad altri PC e server, cerca i backup collegati.</p></div>
+    <div class="card"><p class="num">3</p><h3>Cifra</h3><p class="muted small">I file diventano illeggibili, compare la richiesta di riscatto.</p></div>
+    <div class="card"><p class="num">4</p><h3>Ricatta</h3><p class="muted small">Spesso minaccia anche di pubblicare i dati rubati.</p></div>
+  </div>
+  <p class="lead">Viola la <b>disponibilità</b> e, con il furto dei dati, anche la <b>riservatezza</b>. Pagare non garantisce di riavere i file.</p>
+  <aside class="notes">La "doppia estorsione" (cifratura più minaccia di pubblicazione) è diventata comune: per questo il backup da solo non basta più a risolvere un attacco ransomware, anche se resta indispensabile. Il riscatto si chiede di solito in criptovaluta. Le autorità sconsigliano di pagare: non c'è garanzia, e si finanziano altri attacchi. Le contromisure si vedranno nella prossima lezione (backup 3-2-1, aggiornamenti, MFA).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ingegneria sociale</p><h2>Phishing: si attacca la persona, non il computer</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Le forme</h3>
+      <ul class="points small">
+        <li><b>Phishing</b>: e-mail di massa che imitano banche, corrieri, scuole.</li>
+        <li><b>Spear phishing</b>: messaggio su misura per una persona precisa.</li>
+        <li><b>Smishing</b> e <b>vishing</b>: via SMS o telefonata.</li>
+        <li>Falso supporto tecnico che chiede di installare un programma.</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h3>Le leve psicologiche</h3>
+      <ul class="points small">
+        <li><b>Urgenza</b>: "entro 24 ore".</li>
+        <li><b>Paura</b>: "il tuo account sarà bloccato".</li>
+        <li><b>Autorità</b>: "sono il dirigente", "sono la banca".</li>
+        <li><b>Curiosità</b> e <b>premi</b>: "hai vinto", "guarda chi ti ha taggato".</li>
+      </ul>
+    </div>
+  </div>
+  <p>Obiettivo tipico: rubare le credenziali. Viola l'<b>autenticazione</b> e quindi la <b>riservatezza</b>.</p>
+  <aside class="notes">Ingegneria sociale = manipolare le persone perché facciano qualcosa contro il proprio interesse. Funziona perché sfrutta reazioni umane normali. Chiedere se qualcuno ha ricevuto SMS di finti corrieri o finte banche: quasi sempre qualcuno sì. Regola d'oro: nessun servizio serio chiede la password per e-mail o al telefono.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Caccia agli indizi in una e-mail falsa</h2>
+  <div class="cols-2" style="grid-template-columns:1.9fr 1fr">
+    <div class="card tiny" style="gap:8px;padding:26px 34px">
+      <p><b>Da:</b> Supporto Registro Elettronico &lt;assistenza@registr0-elettronico.example&gt;</p>
+      <p><b>Oggetto:</b> URGENTE!! Il tuo account verra sospeso entro 24 ore</p>
+      <p><b>Allegato:</b> Modulo_verifica.pdf.exe</p>
+      <p>Gentile utente, abbiamo rilevato un accesso sospetto. La tua password e scaduta. Per evitare la sospensione clicca qui e inserisci nome utente e password: <u>https://registro.istituto.example/accedi</u></p>
+      <p>Cordiali saluti, lo staff tecnico</p>
+      <p class="muted">Passando il mouse sul link compare: http://login-verifica.example/registro.php</p>
+    </div>
+    <div class="stack">
+      <p class="small">Apri un documento Google o Writer chiamato <b>phishing-Cognome</b>. Elenca ogni indizio sospetto e, per ciascuno, scrivi come lo verificheresti.</p>
+      <div class="check"><b>Controllo:</b> gli indizi sono almeno 7. Guarda mittente, oggetto, allegato, saluto, ortografia, richiesta, link.</div>
+    </div>
+  </div>
+  <aside class="notes">E-mail inventata: i domini .example sono riservati e non esistono. Indizi attesi: 1) dominio del mittente con lo zero al posto della o e diverso da quello della scuola; 2) urgenza e minaccia nell'oggetto, maiuscole e punti esclamativi; 3) allegato con doppia estensione .pdf.exe, in realtà un programma eseguibile; 4) saluto generico "Gentile utente" invece del nome; 5) errori di ortografia (verra, e scaduta senza accento); 6) richiesta di inserire la password tramite un link; 7) il testo del link è diverso dall'indirizzo reale, che usa http e un dominio estraneo; 8) firma generica senza contatti verificabili. Verifiche: non cliccare, aprire il registro digitando l'indirizzo noto, chiedere in segreteria, segnalare al referente informatico. Ricordare che in Windows conviene mostrare le estensioni dei file (Esplora file, Visualizza).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Attacchi alle password</p><h2>Tre modi per indovinare una password</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Forza bruta</h3><p>Si provano <b>tutte</b> le combinazioni possibili. Funziona sempre, ma può richiedere un tempo enorme.</p></div>
+    <div class="card"><p class="num">2</p><h3>Dizionario</h3><p>Si provano parole comuni e varianti: <code>password</code>, <code>juventus1</code>, <code>Marco2008</code>.</p></div>
+    <div class="card"><p class="num">3</p><h3>Credential stuffing</h3><p>Si riusano coppie e-mail e password rubate a <b>un altro sito</b>.</p></div>
+  </div>
+  <div class="callout">Viola l'<b>autenticazione</b>. Il credential stuffing funziona solo perché tante persone usano la stessa password ovunque.</div>
+  <aside class="notes">Spesso l'attaccante non prova le password sul sito (che blocca dopo pochi tentativi), ma su un archivio di hash rubato: è l'attacco "offline", molto più veloce. Il credential stuffing sfrutta le liste di credenziali uscite da violazioni di altri servizi: se la password è la stessa, cade anche l'account della scuola. Domanda: "quanti di voi usano la stessa password per più di un servizio?" (senza chiedere quale).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Facciamo i conti</p><h2>Quanti tentativi servono con la forza bruta?</h2></div>
+  <div class="formula"><small>N = simboli possibili per carattere · L = lunghezza</small>combinazioni = <span class="hl">N</span><sup>L</sup></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>PIN di 6 cifre</h3><p>10<sup>6</sup> = 1.000.000 combinazioni<br>→ <b>un decimillesimo di secondo</b></p></div>
+    <div class="card soft"><h3>8 lettere minuscole</h3><p>26<sup>8</sup> ≈ 209 miliardi di combinazioni<br>→ <b>circa 21 secondi</b></p></div>
+  </div>
+  <p class="muted small">Ipotesi di esempio: un attaccante con un archivio di password rubato prova 10 miliardi di combinazioni al secondo. Tempi nel caso peggiore.</p>
+  <aside class="notes">Conti: 10^6 / 10^10 = 0,0001 s. 26^8 = 208.827.064.576; diviso 10^10 fa circa 20,9 s. La velocità di 10 miliardi al secondo è un'ipotesi didattica per un attacco offline su hash veloci con schede grafiche; i sistemi ben progettati usano funzioni di hash lente apposta (bcrypt, Argon2) che riducono di molto la velocità. In media si trova la password a metà dei tentativi, quindi il tempo medio è la metà. Far notare che ogni carattere in più moltiplica il tempo per N.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il foglio della forza bruta</h2>
+  <table class="sheet">
+    <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+    <tr><th>1</th><td>Tipo</td><td>N</td><td>L</td><td>Combinazioni</td><td>Secondi</td><td>Anni</td></tr>
+    <tr><th>2</th><td>8 minuscole</td><td>26</td><td>8</td><td class="f">=POTENZA(B2;C2)</td><td class="f">=D2/1E10</td><td class="f sel">=E2/31536000</td></tr>
+  </table>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>In Calc ricopia il foglio e aggiungi le righe: 6 cifre (10), 8 lettere e cifre (62), 8 con simboli (95), 12 minuscole (26), 12 con simboli (95).</li>
+      <li>Trascina in basso le formule di D, E, F. Salva come <b>forza-bruta-Cognome.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <p class="small muted">31.536.000 sono i secondi in un anno (365 · 24 · 3600).</p>
+      <div class="check"><b>Controllo:</b> 12 caratteri con 95 simboli danno circa <b>1,7 milioni di anni</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Risultati attesi (caso peggiore, 10^10 tentativi al secondo): 6 cifre 0,0001 s; 8 minuscole circa 21 s; 8 lettere maiuscole, minuscole e cifre (62^8 ≈ 2,18·10^14) circa 6 ore; 8 con simboli (95^8 ≈ 6,63·10^15) circa 7,7 giorni; 12 minuscole (26^12 ≈ 9,54·10^16) circa 110 giorni; 12 con simboli (95^12 ≈ 5,40·10^23) circa 1,71 milioni di anni. 95 = 26 minuscole + 26 maiuscole + 10 cifre + 33 simboli stampabili (spazio compreso). Calc mostrerà i numeri grandi in notazione scientifica: si può cambiare il formato. Conclusione da far scrivere: la lunghezza conta più della complessità; ma se la password è una parola comune, l'attacco a dizionario la trova subito, qualunque sia la lunghezza. Estensione: aggiungere in G1 la velocità e usare il riferimento assoluto $G$1 al posto di 1E10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Man-in-the-middle</p><h2>Qualcuno si mette in mezzo alla conversazione</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Tu</h3><p class="small">Ti colleghi alla rete "WiFi_Gratis_Stazione".</p></div>
+    <div class="card bad"><h3>Attaccante</h3><p class="small">La rete è sua: vede e può modificare ciò che passa.</p></div>
+    <div class="card soft"><h3>Il sito</h3><p class="small">Riceve le richieste e non si accorge di nulla.</p></div>
+  </div>
+  <ul class="points">
+    <li>Viola la <b>riservatezza</b> (legge i dati) e l'<b>integrità</b> (li cambia).</li>
+    <li>Si combatte con la <b>cifratura</b> delle comunicazioni: HTTPS, VPN.</li>
+  </ul>
+  <div class="callout hl">Se il browser avvisa che il <b>certificato non è valido</b>, fermati: potrebbe esserci qualcuno in mezzo.</div>
+  <aside class="notes">Il falso punto di accesso con un nome credibile si chiama "evil twin". Con HTTPS l'attaccante vede a quale sito ti colleghi ma non il contenuto, e se prova a sostituirsi al sito il browser mostra un avviso sul certificato: quell'avviso non va mai ignorato. Collegare al principio di integrità visto con gli hash.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">DoS e DDoS</p><h2>Troppe richieste: il servizio si blocca</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>DoS</h3><p><b>Denial of Service</b>: un'unica sorgente sommerge il servizio di richieste o sfrutta un difetto per mandarlo in crash.</p></div>
+    <div class="card"><h3>DDoS</h3><p><b>Distributed</b> DoS: migliaia di dispositivi infetti (una <b>botnet</b>) attaccano insieme. Difficile da bloccare.</p></div>
+  </div>
+  <div class="callout hl">Come mille telefonate finte a una pizzeria: i clienti veri non riescono a ordinare. Viola la <b>disponibilità</b>.</div>
+  <p class="muted small">Le botnet sono fatte spesso di telecamere, router e altri oggetti connessi lasciati con la password di fabbrica.</p>
+  <aside class="notes">Le botnet sono spesso formate da dispositivi poco protetti collegati a Internet: telecamere, router, videoregistratori con la password di fabbrica. Il DDoS non ruba dati, ma ferma il servizio: per un negozio online significa vendite perse. Difese: servizi anti-DDoS dei provider, CDN, limitazione delle richieste. Ricordare che anche "provare" un DoS contro il sito della scuola è un reato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Attacchi alle applicazioni web</p><h2>SQL injection: i dati diventano comandi</h2></div>
+  <pre class="code"><span class="c"># il cognome arriva da un modulo web</span>
+sql = <span class="s">"SELECT * FROM studenti WHERE cognome = '"</span> + cognome + <span class="s">"'"</span></pre>
+  <div class="cols-2">
+    <div class="card ok"><h3>Si scrive Rossi</h3><p class="small"><code>... WHERE cognome = 'Rossi'</code><br>La query funziona.</p></div>
+    <div class="card bad"><h3>Si scrive D'Amico</h3><p class="small"><code>... WHERE cognome = 'D'Amico'</code><br>L'apostrofo chiude il testo: errore.</p></div>
+  </div>
+  <p>Se un apostrofo cambia la query, chi attacca può aggiungere <b>pezzi di SQL</b> per leggere o cancellare dati. Viola <b>riservatezza</b> e <b>integrità</b>.</p>
+  <aside class="notes">Il problema non è il cognome D'Amico, che è legittimo: è il programma che incolla il testo dell'utente dentro il comando SQL. Il database non riesce più a distinguere tra dati e istruzioni. Non mostriamo stringhe di attacco: basta capire che se l'utente controlla la struttura della query, controlla il database. Soluzione (prossima lezione): query parametrizzate, in cui il valore viene passato a parte e non viene mai interpretato come SQL.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Attacchi alle applicazioni web</p><h2>XSS: il testo diventa codice nel browser</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un sito di commenti mostra a tutti i visitatori il testo scritto dagli utenti, <b>così com'è</b>:</p>
+      <pre class="code">pagina += <span class="s">"&lt;p&gt;"</span> + commento + <span class="s">"&lt;/p&gt;"</span></pre>
+      <p>Se qualcuno scrive <code>&lt;b&gt;Ciao&lt;/b&gt;</code>, il commento appare in grassetto: il browser lo ha trattato come <b>HTML</b>.</p>
+    </div>
+    <div class="card bad"><h3>Perché è grave</h3><p class="small">Allo stesso modo si può inserire uno <b>script</b>, che parte nel browser di chi legge: può rubare la sessione o cambiare la pagina.</p><p class="small">Viola <b>riservatezza</b> e <b>integrità</b>.</p></div>
+  </div>
+  <aside class="notes">XSS = Cross-Site Scripting. Stessa radice della SQL injection: un dato dell'utente finisce dentro un testo che poi viene interpretato come codice (qui HTML e JavaScript, là SQL). Lo script gira con i permessi del sito vulnerabile, quindi può leggere i cookie di sessione non protetti e agire a nome della vittima. Difesa (prossima lezione): "escaping" dell'output, cioè trasformare &lt; e &gt; in entità, così il browser li mostra come testo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Trova le righe vulnerabili</h2>
+  <pre class="code" style="font-size:27px;padding:24px 36px"><span class="c"> 1</span>  <span class="k">def</span> cerca_studente(cognome):
+<span class="c"> 2</span>      <span class="c"># cognome arriva da un modulo web</span>
+<span class="c"> 3</span>      sql = <span class="s">"SELECT nome, classe FROM studenti WHERE cognome = '"</span> + cognome + <span class="s">"'"</span>
+<span class="c"> 4</span>      righe = db.execute(sql).fetchall()
+<span class="c"> 5</span>      html = <span class="s">"&lt;h3&gt;Risultati per "</span> + cognome + <span class="s">"&lt;/h3&gt;"</span>
+<span class="c"> 6</span>      <span class="k">for</span> nome, classe <span class="k">in</span> righe:
+<span class="c"> 7</span>          html += <span class="s">"&lt;p&gt;"</span> + nome + <span class="s">" - "</span> + classe + <span class="s">"&lt;/p&gt;"</span>
+<span class="c"> 8</span>      <span class="k">return</span> html</pre>
+  <div class="cols-2">
+    <p class="small">Apri Writer o Documenti Google e, nel file <b>codice-Cognome</b>, scrivi per ogni riga vulnerabile: numero, tipo di attacco, principio violato e che cosa succederebbe cercando <code>D'Amico</code>.</p>
+    <div class="check"><b>Controllo:</b> le righe a rischio sono quelle in cui un dato scritto dall'utente viene incollato dentro un testo che poi è interpretato come codice.</div>
+  </div>
+  <aside class="notes">Soluzione: riga 3 = SQL injection (il cognome è concatenato nella query; con D'Amico la query va in errore); viola riservatezza e integrità. Riga 5 = XSS riflesso (il cognome viene rimandato nella pagina HTML senza escaping); viola riservatezza e integrità. Bonus per chi lo nota: anche la riga 7 inserisce nome e classe nell'HTML senza escaping; se nel database fosse stato salvato un nome con codice HTML, sarebbe un XSS memorizzato (stored). Le righe 4, 6, 8 di per sé non sono vulnerabili. La correzione si fa nella prossima lezione.</aside>
+</section>
+
+<section class="slide accent">
+  <div class="head"><p class="kicker">Zero-day</p><h2>Una falla che nessuno ha ancora corretto</h2></div>
+  <div class="flow">
+    <div class="card night"><p class="num">1</p><p class="small">Il difetto esiste nel software, ma <b>nessuno lo sa</b>.</p></div>
+    <div class="card night"><p class="num">2</p><p class="small">Un attaccante lo scopre e lo <b>sfrutta</b>.</p></div>
+    <div class="card night"><p class="num">3</p><p class="small">Il produttore lo scopre e pubblica la <b>patch</b>.</p></div>
+    <div class="card night"><p class="num">4</p><p class="small">Gli utenti <b>aggiornano</b>. Solo ora sono protetti.</p></div>
+  </div>
+  <p class="lead">"Zero giorni": il produttore ha avuto zero giorni per preparare una correzione. Può violare <b>qualsiasi</b> principio.</p>
+  <aside class="notes">Tra il punto 2 e il punto 4 nessuna patch protegge: servono difese a più livelli (minimo privilegio, segmentazione, monitoraggio). Dopo il punto 3 la falla è nota a tutti, attaccanti compresi: chi non aggiorna resta esposto, ed è proprio su queste falle già corrette che si basano molti attacchi. Esempio storico: Log4Shell (dicembre 2021), una vulnerabilità nella libreria Java Log4j usata in moltissimi programmi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Ogni attacco colpisce un principio</h2></div>
+  <table class="data compact" style="color:var(--ink)">
+    <tr><th>Attacco</th><th>Principio violato soprattutto</th></tr>
+    <tr><td>Ransomware, DoS e DDoS</td><td>Disponibilità</td></tr>
+    <tr><td>Spyware, man-in-the-middle</td><td>Riservatezza (e integrità)</td></tr>
+    <tr><td>Phishing, forza bruta, dizionario, credential stuffing</td><td>Autenticazione</td></tr>
+    <tr><td>Trojan con accesso nascosto</td><td>Autorizzazione</td></tr>
+    <tr><td>SQL injection, XSS</td><td>Riservatezza e integrità</td></tr>
+    <tr><td>Virus</td><td>Integrità</td></tr>
+    <tr><td>Zero-day</td><td>Qualsiasi, dipende dalla falla</td></tr>
+  </table>
+  <aside class="notes">Chiedere per ogni riga una contromisura, come anticipo della prossima lezione "Difendersi: le contromisure". Osservazione: il non ripudio è minacciato quando un attaccante agisce con le credenziali rubate di un altro (sembra che sia stato lui) o cancella i log.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documenti con Word e Writer · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 3 · Office automation</p>
+  <h1>Documenti con<br>Word e Writer</h1>
+  <p class="lead">Dal foglio bianco a un documento vero: stili, frontespizio, filigrana e cento lettere personalizzate scritte in un colpo solo.</p>
+  <aside class="notes">Obiettivi: capire che cos'è un word processor, conoscere Writer e il suo equivalente Word, usare gli stili, creare frontespizio, filigrana, intestazione e piè di pagina, preparare una lettera circolare con la stampa in serie. Durata indicativa: 3 ore. Nei PC del laboratorio c'è LibreOffice: tutti gli esercizi sono pensati per Writer, con i nomi dei comandi equivalenti in Word.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultimo testo lungo che hai scritto, dove l'hai scritto?</h2></div>
+  <div class="poll" data-id="ultimo-testo">
+    <ol><li>A mano, su carta</li><li>Sul telefono, in una chat o nelle note</li><li>Al computer, con Word o Writer</li><li>Online, con Google Documenti</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Chiedere a chi ha risposto B: come avete fatto ad andare a capo, a mettere un titolo, a numerare le pagine? Introduce l'idea che un documento non è solo testo, ma testo + struttura + aspetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il word processing</p><h2>Scrivere, correggere, impaginare</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un <b>word processor</b> (elaboratore di testi) è il programma che serve a creare documenti: lettere, relazioni, regolamenti, curriculum.</p>
+      <p>Funziona in modalità <mark>WYSIWYG</mark>, <i>What You See Is What You Get</i>: quello che vedi sullo schermo è quello che otterrai in stampa o in PDF.</p>
+    </div>
+    <div class="card soft"><p class="num">4</p><h3>cose che fa per te</h3><ul class="points"><li>va a capo da solo</li><li>controlla l'ortografia</li><li>formatta e impagina</li><li>esporta in PDF</li></ul></div>
+  </div>
+  <aside class="notes">Far notare la differenza con la macchina da scrivere: lì ogni errore voleva dire ribattere la pagina. Con il word processor il testo si corregge e si sposta senza riscriverlo. Il primo editor WYSIWYG fu Bravo, allo Xerox PARC (1974): ci torniamo nella linea del tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Word e Writer</p><h2>Due programmi, le stesse idee</h2></div>
+  <table class="data">
+    <tr><th></th><th>Microsoft Word</th><th>LibreOffice Writer</th></tr>
+    <tr><td><b>Chi lo fa</b></td><td>Microsoft</td><td>The Document Foundation e una comunità di volontari</td></tr>
+    <tr><td><b>Costo</b></td><td>a pagamento (licenza o abbonamento)</td><td>gratuito e <i>open source</i></td></tr>
+    <tr><td><b>Formato</b></td><td><code>.docx</code></td><td><code>.odt</code> <span class="muted">(OpenDocument, standard ISO)</span></td></tr>
+    <tr><td><b>Pacchetto</b></td><td>Excel, PowerPoint, Access</td><td>Calc, Impress, Base</td></tr>
+  </table>
+  <div class="callout">Writer apre e salva anche i <code>.docx</code>. I menu cambiano, ma <b>stili, intestazioni e stampa in serie</b> esistono in entrambi.</div>
+  <aside class="notes">Nei PC della scuola c'è LibreOffice. Chi a casa ha Word ritrova gli stessi concetti con la barra multifunzione (schede Home, Inserisci, Progettazione, Lettere). Esiste anche Google Documenti, online e gratuito con un account. Il formato OpenDocument è lo standard ISO/IEC 26300.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il capitolo 2 deve iniziare su una pagina nuova. Come fai?</h2></div>
+  <div class="poll" data-id="nuova-pagina" data-tipo="quiz" data-risposta="C">
+    <ol><li>Premo Invio finché il cursore arriva alla pagina dopo</li><li>Premo la barra spaziatrice fino in fondo alla riga</li><li>Inserisco un'interruzione di pagina con Ctrl+Invio</li><li>Riduco la dimensione del carattere</li></ol>
+    <p class="why">Con Ctrl+Invio il capitolo 2 resta sempre in cima alla pagina. Con tanti Invio, appena aggiungi una riga sopra, tutto scivola e il titolo finisce a metà pagina.</p>
+  </div>
+  <aside class="notes">La A è l'errore più diffuso: funziona finché non si modifica il testo. Mostrare dal vivo: con gli Invio vuoti, aggiungere una riga al capitolo 1 e far vedere il titolo che scende. Attivare Visualizza › Caratteri di controllo (Ctrl+F10) per vedere i segni di paragrafo nascosti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La formattazione</p><h2>Tre livelli, dal piccolo al grande</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Carattere</h3><p>Tipo di carattere, dimensione, <b>grassetto</b>, <i>corsivo</i>, colore.</p><p class="muted small">Formato › Carattere</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Paragrafo</h3><p>Allineamento, rientri, spazio prima e dopo, interlinea, elenchi.</p><p class="muted small">Formato › Paragrafo</p></div>
+    <div class="card"><p class="num">3</p><h3>Pagina</h3><p>Formato A4, orientamento, margini, intestazione, piè di pagina.</p><p class="muted small">Formato › Stile di pagina</p></div>
+  </div>
+  <div class="callout hl">Un <b>paragrafo</b> finisce quando premi <b>Invio</b>. Per andare a capo restando nello stesso paragrafo: <b>Maiusc+Invio</b>.</div>
+  <aside class="notes">Esempio da mostrare: il colore di una parola è carattere, il testo centrato è paragrafo, il foglio orizzontale è pagina. Domanda veloce: "l'interlinea è carattere o paragrafo?" (paragrafo). In Word gli stessi comandi sono nella scheda Home e in Layout.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli stili</p><h2>Uno stile è una formattazione con un nome</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Invece di mettere a mano Arial 20 grassetto su ogni titolo, gli dai lo stile <b>Titolo 1</b>.</p>
+      <ul class="points">
+        <li>Cambi lo stile una volta, cambiano <b>tutti</b> i titoli</li>
+        <li>Il Navigatore (<b>F5</b>) mostra la struttura del documento</li>
+        <li>Il sommario si crea da solo</li>
+      </ul>
+    </div>
+    <div class="card night">
+      <p class="tiny muted">Pannello Stili · F11</p>
+      <h3>Titolo 1</h3>
+      <h4>Titolo 2</h4>
+      <p>Corpo del testo: il paragrafo normale, quello che leggi.</p>
+      <p class="muted small">Elenco puntato, Citazione, Didascalia…</p>
+    </div>
+  </div>
+  <aside class="notes">Mostrare dal vivo: tre titoli con stile Titolo 1, poi clic destro sullo stile › Modifica › colore verde: tutti e tre cambiano insieme. In Word gli stili sono nella scheda Home, gruppo Stili ("Titolo 1", "Titolo 2"). Il Navigatore in Word si chiama Riquadro di spostamento (Visualizza › Riquadro di spostamento).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Luca ha scritto i titoli in Arial 20 grassetto, a mano. Cosa non funzionerà?</h2></div>
+  <div class="poll" data-id="titoli-a-mano" data-tipo="quiz" data-risposta="B">
+    <ol><li>La stampa: i titoli usciranno più piccoli</li><li>Il sommario automatico: resterà vuoto</li><li>Il salvataggio in formato .odt</li><li>Il controllo ortografico dei titoli</li></ol>
+    <p class="why">Per Writer quei titoli sono normali paragrafi con il carattere grande: sembrano titoli ma non lo sono. Il sommario e il Navigatore cercano gli stili Titolo, non il grassetto.</p>
+  </div>
+  <aside class="notes">Classico errore: confondere l'aspetto con la struttura. Le altre opzioni funzionano tutte normalmente. Anche gli screen reader usati dalle persone non vedenti saltano da un titolo all'altro solo se sono veri titoli (stili). Ponte verso la slide sull'accessibilità.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il regolamento del laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Writer. Scrivi il titolo <b>Regolamento del laboratorio</b> e dagli lo stile <b>Titolo 1</b>.</li>
+      <li>Aggiungi tre sezioni con stile <b>Titolo 2</b>: <i>Prima di entrare</i>, <i>Durante la lezione</i>, <i>Prima di uscire</i>.</li>
+      <li>Sotto ogni sezione scrivi almeno 3 regole in un <b>elenco numerato</b>.</li>
+      <li>Modifica lo stile Titolo 2 (clic destro › Modifica): scegli un colore. Tutti i titoli cambiano insieme.</li>
+      <li>Salva come <b>regolamento-lab.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> premi <b>F5</b>. Nel Navigatore, sotto <i>Titoli</i>, vedi 1 titolo principale con 3 sottotitoli rientrati. Se non ci sono, hai usato il grassetto invece degli stili.</div>
+  </div>
+  <aside class="notes">Esempi di regole: non mangiare né bere; spegnere il PC con Start › Arresta; salvare il lavoro nella propria cartella; segnalare subito un guasto; non installare programmi. Chi finisce prima: aggiungere una sezione "Uso di internet". Il file servirà anche nei due esercizi successivi: non chiuderlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Frontespizio e filigrana</p><h2>Un documento si presenta dalla prima pagina</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Frontespizio</b>: la prima pagina con titolo, autore, classe, data. Di solito non ha il numero di pagina.</li>
+      <li><b>Filigrana</b>: una scritta chiara dietro al testo, come <i>BOZZA</i> o <i>RISERVATO</i>.</li>
+      <li>Writer: <b>Formato › Pagina del titolo</b> e <b>Formato › Filigrana</b>.</li>
+      <li>Word: <b>Inserisci › Frontespizio</b> e <b>Progettazione › Filigrana</b>.</li>
+    </ul>
+    <svg viewBox="0 0 420 540" width="420" height="540" role="img" aria-label="Pagina con filigrana BOZZA">
+      <rect x="10" y="10" width="400" height="520" rx="14" fill="#ffffff" stroke="#dcdfe8" stroke-width="4"/>
+      <text x="210" y="300" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="92" font-weight="800" fill="#11845f" opacity="0.22" transform="rotate(-35 210 290)">BOZZA</text>
+      <rect x="60" y="70" width="300" height="26" rx="6" fill="#172033"/>
+      <rect x="60" y="110" width="200" height="16" rx="5" fill="#11845f"/>
+      <rect x="60" y="160" width="300" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="182" width="280" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="204" width="295" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="226" width="240" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="270" width="300" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="292" width="270" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="314" width="290" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="358" width="300" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="380" width="210" height="10" rx="4" fill="#c9ced9"/>
+      <rect x="60" y="474" width="300" height="2" fill="#dcdfe8"/>
+      <text x="210" y="502" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="18" fill="#596179">pagina 2</text>
+    </svg>
+  </div>
+  <aside class="notes">La finestra Pagina del titolo di Writer permette di inserire una o più pagine iniziali con uno stile diverso e di far ripartire la numerazione. Se nella versione installata la voce avesse un nome leggermente diverso, la soluzione manuale è: prima pagina con stile di pagina "Prima pagina" e poi Ctrl+Invio. La filigrana in Writer compare su tutte le pagine che usano lo stesso stile di pagina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parte del documento alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="parti-documento">
+    <dt>Intestazione</dt><dd>Fascia in alto, ripetuta su ogni pagina</dd>
+    <dt>Piè di pagina</dt><dd>Fascia in basso, di solito con il numero di pagina</dd>
+    <dt>Frontespizio</dt><dd>Prima pagina con titolo, autore e data</dd>
+    <dt>Filigrana</dt><dd>Scritta chiara e trasparente dietro al testo</dd>
+    <dt>Sommario</dt><dd>Elenco dei capitoli con il loro numero di pagina</dd>
+  </dl>
+  <aside class="notes">A squadre: due minuti per squadra, poi verifica con il pulsante Controlla. Domanda di rinforzo: quale di queste parti si crea in automatico solo se si usano gli stili? (Il sommario.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il regolamento diventa ufficiale</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riapri <b>regolamento-lab.odt</b>. Con <b>Formato › Pagina del titolo</b> aggiungi un frontespizio con titolo, nome, classe e anno scolastico.</li>
+      <li><b>Inserisci › Intestazione e piè di pagina</b>: nell'intestazione scrivi il nome della scuola.</li>
+      <li>Nel piè di pagina: <b>Inserisci › Comando di campo › Numero di pagina</b>.</li>
+      <li><b>Formato › Filigrana</b>: scrivi <b>BOZZA</b>, inclinazione 45°, trasparenza 70%.</li>
+      <li>Salva e poi <b>File › Esporta come › Esporta come PDF</b>: <b>regolamento-lab.pdf</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel PDF il frontespizio è la pagina 1, la scritta BOZZA è dietro al testo nelle pagine del regolamento e il numero di pagina compare in basso.</div>
+  </div>
+  <aside class="notes">Errore tipico: scrivere a mano "1" nel piè di pagina; così tutte le pagine dicono 1. Il comando di campo invece si aggiorna. Nelle versioni recenti esiste anche Inserisci › Numero di pagina. In Word: Inserisci › Numero di pagina, Inserisci › Frontespizio, Progettazione › Filigrana › Filigrana personalizzata. Il PDF si apre in qualsiasi computer e non si modifica per sbaglio: è il formato giusto per consegnare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Anche chi programma deve saper scrivere</h2></div>
+  <figure class="citazione">
+    <blockquote>Oltre a una certa inclinazione per la matematica, un'eccellente padronanza della propria lingua madre è la dote più importante di un programmatore competente.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, premio Turing 1972, nella nota EWD498, 1975</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli <b>screen reader</b> usati da chi non vede saltano da un titolo all'altro solo se hai usato gli stili. Writer ha un <b>controllo dell'accessibilità</b> nel menu Strumenti: segnala, per esempio, le immagini senza testo alternativo.</p></div>
+  <aside class="notes">La traduzione è nostra; l'originale inglese è nella nota manoscritta EWD498 "How do we tell truths that might hurt?" (1975), consultabile nell'archivio Dijkstra dell'Università del Texas. Il controllo dell'accessibilità è presente nelle versioni recenti di LibreOffice (Strumenti › Controllo accessibilità); in Word si trova in Revisione › Verifica accessibilità. Domanda: perché un documento ben strutturato è utile anche a un'AI che deve riassumerlo? (Capisce dove iniziano e finiscono le sezioni.)</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Dalla macchina da scrivere al documento online</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-testi">
+    <li>Esce la macchina da scrivere Sholes e Glidden, con la tastiera QWERTY</li>
+    <li>IBM presenta la MT/ST, una macchina da scrivere che registra il testo su nastro</li>
+    <li>Allo Xerox PARC nasce Bravo, il primo editor WYSIWYG</li>
+    <li>Microsoft pubblica la prima versione di Word</li>
+    <li>Google apre al pubblico Google Documenti</li>
+    <li>Nasce LibreOffice, con Writer</li>
+  </ol>
+  <aside class="notes">Date: Sholes e Glidden (prodotta da Remington) 1874; IBM MT/ST 1964; Bravo 1974, scritto da Butler Lampson e Charles Simonyi; Word 1983, il cui sviluppo fu guidato proprio da Simonyi dopo il passaggio a Microsoft; Google Documenti 2006 (nato dall'acquisto di Writely); LibreOffice 2010, quando una parte della comunità di OpenOffice.org fondò The Document Foundation. Il tranello: molti mettono LibreOffice prima di Google Documenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le lettere circolari</p><h2>Una lettera, tanti destinatari</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Lettera modello</h3><p>Il testo uguale per tutti, con dei <b>campi</b> al posto dei dati: «Nome», «Classe».</p></div>
+    <div class="card soft"><h3>Elenco dei dati</h3><p>Una tabella di Calc: una <b>riga</b> per ogni destinatario, una <b>colonna</b> per ogni campo.</p></div>
+    <div class="card fill"><h3>Stampa in serie</h3><p>Writer unisce i due e crea <b>una lettera per ogni riga</b>.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>È lo stesso meccanismo delle e-mail che iniziano con "Ciao Giulia," inviate a migliaia di persone: un modello e un database. Chi usa i nostri dati per personalizzare i messaggi deve rispettare il <b>GDPR</b>, la legge europea sulla privacy.</p></div>
+  <aside class="notes">In Writer: Strumenti › Stampa in serie guidata. In Word: scheda Lettere › Inizia stampa unione. Esempio scolastico: la lettera ai genitori per la gita, uguale per tutti tranne nome e classe. Chiedere: quante lettere escono da un elenco di 25 righe? (25.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La circolare per la gita</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Calc scrivi in A1:C1 <b>Nome</b>, <b>Cognome</b>, <b>Classe</b> e sotto 4 studenti inventati. Salva <b>elenco-gita.ods</b> e chiudi.</li>
+      <li>In Writer: <b>Strumenti › Stampa in serie guidata</b>. Al passo dell'elenco indirizzi scegli <b>Aggiungi</b> e apri elenco-gita.ods.</li>
+      <li>Scrivi la lettera ai genitori e inserisci i campi «Nome», «Cognome» e «Classe» nel testo.</li>
+      <li>Concludi la procedura e salva il documento unito come <b>circolare-gita.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> circolare-gita.odt ha 4 lettere, una per pagina, ognuna con un nome e una classe diversi. Se vedi ancora «Nome» tra le virgolette, hai salvato il modello e non il documento unito.</div>
+  </div>
+  <aside class="notes">Usare nomi inventati, mai dati veri dei compagni. I campi si possono anche trascinare dal pannello Visualizza › Sorgenti dati (Ctrl+Maiusc+F4) direttamente nel testo. L'etichetta della procedura guidata può variare leggermente tra le versioni di LibreOffice: se qualcosa si blocca, fare la procedura alla LIM passo per passo e far ripetere. In Word: Lettere › Inizia stampa unione › Lettere, poi Seleziona destinatari › Usa elenco esistente, Inserisci campo unione, Finalizza e unisci.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il formato dei file di Writer è <code>.odt</code>, quello di Word è <span class="blank" data-risposta=".docx|docx"></span>.</p>
+    <p>Per iniziare una pagina nuova si usa un'interruzione di pagina: Ctrl+<span class="blank" data-risposta="Invio|enter"></span>.</p>
+    <p>Una formattazione con un nome, come Titolo 1, si chiama <span class="blank" data-risposta="stile"></span>.</p>
+    <p>La scritta chiara BOZZA dietro al testo è la <span class="blank" data-risposta="filigrana"></span>.</p>
+    <p>Per creare tante lettere da un modello e un elenco si usa la stampa in <span class="blank" data-risposta="serie|unione"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: .docx, Invio, stile, filigrana, serie (accettato anche unione, il nome che usa Word).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Word e Writer: programmi diversi, stesse idee</li>
+      <li>Carattere, paragrafo, pagina: tre livelli</li>
+      <li>Titoli con gli stili, mai a mano</li>
+    </ul>
+    <ul class="points">
+      <li>Frontespizio, intestazione, filigrana</li>
+      <li>Per consegnare si esporta in PDF</li>
+      <li>Modello + elenco = lettere circolari</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Nella prossima lezione il documento diventa compilabile: i moduli.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

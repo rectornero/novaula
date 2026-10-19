@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gli array: i vettori · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 7 · Funzioni e array in C e C++</p>
+  <h1>Gli array:<br>i vettori</h1>
+  <p class="lead">Trenta voti in trenta variabili diverse? No, grazie. Un vettore tiene tanti dati dello stesso tipo sotto un solo nome.</p>
+  <aside class="notes">Obiettivi: capire che cos'è un dato strutturato, dichiarare e inizializzare un vettore in C e C++, usare l'indice (da 0 a N-1), scorrere un vettore con for, passare un vettore a una funzione. Durata indicativa: 2-3 ore. Prerequisiti: ciclo for (UDA 6), funzioni e passaggio per indirizzo (lezioni precedenti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti contatti hai nella rubrica del telefono?</h2></div>
+  <div class="poll" data-id="rubrica">
+    <ol><li>Meno di 50</li><li>Da 50 a 150</li><li>Da 150 a 300</li><li>Più di 300</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Poi la domanda: "se doveste scrivere l'app Rubrica, usereste 300 variabili, contatto1, contatto2, ... contatto300?" Nessuno lo farebbe: serve un modo per dare un solo nome a tanti dati. È il vettore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I dati strutturati</p><h2>Un nome, tanti dati</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Senza vettore</h3><pre class="code" style="font-size:26px">int voto1, voto2, voto3,
+    voto4, voto5, voto6;
+<span class="c">// e per 30 voti?</span></pre><p>Un ciclo non può "scorrere" variabili con nomi diversi.</p></div>
+    <div class="card ok"><h3>Con un vettore</h3><pre class="code" style="font-size:26px">int voti[30];
+<span class="c">// voti[0] ... voti[29]</span>
+</pre><p>Un solo nome, e un <b>indice</b> per scegliere la cella.</p></div>
+  </div>
+  <p>Un <mark>dato strutturato</mark> raggruppa più valori. Il vettore (array) è il più semplice: valori <b>dello stesso tipo</b>, uno dopo l'altro.</p>
+  <aside class="notes">Distinguere dato semplice (un int, un float, un char: un solo valore) e dato strutturato (più valori sotto un nome). Il libro chiama il vettore anche "array monodimensionale": una sola dimensione, una fila. Le tabelle a due dimensioni (matrici) arriveranno in seconda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il vettore</p><h2>Una fila di celle numerate da 0</h2></div>
+  <p class="lead">Il vettore <code>voti</code> con 6 celle: sopra il <b>contenuto</b>, sotto l'<b>indice</b>.</p>
+  <div class="bits">
+    <span><b class="on">7</b><small>0</small></span>
+    <span><b>5</b><small>1</small></span>
+    <span><b>8</b><small>2</small></span>
+    <span><b>6</b><small>3</small></span>
+    <span><b>9</b><small>4</small></span>
+    <span><b class="on">4</b><small>5</small></span>
+  </div>
+  <div class="cols-3">
+    <div class="card soft"><p><code>voti[0]</code> vale 7: è il <b>primo</b></p></div>
+    <div class="card soft"><p><code>voti[5]</code> vale 4: è l'<b>ultimo</b></p></div>
+    <div class="card"><p>Con N celle l'indice va da <b>0</b> a <b>N-1</b></p></div>
+  </div>
+  <aside class="notes">Far leggere le celle ad alta voce: "voti di zero vale sette". Domanda: quanto vale voti[3]? (6). E voti[6]? Non esiste: è fuori dal vettore. Curiosità: nel 1982 Edsger Dijkstra scrisse una nota famosa, "Why numbering should start at zero" (EWD831), per spiegare perché conviene contare da 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Qual è l'ultimo elemento del vettore?</h2></div>
+  <pre class="code" style="font-size:36px"><span class="k">int</span> v[5] = {10, 20, 30, 40, 50};</pre>
+  <div class="poll" data-id="ultimo" data-tipo="quiz" data-risposta="B">
+    <ol><li><code>v[5]</code></li><li><code>v[4]</code></li><li><code>v[50]</code></li><li><code>v[-1]</code></li></ol>
+    <p class="why">Le celle sono 5, con indici da 0 a 4: l'ultima è v[4], che vale 50. v[5] è già fuori dal vettore, e il C non te lo segnala!</p>
+  </div>
+  <aside class="notes">Il trabocchetto è la A: "5 celle, quindi l'ultima è la 5". La C confonde indice e contenuto. La D viene da chi conosce Python, dove v[-1] è davvero l'ultimo elemento: in C invece è un errore. Sottolineare che il C non controlla i limiti: leggere v[5] dà un valore a caso o fa andare in crash il programma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I vettori in C e C++</p><h2>Dichiarare, riempire, usare</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:29px"><span class="k">#define</span> N 6             <span class="c">// costante</span>
+
+<span class="k">int</span> voti[N] = {7, 5, 8, 6, 9, 4};
+
+voti[1] = 6;           <span class="c">// cambia il 2°</span>
+printf(<span class="s">"%d"</span>, voti[0]);  <span class="c">// stampa 7</span>
+
+<span class="k">int</span> i = 2;
+printf(<span class="s">"%d"</span>, voti[i + 1]); <span class="c">// 6</span></pre>
+    <ul class="points small">
+      <li><b>Tipo</b> delle celle: <code>int</code></li>
+      <li><b>Nome</b>: <code>voti</code></li>
+      <li><b>Dimensione</b>: N, una costante</li>
+      <li>L'indice può essere una variabile o un'espressione</li>
+      <li>In C++ è uguale; per leggere e scrivere usi <code>cin &gt;&gt; voti[i]</code> e <code>cout</code></li>
+    </ul>
+  </div>
+  <aside class="notes">Con #define N 6 la dimensione si cambia in un solo punto del programma. In C++ si può scrivere anche const int N = 6;. Esiste anche la classe vector del C++, ma a scuola usiamo l'array classico, uguale nei due linguaggi. voti[i + 1] con i = 2 è voti[3], che vale 6 (verificato).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo for e i vettori</p><h2>Il for è fatto apposta per i vettori</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:27px"><span class="k">#define</span> N 5
+<span class="k">int</span> main() {
+    <span class="k">int</span> v[N];
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; N; i++) {
+        printf(<span class="s">"Valore %d: "</span>, i + 1);
+        scanf(<span class="s">"%d"</span>, <span class="hl">&amp;v[i]</span>);
+    }
+    <span class="k">for</span> (<span class="k">int</span> i = N - 1; i &gt;= 0; i--)
+        printf(<span class="s">"%d "</span>, v[i]);
+    <span class="k">return</span> 0;
+}</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Caricamento</h3><p><code>i</code> va da 0 a N-1: la condizione è <code>i &lt; N</code>.</p></div>
+      <div class="card"><h3>Stampa al contrario</h3><p>Passo negativo: da N-1 fino a 0.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Con input 12 15 9 20 14 stampa "14 20 9 15 12" (verificato con gcc). All'utente mostriamo "Valore 1" e non "Valore 0": le persone contano da 1, il computer da 0. Il passo negativo l'avete visto nella UDA 6 con il ciclo for.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le temperature della settimana</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB (linguaggio C) dichiara <code>#define N 5</code> e un vettore <code>int t[N]</code>.</li>
+      <li>Con un <code>for</code> leggi 5 temperature.</li>
+      <li>Stampale al contrario, dall'ultima alla prima.</li>
+      <li>Con un altro <code>for</code> calcola la somma, poi stampa somma e media con un decimale.</li>
+      <li>Salva come <b>temperature-vettore.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 12 15 9 20 14 stampi <code>14 20 9 15 12</code>, somma 70, media 14.0.</div>
+  </div>
+  <aside class="notes">Soluzione della media: printf("%.1f", somma / (float) N); oppure somma / 5.0. Errore tipico: somma / N tra interi dà 14 anche quando la media vera ha decimali (prova con 12 15 9 20 15: media 14.2, la divisione intera dà 14). Verificato con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine le righe: media di un vettore</h2></div>
+  <ol class="puzzle-ordina" data-id="righe-media">
+    <li><code>int v[5] = {6, 8, 5, 7, 9};</code></li>
+    <li><code>int somma = 0;</code></li>
+    <li><code>for (int i = 0; i &lt; 5; i++)</code></li>
+    <li><code>    somma = somma + v[i];</code></li>
+    <li><code>float media = somma / 5.0;</code></li>
+    <li><code>printf("%.1f", media);</code></li>
+  </ol>
+  <aside class="notes">Ordine giusto come scritto; il programma stampa 7.0 (verificato con gcc). Discussione: perché somma = 0 deve stare prima del for e non dentro? Se fosse dentro, si azzererebbe a ogni giro. Perché 5.0 e non 5? Per avere la divisione con i decimali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa?</h2></div>
+  <div class="cols-2">
+    <pre class="code" style="font-size:30px"><span class="k">int</span> v[5] = {3, 1, 4, 1, 5};
+<span class="k">int</span> s = 0;
+<span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; 5; i += 2)
+    s = s + v[i];
+printf(<span class="s">"%d"</span>, s);</pre>
+    <div class="poll" data-id="passo-due" data-tipo="quiz" data-risposta="C">
+      <ol><li>14</li><li>2</li><li>12</li><li>8</li></ol>
+      <p class="why">i vale 0, 2, 4: si sommano v[0], v[2] e v[4], cioè 3 + 4 + 5 = 12.</p>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: stampa 12. Distrattori: 14 è la somma di tutti (non hanno visto i += 2); 2 è la somma delle posizioni dispari (1 + 1); 8 è primo più ultimo. Far tracciare in una tabellina i e s a ogni giro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Prima i dati, poi il codice</h2></div>
+  <figure class="citazione">
+    <blockquote>I cattivi programmatori si preoccupano del codice. I bravi programmatori si preoccupano delle strutture dati e delle loro relazioni.</blockquote>
+    <figcaption><b>Linus Torvalds</b>, creatore di Linux e di Git, in un messaggio a una mailing list, 2006</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Per il computer una foto è un enorme vettore di numeri: una foto da 12 megapixel ha 12 milioni di pixel, ognuno con 3 valori di rosso, verde e blu. Un'AI che riconosce i volti lavora proprio su questi numeri.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese: "Bad programmers worry about the code. Good programmers worry about data structures and their relationships." Linus Torvalds, messaggio alla mailing list di Git, giugno 2006. I conti della foto: 4000 × 3000 = 12 000 000 pixel, ciascuno con tre valori RGB da 0 a 255 (collegamento con la lezione sui colori e l'esadecimale). In realtà l'immagine è una tabella a due dimensioni, ma in memoria è salvata come una lunga fila di numeri, cioè un vettore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trova il bug</p><h2>Questo codice ha un errore. Dove?</h2></div>
+  <pre class="code" style="font-size:32px"><span class="c">1</span>  <span class="k">int</span> v[5];
+<span class="c">2</span>  <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt;= 5; i++)
+<span class="c">3</span>      scanf(<span class="s">"%d"</span>, &amp;v[i]);</pre>
+    <div class="poll" data-id="bug-indici" data-tipo="quiz" data-risposta="B">
+      <ol><li>Riga 1: un vettore va dichiarato con i valori</li><li>Riga 2: con i = 5 si esce dal vettore</li><li>Riga 3: con i vettori la &amp; non serve</li><li>Nessuno: il C conta da 1</li></ol>
+      <p class="why">Gli indici validi sono 0-4: il ciclo salta v[0] e scrive in v[5], che non esiste. Va scritto for (i = 0; i &lt; 5; i++).</p>
+    </div>
+  <aside class="notes">Errore "fuori di uno" (off-by-one), tra i bug più comuni di tutta la programmazione. La C è un tranello: per la singola cella v[i] la &amp; serve eccome, perché scanf deve sapere dove scrivere. Il programma potrebbe anche sembrare funzionare: scrivere fuori dal vettore rovina altre variabili in modo imprevedibile, ed è proprio il tipo di errore di memoria di cui abbiamo parlato nella lezione sui puntatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le funzioni con i vettori</p><h2>Passare un vettore a una funzione</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code" style="font-size:25px"><span class="k">float</span> media(<span class="k">int</span> <span class="hl">v[]</span>, <span class="k">int</span> <span class="hl">n</span>) {
+    <span class="k">int</span> s = 0;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++)
+        s = s + v[i];
+    <span class="k">return</span> (<span class="k">float</span>) s / n;
+}
+<span class="k">void</span> azzera(<span class="k">int</span> v[], <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; n; i++)
+        v[i] = 0;
+}
+<span class="c">// nel main:</span>
+<span class="k">int</span> voti[6] = {7, 5, 8, 6, 9, 4};
+printf(<span class="s">"%.2f"</span>, media(voti, 6));
+azzera(voti, 6);  <span class="c">// voti ora è tutto 0!</span></pre>
+    <div class="stack">
+      <div class="card soft"><p>Si passa il vettore <b>e</b> il numero di celle <code>n</code>: la funzione non sa quanto è lungo.</p></div>
+      <div class="callout hl small">Il nome del vettore è l'<b>indirizzo</b> della prima cella: il vettore non viene copiato, la funzione lavora sull'originale.</div>
+    </div>
+  </div>
+  <aside class="notes">Verificato con gcc: media(voti, 6) stampa 6.50, e dopo azzera tutte le celle valgono 0. Collegamento forte con la lezione precedente: per i vettori il passaggio è sempre "per indirizzo", senza bisogno di scrivere &amp;. Per questo azzera funziona anche se è void. (float) s converte la somma in decimale prima della divisione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Una cassetta degli attrezzi per vettori</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In C scrivi <code>void carica(int v[], int n)</code> che legge n numeri.</li>
+      <li>Scrivi <code>void stampa(int v[], int n)</code> che li stampa su una riga.</li>
+      <li>Scrivi <code>int massimo(int v[], int n)</code>: parti da <code>m = v[0]</code> e confronta con le altre celle.</li>
+      <li>Nel <code>main</code> crea <code>int v[6]</code>, chiama le tre funzioni e stampa il massimo.</li>
+      <li>Salva come <b>attrezzi-vettori.c</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 4 8 15 16 23 42 stampa la riga dei numeri e <code>massimo: 42</code>. Con tutti numeri negativi, per esempio -3 -8 -1 -9 -4 -6, il massimo è -1.</div>
+  </div>
+  <aside class="notes">Soluzione di massimo:
+int massimo(int v[], int n) { int m = v[0]; for (int i = 1; i &lt; n; i++) if (v[i] &gt; m) m = v[i]; return m; }
+Verificato con gcc. Il caso con i negativi smaschera chi parte da m = 0. Queste funzioni torneranno utili nelle prossime due lezioni: ricerca e ordinamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina l'espressione al significato</h2></div>
+  <dl class="puzzle-abbina" data-id="espressioni">
+    <dt><code>int v[N];</code></dt><dd>Crea un vettore di N celle intere</dd>
+    <dt><code>v[0]</code></dt><dd>Il primo elemento</dd>
+    <dt><code>v[N-1]</code></dt><dd>L'ultimo elemento</dd>
+    <dt><code>v[i+1]</code></dt><dd>L'elemento subito dopo v[i]</dd>
+    <dt><code>v[i] = 0;</code></dt><dd>Azzera la cella di indice i</dd>
+  </dl>
+  <aside class="notes">Abbinamenti giusti come scritti. Chiedere: in un ciclo da 0 a N-1, quando si usa v[i+1] bisogna fermarsi a N-2. Perché? Altrimenti all'ultimo giro v[i+1] esce dal vettore. Servirà nell'ordinamento.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il registro dei voti, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su OnlineGDB scegli <b>C++</b> e scrivi <code>int voti[8] = {6, 4, 7, 8, 5, 9, 6, 7};</code></li>
+      <li>Con un solo <code>for</code> calcola la somma, conta le sufficienze (voto ≥ 6) e trova l'<b>indice</b> del voto migliore.</li>
+      <li>Stampa con <code>cout</code> la media, le sufficienze e il voto migliore con il numero della verifica (indice + 1).</li>
+      <li>Salva come <b>registro.cpp</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> media 6.5, sufficienze 6, voto migliore 9 nella verifica n. 6.</div>
+  </div>
+  <aside class="notes">Soluzione nel ciclo: somma += voti[i]; if (voti[i] &gt;= 6) suff++; if (voti[i] &gt; voti[imax]) imax = i; con imax = 0 all'inizio. Media: (float) somma / 8. Verificato con g++. Far notare che conservare l'indice è più utile che conservare il valore: dall'indice si ricava il valore, non il contrario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vettori e intelligenza artificiale</p><h2>Per un'AI ogni parola è un vettore</h2></div>
+  <table class="data compact">
+    <tr><th>Parola</th><th>Vettore (esempio semplificato)</th></tr>
+    <tr><td>gatto</td><td class="mono">{ 0.8, 0.1, 0.6 }</td></tr>
+    <tr><td>cane</td><td class="mono">{ 0.7, 0.2, 0.6 }</td></tr>
+    <tr><td>automobile</td><td class="mono">{ 0.1, 0.9, 0.2 }</td></tr>
+  </table>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I modelli linguistici trasformano ogni parola, o pezzo di parola, in un vettore di centinaia o migliaia di numeri, chiamato <b>embedding</b>. Parole con significato simile hanno vettori vicini: gatto e cane si somigliano, automobile no.</p></div>
+  <aside class="notes">I numeri della tabella sono inventati per l'esempio: i vettori veri hanno centinaia o migliaia di componenti e non sono interpretabili uno per uno. Domanda: quale cella dei vettori distingue meglio gli animali dall'automobile? (la seconda, indice 1). È lo stesso ragionamento del registro: confrontare celle con lo stesso indice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto con i vettori</h2></div>
+  <div class="puzzle-codice" data-risposta="0749" data-aiuto="la prima cifra è l'indice del primo elemento: in C si conta da...">
+    <ul class="points">
+      <li>1ª cifra: l'indice del primo elemento di un vettore</li>
+      <li>2ª cifra: l'indice dell'ultimo elemento di <b>int v[8]</b></li>
+      <li>3ª cifra: in <b>{3, 1, 4, 1, 5}</b>, il valore di <b>v[2]</b></li>
+      <li>4ª cifra: quante celle ha <b>int v[N]</b> con <b>#define N 9</b></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Si parte da 0, l'ultimo è N-1 = 7, v[2] è il terzo elemento (4), N = 9 celle.</div>
+  </div>
+  <aside class="notes">Codice: 0749. Il tranello è la terza cifra: v[2] è il terzo elemento, non il secondo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Un vettore contiene valori tutti dello stesso <span class="blank" data-risposta="tipo"></span>.</p>
+    <p>Il numero che indica la posizione di una cella si chiama <span class="blank" data-risposta="indice"></span>.</p>
+    <p>In <code>int v[10]</code> l'ultimo elemento è <code>v[</code><span class="blank" data-risposta="9"></span><code>]</code>.</p>
+    <p>Per scorrere tutte le celle si usa di solito il ciclo <span class="blank" data-risposta="for"></span>.</p>
+    <p>Un vettore passato a una funzione non viene copiato: si passa il suo <span class="blank" data-risposta="indirizzo"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: tipo, indice, 9, for, indirizzo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Vettore: tanti valori dello stesso tipo, un solo nome</li>
+      <li>Indici da 0 a N-1, il C non controlla i limiti</li>
+      <li><code>int v[N] = {...};</code> e <code>v[i]</code></li>
+    </ul>
+    <ul class="points">
+      <li>Il for scorre il vettore: <code>i &lt; N</code></li>
+      <li>Alle funzioni passi il vettore e la lunghezza</li>
+      <li>Il vettore passa per indirizzo</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula. Prossima lezione: cercare un valore dentro un vettore.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

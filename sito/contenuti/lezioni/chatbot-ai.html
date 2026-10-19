@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I chatbot AI · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">UDA 2 · Basi di intelligenza artificiale</p>
+  <h1>I chatbot AI</h1>
+  <p class="lead">Chiacchierano, spiegano, a volte inventano. Come funzionano davvero, e come usarli senza farsi ingannare.</p>
+  <aside class="notes">Obiettivi: sapere che cos'è un chatbot e distinguere quelli a regole da quelli basati su modelli linguistici; capire l'idea della previsione della parola successiva; conoscere i principali chatbot (ChatGPT, Gemini, Copilot, Poe); scrivere un buon prompt; riconoscere le allucinazioni; conoscere regole d'età e rischi per la privacy. Durata indicativa: 3 ore. Attenzione all'età: quasi tutti i servizi chiedono almeno 13 anni e il permesso dei genitori per i minorenni, e in Italia la legge 132/2025 richiede il consenso dei genitori sotto i 14 anni. Le prove con chatbot veri sono quindi DIMOSTRAZIONI DEL DOCENTE sulla LIM, con l'account del docente; i lab degli studenti non richiedono account.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un chatbot ti risponde con sicurezza. Tu che fai?</h2></div>
+  <div class="poll" data-id="fiducia-chatbot">
+    <ol><li>Mi fido: di solito ci azzecca</li><li>Controllo solo se mi sembra strano</li><li>Controllo sempre su un'altra fonte</li><li>Non uso chatbot</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza giudizio. Tenere a mente i risultati: alla fine della lezione, dopo il fact-checking, rifare la domanda a voce e vedere se qualcuno ha cambiato idea. Chi risponde D è comunque circondato da chatbot: assistenza clienti, assistenti vocali, app scolastiche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Che cosa sono i chatbot</p><h2>Programmi che conversano in linguaggio naturale</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Chatbot a regole</h3>
+      <p>Cercano parole chiave nel messaggio e rispondono con frasi già scritte da una persona.</p>
+      <p class="muted">Esempi: ELIZA (1966), i bot di assistenza «premi 1 per…».</p>
+    </div>
+    <div class="card soft">
+      <h3>Chatbot con modello linguistico</h3>
+      <p>Generano ogni risposta parola per parola con un <b>modello linguistico</b> (LLM) addestrato su enormi quantità di testo.</p>
+      <p class="muted">Esempi: ChatGPT, Gemini, Copilot.</p>
+    </div>
+  </div>
+  <div class="callout"><b>Chatbot</b> = <i>chat</i> + <i>bot</i> (da <i>robot</i>). LLM sta per <i>Large Language Model</i>, grande modello linguistico.</div>
+  <aside class="notes">Il chatbot a regole non sbaglia mai "in modo creativo": o trova la parola chiave o non capisce. Il chatbot con LLM risponde sempre, anche quando non sa: è il motivo delle allucinazioni che vedremo. Gli assistenti vocali come Siri e Alexa sono nati come sistemi soprattutto a regole e oggi stanno integrando modelli linguistici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il primo chatbot</p><h2>ELIZA, la psicoterapeuta di carta</h2></div>
+  <p>Nel 1966 Joseph Weizenbaum, al MIT, scrive ELIZA: risponde rigirando le frasi dell'utente in domande. «Sono triste» diventa «Perché dici di essere triste?». La sua segretaria, che sapeva benissimo come funzionava, un giorno gli chiese di uscire dalla stanza per parlarle in privato.</p>
+  <figure class="citazione">
+    <blockquote>Non mi ero reso conto che un contatto brevissimo con un programma piuttosto semplice potesse indurre un pensiero illusorio così forte in persone del tutto normali.</blockquote>
+    <figcaption><b>Joseph Weizenbaum</b>, informatico del MIT e autore di ELIZA, nel libro «Computer Power and Human Reason», 1976</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra dall'inglese ("I had not realized that extremely short exposures to a relatively simple computer program could induce powerful delusional thinking in quite normal people"). L'episodio della segretaria è raccontato dallo stesso Weizenbaum nel libro. Lo chiamano "effetto ELIZA": tendiamo ad attribuire comprensione e sentimenti a un programma che produce frasi sensate. Chiedere: vale ancora oggi? Con chatbot molto più convincenti, l'effetto è più forte.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-chatbot">
+    <li>Al MIT nasce ELIZA, che imita una psicoterapeuta</li>
+    <li>Il programma PARRY simula un paziente paranoico</li>
+    <li>Siri arriva sull'iPhone</li>
+    <li>Amazon lancia Alexa con l'altoparlante Echo</li>
+    <li>Google presenta il Transformer, il motore dei chatbot moderni</li>
+    <li>ChatGPT viene aperto al pubblico</li>
+  </ol>
+  <aside class="notes">Date: ELIZA 1966; PARRY 1972 (Kenneth Colby, Stanford; nel 1972 "chiacchierò" via rete con ELIZA); Siri ottobre 2011 con l'iPhone 4S; Alexa ed Echo novembre 2014; Transformer giugno 2017, articolo "Attention Is All You Need" di ricercatori di Google; ChatGPT 30 novembre 2022. Il tranello: il Transformer arriva 5 anni prima di ChatGPT. La T di GPT significa proprio Transformer (Generative Pre-trained Transformer).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Costruisci un chatbot a regole in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Calc. In A1 scrivi <b>Tu:</b> e in B1 un messaggio, per esempio <i>ciao, ho fame</i>.</li>
+      <li>In A5:A8 scrivi 4 parole chiave (ciao, compiti, fame, noia), in B5:B8 le risposte del bot.</li>
+      <li>In C5 scrivi <code>=SE(VAL.NUMERO(RICERCA(A5;B$1));B5;"")</code> e trascina fino a C8.</li>
+      <li>Cambia il messaggio in B1: quali risposte compaiono? Prova a mettere in difficoltà il bot.</li>
+      <li>Salva come <b>chatbot-regole.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con <i>ciao, ho fame</i> compaiono le risposte di "ciao" e "fame". Con <i>CIAO</i> funziona lo stesso (RICERCA non guarda le maiuscole), ma con <i>salve</i> il bot resta muto: non conosce sinonimi.</div>
+  </div>
+  <aside class="notes">RICERCA trova la posizione della parola chiave nel messaggio; se non c'è restituisce un errore, quindi VAL.NUMERO dice VERO solo quando la parola c'è. Il $ in B$1 tiene ferma la cella del messaggio quando si trascina. Domande: che cosa succede con "ho fatto i compiti ma ho fame"? (Due risposte insieme.) E con "non ho fame"? (Risponde come se avesse fame: le regole non capiscono la negazione.) È lo stesso limite di ELIZA. Estensione: aggiungere 4 regole e un messaggio di riserva se nessuna regola scatta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gioco</p><h2>«Oggi a pranzo ho mangiato un piatto di…». Che parola viene dopo?</h2></div>
+  <div class="poll" data-id="parola-dopo">
+    <ol><li>pasta</li><li>riso</li><li>minestra</li><li>patatine</li></ol>
+  </div>
+  <p class="muted small">Votate tutti: la classe intera sta per diventare un modello linguistico.</p>
+  <aside class="notes">Dopo il voto: la classe ha prodotto una distribuzione di probabilità, esattamente come un LLM. Il modello calcola per ogni possibile pezzo di parola quanto è probabile che venga dopo, ne sceglie uno (non sempre il più probabile, per variare), lo aggiunge e ricomincia, migliaia di volte. Non "sa" cosa avete mangiato: sa che cosa si scrive di solito dopo quelle parole. Domanda: e se la frase fosse "In Giappone a pranzo ho mangiato un piatto di…"? Il contesto cambia le probabilità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come funziona un modello linguistico</p><h2>Prevedere il pezzo successivo, miliardi di volte</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Pre-addestramento</h3><p>Legge enormi quantità di testo e impara a prevedere il pezzo che viene dopo.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Rifinitura</h3><p>Persone valutano le risposte: impara a seguire istruzioni e a essere utile.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Conversazione</h3><p>Genera la risposta un <b>token</b> alla volta: un token è una parola o un pezzo di parola.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti chatbot recenti, prima di rispondere, scrivono una catena di passaggi intermedi (si chiamano modelli <b>di ragionamento</b>) e possono cercare sul web mostrando le fonti. Sbagliano meno, ma non zero.</p></div>
+  <aside class="notes">Il passo 2 si chiama spesso RLHF (apprendimento per rinforzo da feedback umano): è quello che ha trasformato un "completatore di testi" in un assistente che risponde alle domande. Token: una parola corta comune è spesso un solo token; parole lunghe o rare si spezzano in più token. Quando il chatbot cerca sul web, controllare comunque le fonti che indica: a volte le riassume male.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Alcuni chatbot sbagliano a contare quante «r» ci sono in «ferrovia». Perché?</h2></div>
+  <div class="poll" data-id="token" data-tipo="quiz" data-risposta="B">
+    <ol>
+      <li>Non sono collegati a internet</li>
+      <li>Vedono il testo a pezzi (token), non lettera per lettera</li>
+      <li>Sono programmati per sbagliare le domande facili</li>
+      <li>Le lettere doppie mandano in errore il computer</li>
+    </ol>
+    <p class="why">Il modello riceve numeri che rappresentano pezzi di parola, non le singole lettere: contare le lettere per lui è come contare le lettere di una parola che hai solo sentito pronunciare. Internet non c'entra.</p>
+  </div>
+  <aside class="notes">Il caso famoso è la parola inglese "strawberry" (tre r), su cui molti chatbot hanno sbagliato per mesi. I modelli più recenti spesso ci riescono perché "ragionano" scomponendo la parola lettera per lettera, ma il motivo dell'errore classico resta la tokenizzazione. La A è il distrattore più scelto: confonde il modello con un motore di ricerca. Morale: i chatbot possono essere bravissimi in compiti difficili e sbagliare compiti che a noi sembrano banali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I chatbot più diffusi</p><h2>Abbina ogni chatbot alla sua descrizione</h2></div>
+  <dl class="puzzle-abbina" data-id="chatbot-nomi">
+    <dt>ChatGPT</dt><dd>Di OpenAI: nel 2022 ha reso famosi i modelli linguistici</dd>
+    <dt>Gemini</dt><dd>Di Google: integrato in Android, Gmail e Documenti</dd>
+    <dt>Copilot</dt><dd>Di Microsoft: dentro Windows, Edge e Office</dd>
+    <dt>Poe</dt><dd>Di Quora: un'unica app per chattare con molti modelli diversi</dd>
+    <dt>Le Chat</dt><dd>Di Mistral AI, azienda francese: un chatbot europeo</dd>
+  </dl>
+  <aside class="notes">I quattro del libro più uno europeo. Gemini si chiamava Bard fino al febbraio 2024; Copilot si chiamava Bing Chat fino al novembre 2023. Poe non ha un modello suo: fa da "centralino" verso modelli di aziende diverse, utile per confrontarli. Ne esistono molti altri (per esempio Claude di Anthropic, Meta AI): funzionano tutti con lo stesso principio. Se possibile, mostrare sulla LIM, con l'account del docente, la stessa domanda posta a due chatbot e confrontare le risposte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Punti di forza e limiti</p><h2>Che cosa sanno fare, e che cosa no</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Bravi a…</h3><ul class="points"><li>spiegare in modi diversi</li><li>riassumere e tradurre</li><li>proporre idee ed esempi</li></ul></div>
+    <div class="card bad"><h3>Non garantiscono…</h3><ul class="points"><li>che i fatti siano veri</li><li>notizie recenti (senza ricerca web)</li><li>la riservatezza di ciò che scrivi</li></ul></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I chatbot più recenti sono <b>multimodali</b>: capiscono foto, voce e testo insieme. Puoi fotografare un cartello in tedesco e farti spiegare che cosa dice. Alcuni modelli più piccoli funzionano direttamente sul telefono, anche senza connessione.</p></div>
+  <aside class="notes">Un modello conosce il mondo solo fino alla data in cui sono stati raccolti i suoi dati di addestramento: per le notizie recenti serve la ricerca web, e anche lì bisogna controllare le fonti. Esempi di modelli sul dispositivo: Gemini Nano su alcuni telefoni Android, Apple Intelligence sugli iPhone recenti. Collegare alla NPU della UDA 1. Chiedere: quale uso multimodale vi sarebbe utile per studiare?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere un buon prompt</p><h2>I cinque ingredienti di una buona richiesta</h2></div>
+  <div class="chips"><span class="chip">1 · Ruolo</span><span class="chip">2 · Compito</span><span class="chip">3 · Contesto</span><span class="chip">4 · Formato</span><span class="chip">5 · Limiti</span></div>
+  <div class="cols-2 wide-left">
+    <div class="card ok">
+      <h3>Prompt completo</h3>
+      <p><mark>Sei un tutor di informatica paziente.</mark> Spiegami la differenza tra RAM e disco fisso. <mark>Sono in prima superiore e ho appena studiato i componenti del computer.</mark> Usa un paragone con la vita di tutti i giorni, massimo 5 righe. <mark>Non darmi la soluzione degli esercizi: alla fine fammi una domanda per vedere se ho capito.</mark></p>
+    </div>
+    <div class="card bad">
+      <h3>Prompt vago</h3>
+      <p>«Parlami della RAM.»</p>
+      <p class="muted">Risposta lunga, generica, forse troppo difficile: il modello deve tirare a indovinare che cosa ti serve.</p>
+    </div>
+  </div>
+  <aside class="notes">Far individuare alla classe le cinque parti nel prompt di esempio: ruolo (tutor paziente), compito (spiegami la differenza), contesto (prima superiore, componenti), formato (paragone, 5 righe), limiti (niente soluzioni, domanda finale). Il limite finale trasforma il chatbot da "copia-compiti" a allenatore: è l'uso che consigliamo. Nessun dato personale nel prompt: non serve dire nome, scuola o città.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Laboratorio di prompt</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri Writer. Scegli un argomento di un'altra materia che stai studiando.</li>
+      <li>Scrivi un <b>prompt vago</b> di una riga, per esempio <i>parlami della Prima guerra mondiale</i>.</li>
+      <li>Riscrivilo con <b>tutti e cinque gli ingredienti</b> ed evidenzia ogni parte con un colore diverso.</li>
+      <li>Aggiungi una riga: che cosa ti aspetti di diverso nelle due risposte?</li>
+      <li>Salva come <b>prompt.odt</b> e consegnalo al docente.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il prompt completo ha 5 parti colorate, chiede un formato preciso (righe, elenco, tabella) e non contiene nomi, scuola, indirizzi o altri dati personali.</div>
+  </div>
+  <aside class="notes">Alla fine il docente sceglie 3 o 4 coppie di prompt e le prova sulla LIM con il proprio account, mostrando la risposta al prompt vago e a quello completo. Gli studenti non usano chatbot con account personali in classe. Domanda guida: la risposta al prompt completo è anche più vera, o solo più adatta? (Più adatta: la verità va comunque controllata.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Allucinazioni</p><h2>Un chatbot ti consiglia un libro: titolo, autore, anno. Che cosa ne deduci?</h2></div>
+  <div class="poll" data-id="allucinazione" data-tipo="quiz" data-risposta="D">
+    <ol>
+      <li>Esiste: altrimenti non saprebbe l'anno</li>
+      <li>Esiste, se il chatbot è uno di quelli famosi</li>
+      <li>Esiste, se lo ripete uguale anche la seconda volta</li>
+      <li>Potrebbe essere inventato: va cercato altrove</li>
+    </ol>
+    <p class="why">Un modello linguistico genera testo plausibile, non controlla i fatti. Titoli, date e nomi inventati ma credibili si chiamano <b>allucinazioni</b>, e vengono scritti con lo stesso tono sicuro delle informazioni vere.</p>
+  </div>
+  <aside class="notes">Casi reali da raccontare: nel febbraio 2023, nella pubblicità di lancio di Bard (oggi Gemini), il chatbot attribuì al telescopio James Webb la prima foto di un pianeta fuori dal Sistema solare, che invece era stata scattata nel 2004 da un altro telescopio; nello stesso anno, a New York, due avvocati presentarono in tribunale sentenze inventate da ChatGPT e furono multati. La C è un tranello raffinato: un'allucinazione può ripetersi identica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Fact-checking: smaschera il chatbot</h2>
+  <div class="cols-2">
+    <div class="card small">
+      <p class="tiny muted">Risposta di un chatbot (simulata per l'esercizio)</p>
+      <p>1. Alan Turing nacque a Londra nel 1912.</p>
+      <p>2. ELIZA fu creata nel 1966 da Joseph Weizenbaum all'Università di Stanford.</p>
+      <p>3. La parola «robot» fu inventata dallo scrittore Isaac Asimov.</p>
+      <p>4. Il nome «intelligenza artificiale» nacque a Dartmouth nel 1956.</p>
+      <p>5. ChatGPT è stato aperto al pubblico nel 2020.</p>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>In Calc crea le colonne <b>Frase</b>, <b>Vera o falsa</b>, <b>Correzione</b>, <b>Fonte</b>.</li>
+        <li>Verifica ogni frase con un'enciclopedia o un sito affidabile.</li>
+        <li>Salva come <b>fact-check.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> 3 frasi su 5 sono false. Come nelle risposte vere, gli errori sono mescolati ai fatti giusti.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni. 1 vera (Londra, 23 giugno 1912). 2 falsa: MIT, non Stanford. 3 falsa: la parola "robot" compare nel dramma R.U.R. (1920) di Karel Čapek, che la attribuì al fratello Josef; Asimov inventò invece la parola "robotica". 4 vera (seminario dell'estate 1956). 5 falsa: 30 novembre 2022. Fonti accettabili: Treccani, Wikipedia con le sue note, siti di università e musei. Far notare che la frase 2 è la più insidiosa: data e autore sono giusti, solo l'università è sbagliata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Uso consapevole e rischi</p><h2>Usare i chatbot con la testa</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Età e consenso</h3><p class="small">Quasi tutti i servizi chiedono almeno 13 anni e il permesso dei genitori per i minorenni. In Italia, sotto i 14 anni serve il consenso dei genitori.</p></div>
+    <div class="card"><h3>Privacy</h3><p class="small">Ciò che scrivi resta sui server dell'azienda e può essere usato per addestrare. Niente nomi, foto, password, dati di altri.</p></div>
+    <div class="card"><h3>Studio onesto</h3><p class="small">Usalo come allenatore, non come copia-compiti. Dichiara sempre se e come l'hai usato.</p></div>
+    <div class="card"><h3>Non è una persona</h3><p class="small">Non è un amico né uno psicologo. Per i problemi seri parla con una persona di cui ti fidi.</p></div>
+  </div>
+  <aside class="notes">Fonti: legge 23 settembre 2025, n. 132, art. 4 (in vigore dal 10 ottobre 2025): sotto i 14 anni l'accesso alle tecnologie di AI richiede il consenso di chi esercita la responsabilità genitoriale. Termini d'uso di ChatGPT: almeno 13 anni, permesso dei genitori sotto i 18. Storia italiana: il 30 marzo 2023 il Garante per la privacy bloccò temporaneamente ChatGPT in Italia, anche per l'assenza di verifica dell'età; il servizio tornò a fine aprile dopo alcune modifiche. Sul benessere: ricordare lo sportello d'ascolto della scuola, se presente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vero o falso?</p><h2>Tre convinzioni da mettere alla prova</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>«Il chatbot cerca ogni risposta su Google.»</h3></div><div class="retro"><p><b>Non sempre.</b></p><p class="muted">Di base genera il testo dal modello. Alcuni possono anche cercare sul web: in quel caso mostrano le fonti.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>«Quello che scrivo resta tra me e il chatbot.»</h3></div><div class="retro"><p><b>Falso.</b></p><p class="muted">Le chat sono salvate sui server dell'azienda e, se non lo disattivi, possono servire per addestrare i modelli.</p></div></div>
+    <div class="flip" style="--h:380px"><div class="fronte"><h3>«Nessun chatbot supera il test di Turing.»</h3></div><div class="retro"><p><b>Falso.</b></p><p class="muted">In un esperimento del 2025 molti partecipanti hanno scambiato un chatbot per una persona più spesso delle persone vere.</p></div></div>
+  </div>
+  <aside class="notes">Far votare per alzata di mano prima di girare ogni carta. Terza carta: esperimento di Cameron Jones e Benjamin Bergen (Università della California, San Diego), pubblicato nel 2025: nella versione a tre (giudice, persona, chatbot) GPT-4.5, istruito a impersonare un giovane introverso che conosce bene la cultura di internet, è stato giudicato umano nel 73% delle conversazioni. Discussione: superare il test vuol dire "pensare"? Torniamo alla domanda di Turing del 1950.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il primo chatbot, ELIZA, nacque al MIT nel <span class="blank" data-risposta="1966"></span>.</p>
+    <p>Un modello linguistico genera la risposta un <span class="blank" data-risposta="token|pezzo" style="--w:8ch"></span> alla volta.</p>
+    <p>Un fatto inventato e scritto con sicurezza si chiama <span class="blank" data-risposta="allucinazione" style="--w:13ch"></span>.</p>
+    <p>In Italia, sotto i <span class="blank" data-risposta="14|quattordici" style="--w:4ch"></span> anni, per usare l'AI serve il consenso dei genitori.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 1966; token (accettato pezzo); allucinazione; 14. Poi rifare a voce il sondaggio iniziale: "un chatbot vi risponde con sicurezza, che fate?"</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Chatbot a regole o con modello linguistico</li>
+      <li>Un LLM prevede il token successivo</li>
+      <li>Un buon prompt: ruolo, compito, contesto, formato, limiti</li>
+    </ul>
+    <ul class="points">
+      <li>Le allucinazioni sembrano vere: verifica</li>
+      <li>Niente dati personali nelle chat</li>
+      <li>Età minima e consenso dei genitori</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: creare immagini con l'AI.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

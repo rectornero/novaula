@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Principi di crittografia · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">UDA 10 · La sicurezza e la protezione dei dati</p>
+  <h1>Principi di<br>crittografia</h1>
+  <p class="lead">Dai messaggi segreti di Giulio Cesare al lucchetto delle tue chat: come si nasconde un messaggio a chi non deve leggerlo?</p>
+  <aside class="notes">Obiettivi: conoscere il lessico della crittografia (testo in chiaro, chiave, testo cifrato, crittoanalisi), distinguere sostituzione e trasposizione, usare il cifrario di Cesare, capire la differenza tra cifratura simmetrica e asimmetrica. Durata indicativa: 2-3 ore. Servono LibreOffice Calc e un browser (CyberChef, senza account). Si possono formare squadre fin da subito: lucchetto, quiz e puzzle danno punti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Chi può leggere i messaggi che scrivi su WhatsApp?</h2></div>
+  <div class="poll" data-id="chi-legge">
+    <ol><li>Solo io e chi li riceve</li><li>Anche l'azienda che gestisce l'app</li><li>Chiunque sia collegato al mio stesso Wi-Fi</li><li>Non ne ho idea</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza giudizio: lasciare votare e poi chiedere a un sostenitore di ogni risposta di spiegare. Dal 2016 WhatsApp usa la cifratura end-to-end (protocollo Signal): il contenuto dei messaggi è leggibile solo dai dispositivi di chi scrive e di chi riceve, non dall'azienda né da chi è sul Wi-Fi. L'azienda vede però i metadati (chi scrive a chi, quando). Non dare subito la risposta: "alla fine della lezione saprete spiegare come è possibile".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole giuste</p><h2>Cifrare: trasformare un testo con una chiave</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Testo in chiaro</h3><p style="font-family:var(--mono)">CIAO</p><p class="muted small">Quello che vuoi dire.</p></div>
+    <div class="card fill"><h3>Cifratura</h3><p>algoritmo + <b>chiave</b></p><p class="small">La regola e il suo segreto.</p></div>
+    <div class="card soft"><h3>Testo cifrato</h3><p style="font-family:var(--mono)">FLDR</p><p class="muted small">Illeggibile senza chiave.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="callout"><b>Decifrare</b>: il percorso inverso, fatto da chi <b>conosce la chiave</b>.</div>
+    <div class="callout hl"><b>Crittoanalisi</b>: provare a leggere il messaggio <b>senza</b> la chiave.</div>
+  </div>
+  <p class="lead">La parola viene dal greco <i>kryptós</i>, nascosto, e <i>gráphein</i>, scrivere: <b>crittografia</b> è l'arte di scrivere in modo che legga solo chi deve.</p>
+  <aside class="notes">Crittografia viene dal greco kryptós (nascosto) e gráphein (scrivere). Far ripetere le quattro parole: testo in chiaro, chiave, testo cifrato, crittoanalisi. Domanda: "L'algoritmo è la ricetta, la chiave è...?" (il dosaggio segreto). Il crittografo costruisce cifrari, il crittoanalista li attacca: entrambi lavorano per la sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le tecniche crittografiche</p><h2>Due trucchi antichi: sostituire o spostare</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <p class="num">1</p><h3>Sostituzione</h3>
+      <p>Ogni lettera viene <b>scambiata</b> con un'altra secondo una regola.</p>
+      <p style="font-family:var(--mono)">SCUOLA → VFXROD</p>
+      <p class="muted small">Il cifrario di Cesare: ogni lettera avanza di 3 posti.</p>
+    </div>
+    <div class="card">
+      <p class="num">2</p><h3>Trasposizione</h3>
+      <p>Le lettere restano le stesse ma <b>cambiano di posto</b>.</p>
+      <p style="font-family:var(--mono)">SCUOLA → SULCOA</p>
+      <p class="muted small">Prima le lettere in posizione dispari, poi le pari.</p>
+    </div>
+  </div>
+  <div class="callout">Gli Spartani usavano la <b>scitala</b>: una striscia di cuoio avvolta su un bastone. Srotolata, le lettere apparivano mescolate.</div>
+  <aside class="notes">Verifica degli esempi: SCUOLA con Cesare +3 dà S→V, C→F, U→X, O→R, L→O, A→D, cioè VFXROD. Trasposizione: posizioni 1, 3, 5 (S, U, L) poi 2, 4, 6 (C, O, A), cioè SULCOA. La scitala è una trasposizione: chi aveva un bastone dello stesso diametro (la chiave!) poteva rileggere il messaggio. Chiedere: "In un anagramma si sostituisce o si traspone?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cifrario di Cesare</p><h2>Ogni lettera avanza di 3 posti</h2></div>
+<pre class="code"><span class="c">chiaro </span>  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+<span class="c">cifrato</span>  <span class="hl">D E F G H I J K L M N O P Q R S T U V W X Y Z A B C</span></pre>
+  <div class="cols-2">
+    <ul class="points">
+      <li>La <b>chiave</b> è lo spostamento: qui vale 3.</li>
+      <li>Arrivati alla Z si riparte dalla A, come su un orologio.</li>
+      <li>Per decifrare si torna <b>indietro</b> dello stesso numero.</li>
+    </ul>
+    <div class="card soft"><p>Lo storico romano <b>Svetonio</b> racconta che Giulio Cesare scriveva così le lettere riservate: la D al posto della A, e così via.</p></div>
+  </div>
+  <aside class="notes">Usiamo l'alfabeto internazionale di 26 lettere (con J, K, W, X, Y), quello dei computer. Svetonio, Vite dei Cesari, Vita di Cesare, 56. Fare un esempio alla lavagna con il nome di uno studente. Il ROT13 dei forum è un Cesare con chiave 13: applicato due volte restituisce il testo originale, perché 13 + 13 = 26.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Cesare, chiave 3. Il messaggio cifrato è FLDR. Che cosa c'era scritto?</h2></div>
+  <div class="poll" data-id="fldr" data-tipo="quiz" data-risposta="B">
+    <ol><li>IOGU</li><li>CIAO</li><li>EKCQ</li><li>GMES</li></ol>
+    <p class="why">Per decifrare si torna indietro di 3: F→C, L→I, D→A, R→O. Chi ha scelto IOGU è andato avanti di 3: ha cifrato una seconda volta invece di decifrare.</p>
+  </div>
+  <aside class="notes">Il tranello è IOGU: errore frequentissimo, si applica la regola di cifratura invece di quella inversa. EKCQ e GMES sono spostamenti di una sola lettera (indietro e avanti). Dare 30 secondi con carta e penna prima di votare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La macchina di Cesare in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. In A1 scrivi <b>Chiave</b>, in B1 il numero <b>3</b>.</li>
+      <li>Da A3 ad A6 scrivi una lettera maiuscola per cella: C, I, A, O.</li>
+      <li>In B3 scrivi <code>=CARATTERE(RESTO(CODICE(A3)-65+$B$1;26)+65)</code> e trascina fino a B6.</li>
+      <li>Ora cambia la chiave in B1 con <b>23</b> e scrivi in A3:A6 le lettere F, L, D, R.</li>
+      <li>Salva come <b>cesare.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con chiave 3 in colonna B leggi F, L, D, R. Con chiave 23 il foglio decifra FLDR e torna CIAO: avanzare di 23 equivale a tornare indietro di 3.</div>
+  </div>
+  <aside class="notes">CODICE restituisce il codice ASCII della lettera (A = 65, Z = 90); sottraendo 65 si ottiene la posizione 0-25, RESTO(…;26) fa ripartire dalla A dopo la Z, CARATTERE riconverte il numero in lettera. Funziona anche la chiave -3, perché in Calc RESTO(-1;26) restituisce 25. Se la funzione non viene riconosciuta, cercarla con la procedura guidata fx. Sfida per i più veloci: cifrare il proprio nome con chiave 13 e poi cifrarlo di nuovo con chiave 13.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Crittoanalisi</p><h2>Come si rompe un cifrario senza la chiave</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Forza bruta</h3><p>Si provano <b>tutte</b> le chiavi. Cesare ne ha solo 25 utili: bastano due minuti con carta e penna.</p></div>
+    <div class="card"><h3>Analisi delle frequenze</h3><p>In italiano le lettere più usate sono <b>E, A, I, O</b>. La lettera più frequente nel testo cifrato è probabilmente una E travestita.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Uno studio del 2023 ha mostrato che GPT-4 decifra molto meglio i messaggi in <b>ROT13</b>, frequentissimo in rete, che quelli con altri spostamenti. Un modello linguistico non "ragiona" come un crittoanalista: imita ciò che ha visto più spesso nei dati.</p></div>
+  <aside class="notes">L'analisi delle frequenze fu descritta per la prima volta dal filosofo arabo Al-Kindi, a Baghdad, nel IX secolo, nel "Manoscritto sulla decifrazione dei messaggi crittografici". Lo studio citato è McCoy e altri, "Embers of Autoregression" (2023): il modello era molto più accurato con lo spostamento 13 che con spostamenti meno comuni. Messaggio chiave: un'AI è forte dove i dati di addestramento sono tanti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Detective delle frequenze</h2>
+  <p class="small" style="font-family:var(--mono);line-height:1.35">VO WKMMRSXO MRO MSPBKXY S WOCCKQQS COQBODS CYXY OCSCDSDO ZOB COMYVS WK CO MYXYCMS VO VODDOBO ZSE PBOAEOXDS ZEYS COWZBO DBYFKBO VK MRSKFO</p>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri la lezione su Novaula, copia il testo qui sopra e incollalo in A1 di un nuovo foglio di Calc.</li>
+      <li>In A3 scrivi <code>=CARATTERE(62+RIGA())</code> e trascina fino ad A28: ottieni l'alfabeto.</li>
+      <li>In B3 scrivi <code>=LUNGHEZZA($A$1)-LUNGHEZZA(SOSTITUISCI($A$1;A3;""))</code> e trascina fino a B28.</li>
+      <li>Trova la lettera più frequente, calcola la chiave e decifra con il foglio di Cesare. Salva come <b>frequenze.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la lettera più frequente è la O, che compare 21 volte. Se O sta al posto di E, la chiave è 10. La prima parola decifrata è LE.</div>
+  </div>
+  <aside class="notes">La formula conta quante volte compare una lettera: lunghezza del testo meno lunghezza del testo senza quella lettera. RIGA() in A3 vale 3, quindi 62+3 = 65 = A. Soluzione: chiave 10 (da E a O ci sono 10 posti). Testo in chiaro: "LE MACCHINE CHE CIFRANO I MESSAGGI SEGRETI SONO ESISTITE PER SECOLI MA SE CONOSCI LE LETTERE PIU FREQUENTI PUOI SEMPRE TROVARE LA CHIAVE". Per decifrare con il foglio di Cesare si usa la chiave 16 (26 - 10). Chi finisce prima può scrivere un messaggio cifrato per la squadra avversaria.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine 2500 anni di segreti, dal più antico</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-cifre">
+    <li>Gli Spartani avvolgono i messaggi sulla scitala</li>
+    <li>Giulio Cesare sposta le lettere di 3 posti</li>
+    <li>Al-Kindi, a Baghdad, descrive l'analisi delle frequenze</li>
+    <li>Leon Battista Alberti inventa il disco cifrante</li>
+    <li>Giovan Battista Bellaso pubblica il suo cifrario con parola chiave</li>
+    <li>Marian Rejewski, in Polonia, rompe per primo Enigma</li>
+    <li>Diffie e Hellman inventano la crittografia a chiave pubblica</li>
+  </ol>
+  <aside class="notes">Date: scitala, V secolo a.C.; Cesare, I secolo a.C.; Al-Kindi, IX secolo; disco di Alberti, 1467 (Alberti è considerato il padre della crittografia occidentale); Bellaso, 1553 (il cifrario fu attribuito per errore al francese Vigenère e porta ancora il suo nome); Rejewski, 1932; Diffie e Hellman, 1976. Due italiani in classifica: farlo notare. Tranello: molti mettono Al-Kindi dopo Alberti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Bletchley Park, 1939-1945</p><h2>Enigma: la macchina che sembrava imbattibile</h2></div>
+  <div class="cols-2">
+    <ul class="points small">
+      <li>Macchina tedesca a <b>rotori</b>: ogni tasto premuto cambiava la regola di sostituzione.</li>
+      <li>Più di <b>cento miliardi di miliardi</b> di impostazioni possibili.</li>
+      <li>I polacchi la attaccarono per primi; a Bletchley Park un giovane matematico inglese progettò la <i>Bombe</i>, una macchina per trovare le chiavi.</li>
+      <li>Il punto debole: una lettera non veniva <b>mai</b> cifrata in sé stessa.</li>
+    </ul>
+    <div class="puzzle-codice" data-risposta="TURING" data-aiuto="torna indietro di 7 posti: la A diventa T">
+      <p class="small">Il cognome del matematico che guidò l'attacco a Enigma è cifrato con Cesare, chiave 7:</p>
+      <p style="font-family:var(--mono);font-size:48px;letter-spacing:.12em">ABYPUN</p>
+      <div class="premio"><b>Aperto: TURING.</b> Nel 1950 si chiese anche se le macchine possano pensare.</div>
+    </div>
+  </div>
+  <div class="callout">A Bletchley Park lavoravano <b>migliaia di persone</b>, in gran parte donne: matematiche, linguiste, operatrici delle macchine. Enigma fu battuta da una squadra, non da un genio solitario.</div>
+  <aside class="notes">Enigma dell'esercito tedesco, con 3 rotori scelti tra 5 e 10 cavi sul pannello: circa 1,59 × 10^20 impostazioni. Marian Rejewski, Jerzy Różycki e Henryk Zygalski la attaccarono dal 1932 e nel 1939 consegnarono il loro lavoro agli alleati. La prima Bombe di Turing (migliorata da Gordon Welchman) entrò in funzione nel 1940. A Bletchley Park lavoravano migliaia di persone, in gran parte donne. Soluzione del lucchetto: A-7 = T, B-7 = U, Y-7 = R, P-7 = I, U-7 = N, N-7 = G. Gara a squadre: chi apre per primo prende 2 punti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il segreto sta nella chiave, non nella macchina</h2></div>
+  <figure class="citazione">
+    <blockquote>Il sistema non deve richiedere segretezza e deve poter cadere nelle mani del nemico senza inconvenienti.</blockquote>
+    <figcaption><b>Auguste Kerckhoffs</b>, linguista e crittografo olandese, La cryptographie militaire, 1883</figcaption>
+  </figure>
+  <div class="callout">Nel 1949 <b>Claude Shannon</b>, padre della teoria dell'informazione, lo riassunse così: <i>"il nemico conosce il sistema"</i>.</div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Algoritmo: pubblico</h3><p class="small">AES e RSA li può studiare chiunque. Più esperti li controllano, prima si trovano i difetti.</p></div>
+    <div class="card bad"><h3>Chiave: segreta</h3><p class="small">Se qualcuno la scopre, basta cambiarla. Un algoritmo scoperto, invece, andrebbe buttato.</p></div>
+  </div>
+  <aside class="notes">Traduzioni nostre: Kerckhoffs scrisse in francese ("Il faut qu'il n'exige pas le secret, et qu'il puisse sans inconvénient tomber entre les mains de l'ennemi"), secondo dei suoi sei principi, nel Journal des sciences militaires, 1883. Shannon: "the enemy knows the system being used", in Communication Theory of Secrecy Systems, 1949. Discussione: perché è meglio un algoritmo pubblico? Perché migliaia di esperti lo possono controllare e i difetti vengono trovati prima dei criminali.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il cifrario con la parola chiave</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser su <b>gchq.github.io/CyberChef</b>. Non serve un account.</li>
+      <li>In <b>Operations</b> cerca <b>Vigenère Encode</b> e trascinala in <b>Recipe</b>.</li>
+      <li>Concorda a voce con il compagno una parola chiave (solo lettere) e scrivila in <b>Key</b>.</li>
+      <li>Scrivi un messaggio di due frasi in <b>Input</b>, copia l'<b>Output</b> in un file <b>vigenere.txt</b> e scambiatevi i file.</li>
+      <li>Decifra il messaggio del compagno con <b>Vigenère Decode</b> e la stessa chiave.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con la chiave giusta torna il testo originale. Nel testo cifrato la stessa lettera, per esempio la A, diventa lettere diverse: l'analisi delle frequenze non basta più.</div>
+  </div>
+  <aside class="notes">CyberChef è uno strumento gratuito pubblicato dal GCHQ, il servizio britannico erede di Bletchley Park; funziona nel browser senza registrazione. Il cifrario è quello di Giovan Battista Bellaso (1553): uno spostamento diverso per ogni lettera, dato dalla parola chiave. Fu rotto solo nell'Ottocento (Kasiski lo pubblicò nel 1863). Far provare a decifrare con una chiave sbagliata di una lettera. Domanda ponte: "Come avete fatto a dirvi la chiave? E se foste in due città diverse?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cifratura simmetrica</p><h2>Una sola chiave, da condividere</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Anna</h3><p>cifra con la chiave <code>K</code></p></div>
+    <div class="card night"><h3>Testo cifrato</h3><p class="muted">viaggia in rete</p></div>
+    <div class="card soft"><h3>Marco</h3><p>decifra con la <b>stessa</b> chiave <code>K</code></p></div>
+  </div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Veloce: cifra film e dischi interi.</li>
+      <li>Oggi lo standard è <b>AES</b> (2001): Wi-Fi, chiavette e dischi cifrati.</li>
+    </ul>
+    <div class="callout hl">Il problema: come fai ad arrivare la chiave a Marco <b>senza</b> che nessuno la intercetti?</div>
+  </div>
+  <aside class="notes">Cesare, Bellaso ed Enigma sono tutti cifrari simmetrici. AES (Advanced Encryption Standard) è stato scelto nel 2001 dal NIST statunitense dopo una gara pubblica: lo hanno inventato i belgi Joan Daemen e Vincent Rijmen. Si usa nel Wi-Fi WPA2/WPA3, in BitLocker, nei messaggi delle app di chat. Il problema dello scambio delle chiavi è il ponte verso la slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz da matematici</p><h2>10 compagni, una chiave segreta diversa per ogni coppia. Quante chiavi servono?</h2></div>
+  <div class="poll" data-id="quante-chiavi" data-tipo="quiz" data-risposta="D">
+    <ol><li>10</li><li>20</li><li>90</li><li>45</li></ol>
+    <p class="why">Ognuno dei 10 fa coppia con gli altri 9: 10 × 9 = 90, ma così ogni coppia è contata due volte (Anna-Marco e Marco-Anna). Le chiavi sono 90 : 2 = 45. Con 1000 persone sarebbero 499 500!</p>
+  </div>
+  <aside class="notes">Il tranello è 90: si dimentica che la chiave di Anna e Marco è la stessa di Marco e Anna. Formula: n × (n - 1) : 2. Con tutta la scuola (circa 1000 studenti) servirebbero quasi mezzo milione di chiavi, da consegnare tutte di persona. Per questo serviva un'idea nuova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cifratura asimmetrica</p><h2>Due chiavi: una pubblica e una privata</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Chiave pubblica</h3><p>La dai a <b>tutti</b>. È come un lucchetto aperto: chiunque può chiudere una scatola per te.</p></div>
+    <div class="card fill"><h3>Chiave privata</h3><p>La tieni <b>solo tu</b>. È l'unica chiave che apre quel lucchetto.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un futuro computer quantistico potrebbe rompere le chiavi pubbliche di oggi. Per questo nel 2024 il NIST ha pubblicato i primi standard di crittografia <b>post-quantistica</b>, e alcune app di chat li stanno già adottando.</p></div>
+  <aside class="notes">Proposta da Whitfield Diffie e Martin Hellman nel 1976; il primo sistema completo è RSA (Rivest, Shamir, Adleman, 1977). Si scoprì poi che al GCHQ britannico Clifford Cocks ci era arrivato nel 1973, ma il lavoro rimase segreto fino al 1997. Nella pratica si usano insieme: con l'asimmetrica ci si scambia una chiave simmetrica, poi si cifra tutto con AES. Così funzionano HTTPS e le chat cifrate. Standard post-quantistici del NIST: FIPS 203, 204 e 205, agosto 2024; Signal li usa dal 2023 e iMessage dal 2024.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Anna vuole scrivere a Marco un messaggio che solo lui possa leggere. Con quale chiave lo cifra?</h2></div>
+  <div class="poll" data-id="anna-marco" data-tipo="quiz" data-risposta="C">
+    <ol><li>La chiave privata di Anna</li><li>La chiave pubblica di Anna</li><li>La chiave pubblica di Marco</li><li>La chiave privata di Marco</li></ol>
+    <p class="why">Anna chiude il "lucchetto aperto" che Marco ha dato a tutti: la sua chiave pubblica. Solo la chiave privata di Marco lo riapre. La chiave privata di Marco, Anna non ce l'ha e non deve averla.</p>
+  </div>
+  <aside class="notes">Molti scelgono A, "la mia chiave segreta": l'errore nasce dall'abitudine al simmetrico. Con la chiave privata di Anna si fa un'altra cosa, la firma digitale: chiunque può verificarla con la pubblica di Anna. Lo vedremo nella lezione sulla firma digitale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parola al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="parole-cripto">
+    <dt>Testo in chiaro</dt><dd>Il messaggio prima di essere cifrato</dd>
+    <dt>Chiave</dt><dd>L'informazione segreta che fa funzionare l'algoritmo</dd>
+    <dt>Crittoanalisi</dt><dd>Leggere un messaggio cifrato senza conoscere la chiave</dd>
+    <dt>AES</dt><dd>Lo standard di oggi per la cifratura simmetrica</dd>
+    <dt>Chiave pubblica</dt><dd>Si può dare a chiunque, come un lucchetto aperto</dd>
+    <dt>Chiave privata</dt><dd>Non si consegna mai a nessuno</dd>
+  </dl>
+  <aside class="notes">Lavoro a coppie, 3 minuti. Chi confonde chiave e algoritmo va riportato al principio di Kerckhoffs: l'algoritmo è pubblico, la chiave no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Con Cesare e chiave 3, la lettera A diventa <span class="blank" data-risposta="D"></span>.</p>
+    <p>Spostare le lettere senza cambiarle si chiama <span class="blank" data-risposta="trasposizione"></span>.</p>
+    <p>Se la chiave per cifrare e decifrare è la stessa, la cifratura è <span class="blank" data-risposta="simmetrica"></span>.</p>
+    <p>Per scrivere in segreto a Marco uso la sua chiave <span class="blank" data-risposta="pubblica"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: D, trasposizione, simmetrica, pubblica. Chi sbaglia l'ultima va ripreso sul quiz di Anna e Marco.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Testo in chiaro + chiave → testo cifrato</li>
+      <li>Sostituzione e trasposizione</li>
+      <li>Forza bruta e frequenze rompono i cifrari antichi</li>
+    </ul>
+    <ul class="points">
+      <li>Il segreto sta nella chiave (Kerckhoffs)</li>
+      <li>Simmetrica: una chiave condivisa, AES</li>
+      <li>Asimmetrica: chiave pubblica e chiave privata</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Tornare al sondaggio iniziale: ora sanno spiegare perché WhatsApp non legge i messaggi (cifratura end-to-end con chiavi che stanno solo sui telefoni). Assegnare il compito collegato su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

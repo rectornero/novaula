@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python: la selezione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">UDA 8 · Il coding dei programmi in Python</p>
+  <h1>Python:<br>la selezione</h1>
+  <p class="lead">Se piove prendo l'autobus, altrimenti vado in bici. Oggi i nostri programmi imparano a scegliere una strada: if, else e gli operatori logici.</p>
+  <aside class="notes">Obiettivi: scrivere selezioni semplici (if) e doppie (if-else), usare gli operatori di confronto e gli operatori logici and, or, not, rispettare l'indentazione. Cenni a elif. Durata indicativa: 2-3 ore. Prerequisiti: la selezione nei flow chart (UDA 5) e in C (UDA 6), la lezione "Introduzione a Python". Software: IDLE o un interprete online senza account (OnlineGDB, lingua Python 3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Prima di uscire di casa, quale "se" controlli per primo?</h2></div>
+  <div class="poll" data-id="sel-uscita">
+    <ol><li>Se piove</li><li>Se il telefono è carico</li><li>Se sono in ritardo</li><li>Se ho messo tutto nello zaino</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Dopo il voto: ogni "se" porta a un'azione diversa (ombrello, caricabatterie, corsa). Un programma fa lo stesso: controlla una condizione, che può essere solo vera o falsa, e sceglie quale istruzione eseguire. Chiedere cosa succede "altrimenti": è il ramo else.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Percorsi alternativi</p><h2>Dal rombo del flow chart all'<code>if</code></h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code">voto = float(input(<span class="s">"Voto: "</span>))
+<span class="k">if</span> voto &gt;= 6:
+    print(<span class="s">"Sufficiente"</span>)
+<span class="k">else</span>:
+    print(<span class="s">"Insufficiente"</span>)
+print(<span class="s">"Fine"</span>)</pre>
+      <p class="small">La <b>condizione</b> <code>voto &gt;= 6</code> è vera (<code>True</code>) o falsa (<code>False</code>): si esegue <b>uno solo</b> dei due rami.</p>
+    </div>
+    <svg viewBox="-6 0 612 560" width="100%" role="img" aria-label="Flow chart della selezione doppia">
+      <g font-family="DM Sans, sans-serif" font-size="30" text-anchor="middle">
+        <polygon points="300,20 470,110 300,200 130,110" style="fill:var(--accent-soft);stroke:var(--accent);stroke-width:4"/>
+        <text x="300" y="120" style="font-family:var(--mono);font-size:28px;font-variant-ligatures:none">voto &gt;= 6</text>
+        <path d="M130 110 H70 V280" style="fill:none;stroke:var(--ink);stroke-width:4"/>
+        <path d="M470 110 H530 V280" style="fill:none;stroke:var(--ink);stroke-width:4"/>
+        <text x="90" y="95" style="fill:var(--ok);font-weight:700">Vero</text>
+        <text x="510" y="95" style="fill:var(--bad);font-weight:700">Falso</text>
+        <rect x="0" y="280" width="250" height="90" rx="12" style="fill:#fff;stroke:var(--ink);stroke-width:4"/>
+        <text x="125" y="335">Sufficiente</text>
+        <rect x="350" y="280" width="250" height="90" rx="12" style="fill:#fff;stroke:var(--ink);stroke-width:4"/>
+        <text x="475" y="335">Insufficiente</text>
+        <path d="M125 370 V440 H475 V370 M300 440 V470" style="fill:none;stroke:var(--ink);stroke-width:4"/>
+        <rect x="200" y="470" width="200" height="80" rx="40" style="fill:var(--ink)"/>
+        <text x="300" y="520" style="fill:#fff">Fine</text>
+      </g>
+    </svg>
+  </div>
+  <aside class="notes">Collegare al flow chart della UDA 5: il rombo è la condizione, i due rami sono il vero e il falso, poi le strade si ricongiungono. "Fine" viene stampato sempre, perché è fuori dalla selezione. Far provare con 6 (Sufficiente: l'operatore >= include l'uguale) e con 5.5. In Python i valori logici si scrivono True e False con l'iniziale maiuscola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole di Python</p><h2>Due punti e rientro: niente graffe</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Dopo la condizione e dopo <code>else</code> ci vogliono i <b>due punti</b> <code>:</code></li>
+      <li>Le istruzioni del blocco sono <b>rientrate</b> di 4 spazi (tasto Tab in IDLE)</li>
+      <li>Il blocco finisce quando il rientro finisce</li>
+      <li>In C il blocco stava tra <code>{ }</code>: in Python il rientro è obbligatorio</li>
+    </ul>
+    <figure class="citazione">
+      <blockquote>Bello è meglio che brutto. […] La leggibilità conta.</blockquote>
+      <figcaption><b>Tim Peters</b>, programmatore statunitense, <i>The Zen of Python</i>, 1999 (prova <code>import this</code> in IDLE)</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">Traduzione nostra dall'inglese ("Beautiful is better than ugly. [...] Readability counts."). The Zen of Python sono 19 aforismi che Tim Peters, uno dei primi sviluppatori di Python, pubblicò nel 1999 sulla mailing list del linguaggio; oggi sono nel documento ufficiale PEP 20 e compaiono scrivendo import this. Scelta di progetto di Guido van Rossum: il rientro, che in C è solo una buona abitudine, in Python è una regola. Se manca, Python dà IndentationError. Avvisare: non mescolare spazi e tabulazioni (IDLE inserisce comunque 4 spazi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Che cosa stampa questo programma?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">x = 3
+<span class="k">if</span> x &gt; 5:
+    print(<span class="s">"A"</span>)
+print(<span class="s">"B"</span>)</pre>
+    <div class="poll" data-id="sel-rientro" data-tipo="quiz" data-risposta="D">
+      <ol><li>A e poi B</li><li>Niente</li><li>Solo A</li><li>Solo B</li></ol>
+      <p class="why">La condizione 3 &gt; 5 è falsa, quindi print("A") viene saltato. print("B") non è rientrato: è fuori dall'if e si esegue sempre.</p>
+    </div>
+  </div>
+  <aside class="notes">Il tranello è la B: chi pensa che tutto ciò che sta sotto l'if dipenda dalla condizione. È il rientro a decidere. Variante da proporre a voce: se anche print("B") fosse rientrato, l'output sarebbe vuoto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori di confronto</p><h2>Domande che hanno risposta vero o falso</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Operatore</th><th>Significato</th><th>Esempio vero</th></tr>
+      <tr><td class="mono hl">==</td><td>uguale a</td><td class="mono">5 == 5</td></tr>
+      <tr><td class="mono">!=</td><td>diverso da</td><td class="mono">5 != 4</td></tr>
+      <tr><td class="mono">&lt;  &gt;</td><td>minore, maggiore</td><td class="mono">3 &lt; 8</td></tr>
+      <tr><td class="mono">&lt;=  &gt;=</td><td>minore o uguale, maggiore o uguale</td><td class="mono">6 &gt;= 6</td></tr>
+    </table>
+    <div class="card bad"><h3>Trappola</h3><p><code>=</code> assegna un valore, <code>==</code> confronta. <code>if x = 5:</code> è un errore di sintassi.</p></div>
+  </div>
+  <div class="callout">Solo in Python: <code>1 &lt;= voto &lt;= 10</code> controlla in una volta che il voto sia tra 1 e 10.</div>
+  <aside class="notes">Anche le stringhe si confrontano: "ciao" == "Ciao" è False perché maiuscole e minuscole sono diverse. Il confronto concatenato 1 <= voto <= 10 equivale a 1 <= voto and voto <= 10; in C non funziona così. Nella shell si può scrivere 6 >= 6 e vedere True.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Pari o dispari?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In IDLE apri <b>File, New File</b>.</li>
+      <li>Leggi un numero intero con <code>int(input(…))</code>.</li>
+      <li>Se il resto della divisione per 2 è zero (<code>n % 2 == 0</code>) stampa "pari", altrimenti "dispari".</li>
+      <li>Salva come <b>pari.py</b>, premi F5 e prova con 7, 10, 0 e -3.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 7 dispari, 10 pari, 0 pari, -3 dispari. Se ottieni SyntaxError, controlla <code>==</code> e i due punti.</div>
+  </div>
+  <aside class="notes">Soluzione:
+n = int(input("Numero: "))
+if n % 2 == 0:
+    print(n, "è pari")
+else:
+    print(n, "è dispari")
+Lo zero è pari (0 % 2 vale 0): molti studenti lo dubitano. In Python -3 % 2 vale 1, quindi -3 risulta dispari correttamente. Chi finisce prima: dire anche se il numero è multiplo di 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La selezione semplice</p><h2>Un <code>if</code> senza <code>else</code></h2></div>
+  <div class="cols-2">
+<pre class="code">totale = float(input(<span class="s">"Spesa: "</span>))
+<span class="k">if</span> totale &gt; 50:
+    totale = totale - 5
+    print(<span class="s">"Sconto di 5 euro!"</span>)
+print(<span class="s">"Da pagare:"</span>, totale)</pre>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando sblocchi il telefono con il viso, una rete neurale calcola <b>quanto</b> il volto somiglia a quello salvato. Poi la decisione è un semplice confronto con una soglia, come <code style="background:rgba(255,255,255,.14)">if somiglianza &gt; soglia:</code> sblocca.</p></div>
+  </div>
+  <p class="small muted">Se la condizione è falsa non succede niente di speciale: il programma prosegue con la riga dopo il blocco.</p>
+  <aside class="notes">Con 60 euro: "Sconto di 5 euro!" e "Da pagare: 55.0". Con 40 euro: solo "Da pagare: 40.0". Sul riconoscimento facciale: il modello produce un punteggio di somiglianza; la soglia la sceglie chi progetta il sistema. Soglia alta: meno sblocchi sbagliati ma qualche volta non riconosce il proprietario. Soglia bassa: il contrario. Chiedere: dove mettereste la soglia per un telefono? E per una banca?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine il programma del cinema</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Biglietto <b>ridotto 5 euro</b> per chi ha meno di 14 anni, <b>intero 8 euro</b> per gli altri.</p>
+      <p class="small muted">Guarda bene i rientri: dicono a quale blocco appartiene ogni riga.</p>
+    </div>
+    <ol class="puzzle-ordina" data-id="sel-cinema">
+      <li><code>eta = int(input("Età? "))</code></li>
+      <li><code>if eta &lt; 14:</code></li>
+      <li><code>&nbsp;&nbsp;&nbsp;&nbsp;prezzo = 5</code></li>
+      <li><code>else:</code></li>
+      <li><code>&nbsp;&nbsp;&nbsp;&nbsp;prezzo = 8</code></li>
+      <li><code>print("Prezzo:", prezzo)</code></li>
+    </ol>
+  </div>
+  <aside class="notes">Ordine corretto: input, if eta < 14:, prezzo = 5 (rientrato), else:, prezzo = 8 (rientrato), print. Scambiando i due prezzi il programma funziona ma è ingiusto: i ragazzi pagherebbero di più. Il print deve stare in fondo e senza rientro, altrimenti si eseguirebbe solo in un ramo. Lavoro a coppie, 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori logici</p><h2><code>and</code>, <code>or</code>, <code>not</code>: condizioni composte</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>A</th><th>B</th><th>A and B</th><th>A or B</th><th>not A</th></tr>
+      <tr><td class="mono">True</td><td class="mono">True</td><td class="mono hl">True</td><td class="mono">True</td><td class="mono">False</td></tr>
+      <tr><td class="mono">True</td><td class="mono">False</td><td class="mono">False</td><td class="mono">True</td><td class="mono">False</td></tr>
+      <tr><td class="mono">False</td><td class="mono">True</td><td class="mono">False</td><td class="mono">True</td><td class="mono">True</td></tr>
+      <tr><td class="mono">False</td><td class="mono">False</td><td class="mono">False</td><td class="mono hl">False</td><td class="mono">True</td></tr>
+    </table>
+    <ul class="points small">
+      <li><b>and</b>: vero solo se sono vere <b>tutte e due</b></li>
+      <li><b>or</b>: vero se è vera <b>almeno una</b></li>
+      <li><b>not</b>: rovescia</li>
+    </ul>
+  </div>
+<pre class="code"><span class="k">if</span> giorno == <span class="s">"sabato"</span> <span class="k">or</span> giorno == <span class="s">"domenica"</span>:
+    print(<span class="s">"Niente sveglia!"</span>)</pre>
+  <aside class="notes">Sono gli stessi connettivi della lezione sulla logica della UDA 1 (congiunzione, disgiunzione, negazione) e di && || ! in C. Errore tipico: scrivere if giorno == "sabato" or "domenica": Python non dà errore, ma la condizione è sempre vera, perché una stringa non vuota come "domenica" conta come vero. Va ripetuto il confronto per intero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni condizione al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="sel-logica">
+    <dt><code>x % 2 == 0</code></dt><dd>x è pari</dd>
+    <dt><code>x &gt;= 1 and x &lt;= 10</code></dt><dd>x è compreso tra 1 e 10</dd>
+    <dt><code>x &lt; 1 or x &gt; 10</code></dt><dd>x è fuori dall'intervallo da 1 a 10</dd>
+    <dt><code>not x == 0</code></dt><dd>x è diverso da zero</dd>
+    <dt><code>x % 2 == 0 and x % 5 == 0</code></dt><dd>x è multiplo di 10</dd>
+  </dl>
+  <aside class="notes">A squadre, 2 minuti. Le due condizioni più insidiose sono la seconda e la terza: una è la negazione dell'altra (leggi di De Morgan: not (A and B) equivale a not A or not B). not x == 0 si legge not (x == 0), cioè x != 0. Un numero pari e multiplo di 5 è multiplo di 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il programmatore vuole accettare solo voti da 1 a 10. Con <code>voto = 15</code>?</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code"><span class="k">if</span> voto &gt;= 1 <span class="k">or</span> voto &lt;= 10:
+    print(<span class="s">"valido"</span>)
+<span class="k">else</span>:
+    print(<span class="s">"non valido"</span>)</pre>
+    <div class="poll" data-id="sel-or" data-tipo="quiz" data-risposta="A">
+      <ol><li>Stampa valido</li><li>Stampa non valido</li><li>Errore</li><li>Non stampa niente</li></ol>
+      <p class="why">15 &gt;= 1 è vero, e con or basta una condizione vera. Con or questo controllo accetta qualsiasi numero: serviva and.</p>
+    </div>
+  </div>
+  <aside class="notes">Quasi tutti rispondono B perché "sanno" cosa voleva fare il programmatore. Ma il computer esegue quello che c'è scritto, non quello che intendevamo (l'obiezione di Lady Lovelace, vista nella UDA 1). Correzione: and oppure 1 <= voto <= 10. Chiedere: esiste un numero per cui stampa "non valido"? No: ogni numero è maggiore o uguale a 1 oppure minore o uguale a 10.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il controllo del voto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo file: leggi un voto con <code>float(input(…))</code>.</li>
+      <li>Se il voto è <b>fuori</b> da 1-10 stampa "Voto non valido".</li>
+      <li>Altrimenti, con un secondo <code>if</code> rientrato, stampa "Sufficiente" (da 6 in su) o "Insufficiente".</li>
+      <li>Salva come <b>voto.py</b> e prova con 5.5, 6, 10, 11 e 0.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 5.5 insufficiente, 6 e 10 sufficiente, 11 e 0 non validi. Se 11 risulta sufficiente, hai usato <code>and</code> al posto di <code>or</code> (o il contrario).</div>
+  </div>
+  <aside class="notes">Soluzione (selezioni annidate):
+voto = float(input("Voto: "))
+if voto < 1 or voto > 10:
+    print("Voto non valido")
+else:
+    if voto >= 6:
+        print("Sufficiente")
+    else:
+        print("Insufficiente")
+Nel controllo dei dati in input si cerca prima l'errore: è la stessa idea vista in C. Chi finisce prima può aggiungere i giudizi Buono e Ottimo: è il ponte verso elif, nella slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Bonus</p><h2>Più di due strade: <code>elif</code></h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code">voto = float(input(<span class="s">"Voto: "</span>))
+<span class="k">if</span> voto &lt; 6:
+    print(<span class="s">"Insufficiente"</span>)
+<span class="k">elif</span> voto &lt; 7:
+    print(<span class="s">"Sufficiente"</span>)
+<span class="k">elif</span> voto &lt; 9:
+    print(<span class="s">"Buono"</span>)
+<span class="k">else</span>:
+    print(<span class="s">"Ottimo"</span>)</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Come funziona</h3><p><code>elif</code> = "else if". Python prova le condizioni dall'alto: esegue <b>solo la prima vera</b> e salta tutte le altre.</p></div>
+      <p class="small muted">Per questo <code>voto &lt; 7</code> basta: se arrivi lì, sai già che il voto non è sotto il 6.</p>
+    </div>
+  </div>
+  <aside class="notes">Con 6.5 stampa Sufficiente, con 8 Buono, con 9 Ottimo. L'ordine delle condizioni conta: se mettessimo prima voto < 9, un 4 risulterebbe "Buono". elif evita di annidare tanti if-else uno dentro l'altro. In C si usava else if; in Python c'è anche match, ma non serve ora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia vera</p><h2>Apollo 11: il software che sa scegliere</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1969</p><p>Durante la discesa sulla Luna il computer di bordo segnala gli allarmi <b>1201</b> e <b>1202</b>: è sovraccarico. Il software, scritto al MIT dal gruppo di <b>Margaret Hamilton</b>, era stato progettato per decidere: se non c'è tempo per tutto, tiene solo i compiti più importanti. L'allunaggio continua.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Negli anni '70 i "sistemi esperti" erano migliaia di regole <b>se… allora</b> scritte a mano. Il machine learning ribalta l'idea: un <b>albero di decisione</b> è una catena di <code style="background:rgba(255,255,255,.14)">if</code> che il computer impara da solo, guardando gli esempi.</p></div>
+  </div>
+  <aside class="notes">Fatti: 20 luglio 1969. Il computer di guida dell'Apollo (AGC) ricevette più lavoro di quanto potesse svolgere; il suo sistema operativo ripartiva e manteneva i compiti a priorità più alta, scartando quelli meno importanti. Il controllo a terra decise "go" e Armstrong e Aldrin atterrarono. Margaret Hamilton dirigeva la divisione software del MIT Instrumentation Laboratory; nel 2016 ha ricevuto la Medaglia presidenziale della libertà. Sistemi esperti: per esempio MYCIN (Stanford, anni '70), regole per suggerire antibiotici. Gli alberi di decisione si usano ancora oggi nel machine learning, per esempio per filtri e previsioni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Sfida: l'anno bisestile</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Un anno è bisestile se è divisibile per 4 ma <b>non</b> per 100, oppure se è divisibile per 400.</li>
+      <li>Leggi un anno e traduci la regola in <b>una sola</b> condizione con <code>and</code>, <code>or</code>, <code>%</code>, <code>==</code> e <code>!=</code>.</li>
+      <li>Stampa "bisestile" o "non bisestile".</li>
+      <li>Salva come <b>bisestile.py</b> e prova 2024, 1900, 2000, 2026.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 2024 e 2000 bisestili; 1900 e 2026 no. Il 1900 è la trappola: è divisibile per 4 ma anche per 100.</div>
+  </div>
+  <aside class="notes">Soluzione:
+anno = int(input("Anno: "))
+if (anno % 4 == 0 and anno % 100 != 0) or anno % 400 == 0:
+    print("bisestile")
+else:
+    print("non bisestile")
+Le parentesi rendono chiaro l'ordine (in Python and ha comunque la precedenza su or). È la regola del calendario gregoriano, introdotto nel 1582 da papa Gregorio XIII. Sfida a squadre: la prima coppia che passa tutti e quattro i test vince.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto ragionando come Python</h2></div>
+  <div class="puzzle-codice" data-risposta="2128" data-aiuto="la prima cifra: 2000 e 2024 sono bisestili, 1900 e 2100 no">
+    <ul class="points">
+      <li>1ª cifra: quanti sono bisestili tra 1900, 2000, 2024 e 2100?</li>
+      <li>2ª cifra: scrivi 1 se <code>not (3 &gt; 5)</code> è True, 0 se è False</li>
+      <li>3ª cifra: con <code>x = 12</code>, che cosa stampa <code>if x &gt; 10 and x &lt; 20: print(x % 5)</code>?</li>
+      <li>4ª cifra: con <code>a = 4</code>, dopo <code>if a &gt; 5 or a == 4: a = a * 2</code>, quanto vale <code>a</code>?</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2 bisestili, not False = True, 12 % 5 = 2, con or basta a == 4: a = 8.</div>
+  </div>
+  <aside class="notes">Codice: 2128. A squadre senza computer, poi verifica nella shell. Errori tipici: 3 bisestili (si conta anche il 2100) e 4ª cifra 4 (chi pensa che con or servano entrambe le condizioni vere).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Dopo la condizione di un <code>if</code> si scrivono i <span class="blank" data-risposta="due punti|:"></span>.</p>
+    <p>Il blocco di istruzioni in Python è indicato dal <span class="blank" data-risposta="rientro|indentazione"></span>.</p>
+    <p>Per controllare se due valori sono uguali uso l'operatore <span class="blank" data-risposta="=="></span>.</p>
+    <p>Se devono essere vere tutte e due le condizioni uso <span class="blank" data-risposta="and"></span>; se ne basta una uso <span class="blank" data-risposta="or"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: due punti, rientro (accettato indentazione), ==, and, or.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>if</code> condizione<code>:</code> blocco rientrato</li>
+      <li>Selezione doppia con <code>else</code>, semplice senza</li>
+      <li><code>==</code> confronta, <code>=</code> assegna</li>
+    </ul>
+    <ul class="points">
+      <li><code>and</code> tutte vere, <code>or</code> almeno una, <code>not</code> rovescia</li>
+      <li><code>elif</code> per più di due strade</li>
+      <li>Il computer esegue ciò che scrivi, non ciò che intendi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: il ciclo while, per ripetere finché una condizione è vera.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

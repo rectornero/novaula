@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ciclo for: ripeti N volte · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 6 · La programmazione imperativa in C e C++</p>
+  <h1>Il ciclo for:<br>ripeti N volte</h1>
+  <p class="lead">L'iterazione definita, quando sai in anticipo quante volte ripetere: contatori, accumulatori, conti alla rovescia e cicli dentro i cicli.</p>
+  <aside class="notes">Obiettivi: scrivere un ciclo for in C e C++, tracciarne l'esecuzione, usare contatori e accumulatori, il passo negativo e i cicli annidati. Collegamento con la UDA 5 (iterazione definita nei flow chart e in Flowgorithm) e con Scratch (blocco "ripeti 10 volte"). Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi stampare i numeri da 1 a 1000. Come fai?</h2></div>
+  <div class="poll" data-id="for-mille">
+    <ol><li>Scrivo 1000 printf, con pazienza</li><li>Copio e incollo e poi correggo i numeri</li><li>Faccio ripetere al computer la stessa istruzione</li><li>Chiedo a un'AI di scrivere il programma</li></ol>
+  </div>
+  <aside class="notes">Sondaggio scherzoso. Far notare che anche l'AI, se è brava, scriverebbe un ciclo: tre righe di codice invece di mille. In Scratch c'era il blocco "ripeti 10 volte": oggi vediamo la sua versione in C.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo for</p><h2>Le tre parti del for</h2></div>
+<pre class="code" style="font-size:38px;align-self:flex-start;flex:none"><span class="k">for</span> (<span class="hl">i = 1</span>; <span class="hl">i &lt;= 5</span>; <span class="hl">i++</span>) {
+    printf(<span class="s">"%d\n"</span>, i);
+}</pre>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Partenza</h3><p><code>i = 1</code>: si fa <b>una volta sola</b>, all'inizio.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Condizione</h3><p><code>i &lt;= 5</code>: si controlla <b>prima di ogni giro</b>. Se è falsa, il ciclo finisce.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Passo</h3><p><code>i++</code> vuol dire <code>i = i + 1</code>: si fa <b>alla fine di ogni giro</b>.</p></div>
+  </div>
+  <aside class="notes">La variabile i si chiama contatore o variabile di controllo; va dichiarata (int i;). In C99 e in C++ si può dichiarare dentro il for: for (int i = 1; i &lt;= 5; i++). Il programma stampa 1, 2, 3, 4, 5 su righe diverse. In C++ il corpo diventa cout &lt;&lt; i &lt;&lt; endl;</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Seguiamo il ciclo a mano</p><h2>La tabella di traccia</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Giro</th><th>i</th><th>i &lt;= 5?</th><th>Stampa</th></tr>
+      <tr><td>1</td><td class="mono">1</td><td>vero</td><td class="mono">1</td></tr>
+      <tr><td>2</td><td class="mono">2</td><td>vero</td><td class="mono">2</td></tr>
+      <tr><td>3</td><td class="mono">3</td><td>vero</td><td class="mono">3</td></tr>
+      <tr><td>4</td><td class="mono">4</td><td>vero</td><td class="mono">4</td></tr>
+      <tr><td>5</td><td class="mono">5</td><td>vero</td><td class="mono">5</td></tr>
+      <tr class="hl"><td>fine</td><td class="mono hl">6</td><td class="hl">falso</td><td class="hl">esce</td></tr>
+    </table>
+    <div class="stack">
+      <div class="card soft"><p class="num">5</p><p>giri del ciclo</p></div>
+      <div class="card soft"><p class="num">6</p><p>controlli della condizione: l'ultimo è falso</p></div>
+      <p class="small">Dopo il ciclo <code>i</code> vale <b>6</b>, non 5.</p>
+    </div>
+  </div>
+  <aside class="notes">La tabella di traccia è lo strumento principale per capire i cicli: chiederla anche nelle verifiche. Domanda per la classe: quanto vale i dopo il ciclo? Molti dicono 5: è 6, perché è proprio il valore che rende falsa la condizione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quante volte viene stampato Ciao?</h2></div>
+  <pre class="code" style="align-self:flex-start"><span class="k">for</span> (i = 0; i &lt;= 10; i++) printf(<span class="s">"Ciao\n"</span>);</pre>
+  <div class="poll" data-id="for-volte" data-tipo="quiz" data-risposta="C">
+    <ol><li>10</li><li>9</li><li>11</li><li>Infinite volte</li></ol>
+    <p class="why">i parte da 0 e arriva a 10 compreso: 0, 1, 2, … 10 sono <b>11</b> valori. Per avere 10 giri si scrive <code>i = 0; i &lt; 10</code> oppure <code>i = 1; i &lt;= 10</code>.</p>
+  </div>
+  <aside class="notes">È l'errore "di uno" (in inglese off-by-one), tra i più comuni anche tra i professionisti. Verificato con gcc: 11 righe. Regola pratica: numero di giri = valore finale - valore iniziale + 1 quando si usa &lt;=.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>La tabellina che non sbaglia mai</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C chiedi all'utente quale tabellina vuole e leggi <code>n</code>.</li>
+      <li>Con un <code>for</code> da 1 a 10 stampa una riga per giro: <code>7 x 3 = 21</code>.</li>
+      <li>Usa tre segnaposto: <code>printf("%d x %d = %d\n", n, i, n * i);</code></li>
+      <li>Modifica il ciclo per arrivare fino a 20.</li>
+      <li>Salva come <b>tabellina-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 7 la prima riga è <code>7 x 1 = 7</code> e l'ultima <code>7 x 10 = 70</code>: dieci righe in tutto. Fino a 20 l'ultima è <code>7 x 20 = 140</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: int n, i; printf("Quale tabellina? "); scanf("%d", &amp;n); for (i = 1; i &lt;= 10; i++) { printf("%d x %d = %d\n", n, i, n * i); } Uscita verificata con gcc. Sfida: chiedere anche fino a quale numero arrivare (una seconda scanf).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Contatori e accumulatori</p><h2>La somma da 1 a 100, senza fatica</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:31px"><span class="k">int</span> somma = 0;   <span class="c">// accumulatore</span>
+<span class="k">for</span> (i = 1; i &lt;= 100; i++) {
+    somma = somma + i;
+}
+printf(<span class="s">"%d\n"</span>, somma);   <span class="c">// 5050</span></pre>
+    <div class="card soft"><h3>Si racconta che…</h3><p>il piccolo <b>Carl Friedrich Gauss</b>, a scuola, sommò i numeri da 1 a 100 in pochi secondi: 1 + 100, 2 + 99, 3 + 98… sono 50 coppie da 101. Risultato: <b>5050</b>.</p></div>
+  </div>
+  <div class="callout">L'<b>accumulatore</b> parte da 0 e a ogni giro aggiunge qualcosa. Il <b>contatore</b> aggiunge sempre 1. Inizializzali sempre <b>prima</b> del ciclo!</div>
+  <aside class="notes">L'aneddoto di Gauss viene dal suo primo biografo (Sartorius von Waltershausen, 1856); i dettagli (i numeri esatti, l'età) variano a seconda delle fonti: presentarlo come racconto. Il computer non è furbo come Gauss: fa 100 somme, ma in un tempo invisibile. Errore tipico: dichiarare int somma; senza = 0, il valore iniziale è casuale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>In che ordine lavora un ciclo for?</h2></div>
+  <ol class="puzzle-ordina" data-id="for-ordine">
+    <li>Esegue la partenza: <code>i = 1</code> (una volta sola)</li>
+    <li>Controlla la condizione <code>i &lt;= 3</code></li>
+    <li>Se è vera, esegue le istruzioni del corpo</li>
+    <li>Esegue il passo: <code>i++</code></li>
+    <li>Torna a controllare la condizione</li>
+    <li>Quando la condizione è falsa, esce e prosegue dopo il ciclo</li>
+  </ol>
+  <aside class="notes">Il tranello è mettere il passo prima del corpo: il passo si esegue alla fine di ogni giro. Collegare al flow chart della UDA 5: il ciclo for è un rombo con una freccia che torna indietro.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La media delle temperature, in C++</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su OnlineGDB scegli <b>C++</b>. Dichiara <code>float t, somma = 0;</code></li>
+      <li>Con <code>for (int i = 1; i &lt;= 5; i++)</code> chiedi la temperatura del giorno <code>i</code> e leggila con <code>cin</code>.</li>
+      <li>Dentro il ciclo accumula: <code>somma = somma + t;</code></li>
+      <li>Dopo il ciclo stampa la media: <code>somma / 5</code>.</li>
+      <li>Salva come <b>temperature-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 14, 17, 15, 19, 21 esce <code>Media: 17.2</code>. Se esce un numero enorme o strano, hai dimenticato <code>somma = 0</code>.</div>
+  </div>
+  <aside class="notes">Soluzione: float t, somma = 0; for (int i = 1; i &lt;= 5; i++) { cout &lt;&lt; "Temperatura del giorno " &lt;&lt; i &lt;&lt; ": "; cin &gt;&gt; t; somma = somma + t; } cout &lt;&lt; "Media: " &lt;&lt; somma / 5 &lt;&lt; endl; cout stampa 17.2 senza zeri finali. Stessi dati del lab di Calc della UDA 1 (lì erano 7 giorni). Uscita verificata con g++.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il passo negativo</p><h2>3, 2, 1… decollo!</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<pre class="code" style="font-size:30px"><span class="k">for</span> (i = 10; i &gt;= 1; <span class="hl">i--</span>) {
+    printf(<span class="s">"%d "</span>, i);
+}
+printf(<span class="s">"Decollo!\n"</span>);</pre>
+      <p class="small">Stampa: <code>10 9 8 7 6 5 4 3 2 1 Decollo!</code></p>
+    </div>
+    <div class="card soft"><h3>Il passo lo decidi tu</h3><ul class="points small"><li><code>i--</code> toglie 1 a ogni giro</li><li><code>i = i + 2</code> conta di due in due</li><li><code>i = i - 5</code> scende di cinque</li></ul><p class="small">Con il passo negativo la condizione usa <code>&gt;</code> o <code>&gt;=</code>.</p></div>
+  </div>
+  <aside class="notes">Errore tipico: for (i = 10; i &lt;= 1; i--) non esegue nessun giro, perché la condizione è falsa subito. Altro errore: passo nella direzione sbagliata (i++ partendo da 10 con i &gt;= 1) produce un ciclo che non finisce mai, almeno finché il numero non "trabocca". Uscita verificata con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa stampa questo ciclo?</h2></div>
+  <pre class="code" style="align-self:flex-start"><span class="k">for</span> (i = 10; i &gt; 0; i = i - 3) printf(<span class="s">"%d "</span>, i);</pre>
+  <div class="poll" data-id="for-passo" data-tipo="quiz" data-risposta="A">
+    <ol><li><code>10 7 4 1</code></li><li><code>10 7 4 1 -2</code></li><li><code>10 7 4</code></li><li><code>9 6 3</code></li></ol>
+    <p class="why">Si parte da 10 e si toglie 3: 10, 7, 4, 1. Il valore successivo sarebbe -2, ma la condizione <code>-2 &gt; 0</code> è falsa: il ciclo finisce prima di stamparlo.</p>
+  </div>
+  <aside class="notes">Chi sceglie B dimentica che la condizione si controlla prima di stampare; chi sceglie C si ferma troppo presto (1 è ancora maggiore di 0); D parte dal passo invece che dal valore iniziale. Verificato con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I cicli annidati</p><h2>Un ciclo dentro un ciclo</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">for</span> (r = 1; r &lt;= 3; r++) {      <span class="c">// righe</span>
+    <span class="k">for</span> (c = 1; c &lt;= 4; c++) {  <span class="c">// colonne</span>
+        printf(<span class="s">"*"</span>);
+    }
+    printf(<span class="s">"\n"</span>);
+}</pre>
+<pre class="code" style="font-size:44px;line-height:1.15;background:#05070d">****
+****
+****</pre>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Una foto Full HD ha 1920 × 1080 = <b>2 073 600 pixel</b>. Un filtro come quelli dei social è un doppio ciclo: righe e colonne, pixel per pixel. Le schede video (GPU) fanno migliaia di questi calcoli contemporaneamente: per questo si usano anche per l'AI.</p></div>
+  <aside class="notes">Per ogni giro del ciclo esterno, il ciclo interno fa TUTTI i suoi giri: 3 × 4 = 12 asterischi. Analogia: l'orologio, per ogni ora la lancetta dei minuti fa 60 giri. Il calcolo 1920 × 1080 = 2 073 600 è verificabile. Uscita del programma verificata con gcc.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il triangolo di asterischi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C chiedi quante righe vuoi e leggi <code>righe</code>.</li>
+      <li>Ciclo esterno: <code>r</code> da 1 a <code>righe</code>.</li>
+      <li>Ciclo interno: <code>c</code> da 1 <b>a r</b> (non a un numero fisso!) e stampa <code>*</code>.</li>
+      <li>Dopo il ciclo interno vai a capo.</li>
+      <li>Salva come <b>triangolo-cognome.c</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> con 4 righe esce il triangolo qui sotto: 1 + 2 + 3 + 4 = 10 asterischi.</div>
+<pre class="code" style="font-size:34px;line-height:1.15;background:#05070d">*
+**
+***
+****</pre>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: int righe, r, c; printf("Quante righe? "); scanf("%d", &amp;righe); for (r = 1; r &lt;= righe; r++) { for (c = 1; c &lt;= r; c++) { printf("*"); } printf("\n"); } Il punto chiave: il ciclo interno dipende dalla variabile del ciclo esterno. Sfida: triangolo capovolto (c da 1 a righe - r + 1, oppure r con passo negativo). Uscita verificata con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto contando i giri</h2></div>
+  <div class="puzzle-codice" data-risposta="5968" data-aiuto="nella seconda riga i vale 1, poi 3, poi 9: il giro dopo sarebbe 27">
+    <ul class="points small">
+      <li>1ª cifra: quanti giri fa <code style="background:rgba(255,255,255,.14)">for (i = 0; i &lt; 5; i++)</code></li>
+      <li>2ª cifra: ultimo valore di i dentro <code style="background:rgba(255,255,255,.14)">for (i = 1; i &lt;= 20; i = i * 3)</code></li>
+      <li>3ª cifra: s alla fine di <code style="background:rgba(255,255,255,.14)">s = 0; for (i = 1; i &lt;= 3; i++) s = s + i;</code></li>
+      <li>4ª cifra: quanti * stampano due cicli annidati, 2 righe per 4 colonne</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 5 giri (da 0 a 4), 1-3-9, 1 + 2 + 3 = 6, 2 × 4 = 8.</div>
+  </div>
+  <aside class="notes">Codice: 5968, verificato con gcc. A squadre, solo carta e penna e tabella di traccia. Tranello nella seconda cifra: il passo può anche moltiplicare, non solo sommare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Provare non basta: bisogna ragionare</h2></div>
+  <figure class="citazione">
+    <blockquote>Il collaudo di un programma può mostrare la presenza di errori, ma mai la loro assenza.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico olandese, <i>Notes on Structured Programming</i>, 1970</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche addestrare un'AI è un ciclo: il modello guarda gli esempi, misura quanto sbaglia, si corregge un pochino e ricomincia. Ogni passata completa su tutti i dati si chiama <b>epoca</b>, e di solito se ne fanno molte.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese ("Program testing can be used to show the presence of bugs, but never to show their absence!"), dal saggio EWD249. Storia italiana collegata: nel 1966 Corrado Böhm e Giuseppe Jacopini dimostrarono che ogni algoritmo si può scrivere usando solo sequenza, selezione e iterazione, le tre strutture di questa UDA. Spunto: per questo nei lab proviamo i casi limite (0, 1, l'ultimo giro).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il ciclo <code>for (i = 1; i &lt;= 8; i++)</code> esegue <span class="blank" data-risposta="8|otto"></span> giri.</p>
+    <p>L'istruzione <code>i++</code> equivale a <code>i = i +</code> <span class="blank" data-risposta="1|uno"></span>.</p>
+    <p>Per contare all'indietro si usa un passo <span class="blank" data-risposta="negativo"></span>, per esempio <code>i--</code>.</p>
+    <p>Due cicli uno dentro l'altro si dicono <span class="blank" data-risposta="annidati|nidificati"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: 8, 1, negativo, annidati (accettato anche nidificati).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>for (partenza; condizione; passo)</code></li>
+      <li>Attenti all'errore di uno: <code>&lt;</code> o <code>&lt;=</code>?</li>
+      <li>Accumulatori e contatori partono da 0</li>
+    </ul>
+    <ul class="points">
+      <li>Passo negativo: <code>i--</code> e condizione con <code>&gt;=</code></li>
+      <li>Cicli annidati: righe per colonne</li>
+      <li>La tabella di traccia non mente</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Prossima lezione: il ciclo while, quando non sai quante volte ripetere, e i numeri casuali per i primi giochi.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

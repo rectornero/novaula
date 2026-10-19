@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acchiappa il panino! · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 4 · Scratch e App Inventor</p>
+  <h1>Acchiappa<br>il panino!</h1>
+  <p class="lead">Un gioco di animazione per cellulari: un panino che scappa, il tuo dito che lo insegue, un orologio che corre.</p>
+  <aside class="notes">Obiettivi: usare il touch screen con Canvas e ImageSprite, organizzare il layout, programmare eventi, procedure, variabili e timer, costruire un esempio riepilogativo con difficoltà crescente e tempo limite. Prerequisito: lezione "App per cellulari con App Inventor" (account, Companion, Designer e Blocks). Preparare un'immagine di panino in PNG da dare a chi non ne ha una propria. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti tocchi al secondo pensi di riuscire a fare con un dito?</h2></div>
+  <div class="poll" data-id="tocchi-secondo">
+    <ol><li>2 o 3</li><li>4 o 5</li><li>Da 6 a 8</li><li>Più di 8</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di stima: tenerne a mente il risultato. Alla fine della lezione, con il gioco finito, si scopre chi è il più veloce della classe (i punti in 30 secondi dicono molto sulla velocità reale). Un ragazzo veloce arriva di solito a 6-7 tocchi al secondo su un punto fisso, ma inseguendo un bersaglio che si sposta si scende parecchio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un gioco con il touch screen</p><h2>Il giorno in cui il mouse è finito in tasca</h2></div>
+  <figure class="citazione">
+    <blockquote>Useremo un dispositivo di puntamento con cui siamo tutti nati. Anzi, ne abbiamo dieci: le nostre dita.</blockquote>
+    <figcaption><b>Steve Jobs</b>, presentando il primo iPhone, Macworld di San Francisco, gennaio 2007</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Lo schermo del telefono è <b>capacitivo</b>: sotto il vetro c'è una griglia sottilissima di sensori. Il dito, che conduce elettricità, cambia la carica nei punti che tocca e il telefono calcola le coordinate, anche di più dita insieme (multi-touch).</p></div>
+  <aside class="notes">Traduzione nostra e leggermente abbreviata dal keynote del 9 gennaio 2007. Il primo touch screen capacitivo fu descritto da E. A. Johnson, ingegnere inglese, nel 1965; i touch screen esistevano quindi da decenni, ma l'iPhone li rese di massa. Prova pratica: con un guanto di lana lo schermo non risponde, con una matita nemmeno: il vetro "sente" solo cose che conducono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto</p><h2>Le regole di Acchiappa il panino!</h2></div>
+  <div class="cols-2">
+    <svg viewBox="0 0 520 600" width="520" height="600" role="img" aria-label="Telefono con il gioco: punteggio in alto e un panino sul campo di gioco" font-family="DM Sans, sans-serif">
+      <rect x="40" y="10" width="440" height="580" rx="48" fill="#172033"/>
+      <rect x="62" y="56" width="396" height="490" rx="10" fill="#e3f3e9"/>
+      <rect x="62" y="56" width="396" height="56" fill="#fff"/>
+      <text x="80" y="92" font-size="26" font-weight="700" fill="#172033">Punti: 7</text>
+      <text x="270" y="92" font-size="26" font-weight="700" fill="#d0541f">Tempo: 18</text>
+      <g transform="translate(250 270)">
+        <path d="M-70,0 Q-70,-56 0,-56 Q70,-56 70,0 Z" fill="#e3a14a"/>
+        <circle cx="-30" cy="-34" r="4" fill="#fff6dc"/><circle cx="0" cy="-42" r="4" fill="#fff6dc"/><circle cx="30" cy="-30" r="4" fill="#fff6dc"/>
+        <path d="M-78,4 Q-60,-6 -40,6 Q-20,-6 0,6 Q20,-6 40,6 Q60,-6 78,4 V14 H-78 Z" fill="#59C059"/>
+        <rect x="-74" y="14" width="148" height="14" rx="5" fill="#b8452a"/>
+        <rect x="-72" y="28" width="144" height="10" rx="4" fill="#ffd34d"/>
+        <path d="M-70,38 H70 Q70,62 50,62 H-50 Q-70,62 -70,38 Z" fill="#e3a14a"/>
+      </g>
+      <circle cx="330" cy="380" r="30" fill="#d0541f" opacity=".25"/><circle cx="330" cy="380" r="12" fill="#d0541f" opacity=".6"/>
+      <text x="260" y="470" font-size="22" fill="#596179" text-anchor="middle">tocca il panino prima che scappi</text>
+    </svg>
+    <ol class="steps">
+      <li>Il panino compare in un punto <b>a caso</b> dello schermo</li>
+      <li>Ogni secondo <b>scappa</b> in un altro punto</li>
+      <li>Se lo tocchi: <b>+1 punto</b>, il telefono vibra e il panino salta via</li>
+      <li>Più punti fai, <b>più diventa veloce</b></li>
+      <li>Hai <b>30 secondi</b>: poi compare il punteggio finale</li>
+    </ol>
+  </div>
+  <aside class="notes">È la versione italiana del classico tutorial "MoleMash" (acchiappa la talpa) di App Inventor. Prima di programmare far individuare agli studenti: quali eventi servono? (tocco sul panino, scatto dell'orologio, pulsante ricomincia). Quali variabili? (punti, tempo). Gli ultimi due punti sono l'esempio riepilogativo di fine lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il touch screen in App Inventor</p><h2>Canvas e sprite: la tela e i personaggi</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Canvas</h3><p>Una tela su cui disegnare e su cui si muovono gli sprite. Sente il dito che <b>tocca</b> (Touched) o <b>trascina</b> (Dragged).</p></div>
+    <div class="card"><h3>ImageSprite e Ball</h3><p>Personaggi che vivono dentro il Canvas. Hanno <b>X</b>, <b>Y</b>, velocità e direzione; sentono i tocchi, i lanci (Flung) e gli urti (CollidedWith).</p></div>
+  </div>
+  <div class="callout">Si trovano nel gruppo <b>Drawing and Animation</b>. Uno sprite fuori da un Canvas non si può mettere: prima la tela, poi i personaggi.</div>
+  <aside class="notes">Paragone con Scratch: il Canvas fa la parte dello stage, l'ImageSprite quella dello sprite. Ball è uno sprite già pronto a forma di cerchio colorato, comodo per giochi tipo Pong. Gli sprite hanno anche le proprietà Heading (direzione in gradi) e Speed: con quelle si muovono da soli, senza timer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel Canvas di App Inventor, dove si trova il punto (0, 0)?</h2></div>
+  <div class="poll" data-id="origine-canvas" data-tipo="quiz" data-risposta="C">
+    <ol><li>Al centro, come nello stage di Scratch</li><li>In basso a sinistra, come nel piano cartesiano</li><li>In alto a sinistra, e la y cresce verso il basso</li><li>Dipende dalla grandezza del telefono</li></ol>
+    <p class="why">Come quasi tutti gli schermi e i programmi di grafica, il Canvas misura da in alto a sinistra: x cresce verso destra, y verso il basso. Scratch è un'eccezione, pensata per chi conosce il piano cartesiano.</p>
+  </div>
+  <aside class="notes">La A è il tranello per chi viene da Scratch, la B per chi pensa alla matematica. Conseguenza pratica: per far salire uno sprite bisogna diminuire Y. Lo stesso sistema si usa nelle pagine web e nelle immagini digitali: il pixel (0, 0) è quello in alto a sinistra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il layout</p><h2>I componenti del gioco</h2></div>
+  <table class="data compact">
+    <tr><th>Componente</th><th>Gruppo della palette</th><th>Proprietà da impostare</th></tr>
+    <tr><td>HorizontalArrangement1</td><td>Layout</td><td>Width: Fill parent</td></tr>
+    <tr><td>LabelPunti, LabelTempo (dentro l'arrangement)</td><td>User Interface</td><td>Text: Punti: 0 · Tempo: 30</td></tr>
+    <tr><td>Canvas1</td><td>Drawing and Animation</td><td>Width e Height: Fill parent</td></tr>
+    <tr><td>Panino (ImageSprite nel Canvas)</td><td>Drawing and Animation</td><td>Picture: panino.png · Width e Height: 80 pixels</td></tr>
+    <tr><td>Clock1</td><td>Sensors</td><td>TimerInterval: 1000</td></tr>
+    <tr><td>Sound1</td><td>Media</td><td>nessuna: useremo la vibrazione</td></tr>
+  </table>
+  <aside class="notes">Gli arrangement (Horizontal, Vertical, Table) servono a mettere i componenti uno accanto all'altro o uno sotto l'altro: senza, App Inventor li impila tutti in colonna. Rinominare i componenti (LabelPunti, Panino) rende i blocchi molto più leggibili. TimerInterval è in millisecondi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Prepara il campo di gioco</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo progetto <b>AcchiappaPanino</b>, collegato al Companion.</li>
+      <li>Inserisci i componenti della tabella, nell'ordine, e rinominali.</li>
+      <li>Per Panino scegli Picture, <b>Upload File</b>, e carica l'immagine del panino.</li>
+      <li>Imposta Width e Height del panino a 80 pixels.</li>
+      <li>Guarda il telefono: punteggio e tempo in alto, il panino sulla tela.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> nella colonna Components vedi Screen1 con dentro HorizontalArrangement1 (due label) e Canvas1 (con Panino), e sotto Clock1 e Sound1. Toccando il panino non succede ancora niente.</div>
+  </div>
+  <aside class="notes">Se il panino non compare, controllare che sia stato trascinato DENTRO il Canvas. Se l'immagine è enorme, va ridotta con Width e Height. Chi non ha un'immagine usa quella fornita dal docente oppure disegna il panino con un programma di disegno e lo salva in PNG.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le immagini del gioco</p><h2>Il tuo panino: disegnato, cercato o generato?</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Usa il formato <b>PNG con sfondo trasparente</b>: niente riquadro bianco intorno</li>
+      <li>Immagini piccole: poche centinaia di pixel bastano</li>
+      <li>Rispetta i diritti: disegni tuoi, immagini con licenza libera o fornite dal docente</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti sviluppatori creano le prime bozze dei personaggi con l'<b>AI generativa</b>: si descrive "un panino cartoon che sorride, sfondo trasparente" e il modello disegna. Ma l'AI impara da immagini fatte da persone, e su diritti e uso commerciale le regole sono ancora in discussione. In classe, se serve, è il docente a generare l'immagine.</p></div>
+  </div>
+  <aside class="notes">Collegamento con la UDA 2 (creazione di immagini con l'AI) e con la scheda di cittadinanza sul diritto d'autore digitale. Molti servizi di generazione di immagini richiedono 13 anni o più e il consenso dei genitori: per questo la generazione la fa il docente sulla LIM. Siti con icone a licenza libera vanno controllati uno per uno (attribuzione richiesta o no).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il programma</p><h2>Una procedura per far scappare il panino</h2></div>
+<svg class="blocchi" role="img" aria-label="to SpostaPanino do; set Panino.X to random integer from 0 to Canvas1.Width − Panino.Width; set Panino.Y to random integer from 0 to Canvas1.Height − Panino.Height" viewBox="0 0 1205 288" width="1205" height="288" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L283.122314453125,4 Q291.122314453125,4 291.122314453125,12 L291.122314453125,56 Q291.122314453125,64 283.122314453125,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,232 Q28,240 36,240 L44,240 L52,248 L72,248 L80,240 L283.122314453125,240 Q291.122314453125,240 291.122314453125,248 L291.122314453125,268 Q291.122314453125,276 283.122314453125,276 L10,276 Q2,276 2,268 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">to SpostaPanino do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L1178.9039764404297,64 Q1186.9039764404297,64 1186.9039764404297,72 L1186.9039764404297,144 Q1186.9039764404297,152 1178.9039764404297,152 L80,152 L72,160 L52,160 L44,152 L36,152 Q28,152 28,144 Z" fill="#266643" stroke="#1B4A30" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="108" fill="#fff">set Panino.X to</text><rect x="251.91600036621094" y="72" width="920.9879760742188" height="72" rx="36" fill="#3F71B5" stroke="#2D568C" stroke-width="1.5"/><text dominant-baseline="central" x="267.91600036621094" y="108" fill="#fff">random integer from</text><rect x="556.0874786376953" y="86" width="48" height="44" rx="22" fill="#fff" stroke="#2D568C" stroke-width="1.5"/><text dominant-baseline="central" x="580.0874786376953" y="108" fill="#575E75" font-weight="500" text-anchor="middle">0</text><text dominant-baseline="central" x="614.0874786376953" y="108" fill="#fff">to</text><rect x="652.44677734375" y="78" width="504.4571990966797" height="60" rx="30" fill="#3F71B5" stroke="#2D568C" stroke-width="1.5"/><rect x="668.44677734375" y="84" width="227.1453857421875" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="684.44677734375" y="108" fill="#fff">Canvas1.Width</text><text dominant-baseline="central" x="905.5921630859375" y="108" fill="#fff">−</text><rect x="931.5802307128906" y="84" width="209.32374572753906" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="947.5802307128906" y="108" fill="#fff">Panino.Width</text><path d="M28,160 Q28,152 36,152 L44,152 L52,160 L72,160 L80,152 L1192.3990478515625,152 Q1200.3990478515625,152 1200.3990478515625,160 L1200.3990478515625,232 Q1200.3990478515625,240 1192.3990478515625,240 L80,240 L72,248 L52,248 L44,240 L36,240 Q28,240 28,232 Z" fill="#266643" stroke="#1B4A30" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="196" fill="#fff">set Panino.Y to</text><rect x="248.4990234375" y="160" width="937.9000244140625" height="72" rx="36" fill="#3F71B5" stroke="#2D568C" stroke-width="1.5"/><text dominant-baseline="central" x="264.4990234375" y="196" fill="#fff">random integer from</text><rect x="552.6705017089844" y="174" width="48" height="44" rx="22" fill="#fff" stroke="#2D568C" stroke-width="1.5"/><text dominant-baseline="central" x="576.6705017089844" y="196" fill="#575E75" font-weight="500" text-anchor="middle">0</text><text dominant-baseline="central" x="610.6705017089844" y="196" fill="#fff">to</text><rect x="649.0298004150391" y="166" width="521.3692474365234" height="60" rx="30" fill="#3F71B5" stroke="#2D568C" stroke-width="1.5"/><rect x="665.0298004150391" y="172" width="235.60140991210938" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="681.0298004150391" y="196" fill="#fff">Canvas1.Height</text><text dominant-baseline="central" x="910.6312103271484" y="196" fill="#fff">−</text><rect x="936.6192779541016" y="172" width="217.77976989746094" height="48" rx="24" fill="#439970" stroke="#2F7353" stroke-width="1.5"/><text dominant-baseline="central" x="952.6192779541016" y="196" fill="#fff">Panino.Height</text></svg>
+  <div class="cols-2">
+<svg class="blocchi" role="img" aria-label="when Clock1.Timer do; call SpostaPanino" viewBox="0 0 325 172" width="325" height="172" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L312.0811767578125,4 Q320.0811767578125,4 320.0811767578125,12 L320.0811767578125,56 Q320.0811767578125,64 312.0811767578125,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,116 Q28,124 36,124 L44,124 L52,132 L72,132 L80,124 L312.0811767578125,124 Q320.0811767578125,124 320.0811767578125,132 L320.0811767578125,152 Q320.0811767578125,160 312.0811767578125,160 L10,160 Q2,160 2,152 Z" fill="#C88330" stroke="#A66A22" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">when Clock1.Timer do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L285.88702392578125,64 Q293.88702392578125,64 293.88702392578125,72 L293.88702392578125,116 Q293.88702392578125,124 285.88702392578125,124 L80,124 L72,132 L52,132 L44,124 L36,124 Q28,124 28,116 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="94" fill="#fff">call SpostaPanino</text></svg>
+    <p class="small">Una <b>procedura</b> (viola) è un blocco fatto da te: la scrivi una volta e la chiami quando serve. Il <b>Timer</b> scatta ogni TimerInterval millisecondi.</p>
+  </div>
+  <aside class="notes">Perché togliere la larghezza del panino: X è il bordo sinistro dello sprite; se X fosse uguale alla larghezza del Canvas il panino uscirebbe dallo schermo. La procedura si crea dal gruppo Procedures ("to procedure do") e si rinomina cliccando sul nome. "random integer from … to …" è nel gruppo Math. Corrisponde ai blocchi "I miei blocchi" di Scratch.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il panino scappa, il dito lo prende</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Costruisci la procedura <b>SpostaPanino</b> e il blocco del Timer.</li>
+      <li>Da Variables: <i>initialize global punti to 0</i>.</li>
+      <li>Scrivi l'evento <i>when Panino.Touched</i> della figura.</li>
+      <li>Gioca 30 secondi e conta i tuoi punti.</li>
+      <li>Export: <b>AcchiappaPanino.aia</b>.</li>
+    </ol>
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="when Panino.Touched x y do; set global punti to get global punti + 1; set LabelPunti.Text to join "Punti: " get global punti; call Sound1.Vibrate millisecs 100; call SpostaPanino" viewBox="0 0 837 384" width="670" height="307" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L400.05657958984375,4 Q408.05657958984375,4 408.05657958984375,12 L408.05657958984375,56 Q408.05657958984375,64 400.05657958984375,64 L80,64 L72,72 L52,72 L44,64 L36,64 Q28,64 28,72 L28,328 Q28,336 36,336 L44,336 L52,344 L72,344 L80,336 L400.05657958984375,336 Q408.05657958984375,336 408.05657958984375,344 L408.05657958984375,364 Q408.05657958984375,372 400.05657958984375,372 L10,372 Q2,372 2,364 Z" fill="#C88330" stroke="#A66A22" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">when Panino.Touched x y do</text><path d="M28,72 Q28,64 36,64 L44,64 L52,72 L72,72 L80,64 L660.7350769042969,64 Q668.7350769042969,64 668.7350769042969,72 L668.7350769042969,132 Q668.7350769042969,140 660.7350769042969,140 L80,140 L72,148 L52,148 L44,140 L36,140 Q28,140 28,132 Z" fill="#D05F2D" stroke="#A84B22" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="102" fill="#fff">set global punti to</text><rect x="296.38116455078125" y="72" width="358.3539123535156" height="60" rx="30" fill="#3F71B5" stroke="#2D568C" stroke-width="1.5"/><rect x="312.38116455078125" y="78" width="242.3658447265625" height="48" rx="24" fill="#D05F2D" stroke="#A84B22" stroke-width="1.5"/><text dominant-baseline="central" x="328.38116455078125" y="102" fill="#fff">get global punti</text><text dominant-baseline="central" x="564.7470092773438" y="102" fill="#fff">+</text><rect x="590.7350769042969" y="80" width="48" height="44" rx="22" fill="#fff" stroke="#2D568C" stroke-width="1.5"/><text dominant-baseline="central" x="614.7350769042969" y="102" fill="#575E75" font-weight="500" text-anchor="middle">1</text><path d="M28,148 Q28,140 36,140 L44,140 L52,148 L72,148 L80,140 L824.896484375,140 Q832.896484375,140 832.896484375,148 L832.896484375,208 Q832.896484375,216 824.896484375,216 L80,216 L72,224 L52,224 L44,216 L36,216 Q28,216 28,208 Z" fill="#266643" stroke="#1B4A30" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="178" fill="#fff">set LabelPunti.Text to</text><rect x="341.050048828125" y="148" width="477.846435546875" height="60" rx="30" fill="#B32D5E" stroke="#8A2047" stroke-width="1.5"/><text dominant-baseline="central" x="357.050048828125" y="178" fill="#fff">join</text><rect x="415.7422332763672" y="154" width="134.7884063720703" height="48" rx="24" fill="#B32D5E" stroke="#8A2047" stroke-width="1.5"/><text dominant-baseline="central" x="431.7422332763672" y="178" fill="#fff">"Punti: "</text><rect x="560.5306396484375" y="154" width="242.3658447265625" height="48" rx="24" fill="#D05F2D" stroke="#A84B22" stroke-width="1.5"/><text dominant-baseline="central" x="576.5306396484375" y="178" fill="#fff">get global punti</text><path d="M28,224 Q28,216 36,216 L44,216 L52,224 L72,224 L80,216 L511.5911102294922,216 Q519.5911102294922,216 519.5911102294922,224 L519.5911102294922,268 Q519.5911102294922,276 511.5911102294922,276 L80,276 L72,284 L52,284 L44,276 L36,276 Q28,276 28,268 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="246" fill="#fff">call Sound1.Vibrate millisecs</text><rect x="429.76690673828125" y="224" width="75.82420349121094" height="44" rx="22" fill="#fff" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="467.6790084838867" y="246" fill="#575E75" font-weight="500" text-anchor="middle">100</text><path d="M28,284 Q28,276 36,276 L44,276 L52,284 L72,284 L80,276 L285.88702392578125,276 Q293.88702392578125,276 293.88702392578125,284 L293.88702392578125,328 Q293.88702392578125,336 285.88702392578125,336 L80,336 L72,344 L52,344 L44,336 L36,336 Q28,336 28,328 Z" fill="#7C5385" stroke="#5E3C66" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="306" fill="#fff">call SpostaPanino</text></svg>
+      <div class="check"><b>Controllo:</b> il panino salta ogni secondo; quando lo tocchi vibra, i punti salgono di 1 e il panino scappa subito.</div>
+    </div>
+  </div>
+  <aside class="notes">Errori tipici: "get global punti" preso dal gruppo sbagliato (si ottiene anche passando il mouse sul nome della variabile nel blocco initialize); join senza il secondo pezzo; Panino.Touched confuso con Canvas1.Touched (il secondo scatta toccando qualunque punto della tela). Sull'iPhone la vibrazione potrebbe non funzionare: va bene lo stesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Clock1 ha TimerInterval = 500. Quante volte al secondo scappa il panino?</h2></div>
+  <div class="poll" data-id="timer-interval" data-tipo="quiz" data-risposta="B">
+    <ol><li>500</li><li>2</li><li>0,5</li><li>5</li></ol>
+    <p class="why">TimerInterval è in millisecondi: 500 ms = mezzo secondo, quindi il Timer scatta 2 volte al secondo. Per un panino più lento serve un numero più grande, non più piccolo.</p>
+  </div>
+  <aside class="notes">Chi risponde 0,5 ha pensato che il valore fosse in secondi al contrario; chi dice 500 confonde l'intervallo con la frequenza. Formula: volte al secondo = 1000 ÷ TimerInterval. Collegamento con Scratch, dove "attendi" usa invece i secondi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Tocchi il panino: che cosa succede, in ordine?</h2></div>
+  <ol class="puzzle-ordina" data-id="tocco-panino">
+    <li>Il dito tocca il vetro dello schermo</li>
+    <li>Il telefono calcola le coordinate del tocco</li>
+    <li>App Inventor scopre che il punto è sopra lo sprite Panino</li>
+    <li>Scatta l'evento Panino.Touched</li>
+    <li>La variabile punti aumenta di 1</li>
+    <li>La procedura SpostaPanino lo fa saltare via</li>
+  </ol>
+  <aside class="notes">Hardware, sistema operativo, ambiente, nostro programma: la stessa catena del "premi un tasto" della prima UDA. Tutto avviene in poche decine di millisecondi. Domanda: se tocco il Canvas fuori dal panino, a che punto si interrompe la catena per Panino.Touched? (al terzo: scatta invece Canvas1.Touched).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Esempio riepilogativo</p><h2>Più veloce a ogni punto, e solo 30 secondi</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <h3>Difficoltà crescente</h3>
+      <p>Dopo ogni punto il nuovo TimerInterval è <b>1000 − punti × 50</b>, ma mai sotto 300: è il blocco <i>max</i>.</p>
+      <table class="data compact">
+        <tr><th>punti</th><th>TimerInterval</th></tr>
+        <tr><td>0</td><td>1000 ms</td></tr>
+        <tr><td>10</td><td>500 ms</td></tr>
+        <tr><td>14 o più</td><td>300 ms (il minimo)</td></tr>
+      </table>
+    </div>
+    <div class="stack">
+      <h3>Tempo limite</h3>
+      <ul class="points">
+        <li>Un secondo orologio, <b>Clock2</b>, ogni 1000 ms</li>
+        <li>Variabile <b>tempo</b>: parte da 30, cala di 1 a ogni scatto</li>
+        <li>Quando arriva a 0: ferma i due timer e mostra i punti con un <b>Notifier</b></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Il blocco max è nel gruppo Math (il blocco min con il menu cambiato in max). Senza il minimo di 300 ms, dopo 20 punti il calcolo darebbe 0 o numeri negativi e il gioco diventerebbe ingiocabile. Per fermare un timer: set Clock1.TimerEnabled to false. Il Notifier (User Interface) mostra una finestra con ShowAlert. Il pulsante per ricominciare è un'estensione del compito per casa.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Completa il gioco: velocità e tempo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <i>Panino.Touched</i> aggiungi <i>set Clock1.TimerInterval to</i> max(300, 1000 − punti × 50).</li>
+      <li>Aggiungi <b>Clock2</b> (1000 ms), un <b>Notifier</b> e la variabile <i>tempo</i> = 30.</li>
+      <li><i>when Clock2.Timer</i>: tempo − 1, aggiorna LabelTempo; se tempo = 0, ferma Clock1 e Clock2 e mostra "Fine! Punti: …".</li>
+      <li>Sfida il compagno: chi fa più punti?</li>
+      <li>Export: <b>AcchiappaPanino.aia</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> il contatore scende da 30 a 0; il panino accelera dopo ogni punto fino a 3 salti al secondo circa; a 0 il panino si ferma e compare la finestra con il punteggio.</div>
+  </div>
+  <aside class="notes">Soluzione di Clock2.Timer: set global tempo to (get global tempo − 1); set LabelTempo.Text to join "Tempo: " get global tempo; if get global tempo = 0 then set Clock1.TimerEnabled to false, set Clock2.TimerEnabled to false, call Notifier1.ShowAlert notice (join "Fine! Punti: " get global punti). Con 300 ms il panino salta 1000 ÷ 300 ≈ 3,3 volte al secondo. Riprendere il sondaggio iniziale: quanti tocchi al secondo avevate stimato?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni evento al momento in cui scatta</h2></div>
+  <dl class="puzzle-abbina" data-id="eventi-ai">
+    <dt>Panino.Touched</dt><dd>Il dito tocca il panino</dd>
+    <dt>Panino.Flung</dt><dd>Il dito lancia il panino con uno scatto veloce</dd>
+    <dt>Canvas1.Dragged</dt><dd>Il dito striscia sulla tela</dd>
+    <dt>Clock1.Timer</dt><dd>È passato il tempo impostato</dd>
+    <dt>Screen1.Initialize</dt><dd>L'app si apre</dd>
+    <dt>Button1.Click</dt><dd>Si preme il pulsante</dd>
+  </dl>
+  <aside class="notes">Flung è il gesto di "lanciare" (swipe veloce): con Flung e le proprietà Heading e Speed si possono fare giochi tipo flipper o curling. Dragged serve per disegnare con il dito (il classico tutorial PaintPot di App Inventor).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Gli sprite di App Inventor si muovono dentro un componente <span class="blank" data-risposta="canvas" style="--w:7ch"></span>.</p>
+    <p>Nel Canvas il punto (0, 0) è in alto a <span class="blank" data-risposta="sinistra" style="--w:8ch"></span>.</p>
+    <p>Con TimerInterval = 250 il Timer scatta <span class="blank" data-risposta="4|quattro" style="--w:4ch"></span> volte al secondo.</p>
+    <p>Un blocco creato da me e richiamato quando serve si chiama <span class="blank" data-risposta="procedura|procedure" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Canvas; sinistra; 4 (1000 ÷ 250); procedura.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Canvas = tela, ImageSprite = personaggio</li>
+      <li>(0, 0) in alto a sinistra, y verso il basso</li>
+      <li>Layout con gli arrangement</li>
+    </ul>
+    <ul class="points">
+      <li>Eventi: Touched, Timer, Click, Initialize</li>
+      <li>Procedure per non ripetere i blocchi</li>
+      <li>TimerInterval in millisecondi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (versione personale del gioco con pulsante Ricomincia e un elemento nuovo). Prossima lezione: app e progetti Scratch che usano l'intelligenza artificiale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

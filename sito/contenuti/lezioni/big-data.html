@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Big data e le 5 V · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Dati</p>
+  <h1>Big data<br>e le 5 V</h1>
+  <p class="lead">Da dove arrivano montagne di dati, come si riconoscono, come si trasformano in decisioni e quali regole bisogna rispettare.</p>
+  <aside class="notes">Aprire chiedendo: "Quanti dati avete prodotto da stamattina?" (foto, messaggi, posizione, app, pagamenti). Raccogliere risposte senza numeri precisi: alla fine della prima attività al computer faremo una stima vera. Obiettivo: riconoscere i tipi di dati e le 5 V, conoscere la pipeline e le regole del GDPR, pulire e rappresentare un piccolo dataset.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Che cosa sono i big data</h2></div>
+  <p class="lead">Insiemi di dati così <b>grandi</b>, <b>veloci</b> o <b>vari</b> che gli strumenti tradizionali (un foglio di calcolo, un database su un solo computer) non bastano per salvarli ed elaborarli.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Non è solo la dimensione</h3><p>Conta anche il ritmo con cui arrivano e quanto sono diversi tra loro.</p></div>
+    <div class="card soft"><h3>Servono più macchine</h3><p>I dati si dividono su molti server che lavorano in parallelo.</p></div>
+    <div class="card soft"><h3>Lo scopo è decidere</h3><p>Si raccolgono per scoprire tendenze, prevedere, migliorare un servizio.</p></div>
+  </div>
+  <aside class="notes">Sottolineare che non c'è una soglia fissa ("da 1 TB in su"): un dataset è "big" rispetto agli strumenti disponibili. Esempio: un milione di righe mette in difficoltà un foglio di calcolo (Calc ha un limite massimo di righe), ma è poco per un database su server. Domanda: "Il registro elettronico della scuola è big data?" Di solito no: è grande ma ordinato e gestibile con un database normale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le fonti</p><h2>Da dove arrivano i dati</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Sensori e IoT</h3><p class="small">Contatori, termostati, auto, macchinari, smartwatch: misure continue, spesso ogni secondo.</p></div>
+    <div class="card"><h3>Social</h3><p class="small">Post, commenti, foto, video, "mi piace": tanto testo e tante immagini, scritte da persone.</p></div>
+    <div class="card"><h3>Transazioni</h3><p class="small">Pagamenti, acquisti online, biglietti, prenotazioni: dati ordinati con importi e date.</p></div>
+    <div class="card"><h3>Log</h3><p class="small">I "diari" di server, app e siti: ogni accesso, clic o errore lascia una riga.</p></div>
+  </div>
+  <div class="callout">Molti dati sono prodotti <b>dalle macchine</b>, non dalle persone: un sensore non si stanca mai di misurare.</div>
+  <aside class="notes">Chiedere un esempio di ogni fonte nella vita quotidiana degli studenti: il contapassi del telefono (sensore), le storie su Instagram (social), l'abbonamento del bus validato (transazione), il log del registro elettronico quando si accede (log). IoT = Internet of Things, oggetti connessi a Internet.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Unità di misura</p><h2>Dal byte all'exabyte: ogni passo vale mille volte</h2></div>
+  <table class="data compact">
+    <tr><th>Unità</th><th>Byte</th><th>Ordine di grandezza, per farsi un'idea</th></tr>
+    <tr><td>byte · B</td><td>1</td><td>un carattere di testo semplice</td></tr>
+    <tr><td>kilobyte · kB</td><td>10<sup>3</sup></td><td>una pagina di solo testo: pochi kB</td></tr>
+    <tr><td>megabyte · MB</td><td>10<sup>6</sup></td><td>una foto dello smartphone: alcuni MB</td></tr>
+    <tr><td>gigabyte · GB</td><td>10<sup>9</sup></td><td>un film in alta definizione: alcuni GB</td></tr>
+    <tr><td>terabyte · TB</td><td>10<sup>12</sup></td><td>il disco di un normale PC: circa 1 TB</td></tr>
+    <tr class="hl"><td>petabyte · PB</td><td>10<sup>15</sup></td><td>gli archivi annuali di un grande laboratorio come il CERN</td></tr>
+    <tr class="hl"><td>exabyte · EB</td><td>10<sup>18</sup></td><td>il traffico Internet mondiale si misura in EB al mese</td></tr>
+  </table>
+  <p class="muted small">Esistono anche le unità binarie (KiB, MiB, GiB…) in cui ogni passo vale 1024: le usa spesso il sistema operativo.</p>
+  <aside class="notes">Gli esempi sono ordini di grandezza, non statistiche precise: il messaggio è "dove si colloca" ogni unità. Far notare che un PB è un milione di GB. Il CERN pubblica regolarmente le quantità archiviate dagli esperimenti di LHC, che negli ultimi anni sono state di decine o più di cento PB l'anno. Collegamento con la lezione sui numeri binari: 2^10 = 1024 è vicino a 1000, da qui le due convenzioni (kB = 1000 byte, KiB = 1024 byte).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Stima: quanti dati produce la classe?</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <table class="sheet">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+        <tr><th>1</th><td>Voce</td><td>Quanti</td><td>MB</td><td>MB/giorno</td></tr>
+        <tr><th>2</th><td>Foto</td><td>10</td><td>3</td><td class="f sel">=B2*C2</td></tr>
+        <tr><th>3</th><td>Video</td><td>2</td><td>100</td><td></td></tr>
+        <tr><th>4</th><td>Vocali</td><td>10</td><td>0,5</td><td></td></tr>
+        <tr><th>5</th><td>Studente</td><td></td><td></td><td class="f">=SOMMA(D2:D4)</td></tr>
+      </table>
+      <p class="tiny muted">B = quanti al giorno per studente, C = MB ciascuno (video da 1 minuto). Sono <b>stime</b> da discutere, non dati ufficiali.</p>
+    </div>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Apri <b>Calc</b> e ricopia il foglio; trascina la formula di D2 fino a D4.</li>
+        <li>In D6 calcola il totale per <b>25 studenti</b>, in D7 quello di un anno in GB: <code>=D6*365/1000</code>.</li>
+        <li>Salva come <code>stima-dati-classe.ods</code>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> D5 = 235 MB; in un anno la classe produce circa 2144 GB, cioè circa 2,1&nbsp;TB.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: D2 = 30, D3 = 200, D4 = 5, D5 = 235 MB per studente al giorno; D6 = D5*25 = 5875 MB (circa 5,9 GB) al giorno; D7 = 5875*365/1000 = 2144,375 GB, circa 2,1 TB all'anno. Le stime (3 MB per foto, circa 100 MB per un minuto di video in alta definizione, 0,5 MB per un vocale) sono plausibili ma vanno discusse: chiedere ai ragazzi di controllare le dimensioni reali dei file sui loro telefoni e di aggiornare le celle. Per chi finisce prima: una rete di 100 sensori che inviano 50 byte ogni secondo produce 100 x 50 x 86400 = 432.000.000 byte = 432 MB al giorno, circa 158 GB all'anno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipi di dati</p><h2>Strutturati, semi-strutturati, non strutturati</h2></div>
+  <div class="cols-3">
+    <div class="card">
+      <h3>Strutturati</h3>
+      <p>Righe e colonne con uno <b>schema fisso</b>.</p>
+      <p class="small muted">Tabelle di un database, un foglio di calcolo, gli ordini di un negozio online.</p>
+    </div>
+    <div class="card">
+      <h3>Semi-strutturati</h3>
+      <p>Hanno <b>etichette</b> ma non uno schema rigido.</p>
+      <pre class="code" style="font-size:24px;padding:16px 20px">{<span class="s">"utente"</span>: <span class="s">"anna"</span>,
+ <span class="s">"tag"</span>: [<span class="s">"bici"</span>]}</pre>
+      <p class="small muted">JSON, XML, email, file di log.</p>
+    </div>
+    <div class="card">
+      <h3>Non strutturati</h3>
+      <p>Nessuna organizzazione interna <b>leggibile dalla macchina</b>.</p>
+      <p class="small muted">Foto, video, audio, testi liberi, documenti scansionati.</p>
+    </div>
+  </div>
+  <p>La maggior parte dei dati prodotti oggi è <mark>non strutturata</mark>: è anche la più difficile da analizzare.</p>
+  <aside class="notes">L'email è un buon esempio di semi-strutturato: mittente, data e oggetto sono campi etichettati, il corpo è testo libero. Domanda: "Una foto con i dati EXIF (data, posizione, modello del telefono) che cos'è?" Un'immagine non strutturata accompagnata da metadati semi-strutturati. L'affermazione che la maggior parte dei dati è non strutturata è una stima diffusa nel settore, non un numero preciso: presentarla come tendenza.</aside>
+</section>
+
+<section class="slide accent">
+  <div class="head"><p class="kicker">Le 5 V</p><h2>Cinque domande per capire un dataset</h2></div>
+  <p class="lead">Le prime tre V descrivono i dati, le ultime due dicono se ci si può fidare e se ne vale la pena.</p>
+  <div class="row">
+    <div class="card night grow"><p class="num">V</p><h3>Volume</h3><p class="small muted">Quanti?</p></div>
+    <div class="card night grow"><p class="num">V</p><h3>Velocità</h3><p class="small muted">Quanto in fretta?</p></div>
+    <div class="card night grow"><p class="num">V</p><h3>Varietà</h3><p class="small muted">Di che tipo?</p></div>
+    <div class="card night grow"><p class="num">V</p><h3>Veridicità</h3><p class="small muted">Sono affidabili?</p></div>
+    <div class="card night grow"><p class="num">V</p><h3>Valore</h3><p class="small muted">A che cosa servono?</p></div>
+  </div>
+  <aside class="notes">Storia: all'inizio degli anni 2000 l'analista Doug Laney parlò di tre V (Volume, Velocità, Varietà); Veridicità e Valore sono state aggiunte dopo. Alcuni testi ne elencano anche di più (variabilità, visualizzazione): per noi bastano cinque. Far ripetere le cinque domande a voce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le prime tre V</p><h2>Volume, Velocità, Varietà</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Volume</h3><p>La quantità: da terabyte a petabyte e oltre.</p><p class="small muted">Esempio: gli archivi degli esperimenti di fisica delle particelle crescono di petabyte ogni anno.</p></div>
+    <div class="card"><h3>Velocità</h3><p>Il ritmo con cui arrivano e la fretta di usarli.</p><p class="small muted">Esempio: un pagamento con carta va controllato contro le frodi prima di essere autorizzato, in pochi istanti.</p></div>
+    <div class="card"><h3>Varietà</h3><p>Formati e fonti diversi da mettere insieme.</p><p class="small muted">Esempio: in un ospedale ci sono esami in tabella, referti scritti, immagini radiologiche, segnali dei monitor.</p></div>
+  </div>
+  <div class="callout">Volume e velocità insieme: una rete di sensori che misura <b>ogni secondo</b> non si ferma mai, quindi i dati crescono senza sosta.</div>
+  <aside class="notes">Altri esempi da chiedere alla classe. Volume: l'archivio di tutte le foto caricate su un social. Velocità: un navigatore che ricalcola il percorso in base al traffico, usando le posizioni dei telefoni in movimento. Varietà: un'app di consegne che unisce mappe, ordini, recensioni e foto dei piatti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le ultime due V</p><h2>Veridicità e Valore</h2></div>
+  <div class="cols-2">
+    <div class="card bad">
+      <h3>Veridicità</h3>
+      <p>Quanto i dati sono corretti e affidabili.</p>
+      <ul class="points small">
+        <li>Un sensore guasto che segna 999 °C.</li>
+        <li>Righe duplicate, celle vuote, unità diverse.</li>
+        <li>Recensioni false, profili automatici.</li>
+      </ul>
+    </div>
+    <div class="card ok">
+      <h3>Valore</h3>
+      <p>I dati servono solo se portano a una decisione.</p>
+      <ul class="points small">
+        <li>Un'azienda di trasporti vede dove i bus sono pieni e aggiunge corse.</li>
+        <li>Una fabbrica capisce quando un macchinario sta per guastarsi.</li>
+      </ul>
+    </div>
+  </div>
+  <p>Dati sbagliati portano a decisioni sbagliate: <mark>pulire i dati</mark> è spesso il lavoro più lungo.</p>
+  <aside class="notes">"Garbage in, garbage out": se entra spazzatura, esce spazzatura. Il secondo esempio di valore si chiama manutenzione predittiva. Chiedere: "Raccogliere tutto, sempre, conviene?" No: costa spazio, energia, sicurezza e, con i dati personali, è vietato dal GDPR (principio di minimizzazione, ne parliamo a fine lezione).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Classifica i dataset: tipo e V principale</h2>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>#</th><th>Dataset</th></tr>
+      <tr><td>1</td><td>Temperatura e umidità inviate ogni secondo da migliaia di sensori di una città</td></tr>
+      <tr><td>2</td><td>Anni di video delle telecamere di un museo</td></tr>
+      <tr><td>3</td><td>Recensioni di ristoranti: stelle, testo libero e foto</td></tr>
+      <tr><td>4</td><td>Ordini di un negozio online: cliente, prodotto, prezzo, data</td></tr>
+      <tr><td>5</td><td>Log di un'app salvati in formato JSON</td></tr>
+      <tr><td>6</td><td>Tracce GPS di un'app per la corsa, con salti di centinaia di metri in galleria</td></tr>
+    </table>
+    <div class="stack">
+      <p class="small">In <b>Calc</b> crea le colonne <b>Dataset · Tipo · V principale · Motivazione</b>. Salva come <code>classificazione.ods</code>.</p>
+      <div class="card soft"><p class="small">Una V sola non basta? Scegli la più importante e cita l'altra nella motivazione.</p></div>
+      <div class="check"><b>Controllo:</b> il 2 è non strutturato, il 4 è strutturato; il 6 è il caso tipico di Veridicità.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione indicativa (conta la motivazione): 1 semi-strutturato o strutturato, Velocità (e Volume); 2 non strutturato, Volume; 3 misto: stelle strutturate, testo e foto non strutturati, Varietà (e Veridicità per le recensioni false); 4 strutturato, Valore (consigli di acquisto, previsioni di vendita); 5 semi-strutturato, Velocità o Volume; 6 strutturato o semi-strutturato (coordinate con orario), Veridicità. Far confrontare le risposte tra due compagni prima della correzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La pipeline</p><h2>Dal dato grezzo alla decisione</h2></div>
+  <div class="flow">
+    <div class="card soft"><h4>Raccolta</h4><p class="tiny">sensori, app, siti, API, log</p></div>
+    <div class="card soft"><h4>Archiviazione</h4><p class="tiny">data lake, database, cloud</p></div>
+    <div class="card soft"><h4>Elaborazione</h4><p class="tiny">pulizia, unione, aggregazione</p></div>
+    <div class="card soft"><h4>Analisi</h4><p class="tiny">statistiche, modelli, machine learning</p></div>
+    <div class="card fill"><h4>Visualizzazione</h4><p class="tiny">grafici e dashboard per chi decide</p></div>
+  </div>
+  <p class="lead">Ogni fase prepara la successiva. Un errore nella raccolta arriva fino al grafico finale, se nessuno lo ferma nell'elaborazione.</p>
+  <div class="callout hl">Oggi le proviamo in piccolo: la <b>stima</b> (raccolta e archiviazione), la <b>pulizia</b> in Calc (elaborazione), il <b>grafico</b> (visualizzazione).</div>
+  <aside class="notes">Collegare con le attività della lezione: la stima riguardava la raccolta e l'archiviazione; ora faremo elaborazione (pulizia) e visualizzazione (grafico) in piccolo, con Calc. Nel mondo reale ogni fase è automatica e gira su molti server. Domanda: "In quale fase entra il GDPR?" In tutte, a partire dalla raccolta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Pulisci i dati del sensore (veridicità)</h2>
+  <div class="cols-2" style="grid-template-columns:auto 1fr">
+    <table class="sheet">
+      <tr><th></th><th>A</th><th>B</th></tr>
+      <tr><th>1</th><td>Ora</td><td>Temp °C</td></tr>
+      <tr><th>2</th><td>08:00</td><td>20,5</td></tr>
+      <tr><th>3</th><td>09:00</td><td>21</td></tr>
+      <tr><th>4</th><td>09:00</td><td>21</td></tr>
+      <tr><th>5</th><td>10:00</td><td>21,5 °C</td></tr>
+      <tr><th>6</th><td>11:00</td><td>999</td></tr>
+      <tr><th>7</th><td>12:00</td><td>22,5</td></tr>
+      <tr><th>8</th><td>13:00</td><td></td></tr>
+      <tr><th>9</th><td>14:00</td><td>23</td></tr>
+    </table>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Ricopia i dati in <b>Calc</b>; in B11 scrivi <code>=MEDIA(B2:B9)</code> e annota il risultato.</li>
+        <li>Copia i dati in un secondo foglio chiamato <b>Pulito</b>. Scrivi <b>Controllo</b> in C1, in C2 la formula sotto, e trascinala fino a C9.</li>
+        <li>Elimina la riga doppia, scrivi 21,5 come numero, svuota i valori impossibili: <b>non inventarli</b>. Salva come <code>sensore-aula.ods</code>.</li>
+      </ol>
+      <p class="small"><code>=SE(VAL.NUMERO(B2);SE(B2&gt;50;"fuori scala";"ok");"da controllare")</code></p>
+      <div class="check"><b>Controllo:</b> prima della pulizia la media è 184,5 °C; dopo è 21,7 °C.</div>
+    </div>
+  </div>
+  <aside class="notes">Problemi nascosti: riga 4 duplicata (la formula non la segnala: va trovata a occhio o ordinando); B5 è testo per via di "°C" ("da controllare"); B6 = 999 è un errore del sensore ("fuori scala"); B8 è vuota ("da controllare"). Media sporca: MEDIA ignora testo e celle vuote, quindi (20,5+21+21+999+22,5+23)/6 = 1107/6 = 184,5. Media pulita su 20,5 · 21 · 21,5 · 22,5 · 23: 108,5/5 = 21,7. Sottolineare che un valore mancante si lascia vuoto o si segnala: inventarlo è falsificare i dati. Nel foglio pulito le ore 11:00 e 13:00 restano con la cella vuota.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli strumenti</p><h2>Come si gestiscono davvero i big data</h2></div>
+  <div class="cols-3">
+    <div class="card">
+      <h3>Data lake</h3>
+      <p class="small">Un grande archivio dove si versano i dati <b>grezzi</b>, in qualunque formato, per decidere dopo come usarli.</p>
+      <p class="tiny muted">Il data warehouse invece contiene dati già puliti e strutturati per le analisi.</p>
+    </div>
+    <div class="card">
+      <h3>Hadoop e Spark</h3>
+      <p class="small"><b>Hadoop</b> divide file enormi su molti computer e li elabora in parallelo. <b>Spark</b> lavora soprattutto in memoria ed è più veloce in molti casi.</p>
+      <p class="tiny muted">Entrambi sono progetti open source della Apache Software Foundation.</p>
+    </div>
+    <div class="card">
+      <h3>Database NoSQL</h3>
+      <p class="small">Non usano solo tabelle: si adattano a dati vari e a carichi enormi.</p>
+      <div class="chips"><span class="chip">documenti</span><span class="chip">chiave-valore</span><span class="chip">colonne</span><span class="chip">grafi</span></div>
+    </div>
+  </div>
+  <p class="muted">L'idea comune: invece di un computer sempre più potente, <b>tanti computer normali</b> che lavorano insieme.</p>
+  <aside class="notes">Basta riconoscere i nomi e il ruolo, senza dettagli tecnici. Esempi di database NoSQL: MongoDB (documenti JSON), Redis (chiave-valore), Cassandra (a colonne), Neo4j (grafi, utile per le reti sociali). Il nome Hadoop viene da un elefante di peluche del figlio di uno degli autori. Spark può essere molto più veloce di MapReduce perché evita di riscrivere i risultati intermedi su disco.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Dal foglio pulito al grafico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel foglio <b>Pulito</b> di <code>sensore-aula.ods</code> seleziona le colonne Ora e Temp (A1:B8).</li>
+      <li>Usa <b>Inserisci ▸ Grafico</b> e scegli il tipo <b>Linee</b> (punti e linee).</li>
+      <li>Aggiungi il titolo "Temperatura in aula" e i nomi degli assi: Ora, °C.</li>
+      <li>Fai lo stesso grafico con i dati del primo foglio, quelli sporchi, e mettili a confronto.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Domanda</h4><p class="small">Che cosa succede al grafico sporco? Quale dei due mostreresti a chi deve decidere?</p></div>
+      <div class="check"><b>Controllo:</b> nel grafico pulito la linea sale da 20,5 a 23 °C con due buchi; in quello sporco il 999 schiaccia tutto il resto.</div>
+    </div>
+  </div>
+  <aside class="notes">Nel foglio pulito le righe sono 7 (08:00–14:00, senza il doppione), quindi l'intervallo è A1:B8. Calc di solito lascia una lacuna dove la cella è vuota: è corretto, il dato manca davvero. Nel grafico sporco l'asse verticale arriva a circa 1000 e le temperature normali sembrano una linea piatta vicino allo zero; il 21,5 °C scritto come testo può non essere disegnato. È la visualizzazione, ultima fase della pipeline. Chi finisce prima: aggiungere una linea con la media 21,7.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Privacy</p><h2>Dati personali e GDPR</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p><b>Dato personale</b>: qualunque informazione su una persona identificata o identificabile, anche una posizione GPS o un indirizzo IP.</p>
+      <ul class="points small">
+        <li><b>Base giuridica</b>, per esempio il consenso.</li>
+        <li><b>Finalità</b> dichiarata: i dati si usano solo per quello scopo.</li>
+        <li><b>Minimizzazione</b>: solo i dati che servono.</li>
+        <li><b>Conservazione</b> limitata nel tempo e <b>sicurezza</b>.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>I tuoi diritti</h4><p class="small">Accesso, rettifica, cancellazione ("diritto all'oblio"), portabilità, opposizione.</p></div>
+      <div class="callout small">Il <b>GDPR</b> (Regolamento UE 2016/679) si applica dal 25 maggio 2018. Le sanzioni arrivano fino a 20 milioni di euro o al 4% del fatturato mondiale annuo.</div>
+    </div>
+  </div>
+  <aside class="notes">Anonimizzare significa rendere impossibile risalire alla persona; pseudonimizzare significa sostituire il nome con un codice, ma chi ha la chiave può risalire: i dati pseudonimizzati restano dati personali. Esempio di rischio dei big data: incrociando dataset diversi "anonimi" (posizione, orari, età) si può a volte reidentificare una persona. Collegamento con Startup Lab: se il prodotto del team raccoglie dati degli utenti, l'informativa privacy e la minimizzazione vanno nelle specifiche tecniche. Per le sanzioni vale il valore più alto tra i due.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Che cosa portarsi a casa</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Fonti e tipi</h3><p class="muted">Sensori, social, transazioni, log. Dati strutturati, semi-strutturati, non strutturati.</p></div>
+    <div class="card"><p class="num">2</p><h3>Le 5 V</h3><p class="muted">Volume, Velocità, Varietà, Veridicità, Valore. Unità fino a PB ed EB.</p></div>
+    <div class="card"><p class="num">3</p><h3>Pipeline e regole</h3><p class="muted">Raccolta, archiviazione, elaborazione, analisi, visualizzazione. Sempre nel rispetto del GDPR.</p></div>
+  </div>
+  <p class="lead">Più dati non vuol dire più verità: servono dati <b>puliti</b>, <b>utili</b> e raccolti <b>con il permesso</b>.</p>
+  <aside class="notes">Domanda di uscita: "Dite una V e un esempio che non abbiamo fatto in classe". Collegamento con Startup Lab: quali dati raccoglierà il prodotto del vostro team, e quali V lo riguardano?</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

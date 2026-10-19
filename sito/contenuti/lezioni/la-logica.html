@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La logica · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 1 · Il mondo dell'informatica</p>
+  <h1>La logica</h1>
+  <p class="lead">Vero o falso, acceso o spento: come le regole del ragionamento sono diventate i circuiti che fanno funzionare ogni computer.</p>
+  <aside class="notes">Obiettivi: riconoscere una proposizione, usare i connettivi NOT, AND, OR (e XOR), costruire tabelle di verità, capire come la logica diventa hardware con interruttori e porte logiche. Durata indicativa: 2–3 ore. Collegamento con la lezione sul binario: vero = 1, falso = 0. Le condizioni con "e", "o", "non" torneranno in Scratch, Flowgorithm, C e Python.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>«Questa frase è falsa.» È vera o falsa?</h2></div>
+  <div class="poll" data-id="mentitore">
+    <ol><li>Vera</li><li>Falsa</li><li>Né vera né falsa</li><li>Tutte e due insieme</li></ol>
+  </div>
+  <p class="muted">Pensaci bene: se è vera, allora è falsa. Se è falsa, allora è vera…</p>
+  <aside class="notes">È il paradosso del mentitore, noto fin dall'antica Grecia (attribuito a Eubulide di Mileto, IV secolo a.C.). Non c'è una risposta giusta nel sondaggio: serve a far nascere il bisogno di una definizione precisa. La logica classica lavora solo con frasi a cui si può dare uno e un solo valore, vero o falso: questa frase non è una proposizione. Lasciare argomentare chi ha scelto ogni opzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La logica proposizionale</p><h2>Una proposizione è vera oppure falsa</h2></div>
+  <p class="lead">Una <b>proposizione</b> è una frase di cui si può dire con certezza se è <mark>vera</mark> o <mark>falsa</mark>. Non c'è una terza possibilità.</p>
+  <div class="cols-2">
+    <div class="card ok"><h3>Sono proposizioni</h3><ul class="points"><li>Roma è la capitale d'Italia <span class="muted">(vera)</span></li><li>8 è un numero dispari <span class="muted">(falsa)</span></li><li>Il PC del laboratorio ha 8 GB di RAM</li></ul></div>
+    <div class="card bad"><h3>Non sono proposizioni</h3><ul class="points"><li>Che ore sono?</li><li>Chiudi la finestra!</li><li>Il rosso è il colore più bello</li></ul></div>
+  </div>
+  <aside class="notes">Domande, ordini ed esclamazioni non sono né vere né false. Le opinioni ("il colore più bello") dipendono da chi parla. "Il PC del laboratorio ha 8 GB di RAM" è una proposizione anche se non sappiamo subito se è vera: basta controllare (collegamento con la carta d'identità del PC della lezione precedente). In informatica una proposizione si chiama anche condizione o espressione booleana.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di queste NON è una proposizione?</h2></div>
+  <div class="poll" data-id="proposizione" data-tipo="quiz" data-risposta="C">
+    <ol><li>Parigi è la capitale della Germania</li><li>7 è un numero pari</li><li>Accendi il proiettore!</li><li>Nel laboratorio ci sono 24 computer</li></ol>
+    <p class="why">"Accendi il proiettore!" è un ordine: non è né vero né falso. A e B sono proposizioni false, ma restano proposizioni. D è una proposizione: basta contare i computer per sapere se è vera.</p>
+  </div>
+  <aside class="notes">Il tranello: molti scartano A e B perché sono false. Una proposizione falsa è comunque una proposizione. Variante a voce: "x è maggiore di 5" è una proposizione? Solo quando si conosce il valore di x: in programmazione è proprio così che funzionano le condizioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I connettivi logici</p><h2>Tre parole per costruire ogni ragionamento</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">NOT</p><h3>non</h3><p>Inverte il valore: vero diventa falso, falso diventa vero.</p><p class="muted">NON piove</p></div>
+    <div class="card"><p class="num">AND</p><h3>e</h3><p>È vera solo se <b>entrambe</b> le proposizioni sono vere.</p><p class="muted">Ho finito i compiti E non piove</p></div>
+    <div class="card"><p class="num">OR</p><h3>o</h3><p>È vera se <b>almeno una</b> delle proposizioni è vera.</p><p class="muted">Vado a piedi O in bici</p></div>
+  </div>
+  <div class="callout">Esiste anche lo <b>XOR</b> (o esclusivo): è vero se le due proposizioni hanno valori <b>diversi</b>. "O mangi la minestra o salti dalla finestra."</div>
+  <aside class="notes">Simboli usati nei libri: ¬ per NOT, ∧ per AND, ∨ per OR, ⊕ per XOR. Far costruire alla classe una proposizione composta sulla propria giornata, ad esempio: "Esco SE ho finito i compiti E (c'è il sole O ho l'ombrello)". Le parentesi contano, come in matematica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tabelle di verità</p><h2>Tutti i casi possibili, in una tabella</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data">
+      <tr><th>A</th><th>B</th><th>A AND B</th><th>A OR B</th><th>A XOR B</th></tr>
+      <tr><td class="mono">0</td><td class="mono">0</td><td class="mono">0</td><td class="mono">0</td><td class="mono">0</td></tr>
+      <tr><td class="mono">0</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td></tr>
+      <tr><td class="mono">1</td><td class="mono">0</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td></tr>
+      <tr><td class="mono">1</td><td class="mono">1</td><td class="mono hl">1</td><td class="mono">1</td><td class="mono">0</td></tr>
+    </table>
+    <div class="stack">
+      <table class="data">
+        <tr><th>A</th><th>NOT A</th></tr>
+        <tr><td class="mono">0</td><td class="mono">1</td></tr>
+        <tr><td class="mono">1</td><td class="mono">0</td></tr>
+      </table>
+      <div class="callout">1 = vero, 0 = falso. Con 2 proposizioni i casi sono 2² = <b>4</b>, con 3 sono 2³ = <b>8</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Collegamento con il binario: le righe della tabella sono i numeri da 0 a 3 scritti con 2 bit (00, 01, 10, 11). Con n proposizioni le righe sono 2ⁿ, come i valori che si scrivono con n bit. Far notare la cella evidenziata: AND dà 1 in un solo caso, OR dà 0 in un solo caso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>«Marco prende il primo O il secondo.» Marco li prende tutti e due.</h2></div>
+  <div class="poll" data-id="or-inclusivo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Falsa: "o" vuol dire uno solo dei due</li><li>Vera: l'OR è vero anche quando lo sono entrambe</li><li>Né vera né falsa: la frase è ambigua</li></ol>
+    <p class="why">In logica l'OR è inclusivo: è falso solo quando entrambe le proposizioni sono false. Il "o uno o l'altro" della lingua di tutti i giorni è lo XOR, che qui darebbe falso.</p>
+  </div>
+  <aside class="notes">Il tranello nasce dall'italiano: al ristorante "primo o secondo" significa di solito uno solo dei due (o esclusivo). In informatica, quando si scrive OR, si intende sempre l'OR inclusivo. Domanda di rilancio: e con lo XOR? La proposizione sarebbe falsa.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le tabelle di verità in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri LibreOffice Calc. Riga 1: <b>A</b>, <b>B</b>, <b>AND</b>, <b>OR</b>, <b>XOR</b>, <b>NOT A</b>.</li>
+      <li>In A2:B5 scrivi le 4 coppie: 0 0, 0 1, 1 0, 1 1.</li>
+      <li>In C2 scrivi <code>=SE(E(A2;B2);1;0)</code>, in D2 <code>=SE(O(A2;B2);1;0)</code>.</li>
+      <li>In E2 <code>=SE(XOR(A2;B2);1;0)</code>, in F2 <code>=SE(NON(A2);1;0)</code>. Trascina C2:F2 fino alla riga 5.</li>
+      <li>Salva come <b>tabelle-verita.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dall'alto in basso la colonna AND è 0 0 0 1, la colonna OR è 0 1 1 1. Confronta il resto con la tabella della slide precedente.</div>
+  </div>
+  <aside class="notes">In Calc in italiano le funzioni logiche si chiamano E, O, XOR, NON; restituiscono VERO o FALSO, e la funzione SE le trasforma in 1 e 0. Calc considera 0 come falso e qualunque altro numero come vero. Soluzioni: XOR 0 1 1 0, NOT A 1 1 0 0. Estensione per i più veloci: aggiungere la colonna NAND con =SE(NON(E(A2;B2));1;0), risultato 1 1 1 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come la logica diventa hardware</p><h2>Due interruttori, due porte logiche</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <svg viewBox="0 0 560 200" style="width:100%;height:190px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="6" stroke-linecap="round"><path d="M30,60 H130 M200,60 H290 M360,60 H530 V91 M530,139 V170 H300 M270,170 H30 V60"/><path d="M300,140 V200 M270,152 V188" /><path d="M130,60 L195,32 M290,60 L355,32" stroke="var(--accent)" stroke-width="7"/><circle cx="130" cy="60" r="7" fill="#172033"/><circle cx="290" cy="60" r="7" fill="#172033"/><circle cx="530" cy="115" r="24"/><path d="M513,98 L547,132 M547,98 L513,132" stroke-width="4"/><text x="155" y="105" font-size="34" font-family="sans-serif" fill="#172033" stroke="none">A</text><text x="315" y="105" font-size="34" font-family="sans-serif" fill="#172033" stroke="none">B</text></svg>
+      <h3>In serie = AND</h3>
+      <p class="muted">La lampadina si accende solo se A <b>e</b> B sono chiusi.</p>
+    </div>
+    <div class="card">
+      <svg viewBox="0 -12 560 212" style="width:100%;height:190px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="6" stroke-linecap="round"><path d="M30,60 H150 V25 H220 M290,25 H360 V95 H290 M220,95 H150 V60 M360,60 H530 V91 M530,139 V170 H300 M270,170 H30 V60"/><path d="M300,140 V200 M270,152 V188"/><path d="M220,25 L285,0 M220,95 L285,68" stroke="var(--accent)" stroke-width="7"/><circle cx="220" cy="25" r="7" fill="#172033"/><circle cx="220" cy="95" r="7" fill="#172033"/><circle cx="530" cy="115" r="24"/><path d="M513,98 L547,132 M547,98 L513,132" stroke-width="4"/><text x="110" y="40" font-size="34" font-family="sans-serif" fill="#172033" stroke="none">A</text><text x="110" y="130" font-size="34" font-family="sans-serif" fill="#172033" stroke="none">B</text></svg>
+      <h3>In parallelo = OR</h3>
+      <p class="muted">La lampadina si accende se A <b>o</b> B (o tutti e due) sono chiusi.</p>
+    </div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nei chip gli interruttori sono <b>transistor</b>, comandati dall'elettricità invece che dalle dita. Il chip A17 Pro di un iPhone 15 Pro ne contiene circa <b>19 miliardi</b>.</p></div>
+  <aside class="notes">Fu Claude Shannon, nella sua tesi al MIT del 1937 ("A Symbolic Analysis of Relay and Switching Circuits"), a mostrare che l'algebra di Boole descrive esattamente i circuiti a interruttori e relè: interruttore chiuso = 1, aperto = 0. Il dato dei 19 miliardi di transistor è quello dichiarato da Apple alla presentazione del chip (settembre 2023). Domanda: come si realizza il NOT con un interruttore? Con un pulsante che, premuto, apre il circuito invece di chiuderlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>George Boole e le leggi del pensiero</h2></div>
+  <figure class="citazione">
+    <blockquote>Lo scopo di questo trattato è indagare le leggi fondamentali delle operazioni della mente con cui si ragiona, ed esprimerle nel linguaggio simbolico di un calcolo.</blockquote>
+    <figcaption><b>George Boole</b>, matematico inglese, "An Investigation of the Laws of Thought", 1854</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 1943 McCulloch e Pitts descrissero un <b>neurone artificiale</b> che funzionava come una porta logica. Le reti neurali dei chatbot di oggi sono molto più complesse, ma discendono da quell'idea.</p></div>
+  <aside class="notes">Traduzione nostra, leggermente abbreviata, della prima frase del libro: "The design of the following treatise is to investigate the fundamental laws of those operations of the mind by which reasoning is performed; to give expression to them in the symbolical language of a Calculus…". Boole era un insegnante in gran parte autodidatta. Warren McCulloch e Walter Pitts, "A Logical Calculus of the Ideas Immanent in Nervous Activity" (1943): i loro neuroni a soglia potevano realizzare AND, OR e NOT. Collegamento con la UDA 2 sulle reti neurali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le porte logiche</p><h2>I mattoncini di ogni processore</h2></div>
+  <div class="cols-4">
+    <div class="card"><svg viewBox="0 0 160 100" style="width:100%;height:110px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="5"><path d="M0,30 H40 M0,70 H40 M120,50 H160"/><path d="M40,10 H80 A40,40 0 0 1 80,90 H40 Z" fill="var(--accent-soft)"/></svg><h3>AND</h3><p class="muted">1 solo se tutti gli ingressi sono 1</p></div>
+    <div class="card"><svg viewBox="0 0 160 100" style="width:100%;height:110px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="5"><path d="M0,30 H48 M0,70 H48 M125,50 H160"/><path d="M35,10 Q60,50 35,90 Q95,90 125,50 Q95,10 35,10 Z" fill="var(--accent-soft)"/></svg><h3>OR</h3><p class="muted">1 se almeno un ingresso è 1</p></div>
+    <div class="card"><svg viewBox="0 0 160 100" style="width:100%;height:110px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="5"><path d="M0,50 H40 M126,50 H160"/><path d="M40,12 L106,50 L40,88 Z" fill="var(--accent-soft)"/><circle cx="114" cy="50" r="8" fill="#fff"/></svg><h3>NOT</h3><p class="muted">Inverte: 0 diventa 1, 1 diventa 0</p></div>
+    <div class="card"><svg viewBox="0 0 160 100" style="width:100%;height:110px" aria-hidden="true" fill="none" stroke="#172033" stroke-width="5"><path d="M0,30 H48 M0,70 H48 M125,50 H160"/><path d="M24,10 Q49,50 24,90"/><path d="M35,10 Q60,50 35,90 Q95,90 125,50 Q95,10 35,10 Z" fill="var(--accent-soft)"/></svg><h3>XOR</h3><p class="muted">1 se gli ingressi sono diversi</p></div>
+  </div>
+  <p>Combinando porte logiche si costruiscono circuiti che <b>sommano</b> numeri binari, li confrontano e li ricordano.</p>
+  <div class="callout">Esempio: in binario 1 + 1 = <b>10</b>. Una XOR dà la cifra 0, una AND dà il riporto 1. Due porte e il computer sa già sommare due bit.</div>
+  <aside class="notes">Questi sono i simboli standard (norma americana ANSI/IEEE, i più usati nei simulatori). Esempio da mostrare alla lavagna: il semisommatore (half adder) somma due bit con una XOR (cifra della somma) e una AND (riporto): 1 + 1 = 10 in binario, XOR dà 0, AND dà 1. Curiosità: in Minecraft con la redstone si costruiscono le stesse porte logiche, e alcuni giocatori hanno costruito interi computer funzionanti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni porta alla sua regola</h2></div>
+  <dl class="puzzle-abbina" data-id="porte">
+    <dt>AND</dt><dd>L'uscita è 1 solo se tutti gli ingressi sono 1</dd>
+    <dt>OR</dt><dd>L'uscita è 0 solo se tutti gli ingressi sono 0</dd>
+    <dt>NOT</dt><dd>Ha un solo ingresso e lo inverte</dd>
+    <dt>XOR</dt><dd>L'uscita è 1 se gli ingressi sono diversi</dd>
+    <dt>NAND</dt><dd>L'uscita è 0 solo se tutti gli ingressi sono 1</dd>
+  </dl>
+  <aside class="notes">Le regole sono scritte "al contrario" rispetto alla slide precedente per OR e NAND: costringono a ragionare. NAND = NOT AND. Curiosità: con sole porte NAND si può costruire qualunque altro circuito logico, per questo è detta porta universale; molte memorie flash (le chiavette USB) si chiamano "NAND flash" per il modo in cui sono costruite.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Costruisci un circuito logico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il browser e vai su <b>circuitverse.org/simulator</b>. Per costruire non serve un account.</li>
+      <li>Trascina due ingressi (<b>Input</b>), una porta <b>AND</b> e un'uscita (<b>Output</b>), poi collegali con i fili.</li>
+      <li>Clicca sugli ingressi per passare da 0 a 1: prova le 4 combinazioni e annota l'uscita.</li>
+      <li>Sostituisci la AND con una OR, poi con una XOR, e ripeti.</li>
+      <li>Fai uno screenshot (<b>Win + Maiusc + S</b>), incollalo in Writer e salva come <b>circuito-logico.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con la AND l'uscita vale 1 in un solo caso su 4; con la XOR vale 1 in due casi. Deve tornare con la tabella di verità di Calc.</div>
+  </div>
+  <aside class="notes">CircuitVerse è un simulatore gratuito e open source: l'editor si usa senza registrazione, l'account serve solo per salvare online (per questo lo screenshot). Alternativa senza account: logic.ly/demo. Sfida extra: costruire un allarme che suona se "porta aperta" AND "allarme inserito", poi aggiungere un pulsante di prova con una OR. Soluzione dell'allarme: (porta AND inserito) OR prova.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ragiona come un computer</p><h2>Il cancello si apre se NON (piove E è domenica). Oggi è domenica e non piove.</h2></div>
+  <div class="poll" data-id="cancello" data-tipo="quiz" data-risposta="D">
+    <ol><li>Resta chiuso, perché è domenica</li><li>Resta chiuso, perché la condizione è falsa</li><li>Non si può sapere</li><li>Si apre</li></ol>
+    <p class="why">Piove = falso, domenica = vero. Falso AND vero = falso. NOT falso = vero: il cancello si apre. Prima si calcola la parentesi, poi il NOT.</p>
+  </div>
+  <aside class="notes">Il tranello è fermarsi a "è domenica" e rispondere A. Far scrivere la tabella dei passaggi alla lavagna. Rilancio: e se piovesse di domenica? Vero AND vero = vero, NOT vero = falso: il cancello resta chiuso. È l'unico caso in cui resta chiuso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La logica in un programma Scratch</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Vai su <b>scratch.mit.edu</b> e clicca <b>Crea</b>.</li>
+      <li>Nella categoria Variabili crea la variabile <b>età</b>.</li>
+      <li>Costruisci lo script a destra: la condizione usa il blocco verde <b>e</b> degli Operatori.</li>
+      <li>Prova le combinazioni con la bandiera verde.</li>
+      <li>Menu <b>File</b>, <b>Salva sul tuo computer</b>: <b>biglietto-logico.sb3</b>.</li>
+    </ol>
+    <div class="stack">
+<pre class="code" style="font-size:25px;padding:24px 30px"><span class="k">quando si clicca su</span> bandiera verde
+<span class="k">chiedi</span> <span class="s">[Quanti anni hai?]</span> e attendi
+<span class="k">porta</span> età <span class="k">a</span> (risposta)
+<span class="k">chiedi</span> <span class="s">[Hai il biglietto? (si/no)]</span> e attendi
+<span class="k">se</span> &lt;(età &gt; 13) <span class="hl">e</span> (risposta = si)&gt; <span class="k">allora</span>
+   <span class="k">dire</span> <span class="s">[Puoi entrare]</span>
+<span class="k">altrimenti</span>
+   <span class="k">dire</span> <span class="s">[Non puoi entrare]</span></pre>
+      <div class="check"><b>Controllo:</b> 14 e si: entra. 14 e no: non entra. 10 e si: non entra. Un solo caso su quattro apre: è una AND.</div>
+    </div>
+  </div>
+  <aside class="notes">Scratch online si usa senza account; per salvare si scarica il file .sb3 sul computer. I blocchi "e", "o", "non" sono nella categoria Operatori (verdi). Sfida extra: far entrare anche chi ha meno di 14 anni ma è accompagnato, con una O: (età &gt; 13 e biglietto) o accompagnato. Anticipa la UDA 4 su Scratch.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Viaggio nel tempo</p><h2>Metti in ordine queste tappe, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="storia-logica">
+    <li>Aristotele studia i sillogismi, le regole del ragionamento corretto</li>
+    <li>Leibniz sogna un calcolo capace di risolvere ogni disputa</li>
+    <li>George Boole pubblica Le leggi del pensiero</li>
+    <li>Claude Shannon applica la logica di Boole ai circuiti a relè</li>
+    <li>McCulloch e Pitts descrivono il neurone artificiale</li>
+    <li>John McCarthy usa per la prima volta l'espressione «intelligenza artificiale»</li>
+  </ol>
+  <aside class="notes">Date: Aristotele, IV secolo a.C. (opere di logica raccolte nell'Organon); Leibniz, seconda metà del Seicento (il suo motto "Calculemus!", calcoliamo); Boole, 1854; Shannon, tesi del 1937; McCulloch e Pitts, 1943; McCarthy, proposta per il seminario di Dartmouth del 1955, seminario nel 1956. Tranello: molti invertono Shannon e McCulloch-Pitts, che sono a soli 6 anni di distanza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto: A = 1, B = 0</h2></div>
+  <div class="puzzle-codice" data-risposta="13" data-aiuto="i quattro bit formano 1101: convertilo in decimale">
+    <ul class="points">
+      <li>1° bit: A OR B</li>
+      <li>2° bit: NOT B</li>
+      <li>3° bit: A AND B</li>
+      <li>4° bit: A XOR B</li>
+      <li>Metti i 4 bit in fila e converti il numero binario in decimale: è il codice.</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1, 1, 0, 1: 1101₂ = 8 + 4 + 1 = 13. Logica e binario lavorano insieme.</div>
+  </div>
+  <aside class="notes">Codice: 13. A OR B = 1, NOT B = 1, A AND B = 0, A XOR B = 1 → 1101₂ = 13. Errore tipico: inserire 1101 senza convertire (il lucchetto non si apre), oppure sbagliare la AND. A squadre, la prima squadra che apre vince.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una proposizione può essere solo vera o <span class="blank" data-risposta="falsa"></span>.</p>
+    <p>A AND B è vera solo se A e B sono entrambe <span class="blank" data-risposta="vere"></span>.</p>
+    <p>A OR B è falsa solo se A e B sono entrambe <span class="blank" data-risposta="false"></span>.</p>
+    <p>Due interruttori in serie realizzano la porta <span class="blank" data-risposta="AND|E"></span>.</p>
+    <p>Il matematico che nel 1854 trasformò la logica in calcolo si chiamava George <span class="blank" data-risposta="Boole"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti di tempo. Soluzioni: falsa, vere, false, AND (accettato E), Boole.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Proposizione = frase vera o falsa, senza vie di mezzo</li>
+      <li>NOT inverte, AND vuole tutto vero, OR almeno un vero</li>
+      <li>XOR = valori diversi; l'OR della logica è inclusivo</li>
+    </ul>
+    <ul class="points">
+      <li>Tabelle di verità: con n proposizioni, 2ⁿ righe</li>
+      <li>Serie = AND, parallelo = OR: la logica diventa circuito</li>
+      <li>Miliardi di porte logiche formano un processore</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula, "Le regole del gioco in logica" (si apre quando l'argomento viene segnato come svolto).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

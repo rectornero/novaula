@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numeri decimali e binari · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Sistemi di numerazione</p>
+  <h1>Numeri decimali<br>e binari</h1>
+  <p class="lead">Perché il computer conta solo con 0 e 1, e come passare da una base all'altra.</p>
+  <aside class="notes">Aprire chiedendo: "quante dita servono a un computer per contare?". Obiettivo della lezione: saper convertire a mano in entrambe le direzioni fino a 255.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di partenza</p><h2>Contiamo in base 10 perché abbiamo 10 dita</h2></div>
+  <p class="lead">Nel sistema <b>decimale</b> usiamo 10 cifre, da 0 a 9. Quando finiscono, aggiungiamo una cifra a sinistra.</p>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">10</p><h3>cifre</h3><p>0 1 2 3 4 5 6 7 8 9</p></div>
+    <div class="card soft"><p class="num">9 → 10</p><h3>riporto</h3><p>Finite le cifre, si riparte da 0 e si aggiunge 1 a sinistra.</p></div>
+    <div class="card soft"><p class="num">×10</p><h3>posizione</h3><p>Ogni posto a sinistra vale 10 volte quello a destra.</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sistema posizionale</p><h2>La stessa cifra vale di più se sta più a sinistra</h2></div>
+  <table class="data">
+    <tr><th>Migliaia · 10³</th><th>Centinaia · 10²</th><th>Decine · 10¹</th><th>Unità · 10⁰</th></tr>
+    <tr><td class="mono">2</td><td class="mono">0</td><td class="mono">2</td><td class="mono">6</td></tr>
+  </table>
+  <div class="formula"><small>2026 scomposto</small>2·1000 + 0·100 + 2·10 + 6·1 = <span class="hl">2026</span></div>
+  <p>Il <b>valore</b> di una cifra dipende dalla <mark>posizione</mark>: il 2 di sinistra vale 2000, quello in mezzo vale 20.</p>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">E il computer?</p><h2>Dentro il computer ci sono solo due stati</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="icon">⚡</p><h3>Corrente sì · corrente no</h3><p class="muted">Un circuito è acceso o spento: due stati facili da distinguere, anche con disturbi.</p></div>
+    <div class="card"><p class="icon">0 1</p><h3>Due cifre bastano</h3><p class="muted">Spento = <b>0</b>, acceso = <b>1</b>. Una cifra binaria si chiama <b>bit</b> (binary digit).</p></div>
+  </div>
+  <p class="lead">Con 8 bit si forma un <b>byte</b>: abbastanza per una lettera o un numero da 0 a 255.</p>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Base 2</p><h2>In binario ogni posto vale il doppio</h2></div>
+  <div class="bits">
+    <span><b>0</b><small>128</small></span><span><b>0</b><small>64</small></span><span><b>0</b><small>32</small></span><span><b>0</b><small>16</small></span>
+    <span><b>0</b><small>8</small></span><span><b>0</b><small>4</small></span><span><b>0</b><small>2</small></span><span><b>0</b><small>1</small></span>
+  </div>
+  <p>I <b>pesi</b> sono le potenze di 2: 1, 2, 4, 8, 16, 32, 64, 128. Si leggono da destra verso sinistra.</p>
+  <div class="callout hl">Trucco: ogni peso è il <b>doppio</b> di quello alla sua destra. Basta saper raddoppiare.</div>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da binario a decimale</p><h2>Si sommano i pesi dove c'è un 1</h2></div>
+  <div class="bits">
+    <span><b>0</b><small>128</small></span><span><b>0</b><small>64</small></span><span><b class="on">1</b><small>32</small></span><span><b>0</b><small>16</small></span>
+    <span><b class="on">1</b><small>8</small></span><span><b class="on">1</b><small>4</small></span><span><b>0</b><small>2</small></span><span><b class="on">1</b><small>1</small></span>
+  </div>
+  <div class="formula"><small>00101101 in decimale</small>32 + 8 + 4 + 1 = <span class="hl">45</span></div>
+  <p class="muted">Gli 0 non contano: valgono zero volte il loro peso.</p>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Prova tu: da binario a decimale</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Apri <b>Calc</b> e crea una tabella con due colonne: <b>Binario</b> e <b>Decimale</b>. Converti a mano questi numeri e scrivi il risultato.</p>
+      <table class="data compact">
+        <tr><th>Binario</th><th>Decimale</th></tr>
+        <tr><td class="mono">00000101</td><td>?</td></tr>
+        <tr><td class="mono">00010010</td><td>?</td></tr>
+        <tr><td class="mono">01000001</td><td>?</td></tr>
+        <tr><td class="mono">11111111</td><td>?</td></tr>
+      </table>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Suggerimento</h4><p>Scrivi sopra ogni bit il suo peso: 128 64 32 16 8 4 2 1.</p></div>
+      <div class="check"><b>Controllo:</b> il primo fa 5, l'ultimo fa 255, il numero più grande con 8 bit.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: 5, 18, 65, 255. Far notare che 65 è il codice della lettera A.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da decimale a binario</p><h2>Metodo delle divisioni successive</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Dividi il numero per <b>2</b>.</li>
+      <li>Scrivi il <b>resto</b> (0 o 1).</li>
+      <li>Ripeti con il <b>quoziente</b> finché arrivi a 0.</li>
+      <li>Leggi i resti <mark>dal basso verso l'alto</mark>.</li>
+    </ol>
+    <table class="data compact">
+      <tr><th>Divisione</th><th>Quoziente</th><th>Resto</th></tr>
+      <tr><td class="mono">13 : 2</td><td class="mono">6</td><td class="mono hl">1</td></tr>
+      <tr><td class="mono">6 : 2</td><td class="mono">3</td><td class="mono hl">0</td></tr>
+      <tr><td class="mono">3 : 2</td><td class="mono">1</td><td class="mono hl">1</td></tr>
+      <tr><td class="mono">1 : 2</td><td class="mono">0</td><td class="mono hl">1</td></tr>
+    </table>
+  </div>
+  <div class="formula"><small>Resti letti dal basso</small>13 in binario = <span class="hl">1101</span></div>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Secondo metodo</p><h2>Sottrarre il peso più grande possibile</h2></div>
+  <p class="lead">Utile per fare i conti a mente. Esempio con <b>100</b>:</p>
+  <div class="cols-4">
+    <div class="card"><p class="num">64</p><p>100 − 64 = <b>36</b></p><p class="muted small">bit del 64 → 1</p></div>
+    <div class="card"><p class="num">32</p><p>36 − 32 = <b>4</b></p><p class="muted small">bit del 32 → 1</p></div>
+    <div class="card"><p class="num">4</p><p>4 − 4 = <b>0</b></p><p class="muted small">bit del 4 → 1</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">fine</p><p>Tutti gli altri bit sono 0.</p></div>
+  </div>
+  <div class="formula"><small>100 in binario (8 bit)</small><span class="hl">01100100</span></div>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Prova tu: da decimale a binario</h2>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Nel foglio di prima aggiungi un secondo foglio chiamato <b>Divisioni</b>. Per ciascun numero costruisci la tabella delle divisioni: <b>Divisione · Quoziente · Resto</b>.</p>
+      <div class="chips"><span class="chip">7</span><span class="chip">20</span><span class="chip">42</span><span class="chip">99</span><span class="chip">200</span></div>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Verifica</h4><p>Riconverti ogni risultato in decimale sommando i pesi: devi ritrovare il numero di partenza.</p></div>
+      <div class="check"><b>Controllo:</b> 42 = 101010, 200 = 11001000.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: 7 = 111, 20 = 10100, 42 = 101010, 99 = 1100011, 200 = 11001000.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quanto si può contare</p><h2>Con n bit si contano 2ⁿ valori</h2></div>
+  <table class="data">
+    <tr><th>Bit</th><th>Combinazioni</th><th>Da … a</th><th>Dove si usa</th></tr>
+    <tr><td>1</td><td>2</td><td class="mono">0 – 1</td><td>Sì / no, acceso / spento</td></tr>
+    <tr><td>4</td><td>16</td><td class="mono">0 – 15</td><td>Una cifra esadecimale</td></tr>
+    <tr><td>8 (1 byte)</td><td>256</td><td class="mono">0 – 255</td><td>Un carattere, una componente di colore</td></tr>
+    <tr><td>16</td><td>65.536</td><td class="mono">0 – 65.535</td><td>Caratteri Unicode di base</td></tr>
+  </table>
+  <p class="muted">Ogni bit in più <b>raddoppia</b> le combinazioni possibili.</p>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le tre cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Pesi</h3><p class="muted">In binario ogni posto vale il doppio: 1, 2, 4, 8, 16, 32, 64, 128.</p></div>
+    <div class="card"><p class="num">2</p><h3>Binario → decimale</h3><p class="muted">Somma i pesi dove c'è un 1.</p></div>
+    <div class="card"><p class="num">3</p><h3>Decimale → binario</h3><p class="muted">Dividi per 2 e leggi i resti dal basso.</p></div>
+  </div>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Difendersi: le contromisure · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">Sistemi e reti · Sicurezza informatica</p>
+  <h1>Difendersi:<br>le contromisure</h1>
+  <p class="lead">Dagli attacchi alle difese: che cosa fa davvero un'azienda, una scuola o una persona per proteggersi.</p>
+  <aside class="notes">Riprendere la tabella finale della lezione sugli attacchi: per ogni attacco oggi troviamo almeno una difesa. Obiettivo: saper scegliere e motivare le contromisure per un caso concreto, e saper scrivere codice che non sia vulnerabile a SQL injection e XSS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'idea di fondo</p><h2>Difesa in profondità: più strati, non un muro solo</h2></div>
+  <table class="data compact">
+    <tr><th>Strato</th><th>Contromisure</th></tr>
+    <tr><td><b>Persone</b></td><td>Formazione, regole chiare, segnalazione degli incidenti</td></tr>
+    <tr><td><b>Accessi</b></td><td>Password manager, MFA, minimo privilegio</td></tr>
+    <tr><td><b>Dispositivi</b></td><td>Aggiornamenti, antivirus ed EDR, cifratura del disco</td></tr>
+    <tr><td><b>Rete</b></td><td>Firewall, HTTPS, VPN</td></tr>
+    <tr><td><b>Applicazioni</b></td><td>Query parametrizzate, validazione dell'input</td></tr>
+    <tr><td><b>Dati</b></td><td>Backup 3-2-1, cifratura</td></tr>
+  </table>
+  <div class="callout hl">Se uno strato cede, il successivo limita il danno. E quando cedono tutti serve un <b>piano di risposta</b>.</div>
+  <aside class="notes">Immagine utile: un castello con fossato, mura, torri e guardie. Nessuna contromisura è perfetta: l'obiettivo è che l'attaccante debba superarne molte. Questa tabella è anche la scaletta della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato accessi</p><h2>Password manager e autenticazione a più fattori</h2></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h3>Password manager</h3>
+      <ul class="points small">
+        <li>Ricordi <b>una sola</b> password principale, lunga e robusta.</li>
+        <li>Genera password lunghe e <b>diverse per ogni sito</b>.</li>
+        <li>Compila i campi solo sul sito giusto: aiuta anche contro il phishing.</li>
+      </ul>
+    </div>
+    <div class="card soft">
+      <h3>MFA</h3>
+      <ul class="points small">
+        <li>La password rubata da sola <b>non basta</b> più.</li>
+        <li>Meglio app di autenticazione o chiavette che SMS.</li>
+        <li>Mai approvare una richiesta di accesso che non hai fatto tu.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">Contro: forza bruta, dizionario, <b>credential stuffing</b>, buona parte del phishing.</div>
+  <aside class="notes">Esempi di password manager: quello integrato nel browser o nel telefono, Bitwarden, KeePassXC. Con password uniche il credential stuffing non funziona più: la password rubata a un sito vale solo per quel sito. Gli SMS sono il secondo fattore più debole (si possono intercettare o dirottare con il cambio fraudolento della SIM), ma sono comunque molto meglio di niente. L'attacco che bombarda la vittima di notifiche finché ne approva una si chiama "MFA fatigue". Accenno alle passkey: sostituiscono la password con una coppia di chiavi crittografiche legata al dispositivo e non si possono inserire su un sito falso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato dispositivi</p><h2>Aggiornare e sorvegliare</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Aggiornamenti</h3><p class="small">Ogni patch chiude una vulnerabilità <b>già nota</b> anche agli attaccanti. Aggiornamenti automatici su PC, telefono, router, plugin.</p></div>
+    <div class="card"><h3>Antivirus</h3><p class="small">Riconosce i malware noti dalla loro <b>firma</b> e quelli nuovi da comportamenti sospetti. In Windows c'è Microsoft Defender.</p></div>
+    <div class="card"><h3>EDR</h3><p class="small"><b>Endpoint Detection and Response</b>: sorveglia ciò che succede sul PC, dà l'allarme e può isolarlo dalla rete.</p></div>
+  </div>
+  <div class="callout">Esempio: un programma che rinomina centinaia di file al minuto. L'antivirus può non conoscerlo, l'EDR nota il <b>comportamento</b> da ransomware.</div>
+  <aside class="notes">Collegamento con gli zero-day: dopo la pubblicazione della patch la falla è nota a tutti, quindi chi aggiorna tardi è il bersaglio più facile. L'EDR si usa soprattutto nelle aziende, dove un team (interno o esterno) riceve gli allarmi da tutti i PC e risponde. L'antivirus resta utile ma non basta contro attacchi nuovi o fatti a mano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato rete</p><h2>Il firewall decide quale traffico passa</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+    <table class="data compact">
+      <tr><th>Traffico</th><th>Servizio</th><th>Azione</th></tr>
+      <tr><td>In uscita</td><td class="mono">443 · HTTPS</td><td>Consenti</td></tr>
+      <tr><td>In ingresso da Internet</td><td class="mono">3389 · Desktop remoto</td><td>Blocca</td></tr>
+      <tr><td>In ingresso, non richiesto</td><td class="mono">qualsiasi</td><td>Blocca</td></tr>
+    </table>
+    <p class="muted small">Le regole guardano direzione, indirizzi, porte e programmi.</p>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>Firewall del PC</h4><p class="small">Protegge il singolo computer. In Windows è attivo di serie.</p></div>
+      <div class="card soft"><h4>Firewall di rete</h4><p class="small">Sta tra la rete interna e Internet e protegge tutti.</p></div>
+    </div>
+  </div>
+  <div class="callout hl">Il firewall non ferma ciò che passa per una porta consentita: una mail di phishing arriva lo stesso.</div>
+  <aside class="notes">Principio della regola predefinita: tutto ciò che non è esplicitamente consentito in ingresso viene bloccato. La porta 3389 (RDP, Desktop remoto) esposta su Internet è uno dei modi più comuni con cui entrano i ransomware: se serve l'accesso remoto, si usa una VPN con MFA. Collegare alle porte viste nel corso di reti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Com'è protetto il tuo PC?</h2>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Dal menu Start apri <b>Sicurezza di Windows</b>.</li>
+      <li>In <b>Protezione da virus e minacce</b> annota se la protezione è attiva e la data dell'ultimo aggiornamento.</li>
+      <li>In <b>Firewall e protezione della rete</b> annota lo stato delle reti di dominio, private e pubbliche.</li>
+      <li>Apri <b>PowerShell</b> (non come amministratore) ed esegui i due comandi qui a destra.</li>
+      <li>Salva tutto in <b>stato-sicurezza-Cognome.txt</b>. <mark>Non modificare</mark> nessuna impostazione.</li>
+    </ol>
+    <div class="stack">
+      <pre class="code" style="font-size:24px;padding:24px 28px">Get-NetFirewallProfile |
+  Format-Table Name, Enabled
+
+Get-MpComputerStatus |
+  Select-Object RealTimeProtectionEnabled,
+  AntivirusSignatureLastUpdated</pre>
+      <div class="check"><b>Controllo:</b> trovi tre profili (Domain, Private, Public), ciascuno con <code>True</code> o <code>False</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">Attività di sola lettura: nessun comando modifica il sistema e non serve essere amministratori. Risultato atteso su un PC della scuola: firewall attivo (Enabled = True) su tutti e tre i profili e protezione in tempo reale attiva, con definizioni aggiornate negli ultimi giorni. I nomi dei profili restano in inglese anche su Windows in italiano. Se sulla macchina è installato un altro antivirus gestito dalla scuola, Sicurezza di Windows lo indica e Get-MpComputerStatus può segnalare Defender come disattivato o dare errore: è normale, e si può discutere perché in un'azienda la protezione è gestita in modo centralizzato. Domanda: "perché un profilo pubblico dovrebbe avere regole più severe di uno privato?"</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato dati</p><h2>La regola del backup 3-2-1</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="big">3</p><h3>copie dei dati</h3><p class="small">L'originale più due copie di sicurezza.</p></div>
+    <div class="card soft"><p class="big">2</p><h3>supporti diversi</h3><p class="small">Per esempio un NAS e un disco esterno, o un NAS e il cloud.</p></div>
+    <div class="card soft"><p class="big">1</p><h3>copia fuori sede</h3><p class="small">Lontana dall'ufficio: un incendio o un furto non la toccano.</p></div>
+  </div>
+  <div class="callout hl">Contro il ransomware almeno una copia deve essere <b>scollegata</b> o non modificabile. E un backup vale solo se hai <b>provato a ripristinarlo</b>.</div>
+  <aside class="notes">Il ransomware cerca e cifra anche i backup raggiungibili dalla rete: per questo serve una copia offline (un disco staccato dopo il backup) o immutabile (servizi cloud che impediscono la modifica per un certo periodo). Molte aziende scoprono che il backup non funziona solo quando serve: la prova di ripristino periodica fa parte della regola. La sincronizzazione (per esempio una cartella condivisa) non è un backup: se cancelli o cifri un file, la modifica si propaga anche alla copia.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Progetta il backup di uno studio</h2>
+  <div class="cols-2">
+    <div class="card soft">
+      <h4>Il cliente</h4>
+      <p class="small">Uno studio di commercialisti: 5 PC, un NAS in ufficio con circa 300 GB di documenti dei clienti e il programma di contabilità. Lavorano dal lunedì al sabato.</p>
+    </div>
+    <ol class="steps small">
+      <li>In Calc crea le colonne <b>Copia · Dove · Supporto · Frequenza · Chi controlla</b>.</li>
+      <li>Compila una riga per ogni copia, originale compreso.</li>
+      <li>Aggiungi sotto quando e come si prova il ripristino.</li>
+      <li>Salva come <b>backup-Cognome.ods</b>.</li>
+    </ol>
+  </div>
+  <div class="check"><b>Controllo:</b> ci sono 3 copie su almeno 2 supporti, 1 fuori sede, almeno una scollegata o non modificabile, e le copie fuori ufficio sono cifrate.</div>
+  <aside class="notes">Una soluzione possibile: 1) originale sul NAS in ufficio; 2) backup notturno automatico su un secondo NAS o disco USB, con almeno una copia staccata a rotazione settimanale; 3) backup notturno cifrato su un servizio cloud con conservazione delle versioni per 30 giorni e immutabilità. Chi controlla: il titolare o il tecnico esterno, ogni settimana guarda i rapporti dei backup. Prova di ripristino: una volta al mese si recupera una cartella a caso, una volta all'anno si simula il ripristino completo. Le copie fuori sede contengono dati dei clienti, quindi vanno cifrate (riservatezza, GDPR). Valutare anche la scelta della frequenza: quanti giorni di lavoro lo studio può permettersi di perdere?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Riservatezza dei dati</p><h2>Cifratura: in viaggio e a riposo</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Dati in transito</h3>
+      <ul class="points small">
+        <li><b>HTTPS</b> cifra la comunicazione con il sito: il lucchetto nel browser.</li>
+        <li>Rende inutile l'intercettazione del <b>man-in-the-middle</b>.</li>
+        <li>Su reti sconosciute si può aggiungere una <b>VPN</b>.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Dati a riposo</h3>
+      <ul class="points small">
+        <li>Disco cifrato: <b>BitLocker</b> in Windows, FileVault in macOS.</li>
+        <li>I telefoni sono cifrati quando c'è un codice di sblocco.</li>
+        <li>Se rubano il portatile, i dati restano illeggibili.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout hl">HTTPS non dice che il sito è onesto: dice solo che la connessione con <b>quel</b> sito è cifrata. Anche i siti di phishing hanno il lucchetto.</div>
+  <aside class="notes">La chiave di ripristino di BitLocker va conservata in un posto separato dal PC: senza di essa, un guasto può rendere i dati inaccessibili anche al proprietario (il conflitto tra riservatezza e disponibilità visto nella prima lezione). Sulle edizioni Home di Windows è disponibile, su molti PC, una "crittografia del dispositivo" più semplice. Domanda: "perché il furto di un portatile cifrato è comunque un problema, anche se i dati sono al sicuro?" (disponibilità: serve il backup).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato accessi</p><h2>Minimo privilegio: solo i permessi che servono</h2></div>
+  <p class="lead">Ogni utente e ogni programma riceve <b>soltanto</b> i permessi indispensabili, per il tempo necessario.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Sul PC</h3><p class="small">Si lavora con un account <b>standard</b>; quello da amministratore si usa solo per installare.</p></div>
+    <div class="card soft"><h3>Nel database</h3><p class="small">L'applicazione web usa un utente che può leggere e scrivere le sue tabelle, non cancellare il database.</p></div>
+    <div class="card soft"><h3>In azienda</h3><p class="small">Permessi per ruolo, rivisti spesso. Chi cambia lavoro o se ne va perde subito gli accessi.</p></div>
+  </div>
+  <div class="callout">Non impedisce l'attacco, ma ne <b>limita i danni</b>: un malware ha solo i permessi di chi l'ha avviato.</div>
+  <aside class="notes">Collegamento con il principio di autorizzazione della prima lezione. Esempio: se un dipendente con account standard apre un allegato infetto, il malware non può installare driver né disattivare l'antivirus; con un account amministratore sì. Anche una SQL injection fa meno danni se l'utente del database non ha il permesso di cancellare tabelle.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Strato applicazioni</p><h2>Query parametrizzate e validazione dell'input</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p class="small"><b>Prima</b>: il dato diventa parte del comando.</p>
+      <pre class="code" style="font-size:24px">sql = <span class="s">"... WHERE cognome = '"</span> + cognome + <span class="s">"'"</span>
+db.execute(sql)</pre>
+      <p class="small"><b>Dopo</b>: il comando ha un segnaposto <code>?</code>, il dato viaggia a parte.</p>
+      <pre class="code" style="font-size:24px">sql = <span class="s">"... WHERE cognome = <span class="hl">?</span>"</span>
+db.execute(sql, <span class="hl">(cognome,)</span>)</pre>
+    </div>
+    <div class="stack">
+      <div class="card ok"><h4>Validazione dell'input</h4><p class="small">Controlla tipo, lunghezza e formato. Meglio elencare ciò che è <b>ammesso</b> che ciò che è vietato.</p></div>
+      <div class="card ok"><h4>Escaping dell'output</h4><p class="small">Prima di mettere un testo in una pagina, <code>&lt;</code> e <code>&gt;</code> diventano <code>&amp;lt;</code> e <code>&amp;gt;</code>: contro l'XSS.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Con la query parametrizzata il database riceve separatamente il comando e il valore: il valore non viene mai interpretato come SQL, quindi D'Amico funziona e nessun testo può cambiare la struttura della query. In PHP lo stesso si fa con PDO: prepare("... WHERE cognome = :cognome") e poi execute(['cognome' => $cognome]). La virgola in (cognome,) serve perché in Python una tupla di un solo elemento si scrive così. Validazione: per esempio la classe deve essere una cifra da 1 a 5 seguita da una lettera. La validazione aiuta, ma non sostituisce la query parametrizzata.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Correggi il codice della lezione scorsa</h2>
+  <pre class="code" style="font-size:26px;padding:24px 36px"><span class="c"> 3</span>  sql = <span class="s">"SELECT nome, classe FROM studenti WHERE cognome = '"</span> + cognome + <span class="s">"'"</span>
+<span class="c"> 4</span>  righe = db.execute(sql).fetchall()
+<span class="c"> 5</span>  html = <span class="s">"&lt;h3&gt;Risultati per "</span> + cognome + <span class="s">"&lt;/h3&gt;"</span></pre>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Apri il Blocco note o l'editor del laboratorio e riscrivi le righe 3 e 4 con una query parametrizzata.</li>
+      <li>Riscrivi la riga 5 usando <code>html.escape(cognome)</code> (serve <code>import html</code>: rinomina la variabile in <code>pagina</code>).</li>
+      <li>Salva come <b>cerca_sicuro-Cognome.py</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> nella query non c'è più nessun <code>+</code>, c'è un <code>?</code> e il valore è passato come <code>(cognome,)</code>. Se hai Python, cercando D'Amico non ottieni errori.</div>
+  </div>
+  <aside class="notes">Soluzione completa, eseguibile anche senza un database vero:
+import sqlite3, html
+db = sqlite3.connect(":memory:")
+db.execute("CREATE TABLE studenti (nome TEXT, cognome TEXT, classe TEXT)")
+db.execute("INSERT INTO studenti VALUES (?, ?, ?)", ("Luca", "D'Amico", "5G"))
+def cerca_studente(cognome):
+    sql = "SELECT nome, classe FROM studenti WHERE cognome = ?"
+    righe = db.execute(sql, (cognome,)).fetchall()
+    pagina = "&lt;h3&gt;Risultati per " + html.escape(cognome) + "&lt;/h3&gt;"
+    for nome, classe in righe:
+        pagina += "&lt;p&gt;" + html.escape(nome) + " - " + html.escape(classe) + "&lt;/p&gt;"
+    return pagina
+print(cerca_studente("D'Amico"))
+Output: &lt;h3&gt;Risultati per D&amp;#x27;Amico&lt;/h3&gt;&lt;p&gt;Luca - 5G&lt;/p&gt;. Con l'input &lt;b&gt;Ciao&lt;/b&gt; il testo appare letteralmente e non in grassetto. La variabile va rinominata perché "html" è anche il nome del modulo importato. Bonus: applicare l'escaping anche alla riga del ciclo.</aside>
+</section>
+
+<section class="slide accent">
+  <div class="head"><p class="kicker">Strato persone</p><h2>La formazione è una contromisura tecnica</h2></div>
+  <div class="cols-2">
+    <div class="card night"><h3>Riconoscere</h3><p class="small">Gli indizi del phishing, le richieste insolite, i link e gli allegati sospetti.</p></div>
+    <div class="card night"><h3>Segnalare subito</h3><p class="small">Anche se hai già cliccato: avvisare dopo cinque minuti è meglio che dopo cinque giorni.</p></div>
+    <div class="card night"><h3>Allenarsi</h3><p class="small">Simulazioni di phishing periodiche, brevi e con spiegazione finale.</p></div>
+    <div class="card night"><h3>Regole chiare</h3><p class="small">Dove salvare i file, chi chiamare, che cosa non fare mai.</p></div>
+  </div>
+  <p class="lead">Chi segnala un proprio errore va <b>ringraziato</b>, non punito: altrimenti la prossima volta tace.</p>
+  <aside class="notes">Il phishing aggira firewall e antivirus perché passa per canali consentiti: l'ultima barriera è la persona. Una cultura che punisce chi sbaglia porta a nascondere gli incidenti, che così fanno più danni. Chiedere: "a chi segnalereste una mail sospetta qui a scuola?" e verificare che la classe conosca il referente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando tutto il resto fallisce</p><h2>Il piano di risposta agli incidenti</h2></div>
+  <div class="flow">
+    <div class="card soft"><h4>Preparazione</h4><p class="small">Ruoli, contatti, backup, procedure scritte prima.</p></div>
+    <div class="card soft"><h4>Rilevamento</h4><p class="small">Capire che cosa è successo e quanto è grave.</p></div>
+    <div class="card soft"><h4>Contenimento</h4><p class="small">Isolare i sistemi colpiti per fermare la diffusione.</p></div>
+    <div class="card soft"><h4>Ripristino</h4><p class="small">Eliminare la causa, ripartire dai backup.</p></div>
+    <div class="card fill"><h4>Lezioni apprese</h4><p class="small">Che cosa cambiamo?</p></div>
+  </div>
+  <div class="callout">Se sono coinvolti <b>dati personali</b>, il titolare deve valutare la notifica al Garante della privacy <b>entro 72 ore</b> (GDPR, art. 33).</div>
+  <aside class="notes">Le fasi riprendono il ciclo classico proposto dalle linee guida del NIST americano (SP 800-61): preparazione; rilevamento e analisi; contenimento, eradicazione e ripristino; attività post-incidente. Il piano va scritto e provato a mente fredda: durante un attacco non c'è tempo per decidere chi chiamare. Le 72 ore decorrono dal momento in cui il titolare viene a conoscenza della violazione; la notifica non è dovuta se è improbabile che la violazione presenti un rischio per le persone. Durante il contenimento conviene non spegnere i PC se non indicato dal tecnico: si possono perdere tracce utili all'analisi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Scrivi la checklist dell'incidente</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="card bad"><h4>Ore 10:15, segreteria</h4><p class="small">Sul PC di un'impiegata i file hanno un'estensione strana e non si aprono. Sul desktop c'è un messaggio che chiede un riscatto.</p></div>
+      <p class="small">In Documenti Google crea <b>checklist-incidente-Cognome</b>: da 8 a 10 azioni in ordine, divise in <b>Subito · Entro oggi · Nei giorni seguenti</b>. Per ogni azione indica <b>chi</b> la fa.</p>
+    </div>
+    <div class="check" style="align-self:start"><b>Controllo:</b> la prima azione isola il PC dalla rete; nessuno paga o cancella prove; c'è un passo sui dati personali (72 ore) e uno sulle lezioni apprese.</div>
+  </div>
+  <aside class="notes">Checklist di esempio. Subito: 1) l'impiegata stacca il cavo di rete e disattiva il Wi-Fi, senza spegnere il PC; 2) avvisa il referente informatico e il dirigente; 3) si verifica se altri PC o cartelle condivise mostrano lo stesso problema e si isolano. Entro oggi: 4) il tecnico identifica il tipo di ransomware e come è entrato (mail, chiavetta, accesso remoto); 5) si cambiano le password degli account coinvolti, da un PC pulito; 6) il titolare valuta con il responsabile della protezione dei dati se ci sono dati personali coinvolti e se notificare il Garante entro 72 ore; non si paga il riscatto. Nei giorni seguenti: 7) si reinstalla il sistema e si ripristinano i dati dal backup verificato; 8) si controlla che la causa sia eliminata (patch, regole del firewall, MFA); 9) si avvisano, se necessario, le persone i cui dati sono stati violati; 10) riunione sulle lezioni apprese e aggiornamento del piano. Discutere le differenze fra le checklist: l'ordine conta più del numero di punti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Per ogni attacco, le sue difese</h2></div>
+  <table class="data compact" style="color:var(--ink)">
+    <tr><th>Attacco</th><th>Difese principali</th></tr>
+    <tr><td>Malware e ransomware</td><td>Aggiornamenti, antivirus ed EDR, minimo privilegio, backup 3-2-1</td></tr>
+    <tr><td>Phishing</td><td>Formazione, MFA, password manager</td></tr>
+    <tr><td>Attacchi alle password</td><td>Password lunghe e uniche, MFA</td></tr>
+    <tr><td>Man-in-the-middle</td><td>HTTPS, VPN, mai ignorare gli avvisi sui certificati</td></tr>
+    <tr><td>DoS e DDoS</td><td>Firewall, protezione anti-DDoS, ridondanza</td></tr>
+    <tr><td>SQL injection e XSS</td><td>Query parametrizzate, validazione, escaping</td></tr>
+    <tr><td>Zero-day</td><td>Difesa in profondità, aggiornamenti rapidi, piano di risposta</td></tr>
+  </table>
+  <aside class="notes">Chiusura del percorso in tre lezioni: principi, attacchi, difese. Domanda finale: "se poteste attivare una sola contromisura sul vostro telefono stasera, quale scegliereste e perché?" (risposta ragionevole: MFA sugli account principali, oppure aggiornamenti automatici).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

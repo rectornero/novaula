@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ciclo while: finché serve · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">UDA 6 · La programmazione imperativa in C e C++</p>
+  <h1>Il ciclo while:<br>finché serve</h1>
+  <p class="lead">L'iterazione indefinita, quando non sai quante volte ripetere: cicli con condizione, numeri casuali e due giochi da programmare e sfidare.</p>
+  <aside class="notes">Obiettivi: usare il ciclo while in C e C++, riconoscere e correggere i cicli infiniti, usare un valore sentinella, controllare l'input finché non è valido, generare numeri casuali con rand e srand, programmare due semplici giochi (dado e indovina il numero). Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Indovina un numero da 1 a 100</h2></div>
+  <p class="lead">A ogni tentativo ti dico solo "più alto" o "più basso". Quanti tentativi ti servono, al massimo, se giochi bene?</p>
+  <div class="poll" data-id="while-tentativi">
+    <ol><li>Più di 20</li><li>Tra 10 e 20</li><li>Tra 8 e 9</li><li>7 bastano sempre</li></ol>
+  </div>
+  <aside class="notes">Lasciare votare d'istinto, senza rivelare. La risposta arriva con il gioco di fine lezione: con la strategia del dimezzamento (dire sempre il numero a metà dell'intervallo rimasto) bastano al massimo 7 tentativi, perché 2 elevato alla 7 fa 128, più di 100. Collegamento con i numeri binari della UDA 1. Verificato con una simulazione su tutti i numeri da 1 a 100.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo while</p><h2>Ripeti finché la condizione è vera</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">int</span> n, somma = 0;
+printf(<span class="s">"Numero (0 per finire): "</span>);
+scanf(<span class="s">"%d"</span>, &amp;n);
+<span class="k">while</span> (<span class="hl">n != 0</span>) {
+    somma = somma + n;
+    printf(<span class="s">"Numero (0 per finire): "</span>);
+    scanf(<span class="s">"%d"</span>, &amp;n);
+}
+printf(<span class="s">"Somma: %d\n"</span>, somma);</pre>
+    <div class="stack">
+      <div class="card soft"><h3>Come funziona</h3><p>Controlla la condizione: se è vera esegue il blocco e torna su; se è falsa esce.</p></div>
+      <div class="card soft"><h3>Il valore sentinella</h3><p>Lo 0 non è un dato: è il segnale "ho finito".</p></div>
+    </div>
+  </div>
+  <aside class="notes">Il programma non sa quanti numeri scriverà l'utente: per questo serve un ciclo indefinito. Notare la lettura ripetuta: una prima del ciclo (per avere un valore da controllare) e una alla fine del blocco. Se il primo numero è 0, il ciclo non viene eseguito nemmeno una volta: il while può fare zero giri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">for o while?</p><h2>Sai quante volte, o sai quando fermarti?</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Iterazione definita: for</h3><p>Il numero di giri è noto prima di partire: 10 righe, 5 voti, 100 numeri.</p>
+<pre class="code" style="font-size:27px"><span class="k">for</span> (i = 1; i &lt;= 5; i++) {
+    printf(<span class="s">"%d "</span>, i);
+}</pre></div>
+    <div class="card soft"><h3>Iterazione indefinita: while</h3><p>Si ripete finché succede qualcosa: l'utente scrive 0, esce un 6, indovini.</p>
+<pre class="code" style="font-size:27px">i = 1;
+<span class="k">while</span> (i &lt;= 5) {
+    printf(<span class="s">"%d "</span>, i);
+    i++;
+}</pre></div>
+  </div>
+  <p class="small muted">Ogni for si può riscrivere come while: la partenza va prima, il passo va in fondo al blocco.</p>
+  <aside class="notes">I due programmi stampano entrambi 1 2 3 4 5. Nel while è facile dimenticare il passo (i++): è il quiz della prossima slide. In Flowgorithm e nei flow chart della UDA 5 il while è il ciclo con la condizione in testa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa succede con questo codice?</h2></div>
+<pre class="code" style="align-self:flex-start;font-size:30px"><span class="k">int</span> i = 1;
+<span class="k">while</span> (i &lt;= 5) {
+    printf(<span class="s">"%d "</span>, i);
+}</pre>
+  <div class="poll" data-id="while-infinito" data-tipo="quiz" data-risposta="B">
+    <ol><li>Stampa 1 2 3 4 5</li><li>Stampa 1 all'infinito</li><li>Non stampa niente</li><li>Errore di compilazione</li></ol>
+    <p class="why">Nel blocco nessuno cambia i: vale sempre 1, la condizione è sempre vera e il ciclo non finisce mai. È un <b>ciclo infinito</b>. Manca <code>i++;</code> dentro le graffe.</p>
+  </div>
+  <aside class="notes">Il compilatore non segnala niente: la sintassi è corretta. Per fermare un programma bloccato: pulsante Stop in OnlineGDB, oppure Ctrl+C nella console. Regola: dentro il while qualcosa deve far diventare falsa la condizione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Somma finché non dici basta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C copia il programma della somma con la sentinella 0.</li>
+      <li>Aggiungi un contatore <code>quanti</code> (parte da 0) che aumenta a ogni numero sommato.</li>
+      <li>Alla fine stampa: <code>Somma: 20 di 4 numeri</code>.</li>
+      <li>Prova a scrivere subito 0: che cosa stampa?</li>
+      <li>Salva come <b>sentinella-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> con 5, 8, -3, 10 e poi 0 esce <code>Somma: 20 di 4 numeri</code>. Con 0 subito: <code>Somma: 0 di 0 numeri</code>, il ciclo non è mai partito.</div>
+  </div>
+  <aside class="notes">Soluzione: int n, somma = 0, quanti = 0; printf("Numero (0 per finire): "); scanf("%d", &amp;n); while (n != 0) { somma = somma + n; quanti++; printf("Numero (0 per finire): "); scanf("%d", &amp;n); } printf("Somma: %d di %d numeri\n", somma, quanti); Sfida: stampare anche la media, ma solo se quanti è maggiore di 0 (selezione!). Uscita verificata con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il controllo dei dati in input</p><h2>Chiedi di nuovo, finché il dato è valido</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:29px">printf(<span class="s">"Voto (1-10): "</span>);
+scanf(<span class="s">"%d"</span>, &amp;voto);
+<span class="k">while</span> (voto &lt; 1 || voto &gt; 10) {
+    printf(<span class="s">"Non valido, riprova: "</span>);
+    scanf(<span class="s">"%d"</span>, &amp;voto);
+}
+printf(<span class="s">"Voto %d registrato\n"</span>, voto);</pre>
+    <div class="card soft"><h3>if o while?</h3><p>Con l'<b>if</b> della lezione scorsa il programma segnala l'errore una volta e va avanti.</p><p>Con il <b>while</b> non va avanti finché il dato non è giusto.</p></div>
+  </div>
+  <aside class="notes">Con 12, 0 e poi 7 il programma chiede due volte "Non valido, riprova" e poi registra 7 (verificato con gcc). Esiste anche il ciclo do ... while, che esegue il blocco almeno una volta e controlla la condizione alla fine: comodo proprio per l'input, ma in questa lezione restiamo sul while.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Rimetti in ordine il controllo del voto</h2></div>
+  <ol class="puzzle-ordina" data-id="while-ordina">
+    <li><code>int voto;</code></li>
+    <li><code>printf("Voto (1-10): ");</code></li>
+    <li><code>scanf("%d", &amp;voto);</code></li>
+    <li><code>while (voto &lt; 1 || voto &gt; 10) {</code></li>
+    <li><code>printf("Non valido, riprova: ");</code></li>
+    <li><code>scanf("%d", &amp;voto); }</code></li>
+    <li><code>printf("Voto %d registrato\n", voto);</code></li>
+  </ol>
+  <aside class="notes">Errore tipico: dimenticare la prima scanf prima del while, così la condizione controlla una variabile che non contiene ancora niente. Altro errore: mettere la scanf dentro il ciclo prima della printf di avviso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I numeri casuali</p><h2>Lanciamo un dado virtuale</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:28px"><span class="k">#include</span> &lt;stdlib.h&gt;   <span class="c">// rand, srand</span>
+<span class="k">#include</span> &lt;time.h&gt;     <span class="c">// time</span>
+...
+srand(time(NULL));   <span class="c">// una volta sola</span>
+dado = rand() % 6 + 1;</pre>
+    <ul class="points small">
+      <li><code>rand()</code> dà un numero intero grande.</li>
+      <li><code>% 6</code> lo riduce a un resto da 0 a 5.</li>
+      <li><code>+ 1</code> lo sposta da 1 a 6.</li>
+      <li><code>srand(time(NULL))</code> usa l'orologio come "seme": ogni partita è diversa.</li>
+    </ul>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche i chatbot usano numeri casuali: a ogni passo scelgono la parola successiva tra le più probabili, con un po' di caso (regolato da un parametro chiamato <b>temperatura</b>). Per questo la stessa domanda può avere risposte diverse.</p></div>
+  <aside class="notes">I numeri di rand sono pseudo-casuali: escono da una formula, sempre uguale se il seme è uguale. Senza srand, a ogni esecuzione esce la stessa sequenza (provarlo!). In C++ si usano &lt;cstdlib&gt; e &lt;ctime&gt; con srand(time(0)). Curiosità verificabile sul blog di Cloudflare: l'azienda usa un muro di lampade di lava filmato da una telecamera come sorgente di casualità per la crittografia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quali valori può dare <code>rand() % 6</code>?</h2></div>
+  <div class="poll" data-id="while-rand" data-tipo="quiz" data-risposta="C">
+    <ol><li>Da 1 a 6</li><li>Da 0 a 6</li><li>Da 0 a 5</li><li>Solo 0, 2 e 4</li></ol>
+    <p class="why">Il resto della divisione per 6 può essere 0, 1, 2, 3, 4 o 5: mai 6. Per simulare un dado serve il <code>+ 1</code>: <code>rand() % 6 + 1</code> va da 1 a 6.</p>
+  </div>
+  <aside class="notes">Molti rispondono A perché pensano al dado. Chi risponde B include il divisore tra i resti possibili. Regola generale: rand() % N + 1 dà un numero da 1 a N; rand() % N dà un numero da 0 a N-1.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Gioco 1: quanti lanci per fare 6?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In C includi <code>stdlib.h</code> e <code>time.h</code>, poi chiama <code>srand(time(NULL));</code></li>
+      <li>Dichiara <code>int dado = 0, lanci = 0;</code></li>
+      <li><code>while (dado != 6)</code>: lancia il dado, aumenta <code>lanci</code>, stampa <code>Lancio 3: 5</code>.</li>
+      <li>Dopo il ciclo stampa quanti lanci ci sono voluti.</li>
+      <li>Salva come <b>dado-cognome.c</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'ultimo lancio stampato è sempre un 6 e il numero di lanci cambia a ogni esecuzione. Sfida tra compagni: chi fa 6 al primo colpo?</div>
+  </div>
+  <aside class="notes">Soluzione: int dado = 0, lanci = 0; srand(time(NULL)); while (dado != 6) { dado = rand() % 6 + 1; lanci++; printf("Lancio %d: %d\n", lanci, dado); } printf("Ci sono voluti %d lanci per fare 6\n", lanci); Nota: dado parte da 0 perché la condizione deve essere vera al primo controllo. In media servono 6 lanci, ma può capitare di farne 20. Raccogliere alla LIM i risultati della classe e calcolarne la media. Verificato con gcc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gioco 2</p><h2>Indovina il numero, in C++</h2></div>
+<pre class="code" style="font-size:27px;line-height:1.42">srand(time(0));
+<span class="k">int</span> segreto = rand() % 100 + 1;       <span class="c">// da 1 a 100</span>
+<span class="k">int</span> tentativo = 0, tentativi = 0;
+<span class="k">while</span> (tentativo != segreto) {
+    cout &lt;&lt; <span class="s">"Prova: "</span>;
+    cin &gt;&gt; tentativo;
+    tentativi++;
+    <span class="k">if</span> (tentativo &lt; segreto) { cout &lt;&lt; <span class="s">"Piu' alto!"</span> &lt;&lt; endl; }
+    <span class="k">if</span> (tentativo &gt; segreto) { cout &lt;&lt; <span class="s">"Piu' basso!"</span> &lt;&lt; endl; }
+}
+cout &lt;&lt; <span class="s">"Indovinato in "</span> &lt;&lt; tentativi &lt;&lt; <span class="s">" tentativi!"</span> &lt;&lt; endl;</pre>
+  <div class="callout">Una partita, con il segreto 37: <code>50</code> → Più basso! · <code>25</code> → Più alto! · <code>37</code> → Indovinato in 3 tentativi!</div>
+  <aside class="notes">Servono #include &lt;iostream&gt;, &lt;cstdlib&gt;, &lt;ctime&gt; e using namespace std; Qui ci sono tutte e tre le strutture della UDA: sequenza, selezione (i due if) e iterazione (il while). Far notare: tentativo parte da 0, che non è mai il numero segreto, così il ciclo parte di sicuro. Programma compilato e provato con g++.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Programma il gioco e sfida il compagno</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su OnlineGDB scegli <b>C++</b> e scrivi il gioco "Indovina il numero".</li>
+      <li>Per collaudarlo, stampa per ora il numero segreto all'inizio; poi togli quella riga.</li>
+      <li>Scambiati di posto con un compagno: chi indovina con meno tentativi?</li>
+      <li>Prova la strategia del dimezzamento: 50, poi 25 o 75…</li>
+      <li>Salva come <b>indovina-cognome.cpp</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il programma risponde "Piu' alto!" o "Piu' basso!" a ogni prova sbagliata e si ferma solo quando indovini. Con il dimezzamento non servono mai più di <b>7</b> tentativi.</div>
+  </div>
+  <aside class="notes">Torniamo al sondaggio iniziale: risposta D, 7 tentativi bastano sempre (2^7 = 128 &gt; 100). È lo stesso principio della ricerca binaria che si vedrà nella UDA 7. Sfida extra: limitare i tentativi a 7 con una condizione doppia, while (tentativo != segreto &amp;&amp; tentativi &lt; 7), e stampare "Hai perso" se non si indovina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il bug più famoso della storia</h2></div>
+  <figure class="citazione">
+    <blockquote>Primo caso reale di bug trovato.</blockquote>
+    <figcaption><b>Registro del calcolatore Harvard Mark II</b>, 9 settembre 1947, dal gruppo di lavoro di Grace Hopper</figcaption>
+  </figure>
+  <p>Una falena rimasta incastrata in un relè bloccava il calcolatore: i tecnici la attaccarono con lo scotch sul registro. <b>Grace Hopper</b> amava raccontare questa storia, che ha reso famose le parole "bug" (errore) e "debug" (togliere gli errori).</p>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Ogni videogioco gira dentro un grande while: <b>finché</b> la partita non è finita, leggi i comandi, aggiorna il mondo, disegna lo schermo. Spesso questo ciclo si ripete 60 volte al secondo.</p></div>
+  <aside class="notes">Traduzione nostra dell'annotazione originale "First actual case of bug being found". La pagina del registro con la falena è conservata allo Smithsonian National Museum of American History. La parola "bug" per indicare un guasto si usava già prima (anche Edison la usava): la battuta del registro sta proprio nel "primo caso REALE". Un ciclo infinito è un bug tipico: il programma sembra bloccato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto: quante volte gira?</h2></div>
+  <div class="puzzle-codice" data-risposta="2749" data-aiuto="nella terza riga n vale 20, 10, 5, 2, 1: conta le divisioni">
+    <ul class="points small">
+      <li>1ª cifra: quante x stampa <code style="background:rgba(255,255,255,.14)">i = 1; while (i &lt; 100) { printf("x"); i = i * 10; }</code></li>
+      <li>2ª cifra: quanti tentativi bastano sempre per indovinare un numero da 1 a 100 con il dimezzamento</li>
+      <li>3ª cifra: c alla fine di <code style="background:rgba(255,255,255,.14)">n = 20; c = 0; while (n &gt; 1) { n = n / 2; c++; }</code></li>
+      <li>4ª cifra: il valore più grande che può dare <code style="background:rgba(255,255,255,.14)">rand() % 10</code></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> i vale 1 e 10 (poi 100 non è minore di 100), 7 tentativi, 20-10-5-2-1 sono 4 divisioni, il resto massimo è 9.</div>
+  </div>
+  <aside class="notes">Codice: 2749 (prima e terza cifra verificate con gcc). A squadre con tabella di traccia. La terza riga conta quante volte si può dimezzare 20 prima di arrivare a 1: è lo stesso ragionamento del gioco del dimezzamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il ciclo che si ripete finché una condizione è vera si chiama <span class="blank" data-risposta="while"></span>.</p>
+    <p>Un ciclo la cui condizione non diventa mai falsa è un ciclo <span class="blank" data-risposta="infinito"></span>.</p>
+    <p>Un valore speciale che segnala la fine dei dati si chiama <span class="blank" data-risposta="sentinella"></span>.</p>
+    <p>Per avere un numero da 1 a 6 si scrive <code>rand() % 6 +</code> <span class="blank" data-risposta="1|uno"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: while, infinito, sentinella, 1.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><code>while (condizione)</code>: può fare anche zero giri</li>
+      <li>Dentro il ciclo qualcosa deve cambiare</li>
+      <li>Sentinella e controllo dell'input</li>
+    </ul>
+    <ul class="points">
+      <li><code>srand(time(NULL))</code> una volta, poi <code>rand()</code></li>
+      <li><code>rand() % N + 1</code>: da 1 a N</li>
+      <li>Sequenza, selezione, iterazione: hai tutto!</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (si apre quando l'argomento viene segnato come svolto). Con questa lezione si chiude la UDA 6: annunciare la verifica scritta e indicare la simulazione con le soluzioni su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

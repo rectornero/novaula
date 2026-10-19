@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calc: primi passi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+<style>code,.mono,.formula,table.sheet{font-variant-ligatures:none}code{white-space:nowrap}</style>
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">Informatica · Foglio di calcolo</p>
+  <h1>Calc:<br>primi passi</h1>
+  <p class="lead">Celle, righe e colonne: impariamo a muoverci in LibreOffice Calc, a scrivere i dati, a renderli leggibili e a salvarli nel formato giusto.</p>
+  <div class="meta"><span class="chip">LibreOffice Calc</span><span>3 esercizi al computer</span></div>
+  <aside class="notes">Chiedere alla classe: "chi ha già usato Excel, Calc o Fogli Google? Per fare cosa?". Raccogliere due o tre esempi alla lavagna. Obiettivo della lezione: saper creare, formattare e salvare una tabella semplice. Le formule arrivano nella lezione successiva.</aside>
+</section>
+
+<section class="slide statement">
+  <p class="kicker">L'idea</p>
+  <h2>Un foglio di calcolo è una grande tabella che sa anche <mark>fare i conti</mark>.</h2>
+  <p class="lead">Con Calc organizzi dati in righe e colonne: voti, spese, risultati sportivi, misure di laboratorio. Quando cambi un dato, i calcoli si aggiornano da soli.</p>
+  <aside class="notes">Fare un esempio concreto: la lista della spesa con i prezzi. Su carta, se cambio un prezzo devo rifare la somma; nel foglio di calcolo no. LibreOffice Calc è gratuito e libero; Excel di Microsoft e Fogli Google funzionano in modo molto simile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'interfaccia</p><h2>Cosa vedi quando apri Calc</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="row"><span class="chip">C3</span><code>Ciao!</code><span class="muted small">← casella del nome · barra della formula</span></div>
+      <table class="sheet">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+        <tr><th>1</th><td></td><td></td><td></td><td></td></tr>
+        <tr><th>2</th><td></td><td></td><td></td><td></td></tr>
+        <tr><th>3</th><td></td><td></td><td class="sel">Ciao!</td><td></td></tr>
+        <tr><th>4</th><td></td><td></td><td></td><td></td></tr>
+      </table>
+      <div class="chips"><span class="chip">Foglio1</span><span class="chip">Foglio2</span><span class="chip">+</span></div>
+    </div>
+    <ul class="points small">
+      <li><b>Casella del nome</b>: dice in quale cella sei.</li>
+      <li><b>Barra della formula</b>: mostra il contenuto vero della cella.</li>
+      <li><b>Intestazioni</b>: lettere per le colonne, numeri per le righe.</li>
+      <li><b>Cella attiva</b>: quella con il bordo spesso.</li>
+      <li><b>Schede</b> in basso: i fogli del file.</li>
+    </ul>
+  </div>
+  <div class="callout">In alto ci sono anche la <b>barra dei menu</b> (File, Modifica, Visualizza, Inserisci, Formato…) e le <b>barre degli strumenti</b> con i pulsanti più usati.</div>
+  <aside class="notes">Aprire Calc sulla LIM e indicare ogni parte mentre si legge l'elenco. In alto ci sono anche la barra dei menu (File, Modifica, Visualizza, Inserisci, Formato...) e le barre degli strumenti. Far notare che la casella del nome cambia appena ci si sposta con le frecce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Righe, colonne, celle</p><h2>Ogni cella ha un indirizzo</h2></div>
+  <div class="cols-2">
+    <table class="sheet">
+      <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+      <tr><th>1</th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>2</th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>3</th><td></td><td></td><td class="sel"></td><td></td></tr>
+      <tr><th>4</th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>5</th><td></td><td></td><td></td><td></td></tr>
+    </table>
+    <div class="stack">
+      <div class="card soft"><h3>Colonne</h3><p>Verticali, si chiamano con le <b>lettere</b>: A, B, C… Dopo la Z vengono AA, AB…</p></div>
+      <div class="card soft"><h3>Righe</h3><p>Orizzontali, si chiamano con i <b>numeri</b>: 1, 2, 3…</p></div>
+    </div>
+  </div>
+  <div class="formula"><small>Indirizzo della cella selezionata</small>colonna <span class="hl">C</span> + riga <span class="hl">3</span> = <span class="hl">C3</span></div>
+  <aside class="notes">Regola da far ripetere: prima la lettera (colonna), poi il numero (riga). Mini-gioco: il docente dice un indirizzo (B5, D1...) e uno studente lo indica alla LIM; poi al contrario. Un foglio ha più di un milione di righe: non finiscono mai durante gli esercizi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Fogli e file</p><h2>Un file di Calc può contenere più fogli</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Il file</h3><p>Si chiama <b>cartella di lavoro</b>. È quello che salvi, apri e consegni.</p></div>
+    <div class="card"><p class="num">2</p><h3>I fogli</h3><p>Sono le pagine del file, con le schede in basso. Esempio: un foglio per ogni mese.</p></div>
+    <div class="card"><p class="num">3</p><h3>Le celle</h3><p>Ogni foglio è una griglia di celle con il suo indirizzo: A1, B2…</p></div>
+  </div>
+  <ul class="points">
+    <li><b>Aggiungere</b> un foglio: clic sul <b>+</b> accanto alle schede.</li>
+    <li><b>Rinominare</b>: clic destro sulla scheda › <b>Rinomina foglio</b>, oppure doppio clic sulla scheda.</li>
+  </ul>
+  <aside class="notes">Paragone: il file è un quaderno, i fogli sono le pagine, le celle sono i quadretti. Mostrare alla LIM come aggiungere e rinominare un foglio. Chiedere: "in un file per la squadra di calcio, che fogli fareste?" (giocatori, partite, allenamenti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere i dati</p><h2>Clicca, scrivi, premi Invio</h2></div>
+  <div class="cols-2">
+    <table class="sheet">
+      <tr><th></th><th>A</th><th>B</th></tr>
+      <tr><th>1</th><td>Materia</td><td>Ore</td></tr>
+      <tr><th>2</th><td>Italiano</td><td style="text-align:right">4</td></tr>
+      <tr><th>3</th><td>Matematica</td><td style="text-align:right">4</td></tr>
+      <tr><th>4</th><td>Fisica</td><td style="text-align:right">3</td></tr>
+      <tr><th>5</th><td>Inglese</td><td style="text-align:right">3</td></tr>
+    </table>
+    <ul class="points small">
+      <li><b>Invio</b> scende alla cella sotto, <b>Tab</b> va a destra.</li>
+      <li>Il <b>testo</b> si allinea a sinistra, i <b>numeri</b> a destra.</li>
+      <li>I decimali si scrivono con la <mark>virgola</mark>: <code>3,5</code>.</li>
+      <li><b>F2</b> o doppio clic: modifichi senza cancellare tutto.</li>
+      <li><b>Esc</b> annulla ciò che stai scrivendo.</li>
+      <li><b>Canc</b> svuota le celle selezionate.</li>
+    </ul>
+  </div>
+  <div class="callout hl">Se un numero finisce a <b>sinistra</b>, Calc l'ha preso per testo: controlla di non aver usato il punto al posto della virgola.</div>
+  <aside class="notes">Mostrare la differenza scrivendo 3,5 e 3.5: con Calc in italiano il primo è un numero (a destra), il secondo diventa testo o una data. Le ore della tabella sono solo un esempio: nel laboratorio ognuno scrive il proprio orario.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Il mio orario in un foglio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>LibreOffice Calc</b> e crea un nuovo foglio di calcolo.</li>
+      <li>In A1 scrivi <b>Materia</b>, in B1 <b>Ore a settimana</b>.</li>
+      <li>Dalla riga 2 in giù scrivi tutte le tue materie e le ore di ciascuna.</li>
+      <li>Rinomina il foglio in <b>Orario</b> e aggiungi un secondo foglio chiamato <b>Note</b>.</li>
+      <li>Salva con <b>File › Salva con nome</b>: <code>orario-cognome.ods</code>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Suggerimento</h4><p>Usa Invio per scendere: è molto più veloce del mouse.</p></div>
+      <div class="check"><b>Controllo:</b> i nomi delle materie sono a sinistra, i numeri delle ore a destra. Nelle schede in basso vedi <b>Orario</b> e <b>Note</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Girare tra i banchi e controllare l'allineamento: se un numero è a sinistra, chiedere allo studente perché (spazio prima del numero, punto invece della virgola, lettera). Chi finisce prima: aggiungere in C1 "Docente" e completare la colonna. Il file servirà nell'esercizio sul salvataggio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Selezionare</p><h2>Prima selezioni, poi decidi cosa fare</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <table class="sheet">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+        <tr><th>1</th><td></td><td></td><td></td><td></td></tr>
+        <tr><th>2</th><td></td><td class="sel"></td><td class="sel"></td><td></td></tr>
+        <tr><th>3</th><td></td><td class="sel"></td><td class="sel"></td><td></td></tr>
+        <tr><th>4</th><td></td><td class="sel"></td><td class="sel"></td><td></td></tr>
+        <tr><th>5</th><td></td><td></td><td></td><td></td></tr>
+      </table>
+      <p class="small">Un gruppo di celle si chiama <b>intervallo</b>: questo è <code>B2:C4</code>, cioè 6 celle.</p>
+    </div>
+    <ul class="points small">
+      <li><b>Intervallo</b>: clicca la prima cella e trascina.</li>
+      <li><b>Colonna</b> o <b>riga</b> intera: clic sulla lettera o sul numero.</li>
+      <li><b>Celle lontane</b>: tieni premuto <b>Ctrl</b> e clicca.</li>
+      <li><b>Maiusc + clic</b>: dalla cella attiva fino a quella cliccata.</li>
+      <li><b>Ctrl + A</b>: tutto il foglio.</li>
+    </ul>
+  </div>
+  <aside class="notes">Far provare subito alla LIM a due studenti. L'intervallo B2:C4 comprende tutte le celle del rettangolo da B2 a C4: 2 colonne per 3 righe = 6 celle. Si scrive con i due punti tra la prima e l'ultima cella. Domanda: quante celle ci sono in B2:D4? (9).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Larghezza delle colonne</p><h2>Quando il contenuto non ci sta</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <table class="sheet" style="align-self:flex-start">
+        <tr><th></th><th>A</th><th>B</th></tr>
+        <tr><th>1</th><td>Chiavetta U</td><td style="text-align:right">###</td></tr>
+        <tr><th>2</th><td>Webcam</td><td style="text-align:right">35</td></tr>
+        <tr><th>3</th><td>Tastiera</td><td style="text-align:right">24,9</td></tr>
+      </table>
+      <p class="small muted">Il testo viene tagliato se la cella accanto è piena. Un numero troppo lungo diventa <code>###</code>: il valore c'è, ma non si vede.</p>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h4>A mano</h4><p>Trascina il bordo tra due lettere delle colonne.</p></div>
+      <div class="card soft"><h4>Larghezza ottimale</h4><p><b>Doppio clic</b> sul bordo a destra della lettera: la colonna si adatta al contenuto più lungo.</p></div>
+    </div>
+  </div>
+  <div class="callout hl"><code>###</code> non è un errore: è solo una colonna troppo stretta. Allargala e il numero ricompare.</div>
+  <aside class="notes">Mostrare alla LIM entrambi i metodi. Si può anche usare Formato › Colonne › Larghezza ottimale dopo aver selezionato le colonne. Selezionando più colonne e facendo doppio clic su uno dei bordi, si sistemano tutte insieme. Ricordare: ### non è un errore della formula, è solo una colonna troppo stretta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Formattazione</p><h2>Una tabella leggibile in quattro mosse</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">B</p><h3>Grassetto</h3><p>Per le intestazioni. <b>Ctrl + B</b>.</p></div>
+    <div class="card"><p class="num">▦</p><h3>Bordi</h3><p>Pulsante <b>Bordi</b> sulla barra degli strumenti.</p></div>
+    <div class="card"><p class="num">▮</p><h3>Sfondo</h3><p>Pulsante <b>Colore di sfondo</b> per la prima riga.</p></div>
+    <div class="card"><p class="num">≡</p><h3>Allineamento</h3><p>Centra i titoli, lascia i numeri a destra.</p></div>
+  </div>
+  <div class="callout">Tutte le opzioni sono anche in <b>Formato › Celle</b> (<b>Ctrl + 1</b>): schede <b>Numeri</b>, <b>Carattere</b>, <b>Allineamento</b>, <b>Bordi</b>, <b>Sfondo</b>.</div>
+  <aside class="notes">Regola di stile: pochi colori, chiari, e sempre lo stesso stile per le intestazioni. Il grigio delle griglie non si stampa: se si vuole vedere la tabella sul PDF, servono i bordi. Mostrare il menu del pulsante Bordi con le varie disposizioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Formato numero</p><h2>Il valore resta lo stesso, cambia come lo vedi</h2></div>
+  <table class="data">
+    <tr><th>Scrivi nella cella</th><th>Formato</th><th>Calc mostra</th></tr>
+    <tr><td class="mono">12,5</td><td>Valuta</td><td class="mono hl">12,50 €</td></tr>
+    <tr><td class="mono">0,15</td><td>Percentuale</td><td class="mono hl">15%</td></tr>
+    <tr><td class="mono">3,14159</td><td>Numero, 2 decimali</td><td class="mono hl">3,14</td></tr>
+    <tr><td class="mono">1250</td><td>Numero con separatore delle migliaia</td><td class="mono hl">1.250</td></tr>
+  </table>
+  <p class="small">Dove: <b>Formato › Celle › Numeri</b>, oppure i pulsanti <b>Formatta come valuta</b> e <b>Formatta come percentuale</b>. Il simbolo € <mark>non si scrive</mark> a mano.</p>
+  <aside class="notes">Punto chiave: nella barra della formula si vede sempre il valore vero (0,15), nella cella il valore formattato (15%). Se si scrive "12,50 €" a mano Calc di solito lo riconosce, ma è più sicuro scrivere solo il numero e applicare il formato. Domanda: se scrivo 15 e applico la percentuale, cosa vedo? (1500%: per questo si scrive 0,15, oppure si scrive direttamente 15%).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Sistema il listino del negozio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Scarica <b>calc-esercizi.xlsx</b> dalla pagina dei materiali e aprilo con Calc. Vai sul foglio <b>Listino</b>.</li>
+      <li>Allarga le colonne con il doppio clic finché si legge tutto.</li>
+      <li>Riga 1: grassetto e colore di sfondo. Tutta la tabella <code>A1:D7</code>: bordi.</li>
+      <li>Colonna Prezzo in valuta, Sconto in percentuale, Disponibili con il separatore delle migliaia.</li>
+      <li>Salva con nome come <code>listino-cognome.ods</code>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Attenzione</h4><p>Seleziona l'intera colonna dei valori prima di cambiare il formato.</p></div>
+      <div class="check"><b>Controllo:</b> il mouse costa <b>12,50 €</b>, la tastiera ha sconto <b>15%</b>, le chiavette disponibili sono <b>1.250</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Prezzo B2:B7 in valuta (12,50 €; 24,90 €; 8,00 €; 19,99 €; 35,00 €; 4,50 €). Sconto C2:C7 in percentuale (10%, 15%, 0%, 20%, 25%, 5%). Disponibili D2:D7 con separatore: 40, 12, 1.250, 75, 8, 300. Errore tipico: formattare solo la cella selezionata invece della colonna. Chi finisce prima: centrare la riga di intestazione e colorare a righe alterne.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Salvare</p><h2>Tre formati, tre usi diversi</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">.ods</p><h3>Formato di Calc</h3><p>Formato aperto (ODF). Usalo per i tuoi lavori: conserva tutto.</p></div>
+    <div class="card soft"><p class="num">.xlsx</p><h3>Formato di Excel</h3><p>Per chi usa Microsoft Excel. Calc lo apre e lo salva senza problemi.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">.pdf</p><h3>Da leggere e stampare</h3><p>Non si modifica più: va bene per consegnare o stampare.</p></div>
+  </div>
+  <ul class="points small">
+    <li><b>File › Salva con nome</b>: scegli il formato in <b>Tipo file</b>. Per .xlsx Calc chiede conferma: scegli di usare il formato Excel.</li>
+    <li><b>File › Esporta come › Esporta come PDF</b>: crea un PDF del foglio.</li>
+  </ul>
+  <aside class="notes">Spiegare che il file .xlsx dei materiali si apre con Calc, ma conviene salvare il proprio lavoro in .ods. Il PDF è una "fotografia": per modificarlo bisogna tornare al file .ods. Prima di esportare in PDF conviene guardare l'anteprima di stampa (File › Anteprima di stampa) per vedere se la tabella sta in una pagina.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 10 minuti</span></p>
+  <h2>Un lavoro, tre file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri il tuo <code>listino-cognome.ods</code>.</li>
+      <li><b>File › Salva con nome</b>, Tipo file <b>Excel 2007-365 (.xlsx)</b>, stesso nome.</li>
+      <li><b>File › Esporta come › Esporta come PDF</b>, poi <b>Esporta</b>: salva <code>listino-cognome.pdf</code>.</li>
+      <li>Apri il PDF e controlla che si vedano bordi e formati.</li>
+      <li>Consegna i tre file nel compito su <b>Google Classroom</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Dove sono i file?</h4><p>Nella finestra Salva con nome guarda la cartella prima di cliccare Salva.</p></div>
+      <div class="check"><b>Controllo:</b> nella cartella vedi tre file con lo stesso nome e estensioni diverse: <b>.ods</b>, <b>.xlsx</b>, <b>.pdf</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Se le estensioni non si vedono in Esplora file di Windows: scheda Visualizza › Estensioni nomi file (in Windows 11: Visualizza › Mostra › Estensioni nomi file). Se nel PDF la tabella è divisa su due pagine, si può impostare l'orientamento orizzontale da Formato › Pagina › Pagina. Controllare in Classroom che siano stati caricati tre file distinti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Le cose da ricordare</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>1 · Indirizzi</h3><p class="muted">Colonna + riga: C3. Un intervallo si scrive A1:B5.</p></div>
+    <div class="card"><h3>2 · Dati</h3><p class="muted">Testo a sinistra, numeri a destra. Decimali con la virgola.</p></div>
+    <div class="card"><h3>3 · Colonne</h3><p class="muted">### vuol dire "colonna stretta": doppio clic sul bordo.</p></div>
+    <div class="card"><h3>4 · Formati</h3><p class="muted">Valuta e percentuale cambiano l'aspetto, non il valore.</p></div>
+    <div class="card"><h3>5 · Salvare</h3><p class="muted">.ods per lavorare, .xlsx per Excel, PDF per consegnare.</p></div>
+    <div class="card"><h3>Prossima volta</h3><p class="muted">Le formule: il foglio comincia a calcolare.</p></div>
+  </div>
+  <aside class="notes">Domande veloci di verifica: qual è l'indirizzo della cella nella quarta colonna e seconda riga? (D2). Cosa significa ###? Quale formato scegliete per consegnare un lavoro che non deve essere modificato? Anticipare che la prossima lezione userà ancora calc-esercizi.xlsx.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

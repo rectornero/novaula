@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lavorare a progetti: il ruolo del programmatore · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Startup Lab</p>
+  <h1>Lavorare a progetti:<br>il ruolo del programmatore</h1>
+  <p class="lead">Backlog, user story, sprint, Kanban, Git e test: gli strumenti per trasformare l'idea del team in un prototipo che funziona.</p>
+  <aside class="notes">Aprire chiedendo ai Programmatori dei team: "che cosa avete costruito finora e come sapete che cosa fare la prossima volta?". Obiettivo: alla fine della lezione ogni team ha un backlog con 6 user story, una board Kanban, un repository con README e un primo report di test. Sono le basi dei quattro documenti del Programmatore in Startup Lab.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso · ciclo di vita del software</p><h2>Le fasi del ciclo, dentro le 4 iterazioni</h2></div>
+  <table class="data compact">
+    <tr><th>Iterazione</th><th>Fase prevalente</th><th>Che cosa fa il Programmatore</th></tr>
+    <tr><td><b>1</b> · Idea e avvio</td><td>Analisi</td><td>Raccoglie i requisiti, scrive le prime user story</td></tr>
+    <tr><td><b>2</b> · Pianificazione</td><td>Progettazione</td><td>Sceglie le tecnologie, scrive le specifiche, pianifica gli sprint</td></tr>
+    <tr><td><b>3</b> · Prototipo</td><td>Sviluppo e test</td><td>Costruisce il prototipo nel repository, lo prova, fa il report di test</td></tr>
+    <tr><td><b>4</b> · Rilascio</td><td>Rilascio e manutenzione</td><td>Consegna il prodotto e la guida d'uso, corregge i difetti</td></tr>
+  </table>
+  <div class="callout hl">Non è una <b>cascata</b>: in ogni iterazione si ripete un piccolo ciclo completo (si pianifica, si costruisce, si prova, si mostra nel pitch). Questo è il modo di lavorare <mark>agile</mark>.</div>
+  <aside class="notes">Ripasso veloce: la classe conosce già le sei fasi e la differenza cascata/agile. Domanda: "Perché in Startup Lab la cascata non funzionerebbe?" Risposta attesa: l'idea cambia dopo i feedback dei pitch; con la cascata scopriremmo i problemi solo alla fine. Far notare che la colonna "fase prevalente" indica dove sta il peso, non che le altre fasi siano assenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Agile in pratica · 1</p><h2>Il product backlog: tutto quello che il prodotto dovrà fare</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>ID</th><th>Funzionalità</th><th>Priorità</th><th>Stima</th></tr>
+      <tr><td class="mono">US1</td><td>Prenotare il pranzo</td><td>Alta</td><td class="mono">5</td></tr>
+      <tr><td class="mono">US2</td><td>Vedere il menu del giorno</td><td>Alta</td><td class="mono">2</td></tr>
+      <tr><td class="mono">US3</td><td>Annullare una prenotazione</td><td>Media</td><td class="mono">3</td></tr>
+      <tr><td class="mono">US4</td><td>Pagare con credito prepagato</td><td>Media</td><td class="mono">8</td></tr>
+      <tr><td class="mono">US5</td><td>Ricevere un promemoria</td><td>Bassa</td><td class="mono">3</td></tr>
+      <tr><td class="mono">US6</td><td>Statistiche per la mensa</td><td>Bassa</td><td class="mono">13</td></tr>
+    </table>
+    <ul class="points">
+      <li>È un <b>elenco ordinato</b>: in alto ciò che vale di più.</li>
+      <li>Ogni voce è una <b>user story</b>.</li>
+      <li>È <b>vivo</b>: dopo ogni pitch si aggiunge, si toglie, si riordina.</li>
+      <li>Lo cura il Programmatore, ma le priorità si decidono <b>con il team</b>.</li>
+    </ul>
+  </div>
+  <p class="muted small">Esempio usato in tutta la lezione: <b>MensaSmart</b>, un'app (inventata) per prenotare il pranzo alla mensa della scuola.</p>
+  <aside class="notes">Spiegare che il backlog sostituisce il "documento dei requisiti" scritto una volta per tutte. Domanda: "chi decide la priorità?" Il team, ascoltando gli utenti e i feedback dei pitch; nello Scrum è il Product Owner, in Startup Lab di solito il Manager con il Programmatore. La colonna Stima si spiega tra due slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Agile in pratica · 2</p><h2>La user story: un bisogno visto dall'utente</h2></div>
+  <div class="formula"><small>Lo schema</small>Come <span class="hl">&lt;chi&gt;</span> voglio <span class="hl">&lt;che cosa&gt;</span> per <span class="hl">&lt;perché&gt;</span></div>
+  <div class="cols-2">
+    <div class="card soft">
+      <h4>Esempio · US1</h4>
+      <p>Come <b>studente</b> voglio <b>prenotare il pranzo dall'app entro le 10</b> per <b>non fare la fila alla cassa</b>.</p>
+    </div>
+    <div class="card">
+      <h4>Criteri di accettazione</h4>
+      <ul class="points">
+        <li>Posso scegliere uno dei menu del giorno.</li>
+        <li>Dopo le 10:00 il pulsante <i>Prenota</i> è disattivato.</li>
+        <li>Dopo la prenotazione ricevo un codice di ritiro.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">I criteri di accettazione rendono la storia verificabile: diventeranno i casi di test. Una buona storia è piccola (si chiude in uno sprint), indipendente e testabile. Errore tipico: scrivere una storia tecnica ("come programmatore voglio un database"): il "chi" deve essere un utente reale del prodotto, e il "perché" deve dire il vantaggio per lui.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Agile in pratica · 3</p><h2>La stima: quanto lavoro, non quante ore</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Story point</h3>
+      <div class="chips"><span class="chip">1</span><span class="chip">2</span><span class="chip">3</span><span class="chip">5</span><span class="chip">8</span><span class="chip">13</span></div>
+      <p>Numeri della serie di Fibonacci: misurano lo sforzo <b>relativo</b>. Una storia da 8 è circa il quadruplo di una da 2.</p>
+    </div>
+    <div class="card">
+      <h3>Taglie T-shirt</h3>
+      <div class="chips"><span class="chip">XS</span><span class="chip">S</span><span class="chip">M</span><span class="chip">L</span><span class="chip">XL</span></div>
+      <p>Più semplici per iniziare: si confrontano le storie tra loro. Una storia XL va <b>spezzata</b> in storie più piccole.</p>
+    </div>
+  </div>
+  <div class="callout">Planning poker: ognuno sceglie la stima in segreto, poi si scoprono insieme. Se le stime sono molto diverse, chi ha dato la più alta e la più bassa spiega il perché.</div>
+  <aside class="notes">Perché non le ore: chi stima in ore tende a sbagliare e a "promettere"; le stime relative sono più stabili. I numeri crescono sempre di più perché più una storia è grande più è incerta. Dopo un paio di sprint il team conosce la propria velocità (punti completati per sprint), che serve a pianificare. Si può fare il planning poker con le dita o con foglietti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il backlog della vostra startup: 6 user story</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>Calc</b> (o un foglio Google su Drive) e crea le colonne <b>ID · Come · Voglio · Per · Criteri di accettazione · Stima · Priorità</b>.</li>
+      <li>Scrivi <b>6 user story</b> sul prodotto del tuo team, con almeno <b>2 criteri</b> ciascuna.</li>
+      <li>Stima ogni storia in story point (1, 2, 3, 5, 8, 13) e ordina il foglio per priorità.</li>
+      <li>Salva come <code>backlog-nomestartup.ods</code> nella cartella del team.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Suggerimento</h4><p class="small">Pensa a utenti diversi: il cliente, chi gestisce il servizio, un nuovo utente al primo accesso.</p></div>
+      <div class="check"><b>Controllo:</b> 6 righe complete; ogni "Per" dice un vantaggio per l'utente; nessuna storia oltre 13 punti.</div>
+    </div>
+  </div>
+  <aside class="notes">Il Programmatore guida, ma il lavoro si fa con tutto il team (il Designer conosce gli utenti, l'Economista i clienti paganti). Passare tra i banchi e controllare: (1) il "chi" è un utente e non "il programmatore"; (2) i criteri sono verificabili, cioè si possono provare con un sì/no; (3) le storie da più di 13 punti vanno spezzate. Esempio di soluzione per MensaSmart: US2 "Come studente voglio vedere il menu del giorno per scegliere cosa mangiare" (criteri: il menu compare entro le 8:00; ogni piatto mostra gli allergeni). Questo foglio è la base del documento "Backlog e sprint plan".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Agile in pratica · 4</p><h2>Sprint planning: che cosa facciamo in questo giro</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Si fissa l'<b>obiettivo dello sprint</b> in una frase.</li>
+      <li>Si prendono le storie <b>dall'alto</b> del backlog.</li>
+      <li>Ci si ferma quando si raggiunge la <b>capacità</b> del team.</li>
+      <li>Ogni storia si divide in <b>attività</b> tecniche.</li>
+    </ol>
+    <div class="card soft">
+      <h4>Sprint 1 di MensaSmart</h4>
+      <p class="small">Capacità stimata: <b>10 punti</b></p>
+      <p><b>Obiettivo:</b> uno studente vede il menu e prenota.</p>
+      <p class="mono small">US2 (2) + US1 (5) + US3 (3) = <b>10</b></p>
+      <p class="small muted">US1 → pagina prenotazione · controllo orario · codice di ritiro</p>
+    </div>
+  </div>
+  <aside class="notes">Lo sprint è un periodo fisso (in Startup Lab può coincidere con le giornate di laboratorio tra un pitch e l'altro). La capacità all'inizio è una stima; dopo il primo sprint si usa la velocità reale. Domanda: "Perché non prendiamo US4 da 8 punti, che è più importante di US3?" Perché 2+5+8 = 15 supera la capacità: meglio finire 3 storie che lasciarne 3 a metà. Alla fine dello sprint c'è la sprint review (in Startup Lab coincide spesso con il pitch).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Agile in pratica · 5</p><h2>La board Kanban: il lavoro a colpo d'occhio</h2></div>
+  <div class="cols-3">
+    <div class="card soft">
+      <h3>Da fare</h3>
+      <div class="card"><p class="small"><b>US3</b> · Annullare una prenotazione</p></div>
+      <div class="card"><p class="small"><b>US1</b> · Codice di ritiro</p></div>
+    </div>
+    <div class="card soft">
+      <h3>In corso</h3>
+      <div class="card"><p class="small"><b>US1</b> · Pagina di prenotazione</p><p class="tiny muted">Marco</p></div>
+    </div>
+    <div class="card soft">
+      <h3>Fatto</h3>
+      <div class="card"><p class="small"><b>US2</b> · Menu del giorno</p></div>
+    </div>
+  </div>
+  <p>Ogni scheda si sposta da sinistra a destra. Regola utile: <mark>poche schede "In corso"</mark> alla volta (per esempio al massimo una a testa).</p>
+  <aside class="notes">Kanban in giapponese significa "cartellino". La regola sul limite di lavoro in corso (WIP limit) evita di iniziare tutto e non finire niente. La board si guarda insieme all'avvio della giornata di laboratorio: cosa ho fatto, cosa faccio oggi, cosa mi blocca. Una scheda passa in "Fatto" solo se rispetta la Definition of Done (prossima slide).</aside>
+</section>
+
+<section class="slide accent">
+  <div class="head"><p class="kicker">Definition of Done</p><h2>"Fatto" vuol dire fatto davvero</h2></div>
+  <p class="lead">Il team decide <b>una volta per tutte</b> che cosa serve perché una storia sia finita. Per esempio:</p>
+  <div class="cols-2">
+    <div class="card" style="color:var(--ink)">
+      <ul class="points">
+        <li>Il codice è nel repository, con un commit chiaro.</li>
+        <li>Tutti i criteri di accettazione sono verificati.</li>
+        <li>I test sono scritti e passano.</li>
+      </ul>
+    </div>
+    <div class="card" style="color:var(--ink)">
+      <ul class="points">
+        <li>Un compagno ha rivisto il codice (pull request).</li>
+        <li>Il README è aggiornato, se serve.</li>
+        <li>La funzione si può mostrare nella demo del pitch.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">Differenza da chiarire: i criteri di accettazione sono diversi per ogni storia; la Definition of Done vale per tutte. Domanda: "Ho scritto il codice ma non l'ho provato: è fatto?" No. Ogni team scrive la propria DoD e la incolla nella descrizione della board.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Costruite la board Kanban del team</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Scegli uno strumento: <b>GitHub Projects</b> (vista Board), <b>Trello</b> oppure un foglio <b>Calc</b> con tre colonne.</li>
+      <li>Crea le colonne <b>Da fare · In corso · Fatto</b>.</li>
+      <li>Trasforma le storie del backlog in schede; dividi le prime due in attività.</li>
+      <li>Assegna ogni scheda "In corso" a una persona e scrivi la vostra <b>Definition of Done</b> nella descrizione.</li>
+    </ol>
+    <div class="stack">
+      <div class="card soft"><h4>Con Calc</h4><p class="small">Una colonna per stato, una cella per scheda; per spostarla, taglia e incolla. Salva come <code>kanban-nomestartup.ods</code>.</p></div>
+      <div class="check"><b>Controllo:</b> almeno 6 schede; nessuno ha più di una scheda "In corso"; la DoD ha almeno 4 punti.</div>
+    </div>
+  </div>
+  <aside class="notes">Consigliare GitHub Projects ai team che faranno software: si collega al repository della prossima attività. In GitHub Projects la vista Board crea colonne predefinite in inglese: si possono rinominare. Trello va bene per prodotti fisici o servizi. Verificare che le attività siano concrete (es. "creare la tabella prenotazioni") e non vaghe ("fare il backend"). Se il team non ha ancora un prodotto software, le schede possono riguardare il prototipo fisico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Progettazione</p><h2>Le specifiche tecniche essenziali</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Obiettivo e perimetro</b>: che cosa fa il prototipo e che cosa no.</li>
+      <li><b>Architettura</b>: i blocchi e come comunicano.</li>
+      <li><b>Tecnologie</b> scelte, e perché.</li>
+      <li><b>Dati</b>: che cosa si salva e dove.</li>
+      <li><b>Requisiti non funzionali</b>: velocità, sicurezza, accessibilità.</li>
+      <li><b>Rischi tecnici</b> e vincoli.</li>
+    </ul>
+    <div class="stack">
+      <div class="card soft"><h4>App nel browser</h4><p class="small muted">HTML, CSS, JavaScript</p></div>
+      <p class="tiny muted" style="text-align:center">↓ richieste HTTP</p>
+      <div class="card soft"><h4>Server · API</h4><p class="small muted">es. Python con Flask</p></div>
+      <p class="tiny muted" style="text-align:center">↓ legge e scrive</p>
+      <div class="card soft"><h4>Database</h4><p class="small muted">es. SQLite: menu, prenotazioni</p></div>
+    </div>
+  </div>
+  <aside class="notes">Le specifiche non devono essere lunghe: 2-3 pagine bastano, ma ogni scelta va motivata ("usiamo SQLite perché non richiede un server e basta per un prototipo"). Le tecnologie dell'esempio sono solo un'ipotesi: ogni team sceglie in base a ciò che sa usare e al prodotto (per un oggetto fisico l'architettura può includere un microcontrollore e dei sensori). Questo documento si scrive nell'iterazione 2 e si aggiorna nelle successive.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Git e repository</p><h2>Il codice ha una storia, e si lavora in parallelo</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Repository</b>: la cartella del progetto con tutta la sua storia.</li>
+      <li><b>Commit</b>: una "foto" delle modifiche, con un messaggio.</li>
+      <li><b>Branch</b>: un ramo separato per lavorare senza rompere il resto.</li>
+      <li><b>Pull request</b>: la richiesta di unire un ramo, che un compagno rivede.</li>
+    </ul>
+    <pre class="code" style="font-size:27px"><span class="c"># nuovo ramo per una storia</span>
+git switch -c menu-del-giorno
+<span class="c"># salva le modifiche</span>
+git add .
+git commit -m <span class="s">"Mostra il menu del giorno"</span>
+<span class="c"># invia il ramo a GitHub</span>
+git push -u origin menu-del-giorno</pre>
+  </div>
+  <p class="lead">Il ramo principale (<code>main</code>) deve sempre funzionare: ci si arriva solo con una pull request approvata.</p>
+  <aside class="notes">Un buon messaggio di commit dice che cosa cambia, al presente, in poche parole ("Mostra il menu del giorno", non "modifiche" o "boh"). Un branch per ogni storia o attività. La pull request è anche il momento della revisione del codice, ed è uno dei punti della Definition of Done. Se in laboratorio Git non è installato, tutto si può fare dall'interfaccia web di GitHub: è quello che faremo nell'esercizio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il repository del team con un README</h2>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Su <b>github.com</b> crea un nuovo repository <code>nomestartup-prototipo</code> e spunta l'opzione per aggiungere un file README.</li>
+      <li>Modifica il <code>README.md</code> con le sezioni a destra e fai il commit.</li>
+      <li>Crea un ramo <code>docs-installazione</code>, completa la sezione Installazione e fai il commit sul ramo.</li>
+      <li>Apri una <b>pull request</b>: un compagno la rivede e la unisce a <code>main</code>.</li>
+    </ol>
+    <div class="stack">
+      <pre class="code"><span class="k"># MensaSmart</span>
+Prenota il pranzo dal telefono.
+<span class="k">## Requisiti</span>
+<span class="k">## Installazione</span>
+<span class="k">## Come si usa</span>
+<span class="k">## Team</span></pre>
+      <div class="check"><b>Controllo:</b> la home del repository mostra il README; ci sono almeno 3 commit e 1 pull request unita.</div>
+    </div>
+  </div>
+  <aside class="notes">Il README è la "guida d'uso" richiesta in Startup Lab: chi apre il repository deve capire in un minuto che cos'è il prodotto, come si installa e come si usa. Nella sezione Come si usa vanno passi numerati e, più avanti, uno screenshot. Chi non ha un account GitHub può crearlo con la mail della scuola (verificare prima le regole d'istituto). Aggiungere gli altri membri del team come collaboratori dalle impostazioni del repository. Errori tipici: README vuoto o con solo il titolo; commit tutti con il messaggio predefinito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Test</p><h2>Provare prima che lo provi il cliente</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>Test manuali</h3>
+      <p>Una persona segue dei <b>passi</b> scritti e confronta il risultato con quello <b>atteso</b>.</p>
+      <p class="small muted">Utili per l'interfaccia e per la demo. Lenti da ripetere.</p>
+    </div>
+    <div class="card">
+      <h3>Test automatici</h3>
+      <pre class="code" style="font-size:26px;padding:20px 26px"><span class="k">def</span> test_totale():
+    <span class="k">assert</span> totale(3, 4.5) == 13.5</pre>
+      <p class="small muted">Un programma controlla il codice. Si rilanciano a ogni modifica, ad esempio con <code>pytest</code>.</p>
+    </div>
+  </div>
+  <div class="callout">I <b>criteri di accettazione</b> delle user story sono la prima fonte dei casi di test. I risultati si raccolgono nel <mark>report di test</mark>.</div>
+  <aside class="notes">Esempio: la funzione totale(pasti, prezzo) restituisce pasti * prezzo; 3 pasti da 4,50 euro fanno 13,50. pytest esegue in automatico tutte le funzioni che iniziano con test_. Far notare che i test automatici evitano le regressioni: una modifica nuova che rompe una funzione che prima andava. In Startup Lab basta anche un insieme di test manuali ben documentati; i team con codice dovrebbero averne almeno qualcuno automatico.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il primo report di test</h2>
+  <table class="data compact">
+    <tr><th>ID</th><th>Caso di test (storia)</th><th>Risultato atteso</th><th>Ottenuto</th><th>Esito</th></tr>
+    <tr><td class="mono">T1</td><td>Prenoto alle 9:30 (US1)</td><td>Ricevo un codice di ritiro</td><td>Codice ricevuto</td><td><b>Superato</b></td></tr>
+    <tr><td class="mono">T2</td><td>Prenoto alle 10:05 (US1)</td><td>Il pulsante è disattivato</td><td>Prenotazione accettata</td><td class="hl"><b>Fallito</b></td></tr>
+  </table>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Copia questa tabella in Calc o nel repository (<code>test.md</code>).</li>
+      <li>Scrivi almeno <b>4 casi di test</b> dai criteri di due vostre storie.</li>
+      <li>Esegui i test sul prototipo (o simulali sul mockup) e compila Ottenuto ed Esito.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> ogni caso cita la sua storia; ogni test fallito diventa una nuova scheda nella colonna "Da fare".</div>
+  </div>
+  <aside class="notes">Il report di test documenta che cosa è stato provato, quando e con che risultato. Aggiungere a piacere le colonne Data e Tester. Un test fallito non è un brutto voto: è un difetto trovato prima del cliente. T2 mostra proprio un difetto: il criterio "dopo le 10 il pulsante è disattivato" non è rispettato. Se il prototipo non esiste ancora, i team possono scrivere i casi di test e lasciare vuote Ottenuto ed Esito, che compileranno nell'iterazione 3.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Ripasso</p><h2>I quattro documenti del Programmatore</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1</p><h3>Backlog e sprint plan</h3><p class="muted">User story con criteri e stime, obiettivo e storie di ogni sprint, board Kanban.</p></div>
+    <div class="card"><p class="num">2</p><h3>Specifiche tecniche</h3><p class="muted">Architettura, tecnologie motivate, dati, requisiti non funzionali.</p></div>
+    <div class="card"><p class="num">3</p><h3>Repository e guida d'uso</h3><p class="muted">Commit chiari, un ramo per storia, pull request, README completo.</p></div>
+    <div class="card"><p class="num">4</p><h3>Report di test</h3><p class="muted">Casi presi dai criteri di accettazione, risultati, difetti nel backlog.</p></div>
+  </div>
+  <aside class="notes">Chiudere collegando ogni documento all'iterazione in cui si consegna e al pitch: nel pitch il Programmatore "dimostra" (demo del prototipo), e questi documenti sono la prova di come ci si è arrivati. Uscita: ogni Programmatore dice al proprio team la prima scheda che sposterà in "In corso" alla prossima giornata di laboratorio.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

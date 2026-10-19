@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Variabili e input/output · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">UDA 4 · Scratch e App Inventor</p>
+  <h1>Variabili e<br>input/output</h1>
+  <p class="lead">Punti, vite, nomi e risposte: come un programma ricorda le cose e dialoga con chi lo usa.</p>
+  <aside class="notes">Obiettivi: capire che cos'è una variabile (nome e valore), usare porta e cambia, inizializzare, leggere un dato con "chiedi e attendi" e "risposta", usare gli operatori, gestire l'output. Prerequisito: il gioco acchiappa-mela.sb3 della lezione sui videogiochi (tenere pronta una copia sul PC del docente per chi non l'ha salvato). Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>In un videogioco, quale numero guardi di più?</h2></div>
+  <div class="poll" data-id="numero-gioco">
+    <ol><li>Il punteggio</li><li>Le vite o l'energia</li><li>Il tempo che resta</li><li>Monete e risorse</li><li>Il livello</li></ol>
+  </div>
+  <aside class="notes">Qualunque risposta va bene: far notare che tutti questi numeri cambiano durante la partita e il gioco deve ricordarli istante per istante. Ognuno è una variabile. Domanda di rilancio: "e il nome del giocatore? anche quello va ricordato, ma non è un numero".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le variabili</p><h2>Una variabile è una scatola con un nome</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Ha un <b>nome</b>, che scegli tu: <code>punti</code>, <code>vite</code>, <code>nome</code></li>
+      <li>Contiene un <b>valore</b>: un numero o un testo</li>
+      <li>Il valore può <mark>cambiare</mark> mentre il programma gira</li>
+      <li>Come una cella di Calc: il nome è l'indirizzo, il valore è il contenuto</li>
+    </ul>
+    <div class="card fill" style="align-items:center;text-align:center"><p class="kicker" style="color:#fff">punti</p><p class="big" style="color:#fff">12</p><p>il valore di adesso: tra un secondo potrebbe essere 13</p></div>
+  </div>
+  <aside class="notes">Collegamento con le lezioni su Calc: in B2 posso scrivere un numero e cambiarlo, e le formule che usano B2 si aggiornano. In Scratch il nome sostituisce l'indirizzo della cella. Far proporre agli studenti 5 variabili per un gioco che conoscono (per esempio Minecraft: vita, fame, livello di esperienza, ora del giorno, numero di blocchi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Le variabili hanno quasi due secoli</h2></div>
+  <figure class="citazione">
+    <blockquote>La macchina analitica tesse disegni algebrici proprio come il telaio Jacquard tesse fiori e foglie.</blockquote>
+    <figcaption><b>Ada Lovelace</b>, Note sulla macchina analitica di Babbage, 1843. Nella sua tabella per i numeri di Bernoulli le colonne si chiamano V1, V2, V3…: variabili.</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un modello linguistico come GPT-3 (2020) contiene <b>175 miliardi di parametri</b>: numeri che durante l'addestramento vengono cambiati un pochino alla volta. Anche il cuore di un'AI è fatto di variabili.</p></div>
+  <aside class="notes">Traduzione nostra dalla Nota A delle "Notes" di Ada Lovelace (1843). Nella Nota G la famosa tabella del calcolo dei numeri di Bernoulli usa le colonne di memoria della macchina, chiamate "Variables" e numerate V1, V2, V3 e così via. Il dato su GPT-3 viene dall'articolo di OpenAI "Language Models are Few-Shot Learners" (Brown e altri, 2020). Non serve capire come funziona l'addestramento: basta l'idea che un'AI è fatta di numeri che cambiano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Variabili in Scratch</p><h2>Crearle e usarle</h2></div>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Categoria <b>Variabili</b>, pulsante <b>Crea una variabile</b></li>
+      <li>Scegli il nome e <i>Per tutti gli sprite</i> oppure <i>Solo per questo sprite</i></li>
+      <li>Sullo stage compare il contatore: la casella accanto alla variabile lo mostra o lo nasconde</li>
+    </ol>
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="porta punti a 0" viewBox="0 0 326 76" width="424" height="99" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L18,4 L26,12 L46,12 L54,4 L313.1686553955078,4 Q321.1686553955078,4 321.1686553955078,12 L321.1686553955078,56 Q321.1686553955078,64 313.1686553955078,64 L54,64 L46,72 L26,72 L18,64 L10,64 Q2,64 2,56 Z" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">porta</text><rect x="100.00430297851562" y="12" width="123.12028503417969" height="44" rx="22" fill="#DB6E00" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="116.00430297851562" y="34" fill="#fff">punti</text><path d="M193.1245880126953,30 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="233.1245880126953" y="34" fill="#fff">a</text><rect x="259.1686553955078" y="12" width="48" height="44" rx="22" fill="#fff" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="283.1686553955078" y="34" fill="#575E75" font-weight="500" text-anchor="middle">0</text></svg>
+<svg class="blocchi" role="img" aria-label="cambia punti di 1" viewBox="0 0 361 76" width="469" height="99" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L18,4 L26,12 L46,12 L54,4 L348.8127899169922,4 Q356.8127899169922,4 356.8127899169922,12 L356.8127899169922,56 Q356.8127899169922,64 348.8127899169922,64 L54,64 L46,72 L26,72 L18,64 L10,64 Q2,64 2,56 Z" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="34" fill="#fff">cambia</text><rect x="126.21240234375" y="12" width="123.12028503417969" height="44" rx="22" fill="#DB6E00" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="142.21240234375" y="34" fill="#fff">punti</text><path d="M219.3326873779297,30 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="259.3326873779297" y="34" fill="#fff">di</text><rect x="294.8127899169922" y="12" width="48" height="44" rx="22" fill="#fff" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="318.8127899169922" y="34" fill="#575E75" font-weight="500" text-anchor="middle">1</text></svg>
+<svg class="blocchi" role="img" aria-label="dire punti per 2 secondi" viewBox="0 0 432 80" width="562" height="104" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L18,4 L26,12 L46,12 L54,4 L419.1132507324219,4 Q427.1132507324219,4 427.1132507324219,12 L427.1132507324219,60 Q427.1132507324219,68 419.1132507324219,68 L54,68 L46,76 L26,76 L18,68 L10,68 Q2,68 2,60 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="36" fill="#fff">dire</text><rect x="78.88836669921875" y="12" width="103.12028503417969" height="48" rx="24" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="94.88836669921875" y="36" fill="#fff">punti</text><text dominant-baseline="central" x="192.00865173339844" y="36" fill="#fff">per</text><rect x="247.81683349609375" y="14" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="271.81683349609375" y="36" fill="#575E75" font-weight="500" text-anchor="middle">2</text><text dominant-baseline="central" x="305.81683349609375" y="36" fill="#fff">secondi</text></svg>
+      <p class="small muted"><b>porta</b> sostituisce il valore, <b>cambia</b> aggiunge (o toglie, con un numero negativo). L'ovale arancione <i>legge</i> il valore.</p>
+    </div>
+  </div>
+  <aside class="notes">"Per tutti gli sprite": la variabile è globale, la leggono e modificano tutti (punteggio, vite). "Solo per questo sprite": ogni sprite ha la sua (per esempio la velocità di ciascun nemico). Il blocco ovale con il nome si può infilare in qualunque spazio rotondo. Far notare che non esiste un blocco "sottrai": si usa cambia di −1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2><i>punti</i> vale 5. Esegui in fila: cambia punti di 3, porta punti a 2, cambia punti di 4. Quanto vale?</h2></div>
+  <div class="poll" data-id="porta-cambia" data-tipo="quiz" data-risposta="B">
+    <ol><li>14</li><li>6</li><li>9</li><li>2</li></ol>
+    <p class="why">5 + 3 = 8, poi <i>porta</i> cancella tutto e mette 2, poi 2 + 4 = 6. Chi risponde 14 ha trattato <i>porta</i> come se aggiungesse 2.</p>
+  </div>
+  <aside class="notes">Tracciare alla lavagna una tabella con due colonne: istruzione e valore di punti dopo l'istruzione (8, 2, 6). Questa tecnica si chiama "tracing" e la useremo anche con Flowgorithm, C e Python. Il 9 (C) è di chi somma 5 + 4 ignorando il porta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Acchiappa la mela, parte 4: punti e vite</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>acchiappa-mela.sb3</b> e crea due variabili per tutti gli sprite: <b>punti</b> e <b>vite</b>.</li>
+      <li>Nello script della mela, subito dopo la bandiera verde: <i>porta punti a 0</i> e <i>porta vite a 3</i>.</li>
+      <li>Quando la mela tocca il cestino: <i>cambia punti di 1</i>.</li>
+      <li>Quando tocca il rosso: <i>cambia vite di −1</i>; solo se <i>vite = 0</i> invia <i>game over</i>.</li>
+      <li>Salva <b>acchiappa-mela.sb3</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> a ogni partita i contatori ripartono da 0 e da 3; ogni mela presa vale 1 punto; alla terza mela persa compare "Game over!".</div>
+  </div>
+  <aside class="notes">Soluzione (parte della mela): dentro il per sempre, "se sta toccando il colore rosso? allora: cambia vite di −1; vai a x: (numero a caso…) y: 170; se vite = 0 allora invia a tutti game over". Il blocco "=" è nella categoria Operatori. Errore tipico: dimenticare di riportare in alto la mela dopo aver tolto la vita, così le vite scendono a raffica (vedi il prossimo quiz). Chi finisce prima: ogni 5 punti la mela diventa più veloce (serve una variabile velocità).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Prendi una mela e il punteggio sale di 10 o 15 punti in un colpo. Perché?</h2></div>
+  <div class="poll" data-id="punti-raffica" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il blocco cambia aggiunge 1 per ogni pixel toccato</li><li>La variabile è per tutti gli sprite: conta una volta per sprite</li><li>Scratch arrotonda i punti per eccesso</li><li>Il ciclo controlla circa 30 volte al secondo e la mela resta sul cestino per molti giri</li></ol>
+    <p class="why">Se la mela non si sposta subito dopo il punto, al giro dopo sta ancora toccando il cestino e il punto viene contato di nuovo. Soluzione: subito dopo <i>cambia punti di 1</i>, riportare la mela in alto.</p>
+  </div>
+  <aside class="notes">È uno degli errori più comuni nei giochi fatti a scuola. La B è il distrattore più insidioso: "per tutti gli sprite" significa solo che tutti possono leggerla, c'è comunque una sola variabile. Alternativa alla soluzione: "attendi fino a quando non sta toccando il cestino".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Input e output</p><h2>Il programma fa una domanda e usa la risposta</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; chiedi Come ti chiami? e attendi; dire unione di Ciao,  risposta per 2 secondi" viewBox="0 0 747 252" width="859" height="290" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L488.53509521484375,106 Q496.53509521484375,106 496.53509521484375,114 L496.53509521484375,158 Q496.53509521484375,166 488.53509521484375,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">chiedi</text><rect x="109.13232421875" y="114" width="241.97686767578125" height="44" rx="22" fill="#fff" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="230.12075805664062" y="136" fill="#575E75" font-weight="500" text-anchor="middle">Come ti chiami?</text><text dominant-baseline="central" x="361.10919189453125" y="136" fill="#fff">e attendi</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L734.6492309570312,166 Q742.6492309570312,166 742.6492309570312,174 L742.6492309570312,234 Q742.6492309570312,242 734.6492309570312,242 L54,242 L46,250 L26,250 L18,242 L10,242 Q2,242 2,234 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="204" fill="#fff">dire</text><rect x="78.88836669921875" y="174" width="418.65626525878906" height="60" rx="30" fill="#59C059" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="94.88836669921875" y="204" fill="#fff">unione di</text><rect x="228.90084838867188" y="182" width="100.43629455566406" height="44" rx="22" fill="#fff" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="279.1189956665039" y="204" fill="#575E75" font-weight="500" text-anchor="middle">Ciao, </text><rect x="339.33714294433594" y="180" width="142.20748901367188" height="48" rx="24" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="355.33714294433594" y="204" fill="#fff">risposta</text><text dominant-baseline="central" x="507.5446319580078" y="204" fill="#fff">per</text><rect x="563.3528137207031" y="182" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="587.3528137207031" y="204" fill="#575E75" font-weight="500" text-anchor="middle">2</text><text dominant-baseline="central" x="621.3528137207031" y="204" fill="#fff">secondi</text></svg>
+      <ul class="points small">
+        <li><b>Input</b>: chiedi e attendi, tasti, mouse, microfono</li>
+        <li><b>Output</b>: fumetti, suoni, contatori sullo stage</li>
+        <li><i>risposta</i> contiene l'ultima cosa scritta</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando parli a un assistente vocale, un modello di riconoscimento vocale trasforma la tua voce in testo: è la sua <b>risposta</b>. Il programma la elabora e ti risponde con la sintesi vocale. Input, elaborazione, output: lo stesso schema del gatto, con un'AI al posto della tastiera.</p></div>
+  </div>
+  <aside class="notes">"chiedi e attendi" è nella categoria Sensori: mostra una casella di testo in basso sullo stage e il programma si ferma finché l'utente preme Invio o la spunta. Lo spazio dopo "Ciao," va scritto dentro il primo campo, altrimenti esce "Ciao,Marta". Ricordare il ciclo input, elaborazione, output della prima UDA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli operatori</p><h2>I blocchi verdi fanno i calcoli</h2></div>
+  <table class="data compact">
+    <tr><th>Blocco</th><th>Esempio</th><th>Risultato</th></tr>
+    <tr><td>addizione, sottrazione, moltiplicazione, divisione</td><td class="mono">7 + 5 · 7 * 5 · 7 / 2</td><td class="mono">12 · 35 · 3.5</td></tr>
+    <tr><td>unione di</td><td class="mono">unione di "7" "5"</td><td class="mono">75</td></tr>
+    <tr><td>lunghezza di</td><td class="mono">lunghezza di "Scratch"</td><td class="mono">7</td></tr>
+    <tr><td>resto della divisione</td><td class="mono">17 diviso 5</td><td class="mono">2</td></tr>
+    <tr><td>arrotonda</td><td class="mono">arrotonda 4.6</td><td class="mono">5</td></tr>
+    <tr><td>confronti</td><td class="mono">punti &gt; 10 · vite = 0</td><td class="mono">vero o falso</td></tr>
+  </table>
+  <aside class="notes">In Scratch la moltiplicazione si scrive con l'asterisco e i decimali con il punto (3.5). Il resto della divisione serve per esempio a capire se un numero è pari (resto della divisione per 2 uguale a 0). I confronti sono esagoni: entrano nei "se". Curiosità: in Scratch l'uguale non distingue maiuscole e minuscole, "Roma" = "roma" è vero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa dice il gatto con <i>dire (unione di 2 3)</i>?</h2></div>
+  <div class="poll" data-id="unione" data-tipo="quiz" data-risposta="C">
+    <ol><li>5</li><li>2 3</li><li>23</li><li>Errore: i numeri non si possono unire</li></ol>
+    <p class="why"><i>unione di</i> attacca due testi uno dopo l'altro, anche se sono cifre: 2 e 3 diventano 23. Per sommare serve il blocco <i>+</i>.</p>
+  </div>
+  <aside class="notes">Il misconcetto è la A: "unione" sembra una somma. Il B è di chi immagina uno spazio automatico (non c'è). Lo stesso succede in molti linguaggi: in Python "2" + "3" dà "23". Collegamento: in Calc l'operatore &amp; fa la stessa cosa (="2"&amp;"3" dà 23).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Attenzione</p><h2><i>risposta</i> si sovrascrive: salvala in una variabile</h2></div>
+  <div class="cols-2 wide-left">
+<svg class="blocchi" role="img" aria-label="quando si clicca su bandiera verde; chiedi Primo numero? e attendi; porta a a risposta; chiedi Secondo numero? e attendi; porta b a risposta; dire unione di La somma è  a + b" viewBox="0 0 633 452" width="728" height="520" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,46 C27,18 82,18 107,46 L323.7970275878906,46 Q331.7970275878906,46 331.7970275878906,54 L331.7970275878906,98 Q331.7970275878906,106 323.7970275878906,106 L54,106 L46,114 L26,114 L18,106 L10,106 Q2,106 2,98 Z" fill="#FFBF00" stroke="#CC9900" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="76" fill="#fff">quando si clicca su</text><path d="M289.7970275878906,61 v31" stroke="#45993d" stroke-width="4" stroke-linecap="round"/><path d="M290.7970275878906,61 q7,-4 13,0 t13,0 v15 q-7,-4 -13,0 t-13,0 z" fill="#4cbf56" stroke="#45993d" stroke-width="2"/><path d="M2,114 Q2,106 10,106 L18,106 L26,114 L46,114 L54,106 L473.6248779296875,106 Q481.6248779296875,106 481.6248779296875,114 L481.6248779296875,158 Q481.6248779296875,166 473.6248779296875,166 L54,166 L46,174 L26,174 L18,166 L10,166 Q2,166 2,158 Z" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="136" fill="#fff">chiedi</text><rect x="109.13232421875" y="114" width="227.066650390625" height="44" rx="22" fill="#fff" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="222.6656494140625" y="136" fill="#575E75" font-weight="500" text-anchor="middle">Primo numero?</text><text dominant-baseline="central" x="346.198974609375" y="136" fill="#fff">e attendi</text><path d="M2,174 Q2,166 10,166 L18,166 L26,174 L46,174 L54,166 L352.2999267578125,166 Q360.2999267578125,166 360.2999267578125,174 L360.2999267578125,222 Q360.2999267578125,230 352.2999267578125,230 L54,230 L46,238 L26,238 L18,230 L10,230 Q2,230 2,222 Z" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="198" fill="#fff">porta</text><rect x="100.00430297851562" y="176" width="68.0440673828125" height="44" rx="22" fill="#DB6E00" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="116.00430297851562" y="198" fill="#fff">a</text><path d="M138.04837036132812,194 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="178.04837036132812" y="198" fill="#fff">a</text><rect x="204.09243774414062" y="174" width="142.20748901367188" height="48" rx="24" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="220.09243774414062" y="198" fill="#fff">risposta</text><path d="M2,238 Q2,230 10,230 L18,230 L26,238 L46,238 L54,230 L513.9730377197266,230 Q521.9730377197266,230 521.9730377197266,238 L521.9730377197266,282 Q521.9730377197266,290 513.9730377197266,290 L54,290 L46,298 L26,298 L18,290 L10,290 Q2,290 2,282 Z" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="260" fill="#fff">chiedi</text><rect x="109.13232421875" y="238" width="267.41481018066406" height="44" rx="22" fill="#fff" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="242.83972930908203" y="260" fill="#575E75" font-weight="500" text-anchor="middle">Secondo numero?</text><text dominant-baseline="central" x="386.54713439941406" y="260" fill="#fff">e attendi</text><path d="M2,298 Q2,290 10,290 L18,290 L26,298 L46,298 L54,290 L354.34393310546875,290 Q362.34393310546875,290 362.34393310546875,298 L362.34393310546875,346 Q362.34393310546875,354 354.34393310546875,354 L54,354 L46,362 L26,362 L18,354 L10,354 Q2,354 2,346 Z" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="322" fill="#fff">porta</text><rect x="100.00430297851562" y="300" width="70.08807373046875" height="44" rx="22" fill="#DB6E00" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="116.00430297851562" y="322" fill="#fff">b</text><path d="M140.09237670898438,318 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="180.09237670898438" y="322" fill="#fff">a</text><rect x="206.13644409179688" y="298" width="142.20748901367188" height="48" rx="24" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="222.13644409179688" y="322" fill="#fff">risposta</text><path d="M2,362 Q2,354 10,354 L18,354 L26,362 L46,362 L54,354 L620.8097381591797,354 Q628.8097381591797,354 628.8097381591797,362 L628.8097381591797,434 Q628.8097381591797,442 620.8097381591797,442 L54,442 L46,450 L26,450 L18,442 L10,442 Q2,442 2,434 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="398" fill="#fff">dire</text><rect x="78.88836669921875" y="362" width="535.9213714599609" height="72" rx="36" fill="#59C059" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="94.88836669921875" y="398" fill="#fff">unione di</text><rect x="228.90084838867188" y="376" width="193.78868103027344" height="44" rx="22" fill="#fff" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="325.7951889038086" y="398" fill="#575E75" font-weight="500" text-anchor="middle">La somma è </text><rect x="432.6895294189453" y="368" width="166.12020874023438" height="60" rx="30" fill="#59C059" stroke="#389438" stroke-width="1.5"/><rect x="448.6895294189453" y="374" width="48.0440673828125" height="48" rx="24" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="464.6895294189453" y="398" fill="#fff">a</text><text dominant-baseline="central" x="506.7335968017578" y="398" fill="#fff">+</text><rect x="532.7216644287109" y="374" width="50.08807373046875" height="48" rx="24" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="548.7216644287109" y="398" fill="#fff">b</text></svg>
+    <ul class="points">
+      <li>Dopo la seconda domanda, <i>risposta</i> contiene solo il secondo numero</li>
+      <li>Per questo il primo va messo al sicuro in <b>a</b></li>
+      <li>Il <b>+</b> trasforma i testi scritti in numeri e li somma</li>
+    </ul>
+  </div>
+  <aside class="notes">Domanda alla classe prima di mostrare la soluzione: "come faccio a sommare due numeri se risposta ne ricorda uno solo?". È lo stesso problema dello scambio di due variabili che vedremo in C e Python. Lo script è la base del prossimo laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Il gatto calcolatore</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nuovo progetto. Crea le variabili <b>a</b> e <b>b</b>.</li>
+      <li>Ricostruisci lo script della slide precedente.</li>
+      <li>Aggiungi altre tre battute: differenza, prodotto e quoziente di a e b.</li>
+      <li>Togli la spunta alle variabili, così non si vedono sullo stage.</li>
+      <li>Salva come <b>calcolatrice.sb3</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con 7 e 2 il gatto dice: la somma è 9, la differenza è 5, il prodotto è 14, il quoziente è 3.5.</div>
+  </div>
+  <aside class="notes">Soluzione: dopo la somma, tre blocchi "dire (unione di (La differenza è ) (a − b)) per 2 secondi" e simili con * e /. Se gli studenti usano "dire" senza "per 2 secondi" vedono solo l'ultima battuta: buon momento per ricordare la sequenza. Sfida: che cosa succede se il secondo numero è 0? (Scratch mostra Infinity: farlo notare e chiedere come evitarlo con un "se").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Traccia le variabili e apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2742" data-aiuto="a vale 3, poi 9, poi…; b parte da 50">
+    <ul class="points">
+      <li>Script 1: <i>porta a a 1</i>, poi <i>ripeti 3 volte: porta a a (a * 3)</i></li>
+      <li>Script 2: <i>porta b a 50</i>, poi <i>cambia b di −8</i></li>
+      <li>Il codice è il valore finale di <b>a</b> seguito da quello di <b>b</b></li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> a: 1, 3, 9, 27. b: 50 − 8 = 42. Codice 2742.</div>
+  </div>
+  <aside class="notes">Codice: 2742. A squadre, con una tabella di tracing su un foglio: una colonna per a, una per b. Errore tipico: fermarsi a 9 (due moltiplicazioni invece di tre) e provare 942. Si può verificare in Scratch costruendo i due script.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni situazione al blocco giusto</h2></div>
+  <dl class="puzzle-abbina" data-id="situazioni-blocchi">
+    <dt>Azzerare il punteggio a inizio partita</dt><dd>porta punti a 0</dd>
+    <dt>Togliere una vita</dt><dd>cambia vite di −1</dd>
+    <dt>Leggere il nome del giocatore</dt><dd>chiedi … e attendi</dd>
+    <dt>Usare ciò che ha scritto</dt><dd>risposta</dd>
+    <dt>Attaccare due testi</dt><dd>unione di</dd>
+    <dt>Far vedere il punteggio</dt><dd>mostra la variabile punti</dd>
+  </dl>
+  <aside class="notes">A coppie, 2 minuti. Il tranello è "togliere una vita": non c'è un blocco sottrai, si usa cambia con un numero negativo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il quiz parlante</h2>
+  <div class="cols-2">
+    <ol class="steps">
+      <li>Nuovo progetto, variabile <b>punti</b>: alla bandiera verde vale 0.</li>
+      <li>Fai 3 domande con <i>chiedi e attendi</i>.</li>
+      <li>Dopo ogni domanda un <i>se … allora … altrimenti</i> confronta la risposta, come nella figura.</li>
+      <li>Alla fine: <i>Hai fatto … punti su 3</i>.</li>
+      <li>Salva come <b>quiz.sb3</b>.</li>
+    </ol>
+    <div class="stack">
+<svg class="blocchi" role="img" aria-label="se risposta = Roma allora; cambia punti di 1; dire Giusto! per 1 secondi; altrimenti; dire Era Roma! per 1 secondi" viewBox="0 0 513 368" width="487" height="350" font-family="DM Sans, sans-serif" font-size="28" font-weight="600" dominant-baseline="central" style="flex:none;overflow:visible"><path d="M2,12 Q2,4 10,4 L18,4 L26,12 L46,12 L54,4 L495.6482849121094,4 Q503.6482849121094,4 503.6482849121094,12 L503.6482849121094,72 Q503.6482849121094,80 495.6482849121094,80 L80,80 L72,88 L52,88 L44,80 L36,80 Q28,80 28,88 L28,192 Q28,200 36,200 L44,200 L52,208 L72,208 L80,200 L495.6482849121094,200 Q503.6482849121094,200 503.6482849121094,208 L503.6482849121094,252 Q503.6482849121094,260 495.6482849121094,260 L80,260 L72,268 L52,268 L44,260 L36,260 Q28,260 28,268 L28,312 Q28,320 36,320 L44,320 L52,328 L72,328 L80,320 L495.6482849121094,320 Q503.6482849121094,320 503.6482849121094,328 L503.6482849121094,348 Q503.6482849121094,356 495.6482849121094,356 L54,356 L46,364 L26,364 L18,356 L10,356 Q2,356 2,348 Z" fill="#FFAB19" stroke="#CF8B17" stroke-width="1.5"/><text dominant-baseline="central" x="16" y="42" fill="#fff">se</text><path d="M57.220123291015625,42 L87.22012329101562,12 H375.2519836425781 L405.2519836425781,42 L375.2519836425781,72 H87.22012329101562 Z" fill="#59C059" stroke="#389438" stroke-width="1.5"/><rect x="91.22012329101562" y="18" width="142.20748901367188" height="48" rx="24" fill="#5CB1D6" stroke="#2E8EB8" stroke-width="1.5"/><text dominant-baseline="central" x="107.22012329101562" y="42" fill="#fff">risposta</text><text dominant-baseline="central" x="243.4276123046875" y="42" fill="#fff">=</text><rect x="269.4156799316406" y="20" width="101.8363037109375" height="44" rx="22" fill="#fff" stroke="#389438" stroke-width="1.5"/><text dominant-baseline="central" x="320.3338317871094" y="42" fill="#575E75" font-weight="500" text-anchor="middle">Roma</text><text dominant-baseline="central" x="415.2519836425781" y="42" fill="#fff">allora</text><text dominant-baseline="central" x="16" y="230" fill="#fff">altrimenti</text><path d="M28,88 Q28,80 36,80 L44,80 L52,88 L72,88 L80,80 L374.8127899169922,80 Q382.8127899169922,80 382.8127899169922,88 L382.8127899169922,132 Q382.8127899169922,140 374.8127899169922,140 L80,140 L72,148 L52,148 L44,140 L36,140 Q28,140 28,132 Z" fill="#FF8C1A" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="110" fill="#fff">cambia</text><rect x="152.21240234375" y="88" width="123.12028503417969" height="44" rx="22" fill="#DB6E00" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="168.21240234375" y="110" fill="#fff">punti</text><path d="M245.3326873779297,106 l8,8 l8,-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text dominant-baseline="central" x="285.3326873779297" y="110" fill="#fff">di</text><rect x="320.8127899169922" y="88" width="48" height="44" rx="22" fill="#fff" stroke="#DB6E00" stroke-width="1.5"/><text dominant-baseline="central" x="344.8127899169922" y="110" fill="#575E75" font-weight="500" text-anchor="middle">1</text><path d="M28,148 Q28,140 36,140 L44,140 L52,148 L72,148 L80,140 L463.8374328613281,140 Q471.8374328613281,140 471.8374328613281,148 L471.8374328613281,192 Q471.8374328613281,200 463.8374328613281,200 L80,200 L72,208 L52,208 L44,200 L36,200 Q28,200 28,192 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="170" fill="#fff">dire</text><rect x="104.88836669921875" y="148" width="121.84446716308594" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="165.81060028076172" y="170" fill="#575E75" font-weight="500" text-anchor="middle">Giusto!</text><text dominant-baseline="central" x="236.7328338623047" y="170" fill="#fff">per</text><rect x="292.541015625" y="148" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="316.541015625" y="170" fill="#575E75" font-weight="500" text-anchor="middle">1</text><text dominant-baseline="central" x="350.541015625" y="170" fill="#fff">secondi</text><path d="M28,268 Q28,260 36,260 L44,260 L52,268 L72,268 L80,260 L500.80950927734375,260 Q508.80950927734375,260 508.80950927734375,268 L508.80950927734375,312 Q508.80950927734375,320 500.80950927734375,320 L80,320 L72,328 L52,328 L44,320 L36,320 Q28,320 28,312 Z" fill="#9966FF" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="42" y="290" fill="#fff">dire</text><rect x="104.88836669921875" y="268" width="158.81654357910156" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="184.29663848876953" y="290" fill="#575E75" font-weight="500" text-anchor="middle">Era Roma!</text><text dominant-baseline="central" x="273.7049102783203" y="290" fill="#fff">per</text><rect x="329.5130920410156" y="268" width="48" height="44" rx="22" fill="#fff" stroke="#774DCB" stroke-width="1.5"/><text dominant-baseline="central" x="353.5130920410156" y="290" fill="#575E75" font-weight="500" text-anchor="middle">1</text><text dominant-baseline="central" x="387.5130920410156" y="290" fill="#fff">secondi</text></svg>
+      <div class="check"><b>Controllo:</b> rispondendo "roma" in minuscolo il punto vale lo stesso. Con 2 risposte giuste su 3 il gatto dice: Hai fatto 2 punti su 3.</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione per la frase finale: dire (unione di (Hai fatto ) (unione di (punti) ( punti su 3))). In Scratch l'uguale non distingue maiuscole e minuscole, ma "Roma " con uno spazio finale è diverso da "Roma". Variante: domande di matematica, dove la risposta giusta è calcolata (per esempio "quanto fa 7 * 8?").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una variabile ha un nome e un <span class="blank" data-risposta="valore"></span>.</p>
+    <p>Per azzerare il punteggio uso il blocco <span class="blank" data-risposta="porta"></span> punti a 0.</p>
+    <p>Ciò che l'utente scrive dopo <i>chiedi e attendi</i> finisce nel blocco <span class="blank" data-risposta="risposta" style="--w:8ch"></span>.</p>
+    <p><i>unione di 4 2</i> dà come risultato <span class="blank" data-risposta="42" style="--w:4ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: valore; porta; risposta; 42.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Variabile = nome + valore che cambia</li>
+      <li><i>porta</i> sostituisce, <i>cambia</i> aggiunge</li>
+      <li>Sempre inizializzare all'avvio</li>
+    </ul>
+    <ul class="points">
+      <li>Input: chiedi e attendi, poi risposta</li>
+      <li>Salva la risposta prima della domanda dopo</li>
+      <li><i>+</i> somma, <i>unione di</i> attacca testi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato su Novaula (quiz a tema con punteggio e voto finale). Con questa lezione si chiude la parte su Scratch: dalla prossima si passa ad App Inventor e alle app per il telefono.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

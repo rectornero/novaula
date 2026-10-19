@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDF · Novaula</title>
+<meta name="theme-color" content="#1f2a44">
+<style>
+  html, body { margin: 0; background: #3a4258; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 8px 12px; padding-top: max(8px, env(safe-area-inset-top)); background: #1f2a44; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+  .bar a, .bar button { font: inherit; font-weight: 700; color: #fff; text-decoration: none; background: #2b3550; border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; white-space: nowrap; }
+  .bar a:hover, .bar button:hover { background: #3a4668; }
+  .bar .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .95rem; opacity: .9; }
+  #pages { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 8px 40px; }
+  #pages canvas { max-width: 100%; height: auto !important; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+  .msg { color: #fff; text-align: center; padding: 40px 16px; line-height: 1.5; }
+  .msg a { color: #ffe066; font-weight: 700; }
+  @media (max-width: 480px) { .bar .hide-s { display: none; } .bar { gap: 6px; padding-left: 8px; padding-right: 8px; } }
+</style>
+</head>
+<body>
+<div class="bar">
+  <button type="button" id="close" aria-label="Chiudi il PDF">✕ <span class="hide-s">Chiudi</span></button>
+  <span class="t" id="title"></span>
+  <a id="dl" download aria-label="Scarica il PDF">⬇ <span class="hide-s">Scarica</span></a>
+</div>
+<div id="pages"><p class="msg">Caricamento del PDF…</p></div>
+<script type="module">
+  import * as pdfjs from "./vendor/pdfjs/pdf.min.js";
+  pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdfjs/pdf.worker.min.js";
+  var q = new URLSearchParams(location.search), f = q.get("f") || "", da = (q.get("da") || "").replace(/[^a-z0-9/]/gi, "");
+  var box = document.getElementById("pages");
+  // Solo PDF del sito o dell'archivio Supabase
+  var src = null;
+  try { var u = new URL(f, location.href); if (u.origin === location.origin || /\.supabase\.co$/.test(u.hostname)) src = u.href; } catch (e) {}
+  var name = decodeURIComponent((src || "").split("?")[0].split("/").pop()) || "documento.pdf";
+  var title = q.get("t") || name.replace(/\.pdf$/i, "");
+  document.title = title + " · Novaula";
+  document.getElementById("title").textContent = title;
+  var dl = document.getElementById("dl");
+  if (src) { dl.href = src; dl.download = name; } else dl.hidden = true;
+
+  // Chiudi: la scheda aperta dal sito si chiude; altrimenti si torna alla pagina della classe
+  function close() {
+    try { window.close(); } catch (e) {}
+    setTimeout(function () {
+      var sameSite = document.referrer && document.referrer.indexOf(location.origin) === 0;
+      if (sameSite && history.length > 1) history.back(); else location.href = "./" + (da ? "#/" + da : "");
+    }, 150);
+  }
+  document.getElementById("close").onclick = close;
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+  function fail() {
+    box.innerHTML = '<p class="msg">Non riesco a mostrare il PDF qui.<br><a></a></p>';
+    var a = box.querySelector("a");
+    if (src) { a.href = src; a.textContent = "Apri il PDF"; } else a.remove();
+  }
+  async function render() {
+    if (!src) return fail();
+    try {
+      var doc = await pdfjs.getDocument({ url: src, isEvalSupported: false }).promise;
+      box.textContent = "";
+      var w = Math.min(box.clientWidth - 16, 1100), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      for (var i = 1; i <= doc.numPages; i++) {
+        var page = await doc.getPage(i), v = page.getViewport({ scale: 1 });
+        var vp = page.getViewport({ scale: w / v.width * dpr });
+        var c = document.createElement("canvas");
+        c.width = Math.floor(vp.width); c.height = Math.floor(vp.height);
+        c.style.width = Math.floor(vp.width / dpr) + "px";
+        c.setAttribute("aria-label", "Pagina " + i + " di " + doc.numPages);
+        box.appendChild(c);
+        await page.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise;
+      }
+    } catch (e) { console.error(e); fail(); }
+  }
+  render();
+</script>
+</body>
+</html>
