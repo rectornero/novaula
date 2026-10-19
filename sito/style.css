@@ -191,7 +191,8 @@ label.check-row{flex-direction:row;align-items:center;gap:10px;font-weight:400;m
 label.check-row input{width:20px;height:20px;flex:none;accent-color:var(--accent)}
 
 @media (max-width:480px){
-  .tabs a{flex-direction:column;gap:2px;padding:7px 1px}
+  .tabs{gap:0;padding:4px}
+  .tabs a{flex:1 1 auto;flex-direction:column;gap:2px;padding:7px 2px;border-radius:18px}
   .tabs a span{font-size:.68rem;letter-spacing:-.01em}
   .class-btn{min-height:110px}
 }
@@ -206,5 +207,5 @@ label.check-row input{width:20px;height:20px;flex:none;accent-color:var(--accent
 .card.waiting{gap:6px;padding:14px 16px}
 .card.waiting h3{margin:0;font-size:1.02rem}
 .test.is-done .cal{opacity:.6}
-@media (max-width:380px){.tabs a span{font-size:.66rem}.tabs{gap:2px;padding:4px}}
+@media (max-width:380px){.tabs a span{font-size:.64rem}}
 .version{color:var(--muted);font-size:.78rem;text-align:center;opacity:.8}
