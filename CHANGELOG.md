@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.4.0 (20 Oct 2026): Pagella
+- New "Pagella" page in Area docente (button next to "Vai alle classi", or `#/docente/pagella`): for each class and
+  term, every student's average per mark type, the weighted average and a proposed whole mark for the register.
+- Only marks the teacher confirmed count. Claude's unreviewed proposals and "Da rifare" are left out; the page and the
+  file show how many are still waiting per student.
+- Weights per mark type (default: test and oral 2, project 1.5, the rest 1), the same for all classes or set per class.
+  The weighted average weighs each mark by its type; weight 0 leaves a type out.
+- Terms default to trimestre (1 Sep–31 Dec) and pentamestre (1 Jan–30 Jun), plus "Anno intero"; names and dates can be changed.
+- "Scarica Excel" downloads a real .xlsx for the class: one sheet per term plus a "Voti" sheet listing every confirmed mark.
+- SQL: `aggiornamenti/2026-10-20-pagella.sql` (new `grade_settings` table, teacher only; applied).
+
 ## 2.3.0 (20 Oct 2026): weekly summary
 - Area docente has a new "Riepilogo della settimana" box: for each class, open help desk questions (and unanswered
   slide questions), missing hand-ins for homework due in the last 7 days, things to check (identical files or same
