@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.3.0";
+  var VERSION = "2.4.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -944,6 +944,11 @@
 
   /* Area docente */
   function teacherPage() {
+    if (api.isTeacher() && /^#\/docente\/pagella/.test(location.hash) && window.NovaulaPagella) {
+      setPage("Pagella");
+      window.NovaulaPagella.page(app, Object.assign(pctx(), { classes: classes }));
+      return;
+    }
     setPage("Area docente");
     app.appendChild(h("a", { class: "back", href: "#/", text: "← Tutte le classi" }));
     app.appendChild(h("h1", { text: "Area docente" }));
@@ -953,6 +958,7 @@
         h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
+          window.NovaulaPagella && api.client ? h("a", { class: "btn", href: "#/docente/pagella", text: "Pagella" }) : null,
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
       ));

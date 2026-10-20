@@ -1,0 +1,22 @@
+/* Novaula · Pagella (pagella.js) */
+.pg-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.pg-controls{grid-template-columns:1fr}}
+.pg-weights{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.pg-weights input,.pg-term input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-weight:400}
+.pg-term{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+@media (max-width:560px){.pg-term{grid-template-columns:1fr 1fr}.pg-term label:first-child{grid-column:1/-1}}
+.pg-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);-webkit-overflow-scrolling:touch}
+.pg-table{border-collapse:collapse;width:100%;font-size:.95rem}
+.pg-table th,.pg-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap;vertical-align:middle}
+.pg-table thead th{font-size:.82rem;color:var(--muted);font-weight:700;background:var(--soft);position:sticky;top:0}
+.pg-table tbody tr:last-child>*{border-bottom:0}
+.pg-table .pg-name{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;white-space:normal;min-width:150px}
+.pg-table thead .pg-name{background:var(--soft);z-index:2}
+.pg-name a{font-weight:700;text-decoration:none;color:var(--ink);display:block}
+.pg-name .badge{margin:4px 4px 0 0;display:inline-block}
+.pg-w{display:block;font-weight:400;font-size:.75rem}
+.pg-v{font-weight:800}
+.pg-v.good{color:var(--ok)}.pg-v.mid{color:color-mix(in srgb,#e08a00 80%,var(--ink))}.pg-v.bad{color:var(--danger)}
+.pg-n{color:var(--muted);font-size:.78rem;margin-left:4px}
+.pg-table .mk{min-width:40px;height:36px;font-size:1rem}
+.pg-table .mk.big{min-width:48px;height:40px;font-size:1.25rem}
