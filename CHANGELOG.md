@@ -5,6 +5,15 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.7.0 (20 Oct 2026): updates posted to Artache
+- Every new Novaula version is now posted to the Artache Updates feed by itself: a GitHub Action
+  (`.github/workflows/artache.yml`) runs on each push to `main` that changes this changelog and posts the newest entry
+  as a release, then updates the "Novaula" platform item in the Artache Studio. Re-runs never post the same version twice.
+- Only this changelog text is sent, never anything from the database about students; the script refuses to post
+  anything that looks like a key or token. It needs the repository secret `ARTACHE_TOKEN`; without it nothing is sent.
+- `CLAUDE.md` tells Claude sessions when to post milestones, questions and notes to Artache themselves.
+- No change for students or in the app besides the version number. No SQL.
+
 ## 2.6.0 (20 Oct 2026): phone notifications
 - Students can turn on notifications in «Il mio profilo» («🔔 Notifiche sul telefono»). They get an alert for a new
   visible mark, a "Da rifare" or new material for their class or for them personally. Claude's proposed marks never
