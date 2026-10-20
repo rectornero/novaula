@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.6.0 (20 Oct 2026): phone notifications
+- Students can turn on notifications in «Il mio profilo» («🔔 Notifiche sul telefono»). They get an alert for a new
+  visible mark, a "Da rifare" or new material for their class or for them personally. Claude's proposed marks never
+  notify: only marks the teacher confirmed. Students with a PIN see "Nuovo voto" without the mark on the lock screen.
+- The teacher turns them on in Area docente and gets an alert for every new question in the Aiuto tab.
+- A test notification arrives right after turning them on. Tapping a notification opens the right page.
+- On iPhone notifications only work after «Aggiungi alla schermata Home» (iOS 16.4+): the profile shows the steps in Italian.
+- Free Web Push from the app itself: database triggers call the new Edge Function `notifiche`, which writes the texts
+  and sends them. Grading a whole class at once sends one alert per student, and a batch of materials sends one alert.
+- SQL: `aggiornamenti/2026-10-20-notifiche.sql` (applied). Edge Function: `supabase/functions/notifiche` (deployed).
+
 ## 2.5.0 (20 Oct 2026): class tools on the LIM
 - Under the teacher's "Adesso / Dopo" lesson card there is a new "Strumenti per la classe" bar (class of the current
   lesson preselected, any class can be chosen) with three full-screen tools, built for the LIM and for phones.

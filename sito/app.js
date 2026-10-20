@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.5.0";
+  var VERSION = "2.6.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -962,6 +962,9 @@
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
       ));
+      if (window.NovaulaNotifiche && api.client) app.appendChild(h("div", { class: "card" }, window.NovaulaNotifiche.panel({ h: h, sb: api.client, toast: toast, errText: errText, owner: "docente", subscribe: async function (ep, p256dh, auth) {
+        var r = await api.client.rpc("teacher_push_subscribe", { p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }); if (r.error) throw r.error;
+      } })));
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
       if (window.NovaulaRiepilogo && api.client) window.NovaulaRiepilogo.board(app, { h: h, sb: api.client, findClass: findClass, notice: notice, errText: errText });
