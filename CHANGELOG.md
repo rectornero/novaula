@@ -5,6 +5,15 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.3.0 (20 Oct 2026): weekly summary
+- Area docente has a new "Riepilogo della settimana" box: for each class, open help desk questions (and unanswered
+  slide questions), missing hand-ins for homework due in the last 7 days, things to check (identical files or same
+  device between different students, late hand-ins, Claude's proposed marks to confirm, "Da rifare" pending) and the
+  homework and tests due next week (homework still waiting for its topic is shown as "previsto").
+- Every Friday afternoon Claude posts the same summary in English in the Novaula project.
+- SQL: `aggiornamenti/2026-10-20-riepilogo.sql` (applied): functions `weekly_summary_data` (not callable from the site)
+  and `teacher_weekly_summary` (teacher only).
+
 ## 2.2.0 (19 Oct 2026): the 3E TPSI course
 - 3E's Programma now follows the textbook: 60 new topics after the 5 already there (Units 1–7, two group projects,
   three Educazione civica lessons), including the book's online lessons and labs.

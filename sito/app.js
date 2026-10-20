@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.2.0";
+  var VERSION = "2.3.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -958,6 +958,7 @@
       ));
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
+      if (window.NovaulaRiepilogo && api.client) window.NovaulaRiepilogo.board(app, { h: h, sb: api.client, findClass: findClass, notice: notice, errText: errText });
       app.appendChild(h("p", { class: "version", text: "Novaula " + VERSION }));
       var qbox = h("section", { class: "list" }, h("p", { class: "empty", text: "Caricamento delle domande…" }));
       app.appendChild(h("h2", { text: "Domande senza risposta" }));

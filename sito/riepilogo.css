@@ -1,0 +1,11 @@
+/* Novaula · Riepilogo settimanale (Area docente) */
+.rp-board{gap:6px}
+.rp-class{border-top:1px solid var(--line);padding:8px 0}
+.rp-class:first-of-type{border-top:0}
+.rp-class>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;min-height:40px}
+.rp-class>summary::-webkit-details-marker{display:none}
+.rp-name{font-weight:700}
+.rp-sec{margin:6px 0 0}
+.rp-sec h4{margin:8px 0 4px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rp-sec ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.rp-sec li{overflow-wrap:anywhere}
