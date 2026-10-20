@@ -65,7 +65,9 @@
     var h = x.h, timer = null, rows = null, stopped = false;
     var root = h("section", { class: "now-board", "aria-label": "Lezione in corso e successiva" },
       h("p", { class: "empty", text: "Caricamento dell'orario…" }));
+    var tools = h("div"), stopTools = null;
     box.appendChild(root);
+    box.appendChild(tools);
 
     function classInfo(id) {
       var c = x.findClass(id);
@@ -131,9 +133,21 @@
       if (stopped) return;
       rows = r; render();
       timer = setInterval(render, 20000);
+      // Strumenti per la LIM (lim.js): sorteggio, timer e posti della classe in corso
+      if (window.NovaulaLim) stopTools = window.NovaulaLim(tools, {
+        h: h, sb: x.sb, findClass: x.findClass, classParts: x.classParts, classColor: x.classColor,
+        classIds: function () { return rows.map(function (r) { return r.class_id; }).filter(function (id, i, a) { return a.indexOf(id) === i; }); },
+        currentClass: function () { var s = situation(rows, new Date()); return s.current ? s.current.class_id : s.next && !s.nextDay ? s.next.class_id : null; },
+        lessonEnd: function () {
+          var s = situation(rows, new Date()), d = new Date();
+          if (!s.current) return null;
+          d.setHours(0, mins(s.current.ends), 0, 0);
+          return d.getTime();
+        }
+      });
     });
     function onVisible() { if (document.visibilityState === "visible" && rows) render(); }
     document.addEventListener("visibilitychange", onVisible);
-    return function () { stopped = true; clearInterval(timer); document.removeEventListener("visibilitychange", onVisible); };
+    return function () { stopped = true; clearInterval(timer); if (stopTools) stopTools(); document.removeEventListener("visibilitychange", onVisible); };
   };
 })();
