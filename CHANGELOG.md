@@ -5,6 +5,20 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.5.0 (20 Oct 2026): class tools on the LIM
+- Under the teacher's "Adesso / Dopo" lesson card there is a new "Strumenti per la classe" bar (class of the current
+  lesson preselected, any class can be chosen) with three full-screen tools, built for the LIM and for phones.
+- Sorteggia: random student picker. Students with fewer confirmed marks are much more likely to be picked
+  (weight 1/(1+marks)², the chance is shown next to each name). Tap a name to mark them absent; absent and already
+  picked students are left out for the rest of the day on that device. After a pick: number of marks, desk from the
+  seating plan, last oral test, "Assente, estrai un altro", and a quick "Salva interrogazione" that saves an oral mark.
+  Space bar draws.
+- Timer: presets from 1 to 30 minutes, "Fino a fine ora", ±1 minute, pause; big ring countdown, beeps and flashes at
+  the end, keeps the screen on. It keeps running when the window is closed or the page changes (a chip in the corner shows it).
+- Posti: seating plan per class with rows and desks per row, tap a name then a desk to place, move or swap,
+  "Mescola" for a random plan, view from the desk or from the students. Saved automatically.
+- SQL: `aggiornamenti/2026-10-20-strumenti-lim.sql` (new `seating_plans` table, teacher only; applied).
+
 ## 2.4.0 (20 Oct 2026): Pagella
 - New "Pagella" page in Area docente (button next to "Vai alle classi", or `#/docente/pagella`): for each class and
   term, every student's average per mark type, the weighted average and a proposed whole mark for the register.
