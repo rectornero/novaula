@@ -10,13 +10,21 @@ Comandi
   scarica --classe 5g --compito "startup" [--dir lavoro] [--tutte]
       scarica le consegne non ancora corrette (con --tutte anche quelle già corrette)
       in <dir>/<classe>-<compito>/: un PDF per consegna, la traccia del compito e manifest.json
+  scarica --nuove [--dir lavoro]
+      per la correzione automatica: tutte le consegne nuove di tutte le classi (senza correzione,
+      non saltate, non "da rifare", compito con correzione automatica attiva); se non ce ne sono
+      scrive "Nessuna consegna nuova." ed esce con codice 0
   pagine FILE.pdf [--out DIR]
       immagini PNG delle pagine con la griglia 0-1 (per scegliere i riquadri) e il testo
       di ogni riga con la sua posizione, così Claude può segnare per "testo" o per "riquadro"
   annota FILE.pdf correzione.json [-o corretto.pdf]
       crea il PDF corretto
-  carica correzione.json [--pdf corretto.pdf]
-      invia il PDF corretto e il riepilogo a Novaula (serve submission_id nel JSON)
+  carica correzione.json [--pdf corretto.pdf] [--automatica]
+      invia il PDF corretto e il riepilogo a Novaula (serve submission_id nel JSON);
+      con --automatica la correzione è segnata "automatica" e non sostituisce mai una già esistente
+  salta SUBMISSION_ID "motivo"
+      la consegna non si può correggere in automatico: non verrà più riproposta e il docente
+      vede il motivo in Area docente (con "Riprova" la rimette in coda)
 
 correzione.json
   {"studente": "Mario Rossi", "classe": "5G", "compito": "Backlog e sprint plan",
@@ -118,9 +126,27 @@ def in_pdf(src, dest):
     return False
 
 
+def nota_in_pdf(testo, dest, studente):
+    """Una consegna fatta solo di testo (la nota) diventa un PDF da correggere."""
+    doc = pymupdf.open()
+    page = doc.new_page()
+    p = Penna(page)
+    y = p.scrivi(50, 40, f"Consegna di {studente} (testo scritto nella nota)", 11, 495, GRIGIO, bold=True)
+    for par in str(testo).split("\n"):
+        if y > 790:
+            page = doc.new_page()
+            p = Penna(page)
+            y = 40
+        y = p.scrivi(50, y + 4, par or " ", 10.5, 495)
+    doc.save(dest)
+
+
 def cmd_scarica(a):
-    compiti = chiama("consegne", classe=a.classe, compito=a.compito, assignment_id=a.id)
+    compiti = chiama("consegne", classe=a.classe, compito=a.compito, assignment_id=a.id, nuove=a.nuove)
     if not compiti:
+        if a.nuove:
+            print("Nessuna consegna nuova.")
+            return
         sys.exit("Nessun compito con consegne trovato.")
     for c in compiti:
         cartella = os.path.join(a.dir, f"{c['class_id']}-{slug(c['title'])}")
@@ -144,8 +170,15 @@ def cmd_scarica(a):
                 pdf = os.path.join(cartella, nome + ".pdf")
                 voce["pdf"] = os.path.basename(pdf) if in_pdf(orig, pdf) else None
                 voce["originale"] = os.path.relpath(orig, cartella)
+            elif (s.get("note") or "").strip():
+                pdf = os.path.join(cartella, nome + ".pdf")
+                nota_in_pdf(s["note"], pdf, s["student_name"])
+                voce["pdf"] = os.path.basename(pdf)
+                voce["solo_nota"] = True
+            else:
+                voce["pdf"] = None
             voci.append(voce)
-        manifest = {k: c.get(k) for k in ("id", "class_id", "title", "description", "pdf_url", "due_date")}
+        manifest = {k: c.get(k) for k in ("id", "class_id", "title", "description", "pdf_url", "due_date", "kind", "group_work")}
         manifest["consegne"] = voci
         with open(os.path.join(cartella, "manifest.json"), "w", encoding="utf-8") as f:
             json.dump(manifest, f, ensure_ascii=False, indent=2)
@@ -392,8 +425,16 @@ def cmd_carica(a):
         b64 = base64.b64encode(f.read()).decode()
     r = chiama("salva", submission_id=dati["submission_id"], pdf_base64=b64, grade=dati.get("voto"),
                summary=dati.get("sintesi"), correct=segni.count("giusto"), wrong=segni.count("sbagliato"),
-               partial=segni.count("parziale"))
+               partial=segni.count("parziale"), automatica=a.automatica)
+    if r.get("gia_corretta"):
+        print(f"Già corretta, lasciata com'è: {dati.get('studente')}")
+        return
     print(f"Caricata: {dati.get('studente')} → {r.get('file_path')}")
+
+
+def cmd_salta(a):
+    chiama("salta", submission_id=a.submission_id, motivo=a.motivo)
+    print(f"Saltata: {a.submission_id} ({a.motivo})")
 
 
 def main():
@@ -405,6 +446,7 @@ def main():
     s.add_argument("--id")
     s.add_argument("--dir", default="correzioni")
     s.add_argument("--tutte", action="store_true")
+    s.add_argument("--nuove", action="store_true")
     s = sub.add_parser("pagine")
     s.add_argument("pdf")
     s.add_argument("--out")
@@ -416,8 +458,12 @@ def main():
     s = sub.add_parser("carica")
     s.add_argument("json")
     s.add_argument("--pdf")
+    s.add_argument("--automatica", action="store_true")
+    s = sub.add_parser("salta")
+    s.add_argument("submission_id")
+    s.add_argument("motivo")
     a = ap.parse_args()
-    {"scarica": cmd_scarica, "pagine": cmd_pagine, "annota": cmd_annota, "carica": cmd_carica}[a.cmd](a)
+    {"scarica": cmd_scarica, "pagine": cmd_pagine, "annota": cmd_annota, "carica": cmd_carica, "salta": cmd_salta}[a.cmd](a)
 
 
 if __name__ == "__main__":

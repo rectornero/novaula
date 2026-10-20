@@ -5,6 +5,19 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.7.0 (20 Oct 2026): automatic corrections on hand-in
+- A scheduled Claude task (no API key, a fresh Claude session each run) checks for new hand-ins every hour,
+  Monday to Saturday 8:00–20:00, and corrects them like the on-request corrections: annotated PDF (green/orange/red),
+  summary and proposed mark, hidden from students until the teacher accepts it or sets another.
+- "Correzioni da controllare" in Area docente marks these with "⚡ Automatica" and the time, lists them first, and
+  shows hand-ins Claude could not mark (video, unreadable file…) as "Da correggere a mano" with the reason and a
+  "Riprova al prossimo giro" button.
+- Each assignment's "Consegne ricevute" has a "Correzione automatica di Claude" switch (on by default).
+- A hand-in is never corrected twice and an automatic run never replaces an existing correction. Hand-ins made only
+  of a note are turned into a PDF and marked too.
+- Instructions for the task: `strumenti/CORREZIONE-AUTOMATICA.md`. Edge Function `correzioni` updated (deployed).
+- SQL: `aggiornamenti/2026-10-20-correzioni-automatiche.sql` (applied).
+
 ## 2.6.0 (20 Oct 2026): phone notifications
 - Students can turn on notifications in «Il mio profilo» («🔔 Notifiche sul telefono»). They get an alert for a new
   visible mark, a "Da rifare" or new material for their class or for them personally. Claude's proposed marks never
