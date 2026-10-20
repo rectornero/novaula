@@ -324,7 +324,10 @@
           try { await x.sb.rpc("student_logout", { p_student: sess.id, p_token: sess.token }); } catch (e) {}
           setSession(c.id, null); x.route();
         } })),
-      area);
+      area,
+      window.NovaulaNotifiche && window.NovaulaNotifiche.panel({ h: h, sb: x.sb, toast: x.toast, errText: x.errText, owner: sess.id, subscribe: async function (ep, p256dh, auth) {
+        ok(await x.sb.rpc("student_push_subscribe", { p_student: sess.id, p_token: sess.token, p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }));
+      } }));
   }
 
   function materialCard(c, x, m, teacherTools) {

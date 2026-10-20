@@ -112,3 +112,8 @@ input.gp-in{width:100%;max-width:110px;padding:9px 10px;border:1px solid var(--l
 .pf-sbody h3{font-size:1rem;margin-top:6px}
 .pf-subline{margin:0}
 .pf-reqcard{gap:6px;padding:14px 16px}
+
+/* Notifiche sul telefono (notifiche.js) */
+.push-box{display:flex;flex-direction:column;gap:6px}
+.push-box p{margin:0}
+.push-hint{background:var(--ok-soft);border-radius:10px;padding:8px 10px}
