@@ -15,6 +15,7 @@ MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiorname
 - Each assignment's "Consegne ricevute" has a "Correzione automatica di Claude" switch (on by default).
 - A hand-in is never corrected twice and an automatic run never replaces an existing correction. Hand-ins made only
   of a note are turned into a PDF and marked too.
+- Hand-ins with several files (e.g. photos from a lab slide's hand-in button) are joined into one PDF and marked as a whole.
 - Instructions for the task: `strumenti/CORREZIONE-AUTOMATICA.md`. Edge Function `correzioni` updated (deployed).
 - SQL: `aggiornamenti/2026-10-20-correzioni-automatiche.sql` (applied).
 

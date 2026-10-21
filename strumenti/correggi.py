@@ -163,7 +163,28 @@ def cmd_scarica(a):
                 continue
             voce = {k: s.get(k) for k in ("id", "student_name", "note", "file_name", "created_at", "corrected_at")}
             nome = f"{slug(s['student_name'])}-{s['id'][:8]}"
-            if s.get("url"):
+            multi = [f for f in (s.get("files") or []) if f.get("url")]
+            if len(multi) > 1:
+                # più file (es. foto): ognuno in PDF, poi un solo PDF con tutte le pagine in ordine
+                pdf = os.path.join(cartella, nome + ".pdf")
+                unito, illeggibili, originali = pymupdf.open(), [], []
+                for i, f in enumerate(multi, 1):
+                    ext = os.path.splitext(f.get("name") or "")[1].lower() or ".pdf"
+                    orig = os.path.join(cartella, "originali", f"{nome}-{i}{ext}")
+                    scarica_url(f["url"], orig)
+                    originali.append(os.path.relpath(orig, cartella))
+                    parte = orig + ".pdf"
+                    if in_pdf(orig, parte):
+                        unito.insert_pdf(pymupdf.open(parte))
+                    else:
+                        illeggibili.append(f.get("name") or orig)
+                if len(unito):
+                    unito.save(pdf)
+                voce["pdf"] = os.path.basename(pdf) if len(unito) else None
+                voce["originale"] = originali
+                if illeggibili:
+                    voce["file_non_leggibili"] = illeggibili
+            elif s.get("url"):
                 ext = os.path.splitext(s.get("file_name") or "")[1] or ".pdf"
                 orig = os.path.join(cartella, "originali", nome + ext.lower())
                 scarica_url(s["url"], orig)

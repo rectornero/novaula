@@ -40,6 +40,10 @@ Then for each entry in `consegne`:
 3. Write `<name>.json` exactly as GUIDA-CORREZIONI.md says (`submission_id` = the entry's `id`,
    `studente`, `classe`, `compito`, `voto` like `7`, `7+`, `6½`, `sintesi`, `segni`; all text in Italian).
    For an entry with `"solo_nota": true` the student wrote the answer in the note: mark the generated PDF.
+   A hand-in with several files (e.g. photos from a lab slide) arrives as one PDF with all pages in order;
+   files that could not be converted are listed in `file_non_leggibili`: say so in `sintesi`, or skip the
+   hand-in if the missing files are the main part of the work. Hand-ins from a lab slide's button belong to a
+   hidden `kind: "classe"` assignment whose `description` is the slide text: that is the exercise.
 4. `python3 strumenti/correggi.py annota <pdf> <name>.json`, render one page to check the highlights sit
    on the right lines, fix the JSON if not.
 5. `python3 strumenti/correggi.py carica <name>.json --pdf <name>-corretto.pdf --automatica`

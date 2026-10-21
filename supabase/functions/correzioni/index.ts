@@ -2,6 +2,7 @@
 // Ponte tra la sessione Claude che corregge e lo storage privato delle consegne.
 // Ogni richiesta deve portare l'header x-novaula-token uguale a private_settings.marking_token.
 //   POST {op:"consegne", assignment_id?, classe?, compito?, nuove?}  -> compiti con consegne e link firmati
+//        (url = primo file, files = tutti i file della consegna con il loro link)
 //        nuove: true = solo le consegne da correggere in automatico (senza correzione, non saltate,
 //        non "da rifare", compito con auto_correct); i compiti senza consegne nuove non compaiono
 //   POST {op:"salva", submission_id, pdf_base64, grade?, summary?, correct?, wrong?, partial?, automatica?}
@@ -39,7 +40,7 @@ async function consegne(body: Record<string, string>) {
   if (error) throw error;
   const out = [];
   for (const a of assignments || []) {
-    const { data: subs, error: e2 } = await sb.from("submissions").select("id, student_name, note, file_path, file_name, created_at, status, attempt").eq("assignment_id", a.id).order("created_at");
+    const { data: subs, error: e2 } = await sb.from("submissions").select("id, student_name, note, file_path, file_name, files, created_at, status, attempt").eq("assignment_id", a.id).order("created_at");
     if (e2) throw e2;
     if (!subs || !subs.length) continue;
     const { data: done } = await sb.from("corrections").select("submission_id, updated_at").eq("assignment_id", a.id);
@@ -54,7 +55,14 @@ async function consegne(body: Record<string, string>) {
         const { data: signed } = await sb.storage.from("consegne").createSignedUrl(s.file_path, 900);
         url = signed?.signedUrl || null;
       }
-      list.push({ ...s, url, corrected_at: corrected.get(s.id) || null, skipped: skipped.get(s.id) || null });
+      // consegne con più file (es. foto dalle slide di laboratorio): un link firmato per ciascuno
+      const files = [];
+      for (const f of Array.isArray(s.files) ? s.files : []) {
+        if (!f || !f.path) continue;
+        const { data: sf } = await sb.storage.from("consegne").createSignedUrl(f.path, 900);
+        files.push({ name: f.name || f.path.split("/").pop(), url: sf?.signedUrl || null });
+      }
+      list.push({ ...s, url, files, corrected_at: corrected.get(s.id) || null, skipped: skipped.get(s.id) || null });
     }
     if (!list.length) continue;
     out.push({ ...a, submissions: list });
