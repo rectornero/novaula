@@ -814,6 +814,7 @@
   function teacherSubmissions(a) {
     var list = h("div", { class: "subs" });
     var det = h("details", { class: "teacher" }, h("summary", { text: "Consegne ricevute" }), list,
+      window.NovaulaCorrezioni && api.client ? window.NovaulaCorrezioni.autoToggle(a, corrCtx()) : null,
       h("div", { class: "row" }, confirmBtn("Elimina compito e consegne", "btn danger", async function () { await api.deleteAssignment(a); route(); }))
     );
     det.addEventListener("toggle", async function () {
