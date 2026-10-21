@@ -1,6 +1,6 @@
 /* Novaula · lezioni: parti interattive delle slide.
    Sondaggi e quiz (.poll), puzzle (.puzzle-ordina, .puzzle-abbina, .puzzle-completa con .blank, .puzzle-codice),
-   carte da girare (.flip), timer (.timer), voto dal telefono e domande sulle slide.
+   carte da girare (.flip), timer (.timer), voto dal telefono, domande sulle slide e consegne dalle slide di laboratorio.
    In modalità PDF (?pdf) disegna tutto in forma statica, senza pulsanti e senza soluzioni. */
 (function () {
   "use strict";
@@ -469,6 +469,196 @@
     return { load: load, open: open, badge: badge };
   })();
 
+  // ---------- Consegna dalle slide di laboratorio ----------
+  // Lo studente consegna dal suo profilo (stessa sessione del sito) o scrivendo nome e cognome;
+  // se il nome ha un profilo con PIN, chiede il PIN. I file vanno nel bucket "consegne".
+  var HandIn = (function () {
+    var MAX_FILES = 10, MAX_MB = 20;
+    var people = null;
+    function skey(c) { return "novaula-profilo-" + c; }
+    function getSession(c) {
+      var raw = null;
+      try { raw = sessionStorage.getItem(skey(c)) || localStorage.getItem(skey(c)); } catch (e) {}
+      try { return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+    }
+    function setSession(c, s) {
+      try { sessionStorage.removeItem(skey(c)); if (s) sessionStorage.setItem(skey(c), JSON.stringify(s)); } catch (e) {}
+    }
+    function forget(c) { try { sessionStorage.removeItem(skey(c)); localStorage.removeItem(skey(c)); } catch (e) {} }
+    function nameKey(a, b) { return (String(a || "").trim() + " " + String(b || "").trim()).replace(/\s+/g, " ").toLowerCase(); }
+    function safeName(n) { return String(n || "file").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "").slice(-80) || "file"; }
+    function rnd() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+    function size(b) { return b > 1048576 ? (b / 1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; }
+    function when(t) { return new Date(t).toLocaleString("it-IT", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
+    async function sha256(buf) {
+      var d = await crypto.subtle.digest("SHA-256", buf);
+      return Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+    }
+    async function deviceHash() {
+      var id;
+      try { id = localStorage.getItem("novaula-dispositivo"); } catch (e) {}
+      if (!id) { id = rnd(); try { localStorage.setItem("novaula-dispositivo", id); } catch (e) {} }
+      try { return (await sha256(new TextEncoder().encode("novaula:" + id))).slice(0, 32); } catch (e) { return null; }
+    }
+    function slideInfo(i) {
+      var s = SLIDES[i], t = ((s.querySelector("h1,h2") || {}).textContent || "").replace(/\s+/g, " ").trim();
+      var c = s.cloneNode(true);
+      [].forEach.call(c.querySelectorAll("aside.notes,.foot,.ia-tools,.lab-tag,script,style"), function (x) { x.remove(); });
+      [].forEach.call(c.querySelectorAll("*"), function (x) { x.appendChild(document.createTextNode(" ")); });
+      var text = (c.textContent || "").replace(/\s+/g, " ").trim();
+      return { n: i + 1, heading: t, title: (TITLE + " · slide " + (i + 1) + (t ? ": " + t : "")).slice(0, 200), text: ("Esercizio della slide " + (i + 1) + " della lezione «" + TITLE + "». " + text).slice(0, 3900) };
+    }
+    function open() {
+      var c = classId();
+      if (!c) return askClass(function () { open(); });
+      Cloud.get().then(function (cl) {
+        var info = slideInfo(window.NovaulaDeck.current());
+        var p = panel("Consegna · slide " + info.n);
+        p.el.classList.add("is-hand");
+        if (!cl) { p.body.appendChild(h("p", { text: "La consegna funziona sul sito pubblicato di Novaula." })); return; }
+        if (cl.teacher) return teacherView(cl, c, info, p);
+        form(cl, c, info, p);
+      });
+    }
+
+    function form(cl, c, info, p) {
+      var sess = getSession(c), files = [];
+      p.body.appendChild(h("p", { class: "h-what" }, [h("b", { text: info.heading || TITLE }), h("br"), h("span", { class: "q-note", text: "Classe " + c.toUpperCase() + " · " + TITLE })]));
+      var status = h("div", { class: "h-status" });
+      p.body.appendChild(status);
+      var first = h("input", { type: "text", maxlength: "40", placeholder: "Nome", autocomplete: "given-name", autocapitalize: "words", "aria-label": "Nome" });
+      var last = h("input", { type: "text", maxlength: "40", placeholder: "Cognome", autocomplete: "family-name", autocapitalize: "words", "aria-label": "Cognome" });
+      var pin = h("input", { type: "password", inputmode: "numeric", pattern: "\\d{4}", maxlength: "4", autocomplete: "off", placeholder: "PIN del tuo profilo", "aria-label": "PIN" });
+      var pinRow = h("label", { class: "h-pin", hidden: true }, ["Il tuo profilo ha il PIN: scrivilo", pin]);
+      var who = h("div", { class: "h-who" });
+      function paintWho() {
+        who.textContent = "";
+        if (sess) {
+          who.appendChild(h("p", { class: "h-me" }, ["Consegni come ", h("b", { text: sess.first_name + " " + sess.last_name }), " · ",
+            h("button", { type: "button", class: "h-link", text: "non sei tu?", onclick: function () { forget(c); sess = null; status.textContent = ""; paintWho(); } })]));
+        } else {
+          who.appendChild(h("div", { class: "h-names" }, [first, last]));
+          who.appendChild(pinRow);
+          try { var nm = (localStorage.getItem("novaula-nome-cognome") || "").split("|"); if (nm.length === 2 && !first.value) { first.value = nm[0]; last.value = nm[1]; } } catch (e) {}
+          checkName();
+        }
+      }
+      // Se il nome corrisponde a un profilo con PIN, chiede il PIN
+      function match() { var k = nameKey(first.value, last.value); return (people || []).filter(function (x) { return nameKey(x.first_name, x.last_name) === k; })[0] || null; }
+      function checkName() { var m = match(); pinRow.hidden = !(m && m.has_pin); }
+      first.addEventListener("input", checkName); last.addEventListener("input", checkName);
+      if (!people) cl.sb.rpc("class_students", { p_class: c }).then(function (r) { people = r.data || []; checkName(); });
+
+      var pick = h("input", { type: "file", multiple: true, class: "h-file", "aria-label": "Allega file" });
+      var list = h("ul", { class: "h-files" });
+      var pickBtn = h("label", { class: "ia-btn h-add" }, ["📎 Allega file o foto", pick]);
+      function paintFiles() {
+        list.textContent = "";
+        files.forEach(function (f, k) {
+          list.appendChild(h("li", null, [h("span", { class: "h-fn", text: f.name }), h("span", { class: "q-note", text: size(f.size) }),
+            h("button", { type: "button", class: "ia-x", "aria-label": "Togli " + f.name, text: "✕", onclick: function () { files.splice(k, 1); paintFiles(); } })]));
+        });
+        pickBtn.firstChild.textContent = files.length ? "📎 Aggiungi altri file" : "📎 Allega file o foto";
+      }
+      pick.addEventListener("change", function () {
+        [].forEach.call(pick.files, function (f) {
+          if (files.length >= MAX_FILES) return say2("Al massimo " + MAX_FILES + " file.");
+          if (f.size > MAX_MB * 1048576) return say2("«" + f.name + "» supera " + MAX_MB + " MB.");
+          files.push(f);
+        });
+        pick.value = ""; paintFiles();
+      });
+      var note = h("textarea", { maxlength: "2000", rows: "5", placeholder: "Commento, oppure scrivi qui la risposta…", "aria-label": "Commento o risposta" });
+      var msg = h("p", { class: "q-msg", role: "status" });
+      function say2(t, good) { msg.textContent = t; msg.classList.toggle("bad", !good); }
+      var send = h("button", { type: "submit", class: "ia-btn strong", text: "Consegna al docente" });
+      var f = h("form", { class: "q-form h-form" }, [who,
+        h("label", { class: "h-lab" }, ["Testo", note]),
+        h("div", { class: "h-lab" }, ["File (foto, PDF, codice… max " + MAX_MB + " MB l'uno)", list, pickBtn]),
+        send, msg]);
+      p.body.appendChild(f);
+      p.body.appendChild(h("p", { class: "q-note", text: "La consegna la vede solo il docente." }));
+      paintWho();
+      if (sess) cl.sb.rpc("slide_status", { p_class: c, p_deck: DECK, p_student: sess.id, p_token: sess.token }).then(function (r) {
+        var mine = (r.data || []).filter(function (x) { return x.slide === info.n; });
+        if (!mine.length) return;
+        var lastS = mine[mine.length - 1];
+        status.appendChild(h("p", { class: "h-done" + (lastS.status === "da_rifare" ? " redo" : "") },
+          lastS.status === "da_rifare" ? "Il docente ti chiede di rifarla. Consegna di nuovo qui sotto." : "✓ Già consegnata " + when(lastS.created_at) + (lastS.attempt > 1 ? " (tentativo " + lastS.attempt + ")" : "") + ". Puoi consegnare di nuovo."));
+      });
+
+      f.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!files.length && !note.value.trim()) return say2("Allega un file oppure scrivi la risposta.");
+        if (!sess && (first.value.trim().length < 2 || last.value.trim().length < 2)) return say2("Scrivi nome e cognome.");
+        send.disabled = true;
+        try {
+          // Profilo con PIN: si entra con il PIN prima di caricare i file
+          if (!sess) {
+            var m = match();
+            if (m && m.has_pin) {
+              if (!/^\d{4}$/.test(pin.value)) { pinRow.hidden = false; pin.focus(); throw new Error("Scrivi il PIN del tuo profilo (4 cifre)."); }
+              var u = await cl.sb.rpc("student_unlock", { p_student: m.id, p_pin: pin.value });
+              if (u.error) throw u.error;
+              if (u.data && u.data.error) throw new Error(u.data.error);
+              sess = { id: m.id, token: u.data.token, first_name: m.first_name, last_name: m.last_name };
+              setSession(c, sess);
+            }
+            try { localStorage.setItem("novaula-nome-cognome", first.value.trim() + "|" + last.value.trim()); } catch (e2) {}
+          }
+          var up = [], dir = c + "/slide/" + DECK + "-" + info.n + "/";
+          for (var k = 0; k < files.length; k++) {
+            say2("Carico " + (files.length > 1 ? "il file " + (k + 1) + " di " + files.length : "il file") + "…", true);
+            var fl = files[k], sha = null;
+            try { sha = await sha256(await fl.arrayBuffer()); } catch (e3) { sha = null; }
+            var path = dir + rnd() + "-" + safeName(fl.name);
+            var r = await cl.sb.storage.from("consegne").upload(path, fl, { contentType: fl.type || undefined });
+            if (r.error) throw r.error;
+            up.push({ path: path, name: fl.name.slice(0, 200), size: fl.size, sha: sha });
+          }
+          say2("Invio…", true);
+          var res = await cl.sb.rpc("slide_submit", { p_class: c, p_deck: DECK, p_slide: info.n, p_title: info.title, p_text: info.text,
+            p_student: sess ? sess.id : null, p_token: sess ? sess.token : null, p_first: sess ? null : first.value, p_last: sess ? null : last.value,
+            p_note: note.value, p_files: up, p_device: await deviceHash() });
+          if (res.error) throw res.error;
+          files = []; paintFiles(); note.value = "";
+          status.replaceChildren(h("p", { class: "h-done" }, "✓ Consegnata adesso. Grazie, " + String(res.data.name || "").split(" ")[0] + "!" + (res.data.attempt > 1 ? " (tentativo " + res.data.attempt + ")" : "")));
+          say2("", true);
+        } catch (err) {
+          var t = (err && err.message) || String(err);
+          if (/Sessione scaduta/.test(t)) { forget(c); sess = null; paintWho(); t = "Sessione scaduta: scrivi di nuovo nome e cognome."; }
+          if (/profilo con PIN/.test(t)) { people = null; cl.sb.rpc("class_students", { p_class: c }).then(function (r2) { people = r2.data || []; checkName(); }); }
+          if (/Failed to fetch|NetworkError|Load failed/i.test(t)) t = "Connessione assente: riprova quando sei online.";
+          say2("Non consegnata: " + t);
+        }
+        send.disabled = false;
+      });
+    }
+
+    // Docente (LIM): chi ha già consegnato questa slide
+    function teacherView(cl, c, info, p) {
+      var box = h("div", { class: "q-list" }, h("p", { class: "q-note", text: "Caricamento…" }));
+      p.body.appendChild(h("p", { class: "h-what" }, [h("b", { text: info.heading || TITLE }), h("br"), h("span", { class: "q-note", text: "Classe " + c.toUpperCase() }) ]));
+      p.body.appendChild(box);
+      p.body.appendChild(h("a", { class: "ia-btn wide", href: "../../#/c/" + c + "/compiti", target: "_blank", rel: "noopener", text: "Apri le consegne in Compiti" }));
+      cl.sb.from("assignments").select("id, submissions(student_name, created_at, attempt, file_name, files, note)").eq("class_id", c).eq("deck", DECK).eq("slide", info.n).maybeSingle().then(function (r) {
+        box.textContent = "";
+        var subs = (r.data && r.data.submissions) || [];
+        if (r.error) { box.appendChild(h("p", { class: "q-note", text: "Manca l'aggiornamento del database (2026-10-21-consegne-slide.sql)." })); return; }
+        if (!subs.length) { box.appendChild(h("p", { class: "q-empty", text: "Ancora nessuna consegna per questa slide." })); return; }
+        subs.sort(function (a, b) { return a.created_at < b.created_at ? 1 : -1; });
+        box.appendChild(h("p", { class: "q-note", text: subs.length + (subs.length === 1 ? " consegna" : " consegne") }));
+        subs.forEach(function (s) {
+          var nf = (s.files && s.files.length) || (s.file_name ? 1 : 0);
+          box.appendChild(h("div", { class: "q-item" }, [h("p", { class: "q-who" }, [h("b", { text: s.student_name }), " · " + when(s.created_at) + (nf ? " · " + nf + " file" : "") + (s.note ? " · testo" : "")])]));
+        });
+      });
+    }
+    // Cambiando slide il pannello si chiude (era per un'altra slide)
+    document.addEventListener("slide", function () { var o = document.querySelector(".ia-panel.is-hand"); if (o) o.remove(); });
+    return { open: open };
+  })();
+
   // ---------- Note del docente (tasto N): solo per il docente collegato, o in prova locale ----------
   var Notes = (function () {
     function render() {
@@ -499,6 +689,7 @@
     [].forEach.call(document.querySelectorAll(".timer"), timer);
     if (PRINT) return;
     document.addEventListener("ask", Questions.open);
+    document.addEventListener("hand", HandIn.open);
     document.addEventListener("keydown", function (e) {
       if ((e.key === "n" || e.key === "N") && !(e.target.closest && e.target.closest("input,textarea,select,[contenteditable]"))) Notes.toggle();
     });

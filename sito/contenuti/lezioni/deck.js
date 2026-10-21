@@ -31,6 +31,7 @@
     '<button type="button" data-a="next" aria-label="Slide successiva">→</button>' +
     '<span class="t"></span>' +
     '<a download aria-label="Scarica il PDF">PDF</a>' +
+    '<button type="button" class="hand" data-a="hand" hidden aria-label="Consegna l\'esercizio di questa slide">📎 Consegna</button>' +
     '<button type="button" class="ask" data-a="ask" aria-label="Domande su questa slide">? <span class="hide-s">Domande</span><b class="badge" hidden></b></button>' +
     '<button type="button" data-a="full" aria-label="Schermo intero">⛶</button>';
   bar.querySelector(".t").textContent = title;
@@ -50,9 +51,13 @@
     bar.querySelector(".n").textContent = (cur + 1) + " / " + slides.length;
     bar.querySelector(".prog").style.width = ((cur + 1) / slides.length * 100) + "%";
     history.replaceState(null, "", "#" + (cur + 1));
+    var hand = canHandIn(slides[cur]);
+    bar.querySelector(".hand").hidden = !hand; bar.classList.toggle("can-hand", hand);
     document.dispatchEvent(new CustomEvent("slide", { detail: { index: cur, slide: slides[cur] } }));
   }
-  window.NovaulaDeck = { current: function () { return cur; }, go: function (i) { show(i); }, bar: bar };
+  // Consegna: sulle slide di laboratorio ("Al computer") e su quelle con data-consegna; data-consegna="no" la toglie
+  function canHandIn(s) { var d = s.getAttribute("data-consegna"); return d === "no" ? false : d !== null || s.classList.contains("lab"); }
+  window.NovaulaDeck = { current: function () { return cur; }, go: function (i) { show(i); }, bar: bar, canHandIn: canHandIn };
   // Chiudi: la scheda aperta dal sito si chiude; altrimenti si torna alla pagina della classe
   function close() {
     var d = document, m = /[?&]da=([^&#]+)/.exec(location.search);
@@ -76,6 +81,7 @@
     if (a === "full") full();
     if (a === "close") close();
     if (a === "ask") document.dispatchEvent(new CustomEvent("ask"));
+    if (a === "hand") document.dispatchEvent(new CustomEvent("hand"));
   });
   stage.addEventListener("click", function (e) {
     if (e.target.closest("a,button,input,textarea,select,label,.ia")) return;

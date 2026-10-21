@@ -5,6 +5,23 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.10.0 (21 Oct 2026): hand-in button on lab slides
+- Every "Al computer" lab slide in every deck (1D, 1E, 3E, 5G and future ones) now shows a yellow «📎 Consegna»
+  button in the slide bar. It comes from the shared deck engine (`deck.js`, `interattivo.js`, `deck.css`), so no
+  deck was edited by hand. Any other slide can get it with `data-consegna`; `data-consegna="no"` removes it.
+- The hand-in form asks for Nome, Cognome, a text box for a comment or the written answer, and files: several at
+  once (photos from the camera or gallery, PDFs, code, any type; up to 10 files, 20 MB each). Works on Android and iPhone.
+- Profiles and PIN: a student already signed in on the site hands in as their profile. If the typed name matches a
+  profile with a PIN, the form asks for the PIN; a profile without PIN is linked automatically. Names without a
+  profile are still accepted.
+- The first hand-in on a slide creates a hidden "Lavoro in classe" for that class (title "Lesson · slide N: …",
+  description = the slide text, so automatic corrections know the exercise). Teachers find them in Compiti under
+  «Docente: consegne dalle slide», grouped by lesson, with the usual «Consegne ricevute», downloads for every file,
+  Claude's corrections and marks. Students don't see them in Compiti but find them in «Le mie consegne».
+- On the LIM, the teacher's «📎 Consegna» button lists who has already handed in that slide.
+- SQL: `aggiornamenti/2026-10-21-consegne-slide.sql` (applied): `assignments.deck/slide`, `submissions.files`,
+  RPCs `slide_submit` and `slide_status`. Service worker cache `classe-v26`.
+
 ## 2.6.0 (20 Oct 2026): phone notifications
 - Students can turn on notifications in «Il mio profilo» («🔔 Notifiche sul telefono»). They get an alert for a new
   visible mark, a "Da rifare" or new material for their class or for them personally. Claude's proposed marks never

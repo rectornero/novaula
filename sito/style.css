@@ -209,3 +209,7 @@ label.check-row input{width:20px;height:20px;flex:none;accent-color:var(--accent
 .test.is-done .cal{opacity:.6}
 @media (max-width:380px){.tabs a span{font-size:.64rem}}
 .version{color:var(--muted);font-size:.78rem;text-align:center;opacity:.8}
+/* Consegne dalle slide di laboratorio (docente) */
+.slide-deck{margin:10px 0 0;font-size:1rem}
+.card.from-slide{gap:8px;padding:14px 16px}
+.card.from-slide h3{margin:0;font-size:1.02rem;flex:1;min-width:0}
