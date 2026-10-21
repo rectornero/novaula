@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.9.0";
+  var VERSION = "2.10.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -48,6 +48,11 @@
   }
   function uid() {
     return (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+  }
+  // File di una consegna: tutti quelli allegati (consegne dalle slide) o il solo file_path
+  function filesOf(s) {
+    if (s.files && s.files.length) return s.files;
+    return s.file_path ? [{ path: s.file_path, name: s.file_name }] : [];
   }
   // Materiale che è un file (caricato o in /contenuti) e non un link a un sito
   function isFile(m) {
@@ -188,8 +193,8 @@
       assignments: async function (c) { return ok(await sb.from("assignments").select("*").eq("class_id", c).order("created_at", { ascending: false })); },
       addAssignment: async function (row) { ok(await sb.from("assignments").insert(row)); },
       deleteAssignment: async function (a) {
-        var subs = ok(await sb.from("submissions").select("file_path").eq("assignment_id", a.id));
-        var paths = subs.map(function (s) { return s.file_path; }).filter(Boolean);
+        var subs = ok(await sb.from("submissions").select("file_path, files").eq("assignment_id", a.id));
+        var paths = [].concat.apply([], subs.map(filesOf)).map(function (f) { return f.path; });
         if (paths.length) await sb.storage.from("consegne").remove(paths);
         ok(await sb.from("assignments").delete().eq("id", a.id));
       },
@@ -202,11 +207,13 @@
         ok(await sb.from("submissions").insert(row));
       },
       submissions: async function (aid) { return ok(await sb.from("submissions").select("*").eq("assignment_id", aid).order("created_at")); },
-      submissionUrl: async function (s) {
-        return ok(await sb.storage.from("consegne").createSignedUrl(s.file_path, 3600, { download: s.file_name || true })).signedUrl;
+      submissionUrl: async function (s, f) {
+        f = f || { path: s.file_path, name: s.file_name };
+        return ok(await sb.storage.from("consegne").createSignedUrl(f.path, 3600, { download: f.name || true })).signedUrl;
       },
       deleteSubmission: async function (s) {
-        if (s.file_path) await sb.storage.from("consegne").remove([s.file_path]);
+        var paths = filesOf(s).map(function (f) { return f.path; });
+        if (paths.length) await sb.storage.from("consegne").remove(paths);
         ok(await sb.from("submissions").delete().eq("id", s.id));
       },
       messages: async function (c) {
@@ -600,7 +607,9 @@
     if (api.isTeacher()) box.appendChild(addAssignmentForm(c));
     // In attesa = collegati a un argomento non ancora svolto (li vede solo il docente)
     var waiting = api.isTeacher() ? items.filter(function (a) { return a.topic_id && !a.due_date; }) : [];
-    items = items.filter(function (a) { return waiting.indexOf(a) < 0; });
+    // Consegne dalle slide di laboratorio: le vede solo il docente, in fondo (lo studente le ritrova nel profilo)
+    var fromSlides = items.filter(function (a) { return a.deck; });
+    items = items.filter(function (a) { return waiting.indexOf(a) < 0 && !a.deck; });
     var todayIso = isoDays(0);
     items.sort(function (a, b) {
       var la = a.due_date && a.due_date < todayIso, lb = b.due_date && b.due_date < todayIso;
@@ -649,6 +658,28 @@
       });
       box.appendChild(h("details", { class: "teacher" }, h("summary", { text: "Docente: compiti in attesa (" + waiting.length + ")" }), wl));
     }
+    if (api.isTeacher() && fromSlides.length) box.appendChild(slideSubmissions(c, fromSlides));
+  }
+
+  // Docente: un "Lavoro in classe" per ogni slide di laboratorio che ha ricevuto consegne, raggruppati per lezione
+  function slideSubmissions(c, list) {
+    var decks = {}, order = [];
+    list.forEach(function (a) { if (!decks[a.deck]) { decks[a.deck] = []; order.push(a.deck); } decks[a.deck].push(a); });
+    var wrap = h("div", { class: "stack" });
+    order.forEach(function (d) {
+      var group = decks[d].sort(function (a, b) { return a.slide - b.slide; });
+      wrap.appendChild(h("h3", { class: "slide-deck", text: group[0].title.replace(/ · slide \d+.*$/, "") }));
+      group.forEach(function (a) {
+        wrap.appendChild(h("article", { class: "card assignment from-slide" },
+          h("div", { class: "row" },
+            h("h3", { text: "Slide " + a.slide + (/: (.+)$/.exec(a.title) ? ": " + /: (.+)$/.exec(a.title)[1] : "") }),
+            h("a", { class: "btn link", href: "contenuti/lezioni/" + a.deck + ".html?da=c%2F" + c.id + "%2Fcompiti#" + a.slide, target: "_blank", rel: "noopener", text: "Apri la slide" })),
+          teacherSubmissions(a)));
+      });
+    });
+    return h("details", { class: "teacher", open: true }, h("summary", { text: "Docente: consegne dalle slide (" + list.length + ")" }),
+      h("p", { class: "muted small", text: "Sulle slide «Al computer» gli studenti hanno il pulsante 📎 Consegna. Ogni slide che riceve consegne compare qui come lavoro in classe, con correzioni e voti come gli altri compiti." }),
+      wrap);
   }
 
   /* Verifiche */
@@ -832,10 +863,12 @@
             h("div", { class: "row" }, h("b", { text: s.student_name }), h("span", { class: "muted small", text: fmtTime(s.created_at) })),
             s.note && h("p", { class: "desc small", text: s.note }),
             h("div", { class: "row" },
-              s.file_path && h("button", { class: "btn", type: "button", text: "Scarica " + (s.file_name || "file"), onclick: async function () {
-                try { var u = await api.submissionUrl(s); var link = h("a", { href: u, download: s.file_name || "consegna", target: "_blank", rel: "noopener" }); document.body.appendChild(link); link.click(); link.remove(); }
-                catch (e) { toast(errText(e)); }
-              } }),
+              filesOf(s).map(function (f) {
+                return h("button", { class: "btn", type: "button", text: "Scarica " + (f.name || "file"), onclick: async function () {
+                  try { var u = await api.submissionUrl(s, f); var link = h("a", { href: u, download: f.name || "consegna", target: "_blank", rel: "noopener" }); document.body.appendChild(link); link.click(); link.remove(); }
+                  catch (e) { toast(errText(e)); }
+                } });
+              }),
               confirmBtn("Elimina", "btn link", async function () { await api.deleteSubmission(s); det.open = false; det.open = true; })
             ),
             corr && corr(s, a.title),

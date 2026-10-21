@@ -353,3 +353,24 @@ body.print .ia-tools{display:none}
 .ia-notes{font-size:15px;line-height:1.5}
 .ia-notes p,.ia-notes ul,.ia-notes ol{margin:0 0 .6em}
 .bar .badge[hidden]{display:none!important}
+/* Consegna dalle slide di laboratorio */
+.bar .hand{background:var(--hl);color:var(--hl-ink);font-weight:700;white-space:nowrap}
+.bar .hand:hover{background:#ffe866}
+.bar .hand[hidden]{display:none!important}
+.h-what{margin:0}
+.h-names{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.h-form input,.h-form textarea{font-size:16px}
+.h-form label,.h-lab{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+.h-pin[hidden]{display:none}
+.h-me{margin:0}
+.h-link{appearance:none;border:0;background:none;color:#2f55d4;text-decoration:underline;font:inherit;padding:0;cursor:pointer}
+.h-add{position:relative;font-size:15px!important;padding:10px 16px!important;text-align:center;border-style:dashed!important;border-radius:12px!important}
+.h-file{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;font-size:0}
+.h-files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.h-files li{display:flex;align-items:center;gap:8px;background:#f4f6fb;border-radius:10px;padding:6px 6px 6px 12px;font-weight:400}
+.h-fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h-done{margin:0;padding:10px 12px;border-radius:10px;background:#ddf3e8;color:#0e5a39}
+.h-done.redo{background:#fde2e1;color:#8a1c17}
+.q-msg.bad{color:#b42318}
+@media (max-width:560px){.h-names{grid-template-columns:1fr}}
+@media (max-width:560px){.bar.can-hand a[download],.bar.can-hand [data-a=full]{display:none}.bar.can-hand .n{display:none}.bar .hand{flex-shrink:0;padding:0 10px}}
