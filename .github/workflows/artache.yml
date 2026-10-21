@@ -1,0 +1,25 @@
+# Posts each new Novaula version from CHANGELOG.md to the Artache Updates feed.
+# Needs the repository secret ARTACHE_TOKEN (an art_... token from Artache Settings); without it the job does nothing.
+name: Artache release post
+
+on:
+  push:
+    branches: [main]
+    paths: [CHANGELOG.md]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Post the newest changelog entry
+        env:
+          ARTACHE_TOKEN: ${{ secrets.ARTACHE_TOKEN }}
+        run: node .github/scripts/artache.mjs
