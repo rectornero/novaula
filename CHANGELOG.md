@@ -5,6 +5,14 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.9.0 (21 Oct 2026): lesson-start notifications
+- When a lesson in the timetable starts, the students of that class who turned on notifications get
+  "Inizia la lezione" with subject, room and times, and so does the teacher. Tapping it opens the class page.
+- Checked every minute by pg_cron (Mon–Sat, Rome time). An alert that can't be delivered within 15 minutes is dropped.
+- A phone subscribed both as teacher and as a student gets one alert, not two.
+- Numbered 2.9.0 because 2.7.0 and 2.8.0 are taken by other open PRs.
+- SQL: `aggiornamenti/2026-10-21-notifiche-lezioni.sql` (applied). Edge Function `notifiche` v2 (deployed).
+
 ## 2.8.0 (20 Oct 2026): updates posted to Artache
 - Every new Novaula version is now posted to the Artache Updates feed by itself: a GitHub Action
   (`.github/workflows/artache.yml`) runs on each push to `main` that changes this changelog and posts the newest entry

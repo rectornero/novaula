@@ -3,7 +3,7 @@
 //   GET  (o POST {op:"chiave"})       -> {key} chiave VAPID pubblica per l'iscrizione nel browser
 //                                       (la coppia di chiavi nasce qui al primo uso e resta in private_settings)
 //   POST {tipo, ids|endpoint,owner}   -> solo dai trigger del database, con header x-novaula-push = private_settings.push_token
-//        tipo: voti | materiali | personali | aiuto | prova
+//        tipo: voti | materiali | personali | aiuto | lezione | prova
 // I voti con status 'proposto' (proposte di Claude non ancora viste dal docente) non vengono mai inviati.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
@@ -37,7 +37,7 @@ async function keys() {
   return vapid;
 }
 
-type Msg = { title: string; body: string; url: string; tag: string };
+type Msg = { title: string; body: string; url: string; tag: string; ttl?: number };
 type Sub = { endpoint: string; owner: string; p256dh: string; auth: string };
 
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
@@ -65,7 +65,7 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
   if (body.tipo === "prova") {
     const { data } = await sb.from("push_subscriptions").select("endpoint, owner, p256dh, auth").eq("endpoint", String(body.endpoint)).eq("owner", String(body.owner)).is("disabled_at", null);
     const teacher = body.owner === "docente";
-    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per ogni nuova domanda nella scheda Aiuto." : "Ti avviserò per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
+    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per le nuove domande nella scheda Aiuto e all'inizio di ogni lezione." : "Ti avviserò all'inizio delle lezioni e per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
   }
 
   if (body.tipo === "voti" && ids.length) {
@@ -130,6 +130,23 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
       }]);
     }
   }
+  // inizio lezione (pg_cron ogni minuto): gli studenti della classe e il docente
+  if (body.tipo === "lezione" && ids.length) {
+    const { data: rows } = await sb.from("timetable").select("id, class_id, subject, room, starts, ends").in("id", ids.map(Number));
+    const names = await classNames();
+    const teacher = await subsFor("owner", ["docente"]);
+    for (const l of rows || []) {
+      const { data: studs } = await sb.from("students").select("id").eq("class_id", l.class_id);
+      const subs = [...(await subsFor("student_id", (studs || []).map((s) => s.id))), ...teacher];
+      if (!subs.length) continue;
+      const hm = (t: string) => t.slice(0, 5).replace(":", ".");
+      out.push([subs, {
+        title: `Inizia la lezione: ${names.get(l.class_id) || l.class_id.toUpperCase()}`,
+        body: [l.subject, l.room && "aula " + l.room, hm(l.starts) + "–" + hm(l.ends)].filter(Boolean).join(" · "),
+        url: `${SITE}#/c/${l.class_id}`, tag: "lezione-" + l.class_id, ttl: 900, // in ritardo non serve più
+      }]);
+    }
+  }
   return out;
 }
 
@@ -139,8 +156,11 @@ async function send(pairs: [Sub[], Msg][]) {
   const jobs: Promise<void>[] = [];
   for (const [subs, msg] of pairs) {
     const payload = JSON.stringify(msg);
+    const seen = new Set<string>(); // lo stesso telefono iscritto come docente e come studente riceve un solo avviso
     for (const s of subs) {
-      jobs.push(webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 3 * 86400, urgency: "normal", topic: msg.tag.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 32) })
+      if (seen.has(s.endpoint)) continue;
+      seen.add(s.endpoint);
+      jobs.push(webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: msg.ttl ?? 3 * 86400, urgency: msg.ttl ? "high" : "normal", topic: msg.tag.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 32) })
         .then(async () => { sent++; await sb.from("push_subscriptions").update({ last_ok: new Date().toISOString() }).eq("endpoint", s.endpoint).eq("owner", s.owner); })
         .catch(async (e: { statusCode?: number; body?: string }) => {
           // 404/410: il browser ha tolto il permesso o l'app è stata disinstallata
