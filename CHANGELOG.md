@@ -5,6 +5,22 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.12.0 (22 Oct 2026): full teacher timetable
+- New page «Orario completo» in Area docente (`#/docente/orario`, also linked under the "Adesso / Dopo" cards):
+  the teacher's whole weekly timetable, one day at a time. A day menu at the top (opens on today; on weekends on
+  Monday) plus ‹ › buttons and the left/right arrow keys switch day. The chosen day stays in the link
+  (`#/docente/orario/3` = Wednesday), so it can be bookmarked.
+- Each day shows how many hours, from when to when and which classes, then every lesson in order: start and end
+  time, which period (1ª–7ª ora, double periods marked), class in its colour, subject, the room in big yellow with
+  building and floor, and the timetable note. Free periods between lessons are shown as «Ora libera», and between
+  two lessons the route from one room to the next (same logic as the "Dopo" card), flagged in red when the move is
+  long and there is no break. On today's page the lesson in progress is highlighted with a progress bar and the
+  lessons already done are dimmed; it refreshes every 30 seconds.
+- Below, «Tutta la settimana»: a Monday–Friday grid by period with class and room in every cell (double periods
+  span two rows), the hours per class and in total, and a «Stampa» button that prints just the grid.
+- Works on the phone and on the LIM, light and dark theme. Reads the same `timetable` table (no SQL). Service worker
+  cache `classe-v28`.
+
 ## 2.11.0 (22 Oct 2026): slide bookmark, bigger rooms and routes on the timetable
 - Every lesson deck now has a «🔖» button in the slide bar (or press B) that puts a bookmark on the current slide,
   so a lesson that ran out of time can pick up where it stopped. One bookmark per deck; pressing it on another slide
