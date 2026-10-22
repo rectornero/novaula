@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.11.0";
+  var VERSION = "2.12.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -983,6 +983,11 @@
       window.NovaulaPagella.page(app, Object.assign(pctx(), { classes: classes }));
       return;
     }
+    if (api.isTeacher() && /^#\/docente\/orario/.test(location.hash) && window.NovaulaOrarioPage) {
+      setPage("Orario");
+      stopChat = window.NovaulaOrarioPage(app, { h: h, sb: api.client, findClass: findClass, classParts: classParts, classColor: classColor }, location.hash.split("/")[3]);
+      return;
+    }
     setPage("Area docente");
     app.appendChild(h("a", { class: "back", href: "#/", text: "← Tutte le classi" }));
     app.appendChild(h("h1", { text: "Area docente" }));
@@ -992,6 +997,7 @@
         h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
+          window.NovaulaOrarioPage ? h("a", { class: "btn", href: "#/docente/orario", text: "📅 Orario completo" }) : null,
           window.NovaulaPagella && api.client ? h("a", { class: "btn", href: "#/docente/pagella", text: "Pagella" }) : null,
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
