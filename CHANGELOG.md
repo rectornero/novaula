@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.11.0 (22 Oct 2026): slide bookmark
+- Every lesson deck now has a «🔖» button in the slide bar (or press B) that puts a bookmark on the current slide,
+  so a lesson that ran out of time can pick up where it stopped. One bookmark per deck; pressing it on another slide
+  moves it there, pressing it again on the same slide removes it.
+- When the deck is opened again, a small banner offers «Riprendi da lì» (jump to the bookmarked slide) or
+  «Dall'inizio». Links that already point to a slide number open that slide as before.
+- The bookmarked slide shows 🔖 next to its number, and the bar button shows which slide holds the bookmark.
+- The bookmark is saved on the device (the LIM, the teacher's laptop or a student's phone), so students can use it
+  for their own revision too. It comes from the shared deck engine (`deck.js`, `deck.css`), so every deck has it.
+- No SQL. Service worker cache `classe-v27`.
+
 ## 2.10.0 (21 Oct 2026): hand-in button on lab slides
 - Every "Al computer" lab slide in every deck (1D, 1E, 3E, 5G and future ones) now shows a yellow «📎 Consegna»
   button in the slide bar. It comes from the shared deck engine (`deck.js`, `interattivo.js`, `deck.css`), so no
