@@ -1,4 +1,4 @@
-/* Novaula · Orario: riquadro "Adesso / Dopo" nella home del docente.
+/* Novaula · Orario: riquadro "Adesso / Dopo" nella home del docente (con aula in grande e percorso).
    Mostra in grande la lezione in corso (classe, aula, minuti che mancano) e la successiva,
    più la striscia delle lezioni di oggi. L'orario sta nella tabella timetable (solo docente);
    in modalità demo, o se la tabella non risponde, usa l'orario qui sotto.
@@ -24,6 +24,10 @@
     [5, "11:55", "12:45", "3g", "TPSI", "3B04"],
     [5, "12:45", "13:35", "5g", "TPSI", "1C05"]
   ].map(function (r) { return { weekday: r[0], starts: r[1], ends: r[2], class_id: r[3], subject: r[4], room: r[5] || null, note: r[6] || null }; });
+  // Aule: piano + edificio + numero, es. "2B01" = 2º piano, edificio B, aula 01; "TC02" = piano terra, edificio C.
+  // B e C sono collegati; A (e ogni altro edificio) è separato: si esce e si rientra.
+  var LINKED = { B: "C", C: "B" };
+  var LINK_FLOORS = null; // piani in cui c'è il passaggio B–C (es. [0, 1]); null = su tutti i piani
   var DAYS = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
   var cache = null;
 
@@ -34,6 +38,48 @@
     if (m < 60) return m + " min";
     var hh = Math.floor(m / 60), mm = m % 60;
     return hh + (hh === 1 ? " ora" : " ore") + (mm ? " e " + mm + " min" : "");
+  }
+
+  function parseRoom(room) {
+    var m = /^\s*(T|\d)\s*([A-Z])\s*(\d+)\s*(.*)$/i.exec(room || "");
+    if (!m) return null;
+    return { code: (m[1] + m[2] + m[3]).toUpperCase(), floor: /t/i.test(m[1]) ? 0 : +m[1], building: m[2].toUpperCase(), num: m[3], extra: m[4].trim() };
+  }
+  function floorName(f) { return f === 0 ? "piano terra" : f + "º piano"; }
+  function toFloor(from, to) {
+    if (from === to) return null;
+    var d = Math.abs(to - from);
+    return (to > from ? "sali" : "scendi") + " al " + floorName(to) + " (" + d + (d === 1 ? " piano" : " piani") + ")";
+  }
+  function cap(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+  // Suggerimento di percorso tra due aule: { steps: [...], far: true se serve tempo }
+  function route(fromRoom, toRoom) {
+    var a = parseRoom(fromRoom), b = parseRoom(toRoom);
+    if (!a || !b) return null;
+    var steps = [], floors = 0;
+    if (a.code === b.code) return { steps: ["Resti nella stessa aula"], far: false };
+    if (a.building === b.building) {
+      var f = toFloor(a.floor, b.floor);
+      steps.push(f ? cap(f) + " nell'edificio " + b.building : "Stesso piano, stesso edificio: è a pochi passi");
+      floors = Math.abs(a.floor - b.floor);
+    } else if (LINKED[a.building] === b.building) {
+      var via = a.floor;
+      if (LINK_FLOORS && LINK_FLOORS.indexOf(via) < 0) {
+        via = LINK_FLOORS.slice().sort(function (x, y) { return Math.abs(x - a.floor) + Math.abs(x - b.floor) - Math.abs(y - a.floor) - Math.abs(y - b.floor); })[0];
+        steps.push(cap(toFloor(a.floor, via)) + " nell'edificio " + a.building);
+      }
+      steps.push("Passa da " + a.building + " a " + b.building + " dal collegamento" + (LINK_FLOORS ? " al " + floorName(via) : ""));
+      var g = toFloor(via, b.floor);
+      if (g) steps.push(cap(g) + " nell'edificio " + b.building);
+      floors = Math.abs(a.floor - via) + Math.abs(via - b.floor);
+    } else {
+      if (a.floor > 0) steps.push("Scendi al piano terra dell'edificio " + a.building);
+      steps.push("Esci e vai all'edificio " + b.building + (a.building === "A" || b.building === "A" ? " (A non è collegato agli altri)" : ""));
+      if (b.floor > 0) steps.push("Sali al " + floorName(b.floor) + " (" + b.floor + (b.floor === 1 ? " piano" : " piani") + ")");
+      floors = a.floor + b.floor;
+      return { steps: steps, far: true };
+    }
+    return { steps: steps, far: floors >= 3 };
   }
 
   async function load(sb) {
@@ -61,6 +107,8 @@
     return { t: t, today: today, current: current, next: next, nextDay: nextDay };
   }
 
+  window.NovaulaOrarioRoute = route; // per prove dalla console
+
   window.NovaulaOrario = function (box, x) {
     var h = x.h, timer = null, rows = null, stopped = false;
     var root = h("section", { class: "now-board", "aria-label": "Lezione in corso e successiva" },
@@ -73,10 +121,31 @@
       var c = x.findClass(id);
       return { code: c ? x.classParts(c)[0] : id.toUpperCase(), color: c ? x.classColor(c) : "var(--accent)", href: "#/c/" + id + "/programma" };
     }
+    // Aula in grande: codice, edificio e piano, così si capisce subito dove andare
     function place(r) {
+      var p = parseRoom(r.room);
       return h("span", { class: "now-place" },
-        r.room && h("span", { class: "now-room", text: "Aula " + r.room }),
+        r.room && h("span", { class: "now-room" },
+          h("span", { class: "now-room-k", text: "Aula" }),
+          h("b", { class: "now-room-code", text: p ? p.code : r.room }),
+          p && h("span", { class: "now-room-where", text: "Edificio " + p.building + " · " + floorName(p.floor) + (p.extra ? " · " + p.extra : "") })),
         r.note && h("span", { class: "now-note", text: r.note }));
+    }
+    // Da dove arrivo: l'aula della lezione in corso, oppure dell'ultima lezione di oggi già finita
+    function fromRoom(s) {
+      if (s.current) return s.current.room;
+      var past = s.today.filter(function (r) { return mins(r.ends) <= s.t; });
+      return past.length ? past[past.length - 1].room : null;
+    }
+    function routeBox(s) {
+      if (s.nextDay || !s.next) return null;
+      var from = fromRoom(s), rt = from && route(from, s.next.room);
+      if (!rt) return null;
+      var prevEnd = s.current ? mins(s.current.ends) : null, tight = prevEnd !== null && prevEnd >= mins(s.next.starts);
+      return h("span", { class: "now-route" + (rt.far ? " far" : "") },
+        h("span", { class: "now-route-h" }, "🧭 Percorso da ", h("b", { text: (parseRoom(from) || {}).code || from })),
+        h("ol", null, rt.steps.map(function (t) { return h("li", { text: t }); })),
+        rt.far && tight && h("span", { class: "now-route-warn", text: "Cambio d'ora senza pausa e aula lontana: avviati appena suona" }));
     }
     function whenNext(s) {
       var n = s.next;
@@ -116,7 +185,8 @@
           h("span", { class: "now-code", text: n.code }),
           h("span", { class: "now-subject", text: s.next.subject }),
           place(s.next),
-          h("span", { class: "now-time" }, h("b", { text: whenNext(s) }))));
+          h("span", { class: "now-time" }, h("b", { text: whenNext(s) })),
+          routeBox(s)));
       }
       var strip = s.today.length ? h("ol", { class: "now-strip", "aria-label": "Lezioni di oggi" }, s.today.map(function (r) {
         var ci = classInfo(r.class_id), done = mins(r.ends) <= s.t;
@@ -124,7 +194,7 @@
           h("a", { href: ci.href },
             h("span", { class: "t", text: hhmm(r.starts) }),
             h("b", { text: ci.code }),
-            h("span", { class: "r", text: r.room || "" })));
+            h("span", { class: "r", text: (parseRoom(r.room) || {}).code || r.room || "" })));
       })) : null;
       root.replaceChildren(h("div", { class: "now-grid" }, parts), strip);
     }

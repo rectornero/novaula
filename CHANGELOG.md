@@ -5,7 +5,7 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
-## 2.11.0 (22 Oct 2026): slide bookmark
+## 2.11.0 (22 Oct 2026): slide bookmark, bigger rooms and routes on the timetable
 - Every lesson deck now has a «🔖» button in the slide bar (or press B) that puts a bookmark on the current slide,
   so a lesson that ran out of time can pick up where it stopped. One bookmark per deck; pressing it on another slide
   moves it there, pressing it again on the same slide removes it.
@@ -14,6 +14,12 @@ MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiorname
 - The bookmarked slide shows 🔖 next to its number, and the bar button shows which slide holds the bookmark.
 - The bookmark is saved on the device (the LIM, the teacher's laptop or a student's phone), so students can use it
   for their own revision too. It comes from the shared deck engine (`deck.js`, `deck.css`), so every deck has it.
+- Teacher timetable ("Adesso / Dopo" cards): the room is now shown big, with the building and floor spelled out
+  (for example «2B01 · Edificio B · 2º piano · TB1»; `T` = piano terra). The strip of today's lessons shows the rooms in bold.
+- The "Dopo" card suggests a route from the room you are in (or the last room of the day) to the next one: change floor
+  in the same building, cross between B and C through the connecting passage, or go outside for building A, which is
+  not connected. A long move with no break between lessons is flagged in red. Room codes are read as floor + building
+  + room number. The floors of the B–C passage can be set in `LINK_FLOORS` in `sito/orario.js` (now: every floor).
 - No SQL. Service worker cache `classe-v27`.
 
 ## 2.10.0 (21 Oct 2026): hand-in button on lab slides
