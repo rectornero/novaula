@@ -1,4 +1,6 @@
 # Netlify pubblica la cartella "sito" a ogni push sul ramo main.
+# Ogni pubblicazione consuma crediti del piano Netlify: unire le modifiche a gruppi
+# (più PR in un solo merge su main) invece di un deploy per ogni piccola modifica.
 [build]
   publish = "sito"
   command = ""
