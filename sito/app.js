@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.14.0";
+  var VERSION = "2.14.1";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -387,6 +387,7 @@
   function homePage() {
     setPage("");
     nowBoard();
+    if (api.isTeacher() && api.client && window.NovaulaRiunioni) window.NovaulaRiunioni.strip(app, rnCtx());
     var today = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
     var last = store("last-class");
     app.appendChild(h("section", { class: "hello" },
