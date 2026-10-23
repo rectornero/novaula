@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.14.1";
+  var VERSION = "2.15.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -379,9 +379,12 @@
 
   function nowBoard() {
     if (!api.isTeacher() || !window.NovaulaOrario) return;
+    // a fine giornata la paga del giorno sta sopra le lezioni, fino a mezzanotte
+    var stopPaga = window.NovaulaPaga && api.client ? window.NovaulaPaga(app, { h: h, sb: api.client }) : null;
     var box = h("div");
     app.appendChild(box);
-    stopChat = window.NovaulaOrario(box, { h: h, sb: api.client, findClass: findClass, classParts: classParts, classColor: classColor });
+    var stopOrario = window.NovaulaOrario(box, { h: h, sb: api.client, findClass: findClass, classParts: classParts, classColor: classColor });
+    stopChat = function () { if (stopPaga) stopPaga(); if (stopOrario) stopOrario(); };
   }
 
   function homePage() {

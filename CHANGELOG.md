@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.15.0 (23 Oct 2026): daily wage card
+- Teacher only: when the last lesson of the day ends (14:00 on days without lessons), a golden «Today's wage» card
+  appears above the lessons on the home page and in Area docente, and stays until midnight. It shows the day's wage
+  in big (+€84.09), a short cheer, and a piggy bank for the month: how much is earned so far out of the monthly
+  salary, a progress bar and one coin per Monday–Friday day (today's coin pops in). The first time it is seen each
+  day a few coins rain down (not with reduced motion). It appears by itself at the end time if the page is open.
+- The «💶 Daily wage earned» phone notification now stays on screen until it is swiped away.
+- Same maths as the notification: monthly salary / that month's Monday–Friday days, weekday holidays included.
+  SQL: `aggiornamenti/2026-10-23-paga-card.sql` (function `teacher_wage_today`), already applied.
+  Service worker cache `classe-v32`.
+
 ## 2.14.1 (23 Oct 2026): meetings on the teacher's home page
 - When the teacher is logged in, the home page now shows «🎥 Prossime riunioni» right under the lesson cards: the
   meetings of the next 7 days (up to three), grouped by day, with an «Entra» button for the link, plus a link to the
