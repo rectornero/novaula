@@ -5,6 +5,24 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.14.0 (23 Oct 2026): teacher meetings with an alarm before each one
+- New page «🎥 Riunioni» in Area docente (`#/docente/riunioni`) for class councils (CdC) and GLO meetings: date, time,
+  class, Meet link, length and an optional note. Upcoming meetings are grouped by day (Oggi, Domani, …) with a big
+  «Entra» button that opens the link; past ones are folded away at the bottom. Each meeting can be edited, deleted
+  or added to Google Calendar («📅 Aggiungi al calendario»), so the phone calendar can ring too.
+- Adding one takes a few taps: a CdC / GLO menu, a class menu, day buttons for the next two weeks (Oggi, Domani,
+  lun 26…), start-time buttons from 14.00 to 19.30 every half hour, length buttons (30 min to 2 hours) and the
+  alarm lead time (5 minutes to 1 hour, default 10). Any other date or time can still be typed.
+- Area docente also shows a «🎥 Riunioni» box with the next three meetings.
+- Alarm-style phone notification for the teacher, meetings only: «⏰ Tra 10 min: Consiglio di classe 5G». It stays
+  on screen until tapped, vibrates longer than normal alerts, and comes back at start time («⏰ Inizia ora»).
+  Tapping it opens the Meet link directly. Web notifications can't use a custom ringtone, so it uses the phone's
+  notification sound.
+- When Novaula is open on any page, a full-screen alarm also appears and beeps until «Apri Meet» or «Silenzia».
+- SQL: `aggiornamenti/2026-10-23-riunioni.sql` (table `meetings`, teacher-only RLS, `meetings_push()` and pg_cron job
+  `novaula-riunioni` every minute), already applied with this week's councils. Edge Function `notifiche` gains the
+  `riunione` type (already deployed). Service worker cache `classe-v30`.
+
 ## 2.13.0 (23 Oct 2026): class announcements and daily wage notification
 - The teacher can post a short announcement («avviso», up to 500 characters) to one or more classes, from the yellow
   «Docente: nuovo avviso» panel under the class title or from the new «📌 Avvisi di classe» box in Area docente

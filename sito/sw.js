@@ -1,7 +1,7 @@
 // Tiene in cache solo la struttura del sito per aprirlo velocemente.
 // File, PDF e dati arrivano sempre direttamente dalla rete.
-var CACHE = "classe-v29";
-var SHELL = ["./", "index.html", "style.css", "app.js", "orario.js", "orario.css", "lim.js", "lim.css", "correzioni.js", "correzioni.css", "profili.js", "profili.css", "riepilogo.js", "riepilogo.css", "pagella.js", "pagella.css", "notifiche.js", "avvisi.js", "avvisi.css", "config.js", "seed.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon.svg", "fonts/bricolage-grotesque-latin-wght-normal.woff2", "fonts/atkinson-hyperlegible-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-latin-700-normal.woff2"];
+var CACHE = "classe-v30";
+var SHELL = ["./", "index.html", "style.css", "app.js", "orario.js", "orario.css", "lim.js", "lim.css", "correzioni.js", "correzioni.css", "profili.js", "profili.css", "riepilogo.js", "riepilogo.css", "pagella.js", "pagella.css", "notifiche.js", "avvisi.js", "avvisi.css", "riunioni.js", "riunioni.css", "config.js", "seed.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon.svg", "fonts/bricolage-grotesque-latin-wght-normal.woff2", "fonts/atkinson-hyperlegible-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-latin-700-normal.woff2"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
 });
@@ -28,14 +28,23 @@ self.addEventListener("fetch", function (e) {
 self.addEventListener("push", function (e) {
   var d = {};
   try { d = e.data ? e.data.json() : {}; } catch (err) { d = { body: e.data ? e.data.text() : "" }; }
-  e.waitUntil(self.registration.showNotification(d.title || "Novaula", {
+  var opt = {
     body: d.body || "", tag: d.tag || undefined, data: { url: d.url || "./" },
     icon: "icons/icon-192.png", badge: "icons/icon-192.png", lang: "it"
-  }));
+  };
+  // riunioni: come una sveglia, resta sullo schermo finché non la tocchi, vibra a lungo e suona di nuovo
+  if (d.alarm) {
+    opt.requireInteraction = true; opt.renotify = !!d.tag; opt.silent = false;
+    opt.vibrate = [600, 200, 600, 200, 600, 200, 600, 200, 600];
+    if (d.url && d.url.indexOf("http") === 0) opt.actions = [{ action: "apri", title: "Entra nella riunione" }];
+  }
+  e.waitUntil(self.registration.showNotification(d.title || "Novaula", opt));
 });
 self.addEventListener("notificationclick", function (e) {
   e.notification.close();
   var url = new URL((e.notification.data && e.notification.data.url) || "./", self.registration.scope).href;
+  // link esterno (Meet): si apre a parte, Novaula resta dov'è
+  if (new URL(url).origin !== self.location.origin) { e.waitUntil(self.clients.openWindow(url)); return; }
   e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (list) {
     for (var i = 0; i < list.length; i++) {
       var c = list[i];

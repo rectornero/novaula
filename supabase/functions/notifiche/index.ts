@@ -3,7 +3,7 @@
 //   GET  (o POST {op:"chiave"})       -> {key} chiave VAPID pubblica per l'iscrizione nel browser
 //                                       (la coppia di chiavi nasce qui al primo uso e resta in private_settings)
 //   POST {tipo, ids|endpoint,owner}   -> solo dai trigger del database, con header x-novaula-push = private_settings.push_token
-//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | prova
+//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | riunione | prova
 // I voti con status 'proposto' (proposte di Claude non ancora viste dal docente) non vengono mai inviati.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
@@ -37,7 +37,8 @@ async function keys() {
   return vapid;
 }
 
-type Msg = { title: string; body: string; url: string; tag: string; ttl?: number };
+// alarm: resta sullo schermo finché non viene toccata, vibrazione lunga, suona di nuovo anche con lo stesso tag
+type Msg = { title: string; body: string; url: string; tag: string; ttl?: number; alarm?: boolean };
 type Sub = { endpoint: string; owner: string; p256dh: string; auth: string };
 
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
@@ -65,7 +66,7 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
   if (body.tipo === "prova") {
     const { data } = await sb.from("push_subscriptions").select("endpoint, owner, p256dh, auth").eq("endpoint", String(body.endpoint)).eq("owner", String(body.owner)).is("disabled_at", null);
     const teacher = body.owner === "docente";
-    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per le nuove domande nella scheda Aiuto, all'inizio di ogni lezione e quando pubblichi un avviso." : "Ti avviserò per gli avvisi del docente, all'inizio delle lezioni e per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
+    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per le nuove domande nella scheda Aiuto, all'inizio di ogni lezione, prima delle tue riunioni e quando pubblichi un avviso." : "Ti avviserò per gli avvisi del docente, all'inizio delle lezioni e per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
   }
 
   if (body.tipo === "voti" && ids.length) {
@@ -184,6 +185,27 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
         (full ? `. That's the full ${eur(body.stipendio)}!` : ". Day done, well earned!"),
       url: SITE + "#/docente", tag: "paga", ttl: 6 * 3600,
     }]);
+  }
+  // riunione del docente (pg_cron, meetings_push): "prima" = qualche minuto prima, "ora" = all'inizio.
+  // Toccandola si apre direttamente il link (Meet); senza link, la sezione Riunioni.
+  if (body.tipo === "riunione" && ids.length) {
+    const { data: rows } = await sb.from("meetings").select("id, title, class_id, starts_at, ends_at, link, note").in("id", ids);
+    const subs = await subsFor("owner", ["docente"]);
+    const names = await classNames();
+    const hm = (iso: string) => new Date(iso).toLocaleTimeString("it-IT", { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit" }).replace(":", ".");
+    for (const m of rows || []) {
+      if (!subs.length) break;
+      const start = Date.parse(m.starts_at), end = m.ends_at ? Date.parse(m.ends_at) : start + 3600_000;
+      const min = Math.round((start - Date.now()) / 60000);
+      const quando = body.fase === "ora" || min <= 0 ? "Inizia ora" : `Tra ${min} min`;
+      const cls = m.class_id ? " " + (names.get(m.class_id)?.split(" ")[0] || m.class_id.toUpperCase()) : "";
+      out.push([subs, {
+        title: `⏰ ${quando}: ${cut(m.title, 50)}${cls}`,
+        body: [hm(m.starts_at) + (m.ends_at ? "–" + hm(m.ends_at) : ""), m.link ? "Tocca per entrare" : "", m.note ? cut(m.note, 80) : ""].filter(Boolean).join(" · "),
+        url: m.link || SITE + "#/docente/riunioni", tag: "riunione-" + m.id, alarm: true,
+        ttl: Math.max(60, Math.round((end - Date.now()) / 1000)),
+      }]);
+    }
   }
   return out;
 }

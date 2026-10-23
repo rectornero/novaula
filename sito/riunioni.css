@@ -1,0 +1,44 @@
+/* Novaula · Riunioni del docente */
+.rn-list{display:flex;flex-direction:column;gap:8px}
+.rn-day{font-size:.95rem;margin-top:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.rn-day:first-child{margin-top:0}
+.rn-item{display:flex;align-items:flex-start;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.rn-item.live{border-color:var(--ok);box-shadow:0 0 0 2px color-mix(in srgb,var(--ok) 35%,transparent)}
+.rn-item.past{opacity:.6}
+.rn-when{display:flex;flex-direction:column;align-items:center;min-width:3.4em;font-family:var(--display);line-height:1.1}
+.rn-when b{font-size:1.35rem}
+.rn-when span{font-size:.85rem;color:var(--muted)}
+.rn-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rn-title{font-weight:700;font-size:1.05rem;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.rn-kind{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--accent)}
+.rn-kind.rn-glo{background:color-mix(in srgb,var(--ok) 18%,var(--card));color:var(--ok)}
+.rn-now{background:var(--ok-soft);color:var(--ok)}
+.rn-act{flex:none;display:flex;align-items:center}
+.rn-tools{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px}
+.rn-tools .btn.link{font-size:.88rem;min-height:32px}
+.rn-past{margin-top:18px}
+.rn-past summary{cursor:pointer;font-weight:700;color:var(--muted)}
+.rn-past .rn-list{margin-top:10px}
+.rn-edit{padding:14px;border:1px solid color-mix(in srgb,var(--hl) 70%,var(--line));border-radius:var(--radius);background:color-mix(in srgb,var(--hl) 22%,var(--card))}
+/* modulo: si compila a tocchi */
+.rn-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.rn-two{grid-template-columns:1fr}}
+.rn-field{display:flex;flex-direction:column;gap:6px}
+.rn-lab{font-weight:700}
+.rn-choice{display:flex;flex-wrap:wrap;gap:6px}
+.rn-opt{min-height:42px;min-width:3.6em;padding:6px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.rn-opt.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rn-other{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rn-other input{width:auto}
+/* sveglia a tutto schermo */
+.rn-alarm{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--paper) 70%,rgba(0,0,0,.6));animation:rn-flash 1s ease-in-out infinite alternate}
+.rn-alarm-box{max-width:420px;width:100%;text-align:center;padding:28px 22px;border-radius:24px;background:var(--card);border:3px solid var(--hl);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px}
+.rn-alarm-ico{font-size:3.4rem;animation:rn-shake .5s ease-in-out infinite}
+.rn-alarm-when{font-family:var(--display);font-size:2rem;font-weight:800}
+.rn-alarm-what{font-size:1.3rem;font-weight:700}
+.rn-alarm-time{color:var(--muted);margin-bottom:10px}
+.rn-alarm .row{justify-content:center}
+.rn-alarm .btn{min-width:130px;min-height:52px;font-size:1.05rem}
+@keyframes rn-flash{from{background-color:color-mix(in srgb,var(--hl) 25%,rgba(0,0,0,.55))}to{background-color:rgba(0,0,0,.6)}}
+@keyframes rn-shake{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@media (prefers-reduced-motion:reduce){.rn-alarm,.rn-alarm-ico{animation:none}}
