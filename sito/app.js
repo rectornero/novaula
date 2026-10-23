@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.12.0";
+  var VERSION = "2.13.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -365,11 +365,13 @@
   var api = DEMO ? demoApi() : supabaseApi();
   var classes = [];
   var stopChat = null;
+  var stopAvvisi = null;
 
   /* ---------- Pagine ---------- */
   function setPage(title) {
     document.title = title ? title + " · " + (CFG.TITLE || "Piattaforma di classe") : (CFG.TITLE || "Piattaforma di classe");
     if (stopChat) { stopChat(); stopChat = null; }
+    if (stopAvvisi) { stopAvvisi(); stopAvvisi = null; }
     app.textContent = "";
   }
   function loading() { app.appendChild(h("p", { class: "empty", text: "Caricamento…" })); }
@@ -392,15 +394,17 @@
       h("h1", null, "Ciao! ", h("span", { class: "mark", text: "Scegli la tua classe" })),
       h("p", { class: "lede", text: "Materiali delle lezioni, compiti da consegnare e la chat della classe. Senza account, da telefono o PC." })
     ));
-    app.appendChild(h("div", { class: "classes" }, classes.map(function (c) {
+    var grid = h("div", { class: "classes" }, classes.map(function (c) {
       var p = classParts(c);
-      return h("a", { class: "class-btn", style: "--cc:" + classColor(c), href: "#/c/" + c.id + "/programma" },
+      return h("a", { class: "class-btn", style: "--cc:" + classColor(c), href: "#/c/" + c.id + "/programma", "data-class": c.id },
         h("span", { class: "code", text: p[0] }),
         h("span", { class: "subject", text: p[1] }),
         c.id === last && h("span", { class: "tag", text: "Ultima aperta" }),
         h("span", { class: "go", "aria-hidden": "true", text: "→" })
       );
-    })));
+    }));
+    app.appendChild(grid);
+    if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.badges(grid, avCtx());
     app.appendChild(h("p", { class: "tip", text: "Consiglio: aggiungi Novaula alla schermata Home del telefono per aprirla come un'app." }));
     app.appendChild(h("p", { class: "version", text: "Novaula " + VERSION }));
   }
@@ -419,6 +423,11 @@
         window.NovaulaProfili && api.client ? window.NovaulaProfili.chip(c, pctx()) : null),
       h("h1", null, h("span", { class: "code", text: p[0] }), " ", h("span", { class: "subject", text: p[1] }))
     ));
+    if (window.NovaulaAvvisi && api.client) {
+      var av = window.NovaulaAvvisi.bar(c, Object.assign(avCtx(), { cc: classColor(c) }));
+      app.appendChild(av.el);
+      stopAvvisi = av.stop;
+    }
     app.appendChild(h("nav", { class: "tabs", style: "--cc:" + classColor(c), "aria-label": "Sezioni" }, [["programma", "Programma"], ["materiali", "Materiali"], ["compiti", "Compiti"], ["verifiche", "Verifiche"], ["aiuto", "Aiuto"], ["chat", "Chat"]].map(function (t) {
       return h("a", { href: "#/c/" + id + "/" + t[0], "aria-current": t[0] === tab || (tab === "domande" && t[0] === "chat") ? "page" : null }, icon(t[0]), h("span", { text: t[1] }));
     })));
@@ -836,6 +845,10 @@
     if (window.NovaulaProfili && api.client) x.extra = function (c) { return window.NovaulaProfili.correctionExtra(c, pctx()); };
     return x;
   }
+  // Aiuti per avvisi.js
+  function avCtx() {
+    return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classes: classes };
+  }
   // Aiuti per profili.js
   function pctx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
@@ -1005,6 +1018,7 @@
       if (window.NovaulaNotifiche && api.client) app.appendChild(h("div", { class: "card" }, window.NovaulaNotifiche.panel({ h: h, sb: api.client, toast: toast, errText: errText, owner: "docente", subscribe: async function (ep, p256dh, auth) {
         var r = await api.client.rpc("teacher_push_subscribe", { p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }); if (r.error) throw r.error;
       } })));
+      if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.board(app, avCtx());
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
       if (window.NovaulaRiepilogo && api.client) window.NovaulaRiepilogo.board(app, { h: h, sb: api.client, findClass: findClass, notice: notice, errText: errText });

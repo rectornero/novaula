@@ -1,7 +1,7 @@
 // Tiene in cache solo la struttura del sito per aprirlo velocemente.
 // File, PDF e dati arrivano sempre direttamente dalla rete.
-var CACHE = "classe-v28";
-var SHELL = ["./", "index.html", "style.css", "app.js", "orario.js", "orario.css", "lim.js", "lim.css", "correzioni.js", "correzioni.css", "profili.js", "profili.css", "riepilogo.js", "riepilogo.css", "pagella.js", "pagella.css", "notifiche.js", "config.js", "seed.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon.svg", "fonts/bricolage-grotesque-latin-wght-normal.woff2", "fonts/atkinson-hyperlegible-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-latin-700-normal.woff2"];
+var CACHE = "classe-v29";
+var SHELL = ["./", "index.html", "style.css", "app.js", "orario.js", "orario.css", "lim.js", "lim.css", "correzioni.js", "correzioni.css", "profili.js", "profili.css", "riepilogo.js", "riepilogo.css", "pagella.js", "pagella.css", "notifiche.js", "avvisi.js", "avvisi.css", "config.js", "seed.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon.svg", "fonts/bricolage-grotesque-latin-wght-normal.woff2", "fonts/atkinson-hyperlegible-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-latin-700-normal.woff2"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
 });
