@@ -20,6 +20,9 @@
 .rn-past summary{cursor:pointer;font-weight:700;color:var(--muted)}
 .rn-past .rn-list{margin-top:10px}
 .rn-edit{padding:14px;border:1px solid color-mix(in srgb,var(--hl) 70%,var(--line));border-radius:var(--radius);background:color-mix(in srgb,var(--hl) 22%,var(--card))}
+.rn-strip{display:flex;flex-direction:column;gap:8px;margin:4px 0 18px}
+.rn-strip-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rn-strip-head a{font-size:.95rem;letter-spacing:0;text-transform:none;color:var(--accent);text-decoration:none}
 /* modulo: si compila a tocchi */
 .rn-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:480px){.rn-two{grid-template-columns:1fr}}

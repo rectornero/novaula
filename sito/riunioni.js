@@ -3,6 +3,7 @@
    Qualche minuto prima arriva una notifica "sveglia" sul telefono (funzione Edge "notifiche", tipo 'riunione'):
    toccandola si apre il link Meet. Se Novaula è aperto, suona anche una sveglia a tutto schermo.
    app.js chiama:
+     window.NovaulaRiunioni.strip(contenitore, aiuti)  home del docente: riunioni dei prossimi 7 giorni
      window.NovaulaRiunioni.board(contenitore, aiuti)  riquadro «🎥 Riunioni» in Area docente (prossime + pulsante)
      window.NovaulaRiunioni.page(contenitore, aiuti)   pagina #/docente/riunioni: elenco, aggiungi, modifica, elimina
      window.NovaulaRiunioni.alarm(aiuti)               sveglia in pagina (una volta sola, dopo l'accesso del docente) */
@@ -274,6 +275,20 @@
         if (/meetings|schema cache/i.test(e.message || "")) { sec.previousSibling.remove(); sec.remove(); return; }
         list.replaceChildren(x.notice("err", x.errText(e)));
       });
+    },
+
+    // home del docente, sotto le lezioni: le riunioni dei prossimi 7 giorni (o solo il link alla pagina)
+    strip: function (box, x) {
+      var h = x.h, list = h("div", { class: "rn-list" });
+      var sec = h("section", { class: "rn-strip" }, h("p", { class: "rn-strip-head" }, h("span", { text: "🎥 Prossime riunioni" }),
+        h("a", { href: "#/docente/riunioni", text: "Tutte · aggiungi →" })), list);
+      box.appendChild(sec);
+      load(x.sb, new Date(Date.now() - 3 * 3600000).toISOString()).then(function (l) {
+        var week = Date.now() + 7 * 86400000;
+        l = l.filter(function (m) { return endOf(m) > Date.now() && new Date(m.starts_at).getTime() < week; }).slice(0, 3);
+        if (!l.length) { list.appendChild(h("p", { class: "muted small", text: "Nessuna riunione nei prossimi 7 giorni." })); return; }
+        byDay(x, l, list, function () {}, true);
+      }).catch(function () { sec.remove(); });
     },
 
     page: function (box, x) {

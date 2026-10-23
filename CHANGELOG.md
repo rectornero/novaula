@@ -5,6 +5,11 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.14.1 (23 Oct 2026): meetings on the teacher's home page
+- When the teacher is logged in, the home page now shows «🎥 Prossime riunioni» right under the lesson cards: the
+  meetings of the next 7 days (up to three), grouped by day, with an «Entra» button for the link, plus a link to the
+  full Riunioni page to add more. Service worker cache `classe-v31`.
+
 ## 2.14.0 (23 Oct 2026): teacher meetings with an alarm before each one
 - New page «🎥 Riunioni» in Area docente (`#/docente/riunioni`) for class councils (CdC) and GLO meetings: date, time,
   class, Meet link, length and an optional note. Upcoming meetings are grouped by day (Oggi, Domani, …) with a big
