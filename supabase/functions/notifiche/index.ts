@@ -3,7 +3,7 @@
 //   GET  (o POST {op:"chiave"})       -> {key} chiave VAPID pubblica per l'iscrizione nel browser
 //                                       (la coppia di chiavi nasce qui al primo uso e resta in private_settings)
 //   POST {tipo, ids|endpoint,owner}   -> solo dai trigger del database, con header x-novaula-push = private_settings.push_token
-//        tipo: voti | materiali | personali | aiuto | lezione | avviso | prova
+//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | prova
 // I voti con status 'proposto' (proposte di Claude non ancora viste dal docente) non vengono mai inviati.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
@@ -171,6 +171,19 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
         body: cut(text, 180), url: `${SITE}#/c/${as[0].class_id}`, tag: "avviso-" + as[0].id, ttl: ttl(as[0].expires_at),
       }]);
     }
+  }
+  // fine giornata, solo per il docente: paga del giorno (pg_cron, importi calcolati da wage_push())
+  if (body.tipo === "paga") {
+    const subs = await subsFor("owner", ["docente"]);
+    const eur = (n: unknown) => "€" + Number(n).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const full = Number(body.fatti) >= Number(body.giorni);
+    if (subs.length) out.push([subs, {
+      title: "💶 Daily wage earned: " + eur(body.oggi),
+      body: `${MONTHS[Number(body.mese_n) - 1] || "This month"} so far: ${eur(body.mese)} (${body.fatti} of ${body.giorni} working days)` +
+        (full ? `. That's the full ${eur(body.stipendio)}!` : ". Day done, well earned!"),
+      url: SITE + "#/docente", tag: "paga", ttl: 6 * 3600,
+    }]);
   }
   return out;
 }
