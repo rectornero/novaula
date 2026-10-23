@@ -3,7 +3,7 @@
 //   GET  (o POST {op:"chiave"})       -> {key} chiave VAPID pubblica per l'iscrizione nel browser
 //                                       (la coppia di chiavi nasce qui al primo uso e resta in private_settings)
 //   POST {tipo, ids|endpoint,owner}   -> solo dai trigger del database, con header x-novaula-push = private_settings.push_token
-//        tipo: voti | materiali | personali | aiuto | lezione | prova
+//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | prova
 // I voti con status 'proposto' (proposte di Claude non ancora viste dal docente) non vengono mai inviati.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
@@ -65,7 +65,7 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
   if (body.tipo === "prova") {
     const { data } = await sb.from("push_subscriptions").select("endpoint, owner, p256dh, auth").eq("endpoint", String(body.endpoint)).eq("owner", String(body.owner)).is("disabled_at", null);
     const teacher = body.owner === "docente";
-    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per le nuove domande nella scheda Aiuto e all'inizio di ogni lezione." : "Ti avviserò all'inizio delle lezioni e per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
+    out.push([data || [], { title: "Notifiche attive ✓", body: teacher ? "Ti avviserò per le nuove domande nella scheda Aiuto, all'inizio di ogni lezione e quando pubblichi un avviso." : "Ti avviserò per gli avvisi del docente, all'inizio delle lezioni e per nuovi voti, lavori da rifare e nuovi materiali.", url: SITE, tag: "prova" }]);
   }
 
   if (body.tipo === "voti" && ids.length) {
@@ -146,6 +146,44 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
         url: `${SITE}#/c/${l.class_id}`, tag: "lezione-" + l.class_id, ttl: 900, // in ritardo non serve più
       }]);
     }
+  }
+  // avviso del docente: gli studenti della classe e il docente (come prova); resta valido fino a fine giornata
+  if (body.tipo === "avviso" && ids.length) {
+    const { data: rows } = await sb.from("announcements").select("id, class_id, body, expires_at").in("id", ids);
+    const names = await classNames();
+    const teacher = await subsFor("owner", ["docente"]);
+    const ttl = (iso: string) => Math.max(60, Math.min(8 * 86400, Math.round((Date.parse(iso) - Date.now()) / 1000)));
+    for (const a of rows || []) {
+      const { data: studs } = await sb.from("students").select("id").eq("class_id", a.class_id);
+      const subs = await subsFor("student_id", (studs || []).map((s) => s.id));
+      if (!subs.length) continue;
+      out.push([subs, {
+        title: "📌 Avviso · " + (names.get(a.class_id) || a.class_id.toUpperCase()),
+        body: cut(a.body, 180), url: `${SITE}#/c/${a.class_id}`, tag: "avviso-" + a.id, ttl: ttl(a.expires_at),
+      }]);
+    }
+    // il docente riceve un solo avviso per testo, con l'elenco delle classi
+    for (const [text, as] of group(rows || [], (a) => a.body)) {
+      if (!teacher.length) break;
+      const cls = as.map((a) => names.get(a.class_id) || a.class_id.toUpperCase());
+      out.push([teacher, {
+        title: "📌 Avviso inviato · " + cut(cls.join(", "), 60),
+        body: cut(text, 180), url: `${SITE}#/c/${as[0].class_id}`, tag: "avviso-" + as[0].id, ttl: ttl(as[0].expires_at),
+      }]);
+    }
+  }
+  // fine giornata, solo per il docente: paga del giorno (pg_cron, importi calcolati da wage_push())
+  if (body.tipo === "paga") {
+    const subs = await subsFor("owner", ["docente"]);
+    const eur = (n: unknown) => "€" + Number(n).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const full = Number(body.fatti) >= Number(body.giorni);
+    if (subs.length) out.push([subs, {
+      title: "💶 Daily wage earned: " + eur(body.oggi),
+      body: `${MONTHS[Number(body.mese_n) - 1] || "This month"} so far: ${eur(body.mese)} (${body.fatti} of ${body.giorni} working days)` +
+        (full ? `. That's the full ${eur(body.stipendio)}!` : ". Day done, well earned!"),
+      url: SITE + "#/docente", tag: "paga", ttl: 6 * 3600,
+    }]);
   }
   return out;
 }

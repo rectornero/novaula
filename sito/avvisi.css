@@ -1,0 +1,18 @@
+/* Novaula · Avvisi di classe: foglietto giallo fissato in cima alla pagina della classe */
+.av-bar{display:flex;flex-direction:column;gap:10px}
+.av-bar.av-empty .av-list{display:none}
+.av-list{display:flex;flex-direction:column;gap:10px}
+.av-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:var(--radius);
+  background:color-mix(in srgb,var(--hl) 45%,var(--card));color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--hl) 80%,var(--line));border-left:8px solid var(--cc,var(--accent));box-shadow:var(--shadow)}
+.av-pin{font-size:1.4rem;line-height:1.2;flex:none}
+.av-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.av-meta{font-size:.82rem;color:var(--muted)}
+.av-meta b{color:var(--ink);text-transform:uppercase;letter-spacing:.06em;font-size:.78rem}
+.av-body{font-size:1.15rem;font-weight:700;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere}
+.av-item .btn{flex:none}
+.av-board .av-item{box-shadow:none}
+.av-board{gap:12px}
+.class-btn .av-tag{top:auto;bottom:14px;right:44px}
+/* sulla LIM l'avviso si legge dal fondo dell'aula */
+@media (min-width:1200px){.av-body{font-size:1.45rem}}

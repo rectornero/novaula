@@ -5,6 +5,26 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.13.0 (23 Oct 2026): class announcements and daily wage notification
+- The teacher can post a short announcement («avviso», up to 500 characters) to one or more classes, from the yellow
+  «Docente: nuovo avviso» panel under the class title or from the new «📌 Avvisi di classe» box in Area docente
+  (with a tick list of classes). It stays pinned at the top of the class page, above the tabs, so it shows on every
+  tab including the chat, until midnight (or until tomorrow night, if chosen), then disappears by itself.
+- The pinned note is a big yellow card with the time it was posted and how long it stays; links in the text are
+  clickable, and on the LIM the text is larger. It appears live on open pages (Realtime) and drops off at expiry
+  even if the page stays open. The teacher can remove it early with «Togli».
+- Every new announcement sends a phone notification («📌 Avviso · 5G TPSI») to the class students who turned
+  notifications on, and one to the teacher as a test («📌 Avviso inviato», one per text even when sent to several
+  classes). Tapping it opens the class page. The notification expires with the announcement.
+- On the home page, classes with an active announcement show a «📌 Avviso» tag.
+- Teacher only: at the end of every weekday (when the last lesson of the day ends, 14:00 if there are none) a phone
+  notification «💶 Daily wage earned: €84.09», with what the month has paid so far («October so far: €1,429.55 (17 of
+  22 working days)»). Daily wage = monthly salary (`private_settings.paga_mensile`, 1850) divided by that month's
+  Monday–Friday days; weekday holidays count as paid days, Saturday and Sunday never. pg_cron job `novaula-paga`.
+  SQL: `aggiornamenti/2026-10-23-paga.sql`, already applied.
+- SQL: `aggiornamenti/2026-10-23-avvisi.sql` (table `announcements`, RLS, Realtime, push trigger), already applied.
+  Edge Function `notifiche` gains the `avviso` type (already deployed). Service worker cache `classe-v29`.
+
 ## 2.12.0 (22 Oct 2026): full teacher timetable
 - New page «Orario completo» in Area docente (`#/docente/orario`, also linked under the "Adesso / Dopo" cards):
   the teacher's whole weekly timetable, one day at a time. A day menu at the top (opens on today; on weekends on
