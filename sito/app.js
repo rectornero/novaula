@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.13.0";
+  var VERSION = "2.14.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -849,6 +849,10 @@
   function avCtx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classes: classes };
   }
+  // Aiuti per riunioni.js
+  function rnCtx() {
+    return { h: h, sb: api.client, isTeacher: api.isTeacher, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classes: classes };
+  }
   // Aiuti per profili.js
   function pctx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
@@ -996,6 +1000,11 @@
       window.NovaulaPagella.page(app, Object.assign(pctx(), { classes: classes }));
       return;
     }
+    if (api.isTeacher() && /^#\/docente\/riunioni/.test(location.hash) && window.NovaulaRiunioni && api.client) {
+      setPage("Riunioni");
+      window.NovaulaRiunioni.page(app, rnCtx());
+      return;
+    }
     if (api.isTeacher() && /^#\/docente\/orario/.test(location.hash) && window.NovaulaOrarioPage) {
       setPage("Orario");
       stopChat = window.NovaulaOrarioPage(app, { h: h, sb: api.client, findClass: findClass, classParts: classParts, classColor: classColor }, location.hash.split("/")[3]);
@@ -1011,6 +1020,7 @@
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
           window.NovaulaOrarioPage ? h("a", { class: "btn", href: "#/docente/orario", text: "📅 Orario completo" }) : null,
+          window.NovaulaRiunioni && api.client ? h("a", { class: "btn", href: "#/docente/riunioni", text: "🎥 Riunioni" }) : null,
           window.NovaulaPagella && api.client ? h("a", { class: "btn", href: "#/docente/pagella", text: "Pagella" }) : null,
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
@@ -1018,6 +1028,7 @@
       if (window.NovaulaNotifiche && api.client) app.appendChild(h("div", { class: "card" }, window.NovaulaNotifiche.panel({ h: h, sb: api.client, toast: toast, errText: errText, owner: "docente", subscribe: async function (ep, p256dh, auth) {
         var r = await api.client.rpc("teacher_push_subscribe", { p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }); if (r.error) throw r.error;
       } })));
+      if (window.NovaulaRiunioni && api.client) window.NovaulaRiunioni.board(app, rnCtx());
       if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.board(app, avCtx());
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
@@ -1063,6 +1074,8 @@
     else if (parts[0] === "docente") teacherPage();
     else homePage();
     document.getElementById("teacherLink").textContent = api.isTeacher() ? "Docente ✓" : "Area docente";
+    // sveglia delle riunioni: suona in qualunque pagina finché Novaula è aperto
+    if (api.isTeacher() && api.client && window.NovaulaRiunioni) window.NovaulaRiunioni.alarm(rnCtx());
     window.scrollTo(0, 0);
   }
 
