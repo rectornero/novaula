@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.15.1 (25 Oct 2026): lower hosting and background costs
+- Netlify now skips a production deploy when a push to `main` doesn't change the site (`sito/` or `netlify.toml`), and
+  production deploys are batched to at most one per school day. Deploys were the platform's main hosting cost.
+- The help desk refreshes every 60 seconds instead of 15 (live updates still arrive instantly through Supabase
+  Realtime), and the teacher's meeting alarm checks every 60 seconds instead of 30, only while the page is visible.
+- Background jobs no longer run every minute: lesson-start alerts and the daily wage alert run only at the lesson
+  start and end minutes in the timetable (recomputed when the timetable changes), and meeting alerts run only at the
+  next alert time (switched off when no meeting is coming). About 15,000 runs a week drop to about 150.
+  SQL: `aggiornamenti/2026-10-25-cron-risparmio.sql`, already applied. Service worker cache `classe-v33`.
+- New cost rules for every future change in `CLAUDE.md` ("Netlify credits").
+
 ## 2.15.0 (23 Oct 2026): daily wage card
 - Teacher only: when the last lesson of the day ends (14:00 on days without lessons), a golden «Today's wage» card
   appears above the lessons on the home page and in Area docente, and stays until midnight. It shows the day's wage
