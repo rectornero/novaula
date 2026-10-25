@@ -1,6 +1,9 @@
 # Netlify pubblica la cartella "sito" a ogni push sul ramo main.
-# Ogni pubblicazione consuma crediti del piano Netlify: unire le modifiche a gruppi
-# (più PR in un solo merge su main) invece di un deploy per ogni piccola modifica.
+# Ogni pubblicazione in produzione costa 15 crediti del team Netlify (condivisi con gli altri siti di Nero):
+# unire le modifiche a gruppi (più PR in un solo merge su main) invece di un deploy per ogni piccola modifica.
 [build]
   publish = "sito"
   command = ""
+  # Salta la pubblicazione se il push non cambia né "sito" né questo file
+  # (per esempio solo CHANGELOG, SQL in aggiornamenti/, strumenti/ o supabase/).
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- sito/ netlify.toml"

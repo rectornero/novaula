@@ -27,3 +27,21 @@ This studio tracks its work in Artache. The `artache` MCP tools talk to it.
   like "rectornero/novaula:article-slug", so later changes update the same item.
 - Never put student data in Artache: no student names, marks, hand-ins, PINs, tokens, keys or anything read from the
   Supabase database. App progress and release notes only.
+
+## Netlify credits
+All of Nero's sites (laventina, artache, novaula, ai-ice, tzero) share one Netlify team, "overgame-director", with one
+credit balance: 1,000 credits a month plus bought packs. When it hits zero, every site is paused. Prices: production
+deploy 15 credits; compute and database compute 10 credits per GB-hour; bandwidth 20 credits per GB; web requests 2
+credits per 10,000; AI Gateway 180 credits per USD. Deploy Previews and branch deploys are free.
+
+- Every push to `main` that changes `sito/` or `netlify.toml` is a production deploy (other pushes are skipped by the
+  `ignore` command in `netlify.toml`). Test on branches (free). Batch changes into as few production deploys as
+  possible, at most one per school day, and ask Nero before deploying while credits are low.
+- No scheduled job or polling loop touches the database on every run. Gate it on a cheap check (such as a note of when
+  there is next work), or use delayed or event-driven scheduling instead of polling. This also holds for Supabase
+  pg_cron: `novaula-riunioni` is scheduled only for the next meeting alert, and `novaula-lezioni` / `novaula-paga`
+  only at lesson start and end minutes from `timetable` (`aggiornamenti/2026-10-25-cron-risparmio.sql`).
+- Client polling (setInterval, refetch) is never faster than 60 seconds and skips hidden tabs; prefer Supabase Realtime.
+- No Netlify AI Gateway (or any other paid AI API) unless Nero approves it.
+- Before adding any schedule, polling loop, Netlify Function or production deploy, estimate its monthly credits and
+  say the number to Nero.

@@ -257,7 +257,7 @@
       alarmOn = true;
       document.addEventListener("pointerdown", unlock, { once: true, capture: true });
       check(x);
-      setInterval(function () { if (x.isTeacher()) check(x); }, 30000);
+      setInterval(function () { if (document.visibilityState === "visible" && x.isTeacher()) check(x); }, 60000);
       document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible" && x.isTeacher()) check(x); });
     },
 

@@ -213,7 +213,7 @@
     function typing() { var a = document.activeElement; return !!(a && root.contains(a) && a.matches("textarea, input") && a.closest(".hd-card")); }
     root.addEventListener("focusout", function () { setTimeout(function () { if (pending && !typing()) refresh(); }, 50); });
     var unwatch = db.watch(c.id, soon);
-    var poll = setInterval(function () { if (document.visibilityState === "visible") refresh(); }, 15000);
+    var poll = setInterval(function () { if (document.visibilityState === "visible") refresh(); }, 60000);
     var tick = setInterval(function () { [].forEach.call(root.querySelectorAll("[data-ago]"), function (el) { el.textContent = ago(el.getAttribute("data-ago")) || ctx.fmtTime(el.getAttribute("data-ago")); }); }, 30000);
     function onVisible() { if (document.visibilityState === "visible") refresh(); }
     document.addEventListener("visibilitychange", onVisible);
