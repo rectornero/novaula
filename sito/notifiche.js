@@ -57,7 +57,7 @@
 
     async function draw() {
       var title = h("b", { text: "🔔 Notifiche sul telefono" });
-      var what = o.owner === "docente" ? "Un avviso per ogni nuova domanda nella scheda Aiuto e all'inizio di ogni lezione." : "Un avviso all'inizio di ogni lezione e per nuovi voti, lavori da rifare e nuovi materiali.";
+      var what = o.owner === "docente" ? "Un avviso per ogni nuova domanda nella scheda Aiuto, per gli avvisi di classe, le riunioni e la paga del giorno." : "Un avviso per gli avvisi di classe e per nuovi voti, lavori da rifare e nuovi materiali.";
       if (isIOS() && !standalone()) {
         box.replaceChildren(title, h("p", { class: "small", text: what }),
           h("p", { class: "small push-hint" }, "Su iPhone funzionano solo dall'app: tocca ", h("b", { text: "Condividi" }), " (il quadrato con la freccia ⬆️), poi ",
