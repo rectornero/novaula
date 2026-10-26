@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Risk Based Thinking · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 9</p>
+  <h1>Pensare<br>per rischi</h1>
+  <p class="lead">Il Risk Based Thinking delle norme ISO: prevedere che cosa può andare storto (o andare meglio del previsto) prima che succeda.</p>
+  <aside class="notes">Lezione del libro "Risk Based Thinking nelle norme ISO". Obiettivi: definire il rischio secondo la ISO 31000 e la HLS; conoscere caratteristiche, campo d'azione, step e strumenti del pensiero basato sul rischio; calcolare un indice di rischio P × G; scegliere un trattamento; capire vantaggi e obiettivi. Collegamento: l'unità 4 ha trattato il rischio di progetto (registro dei rischi); qui lo vediamo come principio di tutto il sistema di gestione. Durata: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>La sera prima di una consegna importante, tu…</h2></div>
+  <div class="poll" data-id="u9r-consegna">
+    <ol><li>Salvo una copia del file su un altro supporto</li><li>Controllo che la piattaforma funzioni</li><li>Consegno all'ultimo minuto e speriamo bene</li><li>Non ci ho mai pensato</li></ol>
+  </div>
+  <aside class="notes">Sondaggio leggero. Chi sceglie A o B sta già facendo risk based thinking senza saperlo: ha immaginato un evento incerto (file perso, sito irraggiungibile) e ha agito prima. Chiedere a chi ha scelto C che cosa è successo l'ultima volta che qualcosa è andato storto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione · ISO 31000:2018</p><h2>Rischio: effetto dell'incertezza sugli obiettivi</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Minaccia</h3><p>Effetto negativo: il fornitore consegna in ritardo, un server si guasta, un dato viene rubato.</p></div>
+    <div class="card ok"><h3>Opportunità</h3><p>Effetto positivo: un nuovo bando, un cliente che chiede di più, una tecnologia che fa risparmiare.</p></div>
+  </div>
+  <div class="callout">Il <b>pericolo</b> è la fonte di un possibile danno; il <b>rischio</b> combina quanto è probabile che l'evento avvenga e quanto sarebbero gravi le conseguenze.</div>
+  <aside class="notes">La ISO 31000:2018 (Risk management, linee guida) definisce il rischio come "effetto dell'incertezza sugli obiettivi"; la stessa definizione è nel testo comune della HLS. Nota della norma: l'effetto è uno scostamento da quanto atteso, positivo o negativo. La distinzione pericolo/rischio tornerà nella ISO 45001 e nell'unità 10 (D.Lgs. 81/2008).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale frase descrive un rischio, non un pericolo?</h2></div>
+  <div class="poll" data-id="u9r-quiz-pericolo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il cavo della ciabatta attraversa il corridoio</li><li>Qualcuno può inciampare nel cavo: succede di rado ma ci si può rompere un polso</li><li>Il server è vecchio di dieci anni</li><li>Il magazzino contiene solventi infiammabili</li></ol>
+    <p class="why">B. A, C e D descrivono fonti di possibili danni (pericoli o condizioni). Solo la B parla di un evento incerto con la sua probabilità ("di rado") e la sua gravità ("rompere un polso"): questo è un rischio.</p>
+  </div>
+  <aside class="notes">Il tranello è la C, che sembra "rischiosa": un server vecchio è una condizione; il rischio è "il server si guasta durante la chiusura del bilancio e si perdono due giorni di lavoro". Far riformulare A, C e D come rischi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Caratteristiche</p><h2>Che cosa cambia con la ISO 9001:2015</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Ovunque</h3><p class="muted">Il rischio non è più un capitolo a parte: si considera in ogni processo e in ogni decisione.</p></div>
+    <div class="card"><p class="num">2</p><h3>Prima, non dopo</h3><p class="muted">Sostituisce le vecchie "azioni preventive": la prevenzione diventa il modo normale di pianificare.</p></div>
+    <div class="card"><p class="num">3</p><h3>Proporzionato</h3><p class="muted">Nessun metodo formale obbligatorio: l'impegno dipende da quanto è importante il rischio.</p></div>
+  </div>
+  <aside class="notes">Nell'allegato A.4 della ISO 9001:2015 si spiega che il concetto di azione preventiva è espresso attraverso il pensiero basato sul rischio e che non è richiesto un metodo formale di gestione del rischio né un processo documentato. Chi vuole un metodo strutturato usa la ISO 31000. Il requisito principale è il punto 6.1 "Azioni per affrontare rischi e opportunità".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Campo d'azione</p><h2>Dove si applica il pensiero basato sul rischio</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Contesto</h3><p>Fattori interni ed esterni, parti interessate (punto 4).</p></div>
+    <div class="card soft"><h3>Pianificazione</h3><p>Rischi, opportunità e obiettivi (punto 6.1).</p></div>
+    <div class="card soft"><h3>Processi</h3><p>Ogni processo ha i suoi rischi (punto 4.4).</p></div>
+    <div class="card soft"><h3>Cambiamenti</h3><p>Nuovi fornitori, prodotti, software, persone.</p></div>
+  </div>
+  <p class="lead">Livelli diversi: <b>strategico</b> (la direzione), <b>di processo</b> (l'owner), <b>operativo</b> (chi fa il lavoro).</p>
+  <aside class="notes">Esempio su tre livelli in una software house: strategico = dipendere da un solo grande cliente; di processo = rilasci senza test automatici; operativo = la password del server condivisa su un foglio. Chiedere alla classe un esempio di rischio per ogni livello nella scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli step · ISO 31000</p><h2>Metti in ordine il processo di gestione del rischio</h2></div>
+  <ol class="puzzle-ordina" data-id="u9r-step">
+    <li>Definire contesto, obiettivi e criteri di valutazione</li>
+    <li>Identificare i rischi: che cosa può succedere?</li>
+    <li>Analizzare: probabilità e conseguenze</li>
+    <li>Ponderare: quali rischi vanno trattati per primi?</li>
+    <li>Trattare: scegliere e attuare le azioni</li>
+    <li>Monitorare e riesaminare nel tempo</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Nella ISO 31000:2018 identificazione, analisi e ponderazione insieme formano la "valutazione del rischio" (risk assessment). Attorno a tutto il processo ci sono comunicazione e consultazione, registrazione e reporting. Far notare la somiglianza con il PDCA: i primi quattro passi sono Plan, il trattamento è Do, il monitoraggio è Check e Act.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analizzare</p><h2>Indice di rischio: R = P × G</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact" style="text-align:center">
+      <tr><th>P \ G</th><th>1 lieve</th><th>2 media</th><th>3 grave</th><th>4 gravissima</th></tr>
+      <tr><th>4 molto probabile</th><td>4</td><td class="hl">8</td><td class="hl">12</td><td class="hl">16</td></tr>
+      <tr><th>3 probabile</th><td>3</td><td>6</td><td class="hl">9</td><td class="hl">12</td></tr>
+      <tr><th>2 poco probabile</th><td>2</td><td>4</td><td>6</td><td class="hl">8</td></tr>
+      <tr><th>1 improbabile</th><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+    </table>
+    <div class="stack">
+      <p>Ogni rischio riceve un valore di <b>probabilità</b> P e di <b>gravità</b> G da 1 a 4.</p>
+      <p>Il prodotto ordina le priorità. In giallo i rischi da trattare subito (R ≥ 8).</p>
+      <p class="small muted">Le scale e le soglie le decide l'organizzazione: sono i "criteri" del primo step.</p>
+    </div>
+  </div>
+  <aside class="notes">La matrice 4 × 4 è molto usata anche nella valutazione dei rischi per la sicurezza sul lavoro (unità 10). La soglia R ≥ 8 è una scelta di esempio. Limite della matrice: un rischio improbabile ma catastrofico (P1 × G4 = 4) finisce in fascia bassa; per questo molte aziende aggiungono la regola "gravità 4 si tratta sempre".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Calcola e trascina</p><h2>Quanto vale R?</h2></div>
+  <div class="puzzle-trascina" data-id="u9r-calcolo" data-extra="5|7|12">
+    <p>Il fornitore delle API consegna in ritardo: P = 3, G = 3, quindi R = <span class="slot" data-risposta="9"></span>.</p>
+    <p>Lo sviluppatore più esperto si ammala nella settimana del rilascio: P = 2, G = 4, R = <span class="slot" data-risposta="8"></span>.</p>
+    <p>Il server di test è lento: P = 3, G = 1, R = <span class="slot" data-risposta="3"></span>.</p>
+    <p>Il rischio con priorità più alta è quello del <span class="slot" data-risposta="fornitore"></span>.</p>
+  </div>
+  <aside class="notes">Esempio ipotetico. Soluzioni: 9, 8, 3, fornitore. Distrattori: 5, 7 (chi somma invece di moltiplicare: 3+3 = 6 non c'è, ma 3+4 = 7 sì) e 12. Domanda: lo sviluppatore malato (R = 8) è sopra soglia? Sì, va trattato anche lui: per esempio con la documentazione del codice e un secondo sviluppatore che conosce il modulo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trattare</p><h2>Quattro strade davanti a un rischio</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Evitare</h3><p class="muted">Non fare l'attività che genera il rischio.</p></div>
+    <div class="card"><h3>Ridurre</h3><p class="muted">Abbassare la probabilità o la gravità.</p></div>
+    <div class="card"><h3>Trasferire</h3><p class="muted">Condividerlo con altri: assicurazione, contratto.</p></div>
+    <div class="card"><h3>Accettare</h3><p class="muted">Tenerlo, consapevolmente, e tenerlo d'occhio.</p></div>
+  </div>
+  <div class="callout">Per le <b>opportunità</b> si ragiona al contrario: coglierle, aumentarle, condividerle con un partner, oppure lasciarle andare.</div>
+  <aside class="notes">La ISO 31000:2018 elenca opzioni più dettagliate (evitare, assumere o aumentare il rischio per cogliere un'opportunità, rimuovere la fonte, modificare probabilità o conseguenze, condividere, ritenere con decisione informata). Le quattro strade sono una sintesi didattica molto usata. Trasferire un rischio non lo elimina: se il fornitore assicurato fallisce, il progetto è comunque in ritardo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Quale trattamento?</p><h2>Trascina ogni azione nella sua strada</h2></div>
+  <div class="puzzle-categorie" data-id="u9r-trattamenti" style="--cols:4">
+    <div class="cat"><h4>Evitare</h4><ul><li>Rinunciare a un appalto rischioso</li><li>Non usare una libreria abbandonata</li></ul></div>
+    <div class="cat"><h4>Ridurre</h4><ul><li>Backup quotidiano</li><li>Test automatici</li></ul></div>
+    <div class="cat"><h4>Trasferire</h4><ul><li>Polizza assicurativa</li><li>Penale nel contratto</li></ul></div>
+    <div class="cat"><h4>Accettare</h4><ul><li>Server di test lento</li><li>Piccolo ritardo tollerabile</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 4 minuti. Soluzione come scritto. Discussione: la penale nel contratto trasferisce solo il danno economico, non il ritardo; il backup riduce la gravità della perdita di dati, i test riducono la probabilità di rilasciare bug.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il registro dei rischi in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>A1:E1: <b>Rischio, P, G, R, Livello</b>. Righe 2-6: ritardo fornitore API (3; 3), sviluppatore malato (2; 4), furto di dati (1; 4), requisiti che cambiano (4; 2), server lento (3; 1).</li>
+      <li>D2: <code>=B2*C2</code>; E2: <code>=SE(D2&gt;=8;"Alto";SE(D2&gt;=4;"Medio";"Basso"))</code>. Trascina fino alla riga 6.</li>
+      <li>G2: <code>=CONTA.SE(E2:E6;"Alto")</code>. Ordina per R decrescente.</li>
+      <li>In F scrivi un trattamento per ogni rischio alto. Salva come <b>registro-rischi.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> R = 9, 8, 4, 8, 3. Tre rischi alti, uno medio (furto di dati), uno basso. In cima alla tabella ordinata c'è il ritardo del fornitore.</div>
+  </div>
+  <aside class="notes">Calcoli: 3×3 = 9 alto; 2×4 = 8 alto; 1×4 = 4 medio; 4×2 = 8 alto; 3×1 = 3 basso. Conteggio alti = 3. Ordinamento: menu Dati, Ordina, colonna D decrescente (attenzione a selezionare tutta la tabella). Domanda finale: è accettabile che il furto di dati risulti "medio"? Aprire la discussione sul limite della matrice e sulla regola "gravità 4 si tratta sempre". Valutazione: formule corrette, ordinamento, trattamenti coerenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli strumenti</p><h2>Abbina lo strumento al suo uso</h2></div>
+  <dl class="puzzle-abbina" data-id="u9r-strumenti">
+    <dt>Brainstorming</dt><dd>Far emergere in gruppo più rischi possibili</dd>
+    <dt>Analisi SWOT</dt><dd>Forze, debolezze, opportunità e minacce</dd>
+    <dt>FMEA</dt><dd>Modi di guasto e loro effetti, voce per voce</dd>
+    <dt>Diagramma di Ishikawa</dt><dd>Risalire alle cause di un problema</dd>
+    <dt>Matrice P × G</dt><dd>Mettere i rischi in ordine di priorità</dd>
+  </dl>
+  <aside class="notes">La SWOT è stata vista nell'unità 3; la FMEA (Failure Mode and Effects Analysis) assegna a ogni modo di guasto gravità, probabilità e rilevabilità, e il loro prodotto (RPN) ordina le priorità. Il diagramma di Ishikawa (a lisca di pesce) è di Kaoru Ishikawa. Un elenco completo di tecniche è nella IEC 31010:2019.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il rischio arriva in piccole dosi</h2></div>
+  <figure class="citazione">
+    <blockquote>Come fa un progetto ad accumulare un anno di ritardo? Un giorno alla volta.</blockquote>
+    <figcaption><b>Fred Brooks</b>, informatico, in <i>The Mythical Man-Month</i>, 1975</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Modelli di <b>machine learning</b> addestrati sui dati di progetti passati possono segnalare in anticipo i progetti a rischio di ritardo. Ma anche l'AI ha i suoi rischi (errori, distorsioni, dati sensibili): per gestirli esiste una guida apposita, la <b>ISO/IEC 23894:2023</b>.</p></div>
+  <aside class="notes">Brooks, The Mythical Man-Month (1975), capitolo 14 "Hatching a Catastrophe": "How does a project get to be a year late? … One day at a time." Traduzione nostra. Il messaggio: i grandi disastri sono fatti di piccoli rischi non monitorati, per questo il monitoraggio è uno step del processo. La ISO/IEC 23894:2023 adatta i principi della ISO 31000 ai sistemi di intelligenza artificiale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>L'azienda dipende da un solo fornitore cloud e firma un secondo contratto con un altro</h2></div>
+  <div class="poll" data-id="u9r-quiz-cloud" data-tipo="quiz" data-risposta="C">
+    <ol><li>Evitare il rischio</li><li>Trasferire il rischio</li><li>Ridurre il rischio</li><li>Accettare il rischio</li></ol>
+    <p class="why">C. Un secondo fornitore non elimina il rischio di guasto del primo, ma ne riduce le conseguenze: se uno si ferma, si passa all'altro. Trasferire sarebbe, per esempio, un'assicurazione o una penale.</p>
+  </div>
+  <aside class="notes">Molti scelgono B perché "si coinvolge un altro". Chiarire: il secondo fornitore non si fa carico del danno, è una ridondanza. In informatica si parla di architettura multi-cloud o di disaster recovery.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vantaggi e obiettivi</p><h2>Perché conviene pensare per rischi</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Meno sorprese: i problemi si affrontano prima</li>
+      <li>Decisioni basate su dati, non sull'istinto</li>
+      <li>Risorse concentrate dove servono davvero</li>
+    </ul>
+    <ul class="points">
+      <li>Opportunità colte invece che perse</li>
+      <li>Più fiducia di clienti e investitori</li>
+      <li>Meno burocrazia: niente procedure inutili</li>
+    </ul>
+  </div>
+  <div class="callout hl">Obiettivo finale: aumentare la probabilità di raggiungere gli obiettivi del sistema di gestione.</div>
+  <aside class="notes">Collegamento all'esame: il risk based thinking è un ottimo ponte tra GPOI e Sistemi e reti (sicurezza informatica, analisi dei rischi della ISO/IEC 27001) e con l'unità 10 (valutazione dei rischi del D.Lgs. 81/2008).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Rischi e opportunità di un hackathon a scuola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Caso: la classe organizza un hackathon di 8 ore con 60 studenti e due aziende partner.</li>
+      <li>Con un brainstorming di 5 minuti elencate almeno 8 rischi e 2 opportunità.</li>
+      <li>Per i 4 rischi più importanti assegnate P e G (da 1 a 4) e calcolate R.</li>
+      <li>Per ognuno scegliete un trattamento e un responsabile; per le opportunità, come coglierle.</li>
+      <li>Salvate come <b>hackathon-rischi-gruppoN.odt</b> e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni rischio è scritto come evento ("la rete Wi-Fi non regge 60 portatili"), non come parola sola ("rete"); ogni trattamento ha un nome di responsabile.</div>
+  </div>
+  <aside class="notes">Rischi tipici: Wi-Fi insufficiente, prese elettriche poche, un'azienda partner si ritira, studenti minorenni senza autorizzazione, cibo e allergie, furto di portatili. Opportunità: un'azienda offre stage, un giornale locale ne parla. Il gruppo presenta il rischio con R più alto in 1 minuto. Valutazione: formulazione degli eventi, coerenza P/G, trattamenti concreti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u9r-uscita" data-extra="pericolo|evitare">
+    <p>Il rischio è l'effetto dell'<span class="slot" data-risposta="incertezza"></span> sugli obiettivi.</p>
+    <p>Un rischio con effetto positivo si chiama <span class="slot" data-risposta="opportunità"></span>.</p>
+    <p>Con P = 2 e G = 3 l'indice di rischio vale <span class="slot" data-risposta="6"></span>.</p>
+    <p>Un'assicurazione serve a <span class="slot" data-risposta="trasferire"></span> il rischio.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: incertezza, opportunità, 6, trasferire. Distrattori: pericolo, evitare.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Rischio = effetto dell'incertezza: minaccia o opportunità</li>
+      <li>Ovunque, prima, in proporzione (ISO 9001, 6.1)</li>
+      <li>Step: contesto, identificare, analizzare, ponderare, trattare, monitorare</li>
+    </ul>
+    <ul class="points">
+      <li>R = P × G per mettere in ordine le priorità</li>
+      <li>Evitare, ridurre, trasferire, accettare</li>
+      <li>Strumenti: brainstorming, SWOT, FMEA, Ishikawa</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la prima e più diffusa norma certificabile, la ISO 9001:2015 (gpoi-iso-9001).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

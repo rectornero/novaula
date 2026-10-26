@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cloud e big data · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>Cloud e big data</h1>
+  <p class="lead">Dove finiscono i dati della fabbrica, quanto costa tenerli e come si trasformano in decisioni.</p>
+  <aside class="notes">Obiettivi: capire le nuove esigenze di gestione dei dati, conoscere la definizione NIST di cloud (caratteristiche, modelli di servizio e di distribuzione), confrontare i costi di cloud e server in casa, distinguere i quattro tipi di analytics, conoscere la storia di Freddie Figgers. Durata indicativa: 2 ore. La lezione "big-data" su Novaula (le 5V, i tipi di dati) è il prerequisito: qui non la ripetiamo, la usiamo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Dove sono le tue foto, in questo momento?</h2></div>
+  <div class="poll" data-id="u7-foto">
+    <ol><li>Solo sul telefono</li><li>In un servizio cloud</li><li>Su un PC o un disco esterno</li><li>Non lo so</li></ol>
+  </div>
+  <aside class="notes">Molti scoprono di avere il backup automatico attivo senza saperlo. Domande: in che paese sono fisicamente quei server? Chi può vederle? Che cosa succede se il servizio chiude? Sono le stesse domande che si fa un'impresa, ma con i dati dei clienti e dei macchinari.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>Nuove esigenze di gestione dei dati</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Crescono</h3><p class="muted">Ogni sensore aggiunge dati, giorno e notte.</p></div>
+    <div class="card"><h3>Variano</h3><p class="muted">Picchi a fine mese, a Natale, al lancio di un prodotto.</p></div>
+    <div class="card"><h3>Servono ovunque</h3><p class="muted">In reparto, in ufficio, dal fornitore, dal telefono.</p></div>
+    <div class="card"><h3>Vanno protetti</h3><p class="muted">Backup, accessi, privacy, continuità.</p></div>
+  </div>
+  <div class="callout">Ricordi le <b>5V</b> dei big data? Volume, Velocità, Varietà, Veridicità, Valore. Un server nello sgabuzzino, dimensionato una volta per tutte, fatica a reggerle.</div>
+  <aside class="notes">Richiamare la lezione big-data senza ripeterla: chiedere a due studenti di definire volume e veridicità. Far notare che il problema non è solo tecnico ma organizzativo e di costi: comprare un server per il picco significa pagarlo anche quando è fermo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un'idea del 1961</p><h2>Il calcolo come la corrente elettrica</h2></div>
+  <figure class="citazione">
+    <blockquote>Un giorno il calcolo potrebbe essere organizzato come un servizio pubblico, proprio come lo è il sistema telefonico.</blockquote>
+    <figcaption><b>John McCarthy</b>, informatico, pioniere dell'intelligenza artificiale, discorso per il centenario del MIT, 1961</figcaption>
+  </figure>
+  <p class="lead">Sessant'anni dopo paghiamo potenza di calcolo e spazio a consumo, come l'acqua e la luce.</p>
+  <aside class="notes">McCarthy (che nel 1955-56 coniò anche l'espressione "intelligenza artificiale") parlava di time-sharing: molti utenti che usano lo stesso grande computer. Traduzione nostra e leggermente abbreviata ("computing may someday be organized as a public utility just as the telephone system is a public utility"). Domanda: che cosa ha reso possibile il sogno? Reti veloci, virtualizzazione, data center enormi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La definizione</p><h2>Che cos'è il cloud (NIST)</h2></div>
+  <p class="lead">Un modello per accedere via rete, quando serve, a risorse informatiche condivise e configurabili, ottenute e rilasciate in fretta con poco intervento del fornitore.</p>
+  <div class="cols-3">
+    <div class="card soft"><h3>Self-service</h3><p class="small">Le risorse le attivi tu, quando servono.</p></div>
+    <div class="card soft"><h3>Accesso dalla rete</h3><p class="small">Da PC, telefono, macchina.</p></div>
+    <div class="card soft"><h3>Risorse condivise</h3><p class="small">Gli stessi server servono molti clienti.</p></div>
+    <div class="card soft"><h3>Elasticità</h3><p class="small">Crescono e calano con la richiesta.</p></div>
+    <div class="card soft"><h3>Servizio misurato</h3><p class="small">Paghi ciò che usi.</p></div>
+    <div class="card night"><h3>3 + 4</h3><p class="small muted">3 modelli di servizio, 4 di distribuzione.</p></div>
+  </div>
+  <aside class="notes">Fonte: NIST Special Publication 800-145, "The NIST Definition of Cloud Computing" (2011): cinque caratteristiche essenziali, tre modelli di servizio (SaaS, PaaS, IaaS), quattro modelli di distribuzione (privato, comunitario, pubblico, ibrido). Traduzione e sintesi nostre. È la definizione di riferimento più citata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un negozio online ha un picco enorme nel Black Friday. Quale caratteristica del cloud lo salva?</h2></div>
+  <div class="poll" data-id="u7-elasticita" data-tipo="quiz" data-risposta="C">
+    <ol><li>Il servizio misurato</li><li>L'accesso dalla rete</li><li>L'elasticità rapida</li><li>Il self-service</li></ol>
+    <p class="why">L'elasticità permette di aggiungere server per i giorni di picco e di rilasciarli subito dopo. Il servizio misurato fa sì che li paghi solo per quei giorni: lavorano insieme, ma è l'elasticità a reggere il picco.</p>
+  </div>
+  <aside class="notes">La A è un distrattore forte: il servizio misurato riguarda il conto, non la capacità. Con un server in casa bisognerebbe comprarlo per il picco e tenerlo fermo il resto dell'anno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>SaaS, PaaS o IaaS?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-saas-paas-iaas" style="--cols:3">
+    <div class="cat"><h4>SaaS · software</h4><ul><li>Posta elettronica via browser</li><li>Gestionale in abbonamento online</li><li>Videoconferenze</li></ul></div>
+    <div class="cat"><h4>PaaS · piattaforma</h4><ul><li>Ambiente per pubblicare un'app web</li><li>Database gestito dal fornitore</li></ul></div>
+    <div class="cat"><h4>IaaS · infrastruttura</h4><ul><li>Macchina virtuale noleggiata a ore</li><li>Spazio disco per i backup</li><li>Rete virtuale con firewall</li></ul></div>
+  </div>
+  <aside class="notes">Regola pratica: SaaS = usi un'applicazione finita; PaaS = scrivi il tuo codice, il fornitore gestisce sistema operativo, database e scalabilità; IaaS = noleggi le "macchine" (virtuali) e gestisci tu tutto il resto. Più si scende, più controllo e più lavoro. Collegamento con Informatica: chi sviluppa il progetto di unità 6 su un servizio di hosting gestito usa un PaaS. Squadre, 4 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Dove stanno dati e calcolo?</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-distribuzione">
+    <dt>Cloud pubblico</dt><dd>Risorse di un grande fornitore, condivise e pagate a consumo</dd>
+    <dt>Cloud privato</dt><dd>Infrastruttura dedicata a una sola organizzazione</dd>
+    <dt>Cloud ibrido</dt><dd>Dati sensibili in casa, picchi di calcolo sul pubblico</dd>
+    <dt>Cloud comunitario</dt><dd>Condiviso da enti con esigenze comuni</dd>
+    <dt>Edge</dt><dd>Elaborazione vicino alle macchine, in reparto</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritta. I primi quattro sono i modelli di distribuzione NIST; l'edge non è un modello NIST ma completa il quadro (lo abbiamo visto nella lezione sull'IIoT). Esempio italiano di cloud per la pubblica amministrazione: il Polo Strategico Nazionale, che ospita dati e servizi critici della PA. Domanda: un ospedale dove terrebbe le cartelle cliniche?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un'impresa salva i dati dei clienti su un cloud pubblico. Chi risponde della loro protezione per il GDPR?</h2></div>
+  <div class="poll" data-id="u7-gdpr-cloud" data-tipo="quiz" data-risposta="B">
+    <ol><li>Solo il fornitore del cloud</li><li>L'impresa, titolare del trattamento; il fornitore tratta i dati per suo conto</li><li>Nessuno, se i dati sono cifrati</li><li>Il Garante per la protezione dei dati</li></ol>
+    <p class="why">Chi decide perché e come trattare i dati è il titolare (l'impresa) e resta responsabile anche se usa un fornitore. Il fornitore è "responsabile del trattamento" e deve essere vincolato da un contratto (art. 28 GDPR).</p>
+  </div>
+  <aside class="notes">Misconcezione classica: "è nel cloud, ci pensa il fornitore". Il GDPR è il Regolamento (UE) 2016/679; titolare e responsabile del trattamento sono definiti all'articolo 4, i contratti con il responsabile all'articolo 28. La cifratura (C) riduce i rischi ma non elimina la responsabilità. Il Garante (D) vigila, non protegge i dati al posto dell'impresa. Collegamento alla lezione privacy.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Server in casa o cloud? Fai i conti</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>Impresa di esempio. Server in casa: 6.000 € subito, poi 150 € al mese (energia, assistenza). Cloud: 400 € al mese.</li>
+      <li>A1 <b>Mese</b>, B1 <b>In casa</b>, C1 <b>Cloud</b>. Da A2 a A37 i mesi da 1 a 36.</li>
+      <li>B2 <code>=6000+150*A2</code>, C2 <code>=400*A2</code>, copia in basso.</li>
+      <li>D2 <code>=SE(B2&lt;C2;"in casa";"cloud")</code>, poi un grafico a linee di B e C.</li>
+      <li>Salva come <b>cloud-o-server.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> al mese 24 i costi sono uguali (9.600 €). Prima conviene il cloud, dal mese 25 il server. A 36 mesi: 11.400 € contro 14.400 €.</div>
+  </div>
+  <aside class="notes">Calcolo: 6000 + 150m = 400m → m = 24; a 24 mesi entrambi 9.600 €. A 12 mesi 7.800 contro 4.800 (conviene il cloud). Cifre inventate e arrotondate. Discussione (5 minuti), che è il vero cuore del laboratorio: che cosa non c'è nel conto? Il server va sostituito dopo qualche anno; serve qualcuno che lo gestisca; il cloud regge i picchi; se il server si rompe di notte chi interviene? È un diagramma di redditività come quello dell'unità 2: il punto di incontro delle due rette.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Big data analytics</p><h2>Quattro domande ai dati</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Descrittiva</h3><p class="muted">Che cosa è successo?</p></div>
+    <div class="card"><p class="num">2</p><h3>Diagnostica</h3><p class="muted">Perché è successo?</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Predittiva</h3><p class="muted">Che cosa succederà?</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4</p><h3>Prescrittiva</h3><p>Che cosa conviene fare?</p></div>
+  </div>
+  <div class="callout">Salendo aumentano il <b>valore</b> per chi decide e la <b>difficoltà</b>: servono più dati, più modelli e più verifiche.</div>
+  <aside class="notes">Classificazione diffusa dalla società di analisi Gartner. Esempio in un'unica storia: gli scarti di ieri sono stati 40 (descrittiva); sono saliti quando l'umidità era alta (diagnostica); domani pioverà, quindi saliranno ancora (predittiva); conviene accendere il deumidificatore alle 6 (prescrittiva). Le prime due guardano al passato, le altre al futuro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Che tipo di analisi è?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-analytics" style="--cols:4">
+    <div class="cat"><h4>Descrittiva</h4><ul><li>Scarti di ieri per turno</li><li>Consumo medio del mese</li></ul></div>
+    <div class="cat"><h4>Diagnostica</h4><ul><li>Scarti alti: colpa dell'umidità?</li><li>Perché la linea 2 si ferma</li></ul></div>
+    <div class="cat"><h4>Predittiva</h4><ul><li>Guasto probabile entro 10 giorni</li><li>Ordini attesi a dicembre</li></ul></div>
+    <div class="cat"><h4>Prescrittiva</h4><ul><li>Piano di manutenzione consigliato</li><li>Turni suggeriti per la settimana</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritta. Trappola: "Ordini attesi a dicembre" è predittiva (una previsione), "Turni suggeriti" è prescrittiva (una raccomandazione di azione). 4 minuti, poi correzione con le squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Dal sensore alla decisione</h2></div>
+  <ol class="puzzle-ordina" data-id="u7-pipeline">
+    <li>Raccogliere i dati da sensori e gestionali</li>
+    <li>Trasferirli e archiviarli (data lake)</li>
+    <li>Pulirli e prepararli</li>
+    <li>Analizzarli con statistiche e modelli</li>
+    <li>Mostrarli su un cruscotto</li>
+    <li>Decidere e agire</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Data lake: archivio che conserva i dati nel loro formato originale, anche non strutturati, da elaborare dopo. La pulizia (valori mancanti, sensori impazziti, duplicati) è la fase che di solito richiede più tempo: lo avete visto nel laboratorio sulla veridicità della lezione big-data.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia</p><h2>Freddie Figgers, dal computer rotto all'impresa</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Abbandonato appena nato, viene adottato da una coppia della Florida.</li>
+      <li>Da bambino riceve in regalo un computer rotto: lo smonta e lo fa ripartire.</li>
+      <li>Da ragazzo ripara computer e fonda la sua prima piccola impresa.</li>
+      <li>Per il padre malato di Alzheimer, che si perdeva, crea un localizzatore GPS nelle scarpe.</li>
+      <li>Fonda poi un'impresa di telecomunicazioni e servizi di rete.</li>
+    </ul>
+    <div class="card soft"><h3>Per discutere</h3><p>Il localizzatore manda la posizione di una persona fragile a un server. Chi deve poter vedere quei dati? Dove li terresti?</p></div>
+  </div>
+  <aside class="notes">Freddie Figgers è un imprenditore statunitense citato dal libro di testo. Le informazioni riportate vengono da profili giornalistici statunitensi; date e cifre (età, prezzi di vendita delle sue imprese) variano tra le fonti, per questo non le riportiamo: controllare la pagina del libro. La sua impresa di telecomunicazioni è Figgers Communication. Messaggio: dalla curiosità per un oggetto rotto a un'impresa che vive di dati e reti. Collegamento con l'unità 3 (dall'idea all'impresa) e con il GDPR: la posizione di una persona malata è un dato particolarmente delicato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Di chi sono i dati della macchina?</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Dal settembre 2025 si applica il <b>Data Act</b> europeo (Regolamento UE 2023/2854): chi usa un prodotto connesso, come una macchina industriale o un trattore, ha diritto di accedere ai dati che quel prodotto genera, e cambiare fornitore di cloud deve diventare più facile. Intanto l'AI generativa ha bisogno di enormi data center: il cloud è diventato anche una questione di <b>energia</b> e di <b>sovranità</b>.</p></div>
+  <div class="callout">Domanda per l'impresa: se il costruttore della macchina tiene tutti i dati nel suo cloud, chi può usarli per migliorare la produzione?</div>
+  <aside class="notes">Data Act: Regolamento (UE) 2023/2854, applicabile dal 12 settembre 2025 (alcune parti più tardi). Prevede accesso ai dati dei prodotti connessi e regole per il passaggio da un fornitore cloud a un altro. In Italia il Polo Strategico Nazionale (PSN) ospita i dati e i servizi strategici della pubblica amministrazione. Non citare consumi energetici dei data center: le stime variano molto.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Descrivi e prevedi gli ordini</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>A1 <b>Mese</b>, B1 <b>Ordini</b>. Da A2 i mesi 1-6, da B2: 120, 135, 150, 160, 175, 190.</li>
+      <li>Descrittiva: B9 <code>=MEDIA(B2:B7)</code> e B10 <code>=MAX(B2:B7)</code>.</li>
+      <li>Predittiva: B11 <code>=PREVISIONE(7;B2:B7;A2:A7)</code> per il mese 7.</li>
+      <li>Grafico a dispersione con linea di tendenza lineare.</li>
+      <li>In A13 una frase prescrittiva: quanta materia prima ordineresti? Salva <b>analisi-ordini.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> media 155, massimo 190, previsione per il mese 7: <b>203</b> ordini. La linea di tendenza passa vicino a tutti i punti.</div>
+  </div>
+  <aside class="notes">Calcolo della retta dei minimi quadrati: pendenza 240/17,5 = 13,714; intercetta 155 - 13,714×3,5 = 107; previsione 107 + 13,714×7 = 203. Se la funzione PREVISIONE non viene riconosciuta (versioni recenti la offrono anche come PREVISIONE.LINEARE), cercarla con la procedura guidata fx nella categoria Statistica. Domanda critica: sei mesi bastano per una previsione? E se dicembre ha un picco stagionale? Un modello è utile solo se i dati del passato somigliano al futuro (ricollegare a Box: tutti i modelli sono sbagliati).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Definizione</h3><p>NIST in tre numeri: 5 caratteristiche, 3 modelli di servizio, 4 di distribuzione.</p></div>
+    <div class="card soft"><h3>Un conto</h3><p>Cloud contro server: il punto di pareggio, come il break even dell'unità 2.</p></div>
+    <div class="card soft"><h3>Un dilemma</h3><p>Dati, privacy e sovranità: GDPR e Data Act, collegati a Educazione civica.</p></div>
+  </div>
+  <aside class="notes">Il confronto di costi è un ottimo esempio di come GPOI si intrecci con Informatica e Sistemi: una scelta tecnica è sempre anche una scelta economica e organizzativa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u7-uscita-5" data-extra="ERP|descrittiva">
+    <p>Usare un'applicazione finita via browser è un servizio <span class="slot" data-risposta="SaaS"></span>.</p>
+    <p>La capacità di crescere e calare con la richiesta si chiama <span class="slot" data-risposta="elasticità|elasticita"></span>.</p>
+    <p>L'analisi che risponde a "che cosa succederà?" è quella <span class="slot" data-risposta="predittiva"></span>.</p>
+    <p>Per il GDPR l'impresa resta <span class="slot" data-risposta="titolare"></span> del trattamento.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: SaaS, elasticità, predittiva, titolare. Distrattori: ERP, descrittiva.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Cloud: risorse in rete, elastiche, pagate a consumo</li>
+      <li>SaaS, PaaS, IaaS; pubblico, privato, ibrido, comunitario</li>
+      <li>La scelta si fa anche con i conti</li>
+    </ul>
+    <ul class="points">
+      <li>Analytics: descrittiva, diagnostica, predittiva, prescrittiva</li>
+      <li>Dati nel cloud: l'impresa resta responsabile</li>
+      <li>Figgers: dalla curiosità a un'impresa</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la robotica, l'ultimo pilastro dell'unità.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

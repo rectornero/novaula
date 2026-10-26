@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La progettazione del processo produttivo · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 8</p>
+  <h1>Progettare il<br>processo produttivo</h1>
+  <p class="lead">Verdino è progettato: ora bisogna decidere come costruirne 60 al giorno. Operazioni, attrezzature, area di lavoro, documenti e progettazione concorrente.</p>
+  <aside class="notes">Obiettivi: descrivere un processo produttivo come sequenza di operazioni; distinguere operazioni, controlli, trasporti e attese; scegliere attrezzature e layout; calcolare takt time e numero di postazioni; conoscere ciclo di lavorazione e istruzioni operative; capire la progettazione concorrente. Caso guida: il montaggio di Verdino nell'impresa di esempio. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultima volta che hai montato un mobile con le istruzioni…</h2></div>
+  <div class="poll" data-id="u8-mobile">
+    <ol><li>Tutto liscio al primo colpo</li><li>Ho smontato e rimontato un pezzo</li><li>Sono avanzate viti misteriose</li><li>Non ho mai montato un mobile</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio: chi monta un mobile esegue un processo produttivo progettato da altri, con un ciclo di operazioni, attrezzature (la chiave a brugola), un'istruzione operativa (il foglio con i disegni) e un controllo finale. Le viti avanzate sono un difetto di processo o di documentazione. Oggi progettiamo tutto questo per Verdino.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal progetto alla fabbrica</p><h2>Che cosa si progetta, oltre al prodotto</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><p class="num">1</p><h3>Operazioni</h3><p class="small">Che cosa si fa, in quale ordine, in quanto tempo.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Attrezzature</h3><p class="small">Macchine, utensili e maschere per ogni operazione.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Area di lavoro</h3><p class="small">Layout, postazioni, sicurezza ed ergonomia.</p></div>
+    <div class="card soft"><p class="num">4</p><h3>Documenti</h3><p class="small">Ciclo di lavorazione, istruzioni, schede di controllo.</p></div>
+  </div>
+  <div class="callout">Il processo produttivo trasforma componenti e materiali nel prodotto finito, sempre uguale, nei tempi e ai costi previsti.</div>
+  <aside class="notes">Collegamento con l'unità 1 (il processo: input, attività, output, risorse) e con l'unità 2 (lean production). Per Verdino ipotizziamo che il vaso stampato arrivi da un fornitore con lo stampo pagato dall'impresa, e che in azienda si faccia il montaggio, la programmazione e il collaudo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il montaggio di Verdino</h2></div>
+  <ol class="puzzle-ordina" data-id="u8-montaggio">
+    <li>Controllare i componenti in arrivo</li>
+    <li>Fissare pompa e tubo nel vaso</li>
+    <li>Avvitare la scheda nel vano elettronica</li>
+    <li>Collegare sensore e pompa alla scheda</li>
+    <li>Caricare il firmware</li>
+    <li>Collaudare: misura e pompa acqua?</li>
+    <li>Imballare con manuale e cavo</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Discussione: il firmware si può caricare anche prima di montare la scheda (dal fornitore, o su un banco a parte): è una scelta di processo, non un obbligo. Il collaudo va dopo il firmware perché serve il programma per far funzionare sensore e pompa. Il controllo in accettazione, all'inizio, evita di montare componenti difettosi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I tipi di operazione</p><h2>Non tutto ciò che si fa aggiunge valore</h2></div>
+  <div class="puzzle-categorie" data-id="u8-tipi-operazione" style="--cols:4">
+    <div class="cat"><h4>Operazione</h4><ul><li>Avvitare la scheda</li><li>Caricare il firmware</li></ul></div>
+    <div class="cat"><h4>Controllo</h4><ul><li>Collaudo finale</li><li>Misurare un foro</li></ul></div>
+    <div class="cat"><h4>Trasporto</h4><ul><li>Portare i vasi al banco</li><li>Carrello al magazzino</li></ul></div>
+    <div class="cat"><h4>Attesa</h4><ul><li>Vasi fermi in coda</li><li>Scatole in magazzino</li></ul></div>
+  </div>
+  <aside class="notes">È la classificazione dei diagrammi di flusso di processo (simboli ASME: cerchio operazione, quadrato controllo, freccia trasporto, D attesa, triangolo immagazzinamento; qui uniamo attesa e magazzino). Solo le operazioni trasformano il prodotto e aggiungono valore per il cliente; controlli necessari a parte, trasporti e attese sono sprechi da ridurre (collegamento con la lean production dell'unità 2).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo di lavorazione</p><h2>Trascina l'attrezzatura giusta</h2></div>
+  <div class="puzzle-trascina" data-id="u8-attrezzature" data-extra="stampo">
+    <table class="data compact">
+      <tr><th>Op.</th><th>Descrizione</th><th>Attrezzatura</th><th>Tempo</th></tr>
+      <tr><td class="mono">10</td><td>Montare pompa e tubo nel vaso</td><td><span class="slot" data-risposta="maschera di montaggio"></span></td><td class="mono">4 min</td></tr>
+      <tr><td class="mono">20</td><td>Fissare la scheda e collegare i cavi</td><td><span class="slot" data-risposta="avvitatore elettrico"></span></td><td class="mono">5 min</td></tr>
+      <tr><td class="mono">30</td><td>Caricare il firmware</td><td><span class="slot" data-risposta="programmatore USB"></span></td><td class="mono">2 min</td></tr>
+      <tr><td class="mono">40</td><td>Collaudo funzionale</td><td><span class="slot" data-risposta="banco di collaudo"></span></td><td class="mono">3 min</td></tr>
+      <tr><td class="mono">50</td><td>Imballaggio</td><td>nessuna</td><td class="mono">2 min</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Il ciclo di lavorazione è il documento che elenca le operazioni numerate (10, 20, 30: si lasciano spazi per inserirne di nuove), la postazione, l'attrezzatura e il tempo standard. La maschera di montaggio (in inglese jig) tiene il pezzo nella posizione giusta: rende il montaggio veloce e sempre uguale. Distrattore: lo stampo, che serve al fornitore del vaso, non al montaggio. Tempi ipotetici; totale 16 minuti per pezzo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ritmo della produzione</p><h2>Il takt time: ogni quanti minuti deve uscire un vaso?</h2></div>
+  <div class="cols-2">
+    <div class="formula" style="font-size:50px"><small>Takt time</small>takt =<br><span class="hl">tempo disponibile</span><br>/ domanda</div>
+    <div class="puzzle-codice" data-risposta="7" data-aiuto="7 ore sono 420 minuti">
+      <p>Un turno lavora <b>7 ore</b> al giorno. Servono <b>60 vasi</b> al giorno. Quanti minuti di takt?</p>
+      <div class="premio"><b>Aperto!</b> 420 minuti / 60 vasi = 7 minuti: dalla linea deve uscire un Verdino ogni 7 minuti.</div>
+    </div>
+  </div>
+  <aside class="notes">Codice 7. Takt viene dal tedesco Takt (ritmo, battuta musicale): è il ritmo imposto dalla domanda del cliente. Da non confondere con il tempo ciclo, cioè il tempo che una postazione impiega davvero per il suo lavoro: il tempo ciclo di ogni postazione deve stare sotto il takt. Con 60 vasi al giorno, la prima serie di 2000 pezzi richiede 34 giorni lavorativi (2000/60 = 33,3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Takt 7 minuti, 16 minuti di lavoro per vaso. Quante postazioni servono almeno?</h2></div>
+  <div class="poll" data-id="u8-postazioni" data-tipo="quiz" data-risposta="B">
+    <ol><li>2</li><li>3</li><li>7</li><li>16</li></ol>
+    <p class="why">16 / 7 = 2,29: con 2 postazioni ognuna dovrebbe lavorare 8 minuti, più del takt. Si arrotonda sempre per eccesso: 3 postazioni, per esempio 4 min | 5 + 2 min | 3 + 2 min.</p>
+  </div>
+  <aside class="notes">Il trabocchetto è arrotondare per difetto (A). Il bilanciamento proposto rispetta l'ordine delle operazioni: postazione 1 op. 10 (4 min), postazione 2 op. 20 e 30 (7 min), postazione 3 op. 40 e 50 (5 min). La postazione più lenta (7 min) è il collo di bottiglia e coincide con il takt: la linea regge appena. Efficienza del bilanciamento: 16 / (3 × 7) = 76%.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il ciclo di lavorazione di Verdino in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Copia la tabella del ciclo (op. 10-50) in A1:D6, con i tempi come numeri in D2:D6.</li>
+      <li>In D7 il tempo totale: <code>=SOMMA(D2:D6)</code>.</li>
+      <li>In G1 i minuti al giorno <b>420</b>, in G2 la domanda <b>60</b>, in G3 il takt <code>=G1/G2</code>.</li>
+      <li>In G4 le postazioni minime <code>=ARROTONDA.PER.ECC(D7/G3;0)</code>; in G5 i vasi al giorno con un solo operatore <code>=QUOZIENTE(G1;D7)</code>.</li>
+      <li>Salva come <b>ciclo-verdino.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> totale 16 minuti, takt 7, postazioni minime 3, con un solo operatore 26 vasi al giorno.</div>
+  </div>
+  <aside class="notes">Calcoli: 4+5+2+3+2 = 16; 420/60 = 7; 16/7 = 2,29 → 3; 420/16 = 26,25 → 26 vasi interi. ARROTONDA.PER.ECC arrotonda sempre per eccesso; va bene anche ARROTONDA.ECCESSO(D7/G3;1). Se un nome non viene riconosciuto, cercare la funzione con la procedura guidata fx. Chi finisce prima: aggiunge una colonna "Postazione" (1, 2, 2, 3, 3), calcola con SOMMA.SE il tempo di ogni postazione e verifica che nessuno superi il takt (4, 7, 5).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'area di lavoro</p><h2>Quattro modi di disporre una fabbrica</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Per prodotto</h3><p class="small muted">Postazioni in linea nell'ordine delle operazioni.</p></div>
+    <div class="card"><h3>Per processo</h3><p class="small muted">Reparti con macchine simili; i pezzi girano tra reparti.</p></div>
+    <div class="card"><h3>Posizione fissa</h3><p class="small muted">Il prodotto sta fermo, persone e attrezzi vanno da lui.</p></div>
+    <div class="card fill"><h3>A celle</h3><p class="small">Una piccola isola, spesso a U, fa tutto il ciclo di una famiglia di prodotti.</p></div>
+  </div>
+  <div class="callout">Per Verdino: una <b>cella a U</b> con 3 postazioni. Banchi all'altezza giusta, buona luce, attrezzi a portata di mano, vie di fuga libere (D.Lgs. 81/2008).</div>
+  <aside class="notes">La cella a U accorcia i trasporti e permette a un operatore di seguire più postazioni quando la domanda cala. Ergonomia e sicurezza sono obblighi, non optional: il D.Lgs. 81/2008 (Testo unico sulla salute e sicurezza sul lavoro) impone la valutazione dei rischi e luoghi di lavoro adeguati; lo approfondiremo nell'unità 10. Rimandare anche al deck ergonomia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni layout all'esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="u8-layout">
+    <dt>Per prodotto</dt><dd>Linea di montaggio delle automobili</dd>
+    <dt>Per processo</dt><dd>Officina con un reparto torni e un reparto frese</dd>
+    <dt>Posizione fissa</dt><dd>Cantiere navale: la nave non si muove</dd>
+    <dt>A celle</dt><dd>Isola a U che monta tutta una famiglia di prodotti</dd>
+  </dl>
+  <aside class="notes">Correzione veloce. Domanda: "e un'officina di riparazione di biciclette?" Per processo, se ci sono zone per lavorazioni diverse; posizione fissa se la bici sta su un cavalletto e il meccanico gira intorno. Un layout non è giusto o sbagliato in assoluto: dipende da volumi e varietà dei prodotti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Una fabbrica non è solo una macchina</h2></div>
+  <figure class="citazione">
+    <blockquote>Può l'industria darsi dei fini? Si trovano questi semplicemente nell'indice dei profitti?</blockquote>
+    <figcaption><b>Adriano Olivetti</b>, imprenditore, discorso ai lavoratori per l'inaugurazione dello stabilimento di Pozzuoli, 1955</figcaption>
+  </figure>
+  <div class="card soft"><p>Lo stabilimento di Pozzuoli, progettato dall'architetto Luigi Cosenza, aveva grandi vetrate sul golfo, luce naturale e spazi verdi: l'area di lavoro come parte del progetto.</p></div>
+  <aside class="notes">Il discorso di Olivetti ai lavoratori di Pozzuoli è dell'aprile 1955. La frase prosegue chiedendosi se non ci sia, oltre al ritmo apparente, "una destinazione, una vocazione anche nella vita di una fabbrica". Collegamento con la lezione sull'impresa dell'unità 1 (Adriano Olivetti). Domanda: "nella cella di Verdino, che cosa farebbe Olivetti?"</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Disegnate la cella di montaggio di Verdino</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>app.diagrams.net</b>: una stanza di 8 × 6 m con porta e uscita di emergenza.</li>
+      <li>Disponete a U le 3 postazioni, l'area componenti e l'area prodotti finiti.</li>
+      <li>Disegnate con frecce il percorso dei vasi, senza incroci.</li>
+      <li>Una nota con 3 scelte di ergonomia o sicurezza.</li>
+      <li>Salvate <b>cella-verdino.drawio</b>, esportate in PNG e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le postazioni seguono l'ordine 1, 2, 3; il flusso va dall'ingresso componenti all'uscita prodotti senza incroci; l'uscita di emergenza resta libera.</div>
+  </div>
+  <aside class="notes">In diagrams.net si possono usare le forme della libreria "Floorplan" (planimetrie), oppure semplici rettangoli con una scala dichiarata (1 cm = 1 m). Scelte di ergonomia accettabili: piano di lavoro regolabile in altezza, illuminazione adeguata, attrezzi entro il raggio delle braccia, tappetini antifatica, aspirazione dei fumi alla saldatura se presente. Chiusura: due gruppi presentano e la classe trova un problema nella loro cella.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La documentazione</p><h2>Ogni postazione ha i suoi documenti</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Ciclo di lavorazione</b>: operazioni, attrezzature, tempi</li>
+      <li><b>Istruzione operativa</b>: passi con foto, per chi lavora alla postazione</li>
+      <li><b>Scheda di controllo</b>: che cosa misurare e i limiti</li>
+      <li><b>Distinta base</b> di produzione, con i codici</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le istruzioni operative si mostrano su un tablet alla postazione o in realtà aumentata. Telecamere con <b>visione artificiale</b>, addestrate su immagini di pezzi buoni e difettosi, possono verificare che ogni vite e ogni cavo sia al suo posto. Restano strumenti: qualcuno deve decidere che cosa fare quando segnalano un errore.</p></div>
+  </div>
+  <aside class="notes">Collegamento con l'unità 5 (documenti tecnici, manuali, scrivere istruzioni): un'istruzione operativa è un manuale di tipo tutorial, breve e visivo. Tutti questi documenti hanno codice, versione e revisione: se cambia il prodotto, devono cambiare insieme (gestione delle modifiche, nella lezione sulla qualità).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La progettazione concorrente</p><h2>Prodotto e processo, insieme</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Sequenziale</h3><p>Progettazione finisce, "lancia il progetto oltre il muro" alla produzione, che scopre i problemi quando cambiarlo costa caro.</p></div>
+    <div class="card ok"><h3>Concorrente</h3><p>Un team con progettisti, produzione, acquisti, qualità e fornitori lavora in parallelo fin dal concept.</p></div>
+  </div>
+  <div class="callout">Risultato atteso: meno modifiche tardive e un <b>time to market</b> più breve.</div>
+  <aside class="notes">Progettazione concorrente (concurrent engineering, detta anche simultaneous engineering): le attività di progettazione del prodotto e del processo si sovrappongono. Esempio Verdino: il responsabile del montaggio, presente alla progettazione di dettaglio, chiede che la scheda si fissi con le stesse viti del coperchio e che il vano sia accessibile da sopra: meno attrezzi, montaggio più rapido. Lo approfondiremo con il DFM/A nella lezione sulla qualità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Progettazione concorrente significa…</h2></div>
+  <div class="poll" data-id="u8-concorrente" data-tipo="quiz" data-risposta="A">
+    <ol><li>Progettare prodotto e processo in parallelo, con un team misto</li><li>Progettare insieme alle imprese concorrenti</li><li>Studiare i prodotti dei concorrenti prima di progettare</li><li>Sviluppare più prodotti nello stesso momento</li></ol>
+    <p class="why">"Concorrente" qui vuol dire "che corre insieme", simultaneo: dall'inglese concurrent. Non ha niente a che fare con i concorrenti sul mercato.</p>
+  </div>
+  <aside class="notes">Il tranello linguistico: B e C giocano sul significato commerciale di "concorrente". Anche in informatica "programmazione concorrente" indica processi che avanzano in parallelo, non in competizione: buon collegamento con TPSIT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Sequenziale o concorrente?</h2></div>
+  <div class="puzzle-categorie" data-id="u8-seq-conc">
+    <div class="cat"><h4>Sequenziale</h4><ul><li>La produzione vede il progetto a disegni finiti</li><li>I problemi di montaggio emergono tardi</li><li>Ogni ufficio lavora da solo</li></ul></div>
+    <div class="cat"><h4>Concorrente</h4><ul><li>Team misto fin dal concept</li><li>Prodotto e processo in parallelo</li><li>Fornitori coinvolti presto</li><li>Time to market più breve</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come nei contenitori. Domanda per chiudere: "quali rischi ha la progettazione concorrente?" Più riunioni e coordinamento, decisioni prese con informazioni ancora incomplete, che a volte vanno riviste. Serve un buon project manager (unità 4: comunicazione di progetto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u8-uscita-processo" data-extra="tempo ciclo|stampo">
+    <p>Il tempo disponibile diviso per la domanda è il <span class="slot" data-risposta="takt time"></span>.</p>
+    <p>Il documento con operazioni, attrezzature e tempi è il <span class="slot" data-risposta="ciclo di lavorazione"></span>.</p>
+    <p>Un'isola a U che fa tutto il ciclo di una famiglia di prodotti è una <span class="slot" data-risposta="cella"></span>.</p>
+    <p>Progettare prodotto e processo in parallelo è la progettazione <span class="slot" data-risposta="concorrente"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: takt time, ciclo di lavorazione, cella, concorrente. Distrattori: tempo ciclo (il tempo reale di una postazione, da confrontare con il takt) e stampo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Processo: operazioni, attrezzature, area, documenti</li>
+      <li>Solo le operazioni aggiungono valore</li>
+      <li>Takt = tempo disponibile / domanda</li>
+    </ul>
+    <ul class="points">
+      <li>Postazioni: si arrotonda per eccesso</li>
+      <li>Layout per prodotto, processo, fisso, a celle</li>
+      <li>Concorrente = in parallelo, non contro</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: il calcolo del takt e delle postazioni è un esempio numerico semplice e convincente da portare all'orale, collegandolo alla lean production e alla sicurezza (D.Lgs. 81/2008). Prossima lezione: il test e l'avviamento della produzione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

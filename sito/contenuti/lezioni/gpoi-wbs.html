@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'avvio e la pianificazione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>L'avvio e la<br>pianificazione</h1>
+  <p class="lead">Prima di fare, bisogna sapere che cosa fare. La WBS scompone un progetto intero in pacchetti di lavoro che si possono stimare, assegnare e controllare.</p>
+  <aside class="notes">Obiettivi: sapere che cosa contiene il project charter; distinguere architettura (che cosa) e ingegnerizzazione (come, quando, con chi) del progetto; costruire una WBS con la regola del 100%, riconoscere un buon pacchetto di lavoro, codificare la WBS. Durata: 2 ore. Caso guida: l'e-commerce del Panificio Rossi (impresa di esempio) della lezione precedente. Il deck "gestione-progetti-gantt" (Informatica) ha già introdotto la WBS con un torneo di e-sport: qui si va più a fondo su criteri, pacchetti e codifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Devi preparare l'esame di Stato. Da dove parti?</h2></div>
+  <div class="poll" data-id="u4-wbs-esame">
+    <ol><li>Dal calendario: quanti giorni mancano</li><li>Dall'elenco delle materie e degli argomenti</li><li>Dalla materia che mi preoccupa di più</li><li>Comincio a studiare e vedo come va</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta, ma far notare che B è il punto di partenza del project manager: prima si elenca tutto il lavoro (che cosa), poi lo si mette in calendario (quando). Chi parte dal calendario rischia di dimenticare pezzi; chi parte dalla materia peggiore sta già facendo un'analisi dei rischi. Ci si tornerà nel laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'avvio</p><h2>Il project charter: il progetto nasce sulla carta</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Obiettivo</b>: vendere online pane e dolci con ritiro in negozio</li>
+      <li><b>Ambito</b>: che cosa è compreso e che cosa no (niente app, niente consegne)</li>
+      <li><b>Vincoli</b>: online entro dicembre, budget massimo stabilito</li>
+      <li><b>Stakeholder</b>: titolari, commessi, clienti, software house</li>
+      <li><b>Project manager</b> nominato e sua autorità</li>
+      <li><b>Milestone</b> principali e rischi noti</li>
+    </ul>
+    <div class="card soft"><h3>Perché firmarlo</h3><p class="small">Il charter è il documento che <b>autorizza</b> il progetto. Se a metà lavoro il cliente chiede l'app, si riprende il charter: non era nell'ambito, quindi è una modifica da valutare e pagare.</p></div>
+  </div>
+  <aside class="notes">Il charter è breve (una o due pagine) ed è firmato dallo sponsor o dal committente. Distinguere ambito incluso ed escluso è la difesa principale contro lo "scope creep", l'allargamento strisciante del progetto. Il caso del panificio riprende la decisione presa alla revisione di fase nella lezione precedente (solo ritiro in negozio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla carta al piano</p><h2>Architettura e ingegnerizzazione del progetto</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="num">1</p><h3>Architettura: che cosa</h3><p>Si disegna la <b>struttura</b> del progetto: lo si scompone in parti sempre più piccole fino ai pacchetti di lavoro.</p><p class="chips"><span class="chip">WBS</span></p></div>
+    <div class="card fill"><p class="num" style="color:#fff">2</p><h3>Ingegnerizzazione: come</h3><p>Per ogni pacchetto si definiscono attività, sequenza, durate, risorse e costi.</p><p class="chips"><span class="chip">Reticolo</span><span class="chip">Gantt</span><span class="chip">Budget</span></p></div>
+  </div>
+  <p class="lead">Prima l'architettura, poi l'ingegnerizzazione: non si può mettere in calendario un lavoro che non si è ancora elencato.</p>
+  <aside class="notes">Sono i due termini del libro. L'architettura risponde a "che cosa va fatto" ed è descritta dalla WBS (oggi). L'ingegnerizzazione risponde a "come, in che ordine, quando, con chi e con quanto" ed è il tema delle prossime lezioni: reticoli (PERT e CPM), Gantt, ProjectLibre, e nelle lezioni successive risorse (OBS) e costi (CBS). Collegamento con Informatica: come un programma si progetta prima per moduli e poi si implementa funzione per funzione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Dividere per risolvere</h2></div>
+  <figure class="citazione">
+    <blockquote>Dividere ciascuna delle difficoltà che esaminassi in tante parti quante fosse possibile e necessario per risolverle meglio.</blockquote>
+    <figcaption><b>René Descartes (Cartesio)</b>, filosofo e matematico francese, seconda regola del "Discorso sul metodo", 1637</figcaption>
+  </figure>
+  <p class="lead">Quasi quattro secoli dopo, la WBS applica la stessa regola a un progetto: ogni parte deve essere abbastanza piccola da poterla capire, stimare e affidare a qualcuno.</p>
+  <aside class="notes">Traduzione nostra dal francese: "diviser chacune des difficultés que j'examinerais en autant de parcelles qu'il se pourrait et qu'il serait requis pour les mieux résoudre" (Discours de la méthode, parte seconda, 1637). Notare la doppia condizione "possibile e necessario": si scompone quanto serve, non all'infinito. È esattamente il criterio di arresto dei pacchetti di lavoro (slide 8). Collegamento con Informatica: la tecnica top-down e il divide et impera negli algoritmi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La WBS</p><h2>Work Breakdown Structure: la scomposizione del lavoro</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>La WBS è una <mark>scomposizione gerarchica</mark> di tutto il lavoro necessario per raggiungere gli obiettivi del progetto e creare i suoi deliverable.</p>
+      <ul class="points">
+        <li>In cima c'è il progetto intero (livello 0)</li>
+        <li>Ogni livello scompone il precedente</li>
+        <li>In fondo ci sono i <b>pacchetti di lavoro</b> (work package)</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Si disegna come</h3><p>un albero, simile a un organigramma, oppure come un elenco rientrato con i codici (1, 1.1, 1.2…).</p><p class="muted small">Nomi, non verbi: la WBS descrive risultati e parti di lavoro.</p></div>
+  </div>
+  <aside class="notes">Definizione adattata dal glossario della guida PMBOK (6ª ed., 2017): "a hierarchical decomposition of the total scope of work to be carried out by the project team to accomplish the project objectives and create the required deliverables" (traduzione nostra). Consiglio pratico molto diffuso: usare sostantivi ("Catalogo prodotti"), perché la WBS descrive che cosa si consegna; i verbi ("caricare le foto") arrivano con le attività, nella pianificazione dei tempi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Completa i codici della WBS dell'e-commerce</h2></div>
+  <div class="puzzle-trascina" data-id="u4-wbs-codici" data-extra="4.4|3.3">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px;font-size:27px">
+      <div class="org-box top">0 · E-commerce del Panificio Rossi</div>
+      <div style="display:grid;grid-template-columns:repeat(5,300px);gap:24px">
+        <div class="org-box acc">1 · Gestione</div><div class="org-box acc">2 · Analisi</div><div class="org-box acc">3 · Progettazione</div><div class="org-box acc">4 · Realizzazione</div><div class="org-box acc">5 · Rilascio</div>
+        <div class="card" style="padding:14px 18px;font-size:26px;gap:6px"><p>1.1 Piano di progetto</p><p>1.2 Riunioni e report</p></div>
+        <div class="card" style="padding:14px 18px;font-size:26px;gap:6px"><p>2.1 Interviste al cliente</p><p>2.2 Documento dei requisiti</p></div>
+        <div class="card" style="padding:14px 18px;font-size:26px;gap:6px"><p>3.1 Grafica</p><p><span class="slot" data-risposta="3.2"></span> Database</p></div>
+        <div class="card" style="padding:14px 18px;font-size:26px;gap:6px"><p><span class="slot" data-risposta="4.1"></span> Front-end</p><p>4.2 Back-end</p><p><span class="slot" data-risposta="4.3"></span> Catalogo</p></div>
+        <div class="card" style="padding:14px 18px;font-size:26px;gap:6px"><p>5.1 Test</p><p><span class="slot" data-risposta="5.2"></span> Formazione</p><p>5.3 Messa online</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Database 3.2, Front-end 4.1, Catalogo 4.3, Formazione 5.2. Distrattori: 4.4 e 3.3, che non esistono perché i figli sono numerati di seguito. La WBS ha 1 + 5 + 12 = 18 elementi, 12 pacchetti di lavoro. Il ramo 1 "Gestione del progetto" c'è sempre: anche pianificare, fare riunioni e scrivere report è lavoro e costa ore. Questa WBS segue le fasi; si poteva scomporre anche per prodotto (slide 11).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le regole</p><h2>Fin dove si scompone?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Regola del 100%</h3><p class="small">La WBS contiene <b>tutto</b> il lavoro del progetto e niente di più. I figli di ogni elemento sommano esattamente il 100% del padre.</p></div>
+    <div class="card"><h3>Pacchetto di lavoro</h3><p class="small">L'ultimo livello: si può stimare in tempo e costo, ha un responsabile e produce un risultato verificabile.</p></div>
+    <div class="card"><h3>Né troppo, né troppo poco</h3><p class="small">Regola pratica diffusa: un pacchetto tra circa 8 e 80 ore di lavoro, o non più lungo di un periodo di controllo.</p></div>
+  </div>
+  <div class="callout">Un pacchetto troppo grande non si controlla; uno troppo piccolo fa perdere più tempo a gestirlo che a farlo.</div>
+  <aside class="notes">La regola del 100% è il principio cardine della WBS nello standard del PMI dedicato alla WBS (Practice Standard for Work Breakdown Structures). La regola 8/80 è un'indicazione pratica, non una norma: dirlo esplicitamente. Nel caso del panificio i pacchetti vanno da 8 ore (formazione, messa online) a 48 ore (front-end): tutti dentro la regola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa NON si legge in una WBS?</h2></div>
+  <div class="poll" data-id="u4-wbs-non" data-tipo="quiz" data-risposta="C">
+    <ol><li>Quali pacchetti di lavoro compongono il progetto</li><li>Come si scompone l'ambito, livello per livello</li><li>In che ordine e in quali date si fanno le attività</li><li>Il codice di ogni elemento</li></ol>
+    <p class="why">La WBS dice che cosa va fatto, non quando. L'ordine nasce dai vincoli di precedenza (reticolo) e le date dal calendario (Gantt). Leggere la WBS da sinistra a destra come una sequenza è l'errore più comune.</p>
+  </div>
+  <aside class="notes">Molti scelgono D pensando che i codici siano un dettaglio grafico, oppure credono che la numerazione 1, 2, 3 indichi l'ordine di esecuzione. Nel nostro caso, per esempio, la grafica (3.1) e il catalogo (4.3) possono procedere in parallelo. Anticipa la prossima lezione: la rappresentazione reticolare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>È un buon pacchetto di lavoro?</h2></div>
+  <div class="puzzle-categorie" data-id="u4-wbs-pacchetti">
+    <div class="cat"><h4>Sì, buon pacchetto</h4><ul><li>Carrello acquisti, 40 ore, Marco</li><li>Foto di 60 prodotti, 24 ore</li><li>Test dei pagamenti, 16 ore</li><li>Manuale del back-office</li></ul></div>
+    <div class="cat"><h4>No, da rivedere</h4><ul><li>Fare il sito</li><li>Premere "Salva"</li><li>Cose varie</li><li>Migliorare la qualità</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 4 minuti, poi "Controlla". Soluzione: buoni = carrello (stimato e con responsabile), foto (risultato verificabile: 60 foto), test dei pagamenti, manuale del back-office (un documento consegnabile). Da rivedere: "Fare il sito" è troppo grande (è quasi il progetto intero); "Premere Salva" è troppo piccolo, è un'azione; "Cose varie" viola la regola del 100% al contrario, perché nasconde lavoro non definito; "Migliorare la qualità" non ha un risultato verificabile. Chiedere di riscrivere uno dei cattivi come buono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Con quale criterio è scomposto il primo livello?</h2></div>
+  <p class="small">Lo stesso progetto si può scomporre in modi diversi. Si sceglie il criterio più utile per controllarlo.</p>
+  <dl class="puzzle-abbina" data-id="u4-wbs-criteri">
+    <dt>Per fasi</dt><dd>Analisi, Progettazione, Realizzazione, Rilascio</dd>
+    <dt>Per prodotto</dt><dd>Sito, App, Catalogo, Manuale utente</dd>
+    <dt>Per area funzionale</dt><dd>Sviluppo, Marketing, Amministrazione</dd>
+    <dt>Per area geografica</dt><dd>Negozio di Pavia, negozio di Lodi, sede</dd>
+  </dl>
+  <aside class="notes">Soluzione nell'ordine scritto. La scomposizione per prodotto (orientata ai deliverable) è quella raccomandata dalla guida PMBOK; quella per fasi è la più intuitiva nei progetti software piccoli, come il nostro. Spesso si mescolano: primo livello per fasi, secondo per prodotto. Domanda: con quale criterio è scomposta la WBS della slide 7? Per fasi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Come si costruisce una WBS, passo per passo</h2></div>
+  <ol class="puzzle-ordina" data-id="u4-wbs-passi">
+    <li>Riprendi obiettivo e ambito dal project charter</li>
+    <li>Scegli il criterio per il primo livello</li>
+    <li>Scomponi ogni elemento in parti più piccole</li>
+    <li>Fermati quando il pacchetto è stimabile e assegnabile</li>
+    <li>Assegna un codice a ogni elemento</li>
+    <li>Verifica la regola del 100% e scrivi il dizionario</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. La codifica si fa dopo aver stabilizzato l'albero, altrimenti si rinumera tutto a ogni modifica. Il dizionario della WBS descrive ogni pacchetto (slide successiva). In un progetto vero la WBS si costruisce insieme al team: chi farà il lavoro sa stimarlo meglio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La codifica</p><h2>Il codice dice dove si trova il pacchetto</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula"><small>codice del pacchetto "Catalogo"</small>4<span class="hl">.</span>3</div>
+      <ul class="points small">
+        <li><b>4</b> = quarto elemento del livello 1 (Realizzazione)</li>
+        <li><b>3</b> = terzo figlio di 4</li>
+        <li>Quanti numeri, tanti livelli: 4.3 sta al livello 2</li>
+      </ul>
+    </div>
+    <table class="data compact">
+      <tr><th colspan="2">Dizionario della WBS · 4.3</th></tr>
+      <tr><td><b>Nome</b></td><td>Catalogo prodotti</td></tr>
+      <tr><td><b>Descrizione</b></td><td>Schede di 60 prodotti con foto, prezzo e allergeni</td></tr>
+      <tr><td><b>Responsabile</b></td><td>Giulia (contenuti)</td></tr>
+      <tr><td><b>Stima</b></td><td>16 ore</td></tr>
+      <tr><td><b>Criterio di accettazione</b></td><td>Il cliente approva le schede</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Il codice è la chiave che collega la WBS al resto della pianificazione: la stessa 4.3 tornerà nella CBS (costi), nella matrice delle responsabilità e nel Gantt (lezioni successive dell'unità). Gli allergeni non sono un dettaglio: la vendita di alimenti, anche online, richiede le informazioni sugli allergeni (regolamento UE 1169/2011 sull'informazione alimentare ai consumatori). Nomi e ore sono dell'impresa di esempio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il ramo 4 ha figli da 48, 40 e 16 ore. Il PM scrive "4 · Realizzazione: 120 ore". Che cosa non va?</h2></div>
+  <div class="poll" data-id="u4-wbs-100" data-tipo="quiz" data-risposta="A">
+    <ol><li>Viola la regola del 100%: ci sono 16 ore non descritte da nessun figlio</li><li>Niente: il padre può avere più ore dei figli, come margine di sicurezza</li><li>Il ramo 4 dovrebbe valere 48 ore, il figlio più grande</li><li>Niente, se le 16 ore in più sono riunioni</li></ol>
+    <p class="why">48 + 40 + 16 = 104 ore. Le 16 ore in più sono lavoro che non compare in nessun pacchetto: o manca un figlio, o la stima è sbagliata. Il margine di sicurezza (riserva) si gestisce a parte e in modo esplicito, non nascosto nei totali.</p>
+  </div>
+  <aside class="notes">B e D sono i distrattori forti. Le riunioni sono lavoro vero, ma stanno nel ramo 1 "Gestione" (1.2 Riunioni e report): se servono anche nel ramo 4, vanno scritte come pacchetto. La riserva di gestione si vedrà nella lezione sui costi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Disegna la WBS con diagrams.net</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b>, scegli "Dispositivo" per salvare sul PC e crea un diagramma vuoto.</li>
+      <li>Disegna l'albero della slide 7: il progetto in alto, 5 elementi al livello 1, i 12 pacchetti sotto.</li>
+      <li>Scrivi il codice davanti a ogni nome e collega con i connettori.</li>
+      <li>Aggiungi un 13° pacchetto che manca secondo te, con codice coerente.</li>
+      <li>Salva <b>wbs-panificio.drawio</b> ed esporta <b>wbs-panificio.png</b>; consegna entrambi.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 19 riquadri in tutto (1 + 5 + 13). Il nuovo pacchetto ha il codice successivo nel suo ramo, per esempio <b>5.4</b>, e un nome che è un sostantivo.</div>
+  </div>
+  <aside class="notes">diagrams.net non richiede account. Suggerimento: usare la forma "rettangolo arrotondato" e poi Disponi, Layout, Albero verticale per allineare. Pacchetti mancanti plausibili: 2.3 Analisi dei concorrenti, 3.3 Privacy e cookie (informativa GDPR), 5.4 Manuale per i commessi, 1.3 Chiusura del progetto. Valutare: regola del 100% sensata, codici corretti, nomi come sostantivi.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La WBS in Calc, con il controllo del 100%</h2>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Colonne: <b>Codice</b>, <b>Elemento</b>, <b>Ore</b>. Scrivi i 18 elementi in ordine (0, 1, 1.1, 1.2, 2…), con i codici come testo.</li>
+      <li>Ore dei pacchetti: 8, 16 · 12, 12 · 32, 16 · 48, 40, 16 · 24, 8, 8.</li>
+      <li>Nella riga di ogni ramo calcola la somma dei suoi figli con <code>SOMMA</code>; nella riga 0 somma i cinque rami.</li>
+      <li>In D2 scrivi un controllo: <code>=SE(C2=SOMMA(C3:C19)/2;"OK";"Controlla")</code> (titoli nella riga 1, progetto nella riga 2).</li>
+      <li>Salva come <b>wbs-panificio.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Ramo</th><th>Ore</th></tr>
+        <tr><td>1 Gestione</td><td class="mono">24</td></tr>
+        <tr><td>2 Analisi</td><td class="mono">24</td></tr>
+        <tr><td>3 Progettazione</td><td class="mono">48</td></tr>
+        <tr><td>4 Realizzazione</td><td class="mono">104</td></tr>
+        <tr><td>5 Rilascio</td><td class="mono">40</td></tr>
+      </table>
+      <div class="check"><b>Controllo:</b> progetto 240 ore e D2 mostra OK.</div>
+    </div>
+  </div>
+  <aside class="notes">Il controllo del punto 4: dalla riga 3 alla 19 ci sono sia i rami sia i pacchetti, quindi la loro somma vale il doppio del totale (ogni ora è contata una volta nel pacchetto e una nel ramo). Con i 18 elementi dalla riga 2 alla 19, la somma di C3:C19 vale 480 e la metà è 240, uguale a C2. Chi preferisce può sommare solo i pacchetti con SOMMA di intervalli separati. Codici come testo: scrivere un apostrofo davanti (es. '1.1), altrimenti Calc può trasformarli in numeri o date. Le ore sono ipotetiche e coerenti con le durate usate nelle prossime lezioni (8 ore al giorno): analisi 3 giorni, grafica 4, database 2, front-end 6, back-end 5, catalogo 2, test 3, formazione 1, messa online 1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Una bozza in un minuto, un controllo da fare comunque</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un assistente di AI generativa può proporre in pochi secondi una bozza di WBS a partire dalla descrizione del progetto. Ma non conosce il vostro cliente, i vincoli del charter e le persone del team: può dimenticare pacchetti, inventarne di inutili o mescolare livelli. La regola del 100% e la verifica dei pacchetti restano compito del project manager.</p></div>
+  <div class="callout hl"><b>All'esame:</b> se presenti un progetto (PCTO, lavoro di gruppo, progetto di Informatica), mostra la sua WBS: è il modo più rapido per far capire alla commissione quanto lavoro c'era e come lo avete diviso.</div>
+  <aside class="notes">Se la scuola lo consente, si può fare una dimostrazione dal computer del docente: chiedere a un chatbot una WBS per l'e-commerce e confrontarla con quella della classe, cercando errori (pacchetti mancanti, verbi al posto dei nomi, attività in sequenza invece che scomposizione). Non serve che gli studenti usino account personali. Il consiglio per l'esame è un metodo di esposizione, non una regola ministeriale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u4-wbs-uscita" data-extra="Gantt|verbi">
+    <p>Il project <span class="slot" data-risposta="charter"></span> autorizza il progetto e ne fissa l'ambito.</p>
+    <p>La <span class="slot" data-risposta="WBS"></span> scompone tutto il lavoro; i suoi ultimi elementi sono i <span class="slot" data-risposta="pacchetti"></span> di lavoro.</p>
+    <p>Per la regola del <span class="slot" data-risposta="100%"></span> i figli sommano esattamente il padre.</p>
+    <p>Il codice 5.2 indica il <span class="slot" data-risposta="secondo"></span> figlio del ramo 5.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: charter, WBS, pacchetti, 100%, secondo. Distrattori: Gantt (che mostra il tempo, non la scomposizione) e verbi.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il charter autorizza il progetto e fissa l'ambito</li>
+      <li>Architettura = che cosa; ingegnerizzazione = come e quando</li>
+      <li>La WBS scompone tutto il lavoro, non lo mette in ordine</li>
+    </ul>
+    <ul class="points">
+      <li>Regola del 100% e pacchetti stimabili e assegnabili</li>
+      <li>Criteri: fasi, prodotto, funzione, area geografica</li>
+      <li>Codici e dizionario collegano la WBS a tempi e costi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la rappresentazione reticolare, cioè in che ordine si fanno le attività dei pacchetti.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

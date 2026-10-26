@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il ciclo di sviluppo di un prodotto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 8</p>
+  <h1>Il ciclo di sviluppo<br>di un prodotto</h1>
+  <p class="lead">Dall'idea all'oggetto sullo scaffale: chi lavora a un nuovo prodotto, in quali fasi, e che cosa vuol dire davvero "qualità".</p>
+  <aside class="notes">Apertura dell'unità 8. Obiettivi: definire lo sviluppo di un nuovo prodotto, distinguere qualità progettata e qualità di conformità, conoscere le fasi del ciclo di sviluppo e il meccanismo dei gate. In tutta l'unità useremo un caso nostro, inventato ma realistico: Verdino, un vaso smart con sensore di umidità, prodotto da un'impresa di esempio. Durata indicativa: 2 ore. Collegamento: nell'unità 1 la classe ha già visto "Il prodotto" (definizione e tipi di prodotto); qui si passa a come lo si sviluppa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per te un prodotto è di qualità quando…</h2></div>
+  <div class="poll" data-id="u8-qualita-idea">
+    <ol><li>Costa tanto ed è di marca</li><li>Dura molti anni senza rompersi</li><li>Fa esattamente quello che promette</li><li>Piace a chi lo usa ogni giorno</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, nessuna risposta sbagliata. Far argomentare almeno uno studente per opzione. Tenere a mente il risultato: tra qualche slide la definizione della norma ISO 9000 mostrerà che "costa tanto" non c'entra, mentre B, C e D sono tutte dimensioni della qualità (durata, conformità, qualità percepita).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sviluppare un nuovo prodotto</p><h2>Un lavoro di squadra tra tre funzioni</h2></div>
+  <p class="lead">Lo sviluppo di un prodotto è l'insieme delle attività che parte da un'<mark>opportunità di mercato</mark> e arriva alla produzione, alla vendita e alla consegna.</p>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Marketing</h3><p>Capisce i bisogni dei clienti, il prezzo giusto, i concorrenti.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Progettazione</h3><p>Definisce la forma, i componenti, il software del prodotto.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Produzione</h3><p>Decide come fabbricarlo, con quali macchine e fornitori.</p></div>
+  </div>
+  <aside class="notes">La definizione segue l'impostazione classica di K. Ulrich e S. Eppinger (Product Design and Development), a cui si rifà anche il libro. Accanto alle tre funzioni centrali lavorano acquisti, finanza, qualità, assistenza. Domanda: "chi manca, se il prodotto contiene un'app?" Lo sviluppo software, che è dentro la progettazione. Nell'unità 1 avete visto gli attori dello sviluppo del prodotto: qui li ritroviamo al lavoro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il nostro caso per tutta l'unità</p><h2>Verdino, il vaso che si annaffia da solo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un'impresa di esempio, una piccola startup del territorio, vuole lanciare <b>Verdino</b>: un vaso da interno per chi dimentica di annaffiare le piante.</p>
+      <ul class="points">
+        <li>sensore di umidità del terreno</li>
+        <li>serbatoio d'acqua e piccola pompa</li>
+        <li>scheda con Wi-Fi e app per il telefono</li>
+        <li>alimentazione con cavo USB-C</li>
+      </ul>
+    </div>
+    <div class="card night"><h3>Obiettivo</h3><p>Prezzo al pubblico intorno a 39 euro, prima produzione di 2000 pezzi, in vendita entro un anno.</p><p class="muted">Tutti i numeri del caso sono ipotetici.</p></div>
+  </div>
+  <aside class="notes">Verdino è un prodotto inventato per la classe (il libro usa un altro esempio di laboratorio; noi costruiamo il nostro). Lo seguiremo in tutte le lezioni dell'unità: pianificazione, concept, progettazione, processo produttivo, test, qualità, Six Sigma, e nel laboratorio finale. Chiedere: "chi di voi ha una pianta morta per dimenticanza?" È il bisogno da cui nasce il prodotto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi fa che cosa</p><h2>Trascina ogni attività nella funzione giusta</h2></div>
+  <div class="puzzle-categorie" data-id="u8-funzioni" style="--cols:3">
+    <div class="cat"><h4>Marketing</h4><ul><li>Intervistare i clienti</li><li>Studiare i concorrenti</li><li>Fissare il prezzo obiettivo</li></ul></div>
+    <div class="cat"><h4>Progettazione</h4><ul><li>Scegliere il sensore</li><li>Disegnare il circuito</li><li>Scrivere il firmware</li></ul></div>
+    <div class="cat"><h4>Produzione</h4><ul><li>Organizzare il montaggio</li><li>Scegliere i fornitori</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 3 minuti, poi correzione alla LIM. Soluzione: Marketing = interviste, concorrenti, prezzo obiettivo; Progettazione = sensore, circuito, firmware; Produzione = montaggio, fornitori. Discussione: "scegliere i fornitori" è spesso dell'ufficio acquisti, che collabora con la produzione; "fissare il prezzo obiettivo" coinvolge anche la finanza. Il messaggio: le funzioni lavorano insieme fin dall'inizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La qualità del prodotto</p><h2>Qualità non vuol dire lusso</h2></div>
+  <div class="callout hl">Qualità: grado in cui un insieme di caratteristiche intrinseche di un oggetto <b>soddisfa i requisiti</b>.<br><span class="small muted">UNI EN ISO 9000:2015</span></div>
+  <div class="cols-2">
+    <div class="card"><h3>Qualità progettata</h3><p class="muted">Quanto il progetto risponde ai bisogni del cliente: le funzioni giuste, al prezzo giusto.</p></div>
+    <div class="card"><h3>Qualità di conformità</h3><p class="muted">Quanto ogni pezzo prodotto rispetta il progetto: niente difetti, niente differenze.</p></div>
+  </div>
+  <aside class="notes">La definizione è quella della norma UNI EN ISO 9000:2015 (fondamenti e vocabolario), che la classe ritroverà nell'unità 9. Requisiti = esigenze o aspettative espresse, implicite o obbligatorie (per esempio le leggi). Esempio Verdino: qualità progettata = il sensore misura l'umidità con la precisione che serve a una pianta; qualità di conformità = ogni vaso uscito dalla linea ha il sensore montato e funzionante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le dimensioni della qualità</p><h2>Abbina ogni dimensione a un esempio su Verdino</h2></div>
+  <dl class="puzzle-abbina" data-id="u8-garvin">
+    <dt>Prestazioni</dt><dd>Mantiene il terreno umido al punto giusto</dd>
+    <dt>Affidabilità</dt><dd>Non si guasta nel primo anno di uso</dd>
+    <dt>Conformità</dt><dd>Ogni pezzo è identico al progetto approvato</dd>
+    <dt>Durata</dt><dd>Funziona ancora dopo cinque anni</dd>
+    <dt>Assistenza</dt><dd>La pompa si sostituisce in cinque minuti</dd>
+    <dt>Estetica</dt><dd>Sta bene sulla scrivania di un ufficio</dd>
+  </dl>
+  <aside class="notes">Le otto dimensioni della qualità sono di David A. Garvin (Harvard Business Review, 1987, "Competing on the eight dimensions of quality"): prestazioni, caratteristiche accessorie, affidabilità, conformità, durata, assistenza (serviceability), estetica, qualità percepita. Qui ne usiamo sei; chiedere alla classe un esempio per le altre due (accessori: la notifica sul telefono; qualità percepita: la fiducia nel marchio). Differenza sottile da far emergere: affidabilità = probabilità di non guastarsi in un periodo; durata = quanto a lungo si può usare prima che convenga sostituirlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Due auto, entrambe senza alcun difetto. Quale ha più qualità?</h2></div>
+  <div class="poll" data-id="u8-utilitaria" data-tipo="quiz" data-risposta="C">
+    <ol><li>La sportiva da 200 000 euro</li><li>L'utilitaria, perché costa meno</li><li>Possono averla entrambe: dipende dai requisiti di chi la sceglie</li><li>Nessuna: la qualità si vede solo dopo anni</li></ol>
+    <p class="why">La qualità si misura rispetto ai requisiti. Un'utilitaria che consuma poco, si parcheggia ovunque e non si guasta soddisfa i requisiti del suo cliente quanto la sportiva soddisfa quelli del suo.</p>
+  </div>
+  <aside class="notes">Il trabocchetto è confondere qualità con lusso o con prezzo: quasi tutti scelgono A. La B è il tranello opposto (il prezzo non decide nemmeno in basso). La D confonde la qualità con la sola durata. Riprendere il sondaggio iniziale: chi aveva scelto "costa tanto"?</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 20 minuti</span></p>
+  <h2>La pagella di qualità di un prodotto vero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In gruppi di tre scegliete un prodotto che usate tutti: telefono, borraccia, cuffie, zaino.</li>
+      <li>In LibreOffice Calc: colonna A le otto dimensioni di Garvin, colonna B un voto da 1 a 5, colonna C una frase di motivazione.</li>
+      <li>In B10 calcolate la media con <code>=MEDIA(B2:B9)</code>.</li>
+      <li>Inserite un grafico di tipo <b>Rete</b> sui dati di A1:B9.</li>
+      <li>Salvate come <b>qualita-prodotto.ods</b> e consegnatelo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> otto righe con voto e motivazione, una media tra 1 e 5, un grafico a "ragnatela" con otto punte. La dimensione più bassa è quella su cui il produttore dovrebbe lavorare.</div>
+  </div>
+  <aside class="notes">Le otto dimensioni da scrivere: prestazioni, caratteristiche accessorie, affidabilità, conformità, durata, assistenza, estetica, qualità percepita. In LibreOffice il grafico a ragnatela si chiama "Rete" nella procedura guidata del grafico. Chiusura: due gruppi mostrano il grafico; chiedere se il prezzo del prodotto spiega i voti. Chi finisce prima aggiunge una colonna D con il voto che darebbe un concorrente e un secondo grafico di confronto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le fasi dello sviluppo</p><h2>Sei fasi, dall'idea alla produzione</h2></div>
+  <div class="cols-3">
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">0</p><h3>Pianificazione</h3><p class="small">Bisogni, mercato, obiettivi: si fa o no?</p></div>
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">1</p><h3>Concept</h3><p class="small">Che cosa farà il prodotto e con quali parti.</p></div>
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">2</p><h3>Progettazione di sistema</h3><p class="small">L'architettura: moduli e interfacce.</p></div>
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">3</p><h3>Progettazione di dettaglio</h3><p class="small">Ogni pezzo, ogni materiale, il processo produttivo.</p></div>
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">4</p><h3>Test e miglioramento</h3><p class="small">Prototipi provati e corretti.</p></div>
+    <div class="card soft" style="padding:24px 32px;gap:8px"><p class="num">5</p><h3>Avviamento</h3><p class="small">La produzione parte e sale di ritmo.</p></div>
+  </div>
+  <aside class="notes">È la sequenza di Ulrich ed Eppinger, ripresa dal libro: le prossime lezioni la seguono una fase alla volta (la progettazione del processo produttivo procede in parallelo alla progettazione di dettaglio). La numerazione da 0 indica che la pianificazione viene prima del progetto vero e proprio: decide se il progetto deve partire. Collegamento: è lo stesso schema del ciclo di vita del software (requisiti, analisi, progetto, codifica, test, rilascio) visto in modelli-ciclo-di-vita.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Verdino: metti in ordine il lavoro del team</h2></div>
+  <ol class="puzzle-ordina" data-id="u8-fasi-verdino">
+    <li>Si intervistano 30 persone che hanno piante in casa</li>
+    <li>Si confrontano tre idee di vaso e se ne sceglie una</li>
+    <li>Si divide il vaso in moduli: contenitore, irrigazione, elettronica</li>
+    <li>Si disegnano tutti i pezzi e si sceglie ogni componente</li>
+    <li>Venti prototipi vanno a casa di utenti di prova</li>
+    <li>Parte la prima serie di 2000 pezzi</li>
+  </ol>
+  <aside class="notes">Ordine: pianificazione (interviste), concept (scelta tra idee), progettazione di sistema (moduli), progettazione di dettaglio (pezzi e componenti), test (prototipi agli utenti), avviamento (prima serie). Errore tipico: mettere i prototipi prima della progettazione di dettaglio. Precisare: prototipi semplici si fanno anche nel concept, ma il test con utenti su prototipi quasi definitivi viene dopo il dettaglio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La qualità la decide chi compra</h2></div>
+  <figure class="citazione">
+    <blockquote>La qualità di un prodotto o di un servizio non è ciò che il fornitore ci mette dentro. È ciò che il cliente ne ricava ed è disposto a pagare.</blockquote>
+    <figcaption><b>Peter Drucker</b>, studioso di management, Innovation and Entrepreneurship, 1985</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra dall'inglese ("Quality in a product or service is not what the supplier puts in. It is what the customer gets out and is willing to pay for."). Drucker (1909-2005) è uno dei padri del management moderno. Domanda: "per Verdino, che cosa ricava il cliente?" Non un sensore o un microcontrollore, ma una pianta viva senza doverci pensare. Ecco perché lo sviluppo parte dal bisogno e non dalla tecnologia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il meccanismo dei gate</p><h2>Tra due fasi c'è un cancello</h2></div>
+  <div class="puzzle-trascina" data-id="u8-gate" data-extra="sprint|collaudo">
+    <p>Alla fine di ogni fase il team presenta i risultati a un <span class="slot" data-risposta="gate"></span>, una riunione in cui la direzione decide. Le scelte possibili sono tre: <span class="slot" data-risposta="go"></span> (si passa alla fase successiva), <span class="slot" data-risposta="kill"></span> (il progetto si ferma) oppure <span class="slot" data-risposta="recycle"></span> (si rifà la fase).</p>
+    <p>Fermare presto un'idea debole fa risparmiare: ogni fase costa più della <span class="slot" data-risposta="precedente"></span>.</p>
+  </div>
+  <aside class="notes">Il modello a fasi e cancelli (Stage-Gate) è stato proposto da Robert G. Cooper (articolo su Business Horizons, 1990). Soluzione: gate, go, kill, recycle, precedente; distrattori: sprint (viene da Scrum) e collaudo. A volte si aggiunge una quarta decisione, "hold" (in attesa). Domanda: "Verdino: che cosa porterebbe a un kill al primo gate?" Per esempio un concorrente già sul mercato a 19 euro con le stesse funzioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tempo conta</p><h2>Arrivare primi, ma arrivare bene</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Il <b>time to market</b> è il tempo tra l'avvio dello sviluppo e l'arrivo del prodotto in vendita. Ridurlo aiuta a battere i concorrenti, ma accorciare i test costa caro dopo.</p>
+      <div class="callout">Un difetto scoperto dal cliente costa molto più di uno scoperto in progettazione: richiami, resi, reputazione.</div>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Progettare con l'AI</h3><p>Nei programmi CAD esiste il <b>generative design</b>: il progettista indica carichi, vincoli e materiali e il software propone molte forme possibili, che poi un ingegnere valuta e sceglie. L'AI aiuta anche a leggere migliaia di recensioni per capire i bisogni. La decisione al gate resta delle persone.</p></div>
+  </div>
+  <aside class="notes">Esempio reale di generative design: è disponibile in software CAD commerciali come Autodesk Fusion. Non inventare percentuali sui risparmi: il punto è il metodo (molte alternative generate, valutazione umana). Collegamento con l'unità 7: simulazione e digital twin permettono di provare un prodotto prima di costruirlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quando si decide gran parte del costo finale di Verdino?</h2></div>
+  <div class="poll" data-id="u8-costo-deciso" data-tipo="quiz" data-risposta="B">
+    <ol><li>Durante l'avviamento, quando si comprano i componenti</li><li>In progettazione, quando si scelgono materiali e componenti</li><li>Nel test, quando si scoprono i difetti</li><li>Nella vendita, quando si fissano gli sconti</li></ol>
+    <p class="why">I soldi si spendono soprattutto in produzione, ma si decidono prima: scegliere una scheda con Wi-Fi o un sensore più preciso fissa il costo di ogni pezzo per tutta la vita del prodotto.</p>
+  </div>
+  <aside class="notes">Distinzione utile: costo "impegnato" (deciso dalle scelte di progetto) e costo "sostenuto" (speso davvero). La A attira perché è il momento in cui si paga. Per questo marketing, progettazione e produzione devono lavorare insieme fin dall'inizio: lo vedremo con la progettazione concorrente.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Le fasi di Verdino in ProjectLibre</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri ProjectLibre, nuovo progetto <b>Verdino</b>.</li>
+      <li>Inserisci le sei fasi con queste durate: 2, 4, 3, 6, 4, 3 settimane (scrivi <code>2w</code>, <code>4w</code>…).</li>
+      <li>Dopo ogni fase tranne l'ultima aggiungi un gate: attività <b>Gate 1</b>…<b>Gate 5</b> con durata <code>0</code>.</li>
+      <li>Collega tutto in sequenza fine-inizio nella colonna Predecessori.</li>
+      <li>Salva come <b>verdino-fasi.pod</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 11 righe, 5 rombi (le pietre miliari) nel Gantt, durata totale del progetto <b>22 settimane</b>, cioè 110 giorni lavorativi.</div>
+  </div>
+  <aside class="notes">Somma: 2+4+3+6+4+3 = 22 settimane; con il calendario standard (5 giorni a settimana) sono 110 giorni lavorativi. Le attività a durata zero diventano milestone, disegnate come rombi. Righe: fase 1, gate 1, fase 2, gate 2… fino alla fase 6: 11 righe con predecessori 1, 2, 3… Chi finisce prima: prova ad anticipare l'inizio della progettazione del processo produttivo di 2 settimane con un ritardo negativo (lead) e osserva come cambia la fine. Riprende la lezione del corso su ProjectLibre dell'unità 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Il filo</h3><p class="muted">Bisogno, fasi, gate, qualità: racconta un prodotto che conosci seguendo le sei fasi.</p></div>
+    <div class="card"><h3>L'informatica</h3><p class="muted">Un'app segue lo stesso percorso: requisiti, progetto, test, rilascio, con gate e revisioni.</p></div>
+    <div class="card"><h3>Il PCTO</h3><p class="muted">Se in azienda hai visto un prodotto nascere o cambiare, collega quell'esperienza alle fasi.</p></div>
+  </div>
+  <aside class="notes">Suggerire una frase di apertura: "Un prodotto di qualità è un prodotto che soddisfa i requisiti del cliente; per ottenerlo l'impresa lo sviluppa in fasi controllate da gate". Collegamenti con altre materie: Informatica e TPSIT (ciclo di vita del software), Inglese (lessico: time to market, stage-gate). Non fare promesse sulla forma della prova: invitare a preparare un esempio concreto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u8-uscita-sviluppo" data-extra="prezzo|lusso">
+    <p>Lo sviluppo parte dalla fase 0, la <span class="slot" data-risposta="pianificazione"></span>, e finisce con l'avviamento della produzione.</p>
+    <p>Per la ISO 9000 la qualità è il grado in cui le caratteristiche di un oggetto soddisfano i <span class="slot" data-risposta="requisiti"></span>.</p>
+    <p>La qualità di <span class="slot" data-risposta="conformità"></span> misura quanto ogni pezzo rispetta il progetto.</p>
+    <p>Tra una fase e l'altra un <span class="slot" data-risposta="gate"></span> decide se proseguire.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti, individuale. Soluzione: pianificazione, requisiti, conformità, gate. Distrattori: prezzo e lusso, che riprendono il trabocchetto delle due auto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sviluppare = dall'opportunità di mercato alla consegna</li>
+      <li>Marketing, progettazione e produzione insieme</li>
+      <li>Qualità = soddisfare i requisiti, non il lusso</li>
+    </ul>
+    <ul class="points">
+      <li>Sei fasi, dalla pianificazione all'avviamento</li>
+      <li>Ai gate si decide: go, kill o recycle</li>
+      <li>Il costo si decide in progettazione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la fase 0, la pianificazione di Verdino (bisogni e mercato).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

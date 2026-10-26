@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I manuali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 5</p>
+  <h1>I manuali</h1>
+  <p class="lead">D'uso, d'installazione, di manutenzione; tutorial o reference. E le regole per scrivere istruzioni che una persona riesce davvero a seguire.</p>
+  <aside class="notes">Obiettivi: riconoscere le tipologie di manuale e il loro ricevente; distinguere tutorial, guida pratica, reference e spiegazione; applicare le regole di scrittura delle istruzioni; collaudare un manuale con un utente. Durata: 2 ore. Si riprendono il modello E-M-R (prima lezione dell'unità) e le procedure KB-001 scritte nella lezione sul document management.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Non sai usare una funzione di un'app. Che cosa fai per primo?</h2></div>
+  <div class="poll" data-id="u5-primo-aiuto">
+    <ol><li>Provo a caso finché funziona</li><li>Cerco un video</li><li>Chiedo a qualcuno o a un chatbot</li><li>Apro la guida dell'app</li></ol>
+  </div>
+  <aside class="notes">2 minuti. Qualunque sia il risultato, far notare che video, chatbot e guida in linea esistono perché qualcuno ha scritto della documentazione: anche il chatbot risponde bene solo se ha documenti buoni da cui attingere. La domanda vera della lezione: come si scrive una guida che la gente usa?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipologie</p><h2>Un manuale per ogni ricevente</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>D'uso</h3><p><b>Utente</b>: come si usa il prodotto ogni giorno.</p></div>
+    <div class="card soft"><h3>Guida rapida</h3><p><b>Utente</b>: i primi passi, in una o due pagine.</p></div>
+    <div class="card soft"><h3>D'installazione</h3><p><b>Tecnico</b>: requisiti, montaggio, configurazione.</p></div>
+    <div class="card"><h3>Di manutenzione</h3><p><b>Tecnico</b>: controlli periodici, guasti, ricambi.</p></div>
+    <div class="card"><h3>Dell'amministratore</h3><p><b>Gestore</b>: utenti, permessi, backup.</p></div>
+    <div class="card"><h3>Di riferimento</h3><p><b>Sviluppatore</b>: ogni funzione, ogni parametro.</p></div>
+  </div>
+  <aside class="notes">Per le macchine le istruzioni sono un obbligo di legge: la Direttiva macchine 2006/42/CE le richiede nella lingua del paese; dal 20 gennaio 2027 si applica il Regolamento (UE) 2023/1230, che ammette le istruzioni in formato digitale (con copia cartacea su richiesta dell'acquirente). Nel software il manuale di riferimento è spesso generato in parte dal codice (documentazione delle API). Chiedere: quali di questi manuali servono per un'app web come quella dell'Unità 6?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>In quale manuale va questo capitolo?</h2></div>
+  <div class="puzzle-categorie" data-id="u5-tipo-manuale" style="--cols:3">
+    <div class="cat"><h4>D'uso</h4><ul><li>Prenotare un turno</li><li>Cambiare la password</li></ul></div>
+    <div class="cat"><h4>D'installazione</h4><ul><li>Requisiti del server</li><li>Configurare il database</li><li>Collegare la stampante alla rete</li></ul></div>
+    <div class="cat"><h4>Di manutenzione</h4><ul><li>Backup e ripristino</li><li>Sostituire il filtro ogni 6 mesi</li><li>Codici di errore e rimedi</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Il backup potrebbe stare anche nel manuale dell'amministratore: accettarlo se motivato. Discussione: cambiare la password è nel manuale d'uso, ma reimpostare la password di un altro utente va nel manuale dell'amministratore. Lo stesso gesto cambia manuale se cambia il ricevente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tutorial e reference</p><h2>Imparare o consultare?</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Tutorial</h3><p>Ti prende per mano: un percorso dall'inizio alla fine, con un risultato garantito. Si legge una volta, in ordine.</p><p class="muted small">"Crea la tua prima app in 20 minuti"</p></div>
+    <div class="card"><h3>Reference</h3><p>Descrive tutto, in modo completo e uniforme. Non si legge: si consulta quando serve un dettaglio.</p><p class="muted small">L'elenco delle funzioni di Calc con i loro argomenti</p></div>
+  </div>
+  <div class="callout">Il modello <b>Diátaxis</b> (Daniele Procida) aggiunge due tipi: la <b>guida pratica</b>, che risolve un problema preciso, e la <b>spiegazione</b>, che fa capire il perché.</div>
+  <aside class="notes">Diátaxis è un modello diffuso nella documentazione software (lo usano molti progetti open source). Errore tipico: mescolare i tipi, per esempio un tutorial pieno di tabelle di parametri, che chi impara salta. All'esame: chi ha scritto il README di un progetto di informatica può chiedersi a quale tipo appartiene ciascuna sezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>I quattro tipi di documentazione</h2></div>
+  <div class="puzzle-trascina" data-id="u5-diataxis" data-extra="Glossario|FAQ">
+    <div style="display:grid;grid-template-columns:230px 1fr 1fr;gap:16px;font-size:30px;line-height:1.3">
+      <div></div>
+      <div class="card soft" style="padding:10px 20px;align-items:center;font-weight:700">Mentre studio</div>
+      <div class="card soft" style="padding:10px 20px;align-items:center;font-weight:700">Mentre lavoro</div>
+      <div class="card night" style="justify-content:center;padding:20px"><p>Per <b>fare</b></p></div>
+      <div class="card" style="padding:20px 26px;gap:10px"><span class="slot" data-risposta="Tutorial"></span><p>Un percorso guidato per imparare facendo.</p></div>
+      <div class="card" style="padding:20px 26px;gap:10px"><span class="slot" data-risposta="Guida pratica"></span><p>I passi per risolvere un problema preciso.</p></div>
+      <div class="card night" style="justify-content:center;padding:20px"><p>Per <b>capire</b></p></div>
+      <div class="card" style="padding:20px 26px;gap:10px"><span class="slot" data-risposta="Spiegazione"></span><p>Il perché delle scelte, il contesto, le alternative.</p></div>
+      <div class="card" style="padding:20px 26px;gap:10px"><span class="slot" data-risposta="Reference"></span><p>La descrizione completa, da consultare.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: in alto a sinistra Tutorial, in alto a destra Guida pratica, in basso a sinistra Spiegazione, in basso a destra Reference. Distrattori: Glossario e FAQ (sono componenti, non tipi del modello). Le chip di intestazione delle colonne non si trascinano: sono solo titoli. Esempio per la guida pratica: "Come esportare il Gantt in PDF".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>La pagina che elenca ogni funzione di Calc con sintassi e argomenti è…</h2></div>
+  <div class="poll" data-id="u5-tipo-pagina" data-tipo="quiz" data-risposta="D">
+    <ol><li>Un tutorial</li><li>Una spiegazione</li><li>Una guida pratica</li><li>Un reference</li></ol>
+    <p class="why">È completa, uniforme e si consulta quando serve un dettaglio: è un reference. Non insegna un percorso (tutorial), non risolve un problema preciso (guida pratica), non spiega il perché (spiegazione).</p>
+  </div>
+  <aside class="notes">Quiz di verifica rapida. Per approfondire: "Come calcolare la media escludendo gli zeri" sarebbe una guida pratica; "Perché Calc usa il punto e virgola come separatore in italiano" una spiegazione (la virgola è il separatore decimale).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Scrivere istruzioni</p><h2>Sette regole per istruzioni che funzionano</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Prerequisiti</b> all'inizio: che cosa serve prima di partire</li>
+      <li><b>Un'azione per passo</b>, con i passi numerati</li>
+      <li><b>Verbo all'imperativo</b> in testa: "Apri", "Premi"</li>
+      <li><b>Nomi dei comandi</b> esattamente come sullo schermo</li>
+    </ul>
+    <ul class="points">
+      <li><b>Condizione prima dell'azione</b>: "Se il LED è rosso, premi…"</li>
+      <li><b>Avvertenze prima</b> del passo pericoloso, non dopo</li>
+      <li><b>Risultato atteso</b>: che cosa vedi se è andato bene</li>
+    </ul>
+  </div>
+  <div class="callout hl">Un buon passo si esegue senza rileggerlo: chi legge ha gli occhi sull'oggetto, non sul foglio.</div>
+  <aside class="notes">Le regole sono una sintesi di pratiche comuni della scrittura tecnica (le si ritrova nelle guide di stile delle grandi aziende di software e nella norma ISO/IEC/IEEE 26514 sulla documentazione per gli utenti). Far correggere a voce: "Dopo aver controllato che il cavo sia collegato e se la spia non è accesa bisognerebbe premere il tasto di reset". Versione corretta: "1. Controlla che il cavo sia collegato. 2. Se la spia è spenta, premi Reset."</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Scrivere per le persone</h2></div>
+  <figure class="citazione">
+    <blockquote>Invece di immaginare che il nostro compito principale sia dire a un computer che cosa fare, concentriamoci piuttosto sullo spiegare a esseri umani che cosa vogliamo che il computer faccia.</blockquote>
+    <figcaption><b>Donald Knuth</b>, informatico, «Literate Programming», The Computer Journal, 1984</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra: "Instead of imagining that our main task is to instruct a computer what to do, let us concentrate rather on explaining to human beings what we want a computer to do." Knuth, autore di The Art of Computer Programming e di TeX, propone di scrivere i programmi come testi da leggere. Il collegamento: anche un manuale è codice eseguito da una persona. Domanda: quali errori di un programma assomigliano agli errori di un manuale? (Un passo mancante è come un'istruzione mancante; un'ambiguità è come un comportamento non definito.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Cambiare la batteria del sensore di umidità</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-batteria">
+    <li>Procurati una batteria CR2032 nuova</li>
+    <li>Ruota lo sportello sul retro in senso antiorario e toglilo</li>
+    <li>Togli la batteria scarica</li>
+    <li>Inserisci la batteria nuova con il segno + verso di te</li>
+    <li>Rimetti lo sportello e ruotalo in senso orario</li>
+    <li>Controlla che il LED lampeggi due volte in verde</li>
+  </ol>
+  <aside class="notes">Sensore di esempio, non un prodotto reale. Ordine: prerequisito, apertura, rimozione, inserimento, chiusura, risultato atteso. Far notare le regole applicate: verbo all'imperativo in testa, un'azione per passo, risultato atteso alla fine. Domanda: dove andrebbe un'avvertenza "Non usare batterie ricaricabili"? Prima del passo 4, oppure tra i prerequisiti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Riscrivi le istruzioni della stampante</h2>
+  <div class="callout" style="font-size:30px">«Bisognerebbe che prima della stampa venisse controllato che ci sia la carta e poi magari si va su File e poi Stampa, attenzione che nel lab 2 va scelta la stampante giusta, e comunque conviene salvare prima, altrimenti se si blocca si rischia di perdere tutto.»</div>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Writer riscrivi il testo come istruzioni numerate, con le sette regole.</li>
+      <li>Aggiungi titolo, prerequisiti e una riga "Risultato atteso".</li>
+      <li>Usa i nomi dei comandi in grassetto, come sullo schermo.</li>
+      <li>Salva come <b>istruzioni-stampa.odt</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 5-7 passi, ognuno inizia con un verbo. Il salvataggio viene prima della stampa e la scelta della stampante ha una condizione ("Se sei nel lab 2…").</div>
+  </div>
+  <aside class="notes">Soluzione possibile. Prerequisiti: documento aperto, stampante accesa. 1. Salva il documento (Ctrl+S). 2. Controlla che nel cassetto ci sia carta. 3. Scegli File, Stampa. 4. Se sei nel laboratorio 2, scegli la stampante del laboratorio 2 nell'elenco Stampante. 5. Premi Stampa. Risultato atteso: la stampa esce entro un minuto. Il "conviene salvare" era un'avvertenza nascosta in fondo: va spostata all'inizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni regola, il suo esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-regole-esempi">
+    <dt>Verbo all'imperativo</dt><dd>«Premi Salva.»</dd>
+    <dt>Avvertenza prima</dt><dd>«ATTENZIONE: stacca la spina. Poi apri il coperchio.»</dd>
+    <dt>Condizione prima dell'azione</dt><dd>«Se il LED è rosso, tieni premuto Reset.»</dd>
+    <dt>Risultato atteso</dt><dd>«Compare la scritta Connesso.»</dd>
+    <dt>Prerequisiti</dt><dd>«Prima di iniziare ti servono un cacciavite e 10 minuti.»</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Variante a squadre: ogni squadra inventa un esempio sbagliato per una regola, l'altra lo corregge.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Qual è il modo migliore per collaudare un manuale?</h2></div>
+  <div class="poll" data-id="u5-collaudo-manuale" data-tipo="quiz" data-risposta="B">
+    <ol><li>L'autore lo rilegge con calma il giorno dopo</li><li>Un utente vero esegue le istruzioni senza aiuto, mentre qualcuno osserva dove si blocca</li><li>Lo approva il responsabile del prodotto</li><li>Si passa al correttore ortografico e grammaticale</li></ol>
+    <p class="why">L'autore sa già come si fa e "vede" i passi mancanti anche se non sono scritti. Solo chi non conosce il prodotto scopre le lacune. Rilettura, approvazione e correttore servono, ma dopo.</p>
+  </div>
+  <aside class="notes">Il tranello è la A, che sembra la più seria. È lo stesso principio del collaudo del software: lo sviluppatore non è un buon tester del proprio codice. Nelle aziende si fanno test di usabilità osservando utenti reali. Ponte con il laboratorio successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Il manuale che risponde</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Assistenti AI e istruzioni digitali</h3><p>Molti programmi hanno un assistente AI che risponde alle domande degli utenti attingendo alla documentazione: se il manuale è sbagliato o vecchio, anche le risposte lo sono. Nelle fabbriche si sperimentano istruzioni di manutenzione in <b>realtà aumentata</b>, sovrapposte alla macchina vera attraverso un visore o un tablet.</p></div>
+  <div class="callout">Cambia il canale (chat, visore, video), non il messaggio: passi chiari, avvertenze al posto giusto, risultato atteso.</div>
+  <aside class="notes">Collegare al modello E-M-R: l'assistente AI è un nuovo canale tra emittente e ricevente. Spunto: il Regolamento (UE) 2023/1230 sulle macchine ammetterà le istruzioni in formato digitale dal 2027. Domanda: quali rischi ha un'istruzione di sicurezza data solo da un chatbot? (Risposta generata in modo diverso ogni volta, avvertenze omesse.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 35 minuti</span></p>
+  <h2>Test di usabilità del manuale</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Gruppi di tre: <b>autore</b>, <b>utente</b>, <b>osservatore</b>.</li>
+      <li>L'autore scrive le istruzioni per creare in Calc un grafico a torta dai dati che vuole, senza farsi vedere.</li>
+      <li>L'utente le esegue in silenzio; l'osservatore annota ogni esitazione e ogni domanda.</li>
+      <li>L'autore corregge e produce la rev1.</li>
+      <li>Consegnate <b>manuale-grafico.odt</b> con rev0, rev1 e le osservazioni.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> l'utente arriva al grafico senza chiedere aiuto alla rev1. Le osservazioni indicano il passo e il problema (per esempio "passo 3: non trova il comando").</div>
+  </div>
+  <aside class="notes">Regola importante: durante il test l'autore non parla. Se l'utente si blocca più di 2 minuti, l'osservatore annota e lo sblocca. Scegliere come utente chi usa meno Calc. Se c'è tempo, ruotare i ruoli su un altro compito (per esempio un grafico a colonne). Valutazione: qualità delle osservazioni e miglioramento reale dalla rev0 alla rev1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u5-uscita-manuali" data-extra="glossario|indicativo">
+    <p>Il <span class="slot" data-risposta="tutorial"></span> insegna facendo; il <span class="slot" data-risposta="reference"></span> si consulta quando serve un dettaglio.</p>
+    <p>Ogni passo inizia con un verbo all'<span class="slot" data-risposta="imperativo"></span>.</p>
+    <p>L'<span class="slot" data-risposta="avvertenza"></span> va prima del passo pericoloso.</p>
+    <p>Il collaudo migliore è un test con un <span class="slot" data-risposta="utente"></span> vero.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: tutorial, reference, imperativo, avvertenza, utente. Distrattori: glossario, indicativo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un manuale per ogni ricevente: uso, installazione, manutenzione…</li>
+      <li>Tutorial, guida pratica, reference, spiegazione</li>
+      <li>Per le macchine le istruzioni sono un obbligo di legge</li>
+    </ul>
+    <ul class="points">
+      <li>Un'azione per passo, imperativo, comandi esatti</li>
+      <li>Condizioni e avvertenze prima, risultato atteso dopo</li>
+      <li>Si collauda con un utente vero, non rileggendo</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la relazione tecnica, l'ultimo documento dell'unità e quello che servirà anche per l'esame. Chiedere di recuperare una relazione di laboratorio scritta in un'altra materia.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

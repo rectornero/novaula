@@ -5,6 +5,17 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.16.0 (26 Oct 2026): 5F GPOI full course with drag-and-drop exercises
+- 5F GPOI now has the whole textbook program: 73 interactive lesson decks, one per textbook lesson across the ten
+  units (from "L'impresa" to "Il rischio elettrico"), each with its PDF. They appear in the class's Materiali and are
+  linked to 73 new "In programma" topics in the Programma tab, after the topics already covered.
+- New drag-and-drop exercises in every lesson deck (`interattivo.js`), working with mouse, finger and the LIM pen:
+  «Dividi in categorie» (drag cards into the right box: classifications, true/false, risk matrices) and «Trascina
+  le parole» (drag words into the gaps of a text or onto the labels of a diagram, such as a CPM network or the
+  break-even chart). Each has Controlla, Soluzione and Ricomincia; tapping a card and then its place also works.
+- The existing order and match puzzles can now be dragged too (tapping two items to swap them still works).
+  SQL: `aggiornamenti/2026-10-26-corso-5f-programma.sql`, already applied. Service worker cache `classe-v34`.
+
 ## 2.15.1 (25 Oct 2026): lower hosting and background costs
 - Netlify now skips a production deploy when a push to `main` doesn't change the site (`sito/` or `netlify.toml`), and
   production deploys are batched to at most one per school day. Deploys were the platform's main hosting cost.

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La progettazione di prodotto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 8</p>
+  <h1>La progettazione<br>di prodotto</h1>
+  <p class="lead">Dal concept ai disegni: l'architettura di Verdino, le sue configurazioni, ogni pezzo nel dettaglio, e perché conviene usare pezzi standard.</p>
+  <aside class="notes">Obiettivi: distinguere progettazione di sistema, configurazione e progettazione di dettaglio; riconoscere moduli e interfacce; leggere una tolleranza; capire codifica (classificazione) e standardizzazione dei componenti. Caso guida: Verdino. Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il tuo prossimo telefono: che cosa preferisci?</h2></div>
+  <div class="poll" data-id="u8-batteria">
+    <ol><li>Batteria che cambio da solo in due minuti</li><li>Telefono più sottile, batteria incollata</li><li>Mi è indifferente: lo cambio ogni due anni</li></ol>
+  </div>
+  <aside class="notes">Il sondaggio introduce la scelta tra architettura modulare (parti separabili, interfacce semplici) e integrata (tutto incollato, più compatto). Spunto reale: il regolamento (UE) 2023/1542 sulle batterie prevede che, dal 2027, le batterie portatili degli apparecchi siano rimovibili e sostituibili dall'utilizzatore, con alcune eccezioni. Una decisione di progettazione di sistema diventa un obbligo di legge.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre livelli di progetto</p><h2>Dal sistema al singolo foro</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">1</p><h3>Sistema</h3><p class="small">L'architettura: in quali moduli si divide il prodotto e come si collegano.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Configurazione</h3><p class="small">Come si dispongono i moduli e quali varianti si offrono ai clienti.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Dettaglio</h3><p class="small">Ogni pezzo: forma, misure, tolleranze, materiali, fornitori.</p></div>
+  </div>
+  <div class="callout">Ogni livello consegna documenti al successivo: lo schema a blocchi, le varianti, i disegni e la distinta base completa.</div>
+  <aside class="notes">Nella sequenza delle fasi, la progettazione di sistema è la fase 2 e la progettazione di dettaglio la fase 3. Collegamento con la WBS dell'unità 4: anche lì si scompone dal tutto alle parti. Collegamento con l'unità 5: i disegni e le specifiche sono documenti tecnici con cartiglio, versione e revisione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Progettazione di sistema</p><h2>Moduli e interfacce</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Architettura modulare</h3><p class="muted">Ogni modulo svolge una o poche funzioni e si collega agli altri con interfacce semplici. Si cambia un modulo senza toccare gli altri.</p><p class="small"><b>Esempio:</b> un PC fisso, a cui cambi la scheda video.</p></div>
+    <div class="card"><h3>Architettura integrata</h3><p class="muted">Una parte svolge più funzioni, le interfacce sono complesse o nascoste. Più compatto e leggero, ma difficile da riparare.</p><p class="small"><b>Esempio:</b> un auricolare wireless sigillato.</p></div>
+  </div>
+  <div class="callout">Verdino è modulare: contenitore, irrigazione, elettronica, alimentazione, app.</div>
+  <aside class="notes">Interfaccia = il punto in cui due moduli si toccano o si scambiano qualcosa: forza, energia, acqua, dati. Il lavoro più importante della progettazione di sistema è definire le interfacce, perché poi team diversi lavorano sui moduli in parallelo. Collegamento con Informatica: è la stessa idea dei moduli software e delle API.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo schema a blocchi</p><h2>Trascina i moduli: le frecce dicono che cosa si scambiano</h2></div>
+  <div class="puzzle-trascina" data-id="u8-blocchi" data-extra="Stampo">
+    <div style="position:relative;width:1660px;height:440px;font-size:24px">
+      <svg width="1660" height="440" viewBox="0 0 1660 440" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <defs><marker id="frb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#11845f"/></marker></defs>
+        <g stroke="#11845f" stroke-width="5" fill="none">
+          <line x1="250" y1="220" x2="545" y2="220" marker-end="url(#frb)"/>
+          <line x1="790" y1="220" x2="985" y2="220" marker-end="url(#frb)"/>
+          <line x1="1170" y1="220" x2="1365" y2="220" marker-end="url(#frb)"/>
+          <line x1="665" y1="372" x2="665" y2="260" marker-end="url(#frb)"/>
+          <line x1="665" y1="182" x2="665" y2="70" marker-end="url(#frb)" marker-start="url(#frb)"/>
+        </g>
+        <g font-family="DM Sans, sans-serif" font-size="26" font-weight="700" fill="#172033">
+          <text x="398" y="205" text-anchor="middle">5 V</text>
+          <text x="888" y="205" text-anchor="middle">comando</text>
+          <text x="1268" y="205" text-anchor="middle">acqua</text>
+          <text x="685" y="325">misura</text>
+          <text x="685" y="135">dati via Wi-Fi</text>
+        </g>
+      </svg>
+      <span class="slot" data-risposta="App" style="position:absolute;left:580px;top:0"></span>
+      <span class="slot" data-risposta="Alimentatore" style="position:absolute;left:0;top:192px"></span>
+      <span class="slot" data-risposta="Scheda Wi-Fi" style="position:absolute;left:560px;top:192px"></span>
+      <span class="slot" data-risposta="Pompa" style="position:absolute;left:1000px;top:192px"></span>
+      <div style="position:absolute;left:1380px;top:188px;width:270px;height:66px;border-radius:14px;background:#172033;color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:28px">Vaso e terra</div>
+      <span class="slot" data-risposta="Sensore" style="position:absolute;left:580px;top:376px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: l'alimentatore porta 5 V alla scheda; la scheda comanda la pompa, che porta acqua al vaso; il sensore manda la misura alla scheda; scheda e app si scambiano dati via Wi-Fi in entrambe le direzioni. Distrattore: lo stampo, che è un'attrezzatura di produzione e non un modulo del prodotto. Domanda: "quali frecce sono interfacce elettriche, quali di dati, quali meccaniche?" Introduce il puzzle successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le interfacce</p><h2>Che cosa passa tra i moduli?</h2></div>
+  <div class="puzzle-categorie" data-id="u8-interfacce" style="--cols:3">
+    <div class="cat"><h4>Meccanica</h4><ul><li>Viti tra vaso e base</li><li>Incastro del coperchio</li><li>Tubo nel foro del vaso</li></ul></div>
+    <div class="cat"><h4>Elettrica</h4><ul><li>Connettore USB-C</li><li>Cavo tra sensore e scheda</li><li>Fili della pompa</li></ul></div>
+    <div class="cat"><h4>Dati</h4><ul><li>Wi-Fi tra scheda e router</li><li>API tra app e server</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come nei contenitori. Il tubo nel foro è un'interfaccia meccanica (e anche idraulica: va a tenuta). Il cavo del sensore porta sia alimentazione sia il segnale della misura: accettare la discussione, ma resta un collegamento elettrico. L'API (Application Programming Interface) è il nome che l'informatica dà alle interfacce tra programmi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un prodotto modulare costa sempre meno di uno integrato?</h2></div>
+  <div class="poll" data-id="u8-modulare" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sì, perché i moduli si riutilizzano</li><li>No: connettori, viti e involucri in più costano; in grandi volumi l'integrato può costare meno</li><li>Sì, perché si ripara più facilmente</li><li>No, perché i moduli sono sempre più pesanti</li></ol>
+    <p class="why">La modularità fa risparmiare in varietà, riparazioni e aggiornamenti, ma ogni interfaccia aggiunge pezzi e lavoro. Per un oggetto fabbricato in enormi volumi e mai riparato, integrare può costare meno. Si sceglie caso per caso.</p>
+  </div>
+  <aside class="notes">Il trabocchetto: A e C sono vantaggi veri della modularità, ma non dimostrano un costo sempre minore. D è falsa per la parola "sempre". Esempio: un auricolare economico è integrato perché va prodotto in milioni di pezzi, piccolo e leggero. Verdino è modulare perché la pompa è il pezzo che si guasta più spesso e deve essere sostituibile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un sistema, un'idea coerente</h2></div>
+  <figure class="citazione">
+    <blockquote>Sosterrò che l'integrità concettuale è la considerazione più importante nella progettazione di un sistema.</blockquote>
+    <figcaption><b>Fred Brooks</b>, informatico, responsabile del sistema operativo IBM OS/360, The Mythical Man-Month, 1975</figcaption>
+  </figure>
+  <div class="card soft"><p>Per Brooks un sistema funziona bene se poche persone ne decidono l'architettura e tutti i moduli seguono le stesse regole. Vale per il software e vale per Verdino.</p></div>
+  <aside class="notes">Traduzione nostra dall'inglese ("I will contend that conceptual integrity is the most important consideration in system design", capitolo 4 di The Mythical Man-Month, 1975). Esempio su Verdino: se ogni modulo usasse viti diverse, connettori diversi, colori diversi per i LED, il prodotto perderebbe integrità. Domanda: "chi, nel team di Verdino, dovrebbe essere l'architetto?"</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>L'architettura di Verdino in diagrams.net</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b>, salva sul dispositivo, diagramma vuoto.</li>
+      <li>Disegna 5 moduli: contenitore, irrigazione, elettronica, alimentazione, app.</li>
+      <li>Collega i moduli con frecce: almeno 6 interfacce.</li>
+      <li>Colora le frecce: nero meccaniche, rosso elettriche, blu dati. Aggiungi una legenda.</li>
+      <li>Salva <b>architettura-verdino.drawio</b>, esporta in PNG e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 5 moduli, almeno 6 frecce con un'etichetta (che cosa passa), tre colori e una legenda. L'app non ha frecce nere: con il vaso scambia solo dati.</div>
+  </div>
+  <aside class="notes">Una soluzione: alimentazione → elettronica (rosso, 5 V); elettronica → irrigazione (rosso, comando pompa); irrigazione → contenitore (nero, tubo e acqua); contenitore → elettronica (rosso, cavo del sensore inserito nel terreno; il sensore può stare nel modulo elettronica); elettronica ↔ app (blu, dati Wi-Fi); elettronica → contenitore (nero, viti di fissaggio della scheda). Chi finisce prima: aggiunge un sesto modulo "batteria" e discute quali interfacce cambiano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La configurazione</p><h2>Quante versioni di Verdino a catalogo?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Configurare vuol dire decidere come si dispongono i moduli e quali <b>varianti</b> si offrono: taglie, colori, versioni.</p>
+      <ul class="points">
+        <li>Taglia: S oppure M</li>
+        <li>Colore: bianco, verde salvia, antracite</li>
+        <li>Versione: Wi-Fi oppure Base (solo LED)</li>
+      </ul>
+    </div>
+    <div class="puzzle-codice" data-risposta="12" data-aiuto="moltiplica le scelte: taglie per colori per versioni">
+      <p>Quante configurazioni diverse deve gestire il magazzino?</p>
+      <div class="premio"><b>Aperto!</b> 2 × 3 × 2 = 12 configurazioni, ognuna con il suo codice.</div>
+    </div>
+  </div>
+  <aside class="notes">Codice 12. Ogni opzione in più moltiplica le configurazioni: un quarto colore porterebbe a 16. Per questo le imprese progettano piattaforme comuni e rimandano la differenziazione il più tardi possibile (per esempio il colore è solo la cover esterna, montata alla fine). I configuratori online delle auto e dei PC sono l'esempio che gli studenti conoscono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La progettazione di dettaglio</p><h2>Ogni pezzo, nero su bianco</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Geometria</b>: forma e misure, nel file CAD e nel disegno</li>
+      <li><b>Tolleranze</b>: di quanto una misura può sbagliare</li>
+      <li><b>Materiali</b> e finiture</li>
+      <li><b>Make or buy</b>: produrlo noi o comprarlo</li>
+      <li><b>Firmware</b> e app, fino all'ultima schermata</li>
+    </ul>
+    <div class="card night"><h3>Risultato</h3><p>La documentazione di controllo: disegni con cartiglio, modelli CAD, specifiche, distinta base completa con codici e fornitori.</p></div>
+  </div>
+  <aside class="notes">Nessuna misura è perfetta: la tolleranza indica l'intervallo accettato (per esempio 3,2 ± 0,1 mm). Make or buy per Verdino: il vaso si stampa su disegno nostro (make o lavorazione affidata a terzi su nostro stampo); la scheda Wi-Fi si compra pronta (buy). Collegamento con l'unità 5: il cartiglio, la codifica, le versioni e le revisioni dei documenti tecnici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal generale al particolare</p><h2>Metti in ordine, dal più generale al più dettagliato</h2></div>
+  <ol class="puzzle-ordina" data-id="u8-livelli-progetto">
+    <li>Verdino, il prodotto</li>
+    <li>Il modulo elettronica</li>
+    <li>La scheda Wi-Fi</li>
+    <li>Il foro di fissaggio della scheda</li>
+    <li>Diametro del foro: 3,2 mm ± 0,1</li>
+  </ol>
+  <aside class="notes">Ordine: prodotto, modulo (sistema), componente, caratteristica del componente, quota con tolleranza. I primi due livelli sono decisi nella progettazione di sistema, gli ultimi due nella progettazione di dettaglio. Il foro da 3,2 mm è il classico foro passante per una vite M3 (diametro nominale 3 mm).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il foro deve misurare 3,2 ± 0,1 mm. Quale pezzo si scarta?</h2></div>
+  <div class="poll" data-id="u8-tolleranza" data-tipo="quiz" data-risposta="D">
+    <ol><li>3,10 mm</li><li>3,25 mm</li><li>3,15 mm</li><li>3,31 mm</li></ol>
+    <p class="why">L'intervallo accettato va da 3,1 a 3,3 mm, estremi compresi. 3,10 è proprio sul limite inferiore ed è buono; 3,31 supera il limite superiore di un centesimo ed è da scartare.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: molti scartano il pezzo sul limite. Le tolleranze si scrivono anche come limiti (3,1 - 3,3) o con scostamenti diversi sopra e sotto (per esempio 3,2 +0,1/0). Nel laboratorio successivo controlleremo dieci pezzi con Calc.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Controllo dei fori con Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In A2:A11 scrivi le misure: 3,18 · 3,22 · 3,31 · 3,10 · 3,27 · 3,05 · 3,20 · 3,29 · 3,12 · 3,34.</li>
+      <li>In E1 il limite inferiore <b>3,1</b>, in E2 il superiore <b>3,3</b> (scritti a mano).</li>
+      <li>In B2: <code>=SE(E(A2&gt;=$E$1;A2&lt;=$E$2);"OK";"SCARTO")</code>, copiala fino a B11.</li>
+      <li>In E4 conta gli scarti: <code>=CONTA.SE(B2:B11;"SCARTO")</code>; in E5 la percentuale <code>=E4/10</code>.</li>
+      <li>Salva come <b>controllo-fori.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 3 scarti (3,31 · 3,05 · 3,34), 7 pezzi OK, percentuale di scarto <b>30%</b>. Il 3,10 deve risultare OK.</div>
+  </div>
+  <aside class="notes">Scarti: 3,31 e 3,34 sopra 3,3; 3,05 sotto 3,1. Perché i limiti scritti a mano? Se si calcolano come 3,2-0,1, il computer ottiene 3,1000000000000005 per via della rappresentazione binaria dei decimali e il 3,10 verrebbe scartato: ottimo spunto per Informatica (virgola mobile, IEEE 754). Formattare E5 come percentuale. Discussione: un 30% di scarti è inaccettabile; tornerà con il Six Sigma (capacità del processo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La classificazione</p><h2>Ogni pezzo ha il suo codice: leggilo</h2></div>
+  <p class="lead">Codice di esempio: <code>ELE-SEN-0220-B</code></p>
+  <dl class="puzzle-abbina" data-id="u8-codice">
+    <dt>ELE</dt><dd>Famiglia: componenti elettronici</dd>
+    <dt>SEN</dt><dd>Tipo: sensori</dd>
+    <dt>0220</dt><dd>Numero progressivo del pezzo</dd>
+    <dt>B</dt><dd>Revisione del disegno</dd>
+  </dl>
+  <aside class="notes">Classificare significa raggruppare i pezzi in famiglie con caratteristiche comuni e dare a ciascuno un codice univoco. Codici "parlanti" (significativi) come questo si leggono a colpo d'occhio, ma si esauriscono o diventano incoerenti quando il pezzo cambia famiglia; i codici non significativi (solo un numero progressivo) sono più robusti e si affiancano a una descrizione nel database. Raggruppare pezzi simili permette di riusarli e di lavorarli con le stesse macchine (tecnologia di gruppo). Collegamento con la codifica dei documenti dell'unità 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La standardizzazione</p><h2>Usare pezzi che esistono già</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li><b>Viti metriche ISO</b>: si trovano ovunque, a basso costo</li>
+        <li><b>USB-C</b>: per la direttiva (UE) 2022/2380 è il connettore di ricarica comune per molti dispositivi</li>
+        <li><b>Meno codici</b>: ordini più grandi, magazzino più semplice, meno errori</li>
+      </ul>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nella casa connessa esiste uno standard aperto, <b>Matter</b>, pubblicato nel 2022 dalla Connectivity Standards Alliance: un dispositivo compatibile può dialogare con gli assistenti e le app di produttori diversi. Per Verdino sarebbe un'interfaccia di dati standard al posto di un'app chiusa.</p></div>
+  </div>
+  <aside class="notes">La direttiva (UE) 2022/2380 ha modificato la direttiva sulle apparecchiature radio introducendo il caricabatterie comune USB-C per telefoni, tablet, fotocamere, cuffie e altri dispositivi (obbligo dalla fine del 2024; per i portatili dal 2026). Verdino, alimentato via USB-C, usa cavi e alimentatori che il cliente ha già. Standardizzare non vuol dire fare tutto uguale: si standardizzano i pezzi nascosti per differenziare quelli visibili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Pezzo standard o pezzo su disegno nostro?</h2></div>
+  <div class="puzzle-categorie" data-id="u8-standard">
+    <div class="cat"><h4>Standard: si compra a catalogo</h4><ul><li>Vite M3</li><li>Connettore USB-C</li><li>LED RGB</li><li>Tubo in silicone</li></ul></div>
+    <div class="cat"><h4>Su disegno: lo progettiamo noi</h4><ul><li>Vaso con serbatoio</li><li>Coperchio con il logo</li><li>Circuito stampato di Verdino</li><li>Firmware</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come nei contenitori. Il circuito stampato è su disegno nostro anche se i componenti montati sopra sono standard; il firmware è "su disegno" nel senso che lo scriviamo noi. Domanda: "quale pezzo su disegno potremmo sostituire con uno standard?" Per esempio il coperchio, usando un tappo commerciale con un adesivo con il logo: analisi del valore e standardizzazione lavorano insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u8-uscita-progettazione" data-extra="integrata|revisione">
+    <p>Nella progettazione di sistema si definiscono i moduli e le loro <span class="slot" data-risposta="interfacce"></span>.</p>
+    <p>Un'architettura <span class="slot" data-risposta="modulare"></span> permette di cambiare un modulo senza toccare gli altri.</p>
+    <p>L'intervallo di cui una misura può variare si chiama <span class="slot" data-risposta="tolleranza"></span>.</p>
+    <p>Usare pezzi a catalogo e ridurre i codici è la <span class="slot" data-risposta="standardizzazione"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: interfacce, modulare, tolleranza, standardizzazione. Distrattori: integrata (il contrario di modulare) e revisione (parte del codice, non dell'intervallo).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sistema: moduli e interfacce</li>
+      <li>Modulare o integrata: si sceglie caso per caso</li>
+      <li>Configurazione: le varianti si moltiplicano</li>
+    </ul>
+    <ul class="points">
+      <li>Dettaglio: misure, tolleranze, materiali, make or buy</li>
+      <li>Classificazione: famiglie e codici</li>
+      <li>Standardizzazione: meno codici, pezzi a catalogo</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: l'analogia tra architettura di prodotto e architettura software (moduli, interfacce, API, standard aperti) è un collegamento naturale con Informatica e TPSIT. Prossima lezione: la progettazione del processo produttivo di Verdino.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

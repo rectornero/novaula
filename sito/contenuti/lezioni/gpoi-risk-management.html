@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il risk management · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 3</p>
+  <h1>Il risk<br>management</h1>
+  <p class="lead">Non si possono eliminare tutti i rischi, ma si possono conoscere, pesare e gestire prima che diventino problemi. Con un metodo in cinque fasi e una matrice.</p>
+  <aside class="notes">Lezione del libro "Il risk management". Obiettivi: definire il rischio secondo la ISO 31000, conoscere la normativa di riferimento, le cinque fasi della gestione del rischio, la matrice probabilità/impatto, le strategie di trattamento; costruire un registro dei rischi in Calc. Collegamenti: unità 9 (Risk Based Thinking nelle norme ISO), unità 10 (valutazione dei rischi per la sicurezza, D.Lgs. 81/2008), unità 4 (rischi di progetto). Durata indicativa: 2-3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per te, che cos'è un rischio?</h2></div>
+  <div class="poll" data-id="u3r-def">
+    <ol><li>Un pericolo, qualcosa che può fare male</li><li>La probabilità di perdere qualcosa</li><li>Un'incertezza che può avere effetti positivi o negativi</li><li>Qualcosa da evitare sempre</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione: tutte le risposte contengono un pezzo di verità. Nella slide successiva mostriamo la definizione della ISO 31000, che corrisponde alla C. Chi ha scelto la A confonde rischio e pericolo (lo vedremo bene nell'unità 10: il pericolo è la fonte, il rischio è la combinazione di probabilità e danno). Chi ha scelto la D: anche non fare niente è rischioso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La definizione · ISO 31000:2018</p><h2>Rischio: l'effetto dell'incertezza sugli obiettivi</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Incertezza</h3><p class="muted">Non sappiamo se l'evento accadrà, né quanto peserà.</p></div>
+    <div class="card"><h3>Obiettivi</h3><p class="muted">Un rischio esiste sempre rispetto a qualcosa che vogliamo ottenere.</p></div>
+    <div class="card"><h3>Effetto</h3><p class="muted">Può essere negativo (minaccia) o positivo (opportunità).</p></div>
+  </div>
+  <div class="formula"><small>Per misurarlo, nella pratica</small>Rischio = <span class="hl">Probabilità</span> × <span class="hl">Impatto</span></div>
+  <aside class="notes">ISO 31000:2018 "Risk management - Guidelines", recepita in Italia come UNI ISO 31000:2018: "effect of uncertainty on objectives" (effetto dell'incertezza sugli obiettivi, traduzione nostra). La formula R = P × I è una semplificazione usata nella matrice: probabilità e impatto si stimano su scale da 1 a 5 (o da 1 a 4, come spesso nei documenti di valutazione dei rischi per la sicurezza). Esempio di rischio positivo: un grande cliente potrebbe chiedere un'estensione del progetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La normativa</p><h2>Chi dice come gestire i rischi</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>ISO 31000:2018</h3><p class="small">Linee guida per qualunque organizzazione e qualunque tipo di rischio. Non è certificabile: è un riferimento di metodo.</p></div>
+    <div class="card soft"><h3>D.Lgs. 81/2008</h3><p class="small">Per la sicurezza sul lavoro la valutazione dei rischi è un <b>obbligo</b> del datore di lavoro, con il DVR (documento di valutazione dei rischi).</p></div>
+    <div class="card"><h3>ISO 9001:2015 e sorelle</h3><p class="small">I sistemi di gestione chiedono di considerare rischi e opportunità (risk-based thinking).</p></div>
+    <div class="card"><h3>Project management</h3><p class="small">Le guide del PMI e i metodi di progetto dedicano un'area alla gestione dei rischi di progetto.</p></div>
+  </div>
+  <aside class="notes">D.Lgs. 81/2008: la valutazione di tutti i rischi e l'elaborazione del DVR sono obblighi del datore di lavoro non delegabili (art. 17; contenuti del documento all'art. 28). Lo approfondiremo nell'unità 10. Risk-based thinking: unità 9 (le norme ISO sui sistemi di gestione con la struttura di alto livello). Nella gestione progetti la PMBOK Guide del PMI tratta la gestione dei rischi; ne riparleremo nell'unità 4. Messaggio: la ISO 31000 è volontaria, il D.Lgs. 81/2008 è legge.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Quale di queste affermazioni è vera?</h2></div>
+  <div class="poll" data-id="u3r-norme" data-tipo="quiz" data-risposta="D">
+    <ol><li>La ISO 31000 è obbligatoria per tutte le imprese</li><li>Un'impresa può farsi certificare secondo la ISO 31000</li><li>Il DVR serve solo alle imprese con più di 50 dipendenti</li><li>Chi ha anche un solo lavoratore deve valutare i rischi per la sicurezza</li></ol>
+    <p class="why">La ISO 31000 è una linea guida volontaria e non certificabile. Il D.Lgs. 81/2008 obbliga invece ogni datore di lavoro, anche con un solo lavoratore, a valutare i rischi e a redigere il DVR.</p>
+  </div>
+  <aside class="notes">Risposta D. La C è il tranello: per le imprese fino a 50 lavoratori esistono procedure standardizzate per redigere il DVR, ma l'obbligo di valutare i rischi resta. La B confonde la ISO 31000 con le norme sui sistemi di gestione (ISO 9001, 14001, 45001), che invece sono certificabili. Ci torneremo nelle unità 9 e 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Le cinque fasi della gestione del rischio</h2></div>
+  <ol class="puzzle-ordina" data-id="u3r-fasi">
+    <li>Identificazione: quali rischi esistono?</li>
+    <li>Analisi: con che probabilità e quale impatto?</li>
+    <li>Valutazione: quali sono accettabili e quali no?</li>
+    <li>Trattamento: che cosa facciamo per ciascuno?</li>
+    <li>Monitoraggio e riesame: come cambiano nel tempo?</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. È un ciclo: dal monitoraggio si torna all'identificazione (come nel PDCA). La ISO 31000 descrive il processo con più dettaglio: comunicazione e consultazione (lungo tutto il processo); definizione di ambito, contesto e criteri; valutazione del rischio, che comprende identificazione, analisi e ponderazione; trattamento; monitoraggio e riesame; registrazione e reporting. Le cinque fasi sono la sintesi didattica del libro. Attenzione ai termini: nella norma "valutazione del rischio" (risk assessment) è l'insieme di identificazione, analisi e ponderazione; qui "valutazione" indica la ponderazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In quale fase siamo?</h2></div>
+  <div class="puzzle-categorie" data-id="u3r-fasi-cat" style="--cols:4">
+    <div class="cat"><h4>Identificazione</h4><ul><li>Brainstorming sui possibili problemi</li><li>Lista di controllo dei progetti passati</li></ul></div>
+    <div class="cat"><h4>Analisi e valutazione</h4><ul><li>Stimare probabilità e impatto</li><li>Confronto con la soglia accettabile</li></ul></div>
+    <div class="cat"><h4>Trattamento</h4><ul><li>Backup automatico ogni notte</li><li>Stipulare un'assicurazione</li></ul></div>
+    <div class="cat"><h4>Monitoraggio</h4><ul><li>Rivedere il registro ogni mese</li><li>Controllare gli indicatori di allarme</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Abbiamo unito analisi e valutazione in un solo contenitore per stare nella slide. Discussione sulla "lista di controllo dei progetti passati": si usano le lezioni apprese (lessons learned) per non dimenticare rischi già incontrati. Indicatori di allarme (trigger): segnali che un rischio sta per diventare realtà, per esempio due giorni di ritardo del fornitore. 4 minuti a coppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La matrice probabilità × impatto</p><h2>Metti ogni rischio nella sua casella</h2></div>
+  <div class="puzzle-trascina" data-id="u3r-matrice" data-extra="Rischio zero">
+    <div style="position:relative;width:1664px;height:430px;font-size:22px">
+      <svg width="1050" height="430" viewBox="0 0 1050 430" style="position:absolute;left:0;top:0">
+        <rect x="90" y="0" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="268" y="62" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">5</text>
+        <rect x="280" y="0" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="458" y="62" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">10</text>
+        <rect x="470" y="0" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="648" y="62" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">15</text>
+        <rect x="660" y="0" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="838" y="62" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">20</text>
+        <rect x="850" y="0" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="1028" y="62" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">25</text>
+        <rect x="90" y="72" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="268" y="134" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">4</text>
+        <rect x="280" y="72" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="458" y="134" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">8</text>
+        <rect x="470" y="72" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="648" y="134" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">12</text>
+        <rect x="660" y="72" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="838" y="134" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">16</text>
+        <rect x="850" y="72" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="1028" y="134" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">20</text>
+        <rect x="90" y="144" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="268" y="206" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">3</text>
+        <rect x="280" y="144" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="458" y="206" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">6</text>
+        <rect x="470" y="144" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="648" y="206" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">9</text>
+        <rect x="660" y="144" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="838" y="206" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">12</text>
+        <rect x="850" y="144" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="1028" y="206" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">15</text>
+        <rect x="90" y="216" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="268" y="278" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">2</text>
+        <rect x="280" y="216" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="458" y="278" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">4</text>
+        <rect x="470" y="216" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="648" y="278" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">6</text>
+        <rect x="660" y="216" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="838" y="278" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">8</text>
+        <rect x="850" y="216" width="190" height="72" fill="#fde0dc" stroke="#ffffff" stroke-width="4"/><text x="1028" y="278" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">10</text>
+        <rect x="90" y="288" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="268" y="350" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">1</text>
+        <rect x="280" y="288" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="458" y="350" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">2</text>
+        <rect x="470" y="288" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="648" y="350" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">3</text>
+        <rect x="660" y="288" width="190" height="72" fill="#ddf3e8" stroke="#ffffff" stroke-width="4"/><text x="838" y="350" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">4</text>
+        <rect x="850" y="288" width="190" height="72" fill="#fff1bf" stroke="#ffffff" stroke-width="4"/><text x="1028" y="350" text-anchor="end" font-size="20" fill="#596179" font-family="sans-serif">5</text>
+        <text x="70" y="332" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">1</text>
+        <text x="70" y="260" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">2</text>
+        <text x="70" y="188" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">3</text>
+        <text x="70" y="116" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">4</text>
+        <text x="70" y="44" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">5</text>
+        <text x="185" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">1</text>
+        <text x="375" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">2</text>
+        <text x="565" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">3</text>
+        <text x="755" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">4</text>
+        <text x="945" y="392" text-anchor="middle" font-size="24" font-weight="700" fill="#172033" font-family="sans-serif">5</text>
+        <text x="30" y="180" text-anchor="middle" font-size="24" fill="#596179" font-family="sans-serif" transform="rotate(-90 30 180)">probabilità</text>
+        <text x="565" y="424" text-anchor="middle" font-size="24" fill="#596179" font-family="sans-serif">impatto</text>
+      </svg>
+      <span class="slot" data-risposta="Server" style="position:absolute;left:865px;top:224px"></span>
+      <span class="slot" data-risposta="Fornitore" style="position:absolute;left:295px;top:80px"></span>
+      <span class="slot" data-risposta="Malattia" style="position:absolute;left:485px;top:152px"></span>
+      <span class="slot" data-risposta="Bug" style="position:absolute;left:675px;top:80px"></span>
+      <div class="stack" style="position:absolute;left:1110px;top:0;width:554px;gap:10px;font-size:30px;line-height:1.25">
+        <div><b>Server</b> <span class="mono">P2 · I5</span><br><span class="small">il server cloud si guasta</span></div>
+        <div><b>Fornitore</b> <span class="mono">P4 · I2</span><br><span class="small">i PC nuovi arrivano in ritardo</span></div>
+        <div><b>Malattia</b> <span class="mono">P3 · I3</span><br><span class="small">lo sviluppatore si ammala una settimana</span></div>
+        <div><b>Bug</b> <span class="mono">P4 · I4</span><br><span class="small">un errore grave arriva al cliente</span></div>
+        <div class="tiny muted">Verde basso (1-4) · giallo medio (5-9) · rosso alto (10-25)</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Server riga P=2, colonna I=5 (punteggio 10, alto); Fornitore P=4, I=2 (8, medio); Malattia P=3, I=3 (9, medio); Bug P=4, I=4 (16, alto). Distrattore: "Rischio zero", che non esiste: si può solo ridurre un rischio a un livello accettabile (rischio residuo). Le soglie dei colori sono una scelta dell'organizzazione (i "criteri di rischio" della ISO 31000): qui usiamo basso fino a 4, medio da 5 a 9, alto da 10. Domanda: quale rischio trattereste per primo? Il Bug (16), poi il Server (10).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Rischio A: P = 1, I = 5. Rischio B: P = 5, I = 1.</h2></div>
+  <div class="poll" data-id="u3r-pari" data-tipo="quiz" data-risposta="C">
+    <p class="q">Quale va trattato per primo?</p>
+    <ol><li>A: l'impatto conta sempre più della probabilità</li><li>B: succederà quasi sicuramente</li><li>Hanno lo stesso punteggio: decide il contesto, la matrice da sola non basta</li><li>Nessuno: un punteggio di 5 è sempre trascurabile</li></ol>
+    <p class="why">P × I dà 5 a entrambi, ma un evento raro e catastrofico (A) e uno frequente e lieve (B) si trattano in modo diverso: per A di solito si trasferisce (assicurazione) o si prepara un piano di emergenza; per B si riduce con una procedura.</p>
+  </div>
+  <aside class="notes">Risposta C. È il limite principale della matrice: il prodotto nasconde la forma del rischio. Esempi: A = incendio della sala server (raro, gravissimo); B = un collega arriva in ritardo alla riunione (frequente, lieve). Molte organizzazioni aggiungono una regola: ogni rischio con impatto 5 va trattato, qualunque sia la probabilità. Per la sicurezza sul lavoro si dà priorità ai danni gravi e irreversibili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il trattamento</p><h2>Quattro risposte a una minaccia</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Evitare</h3><p class="small muted">Cambiare il piano perché il rischio non esista più.</p></div>
+    <div class="card"><h3>Ridurre</h3><p class="small muted">Abbassare la probabilità o l'impatto (mitigare).</p></div>
+    <div class="card"><h3>Trasferire</h3><p class="small muted">Spostare l'impatto su altri: assicurazione, contratto.</p></div>
+    <div class="card"><h3>Accettare</h3><p class="small muted">Tenerlo, con una riserva di tempo o di denaro.</p></div>
+  </div>
+  <div class="callout">Ogni rischio importante ha un <b>responsabile</b> (risk owner), un'azione, una scadenza. E un rischio trattato lascia un <b>rischio residuo</b>.</div>
+  <aside class="notes">Per le opportunità (rischi positivi) le strategie speculari sono sfruttare, condividere, migliorare, accettare. La PMBOK Guide aggiunge "escalation": portare il rischio al livello superiore quando è fuori dal controllo del team. Il rischio residuo è quello che resta dopo il trattamento: va accettato consapevolmente. Collegamento con la sicurezza: la gerarchia delle misure di prevenzione e protezione dell'unità 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni strategia al suo esempio</h2></div>
+  <dl class="puzzle-abbina" data-id="u3r-strategie">
+    <dt>Evitare</dt><dd>Non usare una libreria che non è più aggiornata</dd>
+    <dt>Ridurre</dt><dd>Test automatici prima di ogni rilascio</dd>
+    <dt>Trasferire</dt><dd>Polizza assicurativa contro i danni ai server</dd>
+    <dt>Accettare</dt><dd>Due giorni di riserva alla fine del piano</dd>
+    <dt>Escalation</dt><dd>Segnalare al committente un rischio fuori dal controllo del team</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Sul "trasferire": il rischio non sparisce, si sposta l'impatto economico; se il server brucia, il servizio si ferma comunque. Sull'"accettare": le due giornate di riserva sono una riserva di contingenza (contingency reserve), un concetto che ritroveremo nel CPM e nel Gantt.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>I rischi piccoli sono i più pericolosi</h2></div>
+  <figure class="citazione">
+    <blockquote>Come fa un progetto ad accumulare un anno di ritardo? Un giorno alla volta.</blockquote>
+    <figcaption><b>Fred Brooks</b>, informatico, capo del progetto IBM System/360, <i>The Mythical Man-Month</i>, 1975</figcaption>
+  </figure>
+  <p class="lead">Per questo il risk management non finisce dopo la matrice: il monitoraggio settimanale vede i piccoli ritardi prima che diventino un anno.</p>
+  <aside class="notes">Originale: "How does a project get to be a year late? ... One day at a time." (capitolo 14, "Hatching a Catastrophe"). Traduzione nostra. Brooks guidò lo sviluppo del sistema operativo OS/360 per IBM negli anni '60 e da quell'esperienza scrisse il libro, famoso anche per la "legge di Brooks": aggiungere persone a un progetto software in ritardo lo ritarda ancora di più. Collegamento: monitoraggio e controllo del progetto (unità 4).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il registro dei rischi di Officina Digitale</h2>
+  <div class="cols-2 wide-left">
+    <table class="sheet" style="font-size:24px">
+      <tr><th></th><th>A</th><th>B</th><th>C</th></tr>
+      <tr><th>1</th><td>Rischio</td><td>P</td><td>I</td></tr>
+      <tr><th>2</th><td>Server cloud giù il giorno della consegna</td><td>2</td><td>5</td></tr>
+      <tr><th>3</th><td>Il cliente cambia i requisiti a metà</td><td>4</td><td>3</td></tr>
+      <tr><th>4</th><td>Sviluppatore malato una settimana</td><td>3</td><td>2</td></tr>
+      <tr><th>5</th><td>Furto di credenziali (phishing)</td><td>2</td><td>4</td></tr>
+      <tr><th>6</th><td>PC nuovi consegnati in ritardo</td><td>3</td><td>1</td></tr>
+      <tr><th>7</th><td>Bug grave scoperto dal cliente</td><td>3</td><td>4</td></tr>
+    </table>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Copia la tabella in <b>Calc</b> (impresa di esempio).</li>
+        <li>D2: <code>=B2*C2</code>. E2: <code>=SE(D2&gt;=10;"alto";SE(D2&gt;=5;"medio";"basso"))</code>. Copia in basso.</li>
+        <li>Colora E con la formattazione condizionata. Ordina per D decrescente.</li>
+        <li>Per i rischi alti scrivi in F la strategia e in G il responsabile.</li>
+        <li>Salva <b>rischi_cognome.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> 3 rischi alti, 2 medi, 1 basso.</div>
+    </div>
+  </div>
+  <aside class="notes">Punteggi: server 10 (alto), requisiti 12 (alto), malattia 6 (medio), phishing 8 (medio), PC in ritardo 3 (basso), bug 12 (alto). Ordinati: requisiti 12, bug 12, server 10, phishing 8, malattia 6, PC 3. Strategie possibili: requisiti → ridurre (contratto con gestione delle modifiche, consegne frequenti); bug → ridurre (test automatici, revisione del codice); server → trasferire/ridurre (accordo sul livello di servizio con il fornitore, server di riserva, consegna non nel giorno critico). Per la formattazione condizionata in Calc: menu Formato, Condizionale; se il percorso cambia nella versione installata, cercare "formattazione condizionata" nella guida. Variante per chi finisce: aggiungere la colonna "P dopo il trattamento" e ricalcolare il rischio residuo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il rischio nell'AI Act (Reg. UE 2024/1689)</p><h2>Che livello di rischio per la legge europea?</h2></div>
+  <div class="puzzle-categorie" data-id="u3r-aiact" style="--cols:4">
+    <div class="cat"><h4>Vietato</h4><ul><li>Punteggio sociale dei cittadini</li><li>Riconoscere le emozioni dei dipendenti</li></ul></div>
+    <div class="cat"><h4>Alto rischio</h4><ul><li>AI che seleziona i CV</li><li>AI che valuta gli esami</li></ul></div>
+    <div class="cat"><h4>Obblighi di trasparenza</h4><ul><li>Chatbot del servizio clienti</li><li>Video deepfake</li></ul></div>
+    <div class="cat"><h4>Rischio minimo</h4><ul><li>Filtro antispam</li><li>AI nei videogiochi</li></ul></div>
+  </div>
+  <aside class="notes">Il Regolamento europeo sull'intelligenza artificiale (Reg. UE 2024/1689, AI Act) segue proprio un approccio basato sul rischio. Soluzione: vietati il punteggio sociale (social scoring) e il riconoscimento delle emozioni sul luogo di lavoro e nell'istruzione (salvo motivi medici o di sicurezza); alto rischio i sistemi usati per selezionare il personale e per valutare i risultati dell'apprendimento (allegato III); obblighi di trasparenza per chatbot (l'utente deve sapere che parla con un'AI) e contenuti generati come i deepfake; rischio minimo filtri antispam e videogiochi. Gli obblighi entrano in vigore gradualmente dal 2025: i divieti si applicano dal 2 febbraio 2025, gli altri obblighi con scadenze successive (alcune in discussione: verificare lo stato aggiornato). 5 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Rischi dell'AI e AI per i rischi</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Due direzioni</h3><p>L'AI aiuta a individuare rischi (analizza i registri dei progetti passati, segnala anomalie nei dati), ma è anche una fonte di rischio: errori, discriminazioni, dati personali. Per gestirla esistono l'AI Act e la norma <b>ISO/IEC 42001:2023</b>, il primo standard di sistema di gestione per l'AI.</p></div>
+    <div class="callout hl"><b>All'esame</b><br>Il rischio è un ponte tra molte materie: il registro dei rischi del tuo progetto (GPOI), la sicurezza dei dati (Sistemi e reti), la valutazione dei rischi del PCTO (D.Lgs. 81/2008). Porta una matrice compilata da te.</div>
+  </div>
+  <aside class="notes">ISO/IEC 42001:2023 "Artificial intelligence - Management system": stabilisce i requisiti per un sistema di gestione dell'AI in un'organizzazione, con la stessa struttura di alto livello delle altre norme ISO (unità 9); è certificabile. Esempio realistico di AI per i rischi: modelli che segnalano transazioni bancarie anomale (rilevazione delle frodi). Evitare promesse: l'AI stima, ma la decisione e la responsabilità restano alle persone. Sui collegamenti all'esame: indicazione di metodo, non una regola ministeriale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Il piano di risposta ai rischi della vostra impresa</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riprendete l'idea d'impresa e la SWOT: debolezze e minacce sono una miniera di rischi.</li>
+      <li>Fate un brainstorming di 5 minuti: almeno 8 rischi, anche uno positivo.</li>
+      <li>Stimate P e I (da 1 a 5) e disegnate la matrice in <b>Writer</b> o in <b>Calc</b>.</li>
+      <li>Per i 3 rischi più alti: strategia, azione concreta, responsabile, segnale d'allarme.</li>
+      <li>Salvate come <b>rischi_gruppo.odt</b> (o <b>.ods</b>).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni azione ha un nome e una scadenza. "Stare attenti" non è un'azione; "backup ogni notte, lo controlla Sara il lunedì" sì.</div>
+  </div>
+  <aside class="notes">Gestione: 20 minuti di lavoro, 10 di confronto: ogni gruppo presenta il suo rischio più alto e la classe vota se la risposta è convincente. Il rischio positivo (opportunità) serve a ricordare la definizione della ISO 31000. Valutare: varietà dei rischi (tecnici, economici, di mercato, organizzativi, legali), coerenza delle stime, concretezza delle azioni, presenza dei responsabili. Il file torna utile come capitolo "Rischi" del business plan.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole giuste</h2></div>
+  <div class="puzzle-trascina" data-id="u3r-uscita" data-extra="eliminare|pericolo">
+    <p>Per la ISO 31000 il rischio è l'effetto dell'<span class="slot" data-risposta="incertezza"></span> sugli obiettivi.</p>
+    <p>Nella matrice il punteggio è probabilità per <span class="slot" data-risposta="impatto"></span>.</p>
+    <p>Un'assicurazione serve a <span class="slot" data-risposta="trasferire"></span> il rischio.</p>
+    <p>Il rischio che resta dopo il trattamento si chiama rischio <span class="slot" data-risposta="residuo"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: incertezza, impatto, trasferire, residuo. Distrattori: eliminare (il rischio zero non esiste) e pericolo (la fonte del danno, non il rischio).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Rischio: effetto dell'incertezza sugli obiettivi</li>
+      <li>ISO 31000 (metodo), D.Lgs. 81/2008 (obbligo)</li>
+      <li>Identificare, analizzare, valutare, trattare, monitorare</li>
+    </ul>
+    <ul class="points">
+      <li>Matrice P × I: utile, ma non basta da sola</li>
+      <li>Evitare, ridurre, trasferire, accettare</li>
+      <li>Ogni rischio ha un responsabile e un'azione</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: l'Agenda 2030 dell'ONU, dove i rischi diventano globali (clima, risorse, disuguaglianze) e le imprese sono chiamate a fare la loro parte.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

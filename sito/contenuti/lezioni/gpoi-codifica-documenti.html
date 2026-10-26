@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La codifica dei documenti · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 5</p>
+  <h1>La codifica<br>dei documenti</h1>
+  <p class="lead">Un codice, un cartiglio, un indice di revisione: come si riconosce sempre la versione giusta di un documento, anche dopo mesi.</p>
+  <aside class="notes">Obiettivi: assegnare un codice identificativo a un documento; leggere e compilare un cartiglio; distinguere bozze, revisioni e stati del documento; conoscere il versionamento semantico del software. Durata: 2 ore. Riprende la lezione precedente (componenti del documento: identificazione e storia delle revisioni). Gli esempi usano la sigla NQ del progetto "Novaula per il quartiere" che la classe svolgerà nell'Unità 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nel tuo computer, quanti file "definitivi" ci sono?</h2></div>
+  <div class="poll" data-id="u5-definitivo">
+    <ol><li>Nessuno: uso nomi con data o numero di versione</li><li>Uno solo, "definitivo" vuol dire definitivo</li><li>definitivo, definitivo2, definitivo_DAVVERO…</li><li>Non lo so e preferisco non controllare</li></ol>
+  </div>
+  <aside class="notes">Sondaggio leggero, 2 minuti. La C vince quasi sempre e fa ridere: è proprio il problema che la codifica risolve. Domanda: in un'azienda con 200 persone e 10 000 documenti, che cosa succede se il cliente riceve "definitivo2" invece di "definitivo3"? Si costruisce, si installa o si paga sulla base di un documento sbagliato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Identificazione</p><h2>Un codice per ogni documento</h2></div>
+  <div class="formula"><small>Un esempio di regola di codifica (progetto · tipo · numero · revisione)</small>NQ-<span class="hl">SPC</span>-003 · Rev. B</div>
+  <div class="cols-4">
+    <div class="card soft"><h3>NQ</h3><p>Il progetto o la commessa: Novaula per il quartiere.</p></div>
+    <div class="card soft"><h3>SPC</h3><p>Il tipo di documento: una specifica.</p></div>
+    <div class="card soft"><h3>003</h3><p>Il numero progressivo dentro quel tipo.</p></div>
+    <div class="card fill"><h3>Rev. B</h3><p>L'indice di revisione: la seconda emissione approvata.</p></div>
+  </div>
+  <aside class="notes">Ogni azienda ha la sua regola di codifica, scritta in una procedura: l'importante è che sia unica e applicata da tutti. Con le lettere, Rev. A è la prima emissione e Rev. B la seconda; con i numeri si parte spesso da Rev. 0. Far inventare alla classe la sigla per un verbale (VRB) e per un manuale (MAN). Il codice dice che cosa è il documento; la revisione dice a che punto della sua vita è.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il documento NQ-SPC-003 viene modificato e riapprovato. Il suo codice…</h2></div>
+  <div class="poll" data-id="u5-codice-cambia" data-tipo="quiz" data-risposta="D">
+    <ol><li>Diventa NQ-SPC-004, perché è un documento nuovo</li><li>Cambia solo se la modifica è importante</li><li>Prende la data della modifica in coda</li><li>Resta NQ-SPC-003: cambia solo l'indice di revisione</li></ol>
+    <p class="why">Il codice identifica il documento per tutta la sua vita: chi lo cita in altri documenti deve poterlo ritrovare. Le modifiche si tracciano con l'indice di revisione e con la tabella delle revisioni.</p>
+  </div>
+  <aside class="notes">Molti scelgono A, perché nei file personali si fa così. Spiegare il danno: un contratto che cita "NQ-SPC-003" punterebbe a un documento che non viene più aggiornato. Il numero 004 si usa solo per un documento davvero diverso (un'altra specifica).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cartiglio</p><h2>La carta d'identità stampata sul documento</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Il cartiglio è il riquadro, di solito in basso a destra nei disegni o in testa alle pagine, che raccoglie i dati per <b>identificare</b> e <b>gestire</b> il documento.</p>
+      <p class="small muted">La norma internazionale di riferimento è la ISO 7200:2004 (campi dei cartigli e delle intestazioni dei documenti tecnici).</p>
+    </div>
+    <div class="stack">
+      <div class="card soft"><h3>Identificazione</h3><p>Proprietario, codice, revisione, data, foglio.</p></div>
+      <div class="card"><h3>Descrizione</h3><p>Titolo ed eventuale sottotitolo.</p></div>
+      <div class="card"><h3>Gestione</h3><p>Redatto, approvato, tipo e stato del documento.</p></div>
+    </div>
+  </div>
+  <aside class="notes">La ISO 7200:2004 divide i campi in identificativi, descrittivi e amministrativi. Nei disegni meccanici si aggiungono scala, unità di misura, metodo di proiezione; lo vedranno in altre materie tecniche. Chiedere a chi ha portato una tavola di un'altra materia di mostrare il suo cartiglio. Nei documenti di testo il cartiglio diventa spesso un'intestazione o un piè di pagina ripetuto su ogni pagina.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Completa il cartiglio del disegno</h2></div>
+  <div class="puzzle-trascina" data-id="u5-cartiglio" data-extra="Committente|Peso">
+    <div class="cols-4" style="gap:0;border:4px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;font-size:30px">
+      <div style="grid-column:span 2;padding:14px 22px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink)"><span class="slot" data-risposta="Titolo"></span><br><b>Staffa di supporto del sensore</b></div>
+      <div style="padding:14px 22px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink)"><span class="slot" data-risposta="Codice"></span><br><code>OR-DIS-0142</code></div>
+      <div style="padding:14px 22px;border-bottom:3px solid var(--ink)"><span class="slot" data-risposta="Revisione"></span><br><b>B</b></div>
+      <div style="padding:14px 22px;border-right:3px solid var(--ink)"><span class="slot" data-risposta="Approvato"></span><br>M. Verdi, 12/10/2026</div>
+      <div style="padding:14px 22px;border-right:3px solid var(--ink)"><span class="muted small">Redatto</span><br>L. Bianchi</div>
+      <div style="padding:14px 22px;border-right:3px solid var(--ink)"><span class="slot" data-risposta="Scala"></span><br><b>1:2</b></div>
+      <div style="padding:14px 22px"><span class="slot" data-risposta="Foglio"></span><br><b>1 di 3</b></div>
+    </div>
+    <p class="small muted">Officine Rossi, un'impresa di esempio. Proprietario del documento: Officine Rossi srl.</p>
+  </div>
+  <aside class="notes">Soluzione: Titolo (Staffa di supporto del sensore), Codice (OR-DIS-0142), Revisione (B), Approvato (M. Verdi), Scala (1:2), Foglio (1 di 3). Distrattori: Committente e Peso (il peso può comparire nei disegni meccanici, ma qui il valore non c'è). In coppia, 3 minuti. Domanda: perché "1 di 3" e non solo "1"? Perché chi ha in mano un foglio deve sapere se il documento è completo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>L'ipotesi documentale</h2></div>
+  <figure class="citazione">
+    <blockquote>In mezzo a un mare di carte, un piccolo numero di documenti diventa il perno attorno a cui ruota la gestione di ogni progetto.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile del progetto IBM System/360, «The Mythical Man-Month», 1975</figcaption>
+  </figure>
+  <p class="lead">Se quei pochi documenti sono importanti, tutti devono sapere <b>qual è la revisione in vigore</b>.</p>
+  <aside class="notes">Traduzione nostra dal capitolo 10, "The Documentary Hypothesis": "Amid a wash of paper, a small number of documents become the critical pivots around which every project's management turns." Brooks elenca obiettivi, specifiche, tempi, budget, organigramma: sono i documenti che i ragazzi hanno prodotto nell'Unità 4. Chiedere: in un progetto della classe, quali sarebbero i "pochi documenti perno"?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Versioni e revisioni</p><h2>Dalla bozza alla revisione approvata</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Bozze di lavoro</b>: 0.1, 0.2, 0.3… restano nel team</li>
+      <li><b>Prima emissione</b>: Rev. 0 (o Rev. A), verificata e approvata</li>
+      <li><b>Ogni modifica approvata</b>: nuova revisione, 1, 2, 3 (o B, C, D)</li>
+      <li>La revisione precedente diventa <b>superata</b>, non si cancella</li>
+    </ul>
+    <table class="data compact">
+      <tr><th>Rev.</th><th>Data</th><th>Descrizione</th><th>Appr.</th></tr>
+      <tr><td class="mono">0</td><td>05/10</td><td>Prima emissione</td><td>MR</td></tr>
+      <tr><td class="mono">1</td><td>19/10</td><td>Aggiunto requisito R7</td><td>MR</td></tr>
+      <tr><td class="mono hl">2</td><td class="hl">26/10</td><td class="hl">Corretto §3.2</td><td class="hl">MR</td></tr>
+    </table>
+  </div>
+  <aside class="notes">La tabella delle revisioni (registro delle modifiche) dice in una riga che cosa è cambiato: chi legge la Rev. 2 sa che la differenza con la 1 è solo nel paragrafo 3.2. Molte aziende segnano le parti modificate con una barra verticale a margine. Le convenzioni (numeri o lettere, da 0 o da 1) cambiano da azienda ad azienda: conta che siano scritte e rispettate.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il percorso di una nuova revisione</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-iter-revisione">
+    <li>Arriva una richiesta di modifica, con il motivo</li>
+    <li>L'autore redige la nuova revisione e aggiorna la tabella</li>
+    <li>Un collega verifica il contenuto</li>
+    <li>Il responsabile approva e firma</li>
+    <li>La nuova revisione viene distribuita a chi la usa</li>
+    <li>La revisione precedente viene ritirata e archiviata come superata</li>
+  </ol>
+  <aside class="notes">Ordine: richiesta, redazione, verifica, approvazione, distribuzione, ritiro. Il punto critico è l'ultimo: se la vecchia revisione resta in giro (stampata in reparto, allegata a una mail), qualcuno la userà. Nelle norme sui sistemi di gestione (Unità 9) questo si chiama controllo delle informazioni documentate. Verifica e approvazione sono fatte da persone diverse dall'autore: principio dei "quattro occhi".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il cartiglio del tuo documento</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Writer attiva l'intestazione e inserisci una tabella 4 × 2 come il cartiglio della slide 6.</li>
+      <li>Compila: codice <b>NQ-PRG-001</b>, titolo "Piano di progetto", Rev. 0, data, redatto, approvato.</li>
+      <li>Nella cella del foglio inserisci i campi pagina e numero di pagine (Inserisci, Comando di campo).</li>
+      <li>In fondo aggiungi la tabella delle revisioni con la riga della Rev. 0.</li>
+      <li>Scrivi due pagine di prova e salva come <b>NQ-PRG-001_rev0.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il cartiglio compare uguale su entrambe le pagine e il numero cambia da solo: "Pagina 1 di 2", "Pagina 2 di 2". Il codice nel cartiglio coincide con il nome del file.</div>
+  </div>
+  <aside class="notes">Per le pagine di prova si può usare il testo segnaposto. Se i campi non si trovano, mostrare alla LIM il menu Inserisci, Comando di campo, Altri campi. Errore tipico: digitare "1 di 2" a mano: alla seconda pagina il cartiglio direbbe ancora "1 di 2". Il modello servirà anche nell'Unità 6, per i documenti del progetto di classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>In quale stato si trova il documento?</h2></div>
+  <div class="puzzle-categorie" data-id="u5-stati" style="--cols:4">
+    <div class="cat"><h4>Bozza</h4><ul><li>Prima stesura</li><li>Versione 0.2</li></ul></div>
+    <div class="cat"><h4>In verifica</h4><ul><li>Il collega controlla i calcoli</li><li>Inviato al revisore</li></ul></div>
+    <div class="cat"><h4>Approvato</h4><ul><li>Firmato dal responsabile</li><li>Rev. 1 inviata al cliente</li></ul></div>
+    <div class="cat"><h4>Superato</h4><ul><li>Rev. 0 dopo l'uscita della Rev. 1</li><li>Copia timbrata "obsoleta"</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Lo stato è uno dei campi amministrativi del cartiglio secondo la ISO 7200. Discutere: un documento "superato" si butta? No, si conserva (serve a ricostruire che cosa si sapeva in un certo momento, anche in caso di contestazioni), ma si segna in modo che nessuno lo usi per lavorare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il software ha le sue regole</p><h2>Il versionamento semantico</h2></div>
+  <div class="formula"><small>Semantic Versioning 2.0.0 (semver.org)</small><span class="hl">MAJOR</span>.MINOR.PATCH &nbsp;→&nbsp; 2.4.1</div>
+  <div class="cols-3">
+    <div class="card soft"><h3>MAJOR</h3><p>Cambia se il programma non è più compatibile con prima. Gli altri due tornano a 0.</p></div>
+    <div class="card soft"><h3>MINOR</h3><p>Cambia se aggiungi una funzione compatibile. PATCH torna a 0.</p></div>
+    <div class="card soft"><h3>PATCH</h3><p>Cambia se correggi un errore senza cambiare il comportamento previsto.</p></div>
+  </div>
+  <aside class="notes">Il versionamento semantico è una convenzione molto diffusa nelle librerie software (npm, molti progetti open source). La versione 0.y.z indica sviluppo iniziale: tutto può cambiare. Differenza con i documenti: qui il numero di versione è anche un messaggio a chi usa il programma ("posso aggiornare senza rompere niente?").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Che cosa è successo al programma?</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-semver">
+    <dt>2.4.1 → 2.4.2</dt><dd>Corretto un errore, per chi lo usa non cambia nulla</dd>
+    <dt>2.4.1 → 2.5.0</dt><dd>Aggiunta una funzione, compatibile con prima</dd>
+    <dt>2.4.1 → 3.0.0</dt><dd>Una modifica rompe la compatibilità</dd>
+    <dt>0.9.0</dt><dd>Sviluppo iniziale: tutto può ancora cambiare</dd>
+    <dt>3.0.0-beta.1</dt><dd>Pre-rilascio, da provare prima dell'uscita</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Il suffisso dopo il trattino indica un pre-rilascio, che precede la versione normale: 3.0.0-beta.1 viene prima di 3.0.0. Chiedere un esempio di modifica incompatibile in un'app web: cambiare il formato dei dati restituiti da un'API usata da altre app.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale versione è la più recente?</h2></div>
+  <div class="poll" data-id="u5-semver-confronto" data-tipo="quiz" data-risposta="A">
+    <ol><li>1.10.0</li><li>1.9.0</li><li>Sono la stessa versione</li><li>Non si può dire senza la data</li></ol>
+    <p class="why">Le tre parti sono numeri interi confrontati uno alla volta: MAJOR uguale (1), poi MINOR, e 10 è maggiore di 9. Non è un numero decimale: 1.10 non vale 1,1.</p>
+  </div>
+  <aside class="notes">Il tranello è leggere 1.10 come numero con la virgola (1,10 &lt; 1,9). Ordinare i file per nome produce lo stesso errore: "v1.10" finisce prima di "v1.9" in ordine alfabetico. Per questo nei nomi dei file si usano zeri iniziali (001, 002) quando serve l'ordine: lo vedremo nella lezione sul document management.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Controllo delle versioni</p><h2>Chi ha cambiato che cosa, e quando</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Nei documenti di testo</h3><p>Writer registra le modifiche (Ctrl+Maiusc+C) e le mostra con autore e data: chi approva le accetta o le rifiuta una per una.</p></div>
+    <div class="card"><h3>Nel software</h3><p>Git conserva ogni commit con autore, data e messaggio; un'etichetta (tag) segna le versioni rilasciate, per esempio v2.4.1.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nelle aziende manifatturiere i sistemi PLM gestiscono le revisioni di disegni e distinte base; nel software gli assistenti AI propongono messaggi di commit e riassunti delle differenze tra due revisioni. Restano proposte: <b>verifica e approvazione</b> sono responsabilità di persone con un nome nel cartiglio.</p></div>
+  <aside class="notes">PLM = Product Lifecycle Management. All'esame: chi ha usato Git in informatica o nel PCTO può collegare GPOI e programmazione mostrando come un tag corrisponde a una revisione approvata. Non serve entrare nei comandi di Git: basta il concetto di cronologia delle modifiche.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il registro dei documenti di progetto</h2>
+  <div class="cols-2" style="gap:40px">
+    <div class="stack">
+      <ol class="steps small">
+        <li>In Calc copia la tabella a destra in A1:D9.</li>
+        <li>In F2:F4 scrivi i tre stati; in G2 <code>=CONTA.SE($D$2:$D$9;F2)</code> e copia in basso.</li>
+        <li>In G6 <code>=MAX(C2:C9)</code>; poi filtro automatico: solo le bozze.</li>
+        <li>Salva come <b>NQ-registro-documenti.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> Approvato 4, Bozza 2, In verifica 2. Revisione più alta: 3. Con il filtro restano MAN-001 e REL-001.</div>
+    </div>
+    <table class="data compact">
+      <tr><th>Codice</th><th>Titolo</th><th>Rev</th><th>Stato</th></tr>
+      <tr><td class="mono">SPC-001</td><td>Requisiti</td><td>2</td><td>Approvato</td></tr>
+      <tr><td class="mono">SPC-002</td><td>Database</td><td>1</td><td>Approvato</td></tr>
+      <tr><td class="mono">PRG-001</td><td>Piano</td><td>3</td><td>Approvato</td></tr>
+      <tr><td class="mono">VRB-004</td><td>Verbale</td><td>0</td><td>Approvato</td></tr>
+      <tr><td class="mono">MAN-001</td><td>Manuale</td><td>0</td><td>Bozza</td></tr>
+      <tr><td class="mono">TST-001</td><td>Test</td><td>0</td><td>In verifica</td></tr>
+      <tr><td class="mono">PRG-002</td><td>Gantt</td><td>1</td><td>In verifica</td></tr>
+      <tr><td class="mono">REL-001</td><td>Relazione</td><td>0</td><td>Bozza</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Tutti i codici hanno il prefisso NQ-: per brevità nella slide è omesso, gli studenti possono aggiungerlo. Conti: stati Approvato = SPC-001, SPC-002, PRG-001, VRB-004 = 4; Bozza = MAN-001, REL-001 = 2; In verifica = TST-001, PRG-002 = 2; MAX delle revisioni = 3. Estensione per chi finisce: colonna E con la data di emissione e formattazione condizionale per evidenziare le bozze. Il registro è lo strumento del "controllo dello stato": in un colpo d'occhio si vede che cosa è approvato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto: a che versione siamo?</h2></div>
+  <div class="puzzle-codice" data-risposta="210" data-aiuto="dopo una modifica incompatibile la versione diventa 2.0.0">
+    <p>L'app è alla versione <b>1.4.2</b>. In ordine succede questo:</p>
+    <ul class="points">
+      <li>si corregge un errore nel calendario</li>
+      <li>si aggiunge l'esportazione in CSV</li>
+      <li>si corregge un errore nell'esportazione</li>
+      <li>si cambia il formato dei dati dell'API, che non è più compatibile</li>
+      <li>si aggiungono i promemoria via email</li>
+    </ul>
+    <p>Scrivi la versione finale senza punti.</p>
+    <div class="premio"><b>Aperto!</b> 1.4.3 → 1.5.0 → 1.5.1 → 2.0.0 → 2.1.0</div>
+  </div>
+  <aside class="notes">Codice: 210. Passaggi: correzione 1.4.3; nuova funzione 1.5.0 (PATCH torna a 0); correzione 1.5.1; modifica incompatibile 2.0.0 (MINOR e PATCH a 0); nuova funzione 2.1.0. Errore tipico: dimenticare di azzerare le parti a destra (2.5.1). A squadre, vince chi apre per primo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u5-uscita-codifica" data-extra="bozza|major">
+    <p>Il codice identifica il documento e non cambia; a ogni modifica approvata aumenta l'indice di <span class="slot" data-risposta="revisione"></span>.</p>
+    <p>Il riquadro con titolo, codice, revisione e firme si chiama <span class="slot" data-risposta="cartiglio"></span>.</p>
+    <p>Quando esce una nuova revisione, la precedente diventa <span class="slot" data-risposta="superata"></span>.</p>
+    <p>Nella versione 2.4.1 il numero 4 è la versione <span class="slot" data-risposta="minor"></span> e l'1 è la <span class="slot" data-risposta="patch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: revisione, cartiglio, superata, minor, patch. Distrattori: bozza, major.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un codice univoco per ogni documento, che non cambia</li>
+      <li>Il cartiglio: identificazione, descrizione, gestione</li>
+      <li>Bozze 0.x, poi revisioni approvate con tabella</li>
+    </ul>
+    <ul class="points">
+      <li>Stati: bozza, in verifica, approvato, superato</li>
+      <li>Software: MAJOR.MINOR.PATCH</li>
+      <li>Registro dei documenti e controllo delle modifiche</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: il document management, cioè come si archiviano, si cercano e si chiamano i file in un'azienda. Conservare i due file del laboratorio: il modello di cartiglio e il registro serviranno nell'Unità 6.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

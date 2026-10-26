@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi informativi aziendali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 2</p>
+  <h1>I sistemi informativi<br>aziendali</h1>
+  <p class="lead">Dati, persone e procedure che tengono in piedi un'impresa: dai sistemi operativi ai cruscotti della direzione, fino a ERP, CRM e SCM.</p>
+  <aside class="notes">Obiettivi: distinguere sistema informativo e sistema informatico; riconoscere i livelli (operativo, tattico, strategico) e i sistemi che li supportano; conoscere ERP, CRM e SCM; ragionare sull'accesso ai dati (ruoli, permessi, GDPR). Durata: 2 ore. È la lezione dell'unità più vicina al lavoro di un diplomato in informatica: molti faranno assistenza, sviluppo o configurazione proprio su questi sistemi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'impresa perde l'accesso ai suoi dati per una settimana. Che cosa si ferma per primo?</h2></div>
+  <div class="poll" data-id="u2-si-blackout">
+    <ol><li>Le vendite</li><li>La produzione</li><li>Gli stipendi</li><li>Niente: si lavora con carta e penna</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta: la risposta reale è "quasi tutto, subito". Molte imprese colpite da ransomware hanno dovuto fermare produzione e spedizioni per giorni perché ordini, magazzino e fatturazione erano nei sistemi bloccati. Collegamento con il deck cybersecurity-aziendale se la classe lo conosce. Chi sceglie D: per quanti giorni? Con quanti errori?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due cose diverse</p><h2>Sistema informativo e sistema informatico</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Sistema informativo</h3><p>L'insieme di <b>persone, procedure, dati e strumenti</b> con cui un'organizzazione raccoglie, conserva, elabora e distribuisce le informazioni che le servono.</p></div>
+    <div class="card night"><h3>Sistema informatico</h3><p>La parte <b>automatizzata</b> del sistema informativo: hardware, software, reti, database.</p></div>
+  </div>
+  <div class="callout">Il sistema informatico sta <b>dentro</b> il sistema informativo. Comprare un software nuovo non basta: bisogna cambiare anche procedure e abitudini delle persone.</div>
+  <aside class="notes">Esempio: le regole su chi approva un acquisto, i moduli cartacei firmati, le telefonate tra magazzino e vendite fanno parte del sistema informativo anche se nessun computer li gestisce. Molti progetti informatici falliscono perché trattano solo la parte tecnica. Ponte con Informatica: il database è il cuore del sistema informatico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Le quattro componenti</h2></div>
+  <div class="puzzle-categorie" data-id="u2-si-componenti" style="--cols:4">
+    <div class="cat"><h4>Persone</h4><ul><li>Il commerciale che inserisce un ordine</li><li>Il magazziniere col palmare</li></ul></div>
+    <div class="cat"><h4>Procedure</h4><ul><li>Ordini sopra 5 000 € da approvare</li><li>Chiusura contabile di fine mese</li></ul></div>
+    <div class="cat"><h4>Dati</h4><ul><li>L'anagrafica clienti</li><li>Lo storico delle fatture</li></ul></div>
+    <div class="cat"><h4>Tecnologie</h4><ul><li>Il server del database</li><li>Il Wi-Fi del magazzino</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. Far notare che solo l'ultima colonna è il sistema informatico in senso stretto; i dati stanno a cavallo (sono nel database ma il loro significato lo danno le persone). In coppia, 3 minuti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Troppa informazione?</p><h2>La risorsa davvero scarsa</h2></div>
+  <figure class="citazione">
+    <blockquote>Ciò che l'informazione consuma è piuttosto ovvio: consuma l'attenzione di chi la riceve. Quindi una ricchezza di informazioni crea una povertà di attenzione.</blockquote>
+    <figcaption><b>Herbert A. Simon</b>, economista e informatico, premio Nobel per l'economia 1978, <i>Designing Organizations for an Information-Rich World</i>, 1971</figcaption>
+  </figure>
+  <p class="lead">Un buon sistema informativo non dà <b>più</b> dati: dà le informazioni <b>giuste</b> alla persona giusta, al momento giusto.</p>
+  <aside class="notes">Traduzione nostra. Originale: "What information consumes is rather obvious: it consumes the attention of its recipients. Hence a wealth of information creates a poverty of attention…". Simon fu tra i fondatori dell'intelligenza artificiale (con Newell scrisse il Logic Theorist, 1956) e studiò le decisioni nelle organizzazioni. Collegamento con la prima lezione dell'unità: l'attenzione è una risorsa scarsa, come il tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Livelli di decisione</p><h2>Dal lavoro di ogni giorno alla strategia</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Operativo</h3><p class="small">Registrare ordini, fatture, movimenti di magazzino. Molti dati, decisioni di routine, ogni giorno.</p></div>
+    <div class="card soft"><h3>Tattico</h3><p class="small">Controllare come vanno reparti e processi: report mensili, scostamenti dal budget.</p></div>
+    <div class="card fill"><h3>Strategico</h3><p class="small">Scelte di lungo periodo: nuovi mercati, investimenti. Pochi dati sintetici e di scenario.</p></div>
+  </div>
+  <div class="callout">I sistemi <b>operativi</b> producono i dati; i sistemi <b>direzionali</b> (report, cruscotti, business intelligence) li sintetizzano per chi decide.</div>
+  <aside class="notes">È la classica "piramide di Anthony" (Robert N. Anthony, 1965): pianificazione strategica, controllo direzionale, controllo operativo. I sistemi transazionali sono spesso chiamati TPS; i sistemi di supporto alle decisioni DSS. Il dato nasce in basso (un ordine) e sale aggregato (fatturato del mese, del trimestre).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta la piramide</p><h2>Livelli e sistemi</h2></div>
+  <div class="puzzle-trascina" data-id="u2-si-piramide" data-extra="Cloud|Firewall">
+    <div style="position:relative;width:1400px;height:460px">
+      <svg width="1400" height="460" viewBox="0 0 1400 460" aria-hidden="true">
+        <polygon points="680,4 793,150 567,150" fill="#2f6fde"/>
+        <polygon points="567,154 793,154 907,300 453,300" fill="#7fa6ec"/>
+        <polygon points="453,304 907,304 1020,450 340,450" fill="#e3ecfc" stroke="#2f6fde" stroke-width="3"/>
+        <g font-family="DM Sans, sans-serif" font-size="28" font-weight="700" text-anchor="middle">
+          <text x="680" y="118" fill="#ffffff">anni</text>
+          <text x="680" y="238" fill="#172033">mesi</text>
+          <text x="680" y="388" fill="#172033">giorni</text>
+        </g>
+        <g font-family="DM Sans, sans-serif" font-size="24" fill="#596179" text-anchor="middle">
+          <text x="160" y="24">livello</text><text x="1220" y="24">sistemi tipici</text>
+        </g>
+      </svg>
+      <div style="position:absolute;left:0;width:320px;top:56px;display:flex;justify-content:center"><span class="slot" data-risposta="Strategico"></span></div>
+      <div style="position:absolute;left:0;width:320px;top:198px;display:flex;justify-content:center"><span class="slot" data-risposta="Tattico"></span></div>
+      <div style="position:absolute;left:0;width:320px;top:348px;display:flex;justify-content:center"><span class="slot" data-risposta="Operativo"></span></div>
+      <div style="position:absolute;left:1040px;width:360px;top:56px;display:flex;justify-content:center"><span class="slot" data-risposta="Cruscotti"></span></div>
+      <div style="position:absolute;left:1040px;width:360px;top:198px;display:flex;justify-content:center"><span class="slot" data-risposta="Report"></span></div>
+      <div style="position:absolute;left:1040px;width:360px;top:348px;display:flex;justify-content:center"><span class="slot" data-risposta="Transazioni"></span></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: a sinistra dall'alto Strategico, Tattico, Operativo; a destra Cruscotti (business intelligence per la direzione), Report (periodici per i responsabili), Transazioni (registrazione di ordini, fatture, movimenti). Dentro la piramide l'orizzonte delle decisioni: anni, mesi, giorni. Distrattori: Cloud e Firewall, che sono tecnologie trasversali a tutti i livelli. Accettare anche "Report" in alto e "Cruscotti" al centro se motivato: molte imprese usano cruscotti anche a livello tattico; il Controlla però segue la soluzione scritta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un'impresa registra gli ordini su un quaderno. Ha un sistema informativo?</h2></div>
+  <div class="poll" data-id="u2-si-quaderno" data-tipo="quiz" data-risposta="B">
+    <ol><li>No: senza computer non c'è sistema informativo</li><li>Sì: il sistema informativo esiste anche senza computer</li><li>Solo se usa un database</li><li>Solo se ha più di 10 dipendenti</li></ol>
+    <p class="why">Persone, procedure e dati ci sono anche sul quaderno: è un sistema informativo, solo non informatizzato. Manca il sistema informatico, non quello informativo.</p>
+  </div>
+  <aside class="notes">Risposta B. Il tranello A è la confusione tra informativo e informatico, molto frequente anche agli esami. Domanda di rilancio: "quali rischi ha il quaderno?" (un'unica copia, nessuna ricerca, nessun backup, errori di trascrizione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il cuore gestionale</p><h2>ERP: un solo database per tutta l'impresa</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un <b>ERP</b> (Enterprise Resource Planning) è un insieme di <b>moduli integrati</b> che condividono lo stesso database: contabilità, vendite, acquisti, magazzino, produzione, personale.</p>
+      <ul class="points small">
+        <li>Ogni dato si inserisce <b>una volta</b> e lo vedono tutti i moduli</li>
+        <li>I processi attraversano le funzioni senza passaggi a mano</li>
+        <li>Costi e tempi di introduzione alti; cambiare fornitore è difficile</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Un ordine nell'ERP</h3><ol class="steps small"><li>Vendite registra l'ordine</li><li>Magazzino vede la merce da prelevare</li><li>La spedizione scarica le scorte</li><li>Contabilità emette la fattura</li></ol></div>
+  </div>
+  <aside class="notes">Esempi noti di ERP: SAP (Germania), Microsoft Dynamics, Odoo (open source), e diversi gestionali di software house italiane per le PMI. Non serve ricordare i nomi: serve capire l'integrazione. Il rischio di dipendenza da un fornitore si chiama lock-in. Personalizzare troppo un ERP rende difficili gli aggiornamenti: lavoro tipico di consulenti e sviluppatori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Clienti e fornitori</p><h2>CRM e SCM</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>CRM</h3><p class="small">Customer Relationship Management</p><p>Tutto sulla relazione con il cliente: contatti, trattative, preventivi, assistenza, campagne. Obiettivo: conoscere e tenere i clienti.</p></div>
+    <div class="card soft"><h3>SCM</h3><p class="small">Supply Chain Management</p><p>La catena di fornitura: fornitori, previsioni della domanda, scorte, trasporti. Obiettivo: il materiale giusto, nel posto giusto, al costo giusto.</p></div>
+  </div>
+  <div class="callout">ERP guarda <b>dentro</b> l'impresa; CRM verso i <b>clienti</b>; SCM verso i <b>fornitori</b> e la logistica. Nei sistemi moderni i confini si sovrappongono.</div>
+  <aside class="notes">Il CRM è usato soprattutto da vendite, marketing e assistenza; l'SCM da acquisti e logistica. Molti ERP includono moduli di CRM e SCM. Collegamento con la lean production (ultima lezione dell'unità): l'SCM serve anche a lavorare just in time con i fornitori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>ERP, CRM o SCM?</h2></div>
+  <div class="puzzle-categorie" data-id="u2-si-moduli" style="--cols:3">
+    <div class="cat"><h4>ERP</h4><ul><li>Registrare una fattura</li><li>Calcolare il bilancio</li></ul></div>
+    <div class="cat"><h4>CRM</h4><ul><li>Storico dei contatti con un cliente</li><li>Ticket di assistenza</li><li>Clienti per la newsletter</li></ul></div>
+    <div class="cat"><h4>SCM</h4><ul><li>Previsione dei riordini</li><li>Tracciare le forniture in arrivo</li><li>Scorte nei magazzini della rete</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. La gestione del magazzino interno sta in genere nell'ERP; la pianificazione delle scorte su più magazzini e con i fornitori è tipica dell'SCM. Accettare discussioni sui confini: è proprio il punto della slide precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le sigle del sistema informativo</h2></div>
+  <dl class="puzzle-abbina" data-id="u2-si-sigle">
+    <dt>ERP</dt><dd>Moduli integrati con un unico database per tutta l'impresa</dd>
+    <dt>CRM</dt><dd>Gestione della relazione con i clienti</dd>
+    <dt>SCM</dt><dd>Gestione della catena di fornitura</dd>
+    <dt>BI</dt><dd>Analisi dei dati per le decisioni della direzione</dd>
+    <dt>DBMS</dt><dd>Software che gestisce il database</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. BI = Business Intelligence; DBMS = Database Management System (collegamento con Informatica: MySQL, PostgreSQL). Chiedere quali hanno incontrato nel PCTO.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Un mini-CRM con Calc</h2>
+  <div class="cols-2 wide-left">
+    <table class="data compact tiny">
+      <tr><th>Cliente (di esempio)</th><th>Città</th><th>Settore</th><th>Ordini €</th><th>Stato</th></tr>
+      <tr><td>Panificio Aurora</td><td>Torino</td><td>Alimentare</td><td>1200</td><td>Attivo</td></tr>
+      <tr><td>Studio Delta</td><td>Milano</td><td>Servizi</td><td>3400</td><td>Attivo</td></tr>
+      <tr><td>Officina Faro</td><td>Torino</td><td>Meccanica</td><td>0</td><td>Prospect</td></tr>
+      <tr><td>Farmacia Sole</td><td>Asti</td><td>Sanità</td><td>2100</td><td>Attivo</td></tr>
+      <tr><td>Hotel Corallo</td><td>Torino</td><td>Turismo</td><td>5600</td><td>Attivo</td></tr>
+      <tr><td>Bar Centrale</td><td>Milano</td><td>Alimentare</td><td>0</td><td>Prospect</td></tr>
+      <tr><td>Autoscuola Via</td><td>Asti</td><td>Servizi</td><td>900</td><td>Attivo</td></tr>
+      <tr><td>Palestra Onda</td><td>Milano</td><td>Sport</td><td>0</td><td>Prospect</td></tr>
+    </table>
+    <div class="stack">
+      <ol class="steps small">
+        <li>Copia la tabella in Calc e attiva il <b>filtro automatico</b>.</li>
+        <li>Conta gli attivi con <code>CONTA.SE</code>; somma gli ordini per città con <code>SOMMA.SE</code>.</li>
+        <li>Salva <b>mini-crm_cognome.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> 5 attivi, 3 prospect. Torino 6 800 €, Milano 3 400 €, Asti 3 000 €. Totale 13 200 €.</div>
+    </div>
+  </div>
+  <aside class="notes">Formule: =CONTA.SE(E2:E9;"Attivo") → 5; =SOMMA.SE(B2:B9;"Torino";D2:D9) → 1 200 + 0 + 5 600 = 6 800; Milano 3 400 + 0 + 0 = 3 400; Asti 2 100 + 900 = 3 000. Estensione: aggiungere la colonna "Prossima azione" e filtrare i prospect di Milano (2: Bar Centrale, Palestra Onda) per una campagna. Clienti inventati. Messaggio: un vero CRM fa queste cose su migliaia di righe, con lo storico dei contatti e i permessi; il foglio di calcolo condiviso è il "CRM dei poveri" di molte piccole imprese, con tutti i suoi rischi (copie diverse, nessun controllo di accesso).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Accesso ai dati</p><h2>Chi può vedere che cosa</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Ruoli e permessi</h3><p class="small">Ognuno vede e modifica solo ciò che serve al suo lavoro: è il principio del <b>minimo privilegio</b>.</p></div>
+    <div class="card soft"><h3>Dati personali</h3><p class="small">Clienti e dipendenti sono persone: il <b>GDPR</b> (Regolamento UE 2016/679) chiede liceità, minimizzazione e sicurezza.</p></div>
+    <div class="card soft"><h3>Disponibilità</h3><p class="small">Dati accessibili dove servono (anche da mobile) ma protetti: autenticazione forte, backup, registri degli accessi.</p></div>
+  </div>
+  <div class="callout">Nel PCTO o nel primo lavoro probabilmente ti daranno un account su questi sistemi: trattalo come una chiave dell'azienda.</div>
+  <aside class="notes">Esempio: il commerciale vede i clienti della sua zona ma non le buste paga; l'amministrazione vede le fatture ma non modifica gli ordini. Il registro degli accessi (log) permette di sapere chi ha fatto che cosa: è anche la materia prima del process mining visto nella lezione sui processi. Collegamento con i deck privacy e protezione-sicurezza-dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Perché un ERP riduce gli errori rispetto a tanti programmi separati?</h2></div>
+  <div class="poll" data-id="u2-si-erp" data-tipo="quiz" data-risposta="D">
+    <ol><li>Perché è più veloce</li><li>Perché funziona in cloud</li><li>Perché usa l'intelligenza artificiale</li><li>Perché ogni dato si inserisce una sola volta in un database condiviso</li></ol>
+    <p class="why">Con programmi separati lo stesso dato (un cliente, un prezzo) va ricopiato più volte e le copie divergono. L'integrazione su un database unico elimina le ricopiature e le incoerenze.</p>
+  </div>
+  <aside class="notes">Risposta D. Le altre sono caratteristiche che un ERP può avere oppure no: un ERP può essere installato in azienda (on premise) o in cloud, può essere lento, quasi mai è "basato sull'AI". Il concetto chiave è la ridondanza dei dati, che gli studenti conoscono dalla teoria delle basi di dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>L'AI dentro i gestionali</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Che cosa fa già</h3><p class="small">Nei CRM suggerisce quali trattative seguire per prime; negli ERP e negli SCM aiuta a prevedere la domanda e i riordini; risponde a domande sui dati in linguaggio naturale.</p></div>
+    <div class="card soft"><h3>Che cosa le serve</h3><p class="small">Dati puliti e coerenti. Un'anagrafica con clienti doppi o prezzi sbagliati produce previsioni sbagliate, solo più in fretta.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Quando un sistema di AI tratta dati personali valgono il GDPR e, per alcuni usi, il <b>Regolamento europeo sull'intelligenza artificiale</b> (AI Act, Reg. UE 2024/1689), che classifica i sistemi in base al rischio: per esempio quelli usati per selezionare il personale sono considerati ad alto rischio.</p></div>
+  <aside class="notes">L'AI Act (Regolamento UE 2024/1689) entra in applicazione in modo graduale; i sistemi di AI usati per assunzione e selezione del personale sono nell'elenco dei sistemi ad alto rischio (allegato III). Non affermare date precise di applicazione di ogni obbligo senza verificarle. Messaggio per la classe: la qualità dei dati è lavoro da informatici.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 35 minuti</span></p>
+  <h2>Progetta il sistema informativo di un'impresa</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Impresa di esempio: tre negozi di bici in tre città e un negozio online. Oggi usano fogli di calcolo diversi in ogni negozio e spesso vendono online bici che non ci sono.</p>
+      <ol class="steps small">
+        <li>Scegliete i moduli necessari (ERP, CRM, SCM) e motivate.</li>
+        <li>Su app.diagrams.net disegnate il flusso di un ordine online tra i moduli e il database.</li>
+        <li>Fate una tabella di 4 ruoli con che cosa possono vedere e modificare.</li>
+        <li>Consegnate <b>sistema-informativo_gruppoN.pdf</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> il disegno ha un solo database condiviso; l'ordine online scarica le scorte in tempo reale; nessun ruolo ha tutti i permessi tranne l'amministratore di sistema.</div>
+  </div>
+  <aside class="notes">Soluzione attesa: ERP con moduli vendite, magazzino (scorte dei quattro punti vendita), contabilità; e-commerce collegato all'ERP per la disponibilità in tempo reale; CRM per clienti e assistenza (riparazioni, garanzie); SCM utile se i fornitori sono molti e serve prevedere i riordini stagionali. Ruoli esempio: commesso (vede scorte e clienti del negozio, crea vendite), responsabile acquisti (scorte di tutti i negozi, ordini ai fornitori), amministrazione (fatture, pagamenti), amministratore di sistema. Valutare coerenza e motivazioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u2-si-uscita" data-extra="informatico|SCM">
+    <p>Persone, procedure, dati e tecnologie formano il sistema <span class="slot" data-risposta="informativo"></span>.</p>
+    <p>Moduli integrati con un unico database: è un <span class="slot" data-risposta="ERP"></span>.</p>
+    <p>Contatti, trattative e assistenza ai clienti stanno nel <span class="slot" data-risposta="CRM"></span>.</p>
+    <p>Dare a ciascuno solo i permessi necessari è il principio del minimo <span class="slot" data-risposta="privilegio"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: informativo, ERP, CRM, privilegio. Distrattori: informatico, SCM.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Informativo (persone, procedure, dati) ⊃ informatico</li>
+      <li>Livelli: operativo, tattico, strategico</li>
+      <li>Transazioni in basso, cruscotti in alto</li>
+    </ul>
+    <ul class="points">
+      <li>ERP integra, CRM per i clienti, SCM per i fornitori</li>
+      <li>Accesso: ruoli, minimo privilegio, GDPR</li>
+      <li>Prossima lezione: reti di imprese, outsourcing e cloud</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: è l'argomento di GPOI con il collegamento più diretto a Informatica (basi di dati, SQL, permessi) e a Sistemi e reti (sicurezza, backup). Raccontare il gestionale visto nel PCTO, con i moduli e i ruoli, è un ottimo esempio. Raccogliere le consegne su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I costi di progetto e i preventivi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>I costi di progetto<br>e i preventivi</h1>
+  <p class="lead">Quanto costa l'e-commerce del Panificio Rossi, e quanto lo facciamo pagare? Dai tipi di costo alla CBS, dalla stima al preventivo, fino al budget da tenere sotto controllo.</p>
+  <aside class="notes">Obiettivi: classificare i costi (diretti/indiretti, fissi/variabili), costruire la CBS aggregando i costi lungo la WBS, conoscere i metodi di stima, passare dal costo al prezzo (spese generali, riserva, margine, IVA), costruire la curva S del budget. Durata indicativa: 2-3 ore. Serve LibreOffice Calc. Tutti i numeri sono di un'impresa di esempio: tariffe giornaliere inventate ma plausibili (analista 320 €, grafica 280 €, programmatori 260 €, tester 240 €). Calendario del progetto: lo stesso del CPM e del Gantt dell'unità, con l'attività F livellata ai giorni 11-12 come nella lezione sulle risorse umane.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un e-commerce per il panificio: quanto lo fareste pagare?</h2></div>
+  <div class="poll" data-id="cp-prezzo">
+    <ol><li>Meno di 1 000 €</li><li>Da 1 000 a 5 000 €</li><li>Da 5 000 a 15 000 €</li><li>Più di 15 000 €</li></ol>
+  </div>
+  <aside class="notes">Lasciare votare d'istinto e annotare il risultato alla lavagna. Alla fine della lezione il preventivo calcolato sarà di 13 200 € più IVA (16 104 € in tutto): confrontare. Chi vota A di solito pensa solo alle ore di programmazione, dimenticando analisi, test, spese generali e rischi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipologie di costo</p><h2>Due modi di guardare lo stesso costo</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Diretti e indiretti</h3><p><b>Diretto</b>: si attribuisce senza dubbi al progetto (le giornate del programmatore sul Panificio).</p><p><b>Indiretto</b>: serve a tutta l'impresa e si ripartisce con una quota (affitto, amministrazione).</p></div>
+    <div class="card soft"><h3>Fissi e variabili</h3><p><b>Fisso</b>: non cambia con il volume di lavoro, almeno nel breve periodo (affitto).</p><p><b>Variabile</b>: cresce con il lavoro svolto (un freelance pagato a giornata).</p></div>
+  </div>
+  <div class="callout">I costi di progetto sono soprattutto <b>costi del personale</b>: giorni-persona × tariffa giornaliera.</div>
+  <aside class="notes">Collegamento con l'unità 2 (diagramma di redditività): là costi fissi e variabili servivano per il punto di pareggio dell'impresa; qui la distinzione più usata è diretti/indiretti, perché il preventivo parte dai costi diretti dei pacchetti di lavoro. Altre classificazioni utili: costi interni (personale proprio) ed esterni (fornitori), una tantum e ricorrenti (l'hosting si paga ogni anno).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Per la software house: fisso o variabile?</h2></div>
+  <div class="puzzle-categorie" data-id="cp-fissi">
+    <div class="cat"><h4>Costo fisso</h4><ul><li>Affitto dell'ufficio</li><li>Stipendio dell'amministrativa</li><li>Assicurazione annuale</li></ul></div>
+    <div class="cat"><h4>Costo variabile</h4><ul><li>Freelance pagato a giornata</li><li>Token delle API di AI</li><li>Hosting a consumo dei clienti</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Il criterio: se l'impresa lavora a un progetto in più, quel costo aumenta? L'affitto no, il freelance sì. Le API di AI (servizi di modelli linguistici) si pagano in base ai token elaborati: sono un tipico costo variabile nuovo. Discussione: lo stipendio di un programmatore assunto è fisso per l'impresa, ma per il progetto è un costo diretto proporzionale ai giorni assegnati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Per il progetto Panificio: diretto o indiretto?</h2></div>
+  <div class="puzzle-categorie" data-id="cp-diretti">
+    <div class="cat"><h4>Costo diretto</h4><ul><li>Giornate del programmatore</li><li>Licenza del tema grafico</li><li>Primo anno di hosting</li><li>Giornate del tester</li></ul></div>
+    <div class="cat"><h4>Costo indiretto</h4><ul><li>Affitto dell'ufficio</li><li>Bolletta della luce</li><li>Lavoro dell'amministrazione</li><li>Software di contabilità</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. I costi indiretti non spariscono: entrano nel preventivo come "spese generali", una percentuale sui costi diretti. Chiedere: come si potrebbe dividere l'affitto tra i progetti dell'anno? (In proporzione alle giornate lavorate su ciascuno.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il portatile del programmatore, comprato l'anno scorso e usato per tutti i progetti. Per il Panificio è…</h2></div>
+  <div class="poll" data-id="cp-portatile" data-tipo="quiz" data-risposta="B">
+    <ol><li>…un costo diretto da mettere tutto in preventivo</li><li>…un costo indiretto: se ne ripartisce una quota</li><li>…nessun costo: è già stato pagato</li><li>…un costo variabile</li></ol>
+    <p class="why">Il portatile dura qualche anno e serve a molti progetti: il suo costo si ripartisce negli anni (ammortamento) e tra i progetti, dentro le spese generali. "Già pagato" non vuol dire gratis.</p>
+  </div>
+  <aside class="notes">Il tranello è la C: confondere uscita di cassa e costo. Se l'impresa non recupera con i progetti il costo dei computer, tra tre anni non avrà i soldi per ricomprarli. Diverso il caso di un dispositivo comprato apposta per il progetto e consegnato al cliente (un tablet per il panificio): quello è un costo diretto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Cost Breakdown Structure</p><h2>La CBS: i costi diretti lungo la WBS</h2></div>
+  <table class="data compact">
+    <tr><th>Pacchetto</th><th>Chi</th><th>Giorni</th><th>€/giorno</th><th>Costo €</th></tr>
+    <tr><td>A Analisi requisiti</td><td>analista</td><td class="mono">3</td><td class="mono">320</td><td class="mono">960</td></tr>
+    <tr><td>B Progettazione grafica</td><td>grafica</td><td class="mono">4</td><td class="mono">280</td><td class="mono">1 120</td></tr>
+    <tr><td>C Progettazione database</td><td>back-end</td><td class="mono">2</td><td class="mono">260</td><td class="mono">520</td></tr>
+    <tr><td>D Sviluppo front-end</td><td>front-end</td><td class="mono">6</td><td class="mono">260</td><td class="mono">1 560</td></tr>
+    <tr><td>E Sviluppo back-end</td><td>back-end</td><td class="mono">5</td><td class="mono">260</td><td class="mono">1 300</td></tr>
+    <tr><td>F Caricamento catalogo</td><td>back-end</td><td class="mono">2</td><td class="mono">260</td><td class="mono">520</td></tr>
+    <tr><td>G Test · H Formazione · I Messa online</td><td>tester · analista · back-end</td><td class="mono">3 · 1 · 1</td><td class="mono">240 · 320 · 260</td><td class="mono">1 300</td></tr>
+    <tr><td>Licenza tema e hosting primo anno</td><td>fornitori</td><td></td><td></td><td class="mono">720</td></tr>
+    <tr><td><b>Totale costi diretti</b></td><td></td><td></td><td></td><td class="mono hl"><b>8 000</b></td></tr>
+  </table>
+  <aside class="notes">Conti: G 3 × 240 = 720, H 1 × 320 = 320, I 1 × 260 = 260, insieme 1 300. Totale: 960 + 1 120 + 520 + 1 560 + 1 300 + 520 + 1 300 + 720 = 8 000 €. La CBS ha la stessa struttura ad albero della WBS: ogni pacchetto ha un codice e un costo, e i costi si sommano verso l'alto (aggregazione bottom-up). Le tariffe sono di esempio: in un'impresa reale includono stipendio, contributi e una parte di costi del personale non produttivi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina i totali</p><h2>Aggrega la CBS: ogni nodo è la somma dei figli</h2></div>
+  <div class="puzzle-trascina" data-id="cp-cbs" data-extra="3120|7280">
+    <div class="stack" style="align-items:center;gap:18px">
+      <div class="org-box top">Progetto e-commerce · <span class="slot" data-risposta="8000|8 000"></span> €</div>
+      <div class="cols-5" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;width:100%">
+        <div class="card soft" style="padding:18px 20px;font-size:29px"><b>1 Analisi</b><span class="mono">960</span><span class="small muted">A 960</span></div>
+        <div class="card soft" style="padding:18px 20px;font-size:29px"><b>2 Progettazione</b><span class="slot" data-risposta="1640|1 640"></span><span class="small muted">B 1 120<br>C 520</span></div>
+        <div class="card soft" style="padding:18px 20px;font-size:29px"><b>3 Sviluppo</b><span class="slot" data-risposta="3380|3 380"></span><span class="small muted">D 1 560<br>E 1 300<br>F 520</span></div>
+        <div class="card soft" style="padding:18px 20px;font-size:29px"><b>4 Test e rilascio</b><span class="mono">1 300</span><span class="small muted">G 720<br>H 320<br>I 260</span></div>
+        <div class="card soft" style="padding:18px 20px;font-size:29px"><b>5 Fornitori</b><span class="mono">720</span><span class="small muted">tema e hosting</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Progettazione 1 120 + 520 = 1 640; Sviluppo 1 560 + 1 300 + 520 = 3 380; Progetto 960 + 1 640 + 3 380 + 1 300 + 720 = 8 000. Distrattori: 3 120 (Sviluppo senza F, errore frequente) e 7 280 (totale senza i fornitori, cioè solo il personale). Far calcolare a mente a coppie, poi trascinare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dal costo al prezzo</p><h2>Come nasce il preventivo</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Voce</th><th>Calcolo</th><th>€</th></tr>
+      <tr><td>Costi diretti (CBS)</td><td></td><td class="mono">8 000</td></tr>
+      <tr><td>+ Spese generali</td><td class="mono">25% dei diretti</td><td class="mono">2 000</td></tr>
+      <tr><td>+ Riserva per rischi</td><td class="mono">10% di 10 000</td><td class="mono">1 000</td></tr>
+      <tr><td><b>= Budget di progetto</b></td><td></td><td class="mono"><b>11 000</b></td></tr>
+      <tr><td>+ Margine (ricarico)</td><td class="mono">20% di 11 000</td><td class="mono">2 200</td></tr>
+      <tr><td><b>= Prezzo, IVA esclusa</b></td><td></td><td class="mono hl"><b>13 200</b></td></tr>
+      <tr><td>+ IVA</td><td class="mono">22% di 13 200</td><td class="mono">2 904</td></tr>
+      <tr><td><b>= Totale per il cliente</b></td><td></td><td class="mono"><b>16 104</b></td></tr>
+    </table>
+    <div class="card soft"><h3>Il preventivo scritto</h3><ul class="points"><li>Che cosa si consegna (ambito)</li><li>Tempi e fasi</li><li>Prezzo e pagamenti</li><li>Che cosa è escluso</li><li>Validità dell'offerta</li></ul></div>
+  </div>
+  <aside class="notes">Conti: 8 000 × 25% = 2 000, costo pieno 10 000; riserva 10% = 1 000, budget 11 000; ricarico 20% = 2 200, prezzo 13 200; IVA ordinaria 22% = 2 904, totale 16 104. Attenzione al linguaggio: il 20% è un ricarico sul costo; come margine sul prezzo vale 2 200 / 13 200 ≈ 16,7%. La riserva per rischi copre i rischi individuati nel registro dei rischi (unità 3). L'IVA non è un ricavo dell'impresa: la incassa e la versa allo Stato. Se il cliente è un'impresa con partita IVA, di solito la detrae.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>I passi per scrivere un preventivo</h2></div>
+  <ol class="puzzle-ordina" data-id="cp-passi">
+    <li>Scomporre il lavoro nella WBS</li>
+    <li>Stimare giorni e persone di ogni pacchetto</li>
+    <li>Calcolare i costi diretti di ogni pacchetto</li>
+    <li>Aggregare i costi nella CBS</li>
+    <li>Aggiungere spese generali e riserva per rischi</li>
+    <li>Aggiungere margine e IVA</li>
+    <li>Scrivere l'offerta con ambito, tempi e validità</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Domanda: e se il cliente ha già un budget massimo (per esempio 10 000 €)? Si parte da quello e si riduce l'ambito (meno funzioni) o si fasa il progetto: è il triangolo tempo-costi-ambito del deck progetto-e-impresa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I metodi di stima</p><h2>Dal colpo d'occhio al conto preciso</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Per analogia</h3><p>Si parte da un progetto simile già fatto. Veloce, poco preciso: va bene all'inizio.</p></div>
+    <div class="card"><h3>Parametrica</h3><p>Costo unitario × quantità: euro per pagina, per prodotto caricato, per schermata.</p></div>
+    <div class="card soft"><h3>Bottom-up</h3><p>Si stima ogni pacchetto della WBS e si somma. Lenta, ma la più precisa.</p></div>
+  </div>
+  <div class="formula" style="font-size:44px"><small>stima a tre punti (PERT): ottimista O, più probabile M, pessimista P</small>durata attesa = (O + 4M + P) ÷ 6</div>
+  <aside class="notes">La precisione cresce man mano che il progetto si definisce: una stima per analogia nella fase di avvio può sbagliare anche di molto, una bottom-up sulla WBS completa molto meno. La formula a tre punti viene dal PERT (lezione sui reticoli): pesa quattro volte il valore più probabile. Anche il giudizio esperto (chiedere a chi farà il lavoro) è un metodo, spesso combinato con gli altri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Quale metodo di stima stanno usando?</h2></div>
+  <dl class="puzzle-abbina" data-id="cp-stime">
+    <dt>Per analogia</dt><dd>"L'anno scorso un e-commerce simile è costato 9 000 €"</dd>
+    <dt>Parametrica</dt><dd>"60 prodotti × 8 € per ogni scheda caricata"</dd>
+    <dt>Bottom-up</dt><dd>"Sommiamo le giornate di tutti i pacchetti della WBS"</dd>
+    <dt>Giudizio esperto</dt><dd>"La programmatrice senior dice: 5 giorni"</dd>
+    <dt>A tre punti</dt><dd>"Tra 4 e 12 giorni, più probabilmente 5"</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Il caso "A tre punti" prepara il lucchetto finale: (4 + 4 × 5 + 12) / 6 = 6 giorni. Far notare che la stima attesa (6) è più alta del valore più probabile (5) perché il pessimista è lontano: i ritardi sono più probabili degli anticipi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Non tutto sta nel preventivo</h2></div>
+  <figure class="citazione">
+    <blockquote>Le cifre più importanti per la gestione sono sconosciute o impossibili da conoscere, ma una buona gestione deve comunque tenerne conto.</blockquote>
+    <figcaption><b>W. Edwards Deming</b>, statistico e padre della qualità totale, in <i>Out of the Crisis</i>, 1986, riprendendo Lloyd S. Nelson</figcaption>
+  </figure>
+  <p class="lead">Quanto costa un cliente scontento? E un programmatore che se ne va a metà progetto?</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The most important figures that one needs for management are unknown or unknowable (Lloyd S. Nelson, director of statistical methods for the Nashua Corporation), but successful management must nevertheless take account of them." Deming lo scrive in Out of the Crisis (1986) criticando la gestione basata solo sulle cifre visibili. Spunto: la riserva per rischi e la qualità del lavoro sono il modo in cui un preventivo tiene conto di ciò che non si può contare.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il preventivo del Panificio in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Riga 1: <b>Pacchetto, Chi, Giorni, €/giorno, Costo</b>. Righe 2-10: A-I con i dati della CBS.</li>
+      <li>In E2 <code>=C2*D2</code>, copia fino a E10. In E11 la voce fornitori: 720.</li>
+      <li>In E12 <code>=SOMMA(E2:E11)</code>: i costi diretti.</li>
+      <li>Sotto: spese generali 25%, riserva 10%, ricarico 20%, IVA 22%, ognuna con la sua formula.</li>
+      <li>Salva <b>preventivo-panificio.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> diretti 8 000; costo pieno 10 000; budget 11 000; prezzo 13 200; totale con IVA 16 104. Cambia la tariffa del back-end in 280: il prezzo deve aggiornarsi da solo.</div>
+  </div>
+  <aside class="notes">Formule tipo (con i diretti in E12): E13 =E12*25%; E14 =E12+E13; E15 =E14*10%; E16 =E14+E15; E17 =E16*20%; E18 =E16+E17; E19 =E18*22%; E20 =E18+E19. Prova di verifica: con il back-end a 280 €/giorno (C, E, F, I = 10 giorni) i diretti salgono di 200 € a 8 200, e il prezzo diventa 8 200 × 1,25 × 1,10 × 1,20 = 13 530. Chi ha scritto numeri al posto delle formule se ne accorge subito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto della stima</h2></div>
+  <div class="puzzle-codice" data-risposta="1560" data-aiuto="prima la durata attesa: (4 + 4×5 + 12) ÷ 6">
+    <p>Il back-end del prossimo progetto: ottimista <b>4</b> giorni, più probabile <b>5</b>, pessimista <b>12</b>. Il programmatore costa <b>260 €</b> al giorno.</p>
+    <p>Il codice è il <b>costo atteso</b> in euro, con la stima a tre punti.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> (4 + 20 + 12) ÷ 6 = 6 giorni; 6 × 260 = 1 560 €.</div>
+  </div>
+  <aside class="notes">Codice 1560. Errori tipici: 1 300 (usa solo il più probabile, 5 giorni), 1 820 (media semplice (4+5+12)/3 = 7 giorni). A squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il preventivo dice 13 200 € IVA esclusa. Quanto paga il Panificio?</h2></div>
+  <div class="poll" data-id="cp-iva" data-tipo="quiz" data-risposta="C">
+    <ol><li>13 200 €</li><li>15 840 €</li><li>16 104 €</li><li>14 520 €</li></ol>
+    <p class="why">13 200 + 22% = 13 200 × 1,22 = 16 104 €. L'IVA si aggiunge al prezzo: non è un guadagno della software house, che la versa allo Stato.</p>
+  </div>
+  <aside class="notes">B = 20% invece di 22%; D = 10%. Nei preventivi verso le imprese si scrive quasi sempre "IVA esclusa", verso i privati conviene indicare il totale. Il Panificio, come impresa, potrà detrarre l'IVA pagata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gestione dei costi</p><h2>Il budget nel tempo: la curva S</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 1000 480" width="1000" height="480" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Curva S dei costi diretti cumulati, da 0 a 8000 euro in 17 giorni">
+      <g stroke="#dcdfe8" stroke-width="2"><line x1="90" y1="240" x2="940" y2="240"/><line x1="90" y1="60" x2="940" y2="60"/></g>
+      <line x1="90" y1="420" x2="950" y2="420" stroke="#172033" stroke-width="3"/><line x1="90" y1="40" x2="90" y2="420" stroke="#172033" stroke-width="3"/>
+      <g font-size="24" fill="#596179" text-anchor="end"><text x="78" y="428">0</text><text x="78" y="248">4 000</text><text x="78" y="68">8 000</text></g>
+      <g font-size="24" fill="#596179" text-anchor="middle"><text x="140" y="452">1</text><text x="340" y="452">5</text><text x="590" y="452">10</text><text x="840" y="452">15</text><text x="940" y="452">17</text></g>
+      <polyline points="90,420 140,406 190,391 240,377 290,352 340,328 390,304 440,280 490,256 540,233 590,209 640,186 690,163 740,136 790,126 840,115 890,104 940,60" fill="none" stroke="#d0541f" stroke-width="6" stroke-linejoin="round"/>
+      <circle cx="590" cy="209" r="10" fill="#d0541f"/><text x="606" y="200" font-size="26" fill="#172033" font-weight="700">giorno 10: 4 680 €</text>
+      <text x="515" y="476" font-size="22" fill="#596179" text-anchor="middle">giorno del progetto</text>
+    </svg>
+    <div class="stack">
+      <p>Si somma giorno per giorno il costo pianificato: la curva cumulata è la <b>baseline dei costi</b>.</p>
+      <p>Durante il progetto si confronta con la spesa reale: è l'inizio del <b>controllo</b>.</p>
+      <p class="small muted">Si chiama "S" perché nei progetti grandi parte piano, accelera e rallenta alla fine.</p>
+    </div>
+  </div>
+  <aside class="notes">Costi giornalieri (Gantt livellato, solo costi diretti): giorni 1-3 320 (A); 4-5 540 (B+C); 6-7 540 (B+E); 8-10 520 (D+E); 11-12 520 (D+F); 13 580 (D+H); 14-16 240 (G); 17 980 (I 260 + fornitori 720). Cumulati: 960 al giorno 3, 3 120 al giorno 7, 4 680 al giorno 10, 7 020 al giorno 16, 8 000 al giorno 17. Il gradino finale è la spesa per tema e hosting attribuita alla messa online. Nella prossima lezione questa curva diventa il PV dell'Earned Value.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Disegna la curva S del Panificio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Calendario: A 1-3 · B 4-7 · C 4-5 · E 6-10 · D 8-13 · F 11-12 · H 13 · G 14-16 · I 17.</li>
+      <li>In Calc, colonna A i giorni 1-17; colonna B il costo del giorno (tariffe delle attività in corso; il giorno 17 aggiungi 720).</li>
+      <li>In C2 <code>=B2</code>, in C3 <code>=C2+B3</code>, copia in giù.</li>
+      <li>Inserisci un grafico a linee della colonna C, con titolo e assi.</li>
+      <li>Salva <b>curva-s-panificio.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> cumulato 960 al giorno 3, 4 680 al giorno 10, 8 000 al giorno 17, cioè il totale della CBS.</div>
+  </div>
+  <aside class="notes">Costi giornalieri attesi: 320, 320, 320, 540, 540, 540, 540, 520, 520, 520, 520, 520, 580, 240, 240, 240, 980. Errore tipico: dimenticare un'attività nei giorni in cui se ne sovrappongono due (4-7 e 8-13). Per chi finisce: aggiungere una colonna D con le spese generali al 25% e una E con il budget cumulato con riserva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e costi</p><h2>Una voce nuova nei preventivi</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Se l'e-commerce usasse un assistente basato su un modello linguistico (per esempio per rispondere ai clienti), le API si pagherebbero <b>a consumo</b>, in base ai token elaborati: un costo variabile ricorrente da stimare con un modello parametrico (conversazioni al mese × token per conversazione × prezzo). Anche le stime fatte con l'AI vanno controllate con il metodo bottom-up.</p></div>
+  <div class="callout hl"><b>All'esame:</b> mostra la catena WBS → CBS → preventivo con i tuoi numeri, e collega costi fissi e variabili al break even dell'unità 2.</div>
+  <aside class="notes">Non citare prezzi per token: cambiano spesso e dipendono dal fornitore e dal modello. Il punto didattico è il tipo di costo (variabile, ricorrente, legato all'uso) e il metodo di stima parametrica. Domanda: chi paga questo costo dopo la consegna, la software house o il panificio? (Va scritto nel preventivo, tra le condizioni.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="cp-uscita" data-extra="OBS|fisso">
+    <p>La <span class="slot" data-risposta="CBS"></span> somma i costi seguendo la WBS. L'affitto dell'ufficio per il progetto è un costo <span class="slot" data-risposta="indiretto"></span>, le giornate del programmatore un costo <span class="slot" data-risposta="diretto"></span>. Al costo si aggiungono riserva e <span class="slot" data-risposta="margine"></span>; al prezzo si aggiunge l'<span class="slot" data-risposta="IVA"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: CBS, indiretto, diretto, margine, IVA. Distrattori: OBS e fisso (l'affitto è anche fisso, ma la frase parla del progetto: diretto/indiretto).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Diretti/indiretti, fissi/variabili</li>
+      <li>CBS: i costi aggregati lungo la WBS</li>
+      <li>Stime: analogia, parametrica, bottom-up, tre punti</li>
+    </ul>
+    <ul class="points">
+      <li>Diretti + spese generali + riserva = budget</li>
+      <li>Budget + margine = prezzo; poi l'IVA</li>
+      <li>La curva S è la baseline dei costi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Confrontare il sondaggio iniziale con il prezzo calcolato (13 200 € + IVA). Prossima lezione: monitoraggio e controllo, con l'Earned Value.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

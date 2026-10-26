@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'avvio del progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 6</p>
+  <h1>L'avvio<br>del progetto</h1>
+  <p class="lead">Dal bisogno al via libera: accordo, kick-off, project charter, fattibilità, rischi. E un nome da presentare in sessanta secondi.</p>
+  <aside class="notes">Obiettivi: scrivere il bisogno del committente; conoscere gli elementi di un accordo; condurre un kick-off; redigere il project charter del progetto NQ; valutare la fattibilità e i rischi; scegliere nome e identità e preparare un elevator pitch. Durata: 3 ore (due laboratori). Si parte dal verbale dell'intervista NQ-VRB-001 prodotto nella lezione precedente. Il caso è quello comune all'Unità 6: la web app per i turni dei volontari dell'associazione di esempio "Quartiere Solidale".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Sapresti spiegare il progetto NQ a un passante in 30 secondi?</h2></div>
+  <div class="poll" data-id="u6-30-secondi">
+    <ol><li>Sì, senza problemi</li><li>Più o meno, ma mi perderei nei dettagli tecnici</li><li>No, non mi è ancora chiaro a che cosa serve</li><li>Gli parlerei solo di PHP e database</li></ol>
+  </div>
+  <aside class="notes">2 minuti, poi chiedere a un volontario di provarci davvero, cronometrando. Di solito si parla della soluzione (l'app) e non del problema. A fine lezione la stessa sfida torna come elevator pitch: confrontare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Idea e bisogno</p><h2>Prima il problema, poi la soluzione</h2></div>
+  <div class="callout hl">La coordinatrice passa circa <b>2 ore a settimana</b> al telefono per coprire i turni, e circa <b>un sabato al mese</b> il banco alimentare resta scoperto. Serve un modo perché i volontari si iscrivano da soli e i turni scoperti si vedano subito.</div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Chi</h3><p>Ha il problema: la coordinatrice, poi i volontari.</p></div>
+    <div class="card soft"><h3>Che cosa</h3><p>Turni scoperti, doppioni, telefonate.</p></div>
+    <div class="card soft"><h3>Quanto</h3><p>2 ore a settimana, 1 sabato al mese.</p></div>
+    <div class="card soft"><h3>Come sapremo</h3><p>Meno ore al telefono, turni coperti.</p></div>
+  </div>
+  <aside class="notes">È la "dichiarazione del bisogno" ricavata dall'intervista (dati ipotetici, coerenti con la scheda del ruolo). Notare che non contiene la parola "app": descrive il problema e il risultato atteso. L'idea (la web app) nasce da qui e va giustificata: perché un'app e non un foglio condiviso? Perché gli iscritti sono molti, si iscrivono dal telefono e servono promemoria automatici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il contratto</p><h2>Mettere per iscritto gli impegni</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Parti e oggetto</h3><p class="muted">Associazione e scuola; che cosa si consegna, con le funzioni principali.</p></div>
+    <div class="card"><h3>Tempi e corrispettivo</h3><p class="muted">Dieci settimane; nessun compenso, è un progetto didattico.</p></div>
+    <div class="card"><h3>Proprietà del codice</h3><p class="muted">A chi resta e con quale licenza.</p></div>
+    <div class="card"><h3>Dati personali</h3><p class="muted">Chi è titolare, chi tratta i dati per suo conto.</p></div>
+    <div class="card"><h3>Collaudo</h3><p class="muted">Come e quando il committente accetta il lavoro.</p></div>
+    <div class="card"><h3>Dopo la consegna</h3><p class="muted">Chi gestisce l'app quando la classe si diploma.</p></div>
+  </div>
+  <aside class="notes">Tra un'impresa e un cliente il contratto è un atto giuridico vincolante; in un progetto scolastico con un'associazione si usa di solito un accordo o una lettera d'intenti firmata dalla dirigente. Sui dati: secondo il GDPR (Regolamento UE 2016/679) l'associazione, che decide perché e come usare i dati dei volontari, è titolare del trattamento; chi li gestisce per suo conto (per esempio chi amministra il server) è responsabile del trattamento e va nominato per iscritto (art. 28). L'ultimo riquadro è il più dimenticato: chi mantiene l'app dopo giugno?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il kick-off</p><h2>La riunione che fa partire il progetto</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Tutti presenti: committente, sponsor, PM, squadre</li>
+      <li>Si condividono obiettivi, ambito, tempi e ruoli</li>
+      <li>Si decide come comunicare durante il progetto</li>
+      <li>Si chiude con decisioni e prossimi passi, nel verbale</li>
+    </ul>
+    <div class="card fill"><h3>Perché conta</h3><p>È l'ultimo momento in cui tutti ascoltano le stesse cose nello stesso istante. Gli equivoci non chiariti qui costano cari dopo.</p></div>
+  </div>
+  <aside class="notes">Per il progetto NQ: invitare in classe (o in videochiamata) la persona che interpreta la coordinatrice, con la dirigente o un suo delegato. Durata consigliata: un'ora. Il PM conduce, un segretario scrive il verbale NQ-VRB-002. Collegamento con l'Unità 4 (piano della comunicazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>L'agenda del kick-off</h2></div>
+  <ol class="puzzle-ordina" data-id="u6-agenda-kickoff">
+    <li>Presentazioni: chi siamo e che ruolo abbiamo</li>
+    <li>Il bisogno e gli obiettivi del progetto</li>
+    <li>Che cosa è dentro e che cosa è fuori dall'ambito</li>
+    <li>Tempi e milestone</li>
+    <li>Rischi principali e regole di comunicazione</li>
+    <li>Decisioni prese e prossimi passi, con le date</li>
+  </ol>
+  <aside class="notes">Ordine logico: chi, perché, che cosa, quando, che cosa può andare storto e come ci parliamo, poi la chiusura con le azioni. La chiusura con "chi fa che cosa entro quando" è ciò che distingue una riunione utile da una chiacchierata. Accettare rischi e comunicazione in posizione diversa se motivato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il project charter</p><h2>Il documento che autorizza il progetto</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Codice, titolo, committente e sponsor</li>
+      <li>Project manager e la sua autorità</li>
+      <li>Bisogno e obiettivi misurabili</li>
+      <li>Ambito: che cosa è incluso e che cosa no</li>
+    </ul>
+    <ul class="points">
+      <li>Milestone principali</li>
+      <li>Risorse disponibili e vincoli</li>
+      <li>Rischi principali</li>
+      <li>Criteri di successo e firme</li>
+    </ul>
+  </div>
+  <div class="callout"><b>Fuori ambito</b> nel progetto NQ: app da scaricare dagli store, pagamenti, chat tra volontari, dati dei bambini del doposcuola.</div>
+  <aside class="notes">Nella guida PMBOK il project charter è il documento che autorizza formalmente il progetto e dà al project manager l'autorità di usare le risorse. È breve (due pagine bastano) e lo firma lo sponsor. La sezione "fuori ambito" è preziosa: evita discussioni future. La chat è fuori ambito perché richiederebbe moderazione e più dati personali; può diventare una versione 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Le sezioni del charter NQ-PRG-001</h2></div>
+  <div class="puzzle-trascina" data-id="u6-charter" data-extra="Preventivo|Glossario">
+    <table class="data compact" style="font-size:28px">
+      <tr><td style="width:330px"><span class="slot" data-risposta="Obiettivo" style="font-size:24px"></span></td><td>Entro due mesi dal rilascio, almeno il 95% dei posti mensili coperti tramite l'app</td></tr>
+      <tr><td><span class="slot" data-risposta="Ambito" style="font-size:24px"></span></td><td>Calendario dei turni, iscrizione e cancellazione, promemoria via email, area coordinatrice</td></tr>
+      <tr><td><span class="slot" data-risposta="Fuori ambito" style="font-size:24px"></span></td><td>Chat, pagamenti, app per gli store, dati dei minori</td></tr>
+      <tr><td><span class="slot" data-risposta="Milestone" style="font-size:24px"></span></td><td>M1 charter (S2) · M2 requisiti e prototipo (S4) · M3 beta (S8) · M4 rilascio (S10)</td></tr>
+      <tr><td><span class="slot" data-risposta="Vincoli" style="font-size:24px"></span></td><td>Zero euro, server della scuola, 3 ore a settimana per 10 settimane</td></tr>
+      <tr><td><span class="slot" data-risposta="Rischi" style="font-size:24px"></span></td><td>Server non disponibile, volontari che non usano l'app, assenze nel team</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto: Obiettivo, Ambito, Fuori ambito, Milestone, Vincoli, Rischi. Distrattori: Preventivo (qui non c'è un compenso) e Glossario. Far notare che l'obiettivo è misurabile e ha una scadenza: 95% di 82 posti = 77,9, cioè almeno 78 posti al mese.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale obiettivo è scritto bene per il charter?</h2></div>
+  <div class="poll" data-id="u6-smart" data-tipo="quiz" data-risposta="C">
+    <ol><li>Rendere più facile la vita dei volontari</li><li>Realizzare un'app bellissima e velocissima</li><li>Entro due mesi dal rilascio, almeno il 95% dei posti mensili coperti tramite l'app</li><li>Usare le tecnologie web più moderne</li></ol>
+    <p class="why">Solo la C è specifica, misurabile, raggiungibile, pertinente al bisogno e con una scadenza (SMART). Le altre sono desideri: nessuno potrà dire alla fine se sono stati raggiunti. La D poi parla della soluzione, non del bisogno.</p>
+  </div>
+  <aside class="notes">SMART: Specific, Measurable, Achievable, Relevant, Time-bound. Esercizio veloce: trasformare la A in un obiettivo SMART ("entro tre mesi, ore di telefono della coordinatrice ridotte da 2 a meno di 0,5 a settimana"). Domanda: chi misura? Serve un dato di partenza (le 2 ore attuali) e un modo di misurare dopo (la coordinatrice annota per un mese).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Fattibilità</p><h2>Si può fare? A quali condizioni?</h2></div>
+  <div class="puzzle-categorie" data-id="u6-fattibilita" style="--cols:4">
+    <div class="cat"><h4>Tecnica</h4><ul><li>Il server regge 80 utenti?</li><li>Sappiamo usare PHP e MySQL?</li></ul></div>
+    <div class="cat"><h4>Economica</h4><ul><li>Servono licenze a pagamento?</li><li>Il dominio costa?</li></ul></div>
+    <div class="cat"><h4>Organizzativa</h4><ul><li>Abbiamo abbastanza ore?</li><li>Chi la mantiene dopo giugno?</li></ul></div>
+    <div class="cat"><h4>Legale</h4><ul><li>Possiamo trattare email e telefoni?</li><li>Serve un'informativa privacy?</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Lo studio di fattibilità risponde a queste domande prima di impegnare risorse. Risposte per il caso NQ: tecnica sì (80 utenti sono pochissimi per un server web; PHP e MySQL si studiano in informatica); economica sì (software libero; un dominio costa poco ma si può usare un sottodominio della scuola); organizzativa con riserva (manutenzione dopo giugno: da concordare, per esempio con la classe quarta dell'anno dopo); legale sì con condizioni (informativa, dati minimi, nomina del responsabile). La fattibilità può essere "sì, a condizione che…".</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>Il project charter del progetto NQ</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri il modello con cartiglio dell'Unità 5 e salvalo come <b>NQ-PRG-001_rev0.odt</b>.</li>
+      <li>Compila le otto sezioni della slide 7, usando il verbale dell'intervista.</li>
+      <li>Scrivi due obiettivi SMART e almeno tre voci fuori ambito.</li>
+      <li>Inserisci le quattro milestone con la settimana.</li>
+      <li>Massimo due pagine. Esporta in PDF e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni obiettivo ha un numero e una scadenza; le milestone sono M1 (S2), M2 (S4), M3 (S8), M4 (S10); in fondo c'è lo spazio per le firme di sponsor e committente.</div>
+  </div>
+  <aside class="notes">Lavoro per squadre; poi il PM unisce le versioni migliori in un unico charter, che verrà "firmato" dalla persona che interpreta la committente e dal docente nel ruolo di garante. Errori tipici: obiettivi non misurabili, ambito che elenca tecnologie invece di funzioni, milestone confuse con attività ("sviluppo" non è una milestone, "beta pronta" sì).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I rischi</p><h2>Il primo registro dei rischi</h2></div>
+  <table class="data compact">
+    <tr><th>Rischio</th><th>P</th><th>I</th><th>P × I</th><th>Risposta</th></tr>
+    <tr><td>Il server della scuola non è disponibile</td><td>2</td><td>3</td><td class="hl">6</td><td>Ambiente di prova su un PC; accordo con il tecnico</td></tr>
+    <tr><td>I volontari anziani non usano l'app</td><td>2</td><td>3</td><td class="hl">6</td><td>Interfaccia semplice; prova con tre di loro</td></tr>
+    <tr><td>Assenze nel team durante le verifiche</td><td>3</td><td>2</td><td class="hl">6</td><td>Ogni compito ha un sostituto</td></tr>
+    <tr><td>La committente chiede funzioni nuove</td><td>3</td><td>2</td><td class="hl">6</td><td>Richieste di modifica scritte</td></tr>
+    <tr><td>Fuga dei dati dei volontari</td><td>1</td><td>3</td><td>3</td><td>Dati minimi, password cifrate, HTTPS</td></tr>
+  </table>
+  <aside class="notes">Scala da 1 (basso) a 3 (alto), dati di esempio. La matrice impatto/probabilità è stata vista nell'Unità 3 (risk management): qui la si applica al progetto. Far notare l'ultima riga: punteggio più basso, ma vedi il quiz successivo. Nel software "password cifrate" significa, più precisamente, salvate con una funzione di hash adatta (in PHP password_hash).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La fuga di dati ha punteggio 3, il più basso. Che cosa fai?</h2></div>
+  <div class="poll" data-id="u6-rischio-dati" data-tipo="quiz" data-risposta="D">
+    <ol><li>La ignori: prima si trattano i rischi con punteggio 6</li><li>La trasferisci: se succede, è colpa del server della scuola</li><li>La accetti: con 80 utenti nessuno ci attaccherà</li><li>La tratti comunque con misure preventive: l'impatto è grave e la protezione dei dati è un obbligo di legge</li></ol>
+    <p class="why">Il punteggio P × I serve a fare una classifica, non a decidere da solo. Un rischio poco probabile ma gravissimo, che coinvolge dati personali e obblighi del GDPR, va prevenuto: dati minimi, accessi protetti, password salvate con hash, connessione cifrata.</p>
+  </div>
+  <aside class="notes">Il tranello è la A, che applica la regola in modo meccanico. Anche la C è un errore comune: i sistemi piccoli vengono attaccati da programmi automatici che provano tutti gli indirizzi, senza scegliere. La B non è un trasferimento valido: la responsabilità verso i volontari resta dell'associazione e di chi tratta i dati per suo conto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>I documenti dell'avvio</h2></div>
+  <dl class="puzzle-abbina" data-id="u6-documenti-avvio">
+    <dt>Verbale dell'intervista</dt><dd>Fissa i bisogni raccolti dal committente</dd>
+    <dt>Accordo</dt><dd>Stabilisce impegni, proprietà del codice e ruoli sui dati</dd>
+    <dt>Studio di fattibilità</dt><dd>Dice se si può fare e a quali condizioni</dd>
+    <dt>Project charter</dt><dd>Autorizza il progetto e nomina il project manager</dd>
+    <dt>Registro dei rischi</dt><dd>Elenca che cosa può andare storto e come rispondere</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Tutti vanno nella cartella 01_avvio con il loro codice NQ (Unità 5): NQ-VRB-001, NQ-ACC-001, NQ-FAT-001, NQ-PRG-001, NQ-RSK-001 (sigle proposte, la classe può sceglierne altre purché le scriva nella regola di codifica).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Nome e identità</p><h2>Un nome che si ricorda, un minuto per convincere</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Il nome</h3><ul class="points"><li>Breve e facile da pronunciare</li><li>Dice che cosa fa: "Diamoci il turno"</li><li>Adatto a chi lo userà</li><li>Libero: controlla domini e marchi</li></ul></div>
+    <div class="card"><h3>L'elevator pitch</h3><ul class="points"><li>Il problema, con un numero</li><li>Per chi</li><li>La soluzione, in una frase</li><li>Che cosa chiedete</li></ul></div>
+  </div>
+  <div class="callout"><b>All'esame</b>: saper presentare un progetto in un minuto, partendo dal problema, è un ottimo inizio per raccontare qualsiasi esperienza.</div>
+  <aside class="notes">"Diamoci il turno" è solo un esempio: la classe sceglie il suo nome nel laboratorio. Identità: nome, colori, un simbolo semplice, il tono dei messaggi (per i volontari anziani: chiaro e cordiale). L'elevator pitch dura il tempo di un viaggio in ascensore, circa 30-60 secondi. Prima di scegliere un nome si può cercare nella banca dati dei marchi dell'UIBM o dell'EUIPO e verificare i domini liberi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Fare bene la cosa giusta</h2></div>
+  <figure class="citazione">
+    <blockquote>Non c'è nulla di così inutile come fare con grande efficienza ciò che non andrebbe fatto affatto.</blockquote>
+    <figcaption><b>Peter Drucker</b>, studioso di management, «Managing for Business Effectiveness», Harvard Business Review, 1963</figcaption>
+  </figure>
+  <p class="lead">L'avvio serve proprio a questo: decidere <b>che cosa</b> fare, prima di imparare a farlo bene.</p>
+  <aside class="notes">Traduzione nostra: "There is nothing so useless as doing efficiently that which should not be done at all." Collegare ai due errori dell'avvio: partire dalla soluzione (l'app) senza il bisogno, e non scrivere che cosa è fuori ambito. Domanda: nel progetto NQ, che cosa sarebbe "fatto benissimo ma inutile"? (Una chat curatissima che nessuno usa, un'app nativa che i volontari anziani non installano.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Trenta rischi in un minuto?</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>L'AI nell'analisi dei rischi</h3><p>Un assistente AI propone in pochi secondi un elenco di rischi tipici di un progetto web: utile per non dimenticarne nessuno. Ma non sa che il server è quello della scuola, che a marzo ci sono le simulazioni d'esame, che la committente ama le idee nuove. <b>Probabilità e impatto</b> li stima il team, che conosce il contesto.</p></div>
+  <div class="callout">Regola per il progetto NQ: l'elenco generato è una bozza; nel registro entra solo ciò che il team ha discusso e valutato.</div>
+  <aside class="notes">Esercizio facoltativo alla LIM: chiedere a un assistente AI i rischi di "una web app per i turni di volontari, sviluppata da una classe in 10 settimane" e confrontare con il registro della classe. Che cosa manca nell'elenco dell'AI? Che cosa c'è di inutile? Non inserire nel prompt dati personali reali.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 35 minuti</span></p>
+  <h2>Nome, identità ed elevator pitch</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Ogni squadra propone tre nomi e li verifica con i quattro criteri della slide 15.</li>
+      <li>Sceglie un nome e due colori; in diagrams.net disegna un simbolo semplice.</li>
+      <li>Scrive un elevator pitch di massimo 150 parole: problema, per chi, soluzione, richiesta.</li>
+      <li>Lo presenta alla classe in 60 secondi, cronometrati.</li>
+      <li>Consegna <b>NQ-pitch_squadraN.pdf</b> con nomi, simbolo e testo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il pitch contiene almeno un numero del problema (2 ore di telefono, un sabato scoperto al mese) e non nomina nessuna tecnologia. Sta nei 60 secondi.</div>
+  </div>
+  <aside class="notes">Alla fine la classe vota il nome preferito con il sondaggio di Novaula o per alzata di mano; il nome scelto entra nella rev1 del charter. Esempio di pitch: "Ogni sabato il banco alimentare di Quartiere Solidale ha bisogno di sei volontari, ma una volta al mese il turno resta scoperto e la coordinatrice passa due ore a settimana al telefono. Diamoci il turno è una pagina web che i volontari aprono dal telefono per iscriversi ai turni liberi, con un promemoria il giorno prima. Alla coordinatrice chiediamo un'ora per provarla con tre volontari." (circa 70 parole).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-uscita-avvio" data-extra="preventivo|Gantt">
+    <p>Il documento che autorizza il progetto e nomina il PM è il <span class="slot" data-risposta="project charter|charter"></span>.</p>
+    <p>La riunione che fa partire il progetto con tutti gli interessati è il <span class="slot" data-risposta="kick-off"></span>.</p>
+    <p>Un obiettivo scritto bene è <span class="slot" data-risposta="SMART"></span>; ciò che non si farà va scritto nel <span class="slot" data-risposta="fuori ambito"></span>.</p>
+    <p>Il punteggio di un rischio è probabilità per <span class="slot" data-risposta="impatto"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: project charter, kick-off, SMART, fuori ambito, impatto. Distrattori: preventivo, Gantt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Bisogno con numeri, prima di ogni soluzione</li>
+      <li>Accordo: impegni, codice, dati personali, collaudo</li>
+      <li>Kick-off con decisioni e prossimi passi</li>
+    </ul>
+    <ul class="points">
+      <li>Charter: obiettivi SMART, ambito e fuori ambito</li>
+      <li>Fattibilità tecnica, economica, organizzativa, legale</li>
+      <li>Rischi: P × I per ordinare, il buon senso per decidere</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Milestone M1 raggiunta quando il charter è firmato. Prossima lezione: l'approfondimento (analisi del contesto, verbali, WBS, Gantt, ruoli e responsabilità).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

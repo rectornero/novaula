@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La realizzazione del progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 6</p>
+  <h1>La realizzazione</h1>
+  <p class="lead">Dalle richieste della coordinatrice al codice che gira: requisiti, interfaccia, specifiche, componenti, database, metriche. E un occhio sempre sul piano.</p>
+  <aside class="notes">Obiettivi: scrivere requisiti utente verificabili e distinguere funzionali e non funzionali; progettare l'interfaccia per gli utenti reali; passare dai requisiti alle specifiche; scegliere componenti e linguaggi; progettare il database; misurare il software e monitorare l'avanzamento con il valore guadagnato. Durata: 4 ore (due laboratori). È la fase più lunga del progetto NQ (settimane 5-8). Per lo sviluppo vero si lavora in compresenza con informatica e TPSIT; qui si guarda il progetto con gli occhi di chi lo gestisce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Chi dovrebbe decidere come è fatta l'interfaccia?</h2></div>
+  <div class="poll" data-id="u6-chi-decide-ui">
+    <ol><li>Chi la programma</li><li>La coordinatrice, che è il committente</li><li>I volontari, provandola</li><li>Il project manager</li></ol>
+  </div>
+  <aside class="notes">2 minuti. Non c'è una risposta sola: chi programma conosce i limiti tecnici, la committente approva, ma la prova decisiva la fanno gli utenti (Giuseppe, Sara, Marta delle personas). Il PM garantisce che la decisione arrivi in tempo. Ritornare su questo dopo il laboratorio sul prototipo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Requisiti utente</p><h2>Che cosa vuole fare chi userà l'app</h2></div>
+  <div class="cols-2">
+    <div class="card"><p class="small"><b>R1</b> · Come <b>volontario</b> voglio vedere i turni con posti liberi della settimana, per scegliere quando aiutare.</p></div>
+    <div class="card"><p class="small"><b>R2</b> · Come <b>volontario</b> voglio iscrivermi a un turno con nome ed email, senza creare un account.</p></div>
+    <div class="card"><p class="small"><b>R3</b> · Come <b>volontario</b> voglio ricevere un promemoria il giorno prima del turno.</p></div>
+    <div class="card"><p class="small"><b>R4</b> · Come <b>coordinatrice</b> voglio vedere in rosso i turni scoperti dei prossimi 14 giorni.</p></div>
+  </div>
+  <div class="callout">Ogni requisito ha <b>criteri di accettazione</b>: "Se il turno è pieno, il pulsante Mi iscrivo non compare e si legge Turno completo".</div>
+  <aside class="notes">Formato "user story" già visto nel deck "lavorare-a-progetti". I requisiti vengono dall'intervista e dalle personas; li approva la committente (A nella matrice RACI). R2 nasce da Giuseppe: niente account e password da ricordare. Per evitare iscrizioni false, una possibile soluzione è un link di conferma via email: è una scelta da discutere con la committente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Funzionale o non funzionale?</h2></div>
+  <div class="puzzle-categorie" data-id="u6-requisiti">
+    <div class="cat"><h4>Funzionale: che cosa fa</h4><ul><li>Iscriversi a un turno</li><li>Cancellare l'iscrizione</li><li>Esportare gli iscritti in CSV</li><li>Promemoria il giorno prima</li></ul></div>
+    <div class="cat"><h4>Non funzionale: come lo fa</h4><ul><li>Pagina aperta in meno di 2 s</li><li>Caratteri grandi e contrasto alto</li><li>Password salvate con hash</li><li>Funziona su Chrome, Firefox e Safari</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. I requisiti non funzionali riguardano prestazioni, usabilità e accessibilità, sicurezza, compatibilità: corrispondono alle caratteristiche di qualità che vedremo con la ISO/IEC 25010. Errore comune: considerare "password salvate con hash" funzionale perché "fa qualcosa"; in realtà descrive come il sistema protegge i dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>"L'app deve essere facile da usare." Questo requisito è…</h2></div>
+  <div class="poll" data-id="u6-facile" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un buon requisito non funzionale, pronto da approvare</li><li>Un requisito funzionale</li><li>Un desiderio da rendere verificabile, per esempio con un test su utenti reali</li><li>Inutile: ogni app deve essere facile</li></ol>
+    <p class="why">È non funzionale, ma così com'è nessuno può verificarlo. Versione verificabile: "4 volontari su 5 con più di 65 anni si iscrivono a un turno da soli, in meno di 2 minuti, al primo tentativo".</p>
+  </div>
+  <aside class="notes">La A è il tranello: la categoria è giusta, ma il requisito non si può collaudare. Collegare all'obiettivo SMART del charter: lo stesso principio vale per i requisiti. Il test proposto si potrà fare davvero nel collaudo (lezione sulla chiusura).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'interfaccia</p><h2>Progettata per Giuseppe, comoda per Sara</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>Mobile first</b>: si progetta prima per il telefono</li>
+      <li>Iscrizione in <b>tre tocchi</b>: turno, nome ed email, conferma</li>
+      <li>Caratteri grandi e contrasto almeno <b>4,5:1</b> (WCAG)</li>
+      <li>Pulsanti grandi, parole semplici, niente icone senza testo</li>
+      <li>Ogni azione ha una <b>conferma</b> visibile</li>
+    </ul>
+    <div class="card" style="border:6px solid var(--ink);border-radius:36px;padding:26px;gap:12px;font-size:26px">
+      <p class="tiny muted">Diamoci il turno · settimana 12-18</p>
+      <div class="card soft" style="padding:14px 18px"><b>Sab 9-12 · Banco alimentare</b><span>2 posti liberi</span></div>
+      <div class="card bad" style="padding:14px 18px"><b>Lun 15-17 · Doposcuola</b><span>Turno completo</span></div>
+      <div class="card fill" style="padding:14px 18px;align-items:center"><b>Mi iscrivo</b></div>
+    </div>
+  </div>
+  <aside class="notes">Il contrasto 4,5:1 è il minimo del livello AA delle WCAG per il testo normale. Il disegno a destra è un wireframe: mostra la disposizione, non i colori definitivi. "Mobile first" (vedi i deck di sviluppo web della scuola): la maggior parte dei volontari userà il telefono. Domanda: che cosa manca in questo wireframe per Giuseppe? (Un modo per tornare indietro, la data scritta per intero, forse il numero di telefono della coordinatrice.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 40 minuti</span></p>
+  <h2>Il prototipo dell'interfaccia</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In <b>app.diagrams.net</b> cerca le forme "mockup" e disegna tre schermate da telefono: elenco turni, iscrizione, conferma.</li>
+      <li>Aggiungi una schermata per la coordinatrice con i turni scoperti.</li>
+      <li>Stampa o mostra a schermo le schermate a un compagno che interpreta Giuseppe: deve iscriversi senza aiuto.</li>
+      <li>Annota dove esita e correggi il prototipo.</li>
+      <li>Consegnate <b>NQ-SPC-002_prototipo_rev0.pdf</b> con le schermate e le note del test.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> dall'elenco alla conferma servono al massimo tre tocchi; ogni pulsante ha una parola; i turni pieni non hanno il pulsante Mi iscrivo.</div>
+  </div>
+  <aside class="notes">È un test di usabilità su carta, lo stesso metodo della lezione sui manuali. Chi interpreta Giuseppe deve "toccare" sullo schermo stampato e il compagno cambia il foglio. Approvato dalla committente, il prototipo chiude la milestone M2 insieme ai requisiti. Se diagrams.net è lento, va bene il disegno su carta fotografato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Specifiche software</p><h2>Dal requisito alla specifica</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Requisito R2</h3><p>Come volontario voglio iscrivermi a un turno con nome ed email, senza creare un account.</p></div>
+    <div class="card"><h3>Specifica S2.1 · Iscrizione</h3><ul class="points small"><li><b>Input</b>: id del turno, nome (2-60 caratteri), email</li><li><b>Controlli</b>: email valida, posti liberi &gt; 0, non già iscritto</li><li><b>Output</b>: iscrizione salvata, messaggio, email di conferma</li><li><b>Errori</b>: "Turno completo", "Sei già iscritto"</li></ul></div>
+  </div>
+  <div class="callout">Il requisito parla la lingua dell'utente; la specifica parla la lingua di chi programma e di chi collauda.</div>
+  <aside class="notes">La specifica dice che cosa deve fare il software con precisione sufficiente per scriverlo e per provarlo; non dice come è scritto il codice. Ogni specifica è collegata al suo requisito (tracciabilità): se la committente cambia R2, si sa subito quali specifiche e quali test cambiano. Le specifiche vanno nel documento NQ-SPC-001.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Componenti e linguaggi</p><h2>Tre livelli, un linguaggio per ciascuno</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Browser</h3><p>HTML per la struttura, CSS per l'aspetto, JavaScript per le interazioni.</p></div>
+    <div class="card fill"><h3>Server web</h3><p>PHP riceve le richieste, controlla i dati, prepara le pagine.</p></div>
+    <div class="card soft"><h3>Database</h3><p>MySQL o MariaDB conserva volontari, turni, iscrizioni; si interroga in SQL.</p></div>
+  </div>
+  <div class="callout">Componenti in più: un'attività pianificata ogni sera invia i promemoria via email (protocollo SMTP); tutto il traffico passa in HTTPS.</div>
+  <aside class="notes">La scelta segue la fattibilità tecnica dell'avvio: il server della scuola offre PHP e MySQL e la classe li studia in informatica. Con un altro server la scelta potrebbe essere diversa (per esempio Python o Node.js): l'importante è motivarla nel documento delle specifiche. L'attività pianificata è tipicamente un cron job sul server Linux.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>L'architettura di "Diamoci il turno"</h2></div>
+  <div class="puzzle-trascina" data-id="u6-architettura" data-extra="FTP|CSV">
+    <div style="position:relative;height:440px;margin-top:20px">
+      <svg viewBox="0 0 1664 440" width="1664" height="440" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <defs><marker id="frV" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7e45cc"/></marker></defs>
+        <line x1="420" y1="130" x2="640" y2="130" stroke="#7e45cc" stroke-width="6" marker-start="url(#frV)" marker-end="url(#frV)"/>
+        <line x1="1024" y1="130" x2="1244" y2="130" stroke="#7e45cc" stroke-width="6" marker-start="url(#frV)" marker-end="url(#frV)"/>
+        <line x1="832" y1="214" x2="832" y2="320" stroke="#7e45cc" stroke-width="6" marker-end="url(#frV)"/>
+      </svg>
+      <div class="card soft" style="position:absolute;left:0;top:46px;width:420px;height:168px;justify-content:center;font-size:30px"><b>Telefono del volontario</b><span class="muted small">pagine e interazioni</span></div>
+      <div class="card fill" style="position:absolute;left:640px;top:46px;width:384px;height:168px;justify-content:center;font-size:30px"><b>Server della scuola</b><span class="small">logica e controlli</span></div>
+      <div class="card soft" style="position:absolute;left:1244px;top:46px;width:420px;height:168px;justify-content:center;font-size:30px"><b>Database</b><span class="muted small">volontari, turni, iscrizioni</span></div>
+      <div class="card" style="position:absolute;left:520px;top:320px;width:624px;height:110px;justify-content:center;font-size:28px"><b>Promemoria via email, ogni sera</b></div>
+      <span class="slot" data-risposta="JavaScript" style="position:absolute;left:0;top:-14px"></span>
+      <span class="slot" data-risposta="HTTPS" style="position:absolute;left:440px;top:150px"></span>
+      <span class="slot" data-risposta="PHP" style="position:absolute;left:640px;top:-14px"></span>
+      <span class="slot" data-risposta="SQL" style="position:absolute;left:1060px;top:150px"></span>
+      <span class="slot" data-risposta="SMTP" style="position:absolute;left:860px;top:236px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: JavaScript sul telefono (insieme a HTML e CSS), HTTPS sulla freccia tra telefono e server, PHP sul server, SQL sulla freccia tra server e database, SMTP verso le email. Distrattori: FTP (un tempo usato per caricare i file sul server, non per gli utenti) e CSV (un formato di file, usato dall'esportazione, non un linguaggio dell'architettura). Far notare che il telefono non parla mai direttamente con il database: tutto passa dal server, che controlla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il database</p><h2>Tre tabelle bastano</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>volontario</h3><p class="small mono"><b>id</b> · nome · email · telefono</p></div>
+    <div class="card fill"><h3>iscrizione</h3><p class="small mono"><b>volontario_id</b> · <b>turno_id</b> · data_iscrizione</p></div>
+    <div class="card"><h3>turno</h3><p class="small mono"><b>id</b> · attivita · data · ora_inizio · ora_fine · posti</p></div>
+  </div>
+  <pre class="code"><span class="c">-- posti liberi di un turno</span>
+<span class="k">SELECT</span> t.posti - <span class="k">COUNT</span>(i.volontario_id) <span class="k">AS</span> liberi
+<span class="k">FROM</span> turno t <span class="k">LEFT JOIN</span> iscrizione i <span class="k">ON</span> i.turno_id = t.id
+<span class="k">WHERE</span> t.id = ? <span class="k">GROUP BY</span> t.id, t.posti;</pre>
+  <aside class="notes">Un volontario fa molti turni e un turno ha molti volontari: relazione molti a molti, risolta dalla tabella iscrizione. La coppia (volontario_id, turno_id) è chiave primaria di iscrizione, quindi la stessa persona non può iscriversi due volte allo stesso turno. Il LEFT JOIN serve per i turni senza iscritti (COUNT dà 0). Il "?" è un parametro: la query si esegue con un prepared statement, che protegge dalla SQL injection. Nessun dato sui minori del doposcuola: è un vincolo del charter.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni concetto, il suo esempio nel database NQ</h2></div>
+  <dl class="puzzle-abbina" data-id="u6-db">
+    <dt>Chiave primaria</dt><dd>turno.id identifica un solo turno</dd>
+    <dt>Chiave esterna</dt><dd>iscrizione.turno_id punta a un turno esistente</dd>
+    <dt>Relazione molti a molti</dt><dd>Un volontario fa molti turni, un turno ha molti volontari</dd>
+    <dt>Vincolo di unicità</dt><dd>Nessuno si iscrive due volte allo stesso turno</dd>
+    <dt>Funzione di aggregazione</dt><dd>COUNT degli iscritti di un turno</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. È un ripasso dei concetti di informatica in un contesto di progetto. Nel nostro schema il vincolo di unicità coincide con la chiave primaria composta di iscrizione; si può anche usare un id proprio e un vincolo UNIQUE sulla coppia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Da una richiesta a una funzione "fatta"</h2></div>
+  <ol class="puzzle-ordina" data-id="u6-fatto">
+    <li>User story con i criteri di accettazione</li>
+    <li>Schermata nel prototipo, approvata</li>
+    <li>Specifica con input, controlli, output, errori</li>
+    <li>Codice e query, nel ramo della squadra</li>
+    <li>Revisione del codice da parte di un compagno</li>
+    <li>Prova con i criteri di accettazione</li>
+    <li>Integrazione nel ramo principale e scheda spostata in "Fatto"</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Revisione e prova possono scambiarsi o avvenire in parallelo: accettarlo. Il concetto di "definizione di fatto" è nel deck "lavorare-a-progetti": una funzione non è fatta quando il codice è scritto, ma quando è provata e integrata. La board Kanban della classe mostra lo stato di ogni scheda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Monitoraggio</p><h2>Ogni settimana: dove siamo rispetto al piano?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Avanzamento</h3><p>Percentuale fatta di ogni pacchetto, onesta: "quasi finito" non è un numero.</p></div>
+    <div class="card soft"><h3>Valore guadagnato</h3><p>Ore pianificate a oggi (PV) contro ore "guadagnate" dal lavoro fatto (EV).</p></div>
+    <div class="card soft"><h3>Azioni</h3><p>Se un'attività critica è in ritardo: spostare persone, ridurre l'ambito, avvisare.</p></div>
+  </div>
+  <div class="formula"><small>Indice di avanzamento dei tempi</small>SPI = EV / PV &nbsp;<span class="hl">&lt; 1</span> → in ritardo</div>
+  <aside class="notes">Ripasso dell'Unità 4 (monitoraggio, stato di avanzamento ed Earned Value). Nel progetto NQ i costi sono ore di lavoro, quindi PV ed EV si misurano in ore. Il monitoraggio si fa nella riunione settimanale e finisce nel verbale con le azioni correttive.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Lo stato di avanzamento a fine settimana 6</h2>
+  <div class="cols-2" style="gap:40px">
+    <div class="stack">
+      <ol class="steps small">
+        <li>In Calc copia la tabella in A1:D6.</li>
+        <li>E1 <b>PV</b>: <code>=B2*C2</code>; F1 <b>EV</b>: <code>=B2*D2</code>; copia fino alla riga 6.</li>
+        <li>In riga 7 somma B, E, F; in G7 <code>=F7/E7</code> (SPI).</li>
+        <li>Salva come <b>NQ-SAL-S06.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> PV 95 ore, EV 70 ore, SPI 0,74. Il progetto è in ritardo di 25 ore di lavoro.</div>
+    </div>
+    <table class="sheet">
+      <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+      <tr><th>1</th><td>Pacchetto</td><td>Ore</td><td>% piano</td><td>% fatto</td></tr>
+      <tr><th>2</th><td>3.1 Database</td><td>15</td><td>100%</td><td>100%</td></tr>
+      <tr><th>3</th><td>3.2 Back-end</td><td>30</td><td>100%</td><td>70%</td></tr>
+      <tr><th>4</th><td>3.3 Front-end</td><td>30</td><td>100%</td><td>80%</td></tr>
+      <tr><th>5</th><td>3.4 Promemoria</td><td>15</td><td>0%</td><td>0%</td></tr>
+      <tr><th>6</th><td>5.1 Manuale</td><td>20</td><td>100%</td><td>50%</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Dati di esempio. PV = 15 + 30 + 30 + 0 + 20 = 95 ore; EV = 15 + 21 + 24 + 0 + 10 = 70 ore; SPI = 70 / 95 = 0,737, arrotondato 0,74; scostamento SV = EV − PV = −25 ore. Totale ore dei pacchetti (B7) = 110. Le percentuali vanno digitate come 100% o come 1 con formato percentuale. Domanda che porta al quiz successivo: quale ritardo preoccupa di più?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Back-end al 70%, manuale al 50%. Quale ritardo preoccupa di più?</h2></div>
+  <div class="poll" data-id="u6-ritardo-critico" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il manuale: è più indietro</li><li>Il back-end: è sul percorso critico, ogni giorno perso sposta la fine</li><li>Nessuno dei due, lo SPI è vicino a 1</li><li>Pesano uguale, perché si misurano in ore</li></ol>
+    <p class="why">Nel Gantt il back-end (E) è critico: un ritardo lì sposta il rilascio. Il manuale (J) ha 3 settimane di margine: può finire più tardi senza danni, se recupera entro la settimana 9. La percentuale da sola non basta, serve il piano.</p>
+  </div>
+  <aside class="notes">Collega monitoraggio e percorso critico (lezione sull'approfondimento). Azioni correttive possibili: spostare un membro della squadra documentazione sul back-end per due settimane (il manuale ha margine); ridurre l'ambito, rimandando l'esportazione CSV a dopo il rilascio, d'accordo con la committente. La C è sbagliata: 0,74 vuol dire che è stato fatto circa tre quarti del lavoro previsto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metriche del software</p><h2>Misurare il prodotto, non solo il progetto</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Dimensione</h3><p class="muted">Righe di codice (LOC): utile per confronti, pessima come misura di bravura.</p></div>
+    <div class="card"><h3>Complessità</h3><p class="muted">Complessità ciclomatica (McCabe, 1976): decisioni + 1 per ogni funzione.</p></div>
+    <div class="card"><h3>Test</h3><p class="muted">Copertura: quale parte del codice viene eseguita dai test.</p></div>
+    <div class="card"><h3>Difetti</h3><p class="muted">Bug trovati, risolti, ancora aperti, per gravità.</p></div>
+    <div class="card"><h3>Prestazioni</h3><p class="muted">Tempo di risposta: R1 chiede meno di 2 s.</p></div>
+    <div class="card soft"><h3>Qualità</h3><p>Il modello ISO/IEC 25010 (aggiornato nel 2023) elenca le caratteristiche da misurare.</p></div>
+  </div>
+  <aside class="notes">Thomas McCabe propose la complessità ciclomatica nel 1976: in pratica, per una funzione senza salti strani, è il numero di decisioni (if, cicli, casi) più uno, e indica il numero minimo di casi di prova per percorrere tutti i cammini indipendenti. La ISO/IEC 25010 descrive il modello di qualità del prodotto software (tra le caratteristiche: idoneità funzionale, efficienza, compatibilità, affidabilità, sicurezza, manutenibilità). Avvertenza: una metrica diventa inutile se diventa un obiettivo da gonfiare (più righe non vuol dire più lavoro utile).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto: quanto sono complesse?</h2></div>
+  <div class="cols-2" style="gap:24px">
+    <pre class="code" style="font-size:22px;padding:24px 28px"><span class="k">function</span> iscrivi($v, $t) {
+  <span class="k">if</span> (!emailValida($v->email))
+    <span class="k">return</span> <span class="s">"Email non valida"</span>;
+  <span class="k">if</span> ($t->postiLiberi() == 0)
+    <span class="k">return</span> <span class="s">"Turno completo"</span>;
+  <span class="k">if</span> (giaIscritto($v, $t))
+    <span class="k">return</span> <span class="s">"Sei già iscritto"</span>;
+  salva($v, $t);
+  <span class="k">return</span> <span class="s">"Iscrizione confermata"</span>;
+}</pre>
+    <pre class="code" style="font-size:22px;padding:24px 28px"><span class="k">function</span> postiLiberi($t) {
+  $n = 0;
+  <span class="k">foreach</span> ($t->iscrizioni <span class="k">as</span> $i) {
+    <span class="k">if</span> ($i->attiva)
+      $n++;
+  }
+  <span class="k">return</span> $t->posti - $n;
+}</pre>
+  </div>
+  <div class="puzzle-codice" data-risposta="43" data-aiuto="conta gli if e i cicli, poi aggiungi 1" style="min-height:0;padding-top:22px;padding-bottom:22px">
+    <p>Prima cifra: complessità ciclomatica di <b>iscrivi</b>. Seconda cifra: quella di <b>postiLiberi</b>.</p>
+    <div class="premio"><b>Aperto!</b> iscrivi: 3 if + 1 = 4. postiLiberi: foreach + if + 1 = 3. Servono almeno 4 casi di prova per iscrivi.</div>
+  </div>
+  <aside class="notes">Codice: 43. iscrivi ha tre decisioni (tre if) quindi 4 cammini: email non valida, turno completo, già iscritto, iscrizione confermata; servono almeno 4 casi di prova, uno per messaggio. postiLiberi ha due decisioni (il ciclo e l'if) quindi 3. Codice PHP semplificato a scopo didattico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La parte più difficile</h2></div>
+  <figure class="citazione">
+    <blockquote>La parte singola più difficile nel costruire un sistema software è decidere con precisione che cosa costruire.</blockquote>
+    <figcaption><b>Fred Brooks</b>, informatico, «No Silver Bullet», 1986</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli assistenti AI scrivono in fretta funzioni come <b>iscrivi</b>. Ma possono produrre query vulnerabili alla SQL injection o controlli dimenticati: nel progetto NQ ogni pezzo generato passa dalla stessa revisione e dagli stessi test del codice scritto a mano. E "che cosa costruire" lo decide ancora la conversazione con la coordinatrice.</p></div>
+  <aside class="notes">Traduzione nostra: "The hardest single part of building a software system is deciding precisely what to build." (No Silver Bullet: Essence and Accidents of Software Engineering, presentato nel 1986, pubblicato su IEEE Computer nel 1987). Collegamento con il quiz sul requisito "facile da usare". Sulla SQL injection: i prepared statement (con il "?" della query della slide sul database) sono la difesa standard.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-uscita-realizzazione" data-extra="anticipo|WBS">
+    <p>"La pagina si apre in meno di 2 secondi" è un requisito non <span class="slot" data-risposta="funzionale"></span>.</p>
+    <p>La tabella che collega volontari e turni si chiama <span class="slot" data-risposta="iscrizione"></span>.</p>
+    <p>Se l'SPI è minore di 1 il progetto è in <span class="slot" data-risposta="ritardo"></span>; preoccupa di più se il ritardo è sul percorso <span class="slot" data-risposta="critico"></span>.</p>
+    <p>Decisioni + 1 è la complessità <span class="slot" data-risposta="ciclomatica"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: funzionale, iscrizione, ritardo, critico, ciclomatica. Distrattori: anticipo, WBS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Requisiti utente verificabili, funzionali e non funzionali</li>
+      <li>Interfaccia per gli utenti veri, provata con un prototipo</li>
+      <li>Specifiche: input, controlli, output, errori</li>
+    </ul>
+    <ul class="points">
+      <li>Browser, server PHP, database SQL: tre tabelle</li>
+      <li>Monitoraggio con PV, EV e percorso critico</li>
+      <li>Metriche: dimensione, complessità, test, difetti</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la chiusura (testing, installazione sul server, rilascio, presentazione, spunti per altri progetti).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -387,3 +387,42 @@ body.print .ia-tools{display:none}
 .mark-toast button.go{background:var(--hl);color:var(--hl-ink)}
 @media (max-width:560px){.bar.can-hand .mark-n{display:none}}
 @media (max-width:420px){.bar{gap:5px;padding-left:8px;padding-right:8px}.bar button,.bar a{min-width:40px;padding:0 9px}.bar .hand{padding:0 8px}}
+
+/* Trascinamento (interattivo.js): copia che segue il puntatore, carte, mazzi, contenitori */
+.ia-ghost{position:fixed;z-index:50;pointer-events:none;transform-origin:0 0;opacity:.92;box-shadow:0 18px 40px rgba(0,0,0,.28);margin:0;list-style:none;font-family:var(--body)}
+.ia-dragging{opacity:.35}
+.puzzle-ordina>li,.ab-right .ab-item,.chip{touch-action:none}
+.puzzle-ordina>li{cursor:grab}.ab-right .ab-item{cursor:grab}
+
+/* Categorie: <div class="puzzle-categorie" style="--cols:3"><div class="cat"><h4>Nome</h4><ul><li>carta giusta</li>…</ul></div>…</div> */
+.puzzle-categorie{display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:18px;align-items:stretch}
+.cat-pool-box{grid-column:1/-1;display:flex;flex-direction:column;gap:10px;background:var(--soft);border:3px dashed var(--line);border-radius:22px;padding:14px 18px}
+.cat-pool-label{margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cat-drop{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px;min-height:64px;align-content:flex-start;border-radius:14px;transition:background .15s}
+.cat-drop.over{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.cat{display:flex;flex-direction:column;gap:12px;background:var(--card);border:3px solid var(--line);border-radius:22px;padding:16px 18px;min-height:180px}
+.cat>h4{margin:0;font-family:var(--display);font-size:32px;color:var(--accent);line-height:1.15}
+.cat>.cat-drop{flex:1}
+.puzzle-categorie.picking .cat,.puzzle-categorie.picking .cat-pool-box{cursor:pointer;border-color:var(--accent)}
+.chip{display:inline-flex;align-items:center;background:var(--card);border:3px solid var(--accent);border-radius:14px;padding:8px 18px;font-size:27px;line-height:1.2;font-weight:600;cursor:grab;user-select:none;color:var(--ink)}
+.chip.sel{background:var(--accent);color:#fff}
+.chip.right{border-color:var(--ok);background:var(--ok-soft)}
+.chip.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.dark .cat,.dark .chip{background:var(--night-2);border-color:rgba(255,255,255,.15);color:var(--night-ink)}
+.dark .cat-pool-box{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2)}
+.dark .chip{border-color:var(--hl)}
+body.print .cat-drop{min-height:90px}
+
+/* Trascina le parole: <div class="puzzle-trascina" data-extra="…">testo con <span class="slot" data-risposta="…"></span></div> */
+.puzzle-trascina{display:flex;flex-direction:column;gap:16px;position:relative}
+.word-bank{display:flex;flex-wrap:wrap;gap:10px;min-height:64px;padding:12px 14px;background:var(--soft);border:3px dashed var(--line);border-radius:18px}
+.puzzle-trascina p,.puzzle-trascina li{line-height:1.7}
+.slot{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-width:var(--w,8ch);min-height:56px;margin:2px .2em;padding:2px 4px;border:3px dashed var(--accent);border-radius:14px;background:var(--accent-soft);transition:background .15s}
+.slot .chip{padding:4px 14px;border-width:2px}
+.slot.over{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+.slot.right{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}
+.slot.wrong{border-style:solid;border-color:var(--bad);background:var(--bad-soft)}
+.puzzle-trascina.picking .slot{cursor:pointer}
+.slot[style*="position:absolute"],.slot[style*="position: absolute"]{margin:0;background:var(--card)}
+.dark .slot{background:rgba(255,255,255,.08)}
+.dark .word-bank{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2)}

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La chiusura del progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 6</p>
+  <h1>La chiusura<br>del progetto</h1>
+  <p class="lead">Provare, installare, rilasciare, presentare. E poi fermarsi a capire che cosa abbiamo imparato, prima del prossimo progetto.</p>
+  <aside class="notes">Obiettivi: conoscere i livelli di test e scrivere casi di prova; decidere il rilascio con criteri oggettivi; installare l'applicazione sul server con una procedura; presentare il progetto al committente; chiudere formalmente con collaudo, documenti e lezioni apprese. Durata: 3-4 ore (due laboratori). Settimane 9-10 del progetto NQ, milestone M4 (rilascio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un progetto è finito quando…</h2></div>
+  <div class="poll" data-id="u6-finito-quando">
+    <ol><li>Il codice funziona</li><li>Il committente comincia a usarlo</li><li>Il committente firma il collaudo</li><li>Abbiamo archiviato documenti e lezioni apprese</li></ol>
+  </div>
+  <aside class="notes">2 minuti. Risposta da costruire insieme: il prodotto è consegnato quando il committente lo accetta (C), ma il progetto si chiude davvero solo quando anche i documenti sono consegnati, le lezioni apprese scritte e tutto archiviato (D). Molti progetti "non finiscono mai" perché nessuno fa la chiusura formale. La A è la risposta tipica di chi programma.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le attività di chiusura</p><h2>Che cosa succede nelle ultime due settimane</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><p class="num">1</p><h3>Testing</h3><p>Prove interne, poi con gli utenti.</p></div>
+    <div class="card soft"><p class="num">2</p><h3>Installazione</h3><p>Sul server della scuola, con una procedura.</p></div>
+    <div class="card soft"><p class="num">3</p><h3>Rilascio</h3><p>Versione 1.0.0, note di rilascio, formazione.</p></div>
+    <div class="card soft"><p class="num">4</p><h3>Presentazione</h3><p>Demo al committente e collaudo firmato.</p></div>
+  </div>
+  <div class="callout">Poi la <b>chiusura formale</b>: documenti consegnati, lezioni apprese, archivio nella cartella 04_chiusura, verbale di chiusura.</div>
+  <aside class="notes">Nel Gantt dell'approfondimento: H test interni (settimana 8), I installazione e collaudo (settimana 9), K rilascio e relazione finale (settimana 10). La versione 1.0.0 segue il versionamento semantico visto nell'Unità 5: la prima versione stabile, pubblica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il testing</p><h2>Quattro livelli di prova</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Unità</h3><p class="muted">Una funzione da sola: <b>iscrivi()</b> con un'email sbagliata.</p></div>
+    <div class="card"><h3>Integrazione</h3><p class="muted">Pezzi insieme: la pagina salva davvero nel database.</p></div>
+    <div class="card"><h3>Sistema</h3><p class="muted">Tutta l'app, sul server: prestazioni, browser, sicurezza.</p></div>
+    <div class="card fill"><h3>Accettazione</h3><p>Il committente e gli utenti veri: è quello che serviva?</p></div>
+  </div>
+  <div class="callout">Dopo ogni correzione si ripetono anche i test già superati: è il <b>test di regressione</b>.</div>
+  <aside class="notes">I primi tre livelli li fa il fornitore (squadra test, con gli sviluppatori); l'accettazione, o collaudo, la fa il committente. Nel progetto NQ il test di accettazione riprende il requisito verificabile della lezione sulla realizzazione: 4 volontari su 5 con più di 65 anni si iscrivono da soli in meno di 2 minuti. Il test di regressione serve perché correggere un errore può crearne un altro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>A quale livello appartiene la prova?</h2></div>
+  <div class="puzzle-categorie" data-id="u6-livelli-test" style="--cols:4">
+    <div class="cat"><h4>Unità</h4><ul><li>iscrivi() con email errata</li><li>postiLiberi() con 0 iscritti</li></ul></div>
+    <div class="cat"><h4>Integrazione</h4><ul><li>Il modulo salva nel database</li><li>L'iscrizione genera l'email</li></ul></div>
+    <div class="cat"><h4>Sistema</h4><ul><li>100 iscrizioni in un minuto</li><li>Prova su tre browser</li></ul></div>
+    <div class="cat"><h4>Accettazione</h4><ul><li>Tre volontari over 65 da soli</li><li>La coordinatrice firma</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Le 100 iscrizioni al minuto sono molte più di quelle reali (80 volontari): è una prova di carico con margine. "L'iscrizione genera l'email" è integrazione perché coinvolge il codice PHP, il database e il servizio di posta insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Che cosa può dire un test</h2></div>
+  <figure class="citazione">
+    <blockquote>Il collaudo dei programmi può servire a mostrare la presenza di errori, mai a dimostrarne l'assenza.</blockquote>
+    <figcaption><b>Edsger W. Dijkstra</b>, informatico, «Notes on Structured Programming», 1970</figcaption>
+  </figure>
+  <p class="lead">Per questo i test si scelgono con metodo: un caso per ogni ramo, per ogni errore previsto, per ogni requisito.</p>
+  <aside class="notes">Traduzione nostra: "Program testing can be used to show the presence of bugs, but never to show their absence!" (EWD249, 1970; ripresa nel libro Structured Programming, 1972). Collegare alla complessità ciclomatica: iscrivi() ha 4 cammini, quindi almeno 4 casi di prova. Prepara il quiz: che cosa possiamo dire se tutti i test passano?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Anatomia di un caso di prova</h2></div>
+  <div class="puzzle-trascina" data-id="u6-caso-prova" data-extra="Milestone|Cartiglio">
+    <table class="data compact" style="font-size:28px">
+      <tr><td style="width:250px"><b>ID · requisito</b></td><td>T05 · R2 Iscrizione</td></tr>
+      <tr><td><span class="slot" data-risposta="Precondizione" style="font-size:24px"></span></td><td>Anna è già iscritta al turno di sabato 9-12</td></tr>
+      <tr><td><span class="slot" data-risposta="Passi" style="font-size:24px"></span></td><td>Apri il turno, inserisci nome ed email di Anna, premi Mi iscrivo</td></tr>
+      <tr><td><span class="slot" data-risposta="Risultato atteso" style="font-size:24px"></span></td><td>Messaggio "Sei già iscritto"; nessuna nuova riga nel database</td></tr>
+      <tr><td><span class="slot" data-risposta="Risultato ottenuto" style="font-size:24px"></span></td><td>Iscrizione confermata, due righe uguali nel database</td></tr>
+      <tr><td><span class="slot" data-risposta="Esito" style="font-size:24px"></span></td><td><b style="color:var(--bad)">KO</b> · gravità alta</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto: Precondizione, Passi, Risultato atteso, Risultato ottenuto, Esito. Distrattori: Milestone e Cartiglio. Il risultato atteso si scrive prima di eseguire la prova, guardando la specifica S2.1; altrimenti si finisce per "aspettarsi" quello che si vede. Il difetto trovato rivela anche un errore di progetto: la chiave primaria composta di iscrizione avrebbe impedito il doppione nel database.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Tutti i 40 casi di prova passano. Che cosa puoi dire?</h2></div>
+  <div class="poll" data-id="u6-40-test" data-tipo="quiz" data-risposta="B">
+    <ol><li>Che il software non ha difetti</li><li>Che il software si comporta come previsto in quei 40 casi</li><li>Che si può saltare il collaudo con il committente</li><li>Che la copertura del codice è del 100%</li></ol>
+    <p class="why">Un test dimostra solo ciò che prova. Possono esistere difetti in casi non previsti; la copertura dipende da quale codice i test eseguono, non da quanti sono; il collaudo verifica un'altra cosa: che il prodotto serva al committente.</p>
+  </div>
+  <aside class="notes">È Dijkstra applicato. La A è il tranello più forte. Domanda: come si aumenta la fiducia? Con casi scelti dai requisiti e dai rami del codice, con test di sistema sul server vero e con utenti reali nel collaudo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il report dei test e la decisione di rilascio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Calc: in A2:A13 i casi T01…T12, in B l'esito <b>OK</b> o <b>KO</b>, in C la gravità dei KO.</li>
+      <li>KO: <b>T05</b> doppia iscrizione (alta), <b>T09</b> testo tagliato su schermi piccoli (bassa), <b>T11</b> promemoria inviato due volte (media). Tutti gli altri OK.</li>
+      <li>In E2 <code>=CONTA.SE(B2:B13;"OK")/CONTA.VALORI(B2:B13)</code>, formato percentuale.</li>
+      <li>In E3 <code>=CONTA.SE(C2:C13;"alta")</code>.</li>
+      <li>Criterio di rilascio del piano di test: nessun KO alto e almeno il 90% di OK. Scrivi in E5 la decisione. Salva <b>NQ-TST-001_report.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 9 su 12 = 75,0% di OK, 1 difetto alto aperto. Decisione: non si rilascia. Bisogna correggere almeno T05 e T11 e ripetere i test.</div>
+  </div>
+  <aside class="notes">Conti: 12 casi, 3 KO, 9 OK, 9/12 = 75%. Con T05 corretto: 10/12 = 83,3%, ancora sotto il 90%. Con T05 e T11 corretti: 11/12 = 91,7%, nessun KO alto: si può rilasciare, segnalando T09 tra i problemi noti nelle note di rilascio. Il criterio va scritto nel piano di test prima di eseguire i test, non deciso dopo aver visto i risultati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Corretto T05, i casi superati sono 10 su 12. Si rilascia?</h2></div>
+  <div class="poll" data-id="u6-rilascio" data-tipo="quiz" data-risposta="A">
+    <ol><li>No: 10 su 12 è l'83%, sotto il 90% del criterio</li><li>Sì: non ci sono più difetti di gravità alta</li><li>Sì, se la coordinatrice ha fretta</li><li>No, finché non passano tutti i 12</li></ol>
+    <p class="why">Il criterio ha due condizioni e servono entrambe: niente KO alti e almeno il 90% di OK. Correggendo anche T11 si arriva a 11 su 12 (91,7%) e si può rilasciare, con T09 tra i problemi noti. Il 100% non era richiesto.</p>
+  </div>
+  <aside class="notes">B dimentica la seconda condizione; D pretende più del criterio. La C è il caso reale più pericoloso: le pressioni del committente non cambiano i criteri, ma si possono discutere apertamente (per esempio rilasciare a una parte dei volontari come prova).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Installazione sul server</p><h2>La procedura di installazione, in ordine</h2></div>
+  <ol class="puzzle-ordina" data-id="u6-installazione">
+    <li>Verifica i requisiti del server: versioni di PHP e MySQL, spazio</li>
+    <li>Crea il database e un utente con i soli permessi necessari</li>
+    <li>Carica i file dell'applicazione nella cartella del sito</li>
+    <li>Configura database, email e HTTPS</li>
+    <li>Importa i turni dei prossimi due mesi</li>
+    <li>Esegui un test di fumo: apri, iscriviti, cancella</li>
+    <li>Comunica il rilascio e forma la coordinatrice</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Il "test di fumo" (smoke test) è una prova rapida delle funzioni principali sul server vero, per accorgersi subito se qualcosa non si è installato bene. L'utente del database con i soli permessi necessari applica il principio del minimo privilegio. La procedura va scritta nella guida dell'amministratore: chi manterrà l'app dopo giugno dovrà poterla rifare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>I documenti della chiusura</h2></div>
+  <dl class="puzzle-abbina" data-id="u6-documenti-chiusura">
+    <dt>Verbale di collaudo</dt><dd>Il committente dichiara che accetta il lavoro</dd>
+    <dt>Note di rilascio</dt><dd>Che cosa contiene la 1.0.0 e quali problemi sono noti</dd>
+    <dt>Guida dell'amministratore</dt><dd>Come installare, fare il backup, aggiornare</dd>
+    <dt>Relazione finale</dt><dd>Il progetto raccontato, con tempi previsti ed effettivi</dd>
+    <dt>Lezioni apprese</dt><dd>Che cosa rifare e che cosa evitare la prossima volta</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Tutti con codice NQ e cartella 04_chiusura (Unità 5). La relazione finale segue la struttura della relazione tecnica: frontespizio, introduzione, basi teoriche, sviluppo, gestione (con il confronto tra piano ed effettivo), parti finali. Il manuale utente, scritto durante la realizzazione, viene consegnato con questi documenti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La presentazione</p><h2>Dieci minuti davanti al committente</h2></div>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li><b>Il problema</b>, con i numeri dell'inizio</li>
+      <li><b>La demo dal vivo</b>: un volontario si iscrive, la coordinatrice vede il turno coperto</li>
+      <li><b>Come abbiamo lavorato</b>: piano ed effettivo, un problema risolto</li>
+      <li><b>Obiettivi</b>: raggiunti, misurati come?</li>
+      <li><b>Che cosa resta</b>: versione 2, chi la mantiene</li>
+    </ol>
+    <div class="card soft"><h3>Piano B</h3><p>La demo dal vivo può fallire: dati di prova pronti, un video registrato di riserva, una persona che non parla e controlla il tempo.</p></div>
+  </div>
+  <aside class="notes">La presentazione non è un elenco di tecnologie: il committente vuole sapere se il suo problema è risolto. Le tecnologie si nominano solo se servono a spiegare una scelta (per esempio "niente app da installare, perché i volontari anziani non le scaricano"). Gli obiettivi del charter si potranno misurare solo dopo due mesi di uso: dirlo, e proporre come misurarli.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 50 minuti</span></p>
+  <h2>Presentazione finale e collaudo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Ogni squadra prepara 2-3 slide sulla sua parte; il PM le unisce nella scaletta della slide precedente.</li>
+      <li>Prova generale cronometrata: massimo 10 minuti più 5 di domande.</li>
+      <li>Presentazione alla persona che interpreta la committente, con la demo.</li>
+      <li>Con lei eseguite i casi di accettazione e compilate il verbale di collaudo.</li>
+      <li>Consegnate <b>NQ-presentazione.pdf</b> e <b>NQ-VRB-collaudo.pdf</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la presentazione parte dal problema e chiude con i prossimi passi; il verbale elenca i casi provati, l'esito e le eventuali riserve, con data e firme.</div>
+  </div>
+  <aside class="notes">Se l'associazione è reale, la presentazione si può fare in sede o invitandola a scuola; altrimenti il docente o un collega interpreta la committente con il carattere della scheda del ruolo (ama le idee nuove: farà una richiesta in più, da gestire come richiesta di modifica). Il collaudo può chiudersi "con riserva": accettato, a condizione di correggere un difetto entro una data. Valutazione: chiarezza, rispetto dei tempi, qualità della demo, gestione delle domande.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lezioni apprese e spunti</p><h2>Prima di chiudere la cartella</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Retrospettiva</h3><ul class="points"><li>Che cosa è andato bene, da rifare</li><li>Che cosa è andato male, e perché</li><li>Che cosa cambieremmo nel piano</li><li>Un'azione concreta per il prossimo progetto</li></ul></div>
+    <div class="card soft"><h3>Spunti per altri progetti</h3><ul class="points"><li>Versione 2: chat moderata, statistiche</li><li>La stessa app per altre associazioni</li><li>A scuola: prenotare i laboratori, i colloqui</li><li>Manutenzione affidata a una classe quarta</li></ul></div>
+  </div>
+  <aside class="notes">La retrospettiva si fa senza cercare colpevoli: si parla dei processi, non delle persone. Ogni lezione appresa diventa una riga del registro con una proposta concreta (per esempio "le stime del back-end erano ottimiste del 30%: nel prossimo progetto aggiungere un margine"). Il collegamento con la manutenzione è importante: un progetto finisce, il prodotto continua a vivere e qualcuno deve occuparsene.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Test automatici e AI</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Le prove che si ripetono da sole</h3><p>Nei progetti professionali i test di unità e di integrazione girano in automatico a ogni modifica del codice (integrazione continua). Gli assistenti AI propongono casi di prova a partire dalle specifiche: aiutano a non dimenticare i casi limite, ma il risultato atteso va controllato da una persona sulla specifica. E il collaudo resta una conversazione con chi userà l'app.</p></div>
+  <div class="callout"><b>All'esame</b>: questo progetto si racconta bene in tre minuti: il problema, il tuo ruolo, un difetto trovato nei test e come lo avete risolto, che cosa hai imparato.</div>
+  <aside class="notes">Il difetto T05 è un buon esempio da raccontare: è stato trovato da un test, nasceva da una scelta di progetto del database e ha una soluzione chiara. Collegare con informatica (vincoli del database) e TPSIT (applicazioni web). Ricordare che non si inventano dettagli: si racconta ciò che la classe ha fatto davvero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-uscita-chiusura" data-extra="unità|Gantt">
+    <p>La prova fatta dal committente con gli utenti veri è il test di <span class="slot" data-risposta="accettazione"></span>.</p>
+    <p>Dopo ogni correzione si ripetono i vecchi test: è il test di <span class="slot" data-risposta="regressione"></span>.</p>
+    <p>Il risultato <span class="slot" data-risposta="atteso"></span> si scrive prima di eseguire la prova.</p>
+    <p>Il committente accetta il lavoro firmando il verbale di <span class="slot" data-risposta="collaudo"></span>; ciò che abbiamo imparato va nelle lezioni <span class="slot" data-risposta="apprese"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: accettazione, regressione, atteso, collaudo, apprese. Distrattori: unità, Gantt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Test di unità, integrazione, sistema, accettazione</li>
+      <li>Un test mostra gli errori, non la loro assenza</li>
+      <li>Rilascio solo con criteri scritti prima</li>
+    </ul>
+    <ul class="points">
+      <li>Installazione con procedura e test di fumo</li>
+      <li>Presentazione: problema, demo, risultati, futuro</li>
+      <li>Collaudo firmato, lezioni apprese, archivio</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'Unità 6 e del progetto NQ. Proporre di conservare nel portfolio personale un documento prodotto da ciascuno (una specifica, un verbale, il report dei test): servirà per raccontare il progetto all'esame. L'Unità 7 passa all'industria 4.0.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

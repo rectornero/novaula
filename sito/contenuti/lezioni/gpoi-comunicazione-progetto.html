@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La comunicazione di progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>La comunicazione<br>di progetto</h1>
+  <p class="lead">L'e-commerce del Panificio è al giorno 10: il back-end è in ritardo e i costi corrono. Chi deve saperlo, che cosa, quando e con quale canale? Il piano della comunicazione, dalle riunioni alla chiusura.</p>
+  <aside class="notes">Obiettivi: descrivere il ruolo del project manager come centro della comunicazione, usare il modello emittente-messaggio-canale-ricevente-feedback, scrivere un piano della comunicazione, conoscere le comunicazioni tipiche dell'esecuzione (riunioni, report di stato, verbali, richieste di modifica) e della chiusura (accettazione, relazione finale, lezioni apprese), classificare gli strumenti (push, pull, interattivi). Durata indicativa: 2-3 ore. Servono LibreOffice Calc e Writer. Caso: l'e-commerce del Panificio Rossi (impresa di esempio), con i dati del SAL al giorno 10 della lezione sul monitoraggio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il progetto costerà 2 000 € in più alla software house. Come lo dici al tuo capo?</h2></div>
+  <div class="poll" data-id="co-canale">
+    <ol><li>Email dettagliata con il foglio di calcolo</li><li>Messaggio in chat, breve</li><li>Telefonata</li><li>Incontro di persona, con i numeri e una proposta</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione. Non c'è una risposta unica, ma una regola: le notizie importanti e negative si danno in modo interattivo (si vede la reazione, si risponde alle domande) e poi si confermano per iscritto. Il messaggio in chat è veloce ma non lascia spazio a spiegazioni; l'email da sola rischia di essere letta male o non letta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Comunicazione e ruolo del PM</p><h2>Il project manager sta al centro</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>Gran parte del lavoro del PM è <b>comunicare</b>: ascoltare, informare, negoziare, decidere.</li>
+      <li>Gli <b>stakeholder</b> sono tutti quelli che influenzano il progetto o ne sono influenzati.</li>
+      <li>Ognuno ha bisogno di informazioni <b>diverse</b>, con un linguaggio e una frequenza diversi.</li>
+    </ul>
+    <div class="card soft"><h3>Potere e interesse</h3><p><b>Alto potere, alto interesse</b>: coinvolgere da vicino (il Sig. Rossi).</p><p><b>Basso potere, alto interesse</b>: tenere informati (i commessi).</p><p class="small muted">Matrice di Mendelow</p></div>
+  </div>
+  <aside class="notes">La matrice potere/interesse è attribuita ad Aubrey Mendelow (1991): alto potere e basso interesse = tenere soddisfatti; basso potere e basso interesse = monitorare. Stakeholder del Panificio: il Sig. Rossi (committente), i commessi che useranno il sito, i clienti del panificio, il team, il titolare della software house, il fornitore dei pagamenti online. La colonna C e la colonna I della matrice RACI (lezione sulle risorse umane) sono già metà del piano della comunicazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta lo schema</p><h2>Ogni comunicazione ha le stesse parti</h2></div>
+  <div class="puzzle-trascina" data-id="co-modello" data-extra="Baseline|Sponsor">
+    <div style="position:relative;width:1600px;height:440px">
+      <svg viewBox="0 0 1600 440" width="1600" height="440" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Schema della comunicazione da etichettare">
+        <defs><marker id="co-fr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d0541f"/></marker></defs>
+        <rect x="20" y="150" width="300" height="140" rx="22" fill="#fff" stroke="#172033" stroke-width="3"/>
+        <rect x="650" y="150" width="300" height="140" rx="22" fill="#fbe7dc" stroke="#d0541f" stroke-width="3"/>
+        <rect x="1280" y="150" width="300" height="140" rx="22" fill="#fff" stroke="#172033" stroke-width="3"/>
+        <line x1="325" y1="220" x2="642" y2="220" stroke="#d0541f" stroke-width="5" marker-end="url(#co-fr)"/>
+        <line x1="955" y1="220" x2="1272" y2="220" stroke="#d0541f" stroke-width="5" marker-end="url(#co-fr)"/>
+        <path d="M1430,295 L1430,370 L170,370 L170,300" fill="none" stroke="#d0541f" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#co-fr)"/>
+        <path d="M800,64 L800,140" stroke="#596179" stroke-width="4" stroke-dasharray="4 8"/>
+        <g font-size="26" fill="#596179" text-anchor="middle"><text x="170" y="272">il PM</text><text x="800" y="272">email, riunione, chat</text><text x="1430" y="272">il Sig. Rossi</text></g>
+      </svg>
+      <span class="slot" data-risposta="Emittente" style="position:absolute;left:32px;top:170px"></span>
+      <span class="slot" data-risposta="Messaggio" style="position:absolute;left:345px;top:130px"></span>
+      <span class="slot" data-risposta="Canale" style="position:absolute;left:700px;top:170px"></span>
+      <span class="slot" data-risposta="Ricevente" style="position:absolute;left:1292px;top:170px"></span>
+      <span class="slot" data-risposta="Feedback" style="position:absolute;left:670px;top:374px"></span>
+      <span class="slot" data-risposta="Rumore" style="position:absolute;left:700px;top:0"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: a sinistra Emittente (il PM), sulla freccia il Messaggio, al centro il Canale, a destra il Ricevente (il Sig. Rossi), sopra il canale il Rumore (tutto ciò che disturba: gergo tecnico, distrazioni, email sepolte tra cento altre), la freccia di ritorno è il Feedback. Lo schema deriva dal modello di Claude Shannon (1948), pensato per le telecomunicazioni; il feedback è stato aggiunto dai modelli successivi. Collegamento con informatica: è lo stesso schema di un protocollo di rete con conferma di ricezione (ACK). Distrattori: Baseline e Sponsor.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Email a 12 persone: "Rispondete entro venerdì se ci sono problemi". Nessuno risponde. Che cosa sai?</h2></div>
+  <div class="poll" data-id="co-silenzio" data-tipo="quiz" data-risposta="C">
+    <ol><li>Che nessuno ha problemi</li><li>Che tutti sono d'accordo</li><li>Niente di certo: manca il feedback</li><li>Che l'email è stata letta</li></ol>
+    <p class="why">Il silenzio non è un feedback: l'email può essere finita nello spam, letta di fretta o ignorata. Per le decisioni importanti si chiede una risposta esplicita a ciascuno, o si usa un canale interattivo.</p>
+  </div>
+  <aside class="notes">Il tranello è la A, la più comoda per chi scrive. Collegare al modello: comunicazione push senza feedback. Regola pratica: "chi tace acconsente" non vale nei progetti; per approvare una milestone serve un sì scritto (email o firma sul verbale).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il piano della comunicazione</p><h2>Chi, che cosa, quando, come</h2></div>
+  <table class="data compact">
+    <tr><th>Destinatario</th><th>Che cosa</th><th>Quando</th><th>Come</th><th>Chi invia</th></tr>
+    <tr><td>Sig. Rossi</td><td>Stato, milestone, decisioni da prendere</td><td>ogni 2 settimane</td><td>incontro + email di riepilogo</td><td>PM</td></tr>
+    <tr><td>Team</td><td>Attività, blocchi, priorità</td><td>ogni giorno, 15 minuti</td><td>stand-up + chat</td><td>PM</td></tr>
+    <tr><td>Titolare software house</td><td>Costi, rischi, EV</td><td>ogni venerdì</td><td>report di stato</td><td>PM</td></tr>
+    <tr><td>Commessi</td><td>Come usare gli ordini online</td><td>prima della messa online</td><td>formazione in negozio</td><td>analista</td></tr>
+    <tr><td>Fornitore pagamenti</td><td>Requisiti tecnici, test</td><td>all'avvio di E</td><td>email e ticket</td><td>back-end</td></tr>
+  </table>
+  <aside class="notes">Il piano della comunicazione si scrive nella pianificazione, insieme a WBS, Gantt e budget, e si aggiorna quando cambiano gli stakeholder. Far notare: al Sig. Rossi non si manda l'EV (linguaggio interno), ma lo stato in termini che gli interessano: data di messa online, che cosa deve fornire lui, decisioni. Al titolare della software house invece interessano proprio costi ed EAC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Il messaggio giusto per ogni destinatario</h2></div>
+  <dl class="puzzle-abbina" data-id="co-messaggi">
+    <dt>Sig. Rossi</dt><dd>"Servono le foto dei prodotti entro venerdì per restare nei tempi"</dd>
+    <dt>Team</dt><dd>"Il back-end è al 60%: oggi rivediamo chi fa il catalogo"</dd>
+    <dt>Titolare software house</dt><dd>"CPI 0,80, EAC 10 000 €: propongo tre azioni"</dd>
+    <dt>Commessi</dt><dd>"Martedì alle 15 vi mostriamo come gestire gli ordini"</dd>
+    <dt>Fornitore pagamenti</dt><dd>"Ci servono le credenziali dell'ambiente di test"</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Ogni messaggio è breve, concreto e contiene una richiesta o una data. Discussione: che cosa succederebbe mandando al Sig. Rossi il messaggio del titolare? (Rumore: sigle incomprensibili, e preoccupazione inutile su un costo che, a prezzo fisso, resta della software house.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il piano della comunicazione del Panificio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc crea le colonne: <b>Destinatario, Che cosa, Quando, Come, Chi invia, Tipo</b>.</li>
+      <li>Inserisci almeno 7 righe: i 5 della slide più i clienti del panificio e il commercialista.</li>
+      <li>Nella colonna Tipo scrivi push, pull o interattiva.</li>
+      <li>Aggiungi una riga per l'annuncio della messa online ai clienti.</li>
+      <li>Salva <b>piano-comunicazione.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni riga ha un solo "Chi invia" e una frequenza concreta ("ogni lunedì", non "spesso"). Il Sig. Rossi ha almeno un canale interattivo.</div>
+  </div>
+  <aside class="notes">Esempi: clienti del panificio, annuncio dell'apertura del negozio online, una volta, cartello in negozio e post sui social, inviato dal Sig. Rossi (push); commercialista, dati su fatture e incassi online, alla messa online, email, PM o Sig. Rossi (push). Chi finisce: aggiungere una colonna "Documento" (verbale, report, manuale) che collega il piano alla documentazione dell'unità 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La comunicazione in esecuzione</p><h2>Riunioni, report, verbali, modifiche</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Riunioni</h3><p class="small">Kick-off all'avvio, stand-up quotidiano, SAL periodico.</p></div>
+    <div class="card"><h3>Report di stato</h3><p class="small">Semaforo verde, giallo, rosso su tempi, costi, qualità.</p></div>
+    <div class="card"><h3>Verbali</h3><p class="small">Decisioni, responsabili e scadenze, inviati a tutti.</p></div>
+    <div class="card"><h3>Modifiche</h3><p class="small">Ogni richiesta del cliente si scrive, si valuta e si approva.</p></div>
+  </div>
+  <div class="callout"><b>Escalation</b>: se un problema supera i poteri di chi lo vede, sale al livello superiore, con tempi e canali stabiliti prima.</div>
+  <aside class="notes">Report "RAG" (Red, Amber, Green): verde = in linea, giallo = scostamento sotto controllo, rosso = serve una decisione di chi sta sopra. Le richieste di modifica (change request) sono il punto in cui comunicazione e controllo dell'ambito si toccano: senza una richiesta scritta il "già che ci siete" del cliente diventa lavoro gratuito. Collegamento con la lezione sul monitoraggio: i dati del report vengono dall'EV.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Una riunione che non fa perdere tempo</h2></div>
+  <ol class="puzzle-ordina" data-id="co-riunione">
+    <li>Definire l'obiettivo e chi deve esserci</li>
+    <li>Inviare l'ordine del giorno in anticipo</li>
+    <li>Iniziare in orario e nominare chi verbalizza</li>
+    <li>Discutere un punto alla volta</li>
+    <li>Riepilogare decisioni, responsabili e scadenze</li>
+    <li>Inviare il verbale entro un giorno</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Domanda: qual è il passo che si salta più spesso? Di solito il 5 e il 6: la riunione finisce "tutti d'accordo" e dopo una settimana ognuno ricorda una decisione diversa. Il verbale è la memoria del progetto (unità 5, documentazione tecnica).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il report di stato per il Sig. Rossi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Riprendi i dati del SAL al giorno 10: back-end al 60%, fine prevista ancora al giorno 17.</li>
+      <li>In Writer, una pagina: semaforo su tempi e qualità, che cosa è finito, che cosa viene dopo.</li>
+      <li>Scrivi che cosa serve da lui, con una data (le foto e i prezzi per il catalogo).</li>
+      <li>Niente sigle interne: niente CPI, EAC, back-end.</li>
+      <li>Salva <b>report-rossi-giorno10.odt</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> un compagno che non conosce GPOI capisce in un minuto se il progetto è in tempo e che cosa deve fare il cliente.</div>
+  </div>
+  <aside class="notes">Il costo in più (EAC 10 000 contro 8 000) a prezzo fisso è un problema interno della software house: va nel report al titolare, non in quello al cliente, a meno che non cambi l'ambito. Tempi: verde o giallo (il ritardo di E è assorbito dal margine, ma il catalogo F dipende dai dati del cliente, quindi giallo è difendibile). Far scambiare i report a coppie per il controllo "un minuto".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La comunicazione in chiusura</p><h2>Un progetto finisce quando lo si dichiara chiuso</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Accettazione formale</b>: il cliente firma il verbale di collaudo.</li>
+      <li><b>Relazione finale</b>: risultati, tempi e costi a consuntivo.</li>
+      <li><b>Lezioni apprese</b>: che cosa rifare e che cosa evitare.</li>
+    </ul>
+    <ul class="points">
+      <li><b>Archivio</b> ordinato di documenti e codice.</li>
+      <li><b>Passaggio</b> a chi farà assistenza e manutenzione.</li>
+      <li><b>Riconoscimento</b> del lavoro del team.</li>
+    </ul>
+  </div>
+  <div class="callout">È la fase adjourning di Tuckman: il team si scioglie, ma quello che ha imparato resta all'impresa.</div>
+  <aside class="notes">Senza accettazione formale il progetto non finisce mai: il cliente continua a chiedere piccole modifiche "comprese nel prezzo". Le lezioni apprese sono il controllo consuntivo della lezione precedente. Per il Panificio: verbale di collaudo firmato dal Sig. Rossi dopo la messa online, consegna delle credenziali, manuale per i commessi, contratto separato per l'assistenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>In esecuzione o in chiusura?</h2></div>
+  <div class="puzzle-categorie" data-id="co-fasi">
+    <div class="cat"><h4>Esecuzione</h4><ul><li>Report di stato settimanale</li><li>Verbale del SAL</li><li>Richiesta di modifica</li><li>Segnalazione di un ritardo</li></ul></div>
+    <div class="cat"><h4>Chiusura</h4><ul><li>Verbale di collaudo firmato</li><li>Relazione finale a consuntivo</li><li>Riunione delle lezioni apprese</li><li>Consegna dell'archivio</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Discussione: la segnalazione di un ritardo va fatta appena lo si scopre, non alla fine (ricordare il sondaggio del monitoraggio: "la sera prima della verifica").</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli strumenti</p><h2>Spingere, lasciar prendere, parlarsi</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Push</h3><p>Si invia a destinatari precisi: email, report, newsletter. Non garantisce che venga letto.</p></div>
+    <div class="card"><h3>Pull</h3><p>Si pubblica e chi serve va a cercarlo: wiki, cartella condivisa, README del repository.</p></div>
+    <div class="card soft"><h3>Interattiva</h3><p>Scambio in tempo reale: riunione, videochiamata, telefonata. Dà feedback subito.</p></div>
+  </div>
+  <p>La chat del team sta a metà: veloce come una telefonata, ma i messaggi si perdono se le decisioni non finiscono in un documento.</p>
+  <aside class="notes">Classificazione push / pull / interattiva come nel PMBOK del PMI. Strumenti tipici di un team di sviluppo: issue tracker e board (Jira, GitHub Issues), repository con README e wiki, chat (Teams, Slack), videoconferenza, documenti condivisi. Regola utile da scrivere nel patto di squadra: "le decisioni prese in chat si riportano nel verbale o nel ticket".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Push, pull o interattiva?</h2></div>
+  <div class="puzzle-categorie" data-id="co-pushpull" style="--cols:3">
+    <div class="cat"><h4>Push</h4><ul><li>Email con il report</li><li>Newsletter ai clienti</li><li>Notifica di rilascio</li></ul></div>
+    <div class="cat"><h4>Pull</h4><ul><li>Wiki del progetto</li><li>README del repository</li><li>Cartella condivisa</li></ul></div>
+    <div class="cat"><h4>Interattiva</h4><ul><li>Stand-up di 15 minuti</li><li>Videochiamata con il cliente</li><li>Telefonata</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. 9 carte, squadre da 3, 3 minuti. Domanda di approfondimento: il manuale dei commessi è push o pull? (Pull se sta in una cartella; push se lo si stampa e consegna: dipende da come lo si usa.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La legge di Conway</h2></div>
+  <figure class="citazione">
+    <blockquote>Le organizzazioni che progettano sistemi sono costrette a produrre progetti che copiano le loro strutture di comunicazione.</blockquote>
+    <figcaption><b>Melvin Conway</b>, informatico statunitense, in "How Do Committees Invent?", <i>Datamation</i>, aprile 1968</figcaption>
+  </figure>
+  <p class="lead">Come comunica il team, così sarà fatto il software.</p>
+  <aside class="notes">Traduzione nostra, leggermente abbreviata, dall'inglese: "organizations which design systems (in the broad sense used here) are constrained to produce designs which are copies of the communication structures of these organizations". Il nome "legge di Conway" fu reso popolare da Fred Brooks in The Mythical Man-Month (1975). Esempio: se front-end e back-end del Panificio non si parlano, l'interfaccia tra le due parti (le API) sarà il punto più fragile. All'esame: collegamento forte tra GPOI, informatica (architettura software) e la lezione sulle strutture organizzative.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Tre gruppi che non si parlano sviluppano insieme un'app. Che cosa è più probabile?</h2></div>
+  <div class="poll" data-id="co-conway" data-tipo="quiz" data-risposta="B">
+    <ol><li>Un'app perfettamente integrata</li><li>Tre parti con collegamenti fragili tra loro</li><li>Un'app più veloce da sviluppare</li><li>Nessun effetto sul software</li></ol>
+    <p class="why">Per la legge di Conway la struttura del sistema rispecchia quella della comunicazione: dove le persone non si parlano, le parti del software si integrano male.</p>
+  </div>
+  <aside class="notes">La C è il tranello: lavorare separati sembra più veloce, ma i problemi di integrazione emergono nel test (attività G) e costano di più. Rimedi: interfacce definite e scritte all'inizio, riunioni tecniche comuni, un responsabile dell'integrazione nella RACI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e comunicazione</p><h2>Il verbale lo scrive l'AI?</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le piattaforme di videoconferenza offrono trascrizione e riassunti automatici delle riunioni con l'AI. Fanno risparmiare tempo, ma possono sbagliare nomi, numeri e soprattutto <b>chi ha deciso che cosa</b>. Il riassunto va riletto e approvato da una persona prima di diventare il verbale, e chi partecipa va informato della registrazione, come chiede il GDPR.</p></div>
+  <div class="callout hl"><b>All'esame:</b> porta un esempio di piano della comunicazione o di verbale di un tuo progetto (PCTO, laboratorio) e collega la legge di Conway all'architettura del software.</div>
+  <aside class="notes">GDPR = Regolamento (UE) 2016/679: la registrazione e la trascrizione di una riunione sono trattamenti di dati personali, servono informazione e una base giuridica. Domanda: chi è responsabile se il riassunto automatico attribuisce una decisione alla persona sbagliata? (Chi lo ha approvato e inviato: il PM.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto dei canali</h2></div>
+  <div class="puzzle-codice" data-risposta="2145" data-aiuto="canali = n × (n − 1) ÷ 2">
+    <ul class="points">
+      <li>Prime due cifre: i canali di comunicazione tra le 7 persone del progetto (6 del team più il Sig. Rossi).</li>
+      <li>Ultime due cifre: i canali se le persone diventano 10.</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 7 × 6 ÷ 2 = 21; 10 × 9 ÷ 2 = 45. Con 3 persone in più i canali sono più del doppio.</div>
+  </div>
+  <aside class="notes">Codice 2145. La formula dei canali l'avete già vista nel deck gestione-progetti-gantt con la legge di Brooks: qui serve a capire perché un piano della comunicazione diventa indispensabile quando il progetto cresce. A squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="co-uscita" data-extra="baseline|push">
+    <p>Il piano della comunicazione dice chi riceve che cosa, quando e con quale <span class="slot" data-risposta="canale"></span>. Senza <span class="slot" data-risposta="feedback"></span> non sai se il messaggio è arrivato. Le decisioni di una riunione finiscono nel <span class="slot" data-risposta="verbale"></span>; il progetto si chiude con l'<span class="slot" data-risposta="accettazione"></span> del cliente. Una wiki è uno strumento <span class="slot" data-risposta="pull"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: canale, feedback, verbale, accettazione, pull. Distrattori: baseline e push.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il PM è il centro della comunicazione</li>
+      <li>Emittente, messaggio, canale, ricevente, feedback</li>
+      <li>Piano: chi, che cosa, quando, come, chi invia</li>
+    </ul>
+    <ul class="points">
+      <li>Esecuzione: riunioni, report, verbali, modifiche</li>
+      <li>Chiusura: accettazione, relazione, lezioni apprese</li>
+      <li>Push, pull, interattiva; e la legge di Conway</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'unità 4. Per il ripasso: ripercorrere il Panificio dall'inizio (ciclo di vita, WBS, CPM, Gantt, risorse, team, costi, EV, comunicazione) come filo per il colloquio d'esame.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

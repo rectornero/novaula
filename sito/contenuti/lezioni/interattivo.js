@@ -1,5 +1,6 @@
 /* Novaula · lezioni: parti interattive delle slide.
-   Sondaggi e quiz (.poll), puzzle (.puzzle-ordina, .puzzle-abbina, .puzzle-completa con .blank, .puzzle-codice),
+   Sondaggi e quiz (.poll), puzzle (.puzzle-ordina, .puzzle-abbina, .puzzle-completa con .blank, .puzzle-codice,
+   .puzzle-categorie e .puzzle-trascina da trascinare),
    carte da girare (.flip), timer (.timer), voto dal telefono, domande sulle slide e consegne dalle slide di laboratorio.
    In modalità PDF (?pdf) disegna tutto in forma statica, senza pulsanti e senza soluzioni. */
 (function () {
@@ -149,7 +150,8 @@
     t.appendChild(btn("Controlla", check, "strong"));
     t.appendChild(btn("Mescola di nuovo", function () { items.slice().sort(function () { return Math.random() - .5; }).forEach(function (li) { el.appendChild(li); }); clear(); }));
     t.appendChild(msg);
-    say(msg, "Tocca due voci per scambiarle.");
+    say(msg, "Trascina le voci, oppure tocca due voci per scambiarle.");
+    sortable(el, "li", function () { clear(); });
     el.addEventListener("click", function (e) {
       var li = e.target.closest("li"); if (!li || li.parentNode !== el) return;
       clear(true);
@@ -184,7 +186,8 @@
     var sel = null, t = tools(el.parentNode.insertBefore(h("div", { class: "ia-wrap" }), el.nextSibling)), msg = h("span", { class: "ia-msg" });
     t.appendChild(btn("Controlla", check, "strong"));
     t.appendChild(msg);
-    say(msg, "Tocca due voci a destra per scambiarle, finché ogni riga è giusta.");
+    say(msg, "Trascina le voci a destra (o tocca due voci per scambiarle) finché ogni riga è giusta.");
+    sortable(right, ".ab-item", function () { [].forEach.call(right.children, function (x) { x.classList.remove("right", "wrong", "sel"); }); sel = null; });
     right.addEventListener("click", function (e) {
       var it = e.target.closest(".ab-item"); if (!it) return;
       [].forEach.call(right.children, function (x) { x.classList.remove("right", "wrong"); });
@@ -280,6 +283,174 @@
       el.classList.add("running");
       iv = setInterval(function () { left--; draw(); if (left <= 0) { clearInterval(iv); iv = null; el.classList.remove("running"); } }, 1000);
     });
+  }
+
+  // ---------- Trascinamento (mouse, dito, penna della LIM) ----------
+  // drag(item, {onMove(x, y, ghost), onDrop(x, y), onTap()}): sotto i 6 px è un tocco, oltre parte il trascinamento
+  // con una copia che segue il puntatore. Il tocco resta come alternativa (accessibilità, LIM poco precise).
+  function drag(item, cb) {
+    item.style.touchAction = "none";
+    item.addEventListener("pointerdown", function (e) {
+      if (e.button > 0) return;
+      var x0 = e.clientX, y0 = e.clientY, ghost = null, r = item.getBoundingClientRect(), dx = x0 - r.left, dy = y0 - r.top;
+      var scale = r.width / (item.offsetWidth || r.width) || 1;
+      e.preventDefault();
+      function move(ev) {
+        if (!ghost && Math.hypot(ev.clientX - x0, ev.clientY - y0) < 6) return;
+        if (!ghost) {
+          ghost = item.cloneNode(true);
+          ghost.classList.add("ia-ghost");
+          ghost.style.width = item.offsetWidth + "px";
+          ghost.style.transform = "scale(" + scale + ")";
+          document.body.appendChild(ghost);
+          item.classList.add("ia-dragging");
+        }
+        ghost.style.left = (ev.clientX - dx) + "px";
+        ghost.style.top = (ev.clientY - dy) + "px";
+        if (cb.onMove) cb.onMove(ev.clientX, ev.clientY);
+      }
+      function up(ev) {
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+        document.removeEventListener("pointercancel", up);
+        if (ghost) {
+          // il click che il browser manda dopo un trascinamento non deve contare come tocco
+          var stop = function (ce) { ce.stopPropagation(); ce.preventDefault(); };
+          window.addEventListener("click", stop, true);
+          setTimeout(function () { window.removeEventListener("click", stop, true); }, 0);
+          ghost.remove(); item.classList.remove("ia-dragging");
+          if (ev.type === "pointerup" && cb.onDrop) cb.onDrop(ev.clientX, ev.clientY);
+          if (cb.onEnd) cb.onEnd();
+        } else if (ev.type === "pointerup" && cb.onTap) cb.onTap();
+      }
+      document.addEventListener("pointermove", move);
+      document.addEventListener("pointerup", up);
+      document.addEventListener("pointercancel", up);
+    });
+  }
+  function under(x, y, sel, root) {
+    var t = document.elementFromPoint(x, y), m = t && t.closest(sel);
+    return m && (!root || root.contains(m)) ? m : null;
+  }
+  // Riordino trascinando dentro un contenitore (usato da ordina e abbina)
+  function sortable(box, itemSel, after) {
+    [].forEach.call(box.querySelectorAll(itemSel), function (it) {
+      drag(it, {
+        onMove: function (x, y) {
+          var o = under(x, y, itemSel, box);
+          if (!o || o === it || o.parentNode !== box) return;
+          // appena entri in un'altra voce prendi il suo posto: sopra se arrivi dal basso, sotto se arrivi dall'alto
+          var before = !!(o.compareDocumentPosition(it) & Node.DOCUMENT_POSITION_FOLLOWING);
+          box.insertBefore(it, before ? o : o.nextSibling);
+          if (after) after();
+        }
+      });
+    });
+  }
+
+  // ---------- Dividi in categorie (trascina le carte nei contenitori giusti) ----------
+  // <div class="puzzle-categorie" data-id="…" [style="--cols:3"]>
+  //   <div class="cat"><h4>Costi fissi</h4><ul><li>Affitto</li>…</ul></div> … </div>
+  // Le carte giuste sono scritte dentro la loro categoria; la pagina le toglie, le mescola e le mette nel mazzo.
+  function categorie(el) {
+    var cats = [].slice.call(el.querySelectorAll(":scope > .cat")), cards = [];
+    el.classList.add("ia");
+    cats.forEach(function (c, ci) {
+      var ul = c.querySelector("ul") || c.appendChild(h("ul"));
+      ul.classList.add("cat-drop");
+      [].slice.call(ul.children).forEach(function (li) { li.classList.add("chip"); li.dataset.k = ci; cards.push(li); li.remove(); });
+    });
+    var pool = h("ul", { class: "cat-pool cat-drop" });
+    var poolBox = h("div", { class: "cat-pool-box" }, [h("p", { class: "cat-pool-label", text: PRINT ? "Carte da sistemare" : "Trascina ogni carta nel contenitore giusto" }), pool]);
+    el.insertBefore(poolBox, el.firstChild);
+    shuffled(cards.length, DECK + (el.getAttribute("data-id") || el.textContent)).forEach(function (k) { pool.appendChild(cards[k]); });
+    if (PRINT) return;
+    var sel = null, t = tools(el.parentNode.insertBefore(h("div", { class: "ia-wrap" }), el.nextSibling)), msg = h("span", { class: "ia-msg" });
+    t.appendChild(btn("Controlla", check, "strong"));
+    t.appendChild(btn("Soluzione", function () { cards.forEach(function (c) { cats[+c.dataset.k].querySelector(".cat-drop").appendChild(c); }); check(); }));
+    t.appendChild(btn("Ricomincia", function () { shuffled(cards.length, String(Math.random())).forEach(function (k) { pool.appendChild(cards[k]); }); clear(); say(msg, ""); }));
+    t.appendChild(msg);
+    function clear() { cards.forEach(function (c) { c.classList.remove("right", "wrong", "sel"); }); sel = null; el.classList.remove("picking"); }
+    function place(card, zone) { zone.appendChild(card); clear(); }
+    cards.forEach(function (c) {
+      drag(c, {
+        onMove: function (x, y) { [].forEach.call(el.querySelectorAll(".cat-drop"), function (z) { z.classList.remove("over"); }); var z = under(x, y, ".cat,.cat-pool-box", el); if (z) z.querySelector(".cat-drop").classList.add("over"); },
+        onDrop: function (x, y) { var z = under(x, y, ".cat,.cat-pool-box", el); if (z) place(c, z.querySelector(".cat-drop")); },
+        onEnd: function () { [].forEach.call(el.querySelectorAll(".cat-drop"), function (z) { z.classList.remove("over"); }); },
+        onTap: function () { var was = sel === c; clear(); if (!was) { sel = c; c.classList.add("sel"); el.classList.add("picking"); } }
+      });
+    });
+    // Tocco: scegli una carta, poi tocca il contenitore
+    el.addEventListener("click", function (e) {
+      if (!sel || e.target.closest(".chip")) return;
+      var z = e.target.closest(".cat,.cat-pool-box"); if (z) place(sel, z.querySelector(".cat-drop"));
+    });
+    function check() {
+      var ok = 0, placed = 0;
+      cards.forEach(function (c) {
+        var cat = c.closest(".cat"); c.classList.remove("sel");
+        if (!cat) { c.classList.remove("right", "wrong"); return; }
+        placed++;
+        var g = cats.indexOf(cat) === +c.dataset.k; c.classList.toggle("right", g); c.classList.toggle("wrong", !g); if (g) ok++;
+      });
+      say(msg, ok === cards.length ? "Tutto al posto giusto!" : ok + " su " + cards.length + " giuste" + (placed < cards.length ? " (" + (cards.length - placed) + " ancora nel mazzo)" : "") + ".", ok === cards.length ? "ok" : "");
+    }
+  }
+
+  // ---------- Trascina le parole (nei buchi di un testo o sulle etichette di uno schema) ----------
+  // <div class="puzzle-trascina" data-extra="distrattore|altro"> … <span class="slot" data-risposta="Gantt"></span> … </div>
+  // Le parole del mazzo sono le risposte (la prima alternativa) più gli eventuali distrattori in data-extra.
+  // Uno .slot può stare anche sopra un disegno (position:absolute con left/top) per etichettare uno schema.
+  function trascina(el) {
+    var slots = [].slice.call(el.querySelectorAll(".slot"));
+    el.classList.add("ia");
+    var words = slots.map(function (s) { return (s.getAttribute("data-risposta") || "").split("|")[0]; });
+    (el.getAttribute("data-extra") || "").split("|").forEach(function (w) { if (w.trim()) words.push(w.trim()); });
+    slots.forEach(function (s) {
+      // largo quanto la carta che ci va (la prima risposta), non quanto le alternative
+      s.style.setProperty("--w", Math.max(4, (s.getAttribute("data-risposta") || "").split("|")[0].length + 2) + "ch");
+    });
+    var bank = h("div", { class: "word-bank" });
+    var chips = words.map(function (w) { return h("span", { class: "chip word", text: w }); });
+    shuffled(chips.length, DECK + (el.getAttribute("data-id") || el.textContent)).forEach(function (k) { bank.appendChild(chips[k]); });
+    el.insertBefore(bank, el.firstChild);
+    if (PRINT) return;
+    var sel = null, t = tools(el), msg = h("span", { class: "ia-msg" });
+    t.appendChild(btn("Controlla", check, "strong"));
+    t.appendChild(btn("Soluzione", function () {
+      chips.forEach(function (c) { bank.appendChild(c); });
+      slots.forEach(function (s, i) { s.appendChild(chips[i]); });
+      check();
+    }));
+    t.appendChild(btn("Ricomincia", function () { chips.forEach(function (c) { bank.appendChild(c); }); clear(); say(msg, ""); }));
+    t.appendChild(msg);
+    function clear() { slots.forEach(function (s) { s.classList.remove("right", "wrong", "over"); }); chips.forEach(function (c) { c.classList.remove("sel"); }); sel = null; el.classList.remove("picking"); }
+    function put(chip, slot) {
+      var old = slot.querySelector(".chip");
+      if (old && old !== chip) { var from = chip.parentNode; if (from && from.classList.contains("slot")) from.appendChild(old); else bank.appendChild(old); }
+      slot.appendChild(chip); clear();
+    }
+    chips.forEach(function (c) {
+      drag(c, {
+        onMove: function (x, y) { slots.forEach(function (s) { s.classList.remove("over"); }); var s = under(x, y, ".slot", el); if (s) s.classList.add("over"); },
+        onDrop: function (x, y) { var s = under(x, y, ".slot", el); if (s) put(c, s); else if (under(x, y, ".word-bank", el)) { bank.appendChild(c); clear(); } },
+        onEnd: function () { slots.forEach(function (s) { s.classList.remove("over"); }); },
+        onTap: function () {
+          if (c.parentNode.classList.contains("slot") && !sel) { bank.appendChild(c); clear(); return; }
+          var was = sel === c; clear(); if (!was) { sel = c; c.classList.add("sel"); el.classList.add("picking"); }
+        }
+      });
+    });
+    slots.forEach(function (s) { s.addEventListener("click", function (e) { if (sel && !e.target.closest(".chip")) put(sel, s); }); });
+    function check() {
+      var ok = 0;
+      slots.forEach(function (s) {
+        var c = s.querySelector(".chip"), v = c ? norm(c.textContent) : "";
+        var g = !!c && (s.getAttribute("data-risposta") || "").split("|").some(function (a) { return norm(a) === v; });
+        s.classList.toggle("right", g); s.classList.toggle("wrong", !!c && !g); if (g) ok++;
+      });
+      say(msg, ok === slots.length ? "Tutto giusto!" : ok + " su " + slots.length + " giuste.", ok === slots.length ? "ok" : "");
+    }
   }
 
   function loadScript(src) {
@@ -685,6 +856,8 @@
     [].forEach.call(document.querySelectorAll(".puzzle-abbina"), abbina);
     [].forEach.call(document.querySelectorAll(".puzzle-completa"), completa);
     [].forEach.call(document.querySelectorAll(".puzzle-codice"), codice);
+    [].forEach.call(document.querySelectorAll(".puzzle-categorie"), categorie);
+    [].forEach.call(document.querySelectorAll(".puzzle-trascina"), trascina);
     [].forEach.call(document.querySelectorAll(".flip"), flip);
     [].forEach.call(document.querySelectorAll(".timer"), timer);
     if (PRINT) return;

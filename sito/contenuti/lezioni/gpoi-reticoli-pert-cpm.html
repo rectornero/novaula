@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La rappresentazione reticolare · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>La rappresentazione<br>reticolare</h1>
+  <p class="lead">Che cosa viene prima di che cosa? Dalle dipendenze tra le attività al reticolo: le idee di PERT e CPM.</p>
+  <aside class="notes">Obiettivi: riconoscere le dipendenze tra attività e i loro tipi; leggere e disegnare un reticolo con le attività sui nodi (AoN) e conoscere quello con le attività sulle frecce (AoA); conoscere origini e differenze di PERT e CPM; calcolare la durata attesa PERT con tre stime. Durata: 2 ore. Si parte dai pacchetti della WBS dell'e-commerce del Panificio Rossi (impresa di esempio) costruita nella lezione precedente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>La mattina, a colazione, quante cose fai nello stesso momento?</h2></div>
+  <div class="poll" data-id="u4-ret-colazione">
+    <ol><li>Una alla volta, in fila</li><li>Due insieme (il caffè sale mentre mi vesto)</li><li>Tre o più, sono un direttore d'orchestra</li><li>Non faccio colazione</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio. Far emergere che alcune cose devono aspettare altre (non si versa il latte prima di prendere la tazza: dipendenza obbligatoria), altre si fanno in parallelo (la moka sale mentre ci si veste). Un reticolo serve proprio a vedere che cosa aspetta che cosa e che cosa può andare in parallelo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dalla WBS alle attività</p><h2>La tabella delle precedenze dell'e-commerce</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Attività</th><th>Durata</th><th>Predecessori</th></tr>
+      <tr><td><b>A</b> Analisi dei requisiti</td><td class="mono">3 gg</td><td class="mono">–</td></tr>
+      <tr><td><b>B</b> Progettazione grafica</td><td class="mono">4 gg</td><td class="mono">A</td></tr>
+      <tr><td><b>C</b> Progettazione database</td><td class="mono">2 gg</td><td class="mono">A</td></tr>
+      <tr><td><b>D</b> Sviluppo front-end</td><td class="mono">6 gg</td><td class="mono">B</td></tr>
+      <tr><td><b>E</b> Sviluppo back-end</td><td class="mono">5 gg</td><td class="mono">C</td></tr>
+      <tr><td><b>F</b> Caricamento catalogo</td><td class="mono">2 gg</td><td class="mono">C</td></tr>
+      <tr><td><b>G</b> Test di integrazione</td><td class="mono">3 gg</td><td class="mono">D, E</td></tr>
+      <tr><td><b>H</b> Formazione del personale</td><td class="mono">1 gg</td><td class="mono">F</td></tr>
+      <tr><td><b>I</b> Messa online</td><td class="mono">1 gg</td><td class="mono">G, H</td></tr>
+    </table>
+    <div class="stack">
+      <div class="card soft"><h3>Predecessore</h3><p class="small">L'attività che deve finire prima che un'altra possa cominciare.</p></div>
+      <p class="small">Nella tabella c'è tutta la logica del progetto, ma è difficile da "vedere". Il reticolo la trasforma in un disegno.</p>
+    </div>
+  </div>
+  <aside class="notes">Le attività vengono dai pacchetti della WBS (lezione precedente): 2.1+2.2 = A (24 ore = 3 giorni da 8 ore), 3.1 = B, 3.2 = C, 4.1 = D, 4.2 = E, 4.3 = F, 5.1 = G, 5.2 = H, 5.3 = I. Il ramo "Gestione" non entra nel reticolo perché dura per tutto il progetto. Una persona per attività: durate in giorni lavorativi. Questa tabella è la base delle prossime tre lezioni (CPM, Gantt, ProjectLibre): farla copiare sul quaderno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Come si costruisce un reticolo</h2></div>
+  <ol class="puzzle-ordina" data-id="u4-ret-passi">
+    <li>Elenca le attività partendo dai pacchetti della WBS</li>
+    <li>Stima la durata di ogni attività</li>
+    <li>Per ogni attività scrivi i suoi predecessori</li>
+    <li>Disegna i nodi da sinistra a destra, dopo i loro predecessori</li>
+    <li>Collega ogni predecessore al suo successore con una freccia</li>
+    <li>Controlla: un solo inizio, una sola fine, nessun ciclo</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Le durate possono essere stimate anche dopo aver scritto i predecessori: accettare lo scambio tra 2 e 3 se motivato, ma la stima delle durate richiede di conoscere già le attività. Il controllo finale è importante: un reticolo con un ciclo non si può calcolare (vedi il quiz più avanti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Che tipo di dipendenza è?</h2></div>
+  <p class="small"><b>Obbligatoria</b>: lo impone la natura del lavoro. <b>Discrezionale</b>: è una scelta del team. <b>Esterna</b>: dipende da qualcuno fuori dal progetto.</p>
+  <div class="puzzle-categorie" data-id="u4-ret-dipendenze" style="--cols:3">
+    <div class="cat"><h4>Obbligatoria</h4><ul><li>Test dopo il codice</li><li>Back-end dopo il database</li></ul></div>
+    <div class="cat"><h4>Discrezionale</h4><ul><li>Grafica prima, per abitudine</li><li>Formazione con il catalogo vero</li></ul></div>
+    <div class="cat"><h4>Esterna</h4><ul><li>Foto inviate dal panificio</li><li>POS virtuale attivato dalla banca</li><li>Hosting attivato dal fornitore</li></ul></div>
+  </div>
+  <aside class="notes">Classificazione delle dipendenze della guida PMBOK (obbligatorie, discrezionali, esterne; si parla anche di interne). Soluzione: obbligatorie = test dopo il codice, back-end dopo il database (le tabelle servono per scrivere le query); discrezionali = grafica prima del front-end per abitudine del team, formazione dopo il catalogo per usare dati veri; esterne = foto dal panificio, POS virtuale della banca, hosting del fornitore. Messaggio chiave: le discrezionali si possono cambiare per accorciare il progetto, le obbligatorie no, le esterne vanno sorvegliate perché non le controlliamo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due modi di disegnare</p><h2>Attività sui nodi o attività sulle frecce</h2></div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>AoN · attività sui nodi</h3>
+      <svg width="700" height="230" viewBox="0 0 700 230">
+        <defs><marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker></defs>
+        <g stroke="#172033" stroke-width="3" fill="none"><line x1="130" y1="115" x2="276" y2="50" marker-end="url(#m1)"/><line x1="130" y1="115" x2="276" y2="180" marker-end="url(#m1)"/><line x1="390" y1="50" x2="536" y2="108" marker-end="url(#m1)"/><line x1="390" y1="180" x2="536" y2="122" marker-end="url(#m1)"/></g>
+        <g fill="#fbe7dc" stroke="#d0541f" stroke-width="3"><rect x="20" y="80" width="110" height="70" rx="12"/><rect x="280" y="15" width="110" height="70" rx="12"/><rect x="280" y="145" width="110" height="70" rx="12"/><rect x="540" y="80" width="110" height="70" rx="12"/></g>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="34" font-weight="700" fill="#172033" text-anchor="middle"><text x="75" y="127">A</text><text x="335" y="62">B</text><text x="335" y="192">C</text><text x="595" y="127">D</text></g>
+      </svg>
+      <p class="small">Il nodo è l'attività, la freccia è il vincolo. È il metodo usato da ProjectLibre e dalla maggior parte dei software.</p>
+    </div>
+    <div class="card">
+      <h3>AoA · attività sulle frecce</h3>
+      <svg width="700" height="230" viewBox="0 0 700 230">
+        <defs><marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker></defs>
+        <g stroke="#172033" stroke-width="3" fill="none"><line x1="70" y1="115" x2="196" y2="115" marker-end="url(#m2)"/><line x1="240" y1="98" x2="392" y2="42" marker-end="url(#m2)"/><line x1="240" y1="132" x2="392" y2="188" marker-end="url(#m2)"/><line x1="440" y1="42" x2="596" y2="102" marker-end="url(#m2)"/><line x1="420" y1="168" x2="420" y2="66" stroke-dasharray="10 8" marker-end="url(#m2)"/></g>
+        <g fill="#ffffff" stroke="#172033" stroke-width="3"><circle cx="48" cy="115" r="22"/><circle cx="220" cy="115" r="22"/><circle cx="418" cy="40" r="22"/><circle cx="418" cy="190" r="22"/><circle cx="620" cy="115" r="22"/></g>
+        <g font-family="DM Sans, sans-serif" font-size="22" fill="#596179" text-anchor="middle"><text x="48" y="123">1</text><text x="220" y="123">2</text><text x="418" y="48">3</text><text x="418" y="198">4</text><text x="620" y="123">5</text></g>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="32" font-weight="700" fill="#d0541f" text-anchor="middle"><text x="132" y="100">A</text><text x="300" y="56">B</text><text x="300" y="196">C</text><text x="522" y="56">D</text></g>
+      </svg>
+      <p class="small">Il nodo è un evento (inizio o fine). Per dire "D dopo B e C" serve una freccia fittizia tratteggiata, di durata zero.</p>
+    </div>
+  </div>
+  <aside class="notes">Stesso mini-progetto nei due stili: D comincia dopo B e C. Nell'AoA (activity on arrow) i nodi numerati sono eventi; l'attività fittizia (dummy) da 4 a 3 serve a dire che D, che parte dal nodo 3, deve aspettare anche la fine di C. Il PERT classico nacque con le attività sulle frecce; il metodo con le attività sui nodi è detto anche metodo delle precedenze (PDM) ed è quello di quasi tutti i software, ProjectLibre compreso. Nelle prossime lezioni useremo l'AoN.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In un reticolo AoA, che cosa rappresenta un nodo?</h2></div>
+  <div class="poll" data-id="u4-ret-aoa" data-tipo="quiz" data-risposta="B">
+    <ol><li>Un'attività con la sua durata</li><li>Un evento: la fine di alcune attività e l'inizio di altre</li><li>Una risorsa assegnata al progetto</li><li>Un pagamento del cliente</li></ol>
+    <p class="why">Nell'AoA le attività stanno sulle frecce e i nodi sono istanti di tempo (eventi), che non durano. È il contrario dell'AoN, dove il nodo è l'attività.</p>
+  </div>
+  <aside class="notes">Chi ha guardato solo l'AoN risponde A. La D è un richiamo alle milestone: un evento può coincidere con una milestone di pagamento, ma il nodo in sé è solo un istante. Far ridire a voce la differenza: "AoN: nodo = attività; AoA: nodo = evento".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Il vocabolario del reticolo</h2></div>
+  <dl class="puzzle-abbina" data-id="u4-ret-termini">
+    <dt>Nodo (AoN)</dt><dd>Un'attività, con nome e durata</dd>
+    <dt>Freccia (AoN)</dt><dd>Un vincolo di precedenza tra due attività</dd>
+    <dt>Nodo (AoA)</dt><dd>Un evento: istante senza durata</dd>
+    <dt>Attività fittizia</dt><dd>Freccia tratteggiata di durata zero</dd>
+    <dt>Percorso</dt><dd>Catena di attività dall'inizio alla fine</dd>
+  </dl>
+  <aside class="notes">Coppie nell'ordine scritto. Il "percorso" prepara la lezione successiva: il percorso più lungo è il percorso critico. Chiedere: quanti percorsi ha il reticolo dell'e-commerce? Lo si scopre nella prossima slide e nel laboratorio (sono 3).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Completa il reticolo dell'e-commerce</h2></div>
+  <div class="puzzle-trascina" data-id="u4-ret-rete" data-extra="B|G">
+      <div style="position:relative;width:1600px;height:430px">
+      <svg width="1600" height="430" viewBox="0 0 1600 430" style="position:absolute;left:0;top:0"><defs><marker id="fr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker><marker id="frc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#d0541f"/></marker></defs><line x1="180" y1="215" x2="246" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="410" y1="215" x2="476" y2="65" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="410" y1="215" x2="476" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="640" y1="65" x2="706" y2="65" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="640" y1="365" x2="706" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="640" y1="365" x2="706" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="870" y1="65" x2="936" y2="65" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="870" y1="215" x2="936" y2="65" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="870" y1="365" x2="936" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1100" y1="65" x2="1166" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1100" y1="365" x2="1166" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1330" y1="215" x2="1396" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/></svg>
+      <div class="org-box top" style="position:absolute;left:20px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Inizio</b></div>
+      <div class="org-box" style="position:absolute;left:250px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>A</b><span style="font-size:22px;font-weight:500">Analisi</span></div>
+      <div class="org-box" style="position:absolute;left:480px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>B</b><span style="font-size:22px;font-weight:500">Grafica</span></div>
+      <div class="org-box" style="position:absolute;left:480px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>C</b><span style="font-size:22px;font-weight:500">Database</span></div>
+      <div class="org-box" style="position:absolute;left:710px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span class="slot" data-risposta="D"></span></div>
+      <div class="org-box" style="position:absolute;left:710px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span class="slot" data-risposta="E"></span></div>
+      <div class="org-box" style="position:absolute;left:710px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span class="slot" data-risposta="F"></span></div>
+      <div class="org-box" style="position:absolute;left:940px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>G</b><span style="font-size:22px;font-weight:500">Test</span></div>
+      <div class="org-box" style="position:absolute;left:940px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span class="slot" data-risposta="H"></span></div>
+      <div class="org-box" style="position:absolute;left:1170px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>I</b><span style="font-size:22px;font-weight:500">Online</span></div>
+      <div class="org-box top" style="position:absolute;left:1400px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Fine</b></div>
+      </div>
+    <p class="small">Predecessori: B, C ← A · D ← B · E, F ← C · G ← D, E · H ← F · I ← G, H</p>
+  </div>
+  <aside class="notes">Soluzione: in alto dopo Grafica c'è D (front-end); dopo Database, al centro E (back-end, che porta al test) e in basso F (catalogo, che porta alla formazione); in basso dopo F c'è H (formazione). Distrattori: B e G, già presenti. I percorsi dall'inizio alla fine sono tre: A-B-D-G-I, A-C-E-G-I, A-C-F-H-I. Chiedere alle squadre di calcolare la lunghezza di ognuno con le durate della tabella (17, 14, 9 giorni): il più lungo comanda la durata del progetto. È il ponte verso il CPM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il PERT</p><h2>Quando la durata è incerta: tre stime invece di una</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <ul class="points">
+        <li><b>o</b> ottimistica: tutto va bene</li>
+        <li><b>m</b> più probabile: quello che succede di solito</li>
+        <li><b>p</b> pessimistica: va storto quasi tutto</li>
+      </ul>
+      <p class="small">La durata attesa pesa quattro volte la stima più probabile.</p>
+    </div>
+    <div class="formula" style="font-size:52px;align-self:center"><small>durata attesa PERT</small>t<sub>e</sub> = (o + <span class="hl">4m</span> + p) / 6</div>
+  </div>
+  <div class="callout"><b>Esempio:</b> front-end con o = 4, m = 5, p = 12 giorni. t<sub>e</sub> = (4 + 20 + 12) / 6 = <b>6 giorni</b>: più del valore "più probabile", perché il rischio di ritardo è grande.</div>
+  <aside class="notes">La formula deriva dall'ipotesi di una distribuzione beta per la durata; spesso si calcola anche la deviazione standard σ = (p − o)/6, qui 8/6 ≈ 1,33 giorni, che misura l'incertezza. Le durate della tabella delle precedenze sono proprio durate attese PERT (le stime complete sono nel secondo laboratorio). Messaggio chiave: le stime pessimistiche lontane tirano su la media, quindi pianificare con il solo valore "più probabile" porta a promettere date troppo ottimistiche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto con la formula PERT</h2></div>
+  <div class="puzzle-codice" data-risposta="537" data-aiuto="prima cifra: (2 + 16 + 12) / 6">
+    <ul class="points">
+      <li>1ª cifra: t<sub>e</sub> di un'attività con o = 2, m = 4, p = 12</li>
+      <li>2ª cifra: t<sub>e</sub> di un'attività con o = 1, m = 2, p = 9</li>
+      <li>3ª cifra: t<sub>e</sub> di un'attività con o = 4, m = 6, p = 14</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 30/6 = 5, 18/6 = 3, 42/6 = 7. In tutti e tre i casi la durata attesa supera quella più probabile.</div>
+  </div>
+  <aside class="notes">Codice 537. A squadre, senza calcolatrice. Calcoli: (2 + 16 + 12)/6 = 5; (1 + 8 + 9)/6 = 3; (4 + 24 + 14)/6 = 7. Far notare che quando p è molto lontano da m (stime asimmetriche) la durata attesa cresce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>PERT e CPM, nati a un anno di distanza</h2></div>
+  <table class="data compact">
+    <tr><th></th><th>CPM · Critical Path Method</th><th>PERT · Program Evaluation and Review Technique</th></tr>
+    <tr><td><b>Nascita</b></td><td>1957, DuPont con Remington Rand (Walker e Kelley)</td><td>1958, Marina degli Stati Uniti, programma missilistico Polaris</td></tr>
+    <tr><td><b>Durate</b></td><td>Deterministiche: una stima certa</td><td>Probabilistiche: tre stime e durata attesa</td></tr>
+    <tr><td><b>Adatto a</b></td><td>Lavori ripetuti e noti (cantieri, impianti)</td><td>Progetti nuovi e incerti (ricerca, software)</td></tr>
+    <tr><td><b>Punto forte</b></td><td>Percorso critico, legame tempi-costi</td><td>Probabilità di finire entro una data</td></tr>
+  </table>
+  <p class="small">Oggi i due metodi si usano insieme: reticolo e percorso critico del CPM, stime a tre valori del PERT quando c'è incertezza.</p>
+  <aside class="notes">Il CPM fu sviluppato da Morgan R. Walker (DuPont) e James E. Kelley Jr. (Remington Rand) per la pianificazione di lavori di manutenzione e costruzione di impianti chimici. Il PERT fu sviluppato dallo Special Projects Office della Marina statunitense con la società di consulenza Booz Allen Hamilton e la Lockheed per il programma Polaris. Il libro del corso usa entrambe le sigle: la prossima lezione approfondisce il CPM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il tempo è la risorsa che manca di più</h2></div>
+  <figure class="citazione">
+    <blockquote>Sono andati storti più progetti software per mancanza di tempo di calendario che per tutte le altre cause messe insieme.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile del sistema operativo IBM OS/360, "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <p class="lead">Un reticolo ben fatto mostra in anticipo quanto tempo serve davvero e dove non c'è margine.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "More software projects have gone awry for lack of calendar time than for all other causes combined" (F. P. Brooks, The Mythical Man-Month, capitolo 2, 1975). Brooks era già comparso nel deck "gestione-progetti-gantt" con la sua legge sul ritardo; qui la frase apre il capitolo che spiega perché le stime dei programmatori sono di solito ottimistiche. Collegamento con la formula PERT appena vista.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>"Il test G dipende dal front-end D, ma D dipende da G per correggere i bug." Si può disegnare?</h2></div>
+  <div class="poll" data-id="u4-ret-ciclo" data-tipo="quiz" data-risposta="C">
+    <ol><li>Sì, con un normale anello tra D e G</li><li>Sì, ma solo nel reticolo PERT</li><li>No: un reticolo non può avere cicli, la correzione va modellata come un'altra attività</li><li>Sì, aggiungendo un'attività fittizia</li></ol>
+    <p class="why">Un reticolo è un grafo orientato senza cicli: se D aspetta G e G aspetta D, nessuno dei due può cominciare. La correzione dei bug si inserisce come attività a sé (per esempio "Correzioni" dopo G) o si include nella durata del test.</p>
+  </div>
+  <aside class="notes">Trabocchetto per chi pensa al ciclo di vita iterativo del software (deck "modelli-ciclo-di-vita"): le iterazioni esistono, ma nel reticolo si "srotolano" in attività successive (Test 1, Correzioni, Test 2). La D è plausibile per chi ha appena visto le attività fittizie, che però servono solo a esprimere precedenze, non a creare anelli. Collegamento con Informatica: grafo orientato aciclico (DAG), lo stesso che usano i sistemi di build per ordinare le dipendenze.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il reticolo dell'e-commerce in diagrams.net</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b> e scegli di salvare sul dispositivo.</li>
+      <li>Disegna un nodo <b>Inizio</b>, i nove nodi A–I e un nodo <b>Fine</b>. In ogni nodo: lettera, nome breve, durata.</li>
+      <li>Collega con le frecce seguendo la tabella delle precedenze (slide 3).</li>
+      <li>In un riquadro di testo elenca tutti i percorsi da Inizio a Fine con la loro durata totale.</li>
+      <li>Salva <b>reticolo-panificio.drawio</b> ed esporta <b>reticolo-panificio.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 11 nodi e 12 frecce. Tre percorsi: A-B-D-G-I = 17 giorni, A-C-E-G-I = 14, A-C-F-H-I = 9.</div>
+  </div>
+  <aside class="notes">Frecce: Inizio-A, A-B, A-C, B-D, C-E, C-F, D-G, E-G, F-H, G-I, H-I, I-Fine = 12. Calcoli: 3+4+6+3+1 = 17; 3+2+5+3+1 = 14; 3+2+2+1+1 = 9. Chi finisce prima evidenzia in rosso il percorso più lungo: è il percorso critico della prossima lezione. Errori tipici: G collegato solo a D, nodi senza durata, frecce senza punta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Le stime PERT in Calc</h2>
+  <div class="cols-2">
+    <div class="stack">
+      <ol class="steps small">
+        <li>Colonne: <b>Attività</b>, <b>o</b>, <b>m</b>, <b>p</b>, <b>te</b>. Copia le stime della tabella.</li>
+        <li>In E2 scrivi <code>=(B2+4*C2+D2)/6</code> e copia fino a E10.</li>
+        <li>Calcola la durata del percorso A-B-D-G-I due volte: con le <b>m</b> e con le <b>te</b>.</li>
+        <li>In una cella scrivi quale delle due date prometteresti al panificio e perché. Salva <b>pert-panificio.ods</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> le te coincidono con le durate della slide 3. Percorso con le m: 15 giorni; con le te: 17.</div>
+    </div>
+    <table class="data compact">
+      <tr><th>Att.</th><th>o</th><th>m</th><th>p</th></tr>
+      <tr><td>A</td><td class="mono">2</td><td class="mono">3</td><td class="mono">4</td></tr>
+      <tr><td>B</td><td class="mono">2</td><td class="mono">4</td><td class="mono">6</td></tr>
+      <tr><td>C</td><td class="mono">1</td><td class="mono">2</td><td class="mono">3</td></tr>
+      <tr><td>D</td><td class="mono">4</td><td class="mono">5</td><td class="mono">12</td></tr>
+      <tr><td>E</td><td class="mono">3</td><td class="mono">4</td><td class="mono">11</td></tr>
+      <tr><td>F</td><td class="mono">1</td><td class="mono">2</td><td class="mono">3</td></tr>
+      <tr><td>G</td><td class="mono">2</td><td class="mono">2</td><td class="mono">8</td></tr>
+      <tr><td>H</td><td class="mono">1</td><td class="mono">1</td><td class="mono">1</td></tr>
+      <tr><td>I</td><td class="mono">1</td><td class="mono">1</td><td class="mono">1</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Stime ipotetiche. te: A (2+12+4)/6 = 3; B (2+16+6)/6 = 4; C (1+8+3)/6 = 2; D (4+20+12)/6 = 6; E (3+16+11)/6 = 5; F (1+8+3)/6 = 2; G (2+8+8)/6 = 3; H 1; I 1. Percorso A-B-D-G-I con le m: 3+4+5+2+1 = 15; con le te: 3+4+6+3+1 = 17. Risposta attesa: promettere 17 giorni (o anche di più), perché 15 giorni sono il caso in cui tutto va come al solito, senza tener conto dei ritardi possibili su front-end e test. Se E2 dà un risultato strano, controllare le parentesi: senza parentesi Calc divide solo D2 per 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Dal PERT alla simulazione</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il PERT del 1958 usava una formula semplice perché i calcoli si facevano a mano. Oggi molti software di pianificazione fanno una <b>simulazione Monte Carlo</b>: estraggono a caso migliaia di durate per ogni attività, ricalcolano il reticolo ogni volta e mostrano con quale probabilità il progetto finisce entro una certa data. Il reticolo resta lo stesso: cambia la potenza di calcolo.</p></div>
+  <div class="callout hl"><b>All'esame:</b> il reticolo è un grafo orientato aciclico. Puoi collegarlo a Informatica (grafi, ordinamento topologico, dipendenze tra moduli o pacchetti software) e a Matematica (probabilità e media pesata).</div>
+  <aside class="notes">La simulazione Monte Carlo è un metodo consolidato nell'analisi quantitativa dei rischi di progetto ed è citata nella guida PMBOK. Non serve entrare nei dettagli statistici. Il collegamento con i gestori di pacchetti (npm, pip) e i sistemi di build è concreto: anche lì le dipendenze formano un grafo che deve essere senza cicli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u4-ret-uscita" data-extra="risorsa|Gantt">
+    <p>L'attività che deve finire prima che un'altra cominci si chiama <span class="slot" data-risposta="predecessore"></span>.</p>
+    <p>Nel reticolo AoN il nodo è un'<span class="slot" data-risposta="attività"></span>; nell'AoA il nodo è un <span class="slot" data-risposta="evento"></span>.</p>
+    <p>Il <span class="slot" data-risposta="PERT"></span> usa tre stime: ottimistica, più probabile e pessimistica.</p>
+    <p>Un reticolo non può contenere <span class="slot" data-risposta="cicli"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: predecessore, attività, evento, PERT, cicli. Distrattori: risorsa, Gantt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Dipendenze obbligatorie, discrezionali, esterne</li>
+      <li>AoN: attività sui nodi; AoA: attività sulle frecce</li>
+      <li>Un inizio, una fine, nessun ciclo</li>
+    </ul>
+    <ul class="points">
+      <li>CPM 1957: durate certe e percorso critico</li>
+      <li>PERT 1958: t<sub>e</sub> = (o + 4m + p) / 6</li>
+      <li>Il percorso più lungo decide la durata</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: il CPM sotto la lente di ingrandimento, con i calcoli di inizio e fine al più presto e al più tardi e lo slittamento.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

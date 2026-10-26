@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Una nuova rivoluzione industriale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>Una nuova rivoluzione industriale</h1>
+  <p class="lead">Dal vapore ai sistemi cyber-fisici: che cosa cambia davvero quando macchine, prodotti e persone si scambiano dati?</p>
+  <aside class="notes">Prima lezione dell'unità 7 (Industria 4.0). Obiettivi: collocare le quattro rivoluzioni industriali, definire Industria 4.0 e i sistemi cyber-fisici, conoscere i nove pilastri (tecnologie abilitanti) e il piano italiano del 2016. Durata indicativa: 2 ore. Le lezioni successive dell'unità approfondiscono un pilastro ciascuna (simulazione, integrazione, IIoT, cloud e big data, robotica).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Pensa a una fabbrica di oggi: che cosa vedi?</h2></div>
+  <div class="poll" data-id="u7-fabbrica-oggi">
+    <ol><li>Operai alla catena di montaggio</li><li>Robot e pochi tecnici in tuta</li><li>Schermi, sensori e dati ovunque</li><li>Capannoni vuoti, tutto automatico</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, senza risposta giusta. Chiedere a chi ha fatto PCTO in un'azienda manifatturiera che cosa ha visto davvero. Messaggio da far emergere alla fine della lezione: nelle fabbriche reali convivono tutte e quattro le immagini; la "fabbrica spenta" senza persone è un caso raro. Tornare al sondaggio nel riepilogo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Quattro rivoluzioni in 250 anni</h2></div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1ª</p><h3>Vapore</h3><p class="muted">Fine Settecento. La macchina a vapore muove telai e pompe: nasce la fabbrica.</p></div>
+    <div class="card"><p class="num">2ª</p><h3>Elettricità</h3><p class="muted">Fine Ottocento. Motori elettrici, petrolio, catena di montaggio: produzione di massa.</p></div>
+    <div class="card"><p class="num">3ª</p><h3>Elettronica</h3><p class="muted">Anni Settanta. Computer e PLC automatizzano le macchine una per una.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">4ª</p><h3>Connessione</h3><p>Anni Duemiladieci. Macchine, prodotti e sistemi informativi collegati in rete.</p></div>
+  </div>
+  <div class="callout">Ogni rivoluzione cambia la <b>fonte di energia</b> o il <b>modo di controllare</b> la produzione. La quarta cambia il modo di usare l'<b>informazione</b>.</div>
+  <aside class="notes">Le date sono indicative: gli storici discutono sui confini. Collegare a Storia (rivoluzione industriale inglese, seconda rivoluzione e taylorismo-fordismo). La terza rivoluzione è quella dell'automazione "a isole": ogni macchina ha il suo controllo, ma i dati non circolano. È il punto di partenza della quarta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="u7-storia">
+    <li>James Watt brevetta la sua macchina a vapore</li>
+    <li>Ford avvia la catena di montaggio mobile</li>
+    <li>Nasce il primo PLC, il Modicon 084</li>
+    <li>Tim Berners-Lee propone il World Wide Web</li>
+    <li>Alla fiera di Hannover si parla di "Industrie 4.0"</li>
+    <li>L'Italia presenta il Piano nazionale Industria 4.0</li>
+  </ol>
+  <aside class="notes">Date: brevetto di Watt 1769; catena di montaggio mobile nello stabilimento Ford di Highland Park 1913; Modicon 084, primo controllore logico programmabile, 1969; proposta del Web al CERN 1989; il termine "Industrie 4.0" viene presentato alla Hannover Messe nel 2011 (iniziativa del governo tedesco); Piano nazionale Industria 4.0 presentato dal Ministero dello sviluppo economico nel settembre 2016. Il tranello: molti mettono il PLC dopo il Web. Far lavorare a coppie, 3 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La definizione</p><h2>Che cos'è Industria 4.0</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un modo di produrre in cui macchine, prodotti, persone e sistemi informativi sono <mark>connessi e si scambiano dati in tempo reale</mark>, per decidere meglio e più in fretta.</p>
+      <p>Il cuore è il <b>sistema cyber-fisico</b> (CPS): un oggetto fisico con sensori, software e connessione, che ha una "copia" digitale sempre aggiornata.</p>
+    </div>
+    <div class="card soft"><h3>Un sistema cyber-fisico</h3><ul class="points"><li>misura (sensori)</li><li>elabora (software)</li><li>comunica (rete)</li><li>agisce (attuatori)</li></ul></div>
+  </div>
+  <div class="callout">Nato in Germania nel 2011, il programma arriva in Italia nel 2016: <b>Piano nazionale Industria 4.0</b>, poi Impresa 4.0 e Transizione 4.0.</div>
+  <aside class="notes">Cyber-fisico: traduzione di cyber-physical system, termine diffuso in ambito statunitense (National Science Foundation, metà anni 2000). Esempio da far costruire alla classe: una pressa con sensori di pressione, un PLC collegato alla rete e un software che registra ogni ciclo. Collegamento con Sistemi e reti e con TPSIT: è un sistema distribuito con vincoli di tempo reale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le parole</p><h2>Dalla massa alla personalizzazione</h2></div>
+  <div class="puzzle-trascina" data-id="u7-massa" data-extra="vapore|isola">
+    <p>Con la catena di montaggio di Ford nasce la produzione di <span class="slot" data-risposta="massa"></span>: tanti pezzi tutti uguali.</p>
+    <p>Industria 4.0 punta alla personalizzazione: produrre in modo conveniente anche un <span class="slot" data-risposta="lotto"></span> di un solo pezzo.</p>
+    <p>Una macchina con sensori, software e rete è un sistema <span class="slot" data-risposta="cyber-fisico|cyberfisico"></span>.</p>
+    <p>I dati raccolti in reparto servono a prendere <span class="slot" data-risposta="decisioni"></span> più rapide.</p>
+  </div>
+  <aside class="notes">Soluzione: massa, lotto, cyber-fisico, decisioni. Distrattori: vapore, isola. "Lotto 1" (lot size one) è l'espressione tipica: lo stesso impianto produce varianti diverse senza fermarsi per il riattrezzaggio. Esempi da citare senza numeri: auto configurate online, scarpe sportive personalizzate. Si può far fare alla LIM a uno studente per frase.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I pilastri</p><h2>Nove tecnologie abilitanti</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Robot avanzati</h3><p class="muted small">collaborativi, autonomi</p></div>
+    <div class="card"><h3>Manifattura additiva</h3><p class="muted small">stampa 3D di prototipi e ricambi</p></div>
+    <div class="card"><h3>Realtà aumentata</h3><p class="muted small">istruzioni sovrapposte al reale</p></div>
+    <div class="card soft"><h3>Simulazione</h3><p class="muted small">modelli virtuali e gemello digitale</p></div>
+    <div class="card soft"><h3>Integrazione</h3><p class="muted small">orizzontale e verticale</p></div>
+    <div class="card soft"><h3>Industrial IoT</h3><p class="muted small">sensori e macchine in rete</p></div>
+    <div class="card"><h3>Cloud</h3><p class="muted small">calcolo e archivi a consumo</p></div>
+    <div class="card"><h3>Cybersecurity</h3><p class="muted small">proteggere reti e macchine</p></div>
+    <div class="card"><h3>Big data e analytics</h3><p class="muted small">dai dati alle previsioni</p></div>
+  </div>
+  <aside class="notes">Questa lista di nove "pilastri" viene dal rapporto del Boston Consulting Group "Industry 4.0: The Future of Productivity and Growth in Manufacturing Industries" (2015) ed è quella usata da molti libri di testo; il Piano nazionale italiano parla di "tecnologie abilitanti" con un elenco molto simile. In azzurro i pilastri che vedremo in una lezione dedicata (insieme a cloud, big data e robot). Chiedere: quali di queste tecnologie esistevano già prima del 2011? Quasi tutte: la novità è usarle insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Quale pilastro è in gioco?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-pilastri" style="--cols:4">
+    <div class="cat"><h4>Manifattura additiva</h4><ul><li>Ricambio stampato in una notte</li><li>Prototipo di una staffa in 3D</li></ul></div>
+    <div class="cat"><h4>Realtà aumentata</h4><ul><li>Istruzioni sopra il pezzo</li><li>Tecnico guidato col visore</li></ul></div>
+    <div class="cat"><h4>Simulazione</h4><ul><li>Layout provato al computer</li><li>Collaudo virtuale</li></ul></div>
+    <div class="cat"><h4>Cybersecurity</h4><ul><li>Rete di reparto separata</li><li>Firmware dei PLC aggiornato</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: additiva = ricambio stampato, prototipo della staffa; realtà aumentata = istruzioni sopra il pezzo, tecnico guidato col visore (assistenza remota); simulazione = layout provato al computer, collaudo virtuale (virtual commissioning: il software dell'impianto si prova su un modello prima di montarlo); cybersecurity = rete di reparto separata dalla rete degli uffici (segmentazione), aggiornamento del firmware dei PLC. Squadre da 3-4, 4 minuti, poi una squadra alla LIM. Domanda: il collaudo virtuale potrebbe stare anche in "Integrazione"? Discuterne: le categorie reali si sovrappongono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale di queste NON è una novità della quarta rivoluzione?</h2></div>
+  <div class="poll" data-id="u7-novita" data-tipo="quiz" data-risposta="A">
+    <ol><li>Il robot industriale in reparto</li><li>Il sensore che invia dati in tempo reale al gestionale</li><li>La macchina che riceve l'ordine di lavoro dal software aziendale</li><li>Il modello digitale aggiornato dai dati della macchina</li></ol>
+    <p class="why">Il primo robot industriale, Unimate, lavora in uno stabilimento General Motors dal 1961: è terza rivoluzione. La novità di Industria 4.0 non è il robot in sé, ma il fatto che robot, macchine e software si scambino dati.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono che il robot è la novità. Unimate fu progettato da George Devol e Joseph Engelberger e installato da General Motors nel 1961. Le opzioni B, C e D sono tutte forme di integrazione e di cyber-fisico. Ponte verso la lezione sulla robotica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il caso italiano</p><h2>Che cosa offriva il piano del 2016 a chi comprava una macchina 4.0?</h2></div>
+  <div class="poll" data-id="u7-iperammortamento" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un contributo a fondo perduto pari al prezzo</li><li>L'esenzione dall'IVA sull'acquisto</li><li>L'iperammortamento: costo deducibile al 250%</li><li>Un tecnico pagato dallo Stato per un anno</li></ol>
+    <p class="why">Con la legge di bilancio 2017 (legge 232/2016) il costo dei beni "4.0" elencati nell'allegato A si poteva ammortizzare al 250%: meno imposte da pagare. Dal 2020 l'iperammortamento è stato sostituito da crediti d'imposta (Transizione 4.0).</p>
+  </div>
+  <aside class="notes">Ripassare che cos'è l'ammortamento (unità 2: il costo di un bene durevole si distribuisce sugli anni di utilizzo). Con l'iperammortamento al 250% un bene da 100 000 euro si deduce come se costasse 250 000: l'impresa paga meno imposte sul reddito. Non serve fare il calcolo delle imposte. L'incentivo valeva solo se la macchina era interconnessa al sistema di fabbrica: è il gancio per l'esercizio successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Quando una macchina è "4.0" per il fisco</h2></div>
+  <p class="small muted">Servono tutte le 5 caratteristiche obbligatorie e almeno 2 delle 3 ulteriori.</p>
+  <div class="puzzle-categorie" data-id="u7-requisiti">
+    <div class="cat"><h4>Obbligatoria (tutte e 5)</h4><ul><li>Controllo con CNC o PLC</li><li>Interconnessione al sistema di fabbrica</li><li>Integrazione con logistica o altre macchine</li><li>Interfaccia uomo-macchina semplice</li><li>Requisiti di sicurezza aggiornati</li></ul></div>
+    <div class="cat"><h4>Ulteriore (almeno 2 su 3)</h4><ul><li>Telemanutenzione o telediagnosi</li><li>Monitoraggio continuo con sensori</li><li>Modello che simula la macchina</li></ul></div>
+  </div>
+  <aside class="notes">Fonte: circolare dell'Agenzia delle Entrate e del MISE n. 4/E del 30 marzo 2017, che spiega i requisiti per i beni dell'allegato A. Le cinque obbligatorie: controllo per mezzo di CNC e/o PLC; interconnessione ai sistemi informatici di fabbrica con caricamento da remoto di istruzioni; integrazione automatizzata con il sistema logistico o con altre macchine; interfaccia uomo-macchina semplice e intuitiva; rispondenza ai più recenti parametri di sicurezza. Le tre ulteriori (almeno due): telemanutenzione/telediagnosi/controllo remoto; monitoraggio continuo con sensori e adattività alle derive di processo; integrazione con un modello che simula il comportamento della macchina (sistema cyber-fisico). Il punto chiave da far notare: l'interconnessione è obbligatoria. 4 minuti a coppie.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La checklist 4.0 in Calc</h2>
+  <div class="cols-2" style="grid-template-columns:1.8fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>Colonne <b>Requisito</b>, <b>Tipo</b>, <b>Presente</b>. Righe 2-6 le 5 obbligatorie, righe 7-9 le 3 ulteriori.</li>
+      <li>La pressa di esempio ha PLC, rete verso il MES, dati scambiati coi carrelli, touch screen, marcatura a norma, telediagnosi e sensori. Nessun modello. Scrivi 1 o 0 in C.</li>
+      <li>B11 <code>=SOMMA(C2:C6)</code> e B12 <code>=SOMMA(C7:C9)</code></li>
+      <li>B13 <code>=SE(E(B11=5;B12&gt;=2);"Bene 4.0";"Non 4.0")</code></li>
+      <li>Salva come <b>checklist-4-0.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> B11 = 5, B12 = 2, B13 = <b>Bene 4.0</b>. Ora scollega la pressa (C3 = 0): B13 deve diventare <b>Non 4.0</b>, anche se tutto il resto è presente.</div>
+  </div>
+  <aside class="notes">Soluzione: C2..C6 = 1,1,1,1,1; C7 = 1 (telediagnosi), C8 = 1 (sensori), C9 = 0 (modello). B11 = 5, B12 = 2, "Bene 4.0". Con C3 = 0: B11 = 4, "Non 4.0". La funzione E corrisponde ad AND; se qualcuno usa la versione inglese di Calc deve scrivere AND e IF. Variante per chi finisce prima: aggiungere in D una colonna "Come lo verifico?" (per esempio: per l'interconnessione chiedo il registro degli ordini arrivati dal MES). La pressa è un esempio inventato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Rivoluzione o evoluzione?</p><h2>Una voce dal 2016</h2></div>
+  <figure class="citazione">
+    <blockquote>Siamo sull'orlo di una rivoluzione tecnologica che cambierà radicalmente il modo in cui viviamo, lavoriamo e ci relazioniamo gli uni con gli altri.</blockquote>
+    <figcaption><b>Klaus Schwab</b>, fondatore del World Economic Forum, "The Fourth Industrial Revolution", 2016</figcaption>
+  </figure>
+  <p class="lead">Dieci anni dopo: è stata davvero una rivoluzione, o un'evoluzione della terza?</p>
+  <aside class="notes">Frase iniziale dell'articolo di Schwab pubblicato dal World Economic Forum nel gennaio 2016 e ripresa nel libro omonimo dello stesso anno; traduzione nostra dall'inglese ("We stand on the brink of a technological revolution that will fundamentally alter the way we live, work, and relate to one another"). Attenzione: la "quarta rivoluzione industriale" di Schwab è un concetto più ampio di Industria 4.0 (riguarda tutta la società, non solo le fabbriche). Due minuti di discussione: chi dice evoluzione, chi rivoluzione, con un argomento a testa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le parole di Industria 4.0</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-parole">
+    <dt>Sistema cyber-fisico</dt><dd>Oggetto fisico con sensori, software e rete</dd>
+    <dt>Smart factory</dt><dd>Fabbrica in cui impianti e sistemi si coordinano con i dati</dd>
+    <dt>Personalizzazione di massa</dt><dd>Varianti su misura ai costi della grande serie</dd>
+    <dt>Interconnessione</dt><dd>La macchina scambia dati con i sistemi aziendali</dd>
+    <dt>Tecnologia abilitante</dt><dd>Tecnologia che rende possibile la trasformazione</dd>
+  </dl>
+  <aside class="notes">Soluzione nell'ordine scritto. Far leggere a voce alta ogni coppia e chiedere un esempio concreto per la smart factory e per la personalizzazione di massa. Questo lessico serve anche all'orale: usarlo in modo preciso fa la differenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dopo il 4.0</p><h2>Verso Industria 5.0</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Centrata sulla persona</h3><p class="muted">La tecnologia si adatta al lavoratore, non il contrario.</p></div>
+    <div class="card"><h3>Sostenibile</h3><p class="muted">Meno energia e materiali, più riuso e riciclo.</p></div>
+    <div class="card"><h3>Resiliente</h3><p class="muted">Catene di fornitura che reggono crisi e interruzioni.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2021 la Commissione europea ha proposto il concetto di <b>Industria 5.0</b>. In Italia il piano <b>Transizione 5.0</b> (2024) lega gli incentivi per le macchine digitali al <b>risparmio di energia</b>. E l'AI generativa entra in reparto come assistente: risponde alle domande del manutentore leggendo i manuali della macchina.</p></div>
+  <aside class="notes">Fonte: Commissione europea, "Industry 5.0: Towards a sustainable, human-centric and resilient European industry", gennaio 2021. Transizione 5.0: introdotta dal D.L. 19/2024; crediti d'imposta per investimenti in beni 4.0 che riducono i consumi energetici. Non citare percentuali: cambiano con le norme. Sull'AI: un assistente che risponde dai manuali può sbagliare, per questo serve sempre la verifica del tecnico (collegamento al risk management dell'unità 3). Collegamento a Educazione civica: Agenda 2030, obiettivo 9.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Un centro di competenza per le PMI</h2>
+  <div class="cols-2 wide-left" style="align-items:start">
+    <ol class="steps">
+      <li>Ogni gruppo sceglie uno degli 8 centri di competenza italiani: MADE, BI-REX, CIM4.0, SMACT, ARTES 4.0, START 4.0, Cyber 4.0, MedITech.</li>
+      <li>Dal sito ufficiale trova: città, università coinvolte, quali tecnologie abilitanti tratta.</li>
+      <li>Trova un servizio offerto alle piccole imprese (formazione, test, progetti).</li>
+      <li>In Writer, una scheda di una pagina con le fonti. Salva come <b>centro-competenza-gruppoN.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la scheda cita almeno 2 dei 9 pilastri, un servizio concreto per le PMI e l'indirizzo del sito ufficiale da cui hai preso le informazioni.</div>
+  </div>
+  <aside class="notes">I centri di competenza ad alta specializzazione sono stati selezionati dal MISE nel 2018 nell'ambito del Piano nazionale Industria 4.0: MADE (Milano, guidato dal Politecnico), BI-REX (Bologna), CIM4.0 (Torino), SMACT (Nord-Est, Padova), ARTES 4.0 (Pisa, Sant'Anna), START 4.0 (Genova), Cyber 4.0 (Roma), MedITech (Campania e Puglia). Se un sito non risponde, scegliere un altro centro. Esposizione finale: 1 minuto per gruppo. Ricordare la definizione di PMI (Raccomandazione UE 2003/361) vista nell'unità 1.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Parti dalla storia</h3><p>Come apri il discorso?</p></div><div class="retro"><p>Quattro rivoluzioni, una frase ciascuna. Poi la novità della quarta: <b>i dati circolano</b> tra macchine e software.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Collega l'informatica</h3><p>Dove entra il tuo indirizzo?</p></div><div class="retro"><p>Reti e protocolli, database, cloud, sicurezza informatica: ogni pilastro ha una materia del tuo corso dietro.</p></div></div>
+    <div class="flip" style="--h:340px"><div class="fronte"><h3>Porta un esempio</h3><p>Che cosa rende concreto il discorso?</p></div><div class="retro"><p>Un'azienda vista in PCTO, oppure la checklist 4.0: le 5 obbligatorie e le 2 su 3, con l'interconnessione.</p></div></div>
+  </div>
+  <aside class="notes">Girare le carte una alla volta chiedendo prima alla classe. Collegamenti interdisciplinari possibili: Storia (rivoluzioni industriali), Inglese (lessico tecnico), Sistemi e reti, Informatica. Non promettere domande specifiche dell'esame: il colloquio parte da un materiale scelto dalla commissione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u7-uscita-1" data-extra="2016|vapore">
+    <p>Il termine "Industrie 4.0" nasce in <span class="slot" data-risposta="Germania"></span> nel 2011.</p>
+    <p>La terza rivoluzione è quella di elettronica, computer e <span class="slot" data-risposta="PLC"></span>.</p>
+    <p>Per il fisco una macchina è 4.0 solo se è <span class="slot" data-risposta="interconnessa"></span> al sistema di fabbrica.</p>
+    <p>Industria 5.0 mette al centro la <span class="slot" data-risposta="persona"></span>, la sostenibilità e la resilienza.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Germania, PLC, interconnessa, persona. Distrattori: 2016 (anno del piano italiano), vapore. Chi sbaglia la terza riguarda la slide sui requisiti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Quattro rivoluzioni: vapore, elettricità, elettronica, connessione</li>
+      <li>Industria 4.0 = macchine, prodotti e sistemi che si scambiano dati</li>
+      <li>Il cuore è il sistema cyber-fisico</li>
+    </ul>
+    <ul class="points">
+      <li>Nove tecnologie abilitanti, usate insieme</li>
+      <li>In Italia: piano del 2016, interconnessione obbligatoria</li>
+      <li>Industria 5.0: persona, sostenibilità, resilienza</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Tornare al sondaggio iniziale: dopo la lezione, quale immagine di fabbrica è più realistica? Prossima lezione: simulazione e gemello digitale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

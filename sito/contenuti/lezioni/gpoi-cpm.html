@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il CPM sotto la lente · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>Il CPM sotto la<br>lente di ingrandimento</h1>
+  <p class="lead">Vincoli di precedenza, calcolo in avanti e all'indietro, slittamenti: quali attività non possono ritardare nemmeno di un giorno?</p>
+  <aside class="notes">Obiettivi: conoscere i quattro tipi di vincolo di precedenza e il ritardo (lag); calcolare ES, EF, LS, LF e slittamento con il calcolo in avanti e all'indietro; trovare il percorso critico e ragionare sugli effetti di un ritardo. Durata: 2-3 ore, i calcoli vanno fatti con calma. Riferimenti: tabella delle precedenze e reticolo dell'e-commerce del Panificio Rossi (impresa di esempio) della lezione precedente. Il deck "gestione-progetti-gantt" ha introdotto l'idea di percorso critico in modo intuitivo; qui si fa il calcolo completo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il back-end (E) ritarda di 2 giorni. Che cosa succede alla consegna?</h2></div>
+  <div class="poll" data-id="u4-cpm-intuito">
+    <ol><li>Ritarda di 2 giorni</li><li>Ritarda, ma meno di 2 giorni</li><li>Non ritarda affatto</li><li>Non si può sapere</li></ol>
+  </div>
+  <aside class="notes">Votare d'istinto, senza calcoli, e lasciare la domanda aperta: la risposta (non ritarda, perché E ha 3 giorni di slittamento) arriva a metà lezione. La D è una risposta onesta: senza il calcolo CPM davvero non si può sapere. Mostrare la tabella delle precedenze sul quaderno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I vincoli di precedenza</p><h2>Non solo "finisci, poi comincia"</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><h3>FS</h3><p class="small"><b>Fine-Inizio.</b> B comincia quando A finisce. È il caso più comune.</p></div>
+    <div class="card soft"><h3>SS</h3><p class="small"><b>Inizio-Inizio.</b> B può cominciare quando comincia A.</p></div>
+    <div class="card soft"><h3>FF</h3><p class="small"><b>Fine-Fine.</b> B può finire solo quando finisce A.</p></div>
+    <div class="card"><h3>SF</h3><p class="small"><b>Inizio-Fine.</b> B può finire solo quando comincia A. Raro.</p></div>
+  </div>
+  <div class="callout">A ogni vincolo si può aggiungere un <b>ritardo</b> (lag, per esempio FS + 2 giorni) o un <b>anticipo</b> (lead, FS − 1 giorno).</div>
+  <aside class="notes">Sigle inglesi: Finish-to-Start, Start-to-Start, Finish-to-Finish, Start-to-Finish; sono le stesse che si trovano in ProjectLibre (dove compaiono come FS, SS, FF, SF nella colonna dei predecessori, per esempio "2SS"). Il calcolo che faremo oggi usa solo FS, come la tabella dell'e-commerce. Esempio di lag: dopo l'ordine del dominio bisogna aspettare la registrazione prima di configurarlo. Esempio di lead: il test può cominciare un giorno prima della fine dello sviluppo, sulle parti già pronte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Che vincolo c'è tra le due attività?</h2></div>
+  <dl class="puzzle-abbina" data-id="u4-cpm-vincoli">
+    <dt>FS</dt><dd>Il test comincia quando lo sviluppo è finito</dd>
+    <dt>SS</dt><dd>Il manuale si comincia a scrivere quando comincia lo sviluppo</dd>
+    <dt>FF</dt><dd>La documentazione finisce quando finisce il codice</dd>
+    <dt>SF</dt><dd>Il vecchio gestionale resta acceso finché non parte il nuovo</dd>
+    <dt>FS + 2 giorni</dt><dd>Si configura il dominio due giorni dopo averlo ordinato</dd>
+  </dl>
+  <aside class="notes">Coppie nell'ordine scritto. La SF è la più difficile: l'attività "tenere acceso il vecchio gestionale" non può finire finché non comincia l'attività "usare il nuovo gestionale". È l'esempio classico del cambio di turno o del passaggio di consegne tra due sistemi. Far inventare alle coppie un esempio scolastico per SS e FF.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il nodo sotto la lente</p><h2>Ogni attività ha cinque numeri</h2></div>
+  <div class="cols-2">
+    <table class="data" style="text-align:center;width:620px">
+      <tr><td class="mono">ES <b>5</b></td><td class="mono">D <b>5</b></td><td class="mono">EF <b>10</b></td></tr>
+      <tr><td colspan="3" style="background:var(--accent-soft);font-family:var(--display);font-weight:700;font-size:40px">E · Back-end</td></tr>
+      <tr><td class="mono">LS <b>8</b></td><td class="mono hl">Slitt. <b>3</b></td><td class="mono">LF <b>13</b></td></tr>
+    </table>
+    <ul class="points small">
+      <li><b>ES</b> inizio al più presto · <b>EF</b> fine al più presto</li>
+      <li><b>LS</b> inizio al più tardi · <b>LF</b> fine al più tardi</li>
+      <li><b>Slittamento</b> (float): di quanto può ritardare senza ritardare il progetto</li>
+      <li>ES = 5 vuol dire: dopo 5 giorni, cioè dal 6° giorno</li>
+    </ul>
+  </div>
+  <aside class="notes">Le sigle sono inglesi (Early/Late Start/Finish) e sono quelle usate dai software; in italiano si parla anche di tempi minimi e massimi di inizio e fine. Lo slittamento totale si chiama anche margine o scorrimento (total float, total slack). Convenzione: il progetto parte al tempo 0; i numeri indicano giorni trascorsi. Ecco la risposta al sondaggio: il back-end ha 3 giorni di slittamento, quindi un ritardo di 2 giorni non sposta la consegna.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il metodo CPM, passo per passo</h2></div>
+  <ol class="puzzle-ordina" data-id="u4-cpm-metodo">
+    <li>Scrivi attività, durate e predecessori</li>
+    <li>Disegna il reticolo</li>
+    <li>Calcolo in avanti: ES ed EF di ogni attività</li>
+    <li>La durata del progetto è la EF più grande</li>
+    <li>Calcolo all'indietro: LF e LS, partendo dalla fine</li>
+    <li>Slittamento = LS − ES per ogni attività</li>
+    <li>Le attività con slittamento zero formano il percorso critico</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Nessuno scambio è accettabile: il calcolo all'indietro parte dalla durata del progetto, che si conosce solo dopo il calcolo in avanti. Lasciare questa sequenza scritta alla lavagna per le slide successive.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcolo in avanti</p><h2>Prima possibile: si va da sinistra a destra</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula" style="font-size:40px"><small>per ogni attività</small>ES = <span class="hl">MAX</span>(EF dei predecessori)<br>EF = ES + durata</div>
+      <p class="small">Si aspetta il predecessore <b>più lento</b>: un'attività comincia solo quando tutti i suoi predecessori sono finiti.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Att.</th><th>Calcolo</th><th>ES → EF</th></tr>
+      <tr><td>A</td><td>inizio</td><td class="mono">0 → 3</td></tr>
+      <tr><td>B</td><td>dopo A</td><td class="mono">3 → 7</td></tr>
+      <tr><td>C</td><td>dopo A</td><td class="mono">3 → 5</td></tr>
+      <tr><td>D</td><td>dopo B</td><td class="mono">7 → 13</td></tr>
+      <tr><td>E</td><td>dopo C</td><td class="mono">5 → 10</td></tr>
+      <tr><td class="hl">G</td><td class="hl">MAX(13; 10)</td><td class="mono hl">13 → 16</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Il punto delicato è G, che ha due predecessori: D finisce a 13, E a 10, quindi G aspetta D e comincia a 13. L'errore tipico è prendere il minimo o sommare. Le altre attività (F, H, I) si completano nella prossima slide come esercizio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Completa il calcolo in avanti: ES → EF</h2></div>
+  <div class="puzzle-trascina" data-id="u4-cpm-avanti" data-extra="16|10">
+      <div style="position:relative;width:1600px;height:440px">
+      <svg width="1600" height="440" viewBox="0 0 1600 440" style="position:absolute;left:0;top:0"><defs><marker id="fr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker><marker id="frc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#d0541f"/></marker></defs><line x1="190" y1="220" x2="231" y2="220" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="425" y1="220" x2="466" y2="62" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="425" y1="220" x2="466" y2="378" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="660" y1="62" x2="701" y2="62" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="660" y1="378" x2="701" y2="220" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="660" y1="378" x2="701" y2="378" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="895" y1="62" x2="936" y2="62" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="895" y1="220" x2="936" y2="62" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="895" y1="378" x2="936" y2="378" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1130" y1="62" x2="1171" y2="220" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1130" y1="378" x2="1171" y2="220" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1365" y1="220" x2="1406" y2="220" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/></svg>
+      <div class="org-box top" style="position:absolute;left:0px;top:158px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Inizio</b></div>
+      <div class="org-box" style="position:absolute;left:235px;top:158px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">A · 3 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>0</b> → <b>3</b></span></div>
+      <div class="org-box" style="position:absolute;left:470px;top:0px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">B · 4 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>3</b> → <b>7</b></span></div>
+      <div class="org-box" style="position:absolute;left:470px;top:316px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">C · 2 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>3</b> → <b>5</b></span></div>
+      <div class="org-box" style="position:absolute;left:705px;top:0px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">D · 6 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>7</b> → <span class="slot" data-risposta="13"></span></span></div>
+      <div class="org-box" style="position:absolute;left:705px;top:158px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">E · 5 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>5</b> → <b>10</b></span></div>
+      <div class="org-box" style="position:absolute;left:705px;top:316px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">F · 2 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>5</b> → <b>7</b></span></div>
+      <div class="org-box" style="position:absolute;left:940px;top:0px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">G · 3 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><span class="slot" data-risposta="13"></span> → <b>16</b></span></div>
+      <div class="org-box" style="position:absolute;left:940px;top:316px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">H · 1 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><span class="slot" data-risposta="7"></span> → <b>8</b></span></div>
+      <div class="org-box" style="position:absolute;left:1175px;top:158px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><span style="font-size:24px">I · 1 gg</span><span style="font-size:26px;font-weight:500;white-space:nowrap"><b>16</b> → <span class="slot" data-risposta="17"></span></span></div>
+      <div class="org-box top" style="position:absolute;left:1410px;top:158px;width:190px;height:124px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Fine</b></div>
+      </div>
+  </div>
+  <aside class="notes">Soluzione: D finisce a 13 (7 + 6); G comincia a 13 (massimo tra 13 e 10); H comincia a 7 (dopo F, che finisce a 7); I finisce a 17 (comincia a MAX(16; 8) = 16, dura 1). Distrattori: 16 (la EF di G, che qualcuno mette come EF di I dimenticando la durata di I) e 10 (la EF di E, che qualcuno usa come ES di G prendendo il minimo). Durata del progetto: 17 giorni lavorativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Calcolo all'indietro</p><h2>Più tardi possibile: si torna da destra a sinistra</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="formula" style="font-size:40px"><small>per ogni attività</small>LF = <span class="hl">MIN</span>(LS dei successori)<br>LS = LF − durata</div>
+      <p class="small">Si parte dalla fine: LF dell'ultima attività = durata del progetto (17). Un'attività deve finire in tempo per il successore <b>più urgente</b>.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Att.</th><th>Calcolo</th><th>LS ← LF</th></tr>
+      <tr><td>I</td><td>fine progetto</td><td class="mono">16 ← 17</td></tr>
+      <tr><td>G</td><td>prima di I</td><td class="mono">13 ← 16</td></tr>
+      <tr><td>H</td><td>prima di I</td><td class="mono">15 ← 16</td></tr>
+      <tr><td>D</td><td>prima di G</td><td class="mono">7 ← 13</td></tr>
+      <tr><td>E</td><td>prima di G</td><td class="mono">8 ← 13</td></tr>
+      <tr><td class="hl">C</td><td class="hl">MIN(8; 13)</td><td class="mono hl">6 ← 8</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Ora il punto delicato è C, che ha due successori: E deve cominciare al più tardi a 8, F al più tardi a 13 (LF di F = LS di H = 15, quindi LS di F = 13). C deve finire in tempo per il più urgente, quindi LF = 8 e LS = 6. Chi prende il massimo ottiene 13 ed è un errore grave: E partirebbe troppo tardi e ritarderebbe il progetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto con il calcolo all'indietro</h2></div>
+  <div class="puzzle-codice" data-risposta="7138" data-aiuto="LS di F = LF di F − 2, e LF di F = LS di H = 15">
+    <ul class="points">
+      <li>1ª cifra: LF di B (deve finire in tempo per D)</li>
+      <li>2ª e 3ª cifra: LS di F (catalogo)</li>
+      <li>4ª cifra: lo slittamento di H (formazione)</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> LF di B = LS di D = 7; LS di F = 15 − 2 = 13; slittamento di H = 15 − 7 = 8.</div>
+  </div>
+  <aside class="notes">Codice 7138. A squadre, con il reticolo sul quaderno. Calcoli: B ha un solo successore, D, che deve cominciare al più tardi a 7, quindi LF di B = 7. H deve finire per 16 (LS di I), quindi LS di H = 15; F deve finire per 15, quindi LS di F = 13. Slittamento di H = LS − ES = 15 − 7 = 8. L'aiuto compare dopo tre tentativi sbagliati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il quadro completo</p><h2>Tutti i numeri del progetto</h2></div>
+  <table class="data compact">
+    <tr><th>Attività</th><th>D</th><th>ES</th><th>EF</th><th>LS</th><th>LF</th><th>Slittamento</th></tr>
+    <tr><td class="hl"><b>A</b> Analisi</td><td class="mono">3</td><td class="mono">0</td><td class="mono">3</td><td class="mono">0</td><td class="mono">3</td><td class="mono hl">0</td></tr>
+    <tr><td class="hl"><b>B</b> Grafica</td><td class="mono">4</td><td class="mono">3</td><td class="mono">7</td><td class="mono">3</td><td class="mono">7</td><td class="mono hl">0</td></tr>
+    <tr><td><b>C</b> Database</td><td class="mono">2</td><td class="mono">3</td><td class="mono">5</td><td class="mono">6</td><td class="mono">8</td><td class="mono">3</td></tr>
+    <tr><td class="hl"><b>D</b> Front-end</td><td class="mono">6</td><td class="mono">7</td><td class="mono">13</td><td class="mono">7</td><td class="mono">13</td><td class="mono hl">0</td></tr>
+    <tr><td><b>E</b> Back-end</td><td class="mono">5</td><td class="mono">5</td><td class="mono">10</td><td class="mono">8</td><td class="mono">13</td><td class="mono">3</td></tr>
+    <tr><td><b>F</b> Catalogo</td><td class="mono">2</td><td class="mono">5</td><td class="mono">7</td><td class="mono">13</td><td class="mono">15</td><td class="mono">8</td></tr>
+    <tr><td class="hl"><b>G</b> Test</td><td class="mono">3</td><td class="mono">13</td><td class="mono">16</td><td class="mono">13</td><td class="mono">16</td><td class="mono hl">0</td></tr>
+    <tr><td><b>H</b> Formazione</td><td class="mono">1</td><td class="mono">7</td><td class="mono">8</td><td class="mono">15</td><td class="mono">16</td><td class="mono">8</td></tr>
+    <tr><td class="hl"><b>I</b> Online</td><td class="mono">1</td><td class="mono">16</td><td class="mono">17</td><td class="mono">16</td><td class="mono">17</td><td class="mono hl">0</td></tr>
+  </table>
+  <aside class="notes">Tabella di riferimento da far fotografare o copiare. Controllo incrociato: slittamento = LS − ES = LF − EF per ogni riga. Le righe evidenziate hanno slittamento zero. Nota sullo slittamento libero (free float): F può ritardare di 8 giorni, ma se lo fa consuma anche lo slittamento di H, che la segue. Lo slittamento totale è condiviso lungo il ramo C-F-H (e C-E): non si sommano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il percorso critico</p><h2>A-B-D-G-I: 17 giorni, nessun margine</h2></div>
+  <div style="position:relative;width:1600px;height:430px">
+      <svg width="1600" height="430" viewBox="0 0 1600 430" style="position:absolute;left:0;top:0"><defs><marker id="fr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker><marker id="frc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#d0541f"/></marker></defs><line x1="180" y1="215" x2="246" y2="215" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/><line x1="410" y1="215" x2="476" y2="65" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/><line x1="410" y1="215" x2="476" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="640" y1="65" x2="706" y2="65" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/><line x1="640" y1="365" x2="706" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="640" y1="365" x2="706" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="870" y1="65" x2="936" y2="65" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/><line x1="870" y1="215" x2="936" y2="65" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="870" y1="365" x2="936" y2="365" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1100" y1="65" x2="1166" y2="215" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/><line x1="1100" y1="365" x2="1166" y2="215" stroke="#172033" stroke-width="3" marker-end="url(#fr)"/><line x1="1330" y1="215" x2="1396" y2="215" stroke="#d0541f" stroke-width="6" marker-end="url(#frc)"/></svg>
+      <div class="org-box top" style="position:absolute;left:20px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Inizio</b></div>
+      <div class="org-box acc" style="position:absolute;left:250px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>A · 3 gg</b><span style="font-size:22px">slitt. 0</span></div>
+      <div class="org-box acc" style="position:absolute;left:480px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>B · 4 gg</b><span style="font-size:22px">slitt. 0</span></div>
+      <div class="org-box" style="position:absolute;left:480px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>C · 2 gg</b><span style="font-size:22px">slitt. 3</span></div>
+      <div class="org-box acc" style="position:absolute;left:710px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>D · 6 gg</b><span style="font-size:22px">slitt. 0</span></div>
+      <div class="org-box" style="position:absolute;left:710px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>E · 5 gg</b><span style="font-size:22px">slitt. 3</span></div>
+      <div class="org-box" style="position:absolute;left:710px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>F · 2 gg</b><span style="font-size:22px">slitt. 8</span></div>
+      <div class="org-box acc" style="position:absolute;left:940px;top:20px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>G · 3 gg</b><span style="font-size:22px">slitt. 0</span></div>
+      <div class="org-box" style="position:absolute;left:940px;top:320px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>H · 1 gg</b><span style="font-size:22px">slitt. 8</span></div>
+      <div class="org-box acc" style="position:absolute;left:1170px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>I · 1 gg</b><span style="font-size:22px">slitt. 0</span></div>
+      <div class="org-box top" style="position:absolute;left:1400px;top:170px;width:160px;height:90px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;line-height:1.15"><b>Fine</b></div>
+      </div>
+  <p class="small">Il percorso critico è la catena di attività con slittamento zero: è il percorso più lungo, e se una sua attività ritarda di un giorno, ritarda di un giorno tutto il progetto.</p>
+  <aside class="notes">Le attività arancioni sono critiche. Un progetto può avere più di un percorso critico (se due percorsi hanno la stessa lunghezza massima). Il percorso critico può cambiare durante il progetto: se il back-end ritardasse di più di 3 giorni, A-C-E-G-I diventerebbe il nuovo percorso critico. Per questo il calcolo si rifà a ogni aggiornamento: i software come ProjectLibre lo fanno da soli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Critica o no?</h2></div>
+  <div class="puzzle-categorie" data-id="u4-cpm-critiche">
+    <div class="cat"><h4>Critica (slittamento 0)</h4><ul><li>A · Analisi</li><li>B · Grafica</li><li>D · Front-end</li><li>G · Test</li><li>I · Online</li></ul></div>
+    <div class="cat"><h4>Non critica</h4><ul><li>C · Database</li><li>E · Back-end</li><li>F · Catalogo</li><li>H · Formazione</li></ul></div>
+  </div>
+  <aside class="notes">Da fare a memoria, senza guardare la tabella; poi "Controlla". Molti mettono il back-end tra le critiche "perché è la parte difficile": criticità non vuol dire difficoltà o importanza, vuol dire assenza di margine nel calendario. Il database è tecnicamente fondamentale ma ha 3 giorni di slittamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il back-end (E) ritarda di 4 giorni. Di quanto ritarda il progetto?</h2></div>
+  <div class="poll" data-id="u4-cpm-ritardo" data-tipo="quiz" data-risposta="C">
+    <ol><li>4 giorni</li><li>Nessun ritardo: E non è critica</li><li>1 giorno</li><li>3 giorni</li></ol>
+    <p class="why">E ha 3 giorni di slittamento: i primi 3 giorni di ritardo sono assorbiti, il quarto no. Ora E finisce a 14, il test comincia a 14 invece di 13 e il progetto finisce a 18. E diventa critica.</p>
+  </div>
+  <aside class="notes">Distrattori: A (chi somma il ritardo senza pensare al margine), B (chi ricorda solo che E non è critica), D (chi confonde il ritardo con lo slittamento). Ora si può rispondere al sondaggio iniziale: con 2 giorni di ritardo il progetto non ritarda. Con 4 giorni il nuovo percorso critico è A-C-E-G-I: 3 + 2 + 9 + 3 + 1 = 18.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il cliente vuole il sito 2 giorni prima. Dove metti un programmatore in più?</h2></div>
+  <div class="poll" data-id="u4-cpm-crash" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sul catalogo F, che ha più slittamento</li><li>Sul front-end D, che è sul percorso critico</li><li>Sul database C, che viene prima</li><li>Un po' su tutte le attività</li></ol>
+    <p class="why">Accorciare un'attività non critica non accorcia il progetto. Se D passa da 6 a 4 giorni, A-B-D-G-I dura 15 e A-C-E-G-I 14: il progetto finisce in 15 giorni. Ma attenzione: oltre una certa soglia il percorso critico cambia.</p>
+  </div>
+  <aside class="notes">Si chiama "crashing": comprimere le attività critiche aggiungendo risorse, scegliendo quelle con il costo più basso per giorno guadagnato (tema della lezione sui costi). Ricordare la legge di Brooks (deck "gestione-progetti-gantt"): aggiungere persone a un'attività già avviata può rallentarla, perché il nuovo arrivato va formato. Se D venisse ridotto a 3 giorni, il percorso critico diventerebbe A-C-E-G-I con 14 giorni: oltre i 3 giorni di riduzione non si guadagna più nulla da D.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Un giorno alla volta</h2></div>
+  <figure class="citazione">
+    <blockquote>Come fa un progetto ad arrivare in ritardo di un anno? Un giorno alla volta.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile del sistema operativo IBM OS/360, "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <p class="lead">I piccoli ritardi sul percorso critico non si recuperano da soli: si accumulano. Il CPM dice <mark>dove</mark> guardare ogni giorno.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "How does a project get to be a year late? ... One day at a time." (F. P. Brooks, The Mythical Man-Month, 1975, apertura del capitolo 14 "Hatching a Catastrophe"). Nello stesso capitolo Brooks insiste sull'importanza di milestone concrete e verificabili e sull'uso del percorso critico per capire quali piccoli ritardi contano davvero.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il CPM in un foglio di calcolo</h2>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Riga 1: <b>Attività, Durata, ES, EF, LS, LF, Slittamento</b>. Righe 2-10: le attività da A a I con le durate.</li>
+      <li>In avanti: C2 = 0; in D2 <code>=C2+B2</code> e copia in giù. Ogni ES è la EF del predecessore; per G usa <code>=MAX(D5;D6)</code>.</li>
+      <li>All'indietro: F10 <code>=D10</code>; in E10 <code>=F10-B10</code> e copia in su. Ogni LF è la LS del successore; per C usa <code>=MIN(E6;E7)</code>.</li>
+      <li>In G2 <code>=E2-C2</code> e copia in giù. Salva <b>cpm-panificio.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <div class="check"><b>Controllo:</b> EF di I = 17. Slittamento 0 per A, B, D, G, I; 3 per C ed E; 8 per F e H.</div>
+      <div class="callout small">Prova: cambia la durata di B da 4 a 6. Se le formule sono giuste, la durata diventa 19 senza toccare altro.</div>
+    </div>
+  </div>
+  <aside class="notes">Formule complete. In avanti: C3 =D2, C4 =D2, C5 =D3, C6 =D4, C7 =D4, C8 =MAX(D5;D6), C9 =D7, C10 =MAX(D8;D9); D da 2 a 10 =Cn+Bn. All'indietro: F10 =D10, F9 =E10, F8 =E10, F7 =E9, F6 =E8, F5 =E8, F4 =MIN(E6;E7), F3 =E5, F2 =MIN(E3;E4); E da 2 a 10 =Fn−Bn. G =E−C. Errore tipico: copiare la formula dell'ES in giù come se ogni attività dipendesse dalla riga sopra: il foglio dà numeri, ma sbagliati. Per questo la prova con B = 6 è utile: il risultato giusto è 19 e lo slittamento di C ed E diventa 5.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Che cosa succede se…</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li><b>Scenario 1.</b> Le foto del panificio arrivano tardi: il catalogo F dura 7 giorni invece di 2.</li>
+      <li><b>Scenario 2.</b> La grafica B richiede due revisioni in più: dura 6 giorni.</li>
+      <li><b>Scenario 3.</b> Il back-end E finisce in 4 giorni invece di 5.</li>
+      <li><b>Scenario 4.</b> Si aggiunge P "Privacy e cookie", 2 giorni, dopo D e prima di I.</li>
+      <li>Per ogni scenario scrivete in Writer la nuova durata, il percorso critico e una decisione del PM. Salvate <b>cpm-scenari-gruppoN.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> due scenari lasciano la durata a 17 giorni, uno la porta a 19, e in uno la durata non cambia ma la nuova attività resta con solo 1 giorno di margine.</div>
+  </div>
+  <aside class="notes">Soluzioni. Scenario 1: A-C-F-H-I = 3+2+7+1+1 = 14 < 17, durata 17, percorso critico invariato; F ora ha 3 giorni di slittamento. Decisione: sollecitare comunque le foto, il margine si è ridotto. Scenario 2: A-B-D-G-I = 3+6+6+3+1 = 19, durata 19, stesso percorso critico; decisione: avvisare il cliente o comprimere D o G. Scenario 3: A-C-E-G-I = 13, durata 17, nessun cambiamento (accorciare una non critica non serve). Scenario 4: A-B-D-P-I = 3+4+6+2+1 = 16, durata 17, P ha 1 giorno di slittamento: attività "quasi critica" da sorvegliare. Ogni gruppo presenta uno scenario alla classe in un minuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Il CPM è un algoritmo</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il calcolo in avanti è la ricerca del <b>cammino più lungo</b> in un grafo orientato aciclico: si mettono i nodi in ordine topologico e si visita ogni arco una volta sola. Per questo ProjectLibre ricalcola in un istante progetti con migliaia di attività. Gli assistenti di AI possono aiutare a stimare durate o a trovare dipendenze dimenticate, ma il calcolo del percorso critico resta un algoritmo esatto: non serve "indovinarlo".</p></div>
+  <div class="callout hl"><b>All'esame:</b> spiegare il percorso critico con un esempio numerico tuo (anche il progetto di PCTO) e collegarlo a Informatica: grafi, ordinamento topologico, complessità lineare O(V + E).</div>
+  <aside class="notes">Il cammino più lungo in un grafo qualsiasi è un problema difficile, ma in un grafo aciclico si risolve in tempo lineare proprio grazie all'ordinamento topologico: è il motivo per cui il reticolo non deve avere cicli (lezione precedente). Chi segue Informatica può scrivere la funzione in Python o Java come approfondimento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u4-cpm-uscita" data-extra="minimo|risorse">
+    <p>Nel calcolo in avanti l'ES di un'attività è il <span class="slot" data-risposta="massimo"></span> delle EF dei predecessori.</p>
+    <p>Lo slittamento si calcola come LS meno <span class="slot" data-risposta="ES"></span>.</p>
+    <p>Le attività con slittamento <span class="slot" data-risposta="zero|0"></span> formano il percorso <span class="slot" data-risposta="critico"></span>.</p>
+    <p>Il vincolo più comune è Fine-<span class="slot" data-risposta="Inizio"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: massimo, ES, zero, critico, Inizio. Distrattori: minimo (quello del calcolo all'indietro) e risorse.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Vincoli FS, SS, FF, SF, con ritardi e anticipi</li>
+      <li>In avanti: ES = MAX delle EF, EF = ES + D</li>
+      <li>All'indietro: LF = MIN delle LS, LS = LF − D</li>
+    </ul>
+    <ul class="points">
+      <li>Slittamento = LS − ES</li>
+      <li>Percorso critico: slittamento zero, il più lungo</li>
+      <li>Accorciare il progetto: solo sulle attività critiche</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: dal reticolo al calendario, il diagramma di Gantt.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

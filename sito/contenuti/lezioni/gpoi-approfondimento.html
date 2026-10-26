@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'approfondimento del progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 6</p>
+  <h1>L'approfondimento</h1>
+  <p class="lead">Dal charter al piano: il contesto e gli utenti, i verbali, la WBS, il Gantt e chi è responsabile di che cosa nel progetto NQ.</p>
+  <aside class="notes">Obiettivi: analizzare il contesto e gli utenti; scrivere verbali utili; scomporre il progetto NQ in una WBS codificata; costruire il Gantt con dipendenze e percorso critico; assegnare le responsabilità con una matrice RACI; pianificare la documentazione. Durata: 3-4 ore (due laboratori). Riprende l'Unità 4 (WBS, reticoli, CPM, Gantt, ProjectLibre, OBS e matrice delle responsabilità) applicandola al caso comune dell'Unità 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il piano che farete oggi, quanto resterà uguale fino alla fine?</h2></div>
+  <div class="poll" data-id="u6-piano-uguale">
+    <ol><li>Lo rispetteremo quasi alla lettera</li><li>Cambierà un po'</li><li>Cambierà parecchio</li><li>Allora perché farlo?</li></ol>
+  </div>
+  <aside class="notes">2 minuti. La D è la domanda più interessante: tenerla aperta fino alla citazione di Eisenhower. Risposta attesa a fine lezione: il piano cambierà, ma pianificare costringe a capire il lavoro, i legami tra le attività e i punti critici; e senza un piano non si può accorgersi di essere in ritardo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La fase di approfondimento</p><h2>Che cosa produce questa fase</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Contesto</h3><p>Chi sono gli utenti, con quali mezzi, quali regole e alternative.</p></div>
+    <div class="card soft"><h3>WBS</h3><p>Tutto il lavoro, scomposto in pacchetti codificati.</p></div>
+    <div class="card soft"><h3>Gantt</h3><p>Le attività nel tempo, con dipendenze e percorso critico.</p></div>
+    <div class="card"><h3>Responsabilità</h3><p>Chi fa, chi approva, chi è consultato, chi è informato.</p></div>
+    <div class="card"><h3>Verbali</h3><p>Ogni riunione lascia decisioni e azioni scritte.</p></div>
+    <div class="card"><h3>Piano dei documenti</h3><p>Quali documenti, con che codice, chi li scrive.</p></div>
+  </div>
+  <aside class="notes">Nel libro questa fase si chiama approfondimento; in altri testi corrisponde alla pianificazione. Si chiude con la milestone M2 (requisiti e prototipo, settimana 4), ma il piano (WBS e Gantt) va approvato prima, alla fine della settimana 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Analisi del contesto</p><h2>Tre persone che useranno l'app</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Giuseppe, 72 anni</h3><p class="muted">Pensionato, volontario al banco alimentare. Usa WhatsApp e il browser, non installa app. Caratteri piccoli? No grazie.</p></div>
+    <div class="card"><h3>Sara, 17 anni</h3><p class="muted">Studentessa, fa doposcuola due volte al mese. Si iscrive all'ultimo minuto, dal telefono, tra un'ora e l'altra.</p></div>
+    <div class="card fill"><h3>Marta, coordinatrice</h3><p>Usa il computer della sede una volta a settimana. Vuole vedere in un colpo d'occhio i turni scoperti.</p></div>
+  </div>
+  <aside class="notes">Sono "personas": ritratti inventati ma realistici, costruiti dall'intervista, che rappresentano gruppi di utenti. Servono a decidere: un pulsante va bene per Giuseppe? Sara capisce in 10 secondi dove iscriversi? L'analisi del contesto comprende anche la tecnologia disponibile, le norme (GDPR, buone pratiche di accessibilità WCAG) e le alternative esistenti (gruppo WhatsApp, moduli online generici).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Che cosa abbiamo scoperto sul contesto?</h2></div>
+  <div class="puzzle-categorie" data-id="u6-contesto" style="--cols:4">
+    <div class="cat"><h4>Utenti</h4><ul><li>Molti volontari over 65</li><li>Iscrizioni dell'ultimo minuto</li></ul></div>
+    <div class="cat"><h4>Tecnologia</h4><ul><li>Server con PHP e MySQL</li><li>Wi-Fi in sede</li></ul></div>
+    <div class="cat"><h4>Norme</h4><ul><li>GDPR per email e telefoni</li><li>Linee guida WCAG</li></ul></div>
+    <div class="cat"><h4>Alternative</h4><ul><li>Il gruppo WhatsApp</li><li>Moduli online generici</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. WCAG = Web Content Accessibility Guidelines del W3C: per una piccola associazione non sono un obbligo di legge, ma sono la guida migliore per Giuseppe (contrasto, dimensione dei caratteri, pulsanti grandi). Le alternative vanno prese sul serio: se un modulo online gratuito bastasse, l'app non servirebbe. Il nostro valore aggiunto: posti limitati per turno, promemoria, vista della coordinatrice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I verbali</p><h2>Ogni riunione lascia una traccia</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Codice, data, luogo, ora</li>
+      <li>Presenti e assenti</li>
+      <li>Ordine del giorno</li>
+      <li>Sintesi della discussione</li>
+      <li>Decisioni prese</li>
+      <li><b>Azioni: chi, che cosa, entro quando</b></li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Le piattaforme di videoconferenza trascrivono la riunione e un'AI ne propone il riassunto. È una bozza utile, ma registrare richiede di informare i presenti, e le <b>decisioni</b> vanno verificate da chi c'era: un riassunto automatico può attribuire a qualcuno una frase che non ha detto.</p></div>
+  </div>
+  <aside class="notes">Nel progetto NQ: verbale di ogni riunione settimanale (codici NQ-VRB-00N), scritto a turno da un segretario, approvato all'inizio della riunione successiva. La riga delle azioni è quella che si controlla la settimana dopo. Sulla registrazione: in un contesto scolastico con minorenni o con persone esterne serve particolare cautela; per il progetto meglio un verbale scritto a mano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Le parti del verbale NQ-VRB-003</h2></div>
+  <ol class="puzzle-ordina" data-id="u6-verbale">
+    <li>Intestazione: codice, data, luogo, ora</li>
+    <li>Presenti e assenti</li>
+    <li>Ordine del giorno</li>
+    <li>Sintesi della discussione, punto per punto</li>
+    <li>Decisioni prese</li>
+    <li>Azioni: chi, che cosa, entro quando</li>
+    <li>Data della prossima riunione e approvazione</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Le azioni vengono dopo le decisioni perché nascono da esse. Spesso si mette un riepilogo delle azioni anche in alto, per chi legge di fretta: accettarlo come variante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quale riga del verbale serve di più al PM la settimana dopo?</h2></div>
+  <div class="poll" data-id="u6-riga-verbale" data-tipo="quiz" data-risposta="B">
+    <ol><li>La sintesi completa di chi ha detto che cosa</li><li>"Luca: query degli iscritti per turno, entro venerdì 13"</li><li>"Si è discusso a lungo del colore dei pulsanti"</li><li>L'elenco dei presenti</li></ol>
+    <p class="why">Un'azione con responsabile, contenuto e scadenza si può controllare: venerdì 13 il PM chiede a Luca a che punto è. La sintesi e la discussione sono utili per ricostruire le decisioni, ma non dicono che cosa fare.</p>
+  </div>
+  <aside class="notes">Far riscrivere la C come azione: "Squadra interfaccia: due proposte di colori con contrasto verificato, entro martedì". Una riunione senza azioni scritte è quasi sempre una riunione persa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La WBS</p><h2>Tutto il lavoro, in pacchetti</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Si scompone per <b>risultati</b>, non per giorni</li>
+      <li>Regola del 100%: i figli coprono tutto il padre, niente di più</li>
+      <li>Ogni elemento ha un <b>codice</b>: 3, 3.2, 3.2.1</li>
+      <li>Ultimo livello: <b>pacchetti di lavoro</b> stimabili e assegnabili</li>
+    </ul>
+    <div class="card soft"><h3>Nel progetto NQ</h3><p>Un pacchetto di lavoro dura al massimo due settimane e ha una sola squadra responsabile.</p></div>
+  </div>
+  <aside class="notes">Ripasso dell'Unità 4 (avvio e pianificazione, WBS). La regola del 100% evita due errori: dimenticare lavoro (la documentazione, la gestione del progetto stessa) o inserirne di non richiesto. La gestione del progetto è un ramo della WBS: riunioni e verbali sono lavoro vero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>La WBS del progetto NQ</h2></div>
+  <div class="puzzle-trascina" data-id="u6-wbs" data-extra="Marketing|Gantt">
+    <div class="org" style="gap:50px">
+      <div class="org-box top">NQ · Diamoci il turno</div>
+      <div class="org-row" style="--l:9%;--r:9%;gap:18px">
+        <div class="org-box" style="width:310px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:23px;text-align:left"><b>1</b><span class="slot" data-risposta="Gestione" style="font-size:22px"></span><span class="muted">1.1 Charter e piano<br>1.2 Riunioni e verbali<br>1.3 Monitoraggio</span></div>
+        <div class="org-box" style="width:310px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:23px;text-align:left"><b>2</b><span class="slot" data-risposta="Analisi" style="font-size:22px"></span><span class="muted">2.1 Requisiti utente<br>2.2 Specifiche<br>2.3 Prototipo</span></div>
+        <div class="org-box" style="width:310px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:23px;text-align:left"><b>3</b><span class="slot" data-risposta="Sviluppo" style="font-size:22px"></span><span class="muted">3.1 Database<br>3.2 Back-end<br>3.3 Front-end<br>3.4 Promemoria</span></div>
+        <div class="org-box" style="width:310px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:23px;text-align:left"><b>4</b><span class="slot" data-risposta="Test e rilascio" style="font-size:22px"></span><span class="muted">4.1 Piano di test<br>4.2 Collaudo<br>4.3 Installazione</span></div>
+        <div class="org-box" style="width:310px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:23px;text-align:left"><b>5</b><span class="slot" data-risposta="Documentazione" style="font-size:22px"></span><span class="muted">5.1 Manuale utente<br>5.2 Guida coordinatrice<br>5.3 Relazione finale</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: 1 Gestione, 2 Analisi, 3 Sviluppo, 4 Test e rilascio, 5 Documentazione. Distrattori: Marketing (non previsto) e Gantt (è uno strumento di pianificazione, non un ramo del lavoro). Gli studenti deducono il nome di ogni ramo dai pacchetti figli. Domanda: dove va la formazione della coordinatrice? (Nuovo pacchetto 4.4 o 5.2: discuterne, la regola è che ci sia una sola collocazione.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa mostra la WBS?</h2></div>
+  <div class="poll" data-id="u6-wbs-mostra" data-tipo="quiz" data-risposta="C">
+    <ol><li>L'ordine in cui si svolgono le attività</li><li>Chi svolge ogni attività</li><li>Tutto il lavoro del progetto, scomposto in parti più piccole</li><li>Le dipendenze tra le attività</li></ol>
+    <p class="why">La WBS risponde a "che cosa c'è da fare", tutto e solo quello. L'ordine e le dipendenze sono nel reticolo e nel Gantt; chi fa che cosa è nella matrice delle responsabilità (con l'OBS).</p>
+  </div>
+  <aside class="notes">A e D sono il tranello più frequente: si disegna la WBS da sinistra a destra e la si legge come una sequenza. Far notare che nella nostra WBS "5 Documentazione" non avviene dopo "4 Test": il manuale si scrive durante lo sviluppo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>La WBS del progetto in diagrams.net</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b> e scegli un diagramma vuoto.</li>
+      <li>Disegna la radice e i cinque rami della slide precedente, con i codici.</li>
+      <li>Aggiungi i pacchetti di lavoro; scomponi <b>3.2 Back-end</b> in almeno tre pacchetti di terzo livello (3.2.1…).</li>
+      <li>Colora ogni pacchetto con il colore della squadra responsabile.</li>
+      <li>Esporta in PDF e consegna <b>NQ-WBS-001_rev0.pdf</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni pacchetto ha un codice unico e una sola squadra. Il ramo 3.2 ha figli come 3.2.1 Login coordinatrice, 3.2.2 Gestione turni, 3.2.3 Iscrizioni. Nessun elemento è una data.</div>
+  </div>
+  <aside class="notes">Si può usare la forma "organigramma" di diagrams.net o semplici rettangoli e connettori. In alternativa la WBS si scrive come struttura di attività in ProjectLibre (prossimo laboratorio), con rientri. Possibili figli di 3.2: login della coordinatrice, creazione e modifica dei turni, iscrizione e cancellazione, esportazione CSV. Il file .drawio va nella cartella 02_pianificazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Gantt</p><h2>Le attività del progetto, con durate e dipendenze</h2></div>
+  <table class="data compact">
+    <tr><th>ID</th><th>Attività</th><th>Durata</th><th>Dopo</th><th>ID</th><th>Attività</th><th>Durata</th><th>Dopo</th></tr>
+    <tr><td class="mono">A</td><td>Avvio e charter</td><td>2 sett.</td><td>–</td><td class="mono">G</td><td>Promemoria email</td><td>1 sett.</td><td>E</td></tr>
+    <tr><td class="mono">B</td><td>Requisiti utente</td><td>1 sett.</td><td>A</td><td class="mono">H</td><td>Test interni</td><td>1 sett.</td><td>F, G</td></tr>
+    <tr><td class="mono">C</td><td>Prototipo interfaccia</td><td>1 sett.</td><td>B</td><td class="mono">I</td><td>Installazione e collaudo</td><td>1 sett.</td><td>H</td></tr>
+    <tr><td class="mono">D</td><td>Database</td><td>1 sett.</td><td>B</td><td class="mono">J</td><td>Manuale utente</td><td>2 sett.</td><td>C</td></tr>
+    <tr><td class="mono">E</td><td>Back-end</td><td>2 sett.</td><td>D</td><td class="mono">K</td><td>Rilascio e relazione</td><td>1 sett.</td><td>I, J</td></tr>
+    <tr><td class="mono">F</td><td>Front-end</td><td>2 sett.</td><td>C</td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <aside class="notes">Calcolo in avanti (in settimane dall'inizio): A 0-2; B 2-3; C 3-4; D 3-4; E 4-6; F 4-6; G 6-7; H inizia al massimo tra F (6) e G (7), quindi 7-8; I 8-9; J 4-6; K inizia al massimo tra I (9) e J (6), quindi 9-10. Durata minima: 10 settimane. Percorso critico: A, B, D, E, G, H, I, K. Margini: C e F hanno 1 settimana di slack, J ne ha 3. Le fasi tornano con la timeline della prima lezione: approfondimento S3-S4, realizzazione S5-S8, chiusura S9-S10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto del piano</h2></div>
+  <div class="puzzle-codice" data-risposta="1013" data-aiuto="il percorso critico passa da D, E e G, non da C e F">
+    <p>Con la tabella della slide precedente calcola, in settimane:</p>
+    <ul class="points">
+      <li>prime due cifre: la durata minima del progetto</li>
+      <li>terza cifra: il margine (slack) del front-end F</li>
+      <li>quarta cifra: il margine del manuale utente J</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> 10 settimane; F può slittare di 1 settimana, J di 3. Critiche: A, B, D, E, G, H, I, K.</div>
+  </div>
+  <aside class="notes">Codice: 1013. F finisce alla settimana 6 ma H non può iniziare prima della 7 (aspetta G): margine 1. J finisce alla 6 e K inizia alla 9: margine 3. A squadre, con il reticolo disegnato alla lavagna. Errore tipico: considerare critico il ramo del front-end perché ha durata 2.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>Il Gantt del progetto in ProjectLibre</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri ProjectLibre e crea il progetto <b>NQ</b> con inizio lunedì della settimana 1.</li>
+      <li>Inserisci le attività A-K: una settimana = <b>5 giorni</b> (A = 10 g, B = 5 g…).</li>
+      <li>Scrivi i predecessori con gli ID di riga, come nella tabella.</li>
+      <li>Aggiungi le milestone M1-M4 (durata 0) dopo A, dopo C e D, dopo H, dopo K.</li>
+      <li>Salva come <b>NQ-PRG-002_gantt_rev0.pod</b> ed esporta il Gantt in PDF.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> durata totale 50 giorni lavorativi. In rosso (critiche) A, B, D, E, G, H, I, K; C e F hanno 5 giorni di margine, J ne ha 15.</div>
+  </div>
+  <aside class="notes">Durate in giorni: A 10, B 5, C 5, D 5, E 10, F 10, G 5, H 5, I 5, J 10, K 5. In ProjectLibre i predecessori si indicano con il numero di riga, non con la lettera: se le milestone sono inserite tra le attività, i numeri cambiano. Milestone, coerenti con il charter: M1 charter dopo A (fine S2); M2 requisiti e prototipo dopo C e D (fine S4); M3 beta provata internamente dopo H (fine S8); M4 rilascio dopo K (fine S10). L'esportazione in PDF passa dalla stampa su stampante PDF se il menu non la offre direttamente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gruppo di lavoro e responsabilità</p><h2>La matrice RACI</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><p class="num" style="color:#fff">R</p><h3>Responsible</h3><p>Esegue il lavoro.</p></div>
+    <div class="card soft"><p class="num">A</p><h3>Accountable</h3><p>Ne risponde e approva. <b>Uno solo</b> per attività.</p></div>
+    <div class="card soft"><p class="num">C</p><h3>Consulted</h3><p>Dà un parere prima.</p></div>
+    <div class="card soft"><p class="num">I</p><h3>Informed</h3><p>Viene avvisato dopo.</p></div>
+  </div>
+  <div class="callout">Righe = attività o pacchetti della WBS, colonne = persone o squadre dell'OBS. In ogni riga c'è <b>almeno una R</b> e <b>esattamente una A</b>.</div>
+  <aside class="notes">Ripasso dell'Unità 4 (gestione delle risorse umane: OBS e matrice delle responsabilità). Due A sulla stessa riga significano che nessuno risponde davvero; zero R significa che nessuno lo fa. Nel progetto NQ la A dei pacchetti tecnici è il PM, ma per l'approvazione dei requisiti la A è la committente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le lettere</p><h2>Chi fa che cosa per "2.1 Requisiti utente"?</h2></div>
+  <div class="puzzle-trascina" data-id="u6-raci" data-extra="A">
+    <table class="data" style="text-align:center">
+      <tr><th>Squadra analisi</th><th>Project manager</th><th>Coordinatrice</th><th>Squadra back-end</th><th>Squadra test</th></tr>
+      <tr><td style="text-align:center"><span class="slot" data-risposta="R"></span></td><td style="text-align:center"><span class="slot" data-risposta="A"></span></td><td style="text-align:center"><span class="slot" data-risposta="C"></span></td><td style="text-align:center"><span class="slot" data-risposta="C"></span></td><td style="text-align:center"><span class="slot" data-risposta="I"></span></td></tr>
+    </table>
+    <p class="small muted">La squadra analisi scrive i requisiti; il PM li fa approvare e ne risponde; la coordinatrice e il back-end danno un parere prima; i tester vengono avvisati quando sono pronti.</p>
+  </div>
+  <aside class="notes">Soluzione: R, A, C, C, I. Nel mazzo c'è una seconda A come distrattore: chi la usa mette due A sulla stessa riga, l'errore classico. Discussione: perché il back-end è consultato? Perché un requisito può essere costosissimo da realizzare; meglio saperlo prima. Variante: la stessa riga per "4.3 Installazione sul server" (R back-end, A PM, C tecnico di laboratorio, I coordinatrice).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Perché pianificare, se il piano cambierà?</h2></div>
+  <figure class="citazione">
+    <blockquote>I piani non valgono nulla, ma la pianificazione è tutto.</blockquote>
+    <figcaption><b>Dwight D. Eisenhower</b>, presidente degli Stati Uniti, discorso alla National Defense Executive Reserve Conference, 1957</figcaption>
+  </figure>
+  <p class="lead">Il Gantt cambierà, ma chi l'ha costruito conosce i legami tra le attività e sa dove guardare quando qualcosa slitta.</p>
+  <aside class="notes">Traduzione nostra: "Plans are worthless, but planning is everything." (14 novembre 1957). Risposta alla domanda D del sondaggio iniziale. Esempio: se il database (D) slitta di una settimana, chi conosce il percorso critico sa subito che slitta tutto il progetto; se slitta il manuale (J) no, finché resta nel margine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Documentazione di progetto</p><h2>Il piano dei documenti NQ</h2></div>
+  <table class="data compact">
+    <tr><th>Documento</th><th>Codice</th><th>Cartella</th><th>Responsabile</th></tr>
+    <tr><td>Project charter</td><td class="mono">NQ-PRG-001</td><td>01_avvio</td><td>PM</td></tr>
+    <tr><td>WBS e Gantt</td><td class="mono">NQ-WBS-001, NQ-PRG-002</td><td>02_pianificazione</td><td>PM</td></tr>
+    <tr><td>Verbali delle riunioni</td><td class="mono">NQ-VRB-00N</td><td>per fase</td><td>Segretario di turno</td></tr>
+    <tr><td>Requisiti e specifiche</td><td class="mono">NQ-SPC-001, 002</td><td>02_pianificazione</td><td>Squadra analisi</td></tr>
+    <tr><td>Piano e report di test</td><td class="mono">NQ-TST-001</td><td>03_realizzazione</td><td>Squadra test</td></tr>
+    <tr><td>Manuale e relazione finale</td><td class="mono">NQ-MAN-001, NQ-REL-001</td><td>04_chiusura</td><td>Squadra documentazione</td></tr>
+  </table>
+  <aside class="notes">Il piano dei documenti applica l'Unità 5: codifica, cartelle per fase, registro dei documenti in Calc (laboratorio della lezione sulla codifica). Ogni documento ha un responsabile, cioè una R nella matrice. All'esame: mostrare il registro dei documenti del progetto è un modo concreto di parlare di qualità e organizzazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-uscita-approf" data-extra="Gantt|reticolo">
+    <p>La scomposizione di tutto il lavoro in pacchetti codificati è la <span class="slot" data-risposta="WBS"></span>.</p>
+    <p>Le attività che non hanno margine formano il percorso <span class="slot" data-risposta="critico"></span>.</p>
+    <p>Nella matrice RACI, per ogni attività c'è una sola <span class="slot" data-risposta="A"></span>.</p>
+    <p>La riga più utile di un verbale sono le <span class="slot" data-risposta="azioni"></span>, con chi, che cosa ed entro <span class="slot" data-risposta="quando"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: WBS, critico, A, azioni, quando. Distrattori: Gantt, reticolo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Contesto: utenti (personas), tecnologia, norme, alternative</li>
+      <li>Verbali con decisioni e azioni</li>
+      <li>WBS per risultati, con codici e regola del 100%</li>
+    </ul>
+    <ul class="points">
+      <li>Gantt: 10 settimane, percorso critico, margini</li>
+      <li>RACI: almeno una R, una sola A</li>
+      <li>Ogni documento ha codice, cartella e responsabile</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la realizzazione (monitoraggio, requisiti utente, interfaccia, specifiche, componenti e linguaggi, database, metriche del software).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
