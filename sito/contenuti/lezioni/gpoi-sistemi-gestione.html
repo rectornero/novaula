@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I sistemi di gestione · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 9</p>
+  <h1>I sistemi<br>di gestione</h1>
+  <p class="lead">Che cosa si certifica davvero quando si certifica un'azienda: un modo di lavorare fatto di processi, responsabili e numeri da tenere d'occhio.</p>
+  <aside class="notes">Lezione del libro "I sistemi di gestione". Obiettivi: definire sistema di gestione e processo secondo la ISO 9000:2015; riconoscere i principali sistemi di gestione normati; classificare i processi (direzionali, primari, di supporto); descrivere un processo con input, output, risorse, controlli, owner e indicatori; distinguere efficacia ed efficienza. Collegamento con l'unità 1 (lezione "Il processo": catena del valore e process owner): qui riprendiamo quei concetti dal punto di vista delle norme. Durata: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un PC del laboratorio non si accende. Che cosa succede?</h2></div>
+  <div class="poll" data-id="u9s-pc-guasto">
+    <ol><li>Lo dico al docente, che lo dice al tecnico… forse</li><li>C'è un modulo o un registro dei guasti</li><li>Cambio PC e nessuno lo saprà mai</li><li>Non lo so proprio</li></ol>
+  </div>
+  <aside class="notes">Sondaggio sincero, senza giudizio. Se vince la A o la C, la scuola ha un processo informale: funziona finché le persone se ne ricordano. Domanda di rilancio: "come facciamo a sapere quanti guasti ci sono stati quest'anno e in quanto tempo sono stati risolti?" Senza un processo definito e registrato, non lo sappiamo. Useremo questo esempio per tutta la lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione · ISO 9000:2015</p><h2>Che cos'è un sistema di gestione</h2></div>
+  <div class="callout hl">Un <b>sistema di gestione</b> è l'insieme di elementi correlati o interagenti di un'organizzazione per stabilire <b>politiche</b> e <b>obiettivi</b>, e i <b>processi</b> per conseguire quegli obiettivi.</div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Politica</h3><p>Le intenzioni e la direzione, dichiarate dall'alta direzione.</p></div>
+    <div class="card soft"><h3>Obiettivi</h3><p>Risultati da raggiungere, misurabili e con una scadenza.</p></div>
+    <div class="card soft"><h3>Processi</h3><p>Le attività organizzate che portano agli obiettivi.</p></div>
+  </div>
+  <aside class="notes">Definizione 3.5.3 della UNI EN ISO 9000:2015, riportata in modo semplificato. Gli "elementi" sono struttura, ruoli, responsabilità, pianificazione e attività. Un sistema di gestione non è un faldone di documenti: è il modo in cui l'azienda decide, fa e controlla. I documenti servono a renderlo stabile e verificabile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Una norma per ogni tema</p><h2>Abbina il sistema di gestione alla sua norma</h2></div>
+  <dl class="puzzle-abbina" data-id="u9s-norme">
+    <dt>Qualità</dt><dd>ISO 9001</dd>
+    <dt>Ambiente</dt><dd>ISO 14001</dd>
+    <dt>Salute e sicurezza sul lavoro</dt><dd>ISO 45001</dd>
+    <dt>Sicurezza delle informazioni</dt><dd>ISO/IEC 27001</dd>
+    <dt>Energia</dt><dd>ISO 50001</dd>
+    <dt>Intelligenza artificiale</dt><dd>ISO/IEC 42001</dd>
+  </dl>
+  <aside class="notes">Edizioni: ISO 9001:2015, ISO 14001:2015, ISO 45001:2018, ISO/IEC 27001:2022, ISO 50001:2018, ISO/IEC 42001:2023. Per un futuro informatico la 27001 è la più importante dopo la 9001: la chiedono spesso i clienti di software house e fornitori cloud. La 42001 è la prima norma sui sistemi di gestione per l'intelligenza artificiale. La responsabilità sociale (SA 8000) ha una norma di un altro ente, che vedremo nell'ultima lezione dell'unità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Finalità e caratteristiche</p><h2>Un buon sistema di gestione è…</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Orientato agli obiettivi</h3><p class="muted">Ogni regola serve a un risultato: soddisfare il cliente, ridurre gli infortuni, consumare meno.</p></div>
+    <div class="card"><h3>Basato sui processi</h3><p class="muted">Descrive come il lavoro scorre tra le persone, non solo chi comanda chi.</p></div>
+    <div class="card"><h3>Misurabile</h3><p class="muted">Ha indicatori che dicono se le cose vanno bene o male.</p></div>
+    <div class="card"><h3>Documentato quanto serve</h3><p class="muted">Né troppo né troppo poco: le informazioni utili a lavorare e a dimostrare.</p></div>
+    <div class="card"><h3>Condiviso</h3><p class="muted">Le persone lo conoscono e partecipano, a partire dalla direzione.</p></div>
+    <div class="card"><h3>In miglioramento</h3><p class="muted">Gira sul ciclo PDCA: non è mai finito.</p></div>
+  </div>
+  <aside class="notes">Chiedere alla classe di valutare il "sistema guasti PC" della scuola su queste sei caratteristiche, con un voto da 1 a 5 per ciascuna, per alzata di mano. Di solito la peggiore è "misurabile".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il processo · ISO 9000:2015</p><h2>Attività che trasformano input in risultati</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un <b>processo</b> è un insieme di attività correlate o interagenti che utilizzano <b>input</b> per consegnare un <b>risultato atteso</b>.</p>
+      <p>L'output di un processo è spesso l'input di un altro: l'azienda è una <mark>rete di processi</mark>.</p>
+    </div>
+    <div class="card night"><h3>Esempio: gestione guasti</h3><p>Input: segnalazione del docente.<br>Attività: registrare, diagnosticare, riparare, chiudere.<br>Output: PC funzionante e guasto chiuso nel registro.</p></div>
+  </div>
+  <aside class="notes">Definizione 3.4.1 della ISO 9000:2015 (semplificata). Collegamento con la catena del valore di Porter vista nell'unità 1. Far notare che "riparare" a sua volta può avere bisogno di un altro processo: gli acquisti dei pezzi di ricambio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Anatomia di un processo</p><h2>Trascina le etichette sullo schema</h2></div>
+  <div class="puzzle-trascina" data-id="u9s-anatomia" data-extra="Budget|Cliente">
+    <div style="position:relative;width:1500px;height:500px;align-self:center">
+      <svg width="1500" height="500" viewBox="0 0 1500 500" style="position:absolute;left:0;top:0">
+        <defs><marker id="u9s-arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+        <rect x="520" y="150" width="460" height="200" rx="24" fill="var(--accent)"/>
+        <text x="750" y="240" text-anchor="middle" font-size="40" font-weight="700" fill="#fff" font-family="sans-serif">Gestione guasti</text>
+        <text x="750" y="290" text-anchor="middle" font-size="26" fill="#fff" font-family="sans-serif">registrare · riparare · chiudere</text>
+        <line x1="300" y1="250" x2="510" y2="250" stroke="var(--accent)" stroke-width="6" marker-end="url(#u9s-arr)"/>
+        <line x1="990" y1="250" x2="1200" y2="250" stroke="var(--accent)" stroke-width="6" marker-end="url(#u9s-arr)"/>
+        <line x1="750" y1="80" x2="750" y2="142" stroke="var(--accent)" stroke-width="6" marker-end="url(#u9s-arr)"/>
+        <line x1="750" y1="420" x2="750" y2="358" stroke="var(--accent)" stroke-width="6" marker-end="url(#u9s-arr)"/>
+      </svg>
+      <span class="slot" data-risposta="Input" style="position:absolute;left:40px;top:222px"></span>
+      <span class="slot" data-risposta="Output" style="position:absolute;left:1220px;top:222px"></span>
+      <span class="slot" data-risposta="Controlli" style="position:absolute;left:750px;top:10px;transform:translateX(-50%)"></span>
+      <span class="slot" data-risposta="Risorse" style="position:absolute;left:750px;top:430px;transform:translateX(-50%)"></span>
+      <p class="tiny muted" style="position:absolute;left:30px;top:300px;width:270px">la segnalazione del docente</p>
+      <p class="tiny muted" style="position:absolute;left:1220px;top:300px;width:270px">PC funzionante, guasto chiuso</p>
+      <p class="tiny muted" style="position:absolute;left:900px;top:20px;width:420px">regole, tempi massimi, indicatori</p>
+      <p class="tiny muted" style="position:absolute;left:900px;top:440px;width:420px">tecnico, ricambi, software</p>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: a sinistra Input, a destra Output, sopra Controlli (regole e vincoli che guidano il processo), sotto Risorse (persone, strumenti, materiali). È lo schema "a tartaruga" usato da molti auditor, semplificato. Distrattori: Budget (è una risorsa, non un'etichetta dello schema) e Cliente (è chi riceve l'output). Chiedere poi: chi è il process owner? Il responsabile tecnico del laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I processi aziendali</p><h2>Tre famiglie di processi</h2></div>
+  <div class="cols-3">
+    <div class="card night"><h3>Direzionali</h3><p>Decidono la rotta: strategia, obiettivi, riesame della direzione.</p></div>
+    <div class="card fill"><h3>Primari</h3><p>Creano il valore per il cliente: vendita, progettazione, produzione, consegna, assistenza.</p></div>
+    <div class="card soft"><h3>Di supporto</h3><p>Permettono agli altri di funzionare: personale, acquisti, manutenzione, sistemi informativi.</p></div>
+  </div>
+  <p class="lead">Il cliente vede solo i primari, ma senza gli altri si fermano.</p>
+  <aside class="notes">Classificazione diffusa nella pratica dei sistemi di gestione (alcuni testi chiamano i primari "operativi" o "di realizzazione"). Collegamento con la catena del valore di Porter: attività primarie e di supporto. Per una software house il reparto IT interno è un processo di supporto, mentre lo sviluppo del software per i clienti è primario: stessa competenza, ruolo diverso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Una software house</p><h2>Direzionale, primario o di supporto?</h2></div>
+  <div class="puzzle-categorie" data-id="u9s-famiglie" style="--cols:3">
+    <div class="cat"><h4>Direzionali</h4><ul><li>Definire la strategia</li><li>Riesame della direzione</li></ul></div>
+    <div class="cat"><h4>Primari</h4><ul><li>Analisi dei requisiti</li><li>Sviluppo del software</li><li>Assistenza ai clienti</li></ul></div>
+    <div class="cat"><h4>Di supporto</h4><ul><li>Selezione del personale</li><li>Acquisto delle licenze</li><li>Backup dei server interni</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 3 minuti. Soluzione come scritto. Discussione sull'assistenza ai clienti: è primaria perché il cliente la paga o la riceve come parte del servizio. Il backup dei server interni è di supporto; se però l'azienda vendesse backup come servizio, per lei sarebbe primario.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chi è il process owner?</h2></div>
+  <div class="poll" data-id="u9s-quiz-owner" data-tipo="quiz" data-risposta="A">
+    <ol><li>Chi risponde del processo dall'inizio alla fine, anche se attraversa più reparti</li><li>Il capo del reparto in cui il processo comincia</li><li>Chi esegue materialmente la maggior parte delle attività</li><li>L'auditor che controlla il processo</li></ol>
+    <p class="why">A. Il process owner ha la responsabilità del risultato e del miglioramento del processo intero. Spesso il processo attraversa più funzioni: per questo serve qualcuno che lo guardi "in orizzontale", oltre i confini dei reparti.</p>
+  </div>
+  <aside class="notes">B è il tranello: in un'organizzazione per funzioni si pensa che il responsabile sia il capo reparto. Esempio: il processo "dall'ordine all'incasso" passa da vendite, produzione, logistica e amministrazione. Collegare a strutture-organizzative (organizzazione funzionale e a matrice).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Mappa il processo "gestione guasti"</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b> (nessun account), scegli "Dispositivo" per salvare in locale.</li>
+      <li>Disegna il processo con le forme del diagramma di flusso: inizio, attività (rettangoli), decisione (rombo), fine.</li>
+      <li>Usa almeno 6 attività e 1 decisione (per esempio "serve un ricambio?").</li>
+      <li>Accanto al disegno aggiungi un riquadro con: owner, input, output, 2 indicatori.</li>
+      <li>Esporta in PNG come <b>processo-guasti.png</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni attività comincia con un verbo ("registrare il guasto", "ordinare il ricambio") e ogni indicatore è un numero calcolabile, per esempio "ore medie di risoluzione".</div>
+  </div>
+  <aside class="notes">Esportazione: menu File, Esporta come, PNG. Esempio di flusso: segnalazione, registrazione nel registro, assegnazione al tecnico, diagnosi, decisione "serve un ricambio?" (sì: richiesta di acquisto e attesa), riparazione, test, chiusura con data, comunicazione al docente. Indicatori: tempo medio di risoluzione, percentuale di guasti risolti entro 24 ore, numero di guasti per PC. Valutazione: correttezza del flusso, presenza della decisione, indicatori misurabili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Gestire per processi</p><h2>Metti in ordine i passi</h2></div>
+  <ol class="puzzle-ordina" data-id="u9s-approccio">
+    <li>Individuare i processi dell'organizzazione</li>
+    <li>Stabilire sequenza e interazioni tra i processi</li>
+    <li>Assegnare a ogni processo un responsabile</li>
+    <li>Definire indicatori e criteri di controllo</li>
+    <li>Monitorare e misurare i risultati</li>
+    <li>Migliorare i processi in base ai dati</li>
+  </ol>
+  <aside class="notes">L'ordine riprende in forma semplificata il punto 4.4 della ISO 9001:2015 (sistema di gestione per la qualità e relativi processi). Far notare che gli ultimi due passi sono Check e Act del PDCA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La qualità la decide chi riceve</h2></div>
+  <figure class="citazione">
+    <blockquote>La qualità di un prodotto o di un servizio non è ciò che il fornitore ci mette dentro. È ciò che il cliente ne ricava ed è disposto a pagare.</blockquote>
+    <figcaption><b>Peter F. Drucker</b>, studioso di management, in <i>Innovation and Entrepreneurship</i>, 1985</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il <b>process mining</b> ricostruisce i processi reali leggendo i registri degli eventi dei sistemi informatici (gestionali, ticketing): mostra il percorso che le pratiche fanno davvero, spesso diverso da quello disegnato.</p></div>
+  <aside class="notes">Drucker, Innovation and Entrepreneurship (1985): "Quality in a product or service is not what the supplier puts in. It is what the customer gets out and is willing to pay for." Traduzione nostra. Il process mining è una disciplina sviluppata soprattutto da Wil van der Aalst (Eindhoven, poi RWTH Aachen) dagli anni Duemila: per un informatico è il ponte diretto tra basi di dati e sistemi di gestione. Spunto: il registro dei ticket di un help desk è un registro di eventi perfetto per il process mining.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Misurare i processi</p><h2>Efficacia ed efficienza non sono sinonimi</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Efficacia</h3><p>Grado in cui le attività pianificate sono realizzate e i risultati pianificati conseguiti.</p><p class="muted">Ho raggiunto l'obiettivo?</p></div>
+    <div class="card soft"><h3>Efficienza</h3><p>Rapporto tra il risultato ottenuto e le risorse utilizzate.</p><p class="muted">Quanto mi è costato raggiungerlo?</p></div>
+  </div>
+  <div class="callout">Un indicatore (KPI) traduce una delle due domande in un numero: "% guasti chiusi entro 24 ore" misura l'efficacia, "ore di lavoro per guasto" l'efficienza.</div>
+  <aside class="notes">Definizioni 3.7.11 (efficacia) e 3.7.10 (efficienza) della ISO 9000:2015. Chiedere un indicatore di efficacia e uno di efficienza per lo sviluppo software: efficacia = funzionalità consegnate rispetto a quelle promesse nello sprint; efficienza = ore spese per funzionalità consegnata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>L'help desk chiude tutti i ticket, ma con il doppio dei tecnici previsti</h2></div>
+  <div class="poll" data-id="u9s-quiz-eff" data-tipo="quiz" data-risposta="C">
+    <ol><li>Efficiente ma non efficace</li><li>Né efficace né efficiente</li><li>Efficace ma non efficiente</li><li>Efficace ed efficiente</li></ol>
+    <p class="why">C. L'obiettivo (chiudere i ticket) è raggiunto, quindi il processo è efficace; ma usa il doppio delle risorse previste, quindi non è efficiente.</p>
+  </div>
+  <aside class="notes">Molti invertono i due termini. Trucco per ricordarli: efficacia guarda il bersaglio, efficienza guarda il portafoglio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Gli indicatori del registro guasti</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ol class="steps">
+        <li>In Calc, A1 <b>Ticket</b>, B1 <b>Ore</b>. Da A2 ad A11 i numeri 1-10; da B2 a B11: 3, 30, 8, 12, 50, 5, 20, 26, 2, 14.</li>
+        <li>D2: <code>=MEDIA(B2:B11)</code>, D3: <code>=MAX(B2:B11)</code>.</li>
+        <li>D4: <code>=CONTA.SE(B2:B11;"&lt;=24")/CONTA.NUMERI(B2:B11)</code> in formato percentuale.</li>
+        <li>L'obiettivo è l'80% entro 24 ore: in D5 usa <code>SE</code> per scrivere "raggiunto" o "non raggiunto".</li>
+        <li>Salva come <b>kpi-guasti.ods</b> e consegna.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> media 17 ore, massimo 50 ore, 70% entro 24 ore: obiettivo <b>non raggiunto</b>. Il valore medio sembra buono, ma due guasti su dieci superano il giorno.</div>
+  </div>
+  <aside class="notes">Calcoli: somma 3+30+8+12+50+5+20+26+2+14 = 170, media 17. Entro 24 ore: 3, 8, 12, 5, 20, 2, 14 = 7 su 10 = 70%. Oltre: 30, 50, 26. Formula D5: =SE(D4>=0,8;"raggiunto";"non raggiunto"). Messaggio chiave: la media può nascondere i casi peggiori; per questo si usano indicatori di soglia. Domanda: quale azione Plan proponete? (Per esempio una scorta minima di ricambi, perché i ticket lunghi sono spesso quelli in attesa di un pezzo.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne al colloquio</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Lo schema</h3><ul class="points"><li>Sistema di gestione: politica, obiettivi, processi</li><li>Processo: input, attività, output, owner, KPI</li><li>Efficacia ed efficienza</li></ul></div>
+    <div class="card soft"><h3>Il collegamento</h3><ul class="points"><li>Un sistema di ticketing è un processo informatizzato</li><li>I suoi dati diventano KPI e process mining</li><li>Basi di dati: il registro è una tabella</li></ul></div>
+  </div>
+  <aside class="notes">Suggerire agli studenti di portare all'esame un processo che conoscono (dal PCTO o dalla scuola) e saperlo descrivere con lo schema input-output-owner-indicatori in un minuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u9s-uscita" data-extra="funzione|efficacia">
+    <p>Un processo trasforma input in un risultato <span class="slot" data-risposta="atteso"></span>.</p>
+    <p>Chi risponde di tutto il processo è il process <span class="slot" data-risposta="owner"></span>.</p>
+    <p>Il rapporto tra risultato e risorse usate è l'<span class="slot" data-risposta="efficienza"></span>.</p>
+    <p>Vendita e assistenza sono processi <span class="slot" data-risposta="primari"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: atteso, owner, efficienza, primari. Distrattori: funzione, efficacia.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sistema di gestione: politiche, obiettivi, processi</li>
+      <li>Una norma per tema: 9001, 14001, 45001, 27001…</li>
+      <li>Processi direzionali, primari, di supporto</li>
+    </ul>
+    <ul class="points">
+      <li>Processo: input, output, risorse, controlli, owner</li>
+      <li>KPI per misurare efficacia ed efficienza</li>
+      <li>La media può nascondere i casi peggiori</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: perché tutte queste norme hanno lo stesso indice (gpoi-struttura-alto-livello).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La pianificazione delle attività · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>La pianificazione<br>delle attività</h1>
+  <p class="lead">Dal reticolo al calendario: il diagramma di Gantt mostra chi fa che cosa e quando, e permette di controllare se il progetto è in orario.</p>
+  <aside class="notes">Obiettivi: leggere e costruire un diagramma di Gantt dai risultati del CPM; trasformare i giorni lavorativi in date del calendario; usare milestone, baseline e avanzamento; conoscere pregi e limiti del Gantt rispetto al reticolo. Durata: 2 ore. Si usano i risultati del CPM dell'e-commerce del Panificio Rossi (impresa di esempio). Il deck "gestione-progetti-gantt" (Informatica) ha mostrato un primo Gantt in un foglio di calcolo; qui si aggiungono slittamenti, date reali, milestone e controllo dell'avanzamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come tieni sotto controllo verifiche, consegne e impegni?</h2></div>
+  <div class="poll" data-id="u4-gantt-agenda">
+    <ol><li>Agenda o diario di carta</li><li>Calendario sul telefono</li><li>App di liste e promemoria</li><li>A memoria, finora è andata bene</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio. Far notare che un calendario dice "quando" ma non "che cosa dipende da che cosa"; una lista dice "che cosa" ma non "quando". Il Gantt mette insieme le due cose: elenco delle attività a sinistra, tempo in orizzontale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il diagramma di Gantt</p><h2>Una riga per attività, il tempo in orizzontale</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li>A sinistra l'elenco delle attività, spesso con i codici della WBS</li>
+      <li>In alto la scala dei tempi: giorni, settimane o mesi</li>
+      <li>Ogni attività è una <b>barra</b>: comincia alla data di inizio, è lunga quanto la sua durata</li>
+      <li>Rombi per le milestone, frecce per le dipendenze</li>
+    </ul>
+    <div class="card soft"><h3>Un po' di storia</h3><p class="small">Prende il nome da <b>Henry L. Gantt</b> (1861-1919), ingegnere statunitense che diffuse diagrammi a barre per programmare il lavoro nelle fabbriche negli anni Dieci del Novecento. Uno schema simile, l'"harmonogram", era stato ideato dall'ingegnere polacco Karol Adamiecki già nel 1896.</p></div>
+  </div>
+  <aside class="notes">Gantt lavorò con Frederick Taylor e si occupò di organizzazione scientifica del lavoro; i suoi diagrammi servivano a confrontare il lavoro programmato con quello eseguito. Adamiecki pubblicò il suo metodo solo nel 1931, e in polacco e russo: per questo il nome rimasto è quello di Gantt. Il Gantt è più antico del reticolo (anni Cinquanta): nasce come strumento di calendario, non di calcolo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Dai un nome ai pezzi del Gantt dell'e-commerce</h2></div>
+  <div class="puzzle-trascina" data-id="u4-gantt-parti" data-extra="Baseline|Risorsa">
+    <div style="position:relative;width:1600px;height:450px"><svg width="1600" height="450" viewBox="0 0 1600 450" style="position:absolute;left:0;top:0" font-family="DM Sans, sans-serif"><rect x="290.0" y="44" width="76.5" height="400" fill="#ffffff"/><text x="328.2" y="30" font-size="22" fill="#596179" text-anchor="middle">1</text><rect x="366.5" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="404.7" y="30" font-size="22" fill="#596179" text-anchor="middle">2</text><rect x="442.9" y="44" width="76.5" height="400" fill="#ffffff"/><text x="481.2" y="30" font-size="22" fill="#596179" text-anchor="middle">3</text><rect x="519.4" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="557.6" y="30" font-size="22" fill="#596179" text-anchor="middle">4</text><rect x="595.9" y="44" width="76.5" height="400" fill="#ffffff"/><text x="634.1" y="30" font-size="22" fill="#596179" text-anchor="middle">5</text><rect x="672.4" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="710.6" y="30" font-size="22" fill="#596179" text-anchor="middle">6</text><rect x="748.8" y="44" width="76.5" height="400" fill="#ffffff"/><text x="787.1" y="30" font-size="22" fill="#596179" text-anchor="middle">7</text><rect x="825.3" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="863.5" y="30" font-size="22" fill="#596179" text-anchor="middle">8</text><rect x="901.8" y="44" width="76.5" height="400" fill="#ffffff"/><text x="940.0" y="30" font-size="22" fill="#596179" text-anchor="middle">9</text><rect x="978.2" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="1016.5" y="30" font-size="22" fill="#596179" text-anchor="middle">10</text><rect x="1054.7" y="44" width="76.5" height="400" fill="#ffffff"/><text x="1092.9" y="30" font-size="22" fill="#596179" text-anchor="middle">11</text><rect x="1131.2" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="1169.4" y="30" font-size="22" fill="#596179" text-anchor="middle">12</text><rect x="1207.6" y="44" width="76.5" height="400" fill="#ffffff"/><text x="1245.9" y="30" font-size="22" fill="#596179" text-anchor="middle">13</text><rect x="1284.1" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="1322.4" y="30" font-size="22" fill="#596179" text-anchor="middle">14</text><rect x="1360.6" y="44" width="76.5" height="400" fill="#ffffff"/><text x="1398.8" y="30" font-size="22" fill="#596179" text-anchor="middle">15</text><rect x="1437.1" y="44" width="76.5" height="400" fill="#eef1fa"/><text x="1475.3" y="30" font-size="22" fill="#596179" text-anchor="middle">16</text><rect x="1513.5" y="44" width="76.5" height="400" fill="#ffffff"/><text x="1551.8" y="30" font-size="22" fill="#596179" text-anchor="middle">17</text><text x="8" y="72.0" font-size="25" fill="#172033">A Analisi</text><rect x="292.0" y="52" width="225.4" height="24" rx="6" fill="#d0541f"/><text x="8" y="112.0" font-size="25" fill="#172033">B Grafica</text><rect x="521.4" y="92" width="301.9" height="24" rx="6" fill="#d0541f"/><text x="8" y="152.0" font-size="25" fill="#172033">C Database</text><line x1="672.4" y1="144.0" x2="901.8" y2="144.0" stroke="#596179" stroke-width="3" stroke-dasharray="6 6"/><line x1="901.8" y1="134" x2="901.8" y2="154" stroke="#596179" stroke-width="3"/><rect x="521.4" y="132" width="148.9" height="24" rx="6" fill="#2f6fde"/><text x="8" y="192.0" font-size="25" fill="#172033">D Front-end</text><rect x="827.3" y="172" width="454.8" height="24" rx="6" fill="#d0541f"/><text x="8" y="232.0" font-size="25" fill="#172033">E Back-end</text><line x1="1054.7" y1="224.0" x2="1284.1" y2="224.0" stroke="#596179" stroke-width="3" stroke-dasharray="6 6"/><line x1="1284.1" y1="214" x2="1284.1" y2="234" stroke="#596179" stroke-width="3"/><rect x="674.4" y="212" width="378.4" height="24" rx="6" fill="#2f6fde"/><text x="8" y="272.0" font-size="25" fill="#172033">F Catalogo</text><line x1="825.3" y1="264.0" x2="1437.1" y2="264.0" stroke="#596179" stroke-width="3" stroke-dasharray="6 6"/><line x1="1437.1" y1="254" x2="1437.1" y2="274" stroke="#596179" stroke-width="3"/><rect x="674.4" y="252" width="148.9" height="24" rx="6" fill="#2f6fde"/><text x="8" y="312.0" font-size="25" fill="#172033">G Test</text><rect x="1286.1" y="292" width="225.4" height="24" rx="6" fill="#d0541f"/><text x="8" y="352.0" font-size="25" fill="#172033">H Formazione</text><line x1="901.8" y1="344.0" x2="1513.5" y2="344.0" stroke="#596179" stroke-width="3" stroke-dasharray="6 6"/><line x1="1513.5" y1="334" x2="1513.5" y2="354" stroke="#596179" stroke-width="3"/><rect x="827.3" y="332" width="72.5" height="24" rx="6" fill="#2f6fde"/><text x="8" y="392.0" font-size="25" fill="#172033">I Online</text><rect x="1515.5" y="372" width="72.5" height="24" rx="6" fill="#d0541f"/><text x="8" y="432.0" font-size="25" font-weight="700" fill="#172033">Sito online</text><path d="M1590.0 408 L1606.0 424.0 L1590.0 440 L1574.0 424.0 Z" fill="#172033"/><circle cx="1054.7" cy="184.0" r="19" fill="#ffe45c" stroke="#172033" stroke-width="3"/><text x="1054.7" y="192.0" font-size="24" font-weight="700" text-anchor="middle" fill="#172033">1</text><circle cx="1131.2" cy="264.0" r="19" fill="#ffe45c" stroke="#172033" stroke-width="3"/><text x="1131.2" y="272.0" font-size="24" font-weight="700" text-anchor="middle" fill="#172033">2</text><circle cx="1546.0" cy="424.0" r="19" fill="#ffe45c" stroke="#172033" stroke-width="3"/><text x="1546.0" y="432.0" font-size="24" font-weight="700" text-anchor="middle" fill="#172033">3</text><circle cx="262.0" cy="22.0" r="19" fill="#ffe45c" stroke="#172033" stroke-width="3"/><text x="262.0" y="30.0" font-size="24" font-weight="700" text-anchor="middle" fill="#172033">4</text></svg></div>
+    <p class="small">1 <span class="slot" data-risposta="Attività critica"></span> 2 <span class="slot" data-risposta="Slittamento"></span> 3 <span class="slot" data-risposta="Milestone"></span> 4 <span class="slot" data-risposta="Scala dei tempi"></span></p>
+  </div>
+  <aside class="notes">Soluzione: 1 = attività critica (barra arancione del front-end, sul percorso critico); 2 = slittamento (la linea tratteggiata del catalogo, che può spostarsi fino al giorno 15); 3 = milestone "Sito online" (rombo, durata zero, fine del giorno 17); 4 = scala dei tempi (giorni lavorativi da 1 a 17). Distrattori: baseline e risorsa, che compaiono più avanti. Far notare che il Gantt è disegnato con i risultati del CPM: ogni barra comincia a ES e finisce a EF; lo slittamento arriva fino a LF.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>In un Gantt, la barra più lunga indica…</h2></div>
+  <div class="poll" data-id="u4-gantt-barra" data-tipo="quiz" data-risposta="D">
+    <ol><li>l'attività più importante</li><li>l'attività sul percorso critico</li><li>l'attività più costosa</li><li>l'attività che dura di più</li></ol>
+    <p class="why">La lunghezza della barra è solo la durata. Un'attività lunga può avere slittamento (come il back-end E, 5 giorni, non critica) e una breve può essere critica (la messa online I, 1 giorno). Importanza e costo non si leggono dalla barra.</p>
+  </div>
+  <aside class="notes">La B è il trabocchetto: nel nostro Gantt la barra più lunga (D) è anche critica, ma è una coincidenza. Mostrare il controesempio: E (5 giorni) non è critica, I (1 giorno) sì. Il costo dipende dalle risorse assegnate, non dalla durata (lezione sui costi).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Dal reticolo al Gantt</h2></div>
+  <ol class="puzzle-ordina" data-id="u4-gantt-passi">
+    <li>Prendi le attività con le durate dalla WBS</li>
+    <li>Scrivi le precedenze e disegna il reticolo</li>
+    <li>Calcola ES, EF e slittamenti con il CPM</li>
+    <li>Scegli la data di inizio e il calendario lavorativo</li>
+    <li>Disegna le barre da ES a EF e aggiungi le milestone</li>
+    <li>Fai approvare il piano e salvalo come baseline</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Il calendario lavorativo (giorni della settimana, ore al giorno, festivi, ferie) si sceglie prima di disegnare: le stesse durate danno date diverse con calendari diversi. La baseline è la fotografia del piano approvato, con cui si confronterà l'avanzamento reale. ProjectLibre fa da solo i passi 3 e 5 (lezione successiva).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dai giorni alle date</p><h2>17 giorni lavorativi non sono 17 giorni di calendario</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Attività</th><th>Inizio</th><th>Fine</th></tr>
+      <tr><td>A Analisi</td><td>lun 9/11</td><td>mer 11/11</td></tr>
+      <tr><td>B Grafica</td><td>gio 12/11</td><td>mar 17/11</td></tr>
+      <tr><td>D Front-end</td><td>mer 18/11</td><td>mer 25/11</td></tr>
+      <tr><td>G Test</td><td>gio 26/11</td><td>lun 30/11</td></tr>
+      <tr><td>I Online</td><td>mar 1/12</td><td>mar 1/12</td></tr>
+    </table>
+    <div class="stack">
+      <p class="small">Inizio lunedì 9 novembre 2026, cinque giorni lavorativi a settimana. Il giorno lavorativo 17 è <b>martedì 1° dicembre</b>: 23 giorni di calendario, con tre fine settimana in mezzo.</p>
+      <div class="callout small">ES = 7 significa che D comincia il giorno lavorativo 8, cioè mercoledì 18 novembre.</div>
+    </div>
+  </div>
+  <aside class="notes">Solo le attività critiche in tabella; le altre si calcolano nel laboratorio. Date verificate sul calendario 2026: il 9 novembre 2026 è un lunedì; fra il 9 novembre e il 1° dicembre non ci sono festività nazionali. Attenzione invece all'8 dicembre (Immacolata Concezione), festivo: un progetto che lo attraversa deve escluderlo dal calendario. Si vedrà nel secondo laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto con il calendario</h2></div>
+  <div class="puzzle-codice" data-risposta="2618" data-aiuto="G ha ES = 13: comincia il 14° giorno lavorativo">
+    <ul class="points">
+      <li>1ª e 2ª cifra: il giorno di novembre in cui comincia il test G</li>
+      <li>3ª e 4ª cifra: il giorno di novembre in cui può cominciare, al più presto, la formazione H</li>
+    </ul>
+    <p class="small muted">Il progetto comincia lunedì 9 novembre 2026; si lavora dal lunedì al venerdì.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> G: ES 13, giorno lavorativo 14 = giovedì 26 novembre. H: ES 7, giorno lavorativo 8 = mercoledì 18 novembre.</div>
+  </div>
+  <aside class="notes">Codice 2618. Contare sul calendario: settimana 9-13 novembre = giorni 1-5, 16-20 = giorni 6-10, 23-27 = giorni 11-15. Giorno 14 = giovedì 26; giorno 8 = mercoledì 18. Errore tipico: aggiungere 13 al 9 (risultato 22, una domenica), cioè contare i giorni di calendario invece di quelli lavorativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le milestone</p><h2>Pietre miliari: momenti, non lavori</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="icon">◆</p><h3>Requisiti approvati</h3><p class="small">Fine dell'analisi, mercoledì 11 novembre. Il cliente firma il documento dei requisiti.</p></div>
+    <div class="card"><p class="icon">◆</p><h3>Grafica approvata</h3><p class="small">Martedì 17 novembre. Senza questa firma il front-end non parte.</p></div>
+    <div class="card fill"><p class="icon">◆</p><h3>Sito online</h3><p class="small">Martedì 1° dicembre. È la data promessa al panificio.</p></div>
+  </div>
+  <p class="lead">Una milestone ha <mark>durata zero</mark>: segna un risultato verificabile. Spesso coincide con una revisione di fase o con un pagamento.</p>
+  <aside class="notes">Le milestone collegano il Gantt alle revisioni di fase della prima lezione dell'unità. Brooks (lezione sul CPM) raccomanda milestone concrete e verificabili: "grafica quasi finita" non è una milestone, "grafica approvata con firma del cliente" sì. Nei contratti le milestone sono spesso legate ai pagamenti a stato di avanzamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Che cosa si legge meglio in quale diagramma?</h2></div>
+  <div class="puzzle-categorie" data-id="u4-gantt-vs-reticolo">
+    <div class="cat"><h4>Nel Gantt</h4><ul><li>Date sul calendario</li><li>Avanzamento in %</li><li>Ferie e festivi</li><li>Il lavoro di questa settimana</li></ul></div>
+    <div class="cat"><h4>Nel reticolo</h4><ul><li>Tutte le dipendenze</li><li>Calcolo di ES e LS</li><li>Attività fittizie</li><li>Percorsi alternativi</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Il Gantt è immediato per il calendario e per comunicare con il cliente e il team; il reticolo è migliore per ragionare sulla logica e sui calcoli. Nei software moderni (ProjectLibre compreso) il Gantt mostra anche frecce di dipendenza e attività critiche: i due strumenti si usano insieme e sono due viste degli stessi dati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il Gantt di controllo</p><h2>Piano contro realtà</h2></div>
+  <div class="cols-2 wide-left">
+    <svg width="980" height="330" viewBox="0 0 980 330" font-family="DM Sans, sans-serif">
+      <g font-size="26" fill="#172033"><text x="0" y="78">D Front-end</text><text x="0" y="178">E Back-end</text><text x="0" y="278">G Test</text></g>
+      <rect x="230" y="40" width="440" height="22" rx="5" fill="#c9ced9"/><rect x="230" y="66" width="440" height="26" rx="6" fill="#d0541f" opacity=".35"/><rect x="230" y="66" width="220" height="26" rx="6" fill="#d0541f"/>
+      <rect x="90" y="140" width="370" height="22" rx="5" fill="#c9ced9"/><rect x="160" y="166" width="370" height="26" rx="6" fill="#2f6fde" opacity=".35"/><rect x="160" y="166" width="250" height="26" rx="6" fill="#2f6fde"/>
+      <rect x="670" y="240" width="220" height="22" rx="5" fill="#c9ced9"/><rect x="670" y="266" width="220" height="26" rx="6" fill="#d0541f" opacity=".35"/>
+      <line x1="450" y1="16" x2="450" y2="320" stroke="#b42318" stroke-width="4"/><text x="458" y="26" font-size="22" font-weight="700" fill="#b42318">oggi</text>
+    </svg>
+    <ul class="points small">
+      <li><b>Barra grigia</b>: la baseline, cioè il piano approvato</li>
+      <li><b>Barra colorata</b>: le date attuali; la parte piena è il lavoro fatto (% di avanzamento)</li>
+      <li><b>Linea "oggi"</b>: tutto ciò che sta a sinistra dovrebbe essere finito</li>
+    </ul>
+  </div>
+  <aside class="notes">Lettura: D è in linea (la parte piena arriva alla linea di oggi). E è partito un giorno dopo la baseline ed è un po' indietro rispetto alla linea di oggi: è in ritardo, ma ha 3 giorni di slittamento, quindi per ora non sposta la consegna. G non è ancora cominciato, come previsto. Disegno schematico, non in scala con il progetto. Questo controllo "visivo" sarà reso numerico con l'Earned Value nella lezione sul monitoraggio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni simbolo del Gantt al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="u4-gantt-simboli">
+    <dt>Barra</dt><dd>Un'attività, lunga quanto la sua durata</dd>
+    <dt>Rombo</dt><dd>Una milestone: un evento di durata zero</dd>
+    <dt>Linea verticale "oggi"</dt><dd>La data di aggiornamento dello stato</dd>
+    <dt>Barra di riepilogo</dt><dd>Raggruppa i pacchetti di un ramo della WBS</dd>
+    <dt>Barra grigia sotto</dt><dd>La baseline, il piano approvato</dd>
+  </dl>
+  <aside class="notes">Coppie nell'ordine scritto. La barra di riepilogo (summary task) è quella che in ProjectLibre si ottiene "rientrando" le attività sotto una voce: per esempio "4 Realizzazione" con sotto front-end, back-end e catalogo. Collega il Gantt alla WBS e ai suoi codici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il piano cambierà. Pianificare serve lo stesso</h2></div>
+  <figure class="citazione">
+    <blockquote>I piani non valgono niente, ma la pianificazione è tutto.</blockquote>
+    <figcaption><b>Dwight D. Eisenhower</b>, presidente degli Stati Uniti, discorso alla National Defense Executive Reserve Conference, 14 novembre 1957</figcaption>
+  </figure>
+  <p class="lead">Il Gantt di oggi sarà diverso fra due settimane. Ma chi ha pianificato sa che cosa cambia, perché e quanto costa adattarsi.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "Plans are worthless, but planning is everything." Eisenhower la presenta come una frase sentita "molto tempo fa nell'esercito", nel discorso del 14 novembre 1957 a Washington (testo nei Public Papers of the Presidents). Il senso: il valore sta nel processo di pianificazione, che fa capire il problema, non nel documento finale. Domanda alla classe: vale anche per il piano di studio per l'esame?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>È la fine del giorno 10. Il front-end D è al 50%. Com'è messo?</h2></div>
+  <div class="poll" data-id="u4-gantt-stato" data-tipo="quiz" data-risposta="B">
+    <ol><li>In ritardo: a metà progetto dovrebbe essere finito</li><li>In linea con il piano</li><li>In anticipo di un giorno</li><li>Non si può dire senza conoscere i costi</li></ol>
+    <p class="why">D va dal giorno 8 al giorno 13: alla fine del giorno 10 sono passati 3 giorni su 6, quindi il piano prevede il 50%. Avanzamento uguale al previsto: in linea.</p>
+  </div>
+  <aside class="notes">La A confonde la metà del progetto con la metà dell'attività. La D è plausibile per chi ha già sentito parlare di Earned Value: per lo stato dei costi servono i costi, ma per lo stato dei tempi basta il confronto tra avanzamento previsto e reale. Attenzione: la percentuale di avanzamento dichiarata da chi lavora va verificata ("90% finito" da tre settimane è un classico).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il Gantt dell'e-commerce con gli slittamenti</h2>
+  <pre class="code" style="font-size:27px;padding:18px 28px">=SE(E(E$1&gt;$B2;E$1&lt;=$B2+$C2);"X";SE(E(E$1&gt;$B2+$C2;E$1&lt;=$D2);"-";""))</pre>
+  <div class="cols-2">
+    <ol class="steps small">
+      <li>Colonne: <b>Attività</b>, <b>ES</b>, <b>Durata</b>, <b>LF</b> (valori dalla lezione sul CPM). In E1:U1 i giorni da 1 a 17.</li>
+      <li>In E2 scrivi la formula qui sopra.</li>
+      <li>Copia E2 su tutto E2:U10.</li>
+      <li>Con <b>Formato › Condizionale › Condizione</b> colora le celle "X" (barre) e in grigio chiaro le celle "-" (slittamento).</li>
+      <li>Colora a mano in arancione le barre critiche. Salva <b>gantt-panificio.ods</b>.</li>
+    </ol>
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Att.</th><th>ES</th><th>Durata</th><th>LF</th></tr>
+        <tr><td>C</td><td class="mono">3</td><td class="mono">2</td><td class="mono">8</td></tr>
+        <tr><td>F</td><td class="mono">5</td><td class="mono">2</td><td class="mono">15</td></tr>
+        <tr><td>G</td><td class="mono">13</td><td class="mono">3</td><td class="mono">16</td></tr>
+      </table>
+      <div class="check"><b>Controllo:</b> riga di F: "X" nei giorni 6 e 7, "-" dal giorno 8 al 15. Le righe critiche non hanno nessun "-".</div>
+    </div>
+  </div>
+  <aside class="notes">Funzione E = AND in Calc italiano. La formula scrive X se il giorno è dentro la barra (dopo ES e fino a ES + durata) e "-" se il giorno è nello slittamento (dopo EF e fino a LF). Dati completi (ES, durata, LF): A 0,3,3; B 3,4,7; C 3,2,8; D 7,6,13; E 5,5,13; F 5,2,15; G 13,3,16; H 7,1,16; I 16,1,17. Se il menu della formattazione condizionale ha un nome leggermente diverso nella versione installata, cercarlo nel menu Formato. In alternativa si colora a mano: l'importante è la logica della formula. Chi finisce prima aggiunge una riga "Sito online" con il rombo nella colonna 17.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Dai giorni lavorativi alle date, festivi compresi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In un nuovo foglio scrivi in B1 la data di inizio <b>09/11/2026</b> e in B2 la data <b>08/12/2026</b> (festivo).</li>
+      <li>Ricopia attività, ES ed EF. Inizio: <code>=GIORNO.LAVORATIVO($B$1;ES)</code>; fine: <code>=GIORNO.LAVORATIVO($B$1;EF-1)</code>, usando le celle giuste al posto di ES ed EF.</li>
+      <li>Formatta le date come "gio 26/11/26". Controlla che G cominci giovedì 26 novembre.</li>
+      <li>Ora sposta l'inizio a <b>16/11/2026</b> e aggiungi <code>;$B$2</code> come terzo argomento delle formule. Annota la nuova data di "Sito online". Salva <b>date-panificio.ods</b>.</li>
+    </ol>
+    <div class="check" style="align-self:start"><b>Controllo:</b> con inizio 9 novembre, sito online martedì 1° dicembre. Con inizio 16 novembre: martedì 8 dicembre senza festivi, <b>mercoledì 9 dicembre</b> con l'Immacolata esclusa.</div>
+  </div>
+  <aside class="notes">GIORNO.LAVORATIVO(data; giorni; festivi) restituisce la data che si trova dopo un certo numero di giorni lavorativi, saltando sabati, domeniche e i festivi elencati. Con 0 giorni restituisce la data di partenza (che deve essere un giorno lavorativo). Il "−1" sulla fine serve perché un'attività di 1 giorno comincia e finisce lo stesso giorno. Date verificate: con inizio 16/11/2026 il 17° giorno lavorativo è martedì 8 dicembre se non si escludono festivi, mercoledì 9 dicembre escludendo l'8. Il formato data personalizzato "GGG GG/MM/AA" mostra il giorno della settimana abbreviato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Il Gantt vive dentro gli strumenti di oggi</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti strumenti che i team informatici usano ogni giorno hanno una vista a barre nel tempo: GitHub Projects ha una vista "Roadmap", Jira una "Timeline". Alcuni software di pianificazione propongono con l'AI una bozza di calendario a partire da un elenco di attività. È comodo, ma le durate e le dipendenze restano stime da discutere con il team: un Gantt bellissimo con stime sbagliate resta sbagliato.</p></div>
+  <div class="callout hl"><b>All'esame:</b> un Gantt è il modo più chiaro per mostrare in pochi secondi i tempi di un progetto (anche del PCTO). Spiega una milestone e un'attività critica: sono le due domande che arrivano subito.</div>
+  <aside class="notes">Esempi verificabili: GitHub Projects offre i layout tabella, board e roadmap; Jira offre la vista Timeline. Non citare funzioni AI specifiche di prodotti commerciali, che cambiano spesso. Il suggerimento per l'esame è un consiglio di metodo, non una regola ministeriale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u4-gantt-uscita" data-extra="nodo|costo">
+    <p>Nel Gantt ogni attività è una <span class="slot" data-risposta="barra"></span> lunga quanto la sua durata.</p>
+    <p>Un evento di durata zero si chiama <span class="slot" data-risposta="milestone"></span> e si disegna con un rombo.</p>
+    <p>Il piano approvato, da confrontare con la realtà, si chiama <span class="slot" data-risposta="baseline"></span>.</p>
+    <p>Il diagramma prende il nome dall'ingegnere Henry <span class="slot" data-risposta="Gantt"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: barra, milestone, baseline, Gantt. Distrattori: nodo, costo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Gantt: attività in righe, tempo in orizzontale</li>
+      <li>Barre da ES a EF, slittamento fino a LF</li>
+      <li>Giorni lavorativi e calendario: attenti ai festivi</li>
+    </ul>
+    <ul class="points">
+      <li>Milestone: durata zero, risultato verificabile</li>
+      <li>Baseline, avanzamento e linea di oggi per il controllo</li>
+      <li>Prossima lezione: tutto questo in ProjectLibre</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Per la prossima lezione serve ProjectLibre installato sui PC del laboratorio (gratuito, non richiede account).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

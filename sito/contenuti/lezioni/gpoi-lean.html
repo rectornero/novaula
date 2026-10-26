@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La lean production · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 2</p>
+  <h1>La lean<br>production</h1>
+  <p class="lead">Il pensiero snello nato in Toyota: riconoscere gli sprechi, far scorrere il flusso, produrre solo ciò che serve quando serve, migliorare un passo alla volta.</p>
+  <aside class="notes">Obiettivi: conoscere l'origine del Toyota Production System e del termine lean; distinguere attività a valore e sprechi (i 7 muda); i cinque principi del pensiero snello; just in time, pull e kanban; jidoka, kaizen, 5S; calcolare il takt time; applicare la lean al software. Durata: 2-3 ore (c'è un gioco in gruppo). Per il gioco preparare fogli di carta di recupero e un cronometro. Collegamenti: deck agile-scrum-kanban (kanban nel software) e l'Unità 8 (Six Sigma e lean Six Sigma).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il più grande spreco di tempo nella tua giornata a scuola?</h2></div>
+  <div class="poll" data-id="u2-lean-spreco">
+    <ol><li>Aspettare: cambi d'ora, file, PC che si accendono</li><li>Spostarsi tra aule e laboratori</li><li>Rifare lavori fatti male</li><li>Cercare materiale e file</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Ogni opzione è uno dei sette sprechi della lean: attese, movimenti/trasporti, difetti, e il disordine che il metodo 5S vuole eliminare. Tenere il risultato alla lavagna: lo riprendiamo quando presentiamo i sette sprechi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da Ford a Toyota</p><h2>Due modi di produrre</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Produzione di massa</h3><ul class="points small"><li>Grandi lotti dello stesso modello</li><li>Si produce in anticipo e si accumula a magazzino (<b>push</b>)</li><li>Scorte alte "per sicurezza"</li><li>I difetti si scoprono alla fine</li></ul></div>
+    <div class="card fill"><h3>Produzione snella</h3><ul class="points small"><li>Piccoli lotti, molti modelli</li><li>Si produce quando il cliente chiede (<b>pull</b>)</li><li>Scorte minime</li><li>Ci si ferma al primo difetto</li></ul></div>
+  </div>
+  <div class="callout">Nel Giappone del dopoguerra Toyota non aveva capitali, spazi né un mercato grande come quello americano: doveva produrre poco, vario e senza sprecare nulla.</div>
+  <aside class="notes">Il Toyota Production System (TPS) fu sviluppato tra gli anni '40 e '70 soprattutto da Taiichi Ohno, con Eiji Toyoda. La parola "lean" (snello) fu usata da John Krafcik in un articolo del 1988 e resa famosa dal libro di Womack, Jones e Roos "The Machine That Changed the World" (1990), frutto di una ricerca del MIT sull'industria dell'auto. Collegamento con la citazione di Henry Ford nella lezione sulla produzione.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Il padre del Toyota Production System</p><h2>Accorciare la linea del tempo</h2></div>
+  <figure class="citazione">
+    <blockquote>Tutto ciò che facciamo è guardare la linea del tempo, dal momento in cui il cliente ci fa un ordine al momento in cui incassiamo. E accorciamo quella linea eliminando gli sprechi che non aggiungono valore.</blockquote>
+    <figcaption><b>Taiichi Ohno</b>, ingegnere Toyota, <i>Toyota Production System</i>, 1978 (ed. inglese 1988)</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra dall'edizione inglese: "All we are doing is looking at the time line from the moment the customer gives us an order to the point when we collect the cash. And we are reducing that time line by removing the non-value-added wastes." Collegamento con la lezione sui processi: è la stessa idea del processo "dall'ordine all'incasso" e dei tempi misurati nel laboratorio. Domanda: "nel laboratorio sull'e-commerce, quale fase era tutta spreco?" (l'attesa del corriere).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Valore e spreco</p><h2>Che cosa pagherebbe il cliente?</h2></div>
+  <div class="cols-3">
+    <div class="card ok"><h3>Valore aggiunto</h3><p class="small">Trasforma il prodotto in qualcosa che il cliente vuole e pagherebbe: montare, saldare, scrivere il codice di una funzione richiesta.</p></div>
+    <div class="card soft"><h3>Necessario senza valore</h3><p class="small">Il cliente non lo paga, ma oggi non si può eliminare: controlli obbligati per legge, documenti fiscali.</p></div>
+    <div class="card bad"><h3>Spreco (muda)</h3><p class="small">Consuma risorse e non aggiunge valore: attese, ricopiature, pezzi in giro per la fabbrica.</p></div>
+  </div>
+  <div class="callout">In molti processi le attività a valore aggiunto sono una piccola frazione del tempo totale: il resto è attesa. Lo vedremo con i numeri nel laboratorio.</div>
+  <aside class="notes">Muda (spreco) in giapponese. Il TPS parla anche di mura (irregolarità del carico) e muri (sovraccarico di persone e macchine). Esempio scolastico: la verifica corretta è valore per lo studente; la fila per fotocopiarla è spreco; il registro dei voti è necessario senza valore aggiunto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>I cinque principi del pensiero snello</h2></div>
+  <ol class="puzzle-ordina" data-id="u2-lean-principi">
+    <li>Valore: definirlo dal punto di vista del cliente</li>
+    <li>Flusso del valore: mappare tutte le attività, eliminare quelle inutili</li>
+    <li>Flusso: far scorrere il lavoro senza interruzioni e attese</li>
+    <li>Pull: produrre solo quando il cliente (o la fase dopo) lo chiede</li>
+    <li>Perfezione: migliorare continuamente, ripartendo dal primo passo</li>
+  </ol>
+  <aside class="notes">Ordine come scritto: sono i cinque principi di Womack e Jones nel libro "Lean Thinking" (1996). La logica è a cascata: non si può far scorrere un flusso finché non si sono tolte le attività inutili, e non si sa quali sono inutili finché non si è definito il valore. Il quinto principio riporta all'inizio: è un ciclo, come il PDCA.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I sette sprechi di Ohno</p><h2>Dove si nasconde lo spreco</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h4>Sovrapproduzione</h4><p class="small">Produrre più o prima del necessario</p></div>
+    <div class="card soft"><h4>Attese</h4><p class="small">Persone o pezzi fermi</p></div>
+    <div class="card soft"><h4>Trasporti</h4><p class="small">Spostare materiali senza bisogno</p></div>
+    <div class="card soft"><h4>Processi inutili</h4><p class="small">Fare più di quanto chiede il cliente</p></div>
+    <div class="card soft"><h4>Scorte</h4><p class="small">Materiale e lavoro iniziato e fermo</p></div>
+    <div class="card soft"><h4>Movimenti</h4><p class="small">Gesti e spostamenti delle persone</p></div>
+    <div class="card soft"><h4>Difetti</h4><p class="small">Scarti, rilavorazioni, reclami</p></div>
+    <div class="card fill"><h4>+ Talento</h4><p class="small">Idee delle persone non ascoltate</p></div>
+  </div>
+  <aside class="notes">I sette sprechi sono quelli classici del TPS. L'ottavo, il talento non utilizzato, è stato aggiunto in seguito da molti autori occidentali. Per Ohno la sovrapproduzione è il peggiore: genera scorte, trasporti, attese e nasconde i difetti. Riprendere il sondaggio iniziale: quali sprechi avevate scelto?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Gli sprechi in una software house</h2></div>
+  <div class="puzzle-categorie" data-id="u2-lean-software" style="--cols:4">
+    <div class="cat"><h4>Attese</h4><ul><li>Il tester aspetta la build</li><li>Approvazione ferma 3 giorni</li></ul></div>
+    <div class="cat"><h4>Difetti</h4><ul><li>Bug trovato dal cliente</li><li>Pagina rifatta per un requisito frainteso</li></ul></div>
+    <div class="cat"><h4>Sovrapproduzione</h4><ul><li>Funzioni che nessuno userà</li><li>Report che nessuno legge</li></ul></div>
+    <div class="cat"><h4>Scorte</h4><ul><li>20 attività iniziate e non finite</li><li>Codice scritto e mai rilasciato</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. Nel software le "scorte" sono il lavoro iniziato e non consegnato (work in progress): costa, invecchia e non dà valore finché non arriva all'utente. È l'idea alla base dei limiti WIP nelle bacheche kanban (deck agile-scrum-kanban). Riferimento: Mary e Tom Poppendieck, "Lean Software Development" (2003), che hanno tradotto i sette sprechi per il software.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Just in time</p><h2>Solo ciò che serve, quando serve, nella quantità che serve</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nel <b>just in time</b> (JIT) ogni fase produce solo ciò che la fase successiva ha consumato. Il segnale è il <mark>kanban</mark>: un cartellino che autorizza a produrre o prelevare.</p>
+      <ul class="points small">
+        <li>Il pezzo viene prelevato da una piccola scorta (il "supermarket")</li>
+        <li>Il cartellino torna alla fase a monte: "rifanne uno"</li>
+        <li>Niente cartellino, niente produzione</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>L'idea dal supermercato</h3><p class="small">Ohno racconta di essersi ispirato ai supermercati americani: il cliente prende ciò che gli serve e lo scaffale viene riempito solo quando si svuota.</p></div>
+  </div>
+  <aside class="notes">Il kanban (in giapponese, cartellino o insegna) può essere di prelievo o di produzione; oggi spesso è elettronico. Il numero di cartellini in circolo limita la scorta massima. Il JIT richiede fornitori affidabili e vicini, tempi di attrezzaggio brevi e qualità alta: senza scorte, un difetto ferma tutto. Collegamento con l'SCM della lezione sui sistemi informativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta lo schema</p><h2>Il circuito kanban</h2></div>
+  <div class="puzzle-trascina" data-id="u2-lean-kanban" data-extra="Push|Lotto">
+    <div style="position:relative;width:1460px;height:440px">
+      <svg width="1460" height="440" viewBox="0 0 1460 440" aria-hidden="true">
+        <defs>
+          <marker id="kb" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f6fde"/></marker>
+          <marker id="ko" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d0541f"/></marker>
+        </defs>
+        <g font-family="Bricolage Grotesque, sans-serif" font-size="30" font-weight="700" text-anchor="middle" fill="#172033">
+          <rect x="0" y="150" width="300" height="130" rx="18" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="150" y="208">Fase a monte</text><text x="150" y="246" font-size="24" font-weight="400" fill="#596179">produce i pezzi</text>
+          <rect x="520" y="150" width="380" height="130" rx="18" fill="#e3ecfc" stroke="#2f6fde" stroke-width="3"/>
+          <rect x="1120" y="150" width="340" height="130" rx="18" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="1290" y="208">Fase a valle</text><text x="1290" y="246" font-size="24" font-weight="400" fill="#596179">monta il prodotto</text>
+        </g>
+        <line x1="305" y1="200" x2="505" y2="200" stroke="#2f6fde" stroke-width="8" marker-end="url(#kb)"/>
+        <line x1="905" y1="200" x2="1105" y2="200" stroke="#2f6fde" stroke-width="8" marker-end="url(#kb)"/>
+        <path d="M1290,285 C1290,420 150,420 150,300" fill="none" stroke="#d0541f" stroke-width="7" stroke-dasharray="16 10" marker-end="url(#ko)"/>
+      </svg>
+      <div style="position:absolute;left:520px;width:380px;top:187px;display:flex;justify-content:center"><span class="slot" data-risposta="Supermarket"></span></div>
+      <div style="position:absolute;left:300px;width:220px;top:110px;display:flex;justify-content:center"><span class="slot" data-risposta="Pezzi"></span></div>
+      <div style="position:absolute;left:0;width:1460px;top:360px;display:flex;justify-content:center"><span class="slot" data-risposta="Cartellino"></span></div>
+      <div style="position:absolute;left:1120px;width:340px;top:40px;display:flex;justify-content:center"><span class="slot" data-risposta="Pull"></span></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: il riquadro centrale è il Supermarket (piccola scorta controllata); la freccia blu a sinistra porta i Pezzi; la freccia arancione tratteggiata che torna indietro porta il Cartellino (kanban) alla fase a monte; sopra la fase a valle, Pull: è lei che "tira" la produzione prelevando. Distrattori: Push (il contrario) e Lotto. Domanda: "quanti pezzi al massimo possono stare nel supermarket?" Tanti quanti i cartellini in circolo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Con il just in time le scorte…</h2></div>
+  <div class="poll" data-id="u2-lean-scorte" data-tipo="quiz" data-risposta="B">
+    <ol><li>sono vietate: zero pezzi a magazzino</li><li>si riducono al minimo e diventano un segnale</li><li>aumentano, per non fermare mai la linea</li><li>non cambiano: si spostano solo i cartellini</li></ol>
+    <p class="why">Il JIT non vuol dire scorte zero: piccole scorte controllate (i supermarket) restano, e il loro svuotarsi è il segnale per produrre. Scendendo, le scorte fanno emergere i problemi che prima nascondevano.</p>
+  </div>
+  <aside class="notes">Risposta B. La A è il mito più diffuso ("zero magazzino"). Immagine classica: le scorte sono l'acqua di un fiume che copre i sassi (i problemi); abbassando l'acqua i sassi si vedono e si possono togliere. Limite del JIT: quando la catena di fornitura si interrompe (per esempio la carenza mondiale di chip del 2021 ha fermato linee di molte case automobilistiche) le imprese con scorte minime sono le più esposte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli altri attrezzi</p><h2>Jidoka, kaizen, 5S</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Jidoka</h3><p class="small">Automazione "con tocco umano": la macchina o l'operaio si ferma al primo difetto e lo segnala. Meglio fermare la linea che produrre scarti.</p></div>
+    <div class="card soft"><h3>Kaizen</h3><p class="small">Miglioramento continuo a piccoli passi, proposto da chi fa il lavoro, ogni giorno.</p></div>
+    <div class="card soft"><h3>5S</h3><p class="small">Ordine nel posto di lavoro: separare, sistemare, pulire, standardizzare, sostenere.</p></div>
+  </div>
+  <div class="callout">Altre parole utili: <b>poka-yoke</b> (un dispositivo che rende impossibile l'errore, come una spina che entra solo nel verso giusto) e <b>gemba</b> (il luogo dove si fa il lavoro: lì si va a capire i problemi).</div>
+  <aside class="notes">Il jidoka nasce con il telaio automatico di Sakichi Toyoda (fondatore del gruppo Toyota), che si fermava da solo se un filo si spezzava. In fabbrica l'operaio può tirare una corda (andon) che accende una segnalazione e ferma la linea. Le 5S in giapponese: seiri, seiton, seiso, seiketsu, shitsuke. Esempio informatico di poka-yoke: un form che non accetta una data impossibile; un connettore USB-C che entra in entrambi i versi elimina il problema alla radice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le parole giapponesi della lean</h2></div>
+  <dl class="puzzle-abbina" data-id="u2-lean-parole">
+    <dt>Muda</dt><dd>Spreco: ciò che consuma risorse senza dare valore</dd>
+    <dt>Kaizen</dt><dd>Miglioramento continuo a piccoli passi</dd>
+    <dt>Kanban</dt><dd>Cartellino che autorizza a produrre o prelevare</dd>
+    <dt>Jidoka</dt><dd>Fermarsi al primo difetto e segnalarlo</dd>
+    <dt>Poka-yoke</dt><dd>Accorgimento che rende impossibile l'errore</dd>
+    <dt>Gemba</dt><dd>Il luogo dove si fa davvero il lavoro</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Chiedere un esempio scolastico o informatico per ciascuno: un form con controllo dei dati (poka-yoke), la bacheca del gruppo di progetto (kanban), la retrospettiva a fine sprint (kaizen), il test automatico che blocca il rilascio se fallisce (jidoka).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 35 minuti</span></p>
+  <h2>La fabbrica di aeroplanini: push contro pull</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Squadre da 5: 4 postazioni (piega a metà, punte, ali, controllo e firma) e un cronometrista.</li>
+      <li><b>Round 1, push</b> (5 minuti): ogni postazione lavora a lotti di 5 fogli e passa il lotto solo quando è completo.</li>
+      <li><b>Round 2, pull</b> (5 minuti): lotti da 1; si lavora solo se lo spazio davanti alla postazione successiva è vuoto.</li>
+      <li>Annotate per ogni round: aeroplani finiti, pezzi in lavorazione alla fine, scarti, minuto del primo aeroplano finito.</li>
+      <li>In Calc confrontate i due round; salvate <b>gioco-lean_gruppoN.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> nel round pull il primo aeroplano esce molto prima e i pezzi in lavorazione a fine round sono al massimo uno per postazione. Spiegate in due righe perché.</div>
+  </div>
+  <aside class="notes">Preparazione: 60-80 fogli A4 di recupero per squadra, un cronometro (anche quello del telefono). Il quadrato "kanban" davanti a ogni postazione si disegna sul banco con un foglio. Risultati tipici: nel push il primo pezzo esce dopo che 5 fogli hanno attraversato 4 postazioni (diversi minuti), a fine round restano molti pezzi a metà; nel pull il primo pezzo esce in meno di un minuto e il lavoro in corso è basso. Il numero di pezzi finiti può essere simile: il guadagno è nel tempo di attraversamento e nelle scorte. Gli scarti nel push si scoprono tardi, a lotti interi. Ogni gruppo consegna un file a nome di tutti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Takt time e valore aggiunto</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Fabbrica di telai di esempio: un turno di 7,5 ore (27 000 s), domanda di <b>450 telai</b> al giorno. Tempi ciclo: taglio 50 s, saldatura 70 s, verniciatura 45 s, montaggio 55 s. Dall'ordine al telaio finito passano 2 turni.</p>
+      <ol class="steps small">
+        <li>In Calc calcola il <b>takt time</b> = tempo disponibile / domanda.</li>
+        <li>Segnala con <code>SE</code> le fasi più lente del takt; con <code>ARROTONDA.ECCESSO</code> calcola quante postazioni servono.</li>
+        <li>Calcola la quota di valore aggiunto: somma dei tempi ciclo / tempo di attraversamento (54 000 s). Salva <b>takt_cognome.ods</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> takt time <b>60 s</b>. La saldatura (70 s) è più lenta: servono <b>2</b> postazioni. Valore aggiunto 220 s su 54 000 s: circa <b>0,41%</b>.</div>
+  </div>
+  <aside class="notes">Soluzione: takt = 27 000 / 450 = 60 s (ogni 60 secondi deve uscire un telaio). Fasi oltre il takt: solo saldatura; postazioni = ARROTONDA.ECCESSO(70/60;0) = 2; le altre fasi 1. Valore aggiunto = 50 + 70 + 45 + 55 = 220 s; 220 / 54 000 = 0,0041 = 0,41%. Il resto del tempo è attesa tra le fasi: è normale trovare percentuali molto basse nei flussi non ancora snelliti. Numeri ipotetici. Takt viene dal tedesco Takt, battuta del ritmo musicale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Lean e tecnologie digitali</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Jidoka con le telecamere</h3><p class="small">Sistemi di visione artificiale controllano ogni pezzo sulla linea e la fermano al primo difetto: lo stesso principio del telaio di Toyoda, con l'AI.</p></div>
+    <div class="card soft"><h3>Kanban digitale</h3><p class="small">I cartellini diventano segnali nel gestionale; nel software le bacheche kanban limitano il lavoro in corso del team.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Attenzione al rischio opposto: <b>digitalizzare uno spreco</b>. Automatizzare un processo pieno di attese e passaggi inutili lo rende solo più veloce a sprecare. Prima si snellisce, poi si automatizza.</p></div>
+  <aside class="notes">Collegamento con l'Unità 7 (Industria 4.0: IIoT, digital twin, manutenzione predittiva) e con l'Unità 8 (lean Six Sigma). Il principio "prima snellire, poi automatizzare" è ripetuto da molti esperti di lean; formularlo come consiglio, non come citazione. Domanda per l'orale: "come applicheresti la lean al vostro progetto di gruppo?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un team di sviluppo vuole diventare più snello. Che cosa riduce davvero lo spreco?</h2></div>
+  <div class="poll" data-id="u2-lean-team" data-tipo="quiz" data-risposta="D">
+    <ol><li>Aggiungere funzioni in più "che potrebbero servire"</li><li>Iniziare più attività insieme per tenere tutti occupati</li><li>Fare un unico grande rilascio a fine anno</li><li>Limitare il lavoro in corso e finire prima di iniziare</li></ol>
+    <p class="why">A è sovrapproduzione, B aumenta le scorte di lavoro iniziato e i cambi di attività, C allunga il tempo prima che il cliente veda valore e nasconde i difetti. Limitare il lavoro in corso fa scorrere il flusso.</p>
+  </div>
+  <aside class="notes">Risposta D. Il tranello è B: "tenere tutti occupati" sembra efficiente, ma la lean ottimizza il flusso del lavoro, non l'occupazione delle persone. Collegamento con il gioco degli aeroplanini: nel round push tutti erano occupati, ma il primo pezzo usciva tardi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u2-lean-uscita" data-extra="push|lotto">
+    <p>Nella lean ogni attività che non aggiunge valore per il cliente è uno <span class="slot" data-risposta="spreco"></span>.</p>
+    <p>Produrre solo quando la fase successiva lo chiede è la logica <span class="slot" data-risposta="pull"></span>.</p>
+    <p>Il cartellino che autorizza a produrre si chiama <span class="slot" data-risposta="kanban"></span>.</p>
+    <p>Il miglioramento continuo a piccoli passi è il <span class="slot" data-risposta="kaizen"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: spreco, pull, kanban, kaizen. Distrattori: push, lotto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Toyota e Ohno: accorciare il tempo dall'ordine all'incasso</li>
+      <li>Valore, flusso del valore, flusso, pull, perfezione</li>
+      <li>Sette sprechi, più il talento non usato</li>
+    </ul>
+    <ul class="points">
+      <li>JIT e kanban: scorte minime che fanno da segnale</li>
+      <li>Jidoka, kaizen, 5S; takt time</li>
+      <li>Fine dell'Unità 2: prossima unità, sviluppare un'impresa</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: la lean è un ottimo ponte tra GPOI e informatica (kanban, agile, DevOps, test automatici come jidoka) e tra GPOI e storia (dopoguerra giapponese, fordismo). Chiude l'Unità 2; l'Unità 3 riparte dall'impresa (forma giuridica, startup, business plan). Raccogliere le consegne su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il project management · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 1</p>
+  <h1>Il project<br>management</h1>
+  <p class="lead">Da dove viene il mestiere del project manager, chi chiede e chi realizza un progetto, come si affrontano i problemi e chi risponde di che cosa.</p>
+  <aside class="notes">Lezione 3 dell'unità 1 del libro. Obiettivi: conoscere le tappe storiche del project management, distinguere committente e contraente e i tipi di contratto, distinguere rischio, criticità e richiesta di modifica, costruire una matrice RACI. La matrice delle responsabilità torna più in dettaglio nell'unità 4 (gestione delle risorse umane). Durata 2 ore; servono LibreOffice Calc e un foglio di carta per gruppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nei vostri lavori di gruppo, chi decide di solito?</h2></div>
+  <div class="poll" data-id="u1-pm-decide">
+    <ol><li>Chi ha più voglia di lavorare</li><li>Chi parla più forte</li><li>Decidiamo tutti insieme, a voti</li><li>Nessuno: si arriva alla scadenza e si vede</li></ol>
+  </div>
+  <aside class="notes">Sondaggio sincero, anonimo. Le risposte B e D sono quelle che il project management prova a evitare: decisioni prese per caso e responsabilità non chiare. Chiedere un esempio di lavoro di gruppo andato male e annotare alla lavagna la causa: la riprendiamo con la matrice RACI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione · PMI, PMBOK Guide</p><h2>Che cos'è il project management</h2></div>
+  <div class="callout hl">L'applicazione di <b>conoscenze, abilità, strumenti e tecniche</b> alle attività di progetto per soddisfarne i <b>requisiti</b>.</div>
+  <div class="cols-3">
+    <div class="card"><h4>Avviare</h4><p class="small muted">Capire il bisogno, definire obiettivo e committente.</p></div>
+    <div class="card"><h4>Pianificare</h4><p class="small muted">Attività, tempi, costi, rischi, responsabilità.</p></div>
+    <div class="card"><h4>Eseguire</h4><p class="small muted">Guidare il team e produrre i deliverable.</p></div>
+    <div class="card"><h4>Monitorare e controllare</h4><p class="small muted">Confrontare piano e realtà, correggere.</p></div>
+    <div class="card"><h4>Chiudere</h4><p class="small muted">Consegnare, far approvare, imparare dagli errori.</p></div>
+    <div class="card fill"><h4>Il project manager</h4><p class="small">La persona incaricata di guidare il team verso gli obiettivi.</p></div>
+  </div>
+  <aside class="notes">Definizione tradotta da noi dalla PMBOK Guide del PMI ("the application of knowledge, skills, tools, and techniques to project activities to meet the project requirements"). I cinque gruppi di processi (avvio, pianificazione, esecuzione, monitoraggio e controllo, chiusura) tornano nell'unità 4 con il ciclo di vita. Far notare che il PM non fa tutto il lavoro: guida, coordina e risponde dei risultati.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La storia</p><h2>Le piramidi avevano un capo progetto?</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h4>Prima del Novecento</h4><p class="small">Cattedrali, acquedotti, canali: grandi opere guidate da architetti e capomastri, senza un metodo scritto e condiviso.</p></div>
+    <div class="card soft"><h4>Novecento</h4><p class="small">Henry Gantt e i suoi diagrammi; i grandi progetti militari e spaziali; CPM e PERT per calcolare i tempi.</p></div>
+    <div class="card soft"><h4>Oggi</h4><p class="small">Associazioni professionali (IPMA nel 1965, PMI nel 1969), norme ISO, metodi agili per il software.</p></div>
+  </div>
+  <div class="callout">Il project management diventa una <b>disciplina</b> quando i progetti diventano così grandi e veloci che l'esperienza di un singolo non basta più.</div>
+  <aside class="notes">Sulle opere antiche essere prudenti: sappiamo che furono organizzate, ma non con le tecniche di oggi. Henry Gantt (1861-1919) era un ingegnere statunitense allievo di Taylor; i suoi diagrammi nascono negli anni 1910 per la produzione industriale. IPMA (International Project Management Association) nasce in Europa nel 1965; PMI negli Stati Uniti nel 1969. In Italia esistono sezioni di entrambe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Le tappe del project management</h2></div>
+  <ol class="puzzle-ordina" data-id="u1-pm-storia">
+    <li>Henry Gantt disegna i suoi diagrammi per la produzione</li>
+    <li>Il Progetto Manhattan coordina decine di migliaia di persone</li>
+    <li>Nascono CPM e PERT per calcolare i tempi dei progetti</li>
+    <li>Viene fondato il Project Management Institute (PMI)</li>
+    <li>Esce la prima edizione della PMBOK Guide</li>
+    <li>Diciassette sviluppatori firmano il Manifesto Agile</li>
+  </ol>
+  <aside class="notes">Date: diagrammi di Gantt anni 1910; Progetto Manhattan 1942-1946; CPM (DuPont e Remington Rand, 1957) e PERT (Marina statunitense per il missile Polaris, 1958); PMI 1969; prima edizione della PMBOK Guide 1996; Manifesto Agile 2001. Squadre da 4, 3 minuti. Domanda: perché proprio progetti militari e spaziali hanno spinto le tecniche? Dimensioni enormi, migliaia di fornitori, tempi strettissimi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Efficienti, ma sulla cosa giusta</h2></div>
+  <figure class="citazione">
+    <blockquote>Non c'è nulla di così inutile come fare in modo efficiente ciò che non andrebbe fatto affatto.</blockquote>
+    <figcaption><b>Peter Drucker</b>, studioso di management, in "Managing for Business Effectiveness", Harvard Business Review, 1963</figcaption>
+  </figure>
+  <p class="lead">Il project manager non deve solo far finire il lavoro in tempo: deve assicurarsi che il lavoro serva davvero al committente.</p>
+  <aside class="notes">Traduzione nostra. Originale: "There is surely nothing quite so useless as doing with great efficiency what should not be done at all." (Harvard Business Review, maggio-giugno 1963). Collegamento: un progetto che rispetta tempi e costi ma consegna una cosa che nessuno usa è un fallimento del prodotto (lezione precedente). Discussione di 3 minuti: un esempio di lavoro fatto bene ma inutile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi chiede e chi fa</p><h2>Committente e contraente</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Committente</h3><p class="small">Ha il bisogno, ordina il progetto, paga e alla fine accetta il risultato. Ha spesso un suo referente o un suo project manager.</p></div>
+    <div class="card soft"><h3>Contraente (appaltatore)</h3><p class="small">Si impegna a realizzare l'opera o il servizio, con i propri mezzi e a proprio rischio. Ha il suo project manager.</p></div>
+  </div>
+  <div class="callout"><b>Codice civile, art. 1655.</b> L'appalto è il contratto con cui una parte assume, con organizzazione dei mezzi necessari e con gestione a proprio rischio, il compimento di un'opera o di un servizio verso un corrispettivo in danaro.</div>
+  <aside class="notes">Il testo dell'art. 1655 è riportato fedelmente. Nei progetti informatici il contratto è spesso d'appalto di servizi o di sviluppo software. Il contraente può affidare parti del lavoro a terzi solo se il committente lo autorizza (subappalto, art. 1656). Esempio: un Comune (committente) affida a una software house (contraente) il nuovo sito dei servizi online.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Chi fa che cosa in un appalto</h2></div>
+  <div class="puzzle-trascina" data-id="u1-pm-appalto" data-extra="Sponsor|Fornitore">
+    <div style="display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:28px;align-items:center">
+      <div class="card soft" style="align-items:center;text-align:center"><span class="slot" data-risposta="Committente"></span><p class="small">Un Comune di esempio: ha bisogno del sito dei servizi online e lo paga</p></div>
+      <div class="stack" style="text-align:center;gap:14px">
+        <p class="small">paga il <span class="slot" data-risposta="corrispettivo"></span> →</p>
+        <div class="card" style="padding:16px 20px;align-items:center"><p class="small">entrambi firmano il</p><span class="slot" data-risposta="contratto"></span></div>
+        <p class="small">← consegna i <span class="slot" data-risposta="deliverable"></span></p>
+      </div>
+      <div class="card soft" style="align-items:center;text-align:center"><span class="slot" data-risposta="Contraente|Appaltatore"></span><p class="small">Una software house: realizza il sito con i propri mezzi e a proprio rischio</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: a sinistra Committente, frecce: corrispettivo (dal committente al contraente), contratto (al centro), deliverable (dal contraente al committente), a destra Contraente (accettato anche Appaltatore se qualcuno lo scrivesse, ma nel mazzo c'è "Contraente"). Distrattori: Sponsor (figura interna di chi finanzia il progetto) e Fornitore (generico). 3 minuti, uno studente alla LIM spiega ogni freccia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Contratto a prezzo chiuso: il lavoro costa più del previsto. Chi paga la differenza?</h2></div>
+  <div class="poll" data-id="u1-pm-prezzo" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il committente, perché il lavoro è suo</li><li>Il contraente, che si è impegnato su quel prezzo</li><li>Metà ciascuno, per legge</li><li>Nessuno: il contratto si annulla</li></ol>
+    <p class="why">A prezzo chiuso (a corpo) il prezzo è fisso: se i costi salgono, il margine del contraente cala. È il rischio che l'art. 1655 chiama "gestione a proprio rischio". Nei contratti a consuntivo (tempo e materiali) il rischio passa invece al committente.</p>
+  </div>
+  <aside class="notes">Far notare il legame con il risk management: chi firma un prezzo chiuso deve stimare bene e mettere una riserva per i rischi. Il codice civile prevede la revisione del prezzo solo in casi particolari (art. 1664: variazioni dei costi oltre un decimo per circostanze imprevedibili), che è meglio non approfondire ora. Variazioni di ambito chieste dal committente invece si pagano a parte: sono richieste di modifica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le persone intorno a un progetto</h2></div>
+  <dl class="puzzle-abbina" data-id="u1-pm-ruoli">
+    <dt>Committente</dt><dd>Ordina il progetto, lo paga e accetta il risultato</dd>
+    <dt>Sponsor</dt><dd>Dirigente che sostiene il progetto e sblocca le risorse</dd>
+    <dt>Project manager</dt><dd>Guida il team e risponde di tempi, costi e qualità</dd>
+    <dt>Team di progetto</dt><dd>Svolge le attività e produce i deliverable</dd>
+    <dt>Utente finale</dt><dd>Userà ogni giorno il risultato del progetto</dd>
+    <dt>Subappaltatore</dt><dd>Realizza una parte del lavoro per conto del contraente</dd>
+  </dl>
+  <aside class="notes">Soluzione nell'ordine scritto. A coppie, 3 minuti. Distinzione delicata: committente e utente finale possono essere diversi (il Comune paga, i cittadini usano il sito). Lo sponsor può stare nell'impresa del committente o del contraente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gestione delle criticità</p><h2>Rischio, criticità, modifica</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Rischio</h3><p class="small">Un evento <b>incerto e futuro</b> che, se accade, cambia il progetto.</p><p class="small muted">Si prevede e si prepara una risposta.</p></div>
+    <div class="card bad"><h3>Criticità (issue)</h3><p class="small">Un problema <b>già accaduto</b> che blocca o rallenta il lavoro.</p><p class="small muted">Si registra, si assegna, si risolve.</p></div>
+    <div class="card soft"><h3>Richiesta di modifica</h3><p class="small">Qualcuno chiede di <b>cambiare</b> ambito, tempi o costi concordati.</p><p class="small muted">Si valuta l'impatto e si approva o no.</p></div>
+  </div>
+  <div class="callout">Ciclo di una criticità: <b>registrarla</b> nel registro, valutarne l'impatto, <b>assegnarla</b> a un responsabile con una scadenza, risolverla o farla salire di livello (<b>escalation</b>), chiuderla.</div>
+  <aside class="notes">Un rischio che si avvera diventa una criticità. L'escalation non è "fare la spia": è portare il problema a chi ha l'autorità per deciderlo (sponsor, comitato di progetto) quando supera i poteri del PM. Il registro delle criticità (issue log) è il documento che usiamo nel laboratorio di gruppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Rischio, criticità o richiesta di modifica?</h2></div>
+  <div class="puzzle-categorie" data-id="u1-pm-issue" style="--cols:3">
+    <div class="cat"><h4>Rischio</h4><ul><li>I server potrebbero arrivare in ritardo</li><li>Lo sviluppatore esperto potrebbe licenziarsi</li><li>Una nuova norma potrebbe cambiare i requisiti</li></ul></div>
+    <div class="cat"><h4>Criticità</h4><ul><li>Il server è arrivato rotto ieri</li><li>Il test di oggi blocca il login</li><li>Due persone del team sono in malattia</li></ul></div>
+    <div class="cat"><h4>Modifica</h4><ul><li>Il cliente vuole i pagamenti online</li><li>Il cliente chiede di anticipare la consegna</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: rischi = tutto ciò che contiene "potrebbe" (ritardo dei server, dimissioni, nuova norma); criticità = fatti già successi (server rotto, login bloccato, malattia); modifiche = richieste del cliente su ambito o tempi. Squadre, 4 minuti. Chiedere: che cosa diventa il rischio "server in ritardo" se i server non arrivano? Una criticità.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Il registro delle criticità</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Gruppi da 4: un PM, uno sponsor, due membri del team. Progetto: l'app per le iscrizioni a un torneo, consegna tra 3 settimane.</li>
+      <li>Il docente consegna 4 cartellini con 4 eventi. Per ognuno decidete: rischio, criticità o modifica?</li>
+      <li>In Calc create il registro con le colonne <b>N.</b>, <b>Descrizione</b>, <b>Tipo</b>, <b>Impatto</b> (basso, medio, alto), <b>Responsabile</b>, <b>Azione</b>, <b>Scadenza</b>, <b>Escalation sì/no</b>.</li>
+      <li>Il PM presenta allo sponsor la criticità più grave in 1 minuto. Salvate come <b>registro-criticita.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni riga ha un solo responsabile con nome e una scadenza precisa; l'escalation è "sì" solo dove la decisione supera i poteri del PM (soldi in più, consegna spostata).</div>
+  </div>
+  <aside class="notes">Cartellini proposti: (1) il database online gratuito che usate cambierà le condizioni d'uso il mese prossimo (rischio); (2) il grafico ha consegnato le icone in un formato che l'app non legge (criticità, impatto medio, responsabile il grafico, nessuna escalation); (3) l'organizzatore del torneo chiede anche la classifica in tempo reale (richiesta di modifica: valutare l'impatto, escalation perché cambia ambito e tempi); (4) il PC con il codice si è rotto e l'ultimo backup è di 4 giorni fa (criticità alta, escalation se serve un nuovo PC). Lo sponsor deve decidere, non solo ascoltare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'assegnazione delle responsabilità</p><h2>La matrice RACI</h2></div>
+  <div class="cols-4">
+    <div class="card fill"><p class="num" style="color:#fff">R</p><h4>Responsible</h4><p class="small">Esegue il lavoro.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">A</p><h4>Accountable</h4><p class="small">Ne risponde e approva. <b>Uno solo</b> per attività.</p></div>
+    <div class="card soft"><p class="num">C</p><h4>Consulted</h4><p class="small">Viene consultato prima, dà un parere.</p></div>
+    <div class="card soft"><p class="num">I</p><h4>Informed</h4><p class="small">Viene informato dopo.</p></div>
+  </div>
+  <div class="callout">Una tabella: <b>attività</b> sulle righe, <b>persone o ruoli</b> sulle colonne, una lettera in ogni incrocio. Si vede subito chi fa cosa e dove mancano responsabili.</div>
+  <aside class="notes">La matrice RACI è un caso particolare della matrice delle responsabilità (RAM), che rivedremo nell'unità 4 con l'OBS. Regole pratiche: una sola A per attività, almeno una R; troppe C rallentano; nessuno dovrebbe avere solo I su tutto. Esistono varianti, per esempio RASCI con S (support).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina nella tabella</p><h2>Completa la RACI del sito per il Comune</h2></div>
+  <div class="puzzle-trascina" data-id="u1-pm-raci" data-extra="S">
+    <table class="data compact" style="text-align:center">
+      <tr><th>Attività</th><th>Committente</th><th>PM</th><th>Sviluppatore</th><th>Grafico</th></tr>
+      <tr><td>Approvare i requisiti</td><td><span class="slot" data-risposta="A"></span></td><td>R</td><td>C</td><td>I</td></tr>
+      <tr><td>Disegnare l'interfaccia</td><td>C</td><td>A</td><td>C</td><td><span class="slot" data-risposta="R"></span></td></tr>
+      <tr><td>Scrivere il codice</td><td><span class="slot" data-risposta="I"></span></td><td><span class="slot" data-risposta="A"></span></td><td><span class="slot" data-risposta="R"></span></td><td>C</td></tr>
+      <tr><td>Collaudo finale</td><td>A</td><td>R</td><td><span class="slot" data-risposta="C"></span></td><td>I</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Soluzione: requisiti, committente = A (approva lui); interfaccia, grafico = R; codice, committente = I, PM = A, sviluppatore = R; collaudo, sviluppatore = C (consultato sui difetti). Il distrattore S è la "support" della variante RASCI. Ogni riga ha esattamente una A: farlo verificare a voce. Si può discutere se nel collaudo l'A sia il committente (accetta il risultato) o il PM: nel nostro schema il collaudo di accettazione lo approva il committente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quante A può avere una singola attività nella matrice RACI?</h2></div>
+  <div class="poll" data-id="u1-pm-una-a" data-tipo="quiz" data-risposta="A">
+    <ol><li>Una sola</li><li>Almeno due, per sicurezza</li><li>Quante servono, dipende dall'attività</li><li>Nessuna: la A spetta solo al PM, fuori dalla tabella</li></ol>
+    <p class="why">Se due persone "rispondono" della stessa attività, nella pratica non ne risponde nessuno: ciascuno pensa che decida l'altro. Le R invece possono essere più di una.</p>
+  </div>
+  <aside class="notes">Molti scelgono la C perché sembra la risposta prudente. Il principio è di buon senso organizzativo: una sola persona che risponde dell'esito. Collegare al sondaggio iniziale: nei lavori di gruppo spesso le A sono zero oppure tutti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Una RACI che si controlla da sola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Calc. In B1:E1 scrivi i ruoli <b>Presidente</b>, <b>PM</b>, <b>Sviluppatore</b>, <b>Grafico</b>: è il sito di un'associazione sportiva di esempio.</li>
+      <li>In A2:A7 le attività: Requisiti, Grafica, Sviluppo, Testi e foto, Test, Pubblicazione.</li>
+      <li>Riempi ogni cella con una sola lettera: R, A, C o I.</li>
+      <li>In F1 scrivi <b>Quante A</b> e in F2 <code>=CONTA.SE(B2:E2;"A")</code>; in G1 <b>Quante R</b> e in G2 <code>=CONTA.SE(B2:E2;"R")</code>. Copia fino alla riga 7.</li>
+      <li>Salva come <b>raci-associazione.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la colonna F vale <b>1</b> in tutte le righe e la colonna G almeno 1. Se compare 0 o 2, la matrice ha un errore: correggi finché è tutto a posto.</div>
+  </div>
+  <aside class="notes">Una soluzione possibile (righe Presidente, PM, Sviluppatore, Grafico): Requisiti A, R, C, I; Grafica C, A, C, R; Sviluppo I, A, R, C; Testi e foto A, C, I, R (il grafico raccoglie e prepara i materiali, il presidente approva); Test I, A, R, C; Pubblicazione A, R, C, I. In ogni riga F = 1 e G = 1. Errori tipici: due A nella stessa riga, oppure nessuna R per i testi. Chi finisce prima: formattazione condizionale che colora di rosso F quando è diversa da 1. Consegna con il pulsante della slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi e all'esame</p><h2>Il project manager e l'AI</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molti strumenti di gestione dei progetti hanno funzioni di AI che riassumono lo stato del lavoro, propongono un calendario o segnalano attività in ritardo. Sono aiuti utili, ma la A della RACI resta a una persona: un algoritmo non può rispondere di una decisione davanti al committente.</p></div>
+    <div class="card soft"><h3>All'esame</h3><ul class="points small"><li>Racconta una tappa storica e il perché delle tecniche.</li><li>Distingui committente e contraente con un esempio informatico.</li><li>Mostra una RACI del tuo progetto di quinta o del PCTO.</li></ul></div>
+  </div>
+  <aside class="notes">Restare sul concreto e senza numeri inventati: non citare percentuali di adozione dell'AI. Spunto di discussione: un assistente AI che propone le priorità del backlog è R, C o I? (al massimo C: dà un parere, non decide). Collegamento con Informatica: gli strumenti di gestione dei progetti software (issue tracker come quelli di GitHub) sono essi stessi registri delle criticità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole giuste</h2></div>
+  <div class="puzzle-trascina" data-id="u1-pm-uscita" data-extra="rischio|sponsor">
+    <p>Chi ordina e paga il progetto è il <span class="slot" data-risposta="committente"></span>; chi lo realizza a proprio rischio è il <span class="slot" data-risposta="contraente|appaltatore"></span>.</p>
+    <p>Un problema già accaduto che blocca il lavoro è una <span class="slot" data-risposta="criticità"></span>.</p>
+    <p>Nella matrice RACI ogni attività ha una sola <span class="slot" data-risposta="A"></span> e almeno una <span class="slot" data-risposta="R"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: committente, contraente, criticità, A, R. Distrattori: rischio (evento futuro, non già accaduto) e sponsor.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>PM: conoscenze, abilità, strumenti e tecniche per i requisiti</li>
+      <li>Da Gantt e CPM/PERT a PMI, PMBOK e Agile</li>
+      <li>Committente e contraente, appalto (art. 1655)</li>
+    </ul>
+    <ul class="points">
+      <li>Rischio futuro, criticità presente, modifica richiesta</li>
+      <li>Registro delle criticità ed escalation</li>
+      <li>RACI: una sola A per attività</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la leadership e la gestione del team. Ricordare le consegne: registro-criticita.ods e raci-associazione.ods.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

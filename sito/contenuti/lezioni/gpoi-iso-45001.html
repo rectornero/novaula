@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La norma ISO 45001 · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 9</p>
+  <h1>Salute e sicurezza<br>secondo ISO 45001</h1>
+  <p class="lead">Il sistema di gestione della salute e sicurezza sul lavoro (SGSSL): che cosa aggiunge alla legge, le sue parole chiave e la gerarchia dei controlli.</p>
+  <aside class="notes">Lezione del libro "La certificazione della sicurezza secondo la norma ISO 45001:2018". Obiettivi: caratteristiche della ISO 45001:2018; rapporto tra SGSSL e normativa di legge (D.Lgs. 81/2008, art. 30; D.Lgs. 231/2001); definizioni principali (lavoratore, pericolo, rischio per la SSL, incidente, consultazione e partecipazione); gerarchia dei controlli. L'unità 10 approfondirà il D.Lgs. 81/2008 e la valutazione dei rischi: qui restiamo sul sistema di gestione. Durata: 2 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>In una software house ci sono rischi per la salute?</h2></div>
+  <div class="poll" data-id="u9l-rischi-it">
+    <ol><li>No, si sta seduti al computer</li><li>Pochi: vista e schiena</li><li>Sì, anche stress e lavoro da remoto</li><li>Dipende da come è organizzato il lavoro</li></ol>
+  </div>
+  <aside class="notes">Far emergere: videoterminali (vista, postura, D.Lgs. 81/2008 titolo VII), rischio elettrico, incendio, stress lavoro-correlato, lavoro isolato, spostamenti dai clienti. Le risposte C e D sono le più complete. Collegamento con il deck ergonomia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Caratteristiche</p><h2>La prima norma ISO sulla salute e sicurezza</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Dal 2018</h3><p class="muted">Pubblicata a marzo 2018, sostituisce lo standard britannico BS OHSAS 18001:2007.</p></div>
+    <div class="card"><h3>Struttura HLS</h3><p class="muted">Stessi 10 punti di 9001 e 14001: facile da integrare.</p></div>
+    <div class="card"><h3>Partecipazione</h3><p class="muted">I lavoratori vanno consultati e coinvolti: un requisito dedicato, il punto 5.4.</p></div>
+  </div>
+  <div class="callout">Scopo: prevenire lesioni e malattie legate al lavoro e garantire luoghi di lavoro sicuri e salubri.</div>
+  <aside class="notes">Le aziende certificate OHSAS 18001 hanno dovuto passare alla ISO 45001 entro il 2021 (il termine iniziale di marzo 2021 è stato prorogato di sei mesi da IAF per la pandemia). Famiglia: ISO 45002:2023 (linee guida per l'applicazione) e ISO 45003:2021 (salute e sicurezza psicologica sul lavoro, cioè rischi psicosociali come lo stress). La partecipazione dei lavoratori non dirigenti è la novità più forte rispetto a OHSAS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il SGSSL e la legge</p><h2>Obbligatorio per legge o scelta volontaria?</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>D.Lgs. 81/2008: obbligatorio</h3><ul class="points"><li>Per tutti i datori di lavoro</li><li>Valutazione dei rischi e DVR</li><li>Figure obbligatorie: RSPP, RLS, medico competente se serve</li></ul></div>
+    <div class="card ok"><h3>ISO 45001: volontaria</h3><ul class="points"><li>Un sistema per rispettare la legge in modo stabile</li><li>Obiettivi, audit, riesame, miglioramento</li><li>Certificabile da un ente terzo</li></ul></div>
+  </div>
+  <div class="callout hl">Un sistema di gestione non sostituisce la legge: aiuta ad applicarla ogni giorno, non solo il giorno dell'ispezione.</div>
+  <aside class="notes">RSPP = responsabile del servizio di prevenzione e protezione; RLS = rappresentante dei lavoratori per la sicurezza; DVR = documento di valutazione dei rischi. La valutazione dei rischi e la nomina dell'RSPP sono obblighi del datore di lavoro che non si possono delegare (art. 17 del D.Lgs. 81/2008). Approfondimento nell'unità 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Legge o sistema?</p><h2>Obbligo di legge o scelta volontaria?</h2></div>
+  <div class="puzzle-categorie" data-id="u9l-legge">
+    <div class="cat"><h4>Obbligo del D.Lgs. 81/2008</h4><ul><li>Valutare i rischi e scrivere il DVR</li><li>Nominare l'RSPP</li><li>Formare i lavoratori</li><li>Fornire i DPI necessari</li></ul></div>
+    <div class="cat"><h4>Scelta volontaria</h4><ul><li>Farsi certificare ISO 45001</li><li>Audit da parte di un ente terzo</li><li>Obiettivi di miglioramento oltre la legge</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 3 minuti. DPI = dispositivi di protezione individuale. Discussione: un'azienda non certificata ma che rispetta la legge è in regola? Sì. Un'azienda certificata che non ha il DVR? Non è in regola, e non dovrebbe nemmeno essere certificata: la ISO 45001 chiede di soddisfare i requisiti legali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché conviene · art. 30 D.Lgs. 81/2008</p><h2>Il modello di organizzazione e gestione</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Se avviene un infortunio grave per violazione delle norme di sicurezza, anche l'<b>azienda</b> può essere ritenuta responsabile (D.Lgs. 231/2001).</p>
+      <p>Un modello di organizzazione e gestione adottato ed <mark>efficacemente attuato</mark> secondo l'art. 30 può escludere questa responsabilità.</p>
+    </div>
+    <div class="card night"><h3>E la norma?</h3><p>L'art. 30 presume conformi, per le parti corrispondenti, i modelli basati sulle Linee guida UNI-INAIL o sulla BS OHSAS 18001:2007, oggi sostituita dalla ISO 45001.</p></div>
+  </div>
+  <aside class="notes">Art. 30, comma 5, del D.Lgs. 81/2008: "In sede di prima applicazione, i modelli di organizzazione aziendale definiti conformemente alle Linee guida UNI-INAIL per un sistema di gestione della salute e sicurezza sul lavoro (SGSL) del 28 settembre 2001 o al British Standard OHSAS 18001:2007 si presumono conformi ai requisiti di cui al presente articolo per le parti corrispondenti." La legge non è stata aggiornata con la ISO 45001: nella pratica si fa riferimento a questa come evoluzione della OHSAS, ma non è citata nel testo. La responsabilità dell'ente del D.Lgs. 231/2001 riguarda i reati di omicidio colposo e lesioni gravi o gravissime commessi con violazione delle norme di sicurezza (art. 25-septies). Altro vantaggio: un SGSSL può contribuire alla riduzione del premio INAIL per prevenzione, secondo le regole pubblicate ogni anno dall'INAIL.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizioni · ISO 45001:2018</p><h2>Le parole della sicurezza</h2></div>
+  <div class="puzzle-trascina" data-id="u9l-definizioni" data-extra="danno|infortunio" style="font-size:35px">
+    <p><b>Pericolo</b>: <span class="slot" data-risposta="fonte"></span> con un potenziale di causare lesioni e malattie.</p>
+    <p><b>Rischio per la SSL</b>: combinazione della <span class="slot" data-risposta="probabilità"></span> di eventi pericolosi o esposizioni e della gravità delle lesioni e malattie che possono causare.</p>
+    <p><b>Incidente</b>: evento legato al lavoro che potrebbe avere o ha come risultato lesioni e malattie. Se non ne ha, si chiama <span class="slot" data-risposta="quasi incidente|near miss"></span>.</p>
+    <p><b>Lavoratore</b>: persona che svolge un lavoro o attività sotto il <span class="slot" data-risposta="controllo"></span> dell'organizzazione.</p>
+  </div>
+  <aside class="notes">Definizioni del punto 3 della ISO 45001:2018, semplificate. Nella norma la definizione di incidente ha una nota: un incidente senza lesioni e malattie può essere chiamato "near miss" o "near-hit". Il "lavoratore" comprende anche apprendisti, stagisti (anche gli studenti in PCTO!) e personale di fornitori sotto il controllo dell'organizzazione. Distrattori: danno, infortunio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Pericolo e rischio</p><h2>Abbina ogni pericolo dell'ufficio al suo rischio</h2></div>
+  <dl class="puzzle-abbina" data-id="u9l-pericoli">
+    <dt>Videoterminale per molte ore</dt><dd>Affaticamento della vista</dd>
+    <dt>Sedia e scrivania non regolabili</dt><dd>Disturbi a schiena e collo</dd>
+    <dt>Cavi che attraversano il corridoio</dt><dd>Inciampo e caduta</dd>
+    <dt>Ciabatte collegate in cascata</dt><dd>Surriscaldamento e incendio</dd>
+    <dt>Scadenze continue e reperibilità</dt><dd>Stress lavoro-correlato</dd>
+  </dl>
+  <aside class="notes">A coppie, 3 minuti. Il D.Lgs. 81/2008 (art. 28) chiede di valutare anche lo stress lavoro-correlato. Per i videoterminali il riferimento è il titolo VII del D.Lgs. 81/2008. Domanda: quale di questi rischi trattereste per primo? Fare stimare P e G come nella lezione sul risk based thinking.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un collega scivola sul pavimento bagnato ma non si fa niente</h2></div>
+  <div class="poll" data-id="u9l-quiz-nearmiss" data-tipo="quiz" data-risposta="C">
+    <ol><li>Non va registrato: nessuno si è fatto male</li><li>È un infortunio sul lavoro da denunciare all'INAIL</li><li>È un incidente senza lesioni: va segnalato e analizzato</li><li>È una non conformità maggiore</li></ol>
+    <p class="why">C. Per la ISO 45001 è un incidente (un "quasi incidente"): non ha causato lesioni, ma poteva. Analizzarlo permette di eliminare la causa prima che qualcuno si faccia male davvero.</p>
+  </div>
+  <aside class="notes">La A è la risposta istintiva. Spiegare la logica della prevenzione: per ogni infortunio grave ci sono molti quasi incidenti che lo annunciano, e sono un'occasione gratuita per imparare. Evitare di citare rapporti numerici precisi (la "piramide di Heinrich") come se fossero leggi: sono stime storiche discusse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle · Gerarchia dei controlli</p><h2>Dalla misura più efficace alla meno efficace</h2></div>
+  <ol class="puzzle-ordina" data-id="u9l-gerarchia">
+    <li>Eliminare il pericolo</li>
+    <li>Sostituirlo con qualcosa di meno pericoloso</li>
+    <li>Usare controlli tecnici e riorganizzare il lavoro</li>
+    <li>Usare controlli amministrativi, compresa la formazione</li>
+    <li>Usare dispositivi di protezione individuale (DPI)</li>
+  </ol>
+  <aside class="notes">Punto 8.1.2 della ISO 45001:2018, "Eliminare i pericoli e ridurre i rischi per la SSL". Esempio sul rumore di una sala server vicino agli uffici: eliminare (spostare i server in cloud o in un locale separato), sostituire (apparati più silenziosi), controlli tecnici (pannelli fonoassorbenti), amministrativi (turni, cartelli), DPI (cuffie). I DPI sono l'ultima difesa, non la prima: proteggono una persona alla volta e solo se li indossa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Qual è la misura più in alto nella gerarchia?</h2></div>
+  <div class="poll" data-id="u9l-quiz-gerarchia" data-tipo="quiz" data-risposta="D">
+    <ol><li>Dare guanti antitaglio a chi apre gli imballaggi</li><li>Un corso su come usare il taglierino</li><li>Un taglierino con lama a rientro automatico</li><li>Farsi consegnare i materiali senza imballaggi da tagliare</li></ol>
+    <p class="why">D elimina il pericolo (niente da tagliare). C è una sostituzione, B un controllo amministrativo, A un DPI.</p>
+  </div>
+  <aside class="notes">Molti scelgono C perché sembra la più "tecnologica". Far ordinare tutte e quattro le opzioni secondo la gerarchia: D, C, B, A.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Bernardino Ramazzini, il padre della medicina del lavoro</h2></div>
+  <figure class="citazione">
+    <blockquote>A queste domande se ne aggiunga un'altra: che mestiere fa?</blockquote>
+    <figcaption><b>Bernardino Ramazzini</b>, medico di Carpi, in <i>De morbis artificum diatriba</i>, 1700</figcaption>
+  </figure>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Telecamere con AI che controllano se si indossa il casco, sensori indossabili che segnalano le cadute: utili, ma in Italia il controllo a distanza dei lavoratori ha limiti precisi (art. 4 dello Statuto dei lavoratori) e l'AI Act classifica ad alto rischio i sistemi di AI usati per gestire i lavoratori.</p></div>
+  <aside class="notes">Ramazzini (1633-1714), professore a Modena e Padova, nel De morbis artificum diatriba (1700) suggerisce ai medici di aggiungere alle domande di Ippocrate quella sul mestiere del paziente ("quam artem exerceat"). Traduzione nostra dal latino, in forma libera. AI Act: Regolamento (UE) 2024/1689, allegato III, punto 4 (occupazione e gestione dei lavoratori). Statuto dei lavoratori: Legge 300/1970, art. 4 (impianti audiovisivi e altri strumenti di controllo). Domanda: una tecnologia che protegge può anche sorvegliare? Come si trova l'equilibrio? Consultare i lavoratori, come chiede proprio la ISO 45001.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Gli indici infortunistici</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Impresa di esempio: 192 000 ore lavorate ogni anno. Infortuni e giornate perse: 2023 (3; 45), 2024 (2; 60), 2025 (1; 10).</li>
+      <li>In Calc una riga per anno: Anno, Infortuni, Giornate, Ore.</li>
+      <li>Indice di frequenza: <code>=B2*1000000/D2</code>.</li>
+      <li>Indice di gravità: <code>=C2*1000/D2</code>. Arrotonda a 2 decimali.</li>
+      <li>Scrivi che cosa è successo nel 2024 e salva come <b>indici-infortuni.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> frequenza 15,63 / 10,42 / 5,21; gravità 0,23 / 0,31 / 0,05. Nel 2024 gli infortuni calano ma sono più gravi.</div>
+  </div>
+  <aside class="notes">Dati ipotetici. Calcoli: 3 × 1 000 000 / 192 000 = 15,625; 2 × 1 000 000 / 192 000 = 10,4167; 1 × 1 000 000 / 192 000 = 5,2083. Gravità: 45 × 1000 / 192 000 = 0,234; 60 × 1000 / 192 000 = 0,3125; 10 × 1000 / 192 000 = 0,052. Gli indici di frequenza e gravità sono definiti dalla norma UNI 7249 sulle statistiche degli infortuni; la ISO 45001 chiede di monitorare le prestazioni (9.1) ma non impone indicatori specifici. Messaggio chiave: un solo indicatore inganna; servono frequenza e gravità insieme. Valutazione: formule, arrotondamento, commento.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Un modulo per i quasi incidenti</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Writer progettate un modulo per segnalare i quasi incidenti del laboratorio: quando, dove, che cosa è successo, che cosa poteva succedere, proposta.</li>
+      <li>Decidete se la segnalazione può essere anonima e chi la riceve.</li>
+      <li>Scrivete 3 regole perché venga davvero usato.</li>
+      <li>Salvate come <b>modulo-quasi-incidenti-gruppoN.odt</b> e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il modulo si compila in meno di 2 minuti, ha un campo per la proposta del lavoratore e dice chi risponde ed entro quando.</div>
+  </div>
+  <aside class="notes">È l'applicazione pratica del punto 5.4 (consultazione e partecipazione) e del punto 10.2 (incidenti, non conformità e azioni correttive). Discussione finale: perché le persone non segnalano? Paura di essere puniti, moduli lunghi, nessuna risposta. Per questo la ISO 45001 chiede di eliminare gli ostacoli alla partecipazione. Valutazione: semplicità, completezza, regole d'uso realistiche. Variante: realizzare il modulo come form online, se la scuola ha strumenti con account d'istituto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Un collegamento personale</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Il PCTO</h3><p>Durante il PCTO eri un "lavoratore" anche per la ISO 45001: che formazione sulla sicurezza hai ricevuto? Chi era il tuo riferimento?</p></div>
+    <div class="card soft"><h3>L'informatica</h3><p>Un sistema di segnalazione dei quasi incidenti è un'app: database, privacy, notifiche, statistiche per gli indici.</p></div>
+  </div>
+  <aside class="notes">Gli studenti in PCTO sono equiparati ai lavoratori ai fini della sicurezza (D.Lgs. 81/2008, art. 2) e ricevono la formazione generale sulla sicurezza. Ottimo spunto personale per il colloquio, collegato anche all'unità 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u9l-uscita" data-extra="DPI|14001">
+    <p>La ISO 45001 ha sostituito la BS <span class="slot" data-risposta="OHSAS"></span> 18001.</p>
+    <p>Il pericolo è la <span class="slot" data-risposta="fonte"></span> di possibili lesioni e malattie.</p>
+    <p>La misura più efficace è <span class="slot" data-risposta="eliminare"></span> il pericolo.</p>
+    <p>La legge italiana sulla sicurezza è il D.Lgs. <span class="slot" data-risposta="81/2008"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: OHSAS, fonte, eliminare, 81/2008. Distrattori: DPI, 14001.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>ISO 45001:2018, erede della OHSAS 18001</li>
+      <li>Legge obbligatoria, sistema volontario</li>
+      <li>Art. 30: il modello che protegge anche l'azienda</li>
+    </ul>
+    <ul class="points">
+      <li>Pericolo = fonte, rischio = probabilità e gravità</li>
+      <li>I quasi incidenti si segnalano e si analizzano</li>
+      <li>Gerarchia: eliminare prima, DPI per ultimi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la responsabilità sociale, SA 8000 (gpoi-sa-8000).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

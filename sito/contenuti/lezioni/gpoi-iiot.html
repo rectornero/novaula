@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Industrial IoT · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>Industrial IoT</h1>
+  <p class="lead">Sensori che parlano, macchine che avvisano prima di rompersi: la fabbrica entra in rete, un oggetto alla volta.</p>
+  <aside class="notes">Obiettivi: definire IoT e IIoT, distinguere sensori e attuatori, conoscere l'architettura a livelli (dispositivi, edge, rete, piattaforma, applicazioni), il protocollo MQTT, le applicazioni principali (manutenzione predittiva, energia, qualità) e i rischi di sicurezza. Durata indicativa: 2 ore. Serve LibreOffice Calc e diagrams.net. Chi ha fatto Arduino con Tinkercad negli anni precedenti ha già usato sensori e attuatori: valorizzarlo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quanti oggetti connessi hai in casa, telefoni esclusi?</h2></div>
+  <div class="poll" data-id="u7-oggetti-casa">
+    <ol><li>Nessuno</li><li>Da 1 a 3</li><li>Da 4 a 8</li><li>Più di 8</li></ol>
+  </div>
+  <aside class="notes">Far elencare: smart TV, console, assistente vocale, lampadine, termostato, videocitofono, contatore elettrico digitale, auto. Domanda: chi ha cambiato la password predefinita di questi oggetti? Ci torneremo con la sicurezza (botnet Mirai, 2016: centinaia di migliaia di telecamere e router con password di fabbrica usati per un attacco).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le definizioni</p><h2>Dall'IoT all'IIoT</h2></div>
+  <p class="lead">Internet of Things: oggetti fisici dotati di <b>sensori, elaborazione e connessione</b> che scambiano dati con altri oggetti e sistemi, senza bisogno di una persona.</p>
+  <table class="data compact">
+    <tr><th></th><th>IoT di consumo</th><th>Industrial IoT</th></tr>
+    <tr><td><b>Esempio</b></td><td>Termostato smart</td><td>Sensore di vibrazione su un motore</td></tr>
+    <tr><td><b>Se si guasta</b></td><td>Un disagio</td><td>Linea ferma, scarti, rischi per le persone</td></tr>
+    <tr><td><b>Durata</b></td><td>Pochi anni</td><td>Anche 15-20 anni, come la macchina</td></tr>
+    <tr><td><b>Ambiente</b></td><td>Casa</td><td>Polvere, calore, vibrazioni, disturbi elettrici</td></tr>
+  </table>
+  <aside class="notes">L'espressione "Internet of Things" è attribuita a Kevin Ashton, che la usò nel 1999 in una presentazione alla Procter &amp; Gamble sui tag RFID nella catena di fornitura. L'IIoT ha requisiti più severi: affidabilità, tempi certi, sicurezza, compatibilità con macchine vecchie (retrofit). Chiedere: perché la durata conta? Un sensore che non riceve più aggiornamenti di sicurezza dopo 3 anni in una macchina che ne dura 20 è un problema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una visione del 1991</p><h2>Tecnologie che scompaiono</h2></div>
+  <figure class="citazione">
+    <blockquote>Le tecnologie più profonde sono quelle che scompaiono. Si intrecciano nel tessuto della vita quotidiana fino a non distinguersi più da essa.</blockquote>
+    <figcaption><b>Mark Weiser</b>, informatico dello Xerox PARC, "The Computer for the 21st Century", Scientific American, 1991</figcaption>
+  </figure>
+  <p class="lead">In fabbrica il sensore è nascosto nel motore: nessuno lo vede, ma è lui a dire quando il motore si sta consumando.</p>
+  <aside class="notes">Frase iniziale dell'articolo di Weiser (settembre 1991), considerato il manifesto dell'ubiquitous computing; traduzione nostra ("The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it"). Domanda: quali tecnologie sono già "scomparse" nella vostra vita? (il Wi-Fi, il GPS, il chip della carta).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il punto di partenza</p><h2>Sensori e attuatori</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Sensore</h3><p>Trasforma una grandezza fisica (temperatura, pressione, vibrazione, presenza) in un <b>segnale elettrico</b>, poi in un dato.</p><p class="muted small">Il mondo entra nel computer.</p></div>
+    <div class="card fill"><h3>Attuatore</h3><p>Trasforma un comando in un'<b>azione fisica</b>: muove un motore, apre una valvola, spinge un pistone.</p><p class="small" style="opacity:.85">Il computer agisce sul mondo.</p></div>
+  </div>
+  <div class="callout">In mezzo c'è chi decide: il <b>PLC</b> o un microcontrollore. Il <b>gateway</b> porta i dati in rete.</div>
+  <aside class="notes">Collegamento con Arduino: il sensore di temperatura TMP36 e il servomotore sono rispettivamente sensore e attuatore. Il segnale analogico va convertito in digitale (convertitore analogico-digitale, ADC). Chiedere un esempio di sensore e uno di attuatore in un'auto (sensore di parcheggio, motore del finestrino).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Che ruolo ha nella linea?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-sensori-attuatori" style="--cols:3">
+    <div class="cat"><h4>Sensore</h4><ul><li>Accelerometro sul motore</li><li>Fotocellula sul nastro</li><li>Lettore RFID al varco</li></ul></div>
+    <div class="cat"><h4>Attuatore</h4><ul><li>Elettrovalvola dell'aria</li><li>Motore del nastro</li><li>Pistone pneumatico</li></ul></div>
+    <div class="cat"><h4>Controllo e rete</h4><ul><li>PLC della linea</li><li>Gateway IoT</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritta. Il lettore RFID è un sensore (rileva e identifica un tag). Il PLC decide, il gateway raccoglie e traduce i dati verso la rete. Trappola: qualcuno mette il motore tra i sensori perché "ha un encoder": l'encoder è un sensore montato sul motore, il motore resta un attuatore. 4 minuti a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Che cosa misuro, con che cosa?</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-grandezze">
+    <dt>Vibrazioni di un motore</dt><dd>Accelerometro</dd>
+    <dt>Temperatura di un forno</dt><dd>Termocoppia</dd>
+    <dt>Presenza di un pezzo metallico</dt><dd>Sensore induttivo di prossimità</dd>
+    <dt>Identità di un pallet</dt><dd>Tag RFID e lettore</dd>
+    <dt>Difetti su una superficie</dt><dd>Telecamera con visione artificiale</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritta. La termocoppia sfrutta la tensione che nasce alla giunzione di due metalli diversi (effetto Seebeck) e regge temperature alte. Il sensore induttivo rileva solo metalli, senza contatto. La telecamera con visione artificiale usa modelli di AI addestrati su foto di pezzi buoni e difettosi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'architettura</p><h2>Dal sensore all'app, a livelli</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Dispositivi</h3><p class="muted small">sensori, attuatori, macchine</p></div>
+    <div class="card"><h3>Edge</h3><p class="muted small">gateway: raccoglie, filtra, traduce i protocolli</p></div>
+    <div class="card"><h3>Rete</h3><p class="muted small">Ethernet, Wi-Fi, 5G, LoRaWAN</p></div>
+    <div class="card"><h3>Piattaforma</h3><p class="muted small">archivia e analizza, spesso nel cloud</p></div>
+    <div class="card fill"><h3>App</h3><p class="small">cruscotti, allarmi, previsioni</p></div>
+  </div>
+  <div class="callout">L'<b>edge computing</b> elabora i dati vicino alla macchina: risposte rapide, meno traffico, dati sensibili che restano in reparto.</div>
+  <aside class="notes">Un sensore di vibrazione può produrre migliaia di campioni al secondo: mandarli tutti nel cloud costa e rallenta. Il gateway edge calcola valori sintetici (per esempio il valore efficace ogni minuto) e invia solo quelli. LoRaWAN è una rete a lungo raggio e basso consumo, adatta a sensori a batteria sparsi (magazzini, campi). Collegamento a Sistemi e reti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Completa lo schema IIoT</h2></div>
+  <div class="puzzle-trascina" data-id="u7-schema-iiot" data-extra="Stampante|Cartiglio">
+    <div style="position:relative;width:1600px;height:330px;font-size:29px;line-height:1.35">
+      <svg width="1600" height="330" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <defs><marker id="fri" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2f6fde"/></marker></defs>
+        <line x1="350" y1="165" x2="408" y2="165" stroke="#2f6fde" stroke-width="6" marker-end="url(#fri)"/>
+        <line x1="770" y1="165" x2="828" y2="165" stroke="#2f6fde" stroke-width="6" marker-end="url(#fri)"/>
+        <line x1="1190" y1="165" x2="1248" y2="165" stroke="#2f6fde" stroke-width="6" marker-end="url(#fri)"/>
+      </svg>
+      <div style="position:absolute;left:0;top:0;width:340px;height:330px;background:#fff;border:3px solid var(--line);border-radius:22px;padding:22px 24px"><span class="slot" data-risposta="Sensori"></span><p class="muted">misurano vibrazione e corrente del motore</p></div>
+      <div style="position:absolute;left:420px;top:0;width:340px;height:330px;background:#fff;border:3px solid var(--line);border-radius:22px;padding:22px 24px"><span class="slot" data-risposta="Gateway"></span><p class="muted">calcola un valore al minuto e lo pubblica</p></div>
+      <div style="position:absolute;left:840px;top:0;width:340px;height:330px;background:#fff;border:3px solid var(--line);border-radius:22px;padding:22px 24px"><span class="slot" data-risposta="Cloud"></span><p class="muted">archivia lo storico e fa girare il modello</p></div>
+      <div style="position:absolute;left:1260px;top:0;width:340px;height:330px;background:var(--accent-soft);border-radius:22px;padding:22px 24px"><span class="slot" data-risposta="Cruscotto"></span><p class="muted">mostra al manutentore l'allarme</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione da sinistra: Sensori, Gateway (edge), Cloud (piattaforma), Cruscotto (applicazione). Distrattori: Stampante, Cartiglio. Domanda: dove mettereste l'allarme che deve fermare il motore in un decimo di secondo? Non nel cloud: nel PLC o nell'edge (stesso principio della piramide dell'automazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il protocollo dell'IoT</p><h2>MQTT: pubblica e iscriviti</h2></div>
+  <div class="cols-2 wide-left">
+    <pre class="code"><span class="c"># il gateway pubblica sul topic</span>
+fabbrica/reparto1/pressa3/temp  <span class="s">72.5</span>
+fabbrica/reparto1/pressa3/vibr  <span class="s">2.9</span>
+
+<span class="c"># il cruscotto si iscrive</span>
+fabbrica/reparto1/<span class="hl">+</span>/temp
+fabbrica/<span class="hl">#</span></pre>
+    <ul class="points small">
+      <li>Chi pubblica non conosce chi legge: passa tutto dal <b>broker</b>.</li>
+      <li>Il <b>topic</b> è un indirizzo a livelli, come un percorso.</li>
+      <li><code>+</code> sostituisce un livello, <code>#</code> tutti i livelli successivi.</li>
+      <li>Messaggi piccoli: va bene anche per sensori a batteria.</li>
+    </ul>
+  </div>
+  <aside class="notes">MQTT (Message Queuing Telemetry Transport) è nato nel 1999 in IBM per il monitoraggio di oleodotti via satellite; oggi è uno standard OASIS (versione 5.0 del 2019) e la versione 3.1.1 è anche norma ISO/IEC 20922:2016. Livelli di qualità del servizio QoS 0, 1, 2 (al massimo una volta, almeno una volta, esattamente una volta). Il primo abbonamento riceve le temperature di tutte le macchine del reparto 1; il secondo tutto quello che arriva dalla fabbrica. Collegamento a TPSIT: è il modello publish/subscribe, diverso dal request/response di HTTP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Con MQTT, il sensore che pubblica una temperatura…</h2></div>
+  <div class="poll" data-id="u7-mqtt" data-tipo="quiz" data-risposta="B">
+    <ol><li>deve conoscere l'indirizzo di ogni app che la legge</li><li>la invia al broker, che la inoltra agli iscritti a quel topic</li><li>aspetta che un'app gli chieda il valore</li><li>la salva in un file condiviso sul server</li></ol>
+    <p class="why">Nel modello publish/subscribe chi pubblica e chi legge non si conoscono: il broker riceve i messaggi e li distribuisce a chi si è iscritto al topic. Così si possono aggiungere nuove app senza toccare i sensori.</p>
+  </div>
+  <aside class="notes">La C descrive il modello request/response (come HTTP o il polling di un PLC): è la risposta scelta da chi conosce già il web. Far notare il vantaggio organizzativo: l'ufficio qualità può iscriversi ai dati della pressa senza chiedere modifiche alla manutenzione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Manutenzione predittiva su un motore</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>A1 <b>Giorno</b>, B1 <b>Vibrazione (mm/s)</b>. Da A2 i giorni 1-10; da B2: 2,1 2,2 2,1 2,3 2,4 2,6 2,9 3,3 3,8 4,4.</li>
+      <li>C2 <code>=SE(B2&gt;=4,5;"ALLARME";SE(B2&gt;=2,8;"ATTENZIONE";"OK"))</code> e copia in basso.</li>
+      <li>B13 <code>=MEDIA(B2:B11)</code>, B14 <code>=CONTA.SE(C2:C11;"ATTENZIONE")</code>.</li>
+      <li>Inserisci un grafico a linee della vibrazione.</li>
+      <li>In A16 scrivi: fermeresti il motore? Quando? Salva <b>predittiva-motore.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> media 2,81 mm/s, 4 giorni in ATTENZIONE, nessun ALLARME. Ma gli aumenti crescono (0,4, 0,5, 0,6): domani si supera 4,5. Conviene programmare l'intervento.</div>
+  </div>
+  <aside class="notes">Dati inventati per un motore di un'impresa di esempio; le soglie 2,8 e 4,5 mm/s sono esempi didattici (nella realtà dipendono dal tipo di macchina e si ricavano dalle norme della serie ISO 20816 e dai dati del costruttore). Somma = 28,1, media 2,81. ATTENZIONE nei giorni 7-10. Messaggio chiave: la soglia fissa dice "tutto ok fino a domani", il trend dice "intervieni ora". Questa è la differenza tra manutenzione a guasto, preventiva (a calendario) e predittiva (basata sulle condizioni). Collegamento al costo del fermo non pianificato (unità 4, costi di progetto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>A che cosa servono quei dati?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-applicazioni-iiot" style="--cols:3">
+    <div class="cat"><h4>Manutenzione predittiva</h4><ul><li>Vibrazioni del cuscinetto in aumento</li><li>Ricambio ordinato prima del guasto</li></ul></div>
+    <div class="cat"><h4>Energia</h4><ul><li>Compressore acceso a vuoto la notte</li><li>Consumo per pezzo di ogni macchina</li></ul></div>
+    <div class="cat"><h4>Qualità e tracciabilità</h4><ul><li>Lotto di farina rintracciato in un'ora</li><li>Foto di ogni saldatura archiviata</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritta. Le perdite d'aria compressa e le macchine accese a vuoto sono tra gli sprechi energetici più comuni nelle fabbriche e si scoprono solo misurando. Collegamento con la lean production (unità 2, gli sprechi) e con Transizione 5.0 (incentivi legati al risparmio energetico).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Una fabbrica non è collegata a internet. È al sicuro dagli attacchi?</h2></div>
+  <div class="poll" data-id="u7-stuxnet" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sì: senza internet nessun malware può entrare</li><li>Sì, se i PLC sono abbastanza vecchi</li><li>No, ma solo se usa il Wi-Fi</li><li>No: un malware può entrare anche da una chiavetta USB</li></ol>
+    <p class="why">Il worm Stuxnet, scoperto nel 2010, ha raggiunto i PLC di un impianto iraniano isolato da internet passando da chiavette USB, e ha danneggiato le centrifughe cambiando di nascosto la loro velocità.</p>
+  </div>
+  <aside class="notes">Stuxnet colpiva PLC Siemens che controllavano le centrifughe per l'arricchimento dell'uranio nell'impianto di Natanz e mostrava agli operatori valori normali mentre alterava il processo. È il caso più citato di attacco informatico con danni fisici. La B è il tranello opposto: i sistemi vecchi spesso sono i meno protetti. Regole minime: segmentare le reti, controllare i supporti rimovibili, cambiare le password predefinite, aggiornare il firmware.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiamo insieme i pezzi</p><h2>La smart factory</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Vede</h3><p class="muted">Ogni macchina, pezzo e carrello lascia una traccia di dati.</p></div>
+    <div class="card"><h3>Capisce</h3><p class="muted">I dati diventano previsioni: guasti, consumi, scarti.</p></div>
+    <div class="card"><h3>Si adatta</h3><p class="muted">Piani e parametri cambiano senza fermare la produzione.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Arrivano le reti <b>5G private</b> dentro gli stabilimenti e i modelli di AI che girano direttamente sul gateway (<b>edge AI</b>). E l'Unione europea con il <b>Cyber Resilience Act</b> (Regolamento UE 2024/2847) chiederà che i prodotti connessi siano sicuri fin dalla progettazione e ricevano aggiornamenti.</p></div>
+  <aside class="notes">Il Cyber Resilience Act è entrato in vigore a dicembre 2024; la maggior parte degli obblighi si applicherà dal dicembre 2027. Riguarda i "prodotti con elementi digitali", quindi anche i sensori e i gateway IoT. Edge AI: per esempio la visione artificiale che scarta i pezzi difettosi direttamente sulla linea, senza mandare le immagini nel cloud. Niente statistiche di mercato: variano molto tra le fonti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Progetta l'IIoT di una linea di imbottigliamento</h2>
+  <div class="cols-2 wide-left" style="align-items:start">
+    <ol class="steps small">
+      <li>Linea di esempio: riempitrice, tappatrice, etichettatrice, nastro, compressore.</li>
+      <li>Scegliete 4 grandezze da misurare e per ognuna il sensore e lo scopo (manutenzione, energia, qualità).</li>
+      <li>Su <b>app.diagrams.net</b> disegnate i 5 livelli: dispositivi, edge, rete, piattaforma, app.</li>
+      <li>In un riquadro scrivete i 4 topic MQTT nella forma <code>impianto/reparto/macchina/grandezza</code>.</li>
+      <li>Salvate <b>iiot-linea-gruppoN.drawio</b> ed esportate in PNG.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni sensore ha un topic e uno scopo; almeno un dato è elaborato sull'edge; nello schema compare una misura di sicurezza (rete separata, password, aggiornamenti).</div>
+  </div>
+  <aside class="notes">Esempio di soluzione: livello del liquido nella riempitrice (sensore a ultrasuoni, qualità, topic acqua/linea1/riempitrice/livello); coppia di serraggio della tappatrice (qualità); vibrazione del motore del nastro (manutenzione); corrente del compressore (energia, topic acqua/linea1/compressore/corrente). Edge: il gateway calcola il valore medio ogni minuto e segnala subito i tappi fuori coppia. Gruppi da 4, presentazione di 2 minuti per gruppo con la LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Un caso</h3><p>La manutenzione predittiva: dati, soglia, trend, decisione. Spiega anche il risparmio.</p></div>
+    <div class="card soft"><h3>Un protocollo</h3><p>MQTT e publish/subscribe: lo colleghi a Sistemi e reti e a TPSIT.</p></div>
+    <div class="card soft"><h3>Un rischio</h3><p>Stuxnet e le password di fabbrica: la sicurezza fa parte del progetto.</p></div>
+  </div>
+  <aside class="notes">Suggerire di tenere pronto uno schema a livelli (dispositivi, edge, rete, piattaforma, app) da disegnare alla lavagna. Se nel PCTO hanno visto sensori o PLC, è l'aggancio ideale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u7-uscita-4" data-extra="server|stampante">
+    <p>Il <span class="slot" data-risposta="sensore"></span> trasforma una grandezza fisica in un dato; l'<span class="slot" data-risposta="attuatore"></span> trasforma un comando in un'azione.</p>
+    <p>Elaborare i dati vicino alla macchina si chiama <span class="slot" data-risposta="edge"></span> computing.</p>
+    <p>In MQTT i messaggi passano tutti dal <span class="slot" data-risposta="broker"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: sensore, attuatore, edge, broker. Distrattori: server, stampante.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>IIoT: oggetti industriali con sensori, elaborazione e rete</li>
+      <li>Sensori misurano, attuatori agiscono, PLC decide</li>
+      <li>Livelli: dispositivi, edge, rete, piattaforma, app</li>
+    </ul>
+    <ul class="points">
+      <li>MQTT: topic, broker, publish/subscribe</li>
+      <li>Usi: manutenzione predittiva, energia, qualità</li>
+      <li>Ogni oggetto connesso va protetto</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: cloud e big data, cioè dove finiscono e come si analizzano tutti questi dati.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

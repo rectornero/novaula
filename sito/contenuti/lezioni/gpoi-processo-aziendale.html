@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il processo aziendale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 1</p>
+  <h1>Il processo<br>aziendale</h1>
+  <p class="lead">Come lavora davvero un'impresa: attività collegate che trasformano input in risultati per un cliente, la catena del valore, chi ne risponde e come si misura se funziona.</p>
+  <aside class="notes">Lezione 6 dell'unità 1 del libro ("Il processo"). Obiettivi: definire il processo (UNI EN ISO 9000:2015), riconoscerne gli elementi (SIPOC), leggere la catena del valore di Porter, capire il ruolo del process owner e il ciclo pianificazione-esecuzione-misura-miglioramento, distinguere efficacia ed efficienza. Nell'unità 2 la lezione "L'importanza dei processi aziendali" (deck gpoi-processi-aziendali) riprende tipi di processi, mappe e monitoraggio. Durata 2 ore; servono diagrams.net (app.diagrams.net, senza account) e Calc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale "processo" della scuola funziona peggio?</h2></div>
+  <div class="poll" data-id="u1-proc-scuola">
+    <ol><li>Le comunicazioni a studenti e famiglie</li><li>La prenotazione dei laboratori</li><li>L'intervallo al bar o ai distributori</li><li>Le iscrizioni a corsi e uscite</li></ol>
+  </div>
+  <aside class="notes">Sondaggio leggero ma utile: la risposta più votata diventa l'esempio che la classe può usare nel laboratorio con diagrams.net al posto dell'ordine online. Chiedere: chi è il "cliente" di quel processo? Chi ne è responsabile? Spesso la risposta è "nessuno": è proprio il problema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione · UNI EN ISO 9000:2015</p><h2>Che cos'è un processo</h2></div>
+  <div class="callout hl">Un <b>insieme di attività correlate o interagenti</b> che utilizzano <b>input</b> per consegnare un <b>risultato atteso</b>.</div>
+  <div class="flow">
+    <div class="card soft"><h3>Input</h3><p class="small">Materiali, informazioni, richieste.</p></div>
+    <div class="card fill"><h3>Attività</h3><p class="small">Svolte con risorse e regole: persone, macchine, software, procedure.</p></div>
+    <div class="card soft"><h3>Output</h3><p class="small">Il risultato per un cliente, interno o esterno.</p></div>
+  </div>
+  <div class="callout">Il processo è <b>ripetitivo</b>: si svolge ogni giorno. Il progetto invece è unico e finisce. Un progetto spesso crea o migliora un processo.</div>
+  <aside class="notes">Definizione della norma UNI EN ISO 9000:2015, punto 3.4.1 (fondamenti e vocabolario dei sistemi di gestione per la qualità): torna nell'unità 9. Il cliente interno è un altro reparto della stessa impresa (il magazzino è cliente degli acquisti). Collegamento con la lezione sul progetto: progetto e processo sono le due forme del lavoro in un'impresa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli elementi</p><h2>Il modello SIPOC</h2></div>
+  <div class="cols-4" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+    <div class="card"><p class="num">S</p><h4>Suppliers</h4><p class="small muted">Fornitori degli input</p></div>
+    <div class="card"><p class="num">I</p><h4>Inputs</h4><p class="small muted">Ciò che entra</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">P</p><h4>Process</h4><p class="small">Le attività, in sequenza</p></div>
+    <div class="card"><p class="num">O</p><h4>Outputs</h4><p class="small muted">Ciò che esce</p></div>
+    <div class="card"><p class="num">C</p><h4>Customers</h4><p class="small muted">Chi riceve l'output</p></div>
+  </div>
+  <ul class="points small">
+    <li>A questi si aggiungono le <b>risorse</b>, i <b>vincoli</b> (norme, procedure, budget), un <b>responsabile</b> (process owner) e gli <b>indicatori</b> per misurarlo.</li>
+    <li>I processi attraversano l'organigramma in orizzontale: un ordine passa da vendite, magazzino, spedizioni, amministrazione.</li>
+  </ul>
+  <aside class="notes">SIPOC è uno strumento molto usato nel miglioramento dei processi (Six Sigma, unità 8). Collegamento con il deck "Cultura e strutture": l'organigramma è verticale (chi dipende da chi), il processo orizzontale (come scorre il lavoro). Molti problemi nascono nei passaggi tra un ufficio e l'altro.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Il SIPOC della pizzeria a domicilio</h2></div>
+  <dl class="puzzle-abbina" data-id="u1-proc-sipoc">
+    <dt>Supplier</dt><dd>Il mulino e il caseificio che consegnano farina e mozzarella</dd>
+    <dt>Input</dt><dd>Farina, mozzarella e l'ordine arrivato dall'app</dd>
+    <dt>Process</dt><dd>Preparare, cuocere, impacchettare e consegnare</dd>
+    <dt>Output</dt><dd>La pizza calda consegnata con lo scontrino</dd>
+    <dt>Customer</dt><dd>La famiglia che l'ha ordinata</dd>
+  </dl>
+  <aside class="notes">Soluzione nell'ordine scritto. A coppie, 2 minuti. Domanda di rilancio: l'ordine dall'app è un input, ma chi lo fornisce? Il cliente stesso: il cliente può essere anche fornitore di input (informazioni). E il rider è una risorsa del processo o un fornitore? Dipende: dipendente o servizio esterno.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Disegna un processo a corsie</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>app.diagrams.net</b> nel browser (non serve un account), scegli "Dispositivo" per salvare sul PC.</li>
+      <li>Cerca "swimlane" o "pool" tra le forme e crea 4 corsie: <b>Cliente</b>, <b>Sito e vendite</b>, <b>Magazzino</b>, <b>Spedizioni</b>.</li>
+      <li>Disegna l'evasione di un ordine online: inizio, almeno 6 attività, un rombo di decisione "Pagamento ok?", fine.</li>
+      <li>Scrivi su una nota l'input e l'output del processo.</li>
+      <li>Salva come <b>processo-ordine.drawio</b> ed esporta con File, Esporta come, PNG: <b>processo-ordine.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni attività è un verbo all'infinito ("Preparare il pacco"), sta nella corsia di chi la svolge e ha una freccia in uscita; il ramo "no" della decisione porta da qualche parte.</div>
+  </div>
+  <aside class="notes">Soluzione possibile: Cliente: effettuare l'ordine. Sito: registrare l'ordine, verificare il pagamento (decisione: no → avvisare il cliente e chiudere; sì → passare al magazzino). Magazzino: prelevare gli articoli, preparare il pacco. Spedizioni: affidare al corriere, inviare il codice di tracciamento. Cliente: ricevere il pacco (fine). Input: ordine e pagamento; output: pacco consegnato. In alternativa si può modellare il processo più votato nel sondaggio iniziale. Consegnare entrambi i file con il pulsante della slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>L'impresa come catena di attività</h2></div>
+  <figure class="citazione">
+    <blockquote>Ogni impresa è un insieme di attività svolte per progettare, produrre, commercializzare, consegnare e assistere il proprio prodotto.</blockquote>
+    <figcaption><b>Michael Porter</b>, economista della Harvard Business School, in <i>Competitive Advantage</i>, 1985</figcaption>
+  </figure>
+  <p class="lead">Da questa idea nasce la <b>catena del valore</b>: per capire da dove viene il vantaggio di un'impresa bisogna guardare le sue attività una per una.</p>
+  <aside class="notes">Traduzione nostra. Originale: "Every firm is a collection of activities that are performed to design, produce, market, deliver, and support its product." (M. E. Porter, Competitive Advantage, 1985, capitolo 2). Prosegue: "All these activities can be represented using a value chain".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La catena del valore · Porter</p><h2>Attività primarie e di supporto</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Primarie</h3><p class="small">Toccano direttamente il prodotto e il cliente: logistica in entrata, attività operative (produzione), logistica in uscita, marketing e vendite, servizi (post-vendita).</p></div>
+    <div class="card"><h3>Di supporto</h3><p class="small">Rendono possibili le primarie: infrastruttura dell'impresa (direzione, amministrazione, legale), gestione delle risorse umane, sviluppo della tecnologia, approvvigionamenti.</p></div>
+  </div>
+  <div class="callout">Il <b>margine</b> è la differenza tra il valore che il cliente riconosce (quanto paga) e il costo di tutte le attività. Ogni attività può aggiungere valore o solo costo.</div>
+  <aside class="notes">Far notare che il sistema informativo e il reparto IT stanno nelle attività di supporto (sviluppo della tecnologia, infrastruttura), ma oggi in molte imprese digitali il software è il prodotto stesso. Domanda: in una software house, quali sono le attività operative? Sviluppo, test, rilascio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Completa la catena del valore</h2></div>
+  <div class="puzzle-trascina" data-id="u1-proc-catena" data-extra="Contabilità">
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) 190px;gap:8px">
+      <div class="card" style="grid-column:1/6;padding:8px 20px;font-size:27px">Infrastruttura dell'impresa</div>
+      <div class="card" style="grid-column:1/6;padding:8px 20px;font-size:27px">Gestione delle risorse umane</div>
+      <div class="card" style="grid-column:1/6;padding:8px 20px;font-size:27px">Sviluppo della tecnologia</div>
+      <div class="card" style="grid-column:1/6;padding:8px 20px;font-size:27px">Approvvigionamenti</div>
+      <div class="card fill" style="grid-column:6;grid-row:1/6;padding:14px;justify-content:center;align-items:center;text-align:center;font-size:26px">valore − costi =<span class="slot" data-risposta="Margine" style="width:100%;min-width:0"></span></div>
+      <div class="card soft" style="padding:12px;font-size:24px;gap:8px">Ricevere e stoccare i materiali<span class="slot" data-risposta="Logistica in entrata" style="width:100%;min-width:0"></span></div>
+      <div class="card soft" style="padding:12px;font-size:24px;gap:8px">Trasformarli nel prodotto<span class="slot" data-risposta="Attività operative" style="width:100%;min-width:0"></span></div>
+      <div class="card soft" style="padding:12px;font-size:24px;gap:8px">Spedire al cliente<span class="slot" data-risposta="Logistica in uscita" style="width:100%;min-width:0"></span></div>
+      <div class="card soft" style="padding:12px;font-size:24px;gap:8px">Far conoscere e vendere<span class="slot" data-risposta="Marketing e vendite" style="width:100%;min-width:0"></span></div>
+      <div class="card soft" style="padding:12px;font-size:24px;gap:8px">Installare, riparare, assistere<span class="slot" data-risposta="Servizi" style="width:100%;min-width:0"></span></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione da sinistra: Logistica in entrata, Attività operative, Logistica in uscita, Marketing e vendite, Servizi; a destra Margine. Distrattore: Contabilità, che fa parte dell'infrastruttura (attività di supporto), non delle primarie. In Porter le primarie sono in basso, le attività di supporto in alto su tutta la larghezza, il margine a destra a forma di freccia. 3 minuti, alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>In un'impresa che produce biciclette</h2></div>
+  <div class="puzzle-categorie" data-id="u1-proc-primarie">
+    <div class="cat"><h4>Attività primarie</h4><ul><li>Ricevere i telai dal fornitore</li><li>Montare le bici</li><li>Spedire ai negozi</li><li>Campagna sui social</li><li>Riparazioni in garanzia</li></ul></div>
+    <div class="cat"><h4>Attività di supporto</h4><ul><li>Assumere e formare i meccanici</li><li>Scegliere i fornitori</li><li>Sviluppare il gestionale</li><li>Tenere la contabilità</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: primarie = ricevere i telai (logistica in entrata), montare (operative), spedire (logistica in uscita), social (marketing e vendite), garanzia (servizi); supporto = assumere e formare (risorse umane), scegliere i fornitori (approvvigionamenti: è la funzione acquisti, diversa dal ricevere fisicamente la merce), gestionale (tecnologia), contabilità (infrastruttura). Il tranello è "scegliere i fornitori": molti la mettono nelle primarie. Squadre, 4 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gestione</p><h2>Chi risponde di un processo?</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il <b>process owner</b> è il responsabile di un processo <b>da un capo all'altro</b>, anche se attraversa più uffici: ne definisce obiettivi e regole, ne controlla i risultati, ne guida il miglioramento.</p>
+      <ul class="points small">
+        <li><b>Pianificare</b>: obiettivi, indicatori, risorse, procedura.</li>
+        <li><b>Eseguire</b>: le persone lavorano secondo la procedura.</li>
+        <li><b>Misurare</b>: gli indicatori dicono come va (performance).</li>
+        <li><b>Migliorare</b>: si corregge ciò che non va e si ricomincia.</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Esempio</h3><p class="small">Nell'evasione degli ordini online il process owner può essere il responsabile della logistica: risponde dei tempi di consegna anche quando il ritardo nasce in un altro ufficio.</p></div>
+  </div>
+  <aside class="notes">Il ciclo pianificare, eseguire, misurare, migliorare è il ciclo PDCA (Plan, Do, Check, Act) di Shewhart e Deming, che ritroveremo nelle unità 8 e 9. Il process owner non svolge tutte le attività e non è necessariamente il capo di tutte le persone coinvolte: per questo gli servono le capacità di leadership della lezione 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Chi è il process owner?</h2></div>
+  <div class="poll" data-id="u1-proc-owner" data-tipo="quiz" data-risposta="D">
+    <ol><li>Chi svolge tutte le attività del processo</li><li>Il capo dell'ufficio dove il processo comincia</li><li>Il cliente finale, che riceve l'output</li><li>Chi risponde dei risultati del processo da un capo all'altro</li></ol>
+    <p class="why">Il process owner risponde dell'intero processo, anche dove attraversa uffici che non dipendono da lui. Non fa tutto il lavoro e non coincide per forza con un capo ufficio.</p>
+  </div>
+  <aside class="notes">Distrattore più scelto: la B, perché si ragiona per organigramma. Collegamento con la RACI della lezione 3: il process owner è la A del processo nel suo insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il ciclo di gestione di un processo</h2></div>
+  <ol class="puzzle-ordina" data-id="u1-proc-ciclo">
+    <li>Si fissano gli obiettivi e gli indicatori del processo</li>
+    <li>Si nomina il process owner e si assegnano le risorse</li>
+    <li>Si lavora seguendo la procedura</li>
+    <li>Si misurano gli indicatori</li>
+    <li>Si confrontano i risultati con gli obiettivi</li>
+    <li>Si decidono le azioni di miglioramento</li>
+  </ol>
+  <aside class="notes">Ordine: obiettivi e indicatori, owner e risorse, esecuzione, misura, confronto, miglioramento (e poi si ricomincia). Le prime due voci si possono anche scambiare: accettarlo se motivato (spesso l'owner è nominato prima e fissa lui gli obiettivi). Squadre, 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La performance</p><h2>Efficacia ed efficienza</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Efficacia</h3><p>Quanto si raggiungono i <b>risultati pianificati</b>.</p><p class="small muted">Gli ordini arrivano in tempo? I clienti sono soddisfatti?</p></div>
+    <div class="card soft"><h3>Efficienza</h3><p>Il <b>rapporto</b> tra risultato ottenuto e <b>risorse</b> usate.</p><p class="small muted">Quanto costa, in soldi, ore, energia, ogni ordine evaso?</p></div>
+  </div>
+  <div class="callout">Un indicatore (<b>KPI</b>, Key Performance Indicator) è un numero misurato sempre nello stesso modo e confrontato con un <b>obiettivo</b>: "ordini in tempo: 88%, obiettivo 90%".</div>
+  <aside class="notes">Definizioni della UNI EN ISO 9000:2015 (efficacia: grado di realizzazione delle attività pianificate e di conseguimento dei risultati pianificati; efficienza: rapporto tra risultato ottenuto e risorse utilizzate). Collegamento con la citazione di Drucker della lezione 3: efficienza senza efficacia è inutile. Un buon KPI è misurabile, ha un obiettivo, un responsabile e una frequenza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Questo indicatore misura efficacia o efficienza?</h2></div>
+  <div class="puzzle-categorie" data-id="u1-proc-kpi">
+    <div class="cat"><h4>Efficacia</h4><ul><li>% di ordini consegnati in tempo</li><li>Reclami ogni 100 ordini</li><li>Clienti soddisfatti nel sondaggio</li><li>Ordini senza errori</li></ul></div>
+    <div class="cat"><h4>Efficienza</h4><ul><li>Costo per ordine evaso</li><li>Ore di lavoro per ordine</li><li>Energia consumata per pacco</li><li>Imballaggi usati per ordine</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: efficacia = risultati per il cliente (puntualità, reclami, soddisfazione, ordini corretti); efficienza = risorse per unità di risultato (costo, ore, energia, imballaggi). Regola pratica: se nell'indicatore c'è una risorsa (soldi, tempo di lavoro, energia, materiale) divisa per il risultato, è efficienza. Squadre, 3 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Le spedizioni tagliano il costo per pacco del 20%, ma i ritardi aumentano. Il processo è diventato…</h2></div>
+  <div class="poll" data-id="u1-proc-trade" data-tipo="quiz" data-risposta="A">
+    <ol><li>Più efficiente e meno efficace</li><li>Più efficace e più efficiente</li><li>Più efficace e meno efficiente</li><li>Né più efficace né più efficiente: conta solo il costo</li></ol>
+    <p class="why">Usa meno risorse per pacco (più efficiente) ma raggiunge peggio il risultato atteso dal cliente, la consegna puntuale (meno efficace). Per questo un processo si misura con più indicatori insieme.</p>
+  </div>
+  <aside class="notes">Molti scelgono la B perché "risparmiare" sembra sempre un miglioramento. Domanda: quale dei due conta di più? Dipende dalla strategia, ma un'impresa che perde clienti per i ritardi perde anche i ricavi. Il laboratorio successivo mostra lo stesso fenomeno con i numeri.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il cruscotto del processo ordini</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <table class="sheet small">
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+        <tr><th>1</th><td>Mese</td><td>Ordini</td><td>In tempo</td><td>Reclami</td><td>Costo €</td></tr>
+        <tr><th>2</th><td>Gen</td><td>400</td><td>352</td><td>12</td><td>6000</td></tr>
+        <tr><th>3</th><td>Feb</td><td>450</td><td>405</td><td>9</td><td>6300</td></tr>
+        <tr><th>4</th><td>Mar</td><td>500</td><td>420</td><td>20</td><td>6500</td></tr>
+      </table>
+      <ol class="steps small">
+        <li>Copia i dati in Calc. In F2 <code>=C2/B2</code> (formato %), in G2 <code>=D2/B2*100</code>, in H2 <code>=E2/B2</code>; copia fino alla riga 4.</li>
+        <li>Obiettivi: in tempo ≥ 90%, reclami ≤ 3 ogni 100, costo ≤ 14 €. Colora di verde i valori nell'obiettivo. Salva come <b>kpi-ordini.ods</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> in tempo 88%, 90%, 84%; reclami 3, 2, 4 ogni 100; costo 15, 14, 13 € a ordine. Solo febbraio rispetta tutti e tre gli obiettivi. Marzo è il più efficiente ma il meno efficace.</div>
+  </div>
+  <aside class="notes">Dati di un'impresa di esempio. Conti: 352/400 = 0,88; 405/450 = 0,90; 420/500 = 0,84. Reclami: 12/400·100 = 3; 9/450·100 = 2; 20/500·100 = 4. Costo: 6000/400 = 15; 6300/450 = 14; 6500/500 = 13. Chi finisce prima: in I2 una formula con SE che scrive "OK" se tutti e tre gli obiettivi sono rispettati, per esempio <code>=SE(E(F2&gt;=0,9;G2&lt;=3;H2&lt;=14);"OK";"NO")</code>. Consegna con il pulsante della slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi e all'esame</p><h2>Il processo raccontato dai dati</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Ogni attività svolta in un gestionale lascia una traccia con data e ora. Il <b>process mining</b> legge questi registri (event log) e ricostruisce come il processo si svolge davvero, con i passaggi saltati, i ritorni indietro e le attese. È un campo nato nella ricerca informatica, oggi usato da molte imprese insieme a strumenti di AI per scovare i colli di bottiglia.</p></div>
+    <div class="card soft"><h3>All'esame</h3><ul class="points small"><li>Definisci il processo e distinguilo dal progetto.</li><li>Disegna la catena del valore di un'impresa del PCTO.</li><li>Usa efficacia ed efficienza con un KPI concreto.</li></ul></div>
+  </div>
+  <aside class="notes">Il process mining è stato sviluppato soprattutto dal gruppo di Wil van der Aalst (Università tecnica di Eindhoven, poi RWTH Aachen) dagli anni Duemila. Collegamento con Informatica: un event log è una tabella con id del caso, attività e timestamp, che si può interrogare in SQL. Non citare dati di mercato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole giuste</h2></div>
+  <div class="puzzle-trascina" data-id="u1-proc-uscita" data-extra="progetto|organigramma">
+    <p>Un insieme di attività correlate che usano input per un risultato atteso è un <span class="slot" data-risposta="processo"></span>.</p>
+    <p>Chi risponde del processo da un capo all'altro è il <span class="slot" data-risposta="process owner"></span>.</p>
+    <p>Nella catena del valore, spedire al cliente è logistica in <span class="slot" data-risposta="uscita"></span>.</p>
+    <p>Il costo per ordine misura l'<span class="slot" data-risposta="efficienza"></span>; gli ordini in tempo misurano l'<span class="slot" data-risposta="efficacia"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: processo, process owner, uscita, efficienza, efficacia. Distrattori: progetto, organigramma.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Processo: attività correlate, input → risultato atteso</li>
+      <li>SIPOC: fornitori, input, processo, output, clienti</li>
+      <li>Catena del valore: primarie, supporto, margine</li>
+    </ul>
+    <ul class="points">
+      <li>Process owner: risponde da un capo all'altro</li>
+      <li>Pianificare, eseguire, misurare, migliorare</li>
+      <li>Efficacia (risultati) ed efficienza (risorse)</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'unità 1. Ricordare le consegne: processo-ordine.drawio e .png, kpi-ordini.ods. Nell'unità 2 riprendiamo i processi con la lezione "L'importanza dei processi aziendali".</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

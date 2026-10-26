@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La gestione delle risorse umane · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>La gestione delle<br>risorse umane</h1>
+  <p class="lead">La WBS dice che cosa fare. Adesso servono le persone: chi fa che cosa, chi ne risponde e quando lavora ciascuno, senza chiedere a nessuno giornate da sedici ore.</p>
+  <aside class="notes">Obiettivi: costruire l'OBS di un progetto, distinguere lavoro (ore-persona) e durata, compilare e controllare una matrice delle responsabilità RACI, leggere il carico di una risorsa e livellare un sovraccarico usando il margine (slack) del CPM. Durata indicativa: 2-3 ore. Caso di esempio, lo stesso delle lezioni precedenti dell'unità: l'e-commerce del Panificio Rossi (impresa di esempio) sviluppato da una piccola software house, attività A-I, 17 giorni lavorativi, percorso critico A-B-D-G-I. Servono diagrams.net (app.diagrams.net, senza account) e LibreOffice Calc.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Nel vostro ultimo lavoro di gruppo, chi ha deciso chi faceva che cosa?</h2></div>
+  <div class="poll" data-id="ru-gruppo">
+    <ol><li>Uno di noi, e gli altri hanno seguito</li><li>Ognuno ha scelto da sé</li><li>L'abbiamo deciso insieme e scritto</li><li>Nessuno: si è visto strada facendo</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio. Di solito vincono A e D. Chiedere a chi ha votato D: alla fine qualcuno ha lavorato il doppio degli altri? Qualcosa è rimasto senza padrone? Sono esattamente i due problemi che risolvono oggi la matrice delle responsabilità (nessuna attività senza padrone) e la schedulazione delle risorse (nessuno sovraccarico).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il quadro</p><h2>Dalle attività alle persone</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">WBS</p><h3>Che cosa</h3><p>Il lavoro scomposto in pacchetti: analisi, grafica, database, sviluppo, test.</p></div>
+    <div class="card soft"><p class="num">OBS</p><h3>Chi</h3><p>Le unità e i ruoli che lavorano al progetto, in una struttura ad albero.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">RAM</p><h3>Chi fa che cosa</h3><p>La matrice delle responsabilità incrocia WBS e OBS.</p></div>
+  </div>
+  <div class="callout">Poi la <b>schedulazione</b>: mettere le persone sul calendario del Gantt senza superare le ore disponibili di ciascuno.</div>
+  <aside class="notes">RAM = Responsibility Assignment Matrix; la forma più diffusa è la RACI, che vediamo tra poco. Richiamare la WBS dell'e-commerce del Panificio Rossi costruita nella lezione sulla pianificazione e il reticolo CPM: oggi aggiungiamo la terza dimensione del progetto, le persone, che sono la risorsa più costosa e meno "elastica".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Organizational Breakdown Structure</p><h2>L'OBS dell'e-commerce del Panificio Rossi</h2></div>
+  <div class="org">
+    <div class="org-box top">Project manager</div>
+    <div class="org-row" style="--l:15%;--r:15%">
+      <div class="org-box">Analisi e grafica<br><span class="small" style="font-weight:500">analista · grafica</span></div>
+      <div class="org-box acc">Sviluppo<br><span class="small" style="font-weight:500">front-end · back-end</span></div>
+      <div class="org-box">Qualità<br><span class="small" style="font-weight:500">tester</span></div>
+    </div>
+  </div>
+  <div class="cols-2">
+    <div class="card"><h3>Che cos'è</h3><p>La scomposizione gerarchica dell'<b>organizzazione del progetto</b>: unità, ruoli e persone che lo realizzano.</p></div>
+    <div class="card soft"><h3>Non è l'organigramma</h3><p>L'organigramma descrive l'impresa e dura anni; l'OBS descrive <b>un progetto</b> e finisce con lui. Può includere fornitori e cliente.</p></div>
+  </div>
+  <aside class="notes">Nella software house di esempio le stesse persone lavorano anche ad altri progetti: nell'organigramma aziendale (lezione sulle strutture organizzative) stanno nella funzione "Sviluppo", nell'OBS di questo progetto rispondono al project manager. È la struttura a matrice vista nel deck strutture-organizzative. Nell'OBS si scrivono ruoli (e nomi), mai attività: le attività stanno nella WBS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Va nella WBS o nell'OBS?</h2></div>
+  <div class="puzzle-categorie" data-id="ru-wbs-obs">
+    <div class="cat"><h4>WBS: che cosa si fa</h4><ul><li>Progettazione database</li><li>Caricamento catalogo</li><li>Test di integrazione</li><li>Formazione del personale</li></ul></div>
+    <div class="cat"><h4>OBS: chi lo fa</h4><ul><li>Project manager</li><li>Unità Sviluppo</li><li>Tester</li><li>Fornitore dei pagamenti</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: WBS = progettazione database, caricamento catalogo, test di integrazione, formazione del personale (sono pacchetti di lavoro, si descrivono con un nome o un sostantivo d'azione). OBS = project manager, unità Sviluppo, tester, fornitore dei pagamenti (sono soggetti). Trabocchetto: "Test di integrazione" e "Tester" si somigliano, ma uno è un lavoro e l'altro una persona. Far lavorare a coppie 2 minuti, poi un volontario alla LIM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'allocazione delle risorse</p><h2>Lavoro e durata non sono la stessa cosa</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il <b>lavoro</b> (effort) si misura in <b>ore-persona</b> o giorni-persona. La <b>durata</b> è il tempo sul calendario.</p>
+      <div class="formula" style="font-size:46px"><small>se il lavoro è divisibile e le persone lavorano in parallelo</small>durata = lavoro ÷ (persone × <span class="hl">ore/giorno</span>)</div>
+      <p class="small muted">Back-end del Panificio: 40 ore-persona, 1 programmatore a 8 ore al giorno: 5 giorni.</p>
+    </div>
+    <div class="card soft"><h3>Per allocare una persona servono</h3><ul class="points"><li><b>competenze</b> adatte al pacchetto</li><li><b>disponibilità</b> (calendario, ferie, % su altri progetti)</li><li><b>costo</b> orario o giornaliero</li></ul></div>
+  </div>
+  <aside class="notes">Nella WBS si stima il lavoro, poi si decide quante persone assegnare e se ne ricava la durata (ProjectLibre fa proprio questo con i campi Lavoro, Durata e Unità di assegnazione). Esempio: 40 ore-persona con 1 persona a 8 ore/giorno = 5 giorni, la durata dell'attività E. Ma la formula vale solo se il lavoro si può davvero dividere: la slide successiva lo mette in discussione. Il costo orario servirà nella lezione sui costi di progetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il mito del mese-uomo</h2></div>
+  <figure class="citazione">
+    <blockquote>Per mettere al mondo un bambino servono nove mesi, qualunque sia il numero di donne a cui si assegna il compito.</blockquote>
+    <figcaption><b>Fred Brooks</b>, capo del progetto del sistema operativo IBM OS/360, in <i>The Mythical Man-Month</i>, 1975</figcaption>
+  </figure>
+  <p class="lead">Persone e mesi sono intercambiabili solo se il lavoro si divide senza bisogno di parlarsi. Nel software quasi mai.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The bearing of a child takes nine months, no matter how many women are assigned" (The Mythical Man-Month, capitolo 2, 1975). Brooks spiega che molte attività software sono sequenziali (debug) e che ogni nuova persona va formata e coordinata. Nel deck gestione-progetti-gantt avete già visto la legge di Brooks ("aggiungere persone a un progetto in ritardo lo fa ritardare di più"): qui interessa il lato dell'allocazione. All'esame: ottimo aggancio tra GPOI e informatica (progetti software reali, OS/360).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il front-end richiede 48 ore-persona. Un programmatore ci mette 6 giorni. E con 3 programmatori?</h2></div>
+  <div class="poll" data-id="ru-brooks" data-tipo="quiz" data-risposta="B">
+    <ol><li>Esattamente 2 giorni</li><li>Probabilmente più di 2 giorni</li><li>18 giorni</li><li>Sempre 6 giorni</li></ol>
+    <p class="why">Sulla carta 48 ÷ (3 × 8) = 2 giorni. Ma i tre devono dividersi il lavoro, accordarsi sulle interfacce e integrare il codice: la stima realistica è più alta. Chi risponde 2 tratta le persone come mesi intercambiabili.</p>
+  </div>
+  <aside class="notes">La A è il tranello del calcolo "pulito". La C confonde lavoro e durata (moltiplica invece di dividere). La D è vera solo per le attività non divisibili (il bambino di Brooks). Chiedere: quali parti del front-end si potrebbero davvero dividere (pagine diverse) e quali no (la struttura comune, il carrello)?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La matrice delle responsabilità</p><h2>La RACI che conoscete, ora costruita sull'OBS</h2></div>
+  <table class="data compact">
+    <tr><th>Attività</th><th>PM</th><th>Analista</th><th>Grafica</th><th>Front-end</th><th>Back-end</th><th>Tester</th><th>Sig. Rossi</th></tr>
+    <tr><td>A Analisi requisiti</td><td class="hl">A</td><td>R</td><td>C</td><td></td><td></td><td></td><td>C</td></tr>
+    <tr><td>B Progettazione grafica</td><td class="hl">A</td><td></td><td>R</td><td>C</td><td></td><td></td><td>C</td></tr>
+    <tr><td>E Sviluppo back-end</td><td class="hl">A</td><td></td><td></td><td>C</td><td>R</td><td>I</td><td></td></tr>
+    <tr><td>G Test di integrazione</td><td class="hl">A</td><td></td><td></td><td>C</td><td>C</td><td>R</td><td></td></tr>
+    <tr><td>I Messa online</td><td class="hl">A</td><td></td><td></td><td></td><td>R</td><td>C</td><td>I</td></tr>
+  </table>
+  <p class="small"><b>R</b> esegue · <b>A</b> ne risponde e approva (una sola per riga) · <b>C</b> consultato prima · <b>I</b> informato dopo</p>
+  <aside class="notes">La RACI è già stata introdotta nel deck gpoi-project-management (unità 1), con il controllo delle A in Calc: qui la ripassiamo velocemente e la usiamo in modo nuovo, con le colonne prese dall'OBS e lo sguardo al carico di ciascuno. RACI = Responsible, Accountable, Consulted, Informed. Regole di controllo: in ogni riga una e una sola A, almeno una R; colonne piene di R segnalano un sovraccarico, colonne vuote una persona inutile o dimenticata. Il Sig. Rossi, titolare del panificio e committente, compare come C nell'analisi e nella grafica e come I alla messa online. Variante: in progetti piccoli la stessa persona può essere R e A. Qui il PM è A ovunque per semplicità; in un progetto grande la A si delega ai responsabili di unità dell'OBS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Vero o falso?</p><h2>Le regole della matrice RACI</h2></div>
+  <div class="puzzle-categorie" data-id="ru-raci-vf">
+    <div class="cat"><h4>Vero</h4><ul><li>Ogni attività ha una sola A</li><li>Si può essere R e A insieme</li><li>Il cliente può stare nella matrice</li><li>Una colonna piena di R è un allarme</li></ul></div>
+    <div class="cat"><h4>Falso</h4><ul><li>Chi è I deve approvare</li><li>Due A sono più sicure di una</li><li>Ognuno deve avere almeno una A</li><li>La RACI sostituisce la WBS</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Discutere "Due A sono più sicure di una": è l'errore più comune, con due responsabili finali ognuno aspetta l'altro e nessuno decide. "Ognuno deve avere almeno una A": falso, molti membri del team sono solo R, C o I. "La RACI sostituisce la WBS": falso, la usa come righe. Squadre da 3, 3 minuti, poi controllo alla LIM.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>OBS e RACI del Panificio Rossi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Su <b>app.diagrams.net</b> (salva su Dispositivo) disegna l'OBS: PM, tre unità, sei ruoli con un nome.</li>
+      <li>Salva <b>obs-panificio.drawio</b> ed esporta <b>obs-panificio.png</b>.</li>
+      <li>In Calc copia la RACI e aggiungi le righe C, D, F, H.</li>
+      <li>In riga 11 conta le R di ogni ruolo: in B11 <code>=CONTA.SE(B2:B10;"R")</code>, copia fino a H11.</li>
+      <li>Salva <b>raci-panificio.ods</b> e consegna i due file.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> 9 righe, ognuna con una sola A. La riga 11 mostra chi ha più R: di solito il back-end, il primo candidato al sovraccarico. L'OBS contiene solo ruoli e persone: "Sviluppo front-end" come attività non ci va: è un pacchetto della WBS.</div>
+  </div>
+  <aside class="notes">Una soluzione possibile per le righe mancanti: C Progettazione database (Back-end R, PM A, Analista C); D Sviluppo front-end (Front-end R, PM A, Grafica C, Back-end C); F Caricamento catalogo (Back-end R, PM A, Sig. Rossi C perché fornisce prodotti e foto); H Formazione personale (Analista R, PM A, Sig. Rossi I o C). Con queste righe il back-end ha 4 R (C, E, F, I), l'analista 2 (A, H), grafica, front-end e tester 1: è lo stesso squilibrio che la slide sul carico mostra nel tempo. Il controllo "una sola A per riga" con CONTA.SE l'hanno già fatto nel deck gpoi-project-management: chi vuole lo aggiunge nella colonna J. Chi finisce prima: formattazione condizionale che colora le celle della riga 11 maggiori di 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La schedulazione delle risorse</p><h2>Il carico del programmatore back-end</h2></div>
+  <div class="cols-2 wide-left">
+    <svg viewBox="0 0 980 470" width="980" height="470" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Istogramma del carico giornaliero: 16 ore nei giorni 6 e 7">
+      <line x1="80" y1="400" x2="960" y2="400" stroke="#172033" stroke-width="3"/>
+      <g font-size="24" fill="#596179" text-anchor="end"><text x="66" y="408">0</text><text x="66" y="248">8</text><text x="66" y="88">16</text></g>
+      <rect x="110" y="240" width="70" height="160" fill="#9aa3b8"/><rect x="205" y="240" width="70" height="160" fill="#9aa3b8"/>
+      <rect x="300" y="240" width="70" height="160" fill="#d0541f"/><rect x="300" y="80" width="70" height="160" fill="#b42318"/>
+      <rect x="395" y="240" width="70" height="160" fill="#d0541f"/><rect x="395" y="80" width="70" height="160" fill="#b42318"/>
+      <rect x="490" y="240" width="70" height="160" fill="#d0541f"/><rect x="585" y="240" width="70" height="160" fill="#d0541f"/><rect x="680" y="240" width="70" height="160" fill="#d0541f"/>
+      <rect x="775" y="398" width="70" height="2" fill="#d0541f"/><rect x="870" y="398" width="70" height="2" fill="#d0541f"/>
+      <line x1="80" y1="240" x2="960" y2="240" stroke="#127048" stroke-width="4" stroke-dasharray="14 10"/>
+      <g font-size="26" fill="#172033" text-anchor="middle"><text x="145" y="440">4</text><text x="240" y="440">5</text><text x="335" y="440">6</text><text x="430" y="440">7</text><text x="525" y="440">8</text><text x="620" y="440">9</text><text x="715" y="440">10</text><text x="810" y="440">11</text><text x="905" y="440">12</text></g>
+      <g font-size="26" font-weight="700" fill="#fff" text-anchor="middle"><text x="145" y="330">C</text><text x="240" y="330">C</text><text x="335" y="330">E</text><text x="430" y="330">E</text><text x="525" y="330">E</text><text x="620" y="330">E</text><text x="715" y="330">E</text><text x="335" y="170">F</text><text x="430" y="170">F</text></g>
+      <text x="960" y="228" font-size="24" fill="#127048" text-anchor="end" font-weight="700">8 ore disponibili</text>
+      <text x="520" y="466" font-size="22" fill="#596179" text-anchor="middle">giorno del progetto</text>
+    </svg>
+    <div class="stack">
+      <p>Nel Gantt "al più presto", C, E e F toccano tutte a lui: nei giorni 6 e 7 ha <mark>16 ore</mark>.</p>
+      <p>È una risorsa <b>sovrallocata</b>. Rimedi: spostare un'attività, cambiare persona, allungare la durata.</p>
+      <p class="small muted">Il <b>livellamento</b> sposta prima le attività con margine.</p>
+    </div>
+  </div>
+  <aside class="notes">Dati dal reticolo CPM dell'unità: C giorni 4-5, E giorni 6-10 (dopo C), F giorni 6-7 (dopo C, margine 8 giorni). Se tutte e tre sono assegnate al programmatore back-end a tempo pieno, nei giorni 6 e 7 servono 16 ore. ProjectLibre segnala lo stesso problema in rosso nella vista di utilizzo delle risorse. Non anticipare la soluzione: la chiede il quiz successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Come togli il sovraccarico senza allungare il progetto?</h2></div>
+  <div class="poll" data-id="ru-livella" data-tipo="quiz" data-risposta="C">
+    <ol><li>Anticipi F ai giorni 4-5</li><li>Gli chiedi 16 ore al giorno per due giorni</li><li>Sposti F ai giorni 11-12</li><li>Elimini F dal progetto</li></ol>
+    <p class="why">F ha 8 giorni di margine: può iniziare al più tardi il giorno 14. Ai giorni 11-12 il programmatore è libero e la fine resta al giorno 17. Anticipare F è impossibile: dipende da C, che finisce il giorno 5.</p>
+  </div>
+  <aside class="notes">La A viola un vincolo di precedenza (F dopo C) e comunque sovrapporrebbe F a C. Un'alternativa corretta, non tra le opzioni: ritardare E di 2 giorni dentro il suo margine di 3, ma si consuma quasi tutto il margine del ramo che porta al test; conviene usare il margine più grande, quello di F. Anche assegnare F al front-end, libero nei giorni 6-7, funzionerebbe se ha le competenze. La B viola i limiti di orario e la sicurezza (e la qualità del codice). La D cambia l'ambito: il catalogo serve. Dopo lo spostamento il carico è 8 ore al giorno dal giorno 4 al giorno 12.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni problema di allocazione ha il suo rimedio</h2></div>
+  <dl class="puzzle-abbina" data-id="ru-rimedi">
+    <dt>Sovraccarico su un'attività con margine</dt><dd>Spostarla dentro il margine (livellamento)</dd>
+    <dt>Sovraccarico su un'attività critica</dt><dd>Affiancare un'altra persona competente</dd>
+    <dt>Persona disponibile al 50%</dt><dd>A parità di lavoro, durata doppia</dd>
+    <dt>Competenza che manca nel team</dt><dd>Formazione, affiancamento o fornitore esterno</dd>
+    <dt>Una colonna RACI piena di R</dt><dd>Ridistribuire le R tra più persone</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Discussione sulla seconda riga: aggiungere una persona a un'attività critica può aiutare se il lavoro è divisibile e la persona è già competente; altrimenti vale Brooks. Terza riga: 40 ore-persona con una risorsa al 50% (4 ore al giorno) durano 10 giorni invece di 5; ProjectLibre lo calcola con le "unità" di assegnazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Dal lavoro al calendario delle persone</h2></div>
+  <ol class="puzzle-ordina" data-id="ru-processo">
+    <li>Scomporre il lavoro nella WBS</li>
+    <li>Definire unità e ruoli nell'OBS</li>
+    <li>Stimare il lavoro di ogni pacchetto in ore-persona</li>
+    <li>Assegnare le persone e compilare la RACI</li>
+    <li>Calcolare il carico giornaliero di ciascuno</li>
+    <li>Livellare i sovraccarichi usando i margini</li>
+  </ol>
+  <aside class="notes">Ordine corretto come scritto. Discussione: stima e assegnazione si influenzano a vicenda (una persona esperta lavora più in fretta), quindi nella realtà si itera; ma il primo passo resta la WBS e l'ultimo il livellamento. Chiedere in quale software si fanno gli ultimi tre passi: ProjectLibre (risorse, assegnazioni, livellamento).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Livella il carico in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc, riga 1: in B1:J1 i giorni da 4 a 12. In A2, A3, A4: <b>C</b>, <b>E</b>, <b>F</b>.</li>
+      <li>Scrivi 8 nei giorni di ogni attività: C giorni 4-5, E giorni 6-10, F giorni 6-7.</li>
+      <li>In B5 <code>=SOMMA(B2:B4)</code>, in B6 <code>=SE(B5>8;"SOVRACCARICO";"ok")</code>; copia fino a J.</li>
+      <li>Sposta le ore di F nei primi due giorni liberi, senza superare il giorno 14.</li>
+      <li>Salva come <b>carico-backend.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> prima i giorni 6 e 7 danno 16 e SOVRACCARICO. Dopo, F va ai giorni 11-12, la riga 6 dice "ok" ovunque e il totale della settimana e mezza è 72 ore.</div>
+  </div>
+  <aside class="notes">Totale: C 16 + E 40 + F 16 = 72 ore su 9 giorni (4-12) = 8 ore al giorno esatte dopo il livellamento. Il giorno 14 è l'inizio al più tardi di F (margine 8). Estensione per chi finisce: in ProjectLibre, aprire il file del Panificio della lezione precedente, assegnare il programmatore back-end a C, E, F e guardare la vista Uso risorse prima e dopo il livellamento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e lavoro</p><h2>Quando è un software a distribuire il lavoro</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Gli strumenti di gestione progetti propongono già assegnazioni e livellamenti automatici, e alcuni usano l'AI per stimare tempi o suggerire chi è libero. L'<b>AI Act</b> europeo (Regolamento UE 2024/1689) considera <b>ad alto rischio</b> i sistemi di AI che assegnano compiti ai lavoratori in base al loro comportamento o ne valutano le prestazioni: servono trasparenza e supervisione umana.</p></div>
+  <div class="callout hl"><b>All'esame:</b> parti da un tuo progetto (PCTO o laboratorio) e mostra WBS, OBS e RACI. Collega con informatica (team di sviluppo) e con diritto (orari di lavoro).</div>
+  <aside class="notes">Riferimento: Regolamento (UE) 2024/1689, Allegato III, punto 4 (occupazione e gestione dei lavoratori), che include i sistemi destinati ad assegnare compiti sulla base del comportamento individuale o dei tratti personali e a monitorare e valutare prestazioni e comportamento. Il livellamento automatico di ProjectLibre non è AI: è un algoritmo deterministico che sposta attività. Domanda per la classe: accettereste che un algoritmo decida i vostri turni? Che cosa vorreste sapere di lui?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto del project manager</h2></div>
+  <div class="puzzle-codice" data-risposta="4182" data-aiuto="il margine di F è lo stesso del CPM: 8 giorni">
+    <ul class="points">
+      <li>1ª cifra: quante lettere ha la sigla RACI</li>
+      <li>2ª cifra: quante A ci possono essere in una riga</li>
+      <li>3ª cifra: i giorni di margine dell'attività F</li>
+      <li>4ª cifra: in quanti giorni il back-end era sovrallocato</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> RACI, una sola A, margine di F = 8, giorni 6 e 7.</div>
+  </div>
+  <aside class="notes">Codice 4182. A squadre: la prima che apre vince. Dopo tre tentativi sbagliati compare l'aiuto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="ru-uscita" data-extra="CBS|Gantt">
+    <p>L'<span class="slot" data-risposta="OBS"></span> dice chi lavora al progetto, la <span class="slot" data-risposta="WBS"></span> che cosa si fa. La matrice <span class="slot" data-risposta="RACI"></span> le incrocia. Se una persona ha più ore di quelle disponibili è <span class="slot" data-risposta="sovrallocata"></span> e si interviene con il <span class="slot" data-risposta="livellamento"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: OBS, WBS, RACI, sovrallocata, livellamento. Distrattori: CBS (la struttura dei costi, prossime lezioni) e Gantt.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>OBS: chi lavora al progetto, ad albero</li>
+      <li>Lavoro in ore-persona, durata in giorni</li>
+      <li>Persone e mesi non sono intercambiabili</li>
+    </ul>
+    <ul class="points">
+      <li>RACI: una sola A, almeno una R per attività</li>
+      <li>Sovrallocazione: più ore del disponibile</li>
+      <li>Livellamento: si usano prima i margini</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: team building e pari opportunità, cioè come le persone dell'OBS diventano davvero una squadra.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

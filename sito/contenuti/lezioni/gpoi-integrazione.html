@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'integrazione orizzontale e verticale · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>L'integrazione orizzontale e verticale</h1>
+  <p class="lead">Dal sensore al gestionale, dal fornitore al cliente: come fanno i dati a viaggiare senza che nessuno li ricopi a mano?</p>
+  <aside class="notes">Obiettivi: definire il sistema informativo aziendale, conoscere la piramide dell'automazione (modello ISA-95 / IEC 62264) e i suoi livelli, distinguere integrazione verticale e orizzontale, riconoscere standard e protocolli che la rendono possibile. Durata indicativa: 2 ore. Riprende la lezione dell'unità 2 sui sistemi informativi (ERP, CRM, SCM).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>In una piccola impresa, quante volte viene ricopiato a mano un ordine prima di arrivare alla macchina?</h2></div>
+  <div class="poll" data-id="u7-ricopiature">
+    <ol><li>Mai: va tutto da solo</li><li>Una o due volte</li><li>Da tre a cinque volte</li><li>Più di cinque volte</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione: non c'è un dato statistico da rivelare. Raccontare il percorso tipico senza integrazione: l'ordine arriva per e-mail, il commerciale lo inserisce nel gestionale, l'ufficio produzione lo stampa, il capoturno lo scrive sulla lavagna, l'operatore imposta la macchina a mano. Ogni passaggio è tempo perso e un'occasione di errore. Chi ha fatto PCTO in azienda può raccontare come funzionava lì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso e un passo avanti</p><h2>Il sistema informativo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">L'insieme di <b>persone, procedure, dati e tecnologie</b> che raccoglie, conserva, elabora e distribuisce le informazioni di cui l'impresa ha bisogno per lavorare e decidere.</p>
+      <p>La parte automatizzata, fatta di hardware, software e reti, è il <b>sistema informatico</b>.</p>
+    </div>
+    <div class="card soft"><h3>Ricordi l'unità 2?</h3><ul class="points"><li><b>ERP</b>: gestionale integrato</li><li><b>CRM</b>: relazioni con i clienti</li><li><b>SCM</b>: catena di fornitura</li></ul></div>
+  </div>
+  <div class="callout">In Industria 4.0 il sistema informativo scende fino al reparto: anche la <b>macchina</b> diventa una fonte e una destinataria di informazioni.</div>
+  <aside class="notes">Far notare che il sistema informativo esiste anche senza computer (il registro cartaceo degli ordini è un sistema informativo). Il sistema informatico ne è la parte automatizzata. Domanda: chi è il "proprietario" dei dati di produzione, l'ufficio IT o la produzione? Ponte verso la convergenza tra IT (informatica d'ufficio) e OT (tecnologie operative di reparto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Da dove veniamo</p><h2>Il mondo prima dell'integrazione</h2></div>
+  <figure class="citazione">
+    <blockquote>Ogni cliente può avere un'auto dipinta di qualsiasi colore desideri, purché sia nera.</blockquote>
+    <figcaption><b>Henry Ford</b>, fondatore della Ford Motor Company, "My Life and Work", 1922</figcaption>
+  </figure>
+  <p class="lead">Oggi lo stesso impianto produce varianti diverse, ordine per ordine. Per farlo, l'ordine del cliente deve arrivare <b>da solo</b> fino alla macchina.</p>
+  <aside class="notes">La frase è nell'autobiografia "My Life and Work" (1922), scritta con Samuel Crowther, a proposito della Model T; traduzione nostra ("Any customer can have a car painted any colour that he wants so long as it is black"). Il colore unico semplificava la produzione di massa. Collegamento alla lezione precedente: personalizzazione di massa e lotto 1 sono possibili solo con l'integrazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello di riferimento</p><h2>La piramide dell'automazione</h2></div>
+  <table class="data">
+    <tr><th>Livello</th><th>Sistema</th><th>Che cosa fa</th><th>Tempi</th></tr>
+    <tr><td class="mono">4</td><td><b>ERP</b></td><td>Pianifica ordini, acquisti, magazzino, contabilità</td><td>mesi, giorni</td></tr>
+    <tr><td class="mono">3</td><td><b>MES</b></td><td>Gestisce la produzione: ordini di lavoro, tracciabilità, efficienza</td><td>turni, ore</td></tr>
+    <tr><td class="mono">2</td><td><b>SCADA / HMI</b></td><td>Supervisiona l'impianto: grafici, allarmi, comandi dell'operatore</td><td>minuti, secondi</td></tr>
+    <tr><td class="mono">1</td><td><b>PLC</b></td><td>Controlla la macchina eseguendo il suo programma</td><td>millisecondi</td></tr>
+    <tr><td class="mono">0</td><td><b>Sensori e attuatori</b></td><td>Misurano e muovono il processo fisico</td><td>tempo reale</td></tr>
+  </table>
+  <aside class="notes">Il modello a livelli è quello dello standard ANSI/ISA-95, adottato a livello internazionale come IEC 62264. MES = Manufacturing Execution System; SCADA = Supervisory Control And Data Acquisition; HMI = Human Machine Interface (il pannello dell'operatore); PLC = Programmable Logic Controller. Far notare: più si sale, più i dati sono aggregati e i tempi lunghi; più si scende, più i dati sono numerosi e i tempi brevi. Collegamento a Sistemi e reti e TPSIT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Ricostruisci la piramide</h2></div>
+  <div class="puzzle-trascina" data-id="u7-piramide" data-extra="CRM|Gantt">
+    <div style="position:relative;width:1600px;height:520px;font-size:28px">
+      <svg width="1000" height="520" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <polygon points="400,0 600,0 672,96 328,96" fill="#2f6fde"/>
+        <polygon points="322,104 678,104 750,200 250,200" fill="#cddcf8"/>
+        <polygon points="244,208 756,208 828,304 172,304" fill="#e3ecfc"/>
+        <polygon points="166,312 834,312 906,408 94,408" fill="#eef3fd" stroke="#cddcf8" stroke-width="3"/>
+        <polygon points="88,416 912,416 984,512 16,512" fill="#ffffff" stroke="#cddcf8" stroke-width="3"/>
+      </svg>
+      <div style="position:absolute;left:0;top:18px;width:1000px;text-align:center"><span class="slot" data-risposta="ERP"></span></div>
+      <div style="position:absolute;left:0;top:122px;width:1000px;text-align:center"><span class="slot" data-risposta="MES"></span></div>
+      <div style="position:absolute;left:0;top:226px;width:1000px;text-align:center"><span class="slot" data-risposta="SCADA"></span></div>
+      <div style="position:absolute;left:0;top:330px;width:1000px;text-align:center"><span class="slot" data-risposta="PLC"></span></div>
+      <div style="position:absolute;left:0;top:434px;width:1000px;text-align:center"><span class="slot" data-risposta="Sensori"></span></div>
+      <p style="position:absolute;left:1030px;top:28px;color:var(--muted)">4 · ordini, acquisti, fatture</p>
+      <p style="position:absolute;left:1030px;top:132px;color:var(--muted)">3 · ordini di lavoro, tracciabilità</p>
+      <p style="position:absolute;left:1030px;top:236px;color:var(--muted)">2 · allarmi e grafici per l'operatore</p>
+      <p style="position:absolute;left:1030px;top:340px;color:var(--muted)">1 · esegue il ciclo in millisecondi</p>
+      <p style="position:absolute;left:1030px;top:444px;color:var(--muted)">0 · misurano e muovono</p>
+    </div>
+  </div>
+  <aside class="notes">Soluzione dall'alto: ERP, MES, SCADA, PLC, Sensori (e attuatori). Distrattori: CRM (è un sistema del livello 4, ma qui il posto è dell'ERP) e Gantt. Se qualcuno mette CRM in cima, discuterne: non è sbagliato pensarlo al livello 4, ma il cuore del livello è l'ERP. Uno studente alla LIM, la classe suggerisce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il viaggio di un ordine personalizzato</h2></div>
+  <ol class="puzzle-ordina" data-id="u7-viaggio-ordine">
+    <li>Il cliente conferma l'ordine e l'ERP lo registra</li>
+    <li>L'ERP pianifica la produzione e controlla i materiali</li>
+    <li>Il MES crea l'ordine di lavoro per il reparto</li>
+    <li>Lo SCADA mostra all'operatore l'ordine e lo stato delle macchine</li>
+    <li>Il PLC esegue il ciclo con i parametri della variante</li>
+    <li>I dati di produzione risalgono fino all'ERP</li>
+  </ol>
+  <aside class="notes">Ordine come scritto: si scende dalla cima della piramide e poi si risale. Far notare che l'ultima voce chiude il cerchio: senza dati che risalgono, l'ERP non sa che l'ordine è pronto e il commerciale deve telefonare in reparto. 3 minuti a coppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Un forno supera la temperatura massima. Chi spegne la resistenza in pochi millisecondi?</h2></div>
+  <div class="poll" data-id="u7-chi-spegne" data-tipo="quiz" data-risposta="C">
+    <ol><li>L'ERP, che conosce l'ordine in corso</li><li>Il MES, che gestisce il reparto</li><li>Il PLC, che controlla il forno</li><li>Lo SCADA, con il clic dell'operatore</li></ol>
+    <p class="why">Le reazioni rapide e di sicurezza si fanno ai livelli bassi: il PLC legge il sensore e agisce sull'attuatore in millisecondi. Lo SCADA mostra l'allarme all'operatore, ma una persona non reagirebbe mai così in fretta.</p>
+  </div>
+  <aside class="notes">Molti scelgono D perché "lo SCADA controlla l'impianto". Precisare: SCADA supervisiona e registra; il controllo in tempo reale resta al PLC (e per le funzioni di sicurezza a dispositivi dedicati). Regola d'oro: ogni decisione si prende al livello più basso che ha le informazioni e i tempi giusti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le due direzioni</p><h2>Verticale e orizzontale</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><p class="num">↕</p><h3>Integrazione verticale</h3><p>Dentro l'impresa, <b>tra i livelli</b> della piramide: dal sensore all'ERP e ritorno. Niente "isole" di automazione, niente dati ricopiati.</p></div>
+    <div class="card soft"><p class="num">↔</p><h3>Integrazione orizzontale</h3><p>Lungo la <b>catena del valore</b>: tra le funzioni aziendali e con fornitori, logistica e clienti. L'ordine e i dati attraversano le imprese.</p></div>
+  </div>
+  <div class="callout">C'è anche una terza integrazione, <b>end-to-end</b>: lungo tutto il ciclo di vita del prodotto, dalla progettazione all'assistenza.</div>
+  <aside class="notes">La distinzione tra integrazione verticale, orizzontale ed end-to-end viene dai documenti della piattaforma tedesca Industrie 4.0 (2013). Esempio di orizzontale: il fornitore vede le nostre scorte e riordina da solo; il corriere riceve in automatico i dati del collo. Esempio di verticale: il contapezzi del PLC aggiorna il MES, che aggiorna l'ERP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Verticale o orizzontale?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-vert-orizz">
+    <div class="cat"><h4>Integrazione verticale</h4><ul><li>Il PLC invia al MES i pezzi prodotti</li><li>L'ERP manda l'ordine di lavoro al reparto</li><li>Gli allarmi SCADA arrivano al MES</li><li>I consumi delle macchine arrivano all'ERP</li></ul></div>
+    <div class="cat"><h4>Integrazione orizzontale</h4><ul><li>Il fornitore vede le nostre scorte</li><li>Il corriere riceve i dati di spedizione</li><li>Il cliente segue il suo ordine online</li><li>La fattura parte da sola verso il cliente</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritta. La fattura elettronica è un ottimo esempio italiano di integrazione orizzontale: tra imprese passa per il Sistema di Interscambio (SdI) dell'Agenzia delle Entrate, obbligatorio tra privati dal 1° gennaio 2019. Squadre da 3, 4 minuti, poi correzione alla LIM.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La piramide di un panificio industriale</h2>
+  <div class="cols-2 wide-left" style="align-items:start">
+    <ol class="steps small">
+      <li>Apri <b>app.diagrams.net</b> (nessun account), scegli "Dispositivo" per salvare.</li>
+      <li>Disegna i 5 livelli per un panificio industriale di esempio: impastatrici, forno a tunnel, confezionatrice.</li>
+      <li>In ogni livello scrivi un sistema concreto (es. livello 0: sonda di temperatura del forno).</li>
+      <li>Aggiungi almeno 3 frecce verticali con il dato che passa e 2 frecce orizzontali (fornitore di farina, catena di supermercati).</li>
+      <li>Salva <b>piramide-panificio.drawio</b> ed esporta in PNG.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni freccia ha un'etichetta con il dato (es. "pezzi confezionati per lotto"). Le frecce verticali collegano livelli vicini; le orizzontali escono dall'impresa.</div>
+  </div>
+  <aside class="notes">Esempio di soluzione: 4 ERP (ordini della catena di supermercati, acquisti di farina); 3 MES (lotti di produzione, tracciabilità del lotto di farina usato); 2 SCADA (temperature del forno, allarmi); 1 PLC del forno e della confezionatrice; 0 sonde di temperatura, celle di carico delle impastatrici, motori del nastro. Frecce verticali: ordine di produzione ERP→MES, ricetta MES→PLC, temperature PLC→SCADA, pezzi prodotti MES→ERP. Orizzontali: ordine di riapprovvigionamento al mulino, avviso di spedizione alla catena. La tracciabilità del lotto è richiesta nel settore alimentare dal Regolamento (CE) 178/2002. Consegna: file .drawio e PNG.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Gli standard che fanno parlare i sistemi</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-standard">
+    <dt>OPC UA</dt><dd>Scambio di dati tra macchine e software di fabbrica (IEC 62541)</dd>
+    <dt>MQTT</dt><dd>Protocollo leggero publish/subscribe per sensori</dd>
+    <dt>ISA-95</dt><dd>Modello dei livelli tra reparto e gestionale (IEC 62264)</dd>
+    <dt>EDI</dt><dd>Scambio elettronico di documenti tra imprese</dd>
+    <dt>SdI</dt><dd>Sistema di Interscambio delle fatture elettroniche</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritta. OPC UA (Open Platform Communications Unified Architecture) è lo standard più usato per l'integrazione verticale tra macchine di marche diverse. MQTT lo vedremo nella lezione sull'Industrial IoT. EDI (Electronic Data Interchange) e SdI sono esempi di integrazione orizzontale. Collegamento a Sistemi e reti: sono protocolli applicativi su TCP/IP.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Macchine nuove, ma i dati di produzione si scrivono a mano a fine turno. Che cosa manca?</h2></div>
+  <div class="poll" data-id="u7-isola" data-tipo="quiz" data-risposta="A">
+    <ol><li>Integrazione verticale</li><li>Integrazione orizzontale</li><li>Un robot collaborativo</li><li>Un contratto di cloud</li></ol>
+    <p class="why">I dati non salgono dal reparto ai sistemi aziendali: è un'isola di automazione. Serve l'integrazione verticale, per esempio collegando i PLC al MES.</p>
+  </div>
+  <aside class="notes">Il cloud (D) potrebbe essere una parte della soluzione, ma non è ciò che manca: anche con un cloud, qualcuno dovrebbe caricare i dati a mano. Ricollegare alla checklist 4.0 della prima lezione: senza interconnessione la macchina non è "4.0".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>IT e OT si incontrano</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>IT</h3><p class="muted">Informatica degli uffici: ERP, posta, server. Priorità: riservatezza dei dati.</p></div>
+    <div class="card"><h3>OT</h3><p class="muted">Tecnologie di reparto: PLC, SCADA, robot. Priorità: continuità e sicurezza delle persone.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Integrare significa collegare due mondi con regole diverse, e ogni collegamento è anche una porta per un attacco. Per questo la direttiva europea <b>NIS2</b>, recepita in Italia con il <b>D.Lgs. 138/2024</b>, chiede a molte imprese manifatturiere misure di cybersecurity e la notifica degli incidenti. E i primi assistenti AI leggono i dati del MES per rispondere in linguaggio naturale: "perché ieri la linea 2 si è fermata?"</p></div>
+  <aside class="notes">NIS2 = Direttiva (UE) 2022/2555. Il D.Lgs. 138/2024 la recepisce in Italia e include tra i settori anche alcune attività manifatturiere, a seconda della dimensione dell'impresa. Non entrare nei dettagli delle soglie. Sull'AI: la risposta è utile solo se i dati sono integrati e affidabili; un assistente su dati sbagliati dà risposte sicure ma sbagliate.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Gioco di ruolo: l'ordine attraversa la fabbrica</h2>
+  <div class="cols-2 wide-left" style="align-items:start">
+    <ol class="steps small">
+      <li>Cinque gruppi: Commerciale-ERP, MES, SCADA-operatore, PLC-macchina, Fornitore. Ogni gruppo ha un segretario.</li>
+      <li>Il docente consegna al Commerciale un ordine: 300 biscotti con glassa rossa, consegna in 2 giorni.</li>
+      <li>Ogni messaggio passa su un foglietto, solo a chi è collegato: niente scorciatoie.</li>
+      <li>A metà gioco arriva un imprevisto (manca la glassa o si ferma il forno).</li>
+      <li>Il segretario registra ogni messaggio in Calc: N, Da, A, Contenuto, Verticale/Orizzontale. Salva <b>ordine-gruppoN.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 8 messaggi, sia verso il basso sia verso l'alto, e almeno 2 orizzontali (con il Fornitore). L'imprevisto deve risalire fino al Commerciale.</div>
+  </div>
+  <aside class="notes">Disporre i gruppi come una piramide nell'aula (Fornitore di lato). Regola: si parla solo con il livello adiacente o, per l'orizzontale, tra Commerciale e Fornitore. Imprevisto consigliato: il sensore del forno segnala un guasto; il PLC ferma il forno, lo SCADA mostra l'allarme, il MES ripianifica, l'ERP avvisa il cliente. Debriefing di 10 minuti: quanti messaggi sono serviti? Quali si potrebbero automatizzare? Dove si è perso tempo? Ogni segretario consegna il file del suo gruppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Disegna</h3><p>Qual è lo schema da saper rifare?</p></div><div class="retro"><p>La piramide a 5 livelli, con un esempio di dato che sale e uno che scende.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Distingui</h3><p>Le due integrazioni in una frase?</p></div><div class="retro"><p>Verticale: tra i livelli dentro l'impresa. Orizzontale: tra funzioni e imprese, lungo la catena del valore.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Collega</h3><p>Quali materie entrano?</p></div><div class="retro"><p>Sistemi e reti (protocolli), Informatica (database e ERP), TPSIT (client-server e publish/subscribe).</p></div></div>
+  </div>
+  <aside class="notes">Girare una carta alla volta dopo aver sentito la classe. Ricordare che un esempio concreto (un'azienda vista in PCTO, il panificio del laboratorio) vale più di una definizione ripetuta a memoria.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u7-uscita-3" data-extra="CRM|cloud">
+    <p>Software e macchine che non si parlano formano <span class="slot" data-risposta="isole"></span> di automazione.</p>
+    <p>Il <span class="slot" data-risposta="MES"></span> collega il reparto al gestionale.</p>
+    <p>Le reazioni in millisecondi spettano al <span class="slot" data-risposta="PLC"></span>.</p>
+    <p>L'integrazione <span class="slot" data-risposta="orizzontale"></span> collega l'impresa a fornitori e clienti.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: isole, MES, PLC, orizzontale. Distrattori: CRM, cloud.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Sistema informativo: persone, procedure, dati, tecnologie</li>
+      <li>Piramide: sensori, PLC, SCADA, MES, ERP</li>
+      <li>Ogni decisione al livello con i tempi giusti</li>
+    </ul>
+    <ul class="points">
+      <li>Verticale: tra i livelli; orizzontale: tra imprese</li>
+      <li>Standard comuni: OPC UA, MQTT, ISA-95, SdI</li>
+      <li>Più collegamenti, più cybersecurity</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: Industrial IoT, cioè come i sensori del livello 0 entrano direttamente in rete.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulazione e digital twin · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>Simulazione e digital twin</h1>
+  <p class="lead">Provare una fabbrica prima di costruirla, e farle avere un gemello digitale che vive accanto a lei.</p>
+  <aside class="notes">Obiettivi: distinguere modello e simulazione, conoscere le fasi di uno studio di simulazione, calcolare il collo di bottiglia di una linea, distinguere modello digitale, ombra digitale e gemello digitale. Durata indicativa: 2 ore. Serve LibreOffice Calc per i due laboratori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Saliresti su un aereo il cui pilota si è allenato soprattutto al simulatore?</h2></div>
+  <div class="poll" data-id="u7-simulatore">
+    <ol><li>Sì, tranquillamente</li><li>Sì, ma solo con un istruttore a bordo</li><li>No, voglio ore di volo vero</li><li>Non saprei</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Spunto: nell'aviazione civile l'abilitazione a un nuovo tipo di aereo si fa in gran parte su simulatori di volo certificati, che riproducono la cabina e il comportamento dell'aereo; poi segue un periodo di voli di linea con un istruttore. Il simulatore permette di provare guasti ed emergenze senza rischi: è proprio l'idea che portiamo in fabbrica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole</p><h2>Modello e simulazione</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Modello</h3><p>Rappresentazione <b>semplificata</b> di un sistema reale, che ne conserva solo gli aspetti utili allo scopo.</p></div>
+    <div class="card fill"><h3>Simulazione</h3><p>Far "funzionare" il modello nel tempo per rispondere alla domanda: <b>che cosa succede se…?</b></p></div>
+  </div>
+  <div class="cols-3">
+    <div class="card"><h3>Fisici</h3><p class="muted small">plastico, prototipo in scala, galleria del vento</p></div>
+    <div class="card"><h3>Matematici</h3><p class="muted small">formule e fogli di calcolo</p></div>
+    <div class="card"><h3>A eventi e casuali</h3><p class="muted small">code, guasti, tempi variabili (Monte Carlo)</p></div>
+  </div>
+  <aside class="notes">Esempio da costruire con la classe: il modello di una mensa scolastica (studenti che arrivano, casse, tempi di servizio). Che cosa teniamo e che cosa buttiamo? Il colore dei vassoi non serve, il tempo medio alla cassa sì. Il metodo Monte Carlo usa numeri casuali per simulare eventi incerti; nasce negli anni Quaranta nel progetto Manhattan (Ulam, von Neumann). Collegamento a Informatica: una classe in programmazione a oggetti è anch'essa un modello.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una frase da ricordare</p><h2>Il modello perfetto non esiste</h2></div>
+  <figure class="citazione">
+    <blockquote>Tutti i modelli sono sbagliati, ma alcuni sono utili.</blockquote>
+    <figcaption><b>George E. P. Box</b>, statistico britannico, 1979</figcaption>
+  </figure>
+  <p class="lead">Un modello serve se risponde alla nostra domanda con l'<b>approssimazione</b> che ci basta. Per questo va sempre <b>validato</b> con dati reali.</p>
+  <aside class="notes">La frase compare nel contributo di Box "Robustness in the strategy of scientific model building" (1979); l'idea è già nel suo articolo "Science and Statistics" (1976) e torna nel libro con Norman Draper del 1987. Traduzione nostra ("All models are wrong but some are useful"). Chiedere: la mappa della metropolitana è sbagliata (le distanze non sono vere) ma utilissima. Perché?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Le fasi di uno studio di simulazione</h2></div>
+  <ol class="puzzle-ordina" data-id="u7-fasi-simulazione">
+    <li>Definire il problema e la domanda a cui rispondere</li>
+    <li>Raccogliere i dati del sistema reale</li>
+    <li>Costruire il modello</li>
+    <li>Validare il modello confrontandolo con la realtà</li>
+    <li>Provare gli scenari "che cosa succede se"</li>
+    <li>Decidere e applicare le modifiche</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Il passaggio più dimenticato è la validazione: un modello non validato dà risultati precisi ma sbagliati. Collegamento al ciclo di vita del progetto (unità 4): anche qui si parte dagli obiettivi, non dagli strumenti. 3 minuti a coppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un caso di esempio</p><h2>Una linea, tre stazioni</h2></div>
+  <div class="flow">
+    <div class="card"><h3>Taglio</h3><p class="big" style="font-size:96px">40 s</p></div>
+    <div class="card fill"><h3>Saldatura</h3><p class="big" style="font-size:96px;color:#fff">60 s</p></div>
+    <div class="card"><h3>Verniciatura</h3><p class="big" style="font-size:96px">30 s</p></div>
+  </div>
+  <div class="formula"><small>La stazione più lenta (collo di bottiglia) decide il ritmo di tutta la linea</small>pezzi/ora = 3600 ÷ <span class="hl">60</span> = 60</div>
+  <aside class="notes">Linea di un'impresa di esempio che produce telai metallici; tempi ciclo inventati ma realistici. Ogni pezzo passa per le tre stazioni in sequenza. Anche se taglio e verniciatura sono più veloci, i pezzi si accumulano davanti alla saldatura: la linea non può uscire più veloce di 1 pezzo ogni 60 secondi. In un turno di 8 ore (28 800 s): 480 pezzi. Collegamento alla lean production dell'unità 2: il collo di bottiglia è dove si forma la coda (scorte, attese).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Acceleri la verniciatura da 30 a 20 secondi. La produzione oraria…</h2></div>
+  <div class="poll" data-id="u7-collo" data-tipo="quiz" data-risposta="B">
+    <ol><li>aumenta di circa un terzo</li><li>resta di 60 pezzi all'ora</li><li>passa a 90 pezzi all'ora</li><li>diminuisce, perché la saldatura resta indietro</li></ol>
+    <p class="why">La verniciatura non è il collo di bottiglia: il ritmo lo decide ancora la saldatura (60 s). Migliorare una stazione che non è la più lenta non aumenta la produzione: è il motivo per cui si simula prima di investire.</p>
+  </div>
+  <aside class="notes">Molti scelgono A ragionando sulla singola stazione. Far notare che l'investimento sarebbe stato sprecato. Domanda di rilancio: dove conviene investire? Sulla saldatura. È il gancio per il lucchetto e per il laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto: due saldatrici in parallelo</h2></div>
+  <div class="puzzle-codice" data-risposta="720" data-aiuto="con due saldatrici esce un pezzo saldato ogni 30 s: ora la stazione più lenta è un'altra">
+    <ul class="points">
+      <li>L'impresa compra una seconda saldatrice identica e la mette accanto alla prima.</li>
+      <li>Taglio 40 s e verniciatura 30 s restano uguali.</li>
+      <li>Quanti pezzi produce la linea in un turno di 8 ore?</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Due saldatrici: un pezzo ogni 30 s. Il nuovo collo di bottiglia è il taglio (40 s): 3600 ÷ 40 = 90 pezzi/ora, × 8 = 720.</div>
+  </div>
+  <aside class="notes">Codice: 720. Errore tipico: 960 (chi divide solo per 30 s dimenticando che ora il più lento è il taglio). Squadre da 3, chi apre per primo vince. Messaggio: quando sciogli un collo di bottiglia, ne compare un altro. Il laboratorio successivo mette tutto in un foglio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Simula gli scenari in Calc</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>Riga 1: <b>Scenario</b>, <b>Taglio</b>, <b>Saldatura</b>, <b>Verniciatura</b>, <b>Pezzi/ora</b>, <b>Pezzi/turno</b>.</li>
+      <li>Righe 2-5: A base 40, 60, 30 · B saldatura 45 · C due saldatrici (30) · D come C con taglio a 35.</li>
+      <li>E2 <code>=3600/MAX(B2:D2)</code> e F2 <code>=INT(28800/MAX(B2:D2))</code>, poi copia in basso.</li>
+      <li>Aggiungi uno scenario E inventato da te e un grafico a colonne dei pezzi/turno.</li>
+      <li>Salva come <b>simulazione-linea.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> pezzi/turno A 480, B 640, C 720, D 822. In D il pezzo ogni 35 s dà 102,86 pezzi/ora: INT tiene solo i pezzi finiti.</div>
+  </div>
+  <aside class="notes">Soluzioni: A max 60 → 60/h, 480; B max 45 (40, 45, 30) → 80/h, 640; C max 40 (40, 30, 30) → 90/h, 720; D max 35 (35, 30, 30) → 102,857/h, INT(28800/35) = INT(822,86) = 822. Domanda per chi finisce: conviene lo scenario B o C? Dipende dai costi (una saldatrice in più contro un'attrezzatura più veloce): collegare al confronto costi/benefici dell'unità 4. Limite del modello: non considera guasti, cambi formato e pause. Il modello ignora anche la variabilità dei tempi: è un modello deterministico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un passo avanti</p><h2>Dal modello virtuale al gemello digitale</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Modello virtuale</h3><p>Un disegno CAD 3D o una simulazione dell'impianto. Serve a progettare e a provare <b>prima</b> di costruire, anche il software: <i>virtual commissioning</i>.</p></div>
+    <div class="card soft"><h3>Gemello digitale</h3><p>Una replica digitale di <b>un</b> oggetto reale, collegata a lui da un flusso continuo di dati: si aggiorna mentre l'oggetto lavora e aiuta a decidere.</p></div>
+  </div>
+  <p class="small muted">L'idea è presentata da Michael Grieves nel 2002; il nome "digital twin" si diffonde con un documento della NASA del 2010.</p>
+  <aside class="notes">Grieves presentò il concetto all'Università del Michigan in una lezione sul Product Lifecycle Management (2002); il termine "digital twin" è attribuito a John Vickers della NASA e compare nella roadmap tecnologica NASA del 2010. Precedente spesso citato: durante la missione Apollo 13 (1970) i tecnici a terra usarono i simulatori per provare le procedure prima di trasmetterle agli astronauti. Differenza chiave: un modello vale per tutte le macchine di quel tipo; il gemello è il gemello di QUELLA macchina, con la sua usura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Che cosa rende "gemello" un modello digitale?</h2></div>
+  <div class="poll" data-id="u7-gemello" data-tipo="quiz" data-risposta="D">
+    <ol><li>È molto dettagliato, fino all'ultima vite</li><li>È stato fatto con l'intelligenza artificiale</li><li>Si può guardare con un visore 3D</li><li>È collegato all'oggetto reale e si aggiorna con i suoi dati</li></ol>
+    <p class="why">Un gemello digitale può anche essere semplice: conta il collegamento continuo con il suo oggetto reale. Un modello 3D bellissimo ma mai aggiornato resta un modello.</p>
+  </div>
+  <aside class="notes">Le opzioni A, B e C descrivono caratteristiche frequenti ma non necessarie. Esempio: il gemello di un'auto da corsa può essere solo un insieme di equazioni alimentate dalla telemetria, senza alcuna grafica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Modello, ombra o gemello?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-livelli-twin" style="--cols:3">
+    <div class="cat"><h4>Modello digitale</h4><ul><li>CAD 3D del motore</li><li>Layout simulato prima del cantiere</li></ul></div>
+    <div class="cat"><h4>Ombra digitale</h4><ul><li>Cruscotto della temperatura del forno</li><li>Contapezzi aggiornato dal PLC</li><li>Mappa dei carrelli in tempo reale</li></ul></div>
+    <div class="cat"><h4>Gemello digitale</h4><ul><li>Rileva l'usura e rallenta la macchina</li><li>Regola da solo i parametri del forno</li></ul></div>
+  </div>
+  <aside class="notes">Classificazione di Kritzinger e altri (2018, rivista IFAC-PapersOnLine): modello digitale = nessuno scambio automatico di dati con il reale; ombra digitale (digital shadow) = i dati arrivano in automatico dal reale al digitale, ma non il contrario; gemello digitale = scambio automatico nei due sensi. Trappola: il cruscotto in tempo reale sembra un gemello, ma non comanda nulla. 4 minuti a squadre.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Come funziona un gemello digitale</h2></div>
+  <div class="puzzle-trascina" data-id="u7-schema-twin" data-extra="Gantt|Cartiglio">
+    <div style="position:relative;width:1600px;height:400px;font-size:29px;line-height:1.35">
+      <svg width="1600" height="400" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <defs><marker id="frt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#172033"/></marker></defs>
+        <line x1="440" y1="150" x2="1160" y2="150" stroke="#172033" stroke-width="5" marker-end="url(#frt)"/>
+        <line x1="1160" y1="290" x2="440" y2="290" stroke="#172033" stroke-width="5" marker-end="url(#frt)"/>
+      </svg>
+      <div style="position:absolute;left:0;top:30px;width:420px;height:340px;background:#fff;border:3px solid #172033;border-radius:22px;padding:24px 28px">
+        <h4>Macchina reale</h4><p>Fresatrice nel reparto, con un utensile che si consuma.</p>
+      </div>
+      <div style="position:absolute;left:1180px;top:30px;width:420px;height:340px;background:var(--accent-soft);border-radius:22px;padding:24px 28px">
+        <h4>Gemello digitale</h4><p><span class="slot" data-risposta="modello"></span> aggiornato</p><p><span class="slot" data-risposta="previsione"></span></p><p class="muted tiny">"Cambia l'utensile tra 3 giorni"</p>
+      </div>
+      <div style="position:absolute;left:460px;top:40px;width:680px;text-align:center"><span class="slot" data-risposta="sensori"></span> <span class="muted">vibrazioni, temperatura</span></div>
+      <div style="position:absolute;left:460px;top:300px;width:680px;text-align:center"><span class="slot" data-risposta="comandi"></span> <span class="muted">nuovi parametri di taglio</span></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: in alto "sensori" (dati dal reale al digitale), in basso "comandi" (dal digitale al reale), nel gemello "modello" e "previsione". Distrattori: Gantt, Cartiglio. Far notare il ciclo chiuso: senza la freccia in basso sarebbe un'ombra digitale. Esempio realistico di manutenzione predittiva: lo vedremo meglio nella lezione sull'Industrial IoT.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>A che cosa serve, in pratica?</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-usi-twin">
+    <dt>Manutenzione predittiva</dt><dd>Prevedere quando un cuscinetto si romperà</dd>
+    <dt>Virtual commissioning</dt><dd>Collaudare il software di un impianto prima di montarlo</dd>
+    <dt>Gemello di città</dt><dd>Simulare il traffico prima di cambiare un incrocio</dd>
+    <dt>Gemello di processo</dt><dd>Trovare la temperatura di cottura che spreca meno energia</dd>
+    <dt>Prototipo virtuale</dt><dd>Provare la resistenza di un pezzo senza costruirlo</dd>
+  </dl>
+  <aside class="notes">Soluzione nell'ordine scritto. Chiedere quale esempio è un vero gemello (collegato a un oggetto reale che lavora) e quale è "solo" simulazione: il prototipo virtuale e il virtual commissioning avvengono prima che l'oggetto esista, quindi sono modelli; manutenzione predittiva, città e processo sono gemelli se ricevono dati in continuo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il gemello digitale più grande: la Terra</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Destination Earth</h3><p>L'Unione europea sta costruendo <b>Destination Earth</b>, un gemello digitale della Terra per simulare clima ed eventi estremi. Nelle fabbriche l'AI viene usata per creare <b>modelli surrogati</b>: reti neurali che imitano una simulazione lenta e rispondono in pochi secondi, così si possono provare molti più scenari.</p></div>
+  <div class="callout">Ma un modello surrogato impara dai dati della simulazione: <b>eredita i suoi errori</b>. La validazione resta obbligatoria.</div>
+  <aside class="notes">Destination Earth (DestinE) è un'iniziativa della Commissione europea avviata nel 2022, realizzata con ECMWF, ESA ed EUMETSAT; i primi gemelli digitali (eventi estremi, adattamento climatico) sono stati presentati nel 2024. Il supercomputer Leonardo del Cineca di Bologna è tra i sistemi EuroHPC usati dal progetto. Non citare cifre di accuratezza. Collegare alla frase di Box: anche il modello AI è "sbagliato", la domanda è se è utile.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Un'ombra digitale per l'aula</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>A1 <b>Ora</b>, B1 <b>CO₂ (ppm)</b>. Da A2: 8:00, 8:10 … 8:50. Da B2: 420, 480, 540, 600, 660, 720.</li>
+      <li>C2 <code>=SE(B2&gt;=1000;"Apri le finestre";"OK")</code> e copia in basso.</li>
+      <li>B9 aumento ogni 10 minuti: <code>=(B7-B2)/5</code></li>
+      <li>B10 minuti alla soglia: <code>=ARROTONDA((1000-B7)/B9*10;0)</code></li>
+      <li>B11 ora prevista: <code>=A7+B10/1440</code>, in formato ora. Salva <b>ombra-aula.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> B9 = 60 ppm, B10 = 47 minuti, B11 = 9:37. Tutte le righe dicono OK: la previsione serve ad aprire <b>prima</b> di arrivare a 1000.</div>
+  </div>
+  <aside class="notes">Calcoli: (720-420)/5 = 60; (1000-720)/60×10 = 46,67 → 47; 8:50 + 47 minuti = 9:37 (in Calc un giorno vale 1, quindi un minuto vale 1/1440). 1000 ppm è una soglia di riferimento molto usata per la qualità dell'aria interna, non un limite di legge. Dati inventati ma plausibili per un'aula chiusa. Domanda finale: che cosa manca per diventare un gemello? Il comando automatico (finestre o ventilazione aperte dal sistema): ora l'azione la fa una persona. Se la scuola ha un sensore di CO₂, usare i dati veri.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Definisci bene</h3><p>Modello, simulazione, gemello: la differenza è il <b>collegamento</b> con il reale.</p></div>
+    <div class="card soft"><h3>Porta un numero</h3><p>Il collo di bottiglia: con un esempio di tre stazioni mostri che sai ragionare.</p></div>
+    <div class="card soft"><h3>Collega</h3><p>Informatica (classi e oggetti come modelli), Matematica (funzioni), PCTO.</p></div>
+  </div>
+  <aside class="notes">Suggerimento per l'orale: partire da un oggetto concreto (una macchina vista in PCTO o in laboratorio) e chiedersi che dati servirebbero per farne il gemello. Evitare di dire che il gemello "è una copia perfetta": è un modello utile, collegato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u7-uscita-2" data-extra="complicata|veloce">
+    <p>Un modello è una rappresentazione <span class="slot" data-risposta="semplificata"></span> di un sistema reale.</p>
+    <p>La stazione più lenta, il collo di <span class="slot" data-risposta="bottiglia"></span>, decide il ritmo della linea.</p>
+    <p>Se i dati vanno solo dal reale al digitale si parla di <span class="slot" data-risposta="ombra"></span> digitale.</p>
+    <p>Nel gemello digitale i dati viaggiano in <span class="slot" data-risposta="entrambe"></span> le direzioni.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: semplificata, bottiglia, ombra, entrambe. Distrattori: complicata, veloce.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Modello = semplificazione utile; simulazione = farlo girare</li>
+      <li>Sei fasi, con la validazione da non saltare</li>
+      <li>Il collo di bottiglia decide la produzione</li>
+    </ul>
+    <ul class="points">
+      <li>Modello, ombra, gemello: conta il flusso di dati</li>
+      <li>Il gemello è di <b>una</b> macchina, con la sua storia</li>
+      <li>Usi: manutenzione, collaudo, energia, città</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: integrazione orizzontale e verticale. Il gemello digitale ha bisogno che i dati salgano dal reparto ai sistemi aziendali: è proprio l'integrazione verticale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

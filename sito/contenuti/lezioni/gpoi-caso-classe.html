@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Novaula per il quartiere · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 6</p>
+  <h1>Novaula per<br>il quartiere</h1>
+  <p class="lead">Un progetto vero, vissuto in classe dall'idea alla consegna: una web app per i turni dei volontari di un'associazione del quartiere.</p>
+  <aside class="notes">Obiettivi: presentare il caso che la classe svolgerà in tutta l'Unità 6; riconoscere committente, fornitore, utenti e altri stakeholder; conoscere le quattro fasi del ciclo di vita usate nell'unità (avvio, approfondimento, realizzazione, chiusura); organizzare il lavoro della classe. Durata: 2 ore. L'associazione "Quartiere Solidale" è un esempio costruito per la classe: se il docente ha un contatto reale (una parrocchia, una Pro Loco, un'associazione sportiva), conviene sostituirla mantenendo le stesse fasi. Il caso è diverso da quello del libro di testo, ma ne segue le fasi e i concetti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai fatto volontariato o fatto parte di un'associazione?</h2></div>
+  <div class="poll" data-id="u6-volontariato">
+    <ol><li>Sì, con regolarità</li><li>Qualche volta</li><li>No, ma mi piacerebbe</li><li>No</li></ol>
+  </div>
+  <aside class="notes">2 minuti. Chi risponde A o B diventa una risorsa preziosa: sa come si organizzano i turni in un'associazione reale (gruppi WhatsApp, fogli di carta, telefonate). Chiedere a uno di loro di raccontare in un minuto come funziona. Ponte: il nostro committente ha esattamente questo problema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Perché un caso concreto</p><h2>Si impara a gestire un progetto gestendone uno</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Un committente</h3><p>Con bisogni veri, poco tempo e idee che cambiano.</p></div>
+    <div class="card soft"><h3>Tutte le fasi</h3><p>Dall'idea al rilascio: nessuna salta, nemmeno la chiusura.</p></div>
+    <div class="card soft"><h3>Tutti i documenti</h3><p>Charter, verbali, WBS, Gantt, specifiche, test, relazione.</p></div>
+  </div>
+  <div class="callout"><b>All'esame</b>: questo progetto è un'esperienza di classe che puoi raccontare: le fasi, il tuo ruolo, un documento che hai prodotto, un problema che avete risolto.</div>
+  <aside class="notes">Il libro propone la sperimentazione di un caso concreto in classe; noi usiamo un caso nostro, comune a tutta l'unità, così ogni lezione aggiunge un pezzo allo stesso progetto. Collegamenti: Unità 4 (WBS, Gantt, costi, comunicazione) e Unità 5 (codifica, document management, relazione tecnica). Per informatica e TPSIT il progetto è anche un esercizio di sviluppo web reale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il caso</p><h2>L'associazione "Quartiere Solidale"</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un'associazione di volontariato di esempio, nel nostro quartiere. Circa <b>80 volontari</b> per tre attività:</p>
+      <ul class="points">
+        <li><b>Banco alimentare</b>: ogni sabato 9-12, servono 6 persone</li>
+        <li><b>Doposcuola</b>: dal lunedì al giovedì 15-17, servono 3 persone</li>
+        <li><b>Cura del parco</b>: la prima domenica del mese, servono 10 persone</li>
+      </ul>
+    </div>
+    <div class="card bad"><h3>Oggi</h3><p>I turni si organizzano con un gruppo WhatsApp e un foglio appeso in sede. Alcuni turni restano scoperti, altri hanno doppioni. La coordinatrice passa ore al telefono.</p></div>
+  </div>
+  <aside class="notes">Tutti i numeri sono ipotetici, coerenti in tutta l'unità. Far calcolare a voce quanti posti vanno coperti in una settimana normale: sabato 6 + doposcuola 4 × 3 = 12, totale 18. Il calcolo mensile tornerà nel lucchetto. Chiedere: chi ha un problema? (La coordinatrice, i volontari che non sanno quando servono, le persone assistite quando un turno salta.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Qual è il vero bisogno della coordinatrice?</h2></div>
+  <div class="poll" data-id="u6-bisogno" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un'app moderna, come quelle che usano i ragazzi</li><li>Un sito nuovo con il logo dell'associazione</li><li>Sapere in anticipo quali turni sono scoperti, senza telefonare a tutti</li><li>Un gruppo WhatsApp con regole più severe</li></ol>
+    <p class="why">A, B e D sono soluzioni. Il bisogno è un problema da risolvere: coprire i turni con meno fatica. Un'app è solo uno dei modi possibili, e si sceglie dopo aver capito il bisogno.</p>
+  </div>
+  <aside class="notes">Il tranello è la A: siamo informatici e pensiamo subito all'app. Distinguere bisogno e soluzione è la prima competenza della fase di avvio. Domanda: se il bisogno fosse soddisfatto da un foglio di calcolo condiviso, dovremmo comunque fare l'app? (Onestamente no; qui l'app serve perché i volontari sono molti, si iscrivono da soli dal telefono e servono promemoria.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli stakeholder</p><h2>Chi ha un interesse nel progetto</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Committente</h3><p class="muted">L'associazione, rappresentata dalla presidente.</p></div>
+    <div class="card"><h3>Utente chiave</h3><p class="muted">La coordinatrice dei turni.</p></div>
+    <div class="card"><h3>Utenti finali</h3><p class="muted">I volontari, dal telefono.</p></div>
+    <div class="card fill"><h3>Fornitore</h3><p>La classe 5F, con il docente responsabile.</p></div>
+    <div class="card"><h3>Sponsor</h3><p class="muted">La dirigente scolastica: autorizza e mette il server.</p></div>
+    <div class="card"><h3>Beneficiari</h3><p class="muted">Famiglie e persone assistite.</p></div>
+  </div>
+  <aside class="notes">Il committente è chi chiede il lavoro e lo accetta alla fine (Unità 1: contraente e committente). Qui non c'è un compenso, ma ci sono comunque impegni reciproci, che metteremo per iscritto nella fase di avvio. Il tecnico di laboratorio è un altro stakeholder interno (gestisce il server). Domanda: i bambini del doposcuola sono stakeholder? Sì, indiretti: e i loro dati non devono entrare nell'app.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Chi lo fa?</h2></div>
+  <div class="puzzle-categorie" data-id="u6-chi-fa" style="--cols:3">
+    <div class="cat"><h4>Committente</h4><ul><li>Firma l'accordo</li><li>Approva i requisiti</li></ul></div>
+    <div class="cat"><h4>Fornitore</h4><ul><li>Scrive il codice</li><li>Pianifica i tempi</li><li>Installa sul server</li></ul></div>
+    <div class="cat"><h4>Utente finale</h4><ul><li>Si iscrive al turno</li><li>Riceve il promemoria</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Discussione: chi collauda? Il collaudo di accettazione lo fa il committente, spesso con alcuni utenti finali; i test interni li fa il fornitore. Per questo la carta "collaudo" non c'è: sarebbe ambigua, ed è un buon spunto per la lezione sulla chiusura.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo di vita</p><h2>Quattro fasi, dall'idea alla consegna</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Avvio</h3><p>Bisogno, accordo, kick-off, project charter, fattibilità, rischi.</p></div>
+    <div class="card soft"><h3>Approfondimento</h3><p>Contesto, WBS, Gantt, ruoli, verbali.</p></div>
+    <div class="card fill"><h3>Realizzazione</h3><p>Requisiti, interfaccia, database, codice, monitoraggio.</p></div>
+    <div class="card soft"><h3>Chiusura</h3><p>Test, installazione, rilascio, presentazione.</p></div>
+  </div>
+  <aside class="notes">Sono le fasi del libro di testo per il caso in classe; ognuna avrà una lezione dedicata. Rispetto ai modelli del ciclo di vita del software (deck "modelli-ciclo-di-vita"): qui la struttura è a fasi, ma dentro la realizzazione si lavora a piccoli incrementi, come nei metodi agili (deck "agile-scrum-kanban"). Ogni fase si chiude con un documento approvato: è il punto di controllo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Le dieci settimane del progetto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-timeline" data-extra="Preventivo|Manutenzione">
+    <div style="position:relative;height:430px;font-size:24px">
+      <div style="position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:repeat(10,1fr);text-align:center;color:var(--muted)">
+        <span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span><span>S7</span><span>S8</span><span>S9</span><span>S10</span>
+      </div>
+      <div class="card soft" style="position:absolute;left:0;width:326px;top:56px;height:100px;justify-content:center;padding:10px 16px"><span class="slot" data-risposta="Avvio" style="font-size:22px"></span></div>
+      <div class="card soft" style="position:absolute;left:333px;width:326px;top:170px;height:100px;justify-content:center;padding:10px 16px"><span class="slot" data-risposta="Approfondimento" style="font-size:22px"></span></div>
+      <div class="card fill" style="position:absolute;left:666px;width:659px;top:56px;height:100px;justify-content:center;padding:10px 16px"><span class="slot" data-risposta="Realizzazione" style="font-size:22px"></span></div>
+      <div class="card soft" style="position:absolute;left:1332px;width:332px;top:170px;height:100px;justify-content:center;padding:10px 16px"><span class="slot" data-risposta="Chiusura" style="font-size:22px"></span></div>
+      <svg viewBox="0 0 1664 140" width="1664" height="140" style="position:absolute;left:0;top:290px" aria-hidden="true">
+        <line x1="0" y1="30" x2="1664" y2="30" stroke="#596179" stroke-width="4"/>
+        <polygon points="326,6 350,30 326,54 302,30" fill="#7e45cc"/>
+        <polygon points="1640,6 1664,30 1640,54 1616,30" fill="#7e45cc"/>
+      </svg>
+      <span class="slot" data-risposta="Project charter" style="position:absolute;left:200px;top:362px"></span>
+      <span class="slot" data-risposta="Rilascio" style="position:absolute;left:1420px;top:362px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: barre in ordine Avvio (S1-S2), Approfondimento (S3-S4), Realizzazione (S5-S8), Chiusura (S9-S10); traguardi (rombi) Project charter alla fine di S2 e Rilascio alla fine di S10. Distrattori: Preventivo e Manutenzione (la manutenzione viene dopo la chiusura del progetto ed è un'attività operativa, non un progetto). I traguardi sono milestone: durata zero, segnano un risultato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>La storia del progetto, in sette passi</h2></div>
+  <ol class="puzzle-ordina" data-id="u6-storia">
+    <li>La coordinatrice racconta il problema alla classe</li>
+    <li>Si firma l'accordo e si fa il kick-off</li>
+    <li>Si approva il project charter</li>
+    <li>Si preparano WBS e Gantt</li>
+    <li>Si sviluppano e si provano le funzioni</li>
+    <li>Collaudo con i volontari e rilascio</li>
+    <li>Relazione finale e lezioni apprese</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Possibile discussione: il kick-off viene prima o dopo il charter? In molti progetti il charter si approva e poi si fa il kick-off con tutto il team; nel nostro caso la riunione di avvio con il committente serve a raccogliere le informazioni per scriverlo. Lo vedremo nella prossima lezione: accettare entrambe le soluzioni se motivate.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Intervista alla coordinatrice</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Uno studente (o il docente) interpreta la coordinatrice, con la scheda del ruolo.</li>
+      <li>Ogni squadra prepara 6 domande: chi, che cosa, quando, quanti, come si fa oggi, che cosa va storto.</li>
+      <li>Intervista di 15 minuti; un segretario per squadra prende appunti.</li>
+      <li>Scrivete il verbale con l'elenco dei bisogni emersi, ognuno con un dato.</li>
+      <li>Consegnate <b>NQ-VRB-001_intervista_rev0.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 5 bisogni, ognuno con un numero (quanti volontari, quanti turni, quante ore). Avete scoperto anche un vincolo che la coordinatrice non ha detto subito?</div>
+  </div>
+  <aside class="notes">Scheda del ruolo (da leggere solo a chi interpreta): 80 volontari iscritti, circa 35 attivi ogni mese; sabato banco alimentare 9-12, 6 posti, scoperto circa una volta al mese; doposcuola lun-gio 15-17, 3 posti; parco la prima domenica del mese, 10 posti. La coordinatrice telefona circa 2 ore a settimana. Molti volontari sono anziani: non vogliono scaricare app, ma usano il browser del telefono. Vincolo da dire solo se chiesto: i dati dei bambini del doposcuola non devono entrare nel sistema. Budget: zero euro. Desiderio da dire solo se chiesto: un promemoria il giorno prima del turno. Valutare la qualità delle domande, non la quantità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni ruolo, il suo volto nel nostro progetto</h2></div>
+  <dl class="puzzle-abbina" data-id="u6-ruoli">
+    <dt>Committente</dt><dd>L'associazione Quartiere Solidale</dd>
+    <dt>Project manager</dt><dd>Uno studente scelto dalla classe</dd>
+    <dt>Sponsor</dt><dd>La dirigente, che autorizza e mette il server</dd>
+    <dt>Utente chiave</dt><dd>La coordinatrice dei turni</dd>
+    <dt>Team di progetto</dt><dd>Le quattro squadre della 5F</dd>
+    <dt>Garante del metodo</dt><dd>Il docente di GPOI</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Il project manager studente coordina, ma le decisioni che impegnano la scuola (dati personali, server, rapporti con l'associazione) passano dal docente responsabile. Si può far ruotare il ruolo di PM a ogni fase, con un passaggio di consegne scritto: è un buon esercizio di comunicazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come lavoreremo</p><h2>Le regole del progetto NQ</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Le squadre</h3><ul class="points"><li>Analisi e interfaccia</li><li>Sviluppo front-end</li><li>Back-end e database</li><li>Test e documentazione</li></ul></div>
+    <div class="card"><h3>I documenti</h3><ul class="points"><li>Codici NQ-tipo-numero e revisioni</li><li>Cartella condivisa per fasi</li><li>Registro dei documenti</li><li>Verbale di ogni riunione</li></ul></div>
+  </div>
+  <aside class="notes">Le regole riprendono l'Unità 5: codifica (NQ-SPC-001 ecc.), cartelle 01_avvio … 04_chiusura, registro dei documenti in Calc, nomi dei file con data ISO. Le squadre sono una proposta: con classi piccole si possono unire front-end e back-end. Ogni squadra ha un referente che partecipa alla riunione settimanale con il PM.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>A che cosa serve un'impresa, a che cosa serve un progetto</h2></div>
+  <figure class="citazione">
+    <blockquote>Può l'industria darsi dei fini? Si trovano questi semplicemente nell'indice dei profitti?</blockquote>
+    <figcaption><b>Adriano Olivetti</b>, imprenditore, discorso ai lavoratori per l'inaugurazione dello stabilimento di Pozzuoli, 1955</figcaption>
+  </figure>
+  <p class="lead">Il nostro progetto non ha profitto: il suo valore si misura in turni coperti e ore di telefono risparmiate.</p>
+  <aside class="notes">Citazione originale in italiano (Olivetti, discorso di Pozzuoli, 23 aprile 1955); il discorso prosegue chiedendosi se non vi sia "una destinazione, una vocazione anche nella vita di una fabbrica". Collegamento con l'Unità 1 (Olivetti e l'impresa) e con l'Agenda 2030 (Unità 3). Domanda: come misureremo se il progetto è riuscito? Proposte: percentuale di turni coperti, ore di telefono della coordinatrice, numero di volontari iscritti all'app. Le riprenderemo come obiettivi misurabili nel project charter.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>A metà progetto la coordinatrice chiede una chat tra volontari. Il PM…</h2></div>
+  <div class="poll" data-id="u6-richiesta-modifica" data-tipo="quiz" data-risposta="B">
+    <ol><li>La aggiunge subito: il cliente ha sempre ragione</li><li>Valuta l'impatto su tempi e lavoro e decide con il committente, per iscritto</li><li>Rifiuta: quello che non c'era all'inizio non si fa</li><li>La fa sviluppare di nascosto nel fine settimana</li></ol>
+    <p class="why">Ogni nuova richiesta passa da una richiesta di modifica: si stima quanto costa in tempo e lavoro, si decide insieme (farla, rimandarla a una versione successiva, togliere altro) e si aggiorna l'ambito. Né sì automatico né no automatico.</p>
+  </div>
+  <aside class="notes">A e C sono i due errori opposti. La A porta allo "scope creep", l'ambito che cresce senza controllo: con 10 settimane fisse, qualcos'altro salterebbe (di solito i test). La C rompe il rapporto con il committente. Collegamento al triangolo dei vincoli (deck "progetto-e-impresa"). Una risposta tipica del nostro progetto: la chat va in una versione 2, dopo il rilascio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Se un'AI scrive l'app in un pomeriggio…</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>…perché un progetto di dieci settimane?</h3><p>Gli assistenti AI per la programmazione generano in poco tempo un prototipo funzionante. Ma non intervistano la coordinatrice, non sanno che i volontari anziani non scaricano app, non decidono quali dati personali si possono raccogliere e non collaudano con utenti veri. La parte difficile di un progetto resta quella umana.</p></div>
+  <div class="callout">Nel nostro progetto l'AI si può usare come aiuto al codice, dichiarandolo nel registro: ogni riga generata va letta, capita e provata da una persona del team.</div>
+  <aside class="notes">Spunto per una regola di classe sull'uso dell'AI nel progetto (da scrivere nel charter): dove si può usare, come si dichiara, chi verifica. Collegare alla lezione sulla relazione tecnica (AI come aiuto, mai come fonte) e alla Realizzazione, dove parleremo di revisione del codice e sicurezza.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida</p><h2>Apri il lucchetto: quanti posti da coprire?</h2></div>
+  <div class="puzzle-codice" data-risposta="82" data-aiuto="in una settimana normale i posti sono 18">
+    <p>Prendi i dati dell'associazione e calcola quanti posti di volontario vanno coperti in un mese di <b>4 settimane</b>, con una sola prima domenica del mese.</p>
+    <ul class="points">
+      <li>Banco alimentare: 1 turno a settimana, 6 posti</li>
+      <li>Doposcuola: 4 turni a settimana, 3 posti ciascuno</li>
+      <li>Parco: 1 turno al mese, 10 posti</li>
+    </ul>
+    <div class="premio"><b>Aperto!</b> (6 + 4 × 3) × 4 + 10 = 18 × 4 + 10 = 82 posti al mese.</div>
+  </div>
+  <aside class="notes">Codice: 82. Il numero servirà nel charter per un obiettivo misurabile, per esempio "almeno il 95% degli 82 posti mensili coperti" (95% di 82 = 77,9, cioè almeno 78 posti). Errore tipico: dimenticare di moltiplicare il doposcuola per 4 turni (6 + 3 = 9 a settimana, totale 46).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La mappa degli stakeholder</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Apri <b>app.diagrams.net</b> (non serve un account) e scegli un diagramma vuoto.</li>
+      <li>Disegna una griglia 2 × 2: in orizzontale l'<b>interesse</b>, in verticale il <b>potere</b> di decidere.</li>
+      <li>Metti nei quadranti almeno 8 stakeholder del progetto NQ.</li>
+      <li>Accanto a ognuno scrivi come lo terrete informato (riunione, email, demo).</li>
+      <li>Esporta in PNG e consegna <b>NQ-stakeholder.png</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> presidente e coordinatrice in alto a destra (potere e interesse alti), i volontari in basso a destra, la dirigente in alto. Ogni stakeholder ha un canale di comunicazione.</div>
+  </div>
+  <aside class="notes">Quadranti classici: potere alto e interesse alto = gestire da vicino; potere alto e interesse basso = tenere soddisfatto; potere basso e interesse alto = tenere informato; potere basso e interesse basso = monitorare. La dirigente può stare in alto a sinistra o a destra: si accetta se motivato. Possibili stakeholder: presidente, coordinatrice, volontari, dirigente, docente, tecnico di laboratorio, famiglie del doposcuola, persone assistite dal banco alimentare. Il file diagrams.net (.drawio) si può salvare anche nella cartella 01_avvio del progetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u6-uscita-caso" data-extra="sponsor|collaudo">
+    <p>Chi chiede il lavoro e alla fine lo accetta è il <span class="slot" data-risposta="committente"></span>; chi lo realizza è il <span class="slot" data-risposta="fornitore|contraente"></span>.</p>
+    <p>Le fasi sono avvio, <span class="slot" data-risposta="approfondimento"></span>, realizzazione e <span class="slot" data-risposta="chiusura"></span>.</p>
+    <p>Prima di scegliere la soluzione bisogna capire il <span class="slot" data-risposta="bisogno"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: committente, fornitore (accettato anche contraente), approfondimento, chiusura, bisogno. Distrattori: sponsor, collaudo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il caso: turni dei volontari di Quartiere Solidale</li>
+      <li>Bisogno prima della soluzione</li>
+      <li>Committente, fornitore, utenti, sponsor, beneficiari</li>
+    </ul>
+    <ul class="points">
+      <li>Avvio, approfondimento, realizzazione, chiusura</li>
+      <li>Ogni nuova richiesta passa da una modifica scritta</li>
+      <li>Documenti codificati NQ, come nell'Unità 5</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: l'avvio (accordo, kick-off, project charter, fattibilità, rischi, nome e identità, elevator pitch). Il verbale dell'intervista NQ-VRB-001 è il punto di partenza: portarlo stampato o aperto.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

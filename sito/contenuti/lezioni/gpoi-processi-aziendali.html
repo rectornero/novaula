@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'importanza dei processi aziendali · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 2</p>
+  <h1>L'importanza dei<br>processi aziendali</h1>
+  <p class="lead">Un'impresa non è solo un organigramma: è una rete di processi che attraversano le funzioni. Come si pianificano, chi ne risponde, come si misurano e si migliorano.</p>
+  <aside class="notes">Obiettivi: riconoscere i tipi di processo (primari, di supporto, direzionali); capire perché un processo attraversa le funzioni; pianificare un processo; descrivere il ruolo del process owner; distinguere monitoraggio e valutazione; conoscere la storia di Aenne Burda. Durata: 2 ore. Questa lezione si appoggia al deck dell'Unità 1 "Il processo" (gpoi-processo-aziendale): definizione ISO 9000, SIPOC, catena del valore, efficacia ed efficienza sono già stati visti lì. Qui si va su mappa del processo, tipi, monitoraggio e valutazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale "processo" della tua scuola funziona peggio?</h2></div>
+  <div class="poll" data-id="u2-proc-scuola">
+    <ol><li>Giustificare un'assenza</li><li>Segnalare un PC guasto in laboratorio</li><li>Organizzare il PCTO</li><li>Comunicazioni scuola-famiglia</li><li>Prestito dei libri</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta, ma utile: il processo più votato può diventare il caso del laboratorio in gruppo. Chiedere: "perché funziona male? Chi ne è responsabile dall'inizio alla fine?". Di solito la risposta è "nessuno": ogni ufficio fa la sua parte. È il cuore della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso dall'Unità 1</p><h2>Le funzioni sono verticali, i processi orizzontali</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Funzione</h3><p>Un gruppo di persone con le stesse competenze: vendite, magazzino, amministrazione. È ciò che vedi nell'<b>organigramma</b>.</p></div>
+    <div class="card night"><h3>Processo</h3><p>Una sequenza di attività che trasforma un input in un output con valore per un <b>cliente</b>. Passa da una funzione all'altra.</p></div>
+  </div>
+  <div class="callout">Il cliente non vede le funzioni: vede solo se il suo ordine arriva, giusto e in tempo. Ogni "passaggio di mano" tra funzioni è un punto in cui il processo può rallentare o perdersi.</div>
+  <aside class="notes">Rimandare al deck gpoi-processo-aziendale per la definizione della UNI EN ISO 9000:2015 e per lo schema SIPOC. Esempio: un ordine online passa da vendite (conferma), magazzino (prelievo), spedizioni (corriere), amministrazione (fattura e incasso). Ciascuna funzione può lavorare benissimo e il cliente aspettare lo stesso una settimana, perché nessuno guarda il processo intero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta lo schema</p><h2>Un processo attraversa l'organigramma</h2></div>
+  <div class="puzzle-trascina" data-id="u2-proc-schema" data-extra="Organigramma|Prodotto">
+    <div style="position:relative;width:1290px;height:440px">
+      <svg width="1290" height="440" viewBox="0 0 1290 440" aria-hidden="true">
+        <defs><marker id="pa" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f6fde"/></marker></defs>
+        <line x1="260" y1="56" x2="1030" y2="56" stroke="#596179" stroke-width="3"/>
+        <line x1="260" y1="56" x2="260" y2="70" stroke="#596179" stroke-width="3"/>
+        <line x1="1030" y1="56" x2="1030" y2="70" stroke="#596179" stroke-width="3"/>
+        <g font-family="DM Sans, sans-serif" font-size="26" font-weight="700" fill="#172033" text-anchor="middle">
+          <rect x="260" y="74" width="185" height="360" rx="16" fill="#eef1fa" stroke="#dcdfe8" stroke-width="3"/><text x="352" y="116">Vendite</text>
+          <rect x="455" y="74" width="185" height="360" rx="16" fill="#eef1fa" stroke="#dcdfe8" stroke-width="3"/><text x="547" y="116">Magazzino</text>
+          <rect x="650" y="74" width="185" height="360" rx="16" fill="#eef1fa" stroke="#dcdfe8" stroke-width="3"/><text x="742" y="116">Spedizioni</text>
+          <rect x="845" y="74" width="185" height="360" rx="16" fill="#eef1fa" stroke="#dcdfe8" stroke-width="3"/><text x="937" y="116">Amministraz.</text>
+          <rect x="0" y="220" width="220" height="110" rx="16" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="110" y="268">Ordine</text><text x="110" y="302">del cliente</text>
+          <rect x="1070" y="220" width="220" height="110" rx="16" fill="#ffffff" stroke="#172033" stroke-width="3"/><text x="1180" y="268">Merce</text><text x="1180" y="302">consegnata</text>
+        </g>
+        <line x1="222" y1="275" x2="1058" y2="275" stroke="#2f6fde" stroke-width="10" marker-end="url(#pa)"/>
+      </svg>
+      <div style="position:absolute;left:260px;width:770px;top:0;display:flex;justify-content:center"><span class="slot" data-risposta="Funzioni"></span></div>
+      <div style="position:absolute;left:0;width:220px;top:150px;display:flex;justify-content:center"><span class="slot" data-risposta="Input"></span></div>
+      <div style="position:absolute;left:1070px;width:220px;top:150px;display:flex;justify-content:center"><span class="slot" data-risposta="Output"></span></div>
+      <div style="position:absolute;left:260px;width:770px;top:247px;display:flex;justify-content:center"><span class="slot" data-risposta="Processo"></span></div>
+      <div style="position:absolute;left:260px;width:770px;top:350px;display:flex;justify-content:center"><span class="slot" data-risposta="Process owner"></span></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: in alto, sopra le colonne, Funzioni; a sinistra Input (l'ordine del cliente); a destra Output (la merce consegnata); sulla freccia Processo; sotto la freccia Process owner: la persona che risponde del processo da un capo all'altro, anche se le attività le svolgono quattro funzioni diverse. Distrattori: Organigramma (è l'intero disegno verticale, non una parte), Prodotto. Domanda: "di chi è la colpa se l'ordine arriva tardi?" Senza un process owner la risposta è: di nessuno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I processi dell'impresa</p><h2>Primari, di supporto, direzionali</h2></div>
+  <div class="cols-3">
+    <div class="card fill"><h3>Primari</h3><p>Creano direttamente il valore per il cliente esterno: progettare, produrre, vendere, consegnare, assistere.</p></div>
+    <div class="card soft"><h3>Di supporto</h3><p>Rendono possibili i primari: personale, acquisti, sistemi informativi, manutenzione, amministrazione.</p></div>
+    <div class="card night"><h3>Direzionali</h3><p>Orientano tutta l'impresa: strategia, obiettivi, budget, controllo dei risultati, riesame.</p></div>
+  </div>
+  <div class="callout">Per un tecnico informatico è importante: il reparto IT di un'impresa manifatturiera fa un processo <b>di supporto</b>; in una software house lo sviluppo è il processo <b>primario</b>.</div>
+  <aside class="notes">I primari corrispondono alle attività primarie della catena del valore di Porter (vista nell'Unità 1), quelli di supporto alle attività di supporto; i direzionali (o gestionali) sono quelli con cui la direzione governa l'impresa. Alcuni testi chiamano i primari "core". La stessa attività cambia tipo a seconda dell'impresa: è un buon punto per l'orale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>I processi di una software house</h2></div>
+  <div class="puzzle-categorie" data-id="u2-proc-tipi" style="--cols:3">
+    <div class="cat"><h4>Primario</h4><ul><li>Sviluppo delle app</li><li>Vendita ai clienti</li><li>Assistenza ai clienti</li></ul></div>
+    <div class="cat"><h4>Di supporto</h4><ul><li>Selezione del personale</li><li>Acquisto dei PC</li><li>Paghe e contributi</li></ul></div>
+    <div class="cat"><h4>Direzionale</h4><ul><li>Piano strategico</li><li>Budget annuale</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. Possibile obiezione: "l'assistenza è di supporto". No: l'assistenza ai clienti è un servizio che il cliente paga o si aspetta, quindi crea valore per lui ed è primaria. Il supporto IT interno (help desk per i dipendenti) sarebbe invece di supporto.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Migliorare sempre</p><h2>Il processo prima delle persone</h2></div>
+  <figure class="citazione">
+    <blockquote>Migliorare costantemente e per sempre il sistema di produzione e di servizio, per migliorare qualità e produttività, e così ridurre costantemente i costi.</blockquote>
+    <figcaption><b>W. Edwards Deming</b>, statistico e consulente per la qualità, quinto dei 14 punti, <i>Out of the Crisis</i>, 1986</figcaption>
+  </figure>
+  <p class="lead">Per Deming quasi tutti i problemi nascono dal sistema, non dalla cattiva volontà di chi lavora: per questo si migliorano i processi.</p>
+  <aside class="notes">Traduzione nostra. Originale: "Improve constantly and forever the system of production and service, to improve quality and productivity, and thus constantly decrease costs." I 14 punti sono pubblicati in Out of the Crisis (MIT, 1986; prima edizione con altro titolo nel 1982). Deming lavorò in Giappone dal 1950; il ciclo PDCA (Plan, Do, Check, Act), associato al suo nome, tornerà nelle Unità 8 e 9. Domanda: "se un ordine arriva tardi, è colpa del magazziniere o del processo?".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Pianificare un processo</p><h2>Che cosa decidere prima di partire</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Scopo e cliente</b>: per chi esiste il processo</li>
+      <li><b>Confini</b>: dove inizia, dove finisce</li>
+      <li><b>Attività e sequenza</b>: la mappa</li>
+    </ul>
+    <ul class="points">
+      <li><b>Risorse</b>: persone, strumenti, software</li>
+      <li><b>Responsabilità</b>: chi fa che cosa, chi risponde</li>
+      <li><b>Obiettivi e indicatori</b>: come capiremo se va bene</li>
+    </ul>
+  </div>
+  <div class="callout hl">Un obiettivo di processo è <b>misurabile</b>: non "spedire in fretta" ma "95% degli ordini consegnati entro 48 ore".</div>
+  <aside class="notes">Il risultato della pianificazione si scrive in una procedura o scheda di processo, spesso con la mappa (diagramma di flusso o a corsie, come nel laboratorio dell'Unità 1). Collegamento con le norme ISO dell'Unità 9: la ISO 9001 chiede di determinare per ogni processo input, output, sequenza, criteri, risorse, responsabilità, rischi e opportunità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il ciclo di gestione di un processo</h2></div>
+  <ol class="puzzle-ordina" data-id="u2-proc-ciclo">
+    <li>Identificare il processo e il suo cliente</li>
+    <li>Disegnare la mappa delle attività</li>
+    <li>Nominare il process owner</li>
+    <li>Fissare obiettivi e indicatori</li>
+    <li>Eseguire il processo come pianificato</li>
+    <li>Monitorare gli indicatori</li>
+    <li>Valutare i risultati e migliorare</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. È un ciclo: dopo il miglioramento si ripianifica. Sovrapposizione con il PDCA: identificare, mappare, nominare, fissare obiettivi = Plan; eseguire = Do; monitorare = Check; valutare e migliorare = Act. Il process owner può essere nominato anche prima della mappa: accettare l'inversione 2-3 se ben motivata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chi è il process owner dell'evasione degli ordini?</h2></div>
+  <div class="poll" data-id="u2-proc-owner" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il magazziniere che prepara più pacchi</li><li>Chi risponde del risultato dall'ordine alla consegna, anche se non comanda tutte le persone coinvolte</li><li>Il capo della funzione con più dipendenti</li><li>Il cliente, perché è lui a giudicare</li></ol>
+    <p class="why">Il process owner risponde del processo nel suo insieme: obiettivi, indicatori, miglioramento. Spesso non è il capo gerarchico di tutte le persone che ci lavorano: deve coordinare funzioni diverse.</p>
+  </div>
+  <aside class="notes">Risposta B. Il tranello è C: si confonde il responsabile di funzione (verticale) con il responsabile di processo (orizzontale). Compiti tipici del process owner: definire e documentare il processo, fissare gli indicatori, controllarli, proporre e guidare i miglioramenti, fare da riferimento per gli altri responsabili. Collegamento con la struttura a matrice: una persona può rispondere al suo capo funzione e, per il processo, al process owner.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Controllare</p><h2>Monitoraggio e valutazione</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Monitoraggio</h3><p>Misurare <b>in modo continuo</b> come sta andando: dati raccolti ogni giorno, cruscotti, allarmi quando un valore esce dalla soglia.</p><p class="small muted">Domanda: che cosa sta succedendo?</p></div>
+    <div class="card night"><h3>Valutazione</h3><p>Giudicare <b>periodicamente</b> i risultati rispetto agli obiettivi e decidere: confermare, correggere, cambiare.</p><p class="small muted">Domanda: va bene così? Che cosa facciamo?</p></div>
+  </div>
+  <div class="callout">Senza monitoraggio la valutazione è un'opinione. Senza valutazione il monitoraggio è un mucchio di numeri.</div>
+  <aside class="notes">Strumenti della valutazione: riesame del processo con la direzione, audit interni (verifiche indipendenti che il processo si svolga come pianificato), confronto con altre imprese (benchmarking). La differenza tra efficacia (raggiungere l'obiettivo) ed efficienza (con quante risorse) è nel deck dell'Unità 1: chiedere a uno studente di ricordarla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Monitorare o valutare?</h2></div>
+  <div class="puzzle-categorie" data-id="u2-proc-monval">
+    <div class="cat"><h4>Monitoraggio</h4><ul><li>Contare ogni giorno gli ordini evasi</li><li>Cruscotto aggiornato in tempo reale</li><li>Allarme se un ordine supera 48 ore</li><li>Registrare ogni reclamo</li></ul></div>
+    <div class="cat"><h4>Valutazione</h4><ul><li>Riesame trimestrale con la direzione</li><li>Confronto con gli obiettivi annuali</li><li>Audit interno sul processo</li><li>Decidere di cambiare corriere</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. L'audit è valutazione perché giudica la conformità rispetto a quanto pianificato. "Decidere di cambiare corriere" è il tipico esito di una valutazione. In coppia, 3 minuti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Dove si perde il tempo?</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">E-commerce di esempio, ore dall'ordine: <b>P</b> preparato, <b>S</b> spedito, <b>C</b> consegnato.</p>
+      <table class="data compact"><tr><th>Ordine</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr><tr><td>P</td><td>4</td><td>6</td><td>3</td><td>5</td><td>2</td><td>4</td></tr><tr><td>S</td><td>20</td><td>30</td><td>26</td><td>22</td><td>28</td><td>18</td></tr><tr><td>C</td><td>44</td><td>50</td><td>47</td><td>70</td><td>46</td><td>42</td></tr></table>
+      <ol class="steps small">
+        <li>In Calc, per ogni ordine: preparazione P, attesa S − P, trasporto C − S.</li>
+        <li>Media e <code>MEDIANA</code> per fase; ordini entro 48 ore.</li>
+        <li>Una proposta di miglioramento; salva <b>tempi-processo_cognome.ods</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> medie 4 h, 20 h, 25,8 h; totale medio 49,8 h. Entro 48 ore: <b>4 ordini su 6</b> (66,7%). Mediana del trasporto 22,5 h: la media è alzata dall'ordine 4.</div>
+  </div>
+  <aside class="notes">Soluzione. Fasi per ordine (preparazione, attesa, trasporto, totale): 1: 4, 16, 24, 44; 2: 6, 24, 20, 50; 3: 3, 23, 21, 47; 4: 5, 17, 48, 70; 5: 2, 26, 18, 46; 6: 4, 14, 24, 42. Medie: 24/6 = 4; 120/6 = 20; 155/6 = 25,83; totale 299/6 = 49,83. Mediane: preparazione 4, attesa 20 (16, 17, 23, 24 → (17+23)/2 = 20), trasporto (21+24)/2 = 22,5. Entro 48 ore gli ordini 1, 3, 5, 6. Lettura: l'attesa del corriere (20 ore) è tutta interna e non aggiunge valore: probabilmente il corriere passa una volta al giorno. Proposta tipica: due ritiri al giorno o orario limite per gli ordini. L'ordine 4 è un caso anomalo da indagare. Formula per il conteggio: =CONTA.SE(intervallo;"<=48"). Dati ipotetici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il magazzino spedisce una volta a settimana per risparmiare. Il processo…</h2></div>
+  <div class="poll" data-id="u2-proc-silos" data-tipo="quiz" data-risposta="D">
+    <ol><li>migliora: i costi di spedizione scendono</li><li>non cambia: è una scelta interna del magazzino</li><li>migliora, se il magazzino raggiunge il suo budget</li><li>peggiora per il cliente: i tempi di consegna si allungano</li></ol>
+    <p class="why">Una funzione ottimizza il proprio risultato a spese del processo intero. Il cliente aspetta fino a una settimana in più: il processo va valutato dall'ordine alla consegna, non pezzo per pezzo.</p>
+  </div>
+  <aside class="notes">Risposta D. Le altre tre ragionano "per funzione" (logica a silos). È esattamente il motivo per cui serve un process owner con indicatori di processo e non solo di funzione. La scelta potrebbe anche essere giusta per un'impresa che vende all'ingrosso con consegne programmate: dipende da che cosa vuole il cliente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia di processo</p><h2>Aenne Burda: la moda come istruzioni</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Nel 1949 Aenne Burda fonda a Offenburg, in Germania, una casa editrice; dal 1950 esce la rivista <b>Burda Moden</b>.</p>
+      <p>L'idea: allegare a ogni modello il <mark>cartamodello</mark> in più taglie, con istruzioni passo per passo. Milioni di lettrici possono cucire a casa un abito alla moda.</p>
+      <p class="small muted">Nel 1987 la rivista fu tra le prime pubblicazioni occidentali stampate in russo in Unione Sovietica.</p>
+    </div>
+    <div class="card soft"><h3>Il processo, ogni mese</h3><ol class="steps small"><li>Scegliere i modelli della stagione</li><li>Disegnarli e svilupparli in tutte le taglie</li><li>Scrivere e verificare le istruzioni</li><li>Stampare e distribuire</li><li>Raccogliere le reazioni delle lettrici</li></ol></div>
+  </div>
+  <aside class="notes">Aenne Burda (1909-2005), imprenditrice tedesca, figura citata dal libro di testo. Il punto per la lezione: un processo editoriale ripetuto ogni mese, con scadenze fisse, e un prodotto che è esso stesso un processo documentato per il cliente (il cartamodello con le istruzioni). Collegamento con l'Unità 5 sui manuali: scrivere istruzioni che chiunque possa seguire. Le date (fondazione 1949, prima uscita 1950, edizione russa presentata a Mosca nel 1987) si possono verificare sulle fonti biografiche; evitare cifre sulle tirature.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni processo il suo indicatore</h2></div>
+  <dl class="puzzle-abbina" data-id="u2-proc-indicatori">
+    <dt>Evasione degli ordini</dt><dd>Ore tra l'ordine e la consegna</dd>
+    <dt>Assistenza clienti</dt><dd>Ticket risolti al primo contatto</dd>
+    <dt>Selezione del personale</dt><dd>Giorni per coprire una posizione</dd>
+    <dt>Sviluppo software</dt><dd>Difetti trovati dopo il rilascio</dd>
+    <dt>Acquisti</dt><dd>Forniture arrivate in ritardo</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Per ciascuno chiedere un obiettivo misurabile, per esempio "almeno il 70% dei ticket risolti al primo contatto" (valori ipotetici). Un buon indicatore è collegato allo scopo del processo, facile da misurare e capito da chi lavora.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il process mining</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Ogni volta che qualcuno lavora in un gestionale lascia una traccia: chi, che cosa, quando. Il <b>process mining</b> legge questi <b>registri di eventi</b> e ricostruisce automaticamente la mappa reale del processo.</p>
+      <p class="small muted">Scopre varianti, cicli e attese che nessuno aveva disegnato.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>È un campo nato dalla ricerca universitaria all'incrocio tra data mining e gestione dei processi; oggi si combina con l'AI per prevedere quali ordini rischiano di arrivare in ritardo e suggerire dove intervenire.</p></div>
+  </div>
+  <aside class="notes">Il padre accademico del process mining è Wil van der Aalst (Università di Eindhoven, poi RWTH Aachen). L'input minimo è un registro con tre colonne: identificativo del caso (l'ordine), attività, data e ora. Collegamento con il laboratorio: i tempi P, S, C sono proprio un piccolo registro di eventi. Collegamento con la lezione sui sistemi informativi: i dati vengono dall'ERP.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 35 minuti</span></p>
+  <h2>Mappa e migliora un processo della scuola</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Gruppi da 4. Scegliete un processo del sondaggio iniziale (o un altro concordato).</li>
+      <li>Disegnate la mappa <b>com'è oggi</b>: input, attività, chi le fa, output, cliente. Su carta o su app.diagrams.net.</li>
+      <li>Proponete un process owner e motivate la scelta.</li>
+      <li>Fissate 2 indicatori con un obiettivo numerico.</li>
+      <li>Disegnate la mappa <b>migliorata</b> con almeno un passaggio in meno.</li>
+      <li>Consegnate <b>processo_gruppoN.pdf</b> (foto o esportazione delle due mappe e una pagina di testo).</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le due mappe hanno inizio e fine chiari; gli indicatori sono numeri misurabili (tempi, percentuali, conteggi); il miglioramento elimina un'attesa, un passaggio o un controllo doppio.</div>
+  </div>
+  <aside class="notes">Esempio per "segnalare un PC guasto": oggi lo studente lo dice al docente, che lo scrive su un foglio, che il tecnico legge il giorno dopo; process owner il responsabile del laboratorio o l'assistente tecnico; indicatori: ore tra segnalazione e riparazione, percentuale di postazioni funzionanti; miglioramento: modulo online con QR code sulla postazione. Valutare chiarezza della mappa, misurabilità degli indicatori, concretezza della proposta. Presentazione di 2 minuti per gruppo se c'è tempo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u2-proc-uscita" data-extra="funzione|primario">
+    <p>Un processo attraversa le funzioni e crea valore per un <span class="slot" data-risposta="cliente"></span>.</p>
+    <p>Selezione del personale e acquisti sono processi di <span class="slot" data-risposta="supporto"></span>.</p>
+    <p>Chi risponde del processo da un capo all'altro è il <span class="slot" data-risposta="process owner"></span>.</p>
+    <p>Misurare ogni giorno è monitoraggio; giudicare i risultati è <span class="slot" data-risposta="valutazione"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: cliente, supporto, process owner, valutazione. Distrattori: funzione, primario.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>I processi attraversano le funzioni</li>
+      <li>Primari, di supporto, direzionali</li>
+      <li>Pianificare: confini, attività, risorse, obiettivi</li>
+    </ul>
+    <ul class="points">
+      <li>Il process owner risponde del tutto</li>
+      <li>Monitorare con continuità, valutare per decidere</li>
+      <li>Aenne Burda: un processo che diventa prodotto</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: descrivere un processo dell'impresa del PCTO (input, attività, output, cliente, chi ne rispondeva, come si misurava) è un collegamento molto efficace. Prossima lezione: la struttura organizzativa e le funzioni aziendali. Raccogliere le consegne su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

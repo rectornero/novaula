@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I documenti tecnici · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 5</p>
+  <h1>I documenti<br>tecnici</h1>
+  <p class="lead">Chi scrive, che cosa dice, a chi parla: il modello E-M-R e le parti che ogni documento di progetto deve avere.</p>
+  <aside class="notes">Obiettivi: definire il documento tecnico e i suoi tratti; applicare il modello Emittente-Messaggio-Ricevente; riconoscere i principali tipi di documento tecnico e i loro componenti. Durata indicativa: 2 ore. È la prima lezione dell'Unità 5: le successive tratteranno codifica, document management, manuali e relazione tecnica. Collegamento: nell'Unità 4 i ragazzi hanno già prodotto WBS, Gantt e preventivi, cioè documenti tecnici senza chiamarli così.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>L'ultima volta che hai aperto un manuale di istruzioni…</h2></div>
+  <div class="poll" data-id="u5-manuale-letto">
+    <ol><li>L'ho letto tutto, prima di usare l'oggetto</li><li>Solo quando qualcosa non funzionava</li><li>Ho guardato solo le figure</li><li>Non ricordo di averne mai aperto uno</li><li>Ho cercato un video online al suo posto</li></ol>
+  </div>
+  <aside class="notes">Sondaggio rompighiaccio, 2 minuti. Di solito vincono B ed E. Domanda di rilancio: "se nessuno legge i manuali, perché le aziende li scrivono?" Risposte attese: obblighi di legge (sicurezza, garanzia), assistenza che costa meno, responsabilità. Ponte: un documento tecnico esiste perché qualcuno, prima o poi, deve fare qualcosa grazie a esso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizione</p><h2>Che cos'è un documento tecnico</h2></div>
+  <div class="callout hl">Un documento tecnico descrive in modo <b>preciso e verificabile</b> un prodotto, un processo o un progetto, perché un <b>destinatario definito</b> possa capirlo, usarlo, costruirlo o controllarlo.</div>
+  <div class="cols-4">
+    <div class="card"><p class="num">1</p><h3>Preciso</h3><p class="muted">Numeri, unità di misura, termini definiti. Niente "circa".</p></div>
+    <div class="card"><p class="num">2</p><h3>Verificabile</h3><p class="muted">Ogni affermazione si può controllare o provare.</p></div>
+    <div class="card"><p class="num">3</p><h3>Rintracciabile</h3><p class="muted">Ha un codice, una revisione, un autore, una data.</p></div>
+    <div class="card"><p class="num">4</p><h3>Mirato</h3><p class="muted">È scritto per un lettore preciso, non per tutti.</p></div>
+  </div>
+  <aside class="notes">Far confrontare con un tema di italiano: anche lì c'è un autore e un lettore, ma il documento tecnico non cerca l'effetto, cerca di non lasciare dubbi. Esempio da far correggere a voce: "il server deve rispondere velocemente" diventa "il server risponde entro 2 secondi nel 95% delle richieste". La rintracciabilità sarà il tema della prossima lezione (codifica e revisioni).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il modello E-M-R</p><h2>Emittente, messaggio, ricevente</h2></div>
+  <div class="flow">
+    <div class="card soft"><p class="num">E</p><h3>Emittente</h3><p>Chi produce il documento e ne risponde: un tecnico, un ufficio, l'azienda.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">M</p><h3>Messaggio</h3><p>Il contenuto, scritto con un codice (lingua, simboli, disegni) e inviato su un canale.</p></div>
+    <div class="card soft"><p class="num">R</p><h3>Ricevente</h3><p>Chi lo legge e deve agire: utente, tecnico, cliente, collaudatore.</p></div>
+  </div>
+  <div class="callout">Il <b>feedback</b> torna dal ricevente all'emittente: domande, segnalazioni, errori trovati. Il <b>rumore</b> è tutto ciò che disturba: ambiguità, gergo, figure illeggibili.</div>
+  <aside class="notes">Il modello deriva dagli schemi della comunicazione del Novecento (Shannon e Weaver, poi Jakobson per gli elementi codice, canale, contesto). Insistere su un punto: nel documento tecnico si parte dal ricevente. Prima di scrivere ci si chiede chi leggerà, che cosa sa già e che cosa deve fare dopo aver letto. Il rumore in un documento non è acustico: è una frase che si può capire in due modi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Il libretto della lavastoviglie, visto con il modello E-M-R</h2></div>
+  <div class="puzzle-trascina" data-id="u5-emr-schema" data-extra="Cartiglio|Allegato">
+    <div style="position:relative;height:470px;font-size:30px">
+      <svg viewBox="0 0 1664 470" width="1664" height="470" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <defs><marker id="frA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c8326f"/></marker></defs>
+        <line x1="446" y1="150" x2="604" y2="150" stroke="#c8326f" stroke-width="6" marker-end="url(#frA)"/>
+        <line x1="1058" y1="150" x2="1216" y2="150" stroke="#c8326f" stroke-width="6" marker-end="url(#frA)"/>
+        <line x1="832" y1="226" x2="832" y2="294" stroke="#c8326f" stroke-width="6" stroke-dasharray="10 8"/>
+        <polyline points="1444,416 1444,452 220,452 220,234" fill="none" stroke="#596179" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#frA)"/>
+      </svg>
+      <div class="card" style="position:absolute;left:0;top:76px;width:440px;height:150px;justify-content:center;font-size:30px">Ufficio tecnico del produttore</div>
+      <div class="card soft" style="position:absolute;left:612px;top:76px;width:440px;height:150px;justify-content:center;font-size:30px">Istruzioni passo passo, con figure</div>
+      <div class="card" style="position:absolute;left:1224px;top:76px;width:440px;height:150px;justify-content:center;font-size:30px">Chi ha appena comprato la lavastoviglie</div>
+      <div class="card" style="position:absolute;left:612px;top:300px;width:440px;height:116px;justify-content:center;font-size:28px">Libretto di carta e PDF sul sito</div>
+      <div class="card" style="position:absolute;left:1224px;top:300px;width:440px;height:116px;justify-content:center;font-size:28px">Chiamate all'assistenza e recensioni</div>
+      <span class="slot" data-risposta="Emittente" style="position:absolute;left:0;top:0"></span>
+      <span class="slot" data-risposta="Messaggio" style="position:absolute;left:612px;top:0"></span>
+      <span class="slot" data-risposta="Ricevente" style="position:absolute;left:1224px;top:0"></span>
+      <span class="slot" data-risposta="Canale" style="position:absolute;left:862px;top:236px"></span>
+      <span class="slot" data-risposta="Feedback" style="position:absolute;left:1224px;top:236px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Emittente = ufficio tecnico; Messaggio = istruzioni; Ricevente = chi ha comprato; Canale = libretto e PDF; Feedback = chiamate e recensioni. Distrattori: Cartiglio e Allegato (componenti del documento, non elementi della comunicazione). A coppie, 3 minuti, poi uno studente trascina alla LIM. Rilancio: se le chiamate all'assistenza sono tante sullo stesso passaggio, che cosa deve fare l'emittente? Correggere il messaggio nella revisione successiva: è il feedback che migliora il documento.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il problema di ogni comunicazione</h2></div>
+  <figure class="citazione">
+    <blockquote>Il problema fondamentale della comunicazione è riprodurre in un punto, esattamente o approssimativamente, un messaggio scelto in un altro punto.</blockquote>
+    <figcaption><b>Claude Shannon</b>, ingegnere e matematico, «A Mathematical Theory of Communication», 1948</figcaption>
+  </figure>
+  <p class="lead">Un documento tecnico funziona quando il ricevente ricostruisce <b>esattamente</b> ciò che l'emittente aveva in mente. "Approssimativamente", in un progetto, costa caro.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point" (Bell System Technical Journal, 1948, introduzione). Shannon parlava di segnali, non di significati, ma l'idea si applica bene: nel documento tecnico l'obiettivo è l'esattezza. Domanda alla classe: un esempio in cui "approssimativamente" basta (un messaggio a un amico) e uno in cui non basta (la coppia di serraggio di una ruota, la porta di un server).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Stesso software, tre lettori diversi. Che cosa fai?</h2></div>
+  <div class="poll" data-id="u5-tre-lettori" data-tipo="quiz" data-risposta="B">
+    <ol><li>Un unico documento completo, così nessuno resta senza informazioni</li><li>Documenti distinti, ciascuno con linguaggio e dettagli adatti al suo lettore</li><li>Il codice sorgente ben commentato: è la documentazione più aggiornata</li><li>Un video tutorial, perché nessuno legge</li></ol>
+    <p class="why">Il modello E-M-R parte dal ricevente: l'utente deve usare il software, il tecnico installarlo, il cliente decidere. Un documento unico è troppo lungo per l'uno e troppo vago per l'altro. Il codice commentato serve solo agli sviluppatori.</p>
+  </div>
+  <aside class="notes">A tranello è la A, che sembra la più prudente. Far notare che i documenti possono condividere parti (glossario, requisiti) ma ognuno ha un suo ricevente. Il video (D) è un canale, non una soluzione: può affiancare un manuale ma non sostituisce le specifiche per il tecnico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipi di documento</p><h2>I documenti che accompagnano un progetto</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><h3>Specifica</h3><p>Che cosa deve fare il prodotto: requisiti, vincoli.</p></div>
+    <div class="card soft"><h3>Progetto</h3><p>Come è fatto: disegni, schemi, architettura.</p></div>
+    <div class="card soft"><h3>Scheda tecnica</h3><p>Dati e prestazioni di un componente (datasheet).</p></div>
+    <div class="card soft"><h3>Manuale</h3><p>Come si usa, si installa, si ripara.</p></div>
+    <div class="card"><h3>Relazione tecnica</h3><p>Che cosa si è fatto, come e con quali risultati.</p></div>
+    <div class="card"><h3>Verbale</h3><p>Che cosa si è deciso in una riunione o in un collaudo.</p></div>
+    <div class="card"><h3>Piano e report di test</h3><p>Che cosa si prova e con quale esito.</p></div>
+    <div class="card"><h3>Procedura</h3><p>Chi fa che cosa, in quale ordine, in azienda.</p></div>
+  </div>
+  <aside class="notes">Gli otto tipi coprono quasi tutto ciò che gira in un progetto informatico o industriale. Chiedere: quali di questi avete già prodotto nel PCTO o nell'Unità 4? (WBS e Gantt fanno parte del piano di progetto, il preventivo è un documento per il cliente.) Manuali e relazione tecnica avranno una lezione dedicata.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Chi è il ricevente principale?</h2></div>
+  <div class="puzzle-categorie" data-id="u5-ricevente" style="--cols:3">
+    <div class="cat"><h4>Il team di progetto</h4><ul><li>Specifica del database</li><li>Verbale della riunione tecnica</li><li>Schema dell'architettura</li></ul></div>
+    <div class="cat"><h4>Il cliente</h4><ul><li>Offerta economica</li><li>Stato di avanzamento lavori</li><li>Verbale di collaudo</li></ul></div>
+    <div class="cat"><h4>L'utente finale</h4><ul><li>Guida rapida</li><li>Manuale d'uso</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione: team = specifica del database, verbale tecnico, schema dell'architettura; cliente = offerta, stato di avanzamento, verbale di collaudo; utente = guida rapida, manuale d'uso. Discussione: il verbale di collaudo è firmato da fornitore e cliente insieme, ma il ricevente che deve decidere (accettare il lavoro e pagare) è il cliente. Alcuni studenti metteranno il manuale d'uso nel cliente: va bene discuterne, il cliente lo riceve, ma chi lo legge e agisce è l'utente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">I componenti</p><h2>Le parti di un documento tecnico</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Identificazione</b>: titolo, codice, revisione, data, autore, approvazione</li>
+      <li><b>Scopo e campo di applicazione</b>: a che cosa serve, che cosa non copre</li>
+      <li><b>Riferimenti</b>: norme e documenti collegati</li>
+      <li><b>Termini e definizioni</b>: il glossario</li>
+    </ul>
+    <ul class="points">
+      <li><b>Corpo</b>: il contenuto tecnico, diviso in capitoli numerati</li>
+      <li><b>Figure e tabelle</b> numerate, con didascalia</li>
+      <li><b>Allegati</b>: disegni, dati, listati troppo lunghi</li>
+      <li><b>Storia delle revisioni</b>: chi ha cambiato che cosa e quando</li>
+    </ul>
+  </div>
+  <div class="callout"><b>All'esame</b>: se presenti un progetto del PCTO o di informatica, mostra un tuo documento e indica queste parti. È un modo concreto per collegare GPOI alle altre materie.</div>
+  <aside class="notes">Anche le norme ISO seguono uno schema simile: Scopo, Riferimenti normativi, Termini e definizioni, poi i requisiti. Lo vedranno nell'Unità 9. L'identificazione e la storia delle revisioni saranno approfondite nella prossima lezione (cartiglio, versioni e revisioni). Il suggerimento d'esame è generico: un esempio concreto e ben spiegato vale più di una definizione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Dalla prima all'ultima pagina</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-ordine-parti">
+    <li>Frontespizio con codice, revisione e data</li>
+    <li>Storia delle revisioni</li>
+    <li>Indice</li>
+    <li>Scopo e campo di applicazione</li>
+    <li>Termini e definizioni</li>
+    <li>Contenuto tecnico, per capitoli</li>
+    <li>Allegati</li>
+  </ol>
+  <aside class="notes">Ordine più comune: frontespizio, storia delle revisioni, indice, scopo, termini, corpo, allegati. Molte aziende mettono la storia delle revisioni subito dopo il frontespizio (si vede subito se si ha l'ultima versione), altre in fondo: accettare entrambe se motivate. Il punto fermo: scopo e definizioni vengono prima del contenuto, gli allegati alla fine.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Smonta un documento vero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Nel browser cerca il manuale PDF di un oggetto che hai (telefono, stampante, bici elettrica) o della LIM della classe.</li>
+      <li>Apri Writer e crea una tabella con due colonne: <b>Elemento</b> e <b>Nel documento</b>.</li>
+      <li>Righe: emittente, ricevente, canale, codice del documento, revisione o data, lingue.</li>
+      <li>Aggiungi una riga per ogni componente della slide precedente: presente o assente, e a che pagina.</li>
+      <li>Salva come <b>analisi-documento.odt</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> almeno 12 righe compilate. Quasi tutti i manuali hanno un codice o una data di revisione, spesso in piccolo sul retro o in fondo all'ultima pagina. Se manca, scrivilo: è un'informazione anche quella.</div>
+  </div>
+  <aside class="notes">Se la rete è lenta, preparare due o tre PDF di manuali su una cartella condivisa. Dove si trova il codice: spesso è una sigla in basso a sinistra sull'ultima pagina (per esempio un numero di parte con un indice di revisione). Far confrontare in coppia: due manuali dello stesso produttore hanno la stessa struttura? Di solito sì, perché l'azienda usa un modello.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>A che cosa serve ogni parte?</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-parti-funzione">
+    <dt>Scopo</dt><dd>Dice a che cosa serve il documento e che cosa non copre</dd>
+    <dt>Glossario</dt><dd>Fissa il significato dei termini una volta per tutte</dd>
+    <dt>Riferimenti</dt><dd>Rimanda alle norme e agli altri documenti collegati</dd>
+    <dt>Storia delle revisioni</dt><dd>Elenca chi ha cambiato che cosa e quando</dd>
+    <dt>Allegati</dt><dd>Raccolgono tabelle e disegni troppo lunghi per il testo</dd>
+  </dl>
+  <aside class="notes">Soluzioni nell'ordine scritto. Far notare che il glossario è l'arma principale contro il rumore: se "utente" e "cliente" sono definiti, nessuno li confonde. Domanda: perché lo scopo dice anche che cosa NON copre? Per evitare che qualcuno usi il documento fuori dal suo campo (per esempio un manuale d'uso usato per riparare).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quando un documento tecnico è davvero buono?</h2></div>
+  <div class="poll" data-id="u5-buono" data-tipo="quiz" data-risposta="C">
+    <ol><li>Quando contiene tutte le informazioni disponibili sul prodotto</li><li>Quando è scritto in tono formale e impersonale</li><li>Quando il suo ricevente può fare ciò che deve senza chiedere all'autore</li><li>Quando l'ha approvato il responsabile dell'ufficio tecnico</li></ol>
+    <p class="why">La misura è il ricevente. Troppe informazioni sono rumore (A); il tono formale non garantisce la chiarezza (B); l'approvazione rende il documento ufficiale, non utile (D).</p>
+  </div>
+  <aside class="notes">La D è il tranello più forte: l'approvazione è necessaria (rintracciabilità, responsabilità) ma non sufficiente. Esempio: un documento approvato che usa sigle mai spiegate. Collegare al feedback: se l'assistenza riceve sempre la stessa domanda, il documento non è buono anche se è approvato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Chi è l'emittente se scrive un'AI?</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Documentazione scritta con l'AI</h3><p>Gli assistenti AI producono in pochi secondi la bozza di un manuale o la descrizione di un programma a partire dal codice. Ma l'<b>emittente</b> resta l'azienda: qualcuno deve verificare, correggere e firmare. Il Regolamento europeo sull'intelligenza artificiale (Regolamento UE 2024/1689, AI Act) chiede a chi fornisce sistemi di AI ad alto rischio una <b>documentazione tecnica</b> completa (art. 11 e allegato IV).</p></div>
+  <div class="callout">Una bozza generata è un messaggio senza emittente responsabile, finché una persona non la verifica e non la approva.</div>
+  <aside class="notes">Spunto di discussione, 5 minuti: quali errori può fare un'AI che scrive un manuale? (Inventa funzioni che non esistono, usa termini diversi da quelli dell'interfaccia, non conosce il ricevente.) Per l'AI Act: l'art. 11 riguarda la documentazione tecnica dei sistemi ad alto rischio, il contenuto è elencato nell'allegato IV. Non entrare nei dettagli: basta il principio che anche l'AI deve essere documentata.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Un messaggio, tre riceventi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Gruppi di tre. Argomento: <b>il Wi-Fi della scuola</b>, come si accede e che limiti ha.</li>
+      <li>Ognuno scrive una versione per un ricevente: uno <b>studente di prima</b>, il <b>tecnico di laboratorio</b>, la <b>dirigente</b> che deve decidere se potenziarlo.</li>
+      <li>Massimo mezza pagina per versione, con titolo, scopo e data.</li>
+      <li>Scambiatevi i testi: ognuno segna una frase che il suo ricevente non capirebbe.</li>
+      <li>Salvate le tre versioni in <b>tre-riceventi.odt</b> e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> le tre versioni sono diverse davvero. Lo studente trova passi da seguire, il tecnico dati precisi (rete, autenticazione, banda), la dirigente costi, problemi e una proposta.</div>
+  </div>
+  <aside class="notes">Se i ragazzi non conoscono i dettagli reali della rete della scuola, far usare dati ipotetici dichiarati come tali (per esempio "banda ipotetica di 100 Mbit/s"). Valutazione rapida: adeguatezza al ricevente, precisione, presenza di titolo, scopo e data. In chiusura leggere ad alta voce due versioni per la dirigente e chiedere quale convince di più e perché.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u5-uscita-emr" data-extra="Indice|Canale">
+    <p>Nel modello E-M-R chi produce il documento è l'<span class="slot" data-risposta="emittente"></span> e chi lo legge e agisce è il <span class="slot" data-risposta="ricevente"></span>.</p>
+    <p>Le domande e le segnalazioni che tornano all'autore sono il <span class="slot" data-risposta="feedback"></span>; l'ambiguità è <span class="slot" data-risposta="rumore"></span>.</p>
+    <p>Il significato dei termini si fissa nel <span class="slot" data-risposta="glossario"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti, da soli. Soluzioni: emittente, ricevente, feedback, rumore, glossario. Distrattori: Indice e Canale (il canale è un elemento del modello ma non va in nessuno spazio). Chi finisce prima scrive sul quaderno un esempio di rumore trovato nel manuale analizzato in laboratorio.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Documento tecnico: preciso, verificabile, rintracciabile, mirato</li>
+      <li>E-M-R: si scrive partendo dal ricevente</li>
+      <li>Feedback per migliorare, rumore da eliminare</li>
+    </ul>
+    <ul class="points">
+      <li>Specifiche, progetti, manuali, relazioni, verbali, test</li>
+      <li>Identificazione, scopo, riferimenti, glossario, corpo, allegati</li>
+      <li>Con l'AI la responsabilità resta di chi firma</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la codifica dei documenti (identificazione, cartiglio, versioni e revisioni). Chiedere di portare, se possibile, un disegno tecnico o una tavola fatta in un'altra materia: servirà per vedere un cartiglio vero.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

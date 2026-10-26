@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il rischio elettrico · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 10</p>
+  <h1>Il rischio<br>elettrico</h1>
+  <p class="lead">Non è la tensione da sola a fare male: è la corrente che attraversa il corpo. Norme, elettrocuzione, effetti sull'uomo e le protezioni che ci sono in ogni ufficio.</p>
+  <div class="meta"><span class="chip">I = V / R</span><span>Il rischio elettrico</span></div>
+  <aside class="notes">Obiettivi: conoscere la normativa di riferimento (legge 186/1968, D.Lgs. 81/2008 artt. 80-87, D.M. 37/2008, D.P.R. 462/2001, norme CEI), definire l'elettrocuzione e distinguere contatti diretti e indiretti, descrivere gli effetti della corrente sul corpo umano, riconoscere le protezioni (isolamento, messa a terra, interruttore differenziale, doppio isolamento, bassissima tensione). Durata indicativa: 2 ore. Il deck "sicurezza-lavoro-laboratorio" ha già trattato prese, ciabatte e potenze: qui si va più a fondo su fisica, norme e protezioni. Collegamento con Sistemi e reti ed Elettrotecnica del biennio (legge di Ohm).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai preso la scossa?</h2></div>
+  <div class="poll" data-id="u10e-scossa">
+    <ol><li>Sì, da una presa o da un elettrodomestico</li><li>Sì, ma solo elettricità statica (maniglia, auto)</li><li>No, mai</li><li>Non me lo ricordo</li></ol>
+  </div>
+  <aside class="notes">Sondaggio, 2 minuti, senza chiedere i dettagli a chi ha avuto incidenti. La scossa elettrostatica è un impulso di tensione molto alta (migliaia di volt) ma di durata brevissima e con pochissima energia: per questo dà fastidio ma di solito non è pericolosa. Sarà il primo esempio del concetto chiave della lezione: contano la corrente, il percorso e la durata, non solo la tensione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Normativa di riferimento</p><h2>Le regole dell'impianto elettrico</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Legge 186/1968</h3><p>Impianti e apparecchi a <b>regola d'arte</b>; se rispettano le norme CEI si considerano a regola d'arte.</p></div>
+    <div class="card"><h3>D.Lgs. 81/2008</h3><p>Titolo III, capo III (artt. 80-87): il datore di lavoro protegge i lavoratori da tutti i rischi elettrici.</p></div>
+    <div class="card"><h3>D.M. 37/2008</h3><p>Impianti negli edifici: li installa un'impresa abilitata, che rilascia la <b>dichiarazione di conformità</b>.</p></div>
+    <div class="card"><h3>D.P.R. 462/2001</h3><p>Verifiche periodiche degli impianti di messa a terra nei luoghi di lavoro.</p></div>
+    <div class="card"><h3>Norme CEI</h3><p>CEI 64-8 per gli impianti in bassa tensione, CEI 11-27 per chi lavora sugli impianti.</p></div>
+    <div class="card"><h3>Marcatura CE</h3><p>Gli apparecchi in commercio rispettano la direttiva europea bassa tensione.</p></div>
+  </div>
+  <aside class="notes">Legge 1° marzo 1968, n. 186: due articoli, il secondo dice che materiali, apparecchiature, macchinari, installazioni e impianti realizzati secondo le norme del CEI si considerano costruiti a regola d'arte. D.Lgs. 81/2008, art. 80: il datore di lavoro prende le misure necessarie affinché i lavoratori siano salvaguardati da tutti i rischi di natura elettrica (contatti diretti e indiretti, innesco di incendi ed esplosioni, fulminazione, sovratensioni…); artt. 82-83 lavori sotto tensione e in prossimità. D.M. 22 gennaio 2008, n. 37: installazione degli impianti all'interno degli edifici. D.P.R. 462/2001: verifiche periodiche degli impianti di terra, dei dispositivi contro le scariche atmosferiche e degli impianti in luoghi con pericolo di esplosione. Direttiva bassa tensione: 2014/35/UE. La CEI 64-8 vale fino a 1000 V in alternata e 1500 V in continua.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Ogni norma con il suo oggetto</h2></div>
+  <dl class="puzzle-abbina" data-id="u10e-norme">
+    <dt>Legge 186/1968</dt><dd>Tutto deve essere fatto a regola d'arte</dd>
+    <dt>D.M. 37/2008</dt><dd>Dichiarazione di conformità dell'installatore</dd>
+    <dt>D.P.R. 462/2001</dt><dd>Verifiche periodiche dell'impianto di terra</dd>
+    <dt>CEI 64-8</dt><dd>Progettare e realizzare impianti in bassa tensione</dd>
+    <dt>CEI 11-27</dt><dd>Lavorare sugli impianti: persone esperte e avvertite</dd>
+    <dt>D.Lgs. 81/2008, art. 80</dt><dd>Obblighi del datore di lavoro sui rischi elettrici</dd>
+  </dl>
+  <aside class="notes">Tre minuti, individuale. La CEI 11-27 (insieme alla CEI EN 50110) classifica chi lavora sugli impianti: PES persona esperta, PAV persona avvertita, PEC persona comune; il datore di lavoro attribuisce queste qualifiche dopo una formazione adeguata. Domanda: un tecnico informatico che apre un armadio rack con un quadretto elettrico deve avere una qualifica? Dipende dal lavoro: cambiare un server spento e scollegato non è un lavoro elettrico; intervenire sul quadro sì.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Codelab apre un nuovo ufficio. Chi può realizzare l'impianto elettrico?</h2></div>
+  <div class="poll" data-id="u10e-installatore" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un dipendente bravo con l'elettronica</li><li>Il datore di lavoro, se è ingegnere</li><li>Un'impresa abilitata, che poi rilascia la dichiarazione di conformità</li><li>L'RSPP dell'azienda</li></ol>
+    <p class="why">Gli impianti negli edifici li installano solo imprese abilitate (D.M. 37/2008), che alla fine rilasciano la dichiarazione di conformità alla regola d'arte. Senza quel documento l'impianto non è in regola, anche se funziona.</p>
+  </div>
+  <aside class="notes">Il D.M. 37/2008 prevede che l'impresa installatrice abbia un responsabile tecnico con requisiti professionali e sia iscritta al registro delle imprese o all'albo delle imprese artigiane con l'abilitazione. Per impianti più grandi o complessi serve anche un progetto firmato da un professionista. L'RSPP valuta i rischi e consiglia, ma non è un installatore. Collegamento: la dichiarazione di conformità è un documento tecnico, come quelli visti nell'unità 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Elettrocuzione</p><h2>Quando il corpo diventa parte del circuito</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Contatto diretto</h3><p>Tocchi una parte che è <b>normalmente in tensione</b>: un filo spellato, un morsetto, i contatti di una presa.</p></div>
+    <div class="card fill"><h3>Contatto indiretto</h3><p>Tocchi una parte metallica (una <b>massa</b>) che normalmente è sicura ma è andata in tensione per un guasto.</p></div>
+  </div>
+  <div class="callout">L'<b>elettrocuzione</b> è il passaggio di corrente nel corpo umano. Il contatto indiretto è il più insidioso: nessuno sa che quella carcassa è pericolosa.</div>
+  <aside class="notes">Termini: elettrocuzione (passaggio di corrente attraverso il corpo); folgorazione è usato spesso come sinonimo, in senso stretto indica la scarica di un fulmine. Massa = parte conduttrice accessibile di un apparecchio, che non è in tensione in condizioni normali ma può andarci in caso di guasto dell'isolamento (per esempio la carcassa di una lavatrice o il case metallico di un PC fisso). Altri rischi elettrici: l'arco elettrico (ustioni e lesioni agli occhi, tipico di chi lavora sui quadri) e l'incendio di origine elettrica (sovraccarichi, ciabatte in cascata, connessioni allentate).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Contatto diretto o indiretto?</h2></div>
+  <div class="puzzle-categorie" data-id="u10e-contatti">
+    <div class="cat"><h4>Contatto diretto</h4><ul><li>Toccare un filo spellato</li><li>Infilare una forbice nella presa</li><li>Toccare un morsetto del quadro aperto</li></ul></div>
+    <div class="cat"><h4>Contatto indiretto</h4><ul><li>Carcassa del forno andata in tensione</li><li>Lavatrice con un guasto interno</li><li>Case metallico del PC in tensione</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 3 minuti. Regola per decidere: la parte toccata è fatta per portare corrente (diretto) oppure no, ed è in tensione solo per un guasto (indiretto)? Protezioni corrispondenti: per i contatti diretti isolamento, involucri, barriere, distanza; per i contatti indiretti messa a terra coordinata con l'interruttore differenziale, oppure doppio isolamento. Le vediamo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La fisica che serve</p><h2>È la corrente che fa male</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>legge di Ohm applicata al corpo</small>I = <span class="hl">V</span> / <span class="hl">R</span></div>
+      <p>La tensione <b>spinge</b> la corrente; la resistenza del corpo la <b>frena</b>. Pelle bagnata, grande superficie di contatto, piedi nudi su un pavimento umido: la resistenza scende e la corrente sale.</p>
+    </div>
+    <div class="card soft"><h3>Contano anche</h3><ul class="points"><li>il percorso (mano-mano, mano-piedi: passa dal cuore)</li><li>la durata</li><li>il tipo di corrente e la frequenza</li></ul></div>
+  </div>
+  <aside class="notes">La resistenza (più precisamente l'impedenza) del corpo umano non è costante: diminuisce al crescere della tensione, con la pelle bagnata o lesa e con una superficie di contatto più grande. Per i conti useremo valori indicativi e arrotondati (per esempio 1000 Ω a 230 V con pelle umida), dichiarando che sono una semplificazione didattica: i valori di riferimento stanno nella norma CEI/IEC 60479-1. Esempio: 230 V / 1000 Ω = 0,23 A = 230 mA, una corrente pericolosissima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Effetti della corrente sull'uomo</p><h2>Metti in ordine: dalla corrente più debole alla più forte</h2></div>
+  <ol class="puzzle-ordina" data-id="u10e-effetti">
+    <li>Percezione: un leggero formicolio</li>
+    <li>Contrazioni muscolari involontarie</li>
+    <li>Tetanizzazione: la mano non riesce a staccarsi</li>
+    <li>Difficoltà respiratoria, fino all'arresto</li>
+    <li>Fibrillazione ventricolare: il cuore non pompa più</li>
+  </ol>
+  <aside class="notes">Valori indicativi per corrente alternata a 50 Hz e tempi lunghi (norma CEI/IEC 60479-1): soglia di percezione circa 0,5 mA; soglia di rilascio (oltre la quale la tetanizzazione impedisce di lasciare la presa) circa 10 mA; con alcune decine di milliampere per tempi sufficienti compaiono difficoltà respiratorie e cresce la probabilità di fibrillazione ventricolare, che è la causa più frequente di morte per elettrocuzione. Con correnti molto alte si aggiungono ustioni, anche interne. L'ordine reale dipende anche dalla durata: è un ordine "di massima", spiegarlo. La fibrillazione si interrompe solo con un defibrillatore: per questo i DAE nei luoghi pubblici e a scuola sono così importanti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le soglie</p><h2>Pochi milliampere fanno la differenza</h2></div>
+  <div class="cols-3">
+    <div class="card ok"><p class="num" style="color:var(--ok)">0,5 mA</p><h3>Percezione</h3><p>Circa la soglia sotto cui di solito non si sente niente.</p></div>
+    <div class="card soft"><p class="num">10 mA</p><h3>Rilascio</h3><p>Circa la soglia oltre cui i muscoli si contraggono e non si riesce più a lasciare la presa.</p></div>
+    <div class="card bad"><p class="num" style="color:var(--bad)">30 mA</p><h3>Il differenziale</h3><p>La sensibilità tipica dell'interruttore differenziale di casa e dell'ufficio.</p></div>
+  </div>
+  <div class="callout">Valori indicativi per corrente alternata a 50 Hz: l'effetto dipende anche da durata e percorso.</div>
+  <aside class="notes">Fonte dei valori: CEI/IEC 60479-1 (effetti della corrente sul corpo umano), zone tempo-corrente da AC-1 ad AC-4. Il differenziale con corrente differenziale nominale di 30 mA è richiesto dalla CEI 64-8 come protezione addizionale nei circuiti delle abitazioni e in molti altri casi; interviene in tempi dell'ordine delle decine di millisecondi, tanto più rapidamente quanto più alta è la corrente di dispersione. Far notare che 30 mA è sopra la soglia di rilascio: il differenziale non impedisce la scossa, la rende abbastanza breve da non uccidere nella grande maggioranza dei casi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Come ci protegge l'impianto</h2></div>
+  <div class="puzzle-trascina" data-id="u10e-schema" data-extra="Fusibile|Trasformatore">
+    <div style="position:relative;width:1500px;height:440px">
+      <svg width="1500" height="440" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <rect x="0" y="40" width="430" height="230" rx="18" fill="#ffffff" stroke="#172033" stroke-width="3"/>
+        <text x="215" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="30" font-weight="700" fill="#172033">Quadro</text>
+        <line x1="430" y1="110" x2="1050" y2="110" stroke="#8a5a2b" stroke-width="7"/>
+        <line x1="430" y1="200" x2="1050" y2="200" stroke="#2f6fde" stroke-width="7"/>
+        <rect x="1050" y="30" width="250" height="280" rx="22" fill="#e6e8ef" stroke="#172033" stroke-width="4"/>
+        <circle cx="1175" cy="235" r="48" fill="none" stroke="#596179" stroke-width="6"/>
+        <line x1="1175" y1="310" x2="1175" y2="380" stroke="#11845f" stroke-width="7" stroke-dasharray="14 10"/>
+        <line x1="1135" y1="382" x2="1215" y2="382" stroke="#172033" stroke-width="5"/>
+        <line x1="1150" y1="397" x2="1200" y2="397" stroke="#172033" stroke-width="5"/>
+        <line x1="1163" y1="412" x2="1187" y2="412" stroke="#172033" stroke-width="5"/>
+        <g stroke="#c8326f" stroke-width="14" stroke-linecap="round" fill="none">
+          <line x1="1420" y1="150" x2="1420" y2="290"/><line x1="1420" y1="290" x2="1395" y2="400"/><line x1="1420" y1="290" x2="1450" y2="400"/>
+          <line x1="1420" y1="180" x2="1306" y2="170"/>
+        </g>
+        <circle cx="1420" cy="110" r="32" fill="#c8326f"/>
+      </svg>
+      <span class="slot" data-risposta="Differenziale" style="position:absolute;left:25px;top:140px"></span>
+      <span class="slot" data-risposta="Fase" style="position:absolute;left:660px;top:40px"></span>
+      <span class="slot" data-risposta="Neutro" style="position:absolute;left:640px;top:215px"></span>
+      <span class="slot" data-risposta="Massa" style="position:absolute;left:1105px;top:70px"></span>
+      <span class="slot" data-risposta="Terra" style="position:absolute;left:930px;top:365px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: nel quadro l'interruttore Differenziale; filo marrone in alto Fase, filo blu Neutro; la carcassa metallica dell'elettrodomestico è la Massa; il conduttore di protezione giallo-verde porta alla Terra (impianto di messa a terra). Funzionamento: se l'isolamento interno si guasta, la massa va in tensione; con la messa a terra la corrente di guasto si scarica verso terra, la corrente che torna sul neutro è minore di quella che esce dalla fase e il differenziale, che misura proprio questa differenza, apre il circuito. Se la persona tocca la massa nel frattempo, la corrente nel suo corpo dura pochissimo. Distrattori: fusibile (protegge da sovraccarichi e cortocircuiti, non dalla dispersione verso terra) e trasformatore. I colori dei conduttori (blu per il neutro, giallo-verde per la protezione) sono quelli prescritti dalle norme; per la fase si usano marrone, nero o grigio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>L'interruttore differenziale ("salvavita") ti protegge…</h2></div>
+  <div class="poll" data-id="u10e-differenziale" data-tipo="quiz" data-risposta="A">
+    <ol><li>Quando una corrente si disperde verso terra, anche attraverso il tuo corpo</li><li>Dai cortocircuiti tra fase e neutro</li><li>Dai sovraccarichi delle ciabatte</li><li>Anche se tocchi fase e neutro insieme, isolato da terra</li></ol>
+    <p class="why">Il differenziale confronta la corrente che esce sulla fase con quella che rientra sul neutro: interviene solo se una parte si disperde verso terra. Cortocircuiti e sovraccarichi li gestisce l'interruttore magnetotermico; se tocchi fase e neutro insieme, isolato da terra, la corrente esce e rientra uguale e il differenziale non vede niente.</p>
+  </div>
+  <aside class="notes">Il nome commerciale "salvavita" fa credere che protegga da tutto. B e C sono compiti del magnetotermico (o dei fusibili), che protegge l'impianto più che le persone. La D è il tranello più fine: chi tocca contemporaneamente fase e neutro stando isolato da terra diventa un "carico" come una lampadina, e il differenziale non interviene. Morale: il differenziale è una protezione in più, non sostituisce l'isolamento e il buon senso (si lavora sugli impianti solo dopo aver tolto tensione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lucchetto</p><h2>Due conti con la legge di Ohm</h2></div>
+  <div class="puzzle-codice" data-risposta="2306" data-aiuto="I in mA = V / R × 1000">
+    <p>Calcola la corrente in <b>milliampere</b> con valori indicativi e arrotondati. Il codice è il primo risultato seguito dal secondo.</p>
+    <ul class="points">
+      <li>Mano bagnata su un filo a 230 V, resistenza totale 1000 Ω.</li>
+      <li>Scheda alimentata a 24 V, pelle asciutta, resistenza totale 4000 Ω.</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 230 mA: oltre ogni soglia, rischio di morte. 6 mA: si sente, ma sotto la soglia di rilascio. Per questo le tensioni molto basse si usano dove il contatto è facile.</div>
+  </div>
+  <aside class="notes">Codice: 2306. 230 / 1000 = 0,23 A = 230 mA; 24 / 4000 = 0,006 A = 6 mA. Ricordare che i valori di resistenza sono una semplificazione didattica. Bassissima tensione di sicurezza (SELV): fino a 50 V in alternata e 120 V in continua, ottenuta con un trasformatore di sicurezza o batterie; i circuiti dei giocattoli elettrici, di molte lampade e delle schede come Arduino lavorano a tensioni ben più basse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le protezioni</p><h2>Contro i contatti diretti e indiretti</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Contatti diretti</h3><ul class="points"><li>Isolamento delle parti attive</li><li>Involucri e barriere (quadri chiusi, prese con alveoli protetti)</li><li>Distanza e ostacoli</li><li>In più: differenziale da 30 mA</li></ul></div>
+    <div class="card"><h3>Contatti indiretti</h3><ul class="points"><li>Messa a terra delle masse + differenziale</li><li>Apparecchi a doppio isolamento (classe II)</li><li>Bassissima tensione di sicurezza (classe III)</li><li>Verifiche periodiche dell'impianto</li></ul></div>
+  </div>
+  <aside class="notes">Classi degli apparecchi (CEI EN 61140): classe I = isolamento principale più collegamento delle masse al conduttore di protezione (spina con il contatto di terra); classe II = doppio isolamento o isolamento rinforzato, nessun collegamento a terra, simbolo del doppio quadrato; classe III = alimentati a bassissima tensione di sicurezza. Mai togliere o tagliare il contatto di terra di una spina per farla entrare in una presa vecchia: si trasforma un apparecchio di classe I in un apparecchio senza protezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>In quale classe è l'apparecchio?</h2></div>
+  <div class="puzzle-categorie" data-id="u10e-classi" style="--cols:3">
+    <div class="cat"><h4>Classe I · con terra</h4><ul><li>Lavatrice</li><li>PC fisso con case metallico</li><li>Frigorifero</li></ul></div>
+    <div class="cat"><h4>Classe II · doppio isolamento</h4><ul><li>Asciugacapelli</li><li>Caricabatterie del telefono</li></ul></div>
+    <div class="cat"><h4>Classe III · bassissima tensione</h4><ul><li>Arduino alimentato via USB</li><li>Lampada da scrivania a 12 V</li></ul></div>
+  </div>
+  <aside class="notes">Esempi tipici; la verità sta sempre sull'etichetta del singolo apparecchio: il simbolo del doppio quadrato indica la classe II, il simbolo di terra (o la spina con il contatto di terra) la classe I, il simbolo del rombo con III la classe III. Una lampada a 12 V alimentata da un trasformatore di sicurezza è in classe III, mentre il suo trasformatore collegato alla rete sarà di classe I o II. Discussione: perché gli asciugacapelli sono quasi sempre in classe II? (Si usano in bagno, vicino all'acqua, e la presa potrebbe non avere la terra: il doppio isolamento non dipende dall'impianto.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Anche l'esperto più famoso prese la scossa</h2></div>
+  <figure class="citazione">
+    <blockquote>Di recente ho fatto un esperimento di elettricità che non desidero ripetere mai più.</blockquote>
+    <figcaption><b>Benjamin Franklin</b>, scienziato e politico americano, lettera al fratello John, 25 dicembre 1750</figcaption>
+  </figure>
+  <div class="callout">Franklin stava parlando con gli amici mentre preparava le sue bottiglie di Leida cariche: si distrasse e la scarica gli attraversò braccia e corpo. La lezione vale ancora: <b>la distrazione è un fattore di rischio</b>.</div>
+  <aside class="notes">Nella lettera Franklin racconta che voleva uccidere un tacchino con la scarica di due grandi bottiglie di Leida e che, distratto dalla conversazione con i presenti (lo scrive lui stesso), prese la scarica attraverso le braccia e il corpo, restando intontito per un po'. Traduzione nostra dall'inglese ("I have lately made an experiment in electricity, that I desire never to repeat"). Collegamento con la lezione su pericolo e rischio: il pericolo era noto, ma la probabilità è salita per un fattore umano. Nei lavori elettrici le procedure (togliere tensione, bloccare, verificare l'assenza di tensione) esistono proprio perché anche gli esperti sbagliano.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Se succede</p><h2>Un collega resta attaccato a un cavo: che cosa fai?</h2></div>
+  <ol class="steps">
+    <li><b>Non toccarlo</b>: la corrente passerebbe anche nel tuo corpo.</li>
+    <li><b>Togli la corrente</b>: interruttore generale, quadro, spina.</li>
+    <li>Se non puoi, allontanalo con un oggetto <b>isolante e asciutto</b> (legno, plastica), stando su una superficie asciutta.</li>
+    <li>Chiama il <b>112</b> e avvisa l'addetto al primo soccorso; se non respira, serve il defibrillatore (DAE).</li>
+  </ol>
+  <aside class="notes">Indicazioni generali di primo soccorso, da ripassare con il piano di emergenza della scuola e dell'azienda. Sottolineare l'ordine: prima la propria sicurezza (non diventare la seconda vittima), poi togliere tensione, poi i soccorsi. Con le alte tensioni (linee aeree, cabine) non ci si avvicina affatto: si chiama il 112 e si aspetta che il gestore tolga tensione. Chiedere: sapete dove si trova il quadro elettrico del laboratorio e il DAE più vicino?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e rischio elettrico</p><h2>Batterie, data center, manutenzione predittiva</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Nuove tensioni, nuovi strumenti</h3><p>Le auto elettriche hanno batterie a centinaia di volt in corrente continua: officine e soccorritori devono seguire procedure e qualifiche apposite. Nei data center e nelle fabbriche si usano <b>termocamere</b> e sensori che, con l'analisi dei dati, segnalano una connessione che si sta scaldando prima che diventi un guasto o un incendio.</p></div>
+  <div class="callout">All'esame: il rischio elettrico collega sicurezza, fisica (legge di Ohm), Sistemi e reti (alimentazione e UPS nei rack) e manutenzione predittiva dell'Industria 4.0 (unità 7).</div>
+  <aside class="notes">Molte auto elettriche lavorano intorno ai 400 V e alcune intorno agli 800 V in corrente continua: non dare valori più precisi. Per i lavori elettrici la CEI 11-27 prevede le figure PES e PAV; esistono percorsi specifici per i veicoli elettrici. La termografia dei quadri è una tecnica consolidata; l'analisi automatica dei dati (anche con modelli di machine learning) serve a stabilire quando intervenire, non sostituisce le verifiche di legge (D.P.R. 462/2001). Spunto per l'orale: un UPS in un rack è un'apparecchiatura che resta in tensione anche quando si stacca la spina dalla rete.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La legge di Ohm in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Intestazioni A1:D1: <b>Tensione (V), Resistenza (Ω), Corrente (mA), Effetto</b>.</li>
+      <li>Righe 2-7 (V, Ω): 230 1000; 230 2000; 230 50000; 24 4000; 12 6000; 5 20000.</li>
+      <li>In C2 <code>=A2/B2*1000</code>; in D2 <code>=SE(C2&lt;0,5;"Non percepita";SE(C2&lt;10;"Percepita";"Pericolosa"))</code>. Copia fino alla riga 7.</li>
+      <li>In C9 <code>=SOMMA(C2:C7)</code>, in D9 <code>=CONTA.SE(D2:D7;"Pericolosa")</code>.</li>
+      <li>Salva come <b>ohm-sicurezza.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> correnti 230; 115; 4,6; 6; 2; 0,25 mA. In C9 leggi 357,85 e in D9 leggi 2. Solo l'ultima riga è "Non percepita".</div>
+  </div>
+  <aside class="notes">Conti: 230/1000 = 0,23 A = 230 mA; 230/2000 = 115 mA; 230/50000 = 4,6 mA (resistenza molto alta: piedi su un tappeto isolante asciutto, per esempio); 24/4000 = 6 mA; 12/6000 = 2 mA; 5/20000 = 0,25 mA. Somma 357,85; pericolose 2. Avvertenza da scrivere nel file in F2: la classificazione usa solo la corrente, mentre l'effetto reale dipende anche da durata e percorso, e la resistenza del corpo cambia con la tensione. Domanda finale: perché la terza riga, a 230 V, risulta solo "percepita"? Perché una persona ben isolata da terra riduce molto la corrente: è il principio dei tappeti e dei guanti isolanti usati dagli elettricisti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Caccia ai simboli sulle etichette</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Gruppi di 3. Il docente vi consegna tre apparecchi <b>scollegati</b>: per esempio un alimentatore, un monitor, una ciabatta.</li>
+      <li>Fotografate l'etichetta di ognuno e annotate tensione, corrente o potenza, marcatura CE e simboli di classe.</li>
+      <li>Scrivete per ognuno la classe (I, II o III) e un rischio elettrico legato al suo uso.</li>
+      <li>Salvate tabella e foto in <b>etichette-elettriche.odt</b> e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni riga ha la classe giustificata da un simbolo o dal tipo di spina; ogni rischio è concreto (per esempio "case metallico: serve la presa con la terra").</div>
+  </div>
+  <aside class="notes">Solo apparecchi scollegati dalla rete e integri. Simboli da far riconoscere: doppio quadrato (classe II), terra o spina con contatto di terra (classe I), CE, eventualmente il codice IP (grado di protezione contro polvere e acqua) e il simbolo del cassonetto barrato (RAEE). Il deck "sicurezza-lavoro-laboratorio" faceva i conti sulla potenza delle ciabatte: qui l'attenzione è sulla classe di protezione. Se non ci sono apparecchi disponibili, cercare online le schede tecniche di un alimentatore per portatile e di un monitor.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u10e-uscita" data-extra="tensione|magnetotermico">
+    <p>L'<span class="slot" data-risposta="elettrocuzione"></span> è il passaggio di corrente attraverso il corpo umano.</p>
+    <p>Toccare la carcassa di un apparecchio guasto è un contatto <span class="slot" data-risposta="indiretto"></span>.</p>
+    <p>Oltre circa 10 mA scatta la <span class="slot" data-risposta="tetanizzazione"></span> e non si riesce a staccarsi.</p>
+    <p>Il <span class="slot" data-risposta="differenziale"></span> interviene quando la corrente si disperde verso terra.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: elettrocuzione, indiretto, tetanizzazione, differenziale. Distrattori: tensione e magnetotermico (protegge da sovraccarichi e cortocircuiti).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Regola d'arte: legge 186/1968 e norme CEI</li>
+      <li>D.Lgs. 81 artt. 80-87, D.M. 37/2008, D.P.R. 462/2001</li>
+      <li>Contatto diretto e indiretto; I = V / R</li>
+    </ul>
+    <ul class="points">
+      <li>0,5 mA percezione, circa 10 mA rilascio, poi fibrillazione</li>
+      <li>Terra + differenziale, doppio isolamento, SELV</li>
+      <li>Se succede: non toccare, togli corrente, 112</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'unità 10. Ripasso consigliato: un "lucchetto" che unisca tutte le lezioni (anno del Testo unico, valore massimo della matrice, numero minimo di RLS fino a 200 lavoratori, ore del videoterminalista, soglia del differenziale). Per l'orale: scegliere un caso (una software house, il laboratorio della scuola, lo stage) e attraversare tutta l'unità.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

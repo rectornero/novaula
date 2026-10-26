@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reti di imprese, outsourcing e cloud · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 2</p>
+  <h1>Reti di imprese,<br>outsourcing e cloud</h1>
+  <p class="lead">Il ruolo delle ICT nelle nuove organizzazioni: imprese che collaborano in rete, che affidano fuori parti del lavoro e che noleggiano l'informatica come un servizio.</p>
+  <aside class="notes">Lezione del libro "Nuove organizzazioni e modelli di riferimento: il ruolo delle ICT". Obiettivi: conoscere le forme di relazione tra imprese; capire come Internet ha cambiato gli scambi (B2B, B2C, fatturazione elettronica); ricordare la new economy e la sua bolla; ragionare su make or buy e outsourcing; collegare ASP, SaaS e cloud con i modelli IaaS, PaaS, SaaS. Durata: 2 ore. Prerequisiti: lezioni sul break even (il laboratorio make or buy usa lo stesso ragionamento) e sui sistemi informativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Un'impresa di 10 persone dovrebbe avere un server in ufficio?</h2></div>
+  <div class="poll" data-id="u2-ict-server">
+    <ol><li>Sì, i dati devono stare in casa</li><li>No, meglio tutto in cloud</li><li>Dipende da che cosa fa e da quanto spende</li><li>Non saprei</li></ol>
+  </div>
+  <aside class="notes">Sondaggio senza risposta giusta. Chiedere a un sostenitore di A e uno di B un argomento ciascuno (controllo dei dati e indipendenza dalla connessione contro costi, manutenzione, sicurezza gestita da specialisti). La C è la risposta da tecnico: alla fine della lezione la classe avrà gli strumenti per motivarla con numeri (laboratorio make or buy).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Relazioni tra imprese</p><h2>Nessuna impresa lavora da sola</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Filiera</h3><p class="small">La catena di fornitori e clienti dalla materia prima al consumatore.</p></div>
+    <div class="card soft"><h3>Distretto industriale</h3><p class="small">Molte PMI dello stesso settore concentrate in un territorio: un modello tipico italiano.</p></div>
+    <div class="card soft"><h3>Rete di imprese</h3><p class="small">Imprese indipendenti che si impegnano con un <b>contratto di rete</b> su un programma comune.</p></div>
+    <div class="card soft"><h3>Consorzio</h3><p class="small">Un'organizzazione comune per svolgere insieme alcune fasi: acquisti, export, marchio.</p></div>
+    <div class="card soft"><h3>Franchising</h3><p class="small">Un marchio concede format e know-how a imprese affiliate in cambio di un compenso.</p></div>
+    <div class="card soft"><h3>Joint venture</h3><p class="small">Due o più imprese creano insieme una nuova attività per un obiettivo specifico.</p></div>
+  </div>
+  <aside class="notes">Il contratto di rete è stato introdotto in Italia nel 2009 (D.L. 5/2009, art. 3, comma 4-ter, convertito dalla L. 33/2009): permette a PMI di collaborare restando autonome. Distretti noti: occhialeria nel Bellunese, piastrelle a Sassuolo, sedie in Friuli, tessile a Prato, meccanica e packaging in Emilia. Le ICT rendono possibile coordinare imprese lontane come se fossero reparti della stessa azienda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Che forma di collaborazione è?</h2></div>
+  <dl class="puzzle-abbina" data-id="u2-ict-forme">
+    <dt>Franchising</dt><dd>Una gelateria apre con l'insegna e le ricette di una catena nazionale</dd>
+    <dt>Distretto industriale</dt><dd>Decine di piccole aziende di occhiali nella stessa provincia</dd>
+    <dt>Rete di imprese</dt><dd>Cinque PMI firmano un contratto per partecipare insieme a una gara</dd>
+    <dt>Joint venture</dt><dd>Due grandi gruppi fondano una società comune per le batterie</dd>
+    <dt>Consorzio</dt><dd>I produttori di un formaggio tutelano insieme la denominazione</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. I consorzi di tutela dei prodotti DOP italiani sono un esempio che tutti conoscono. Domanda: "in quale di queste forme le ICT sono più importanti?" (rete di imprese e franchising: condivisione di dati, ordini, gestionali comuni).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ruolo della rete</p><h2>Internet abbassa il costo di collaborare</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Cercare fornitori, confrontare prezzi, scambiare ordini e documenti costa meno: le imprese possono comprare fuori ciò che prima facevano in casa, e collaborare a distanza.</p>
+      <ul class="points small">
+        <li><b>B2B</b>: tra imprese (ordini, cataloghi, piattaforme di fornitura)</li>
+        <li><b>B2C</b>: dall'impresa al consumatore (e-commerce)</li>
+        <li><b>C2C</b>: tra privati, attraverso una piattaforma</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>In Italia</h3><p class="small">Dal 1° gennaio 2019 la <b>fattura elettronica</b> è obbligatoria anche tra privati: i file XML passano dal Sistema di Interscambio (SdI) dell'Agenzia delle Entrate.</p></div>
+  </div>
+  <aside class="notes">Teoria di riferimento: Ronald Coase, "The Nature of the Firm" (1937): un'impresa fa in casa ciò che costerebbe di più comprare sul mercato, perché anche usare il mercato ha dei costi (costi di transazione). Internet abbassa questi costi, quindi conviene esternalizzare di più. La fattura elettronica è un esempio di EDI (scambio elettronico di documenti strutturati): un formato standard (FatturaPA, XML) letto direttamente dai gestionali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>B2B, B2C o C2C?</h2></div>
+  <div class="puzzle-categorie" data-id="u2-ict-b2b" style="--cols:3">
+    <div class="cat"><h4>B2B</h4><ul><li>Riordino automatico al fornitore</li><li>Fattura elettronica tra due imprese</li><li>Gestionale venduto a un'azienda</li></ul></div>
+    <div class="cat"><h4>B2C</h4><ul><li>Abbonamento a uno streaming</li><li>Scarpe comprate su un sito</li><li>Biglietto del treno in app</li></ul></div>
+    <div class="cat"><h4>C2C</h4><ul><li>Vecchio telefono venduto a un privato</li><li>Bici usata su un sito di annunci</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. Nel C2C la piattaforma è un'impresa, ma lo scambio avviene tra privati. In volume di denaro il B2B è molto più grande del B2C, anche se lo vediamo meno: non citare cifre senza fonte.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>La new economy e la bolla delle dot-com</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1995</p><h3>L'entusiasmo</h3><p class="small">Il Web si apre al commercio: nascono negozi online, portali, motori di ricerca. Amazon (1994) ed eBay (1995) sono di quegli anni.</p></div>
+    <div class="card bad"><p class="num" style="color:var(--bad)">2000</p><h3>La bolla scoppia</h3><p class="small">Molte società quotate in borsa senza ricavi né profitti crollano; tante chiudono.</p></div>
+    <div class="card ok"><p class="num" style="color:var(--ok)">Dopo</p><h3>Chi resta</h3><p class="small">Sopravvive chi ha un modello di business vero: clienti che pagano, costi sotto controllo.</p></div>
+  </div>
+  <aside class="notes">"New economy" indicava l'idea che Internet avrebbe cambiato le regole dell'economia. Il listino tecnologico statunitense Nasdaq raggiunse il massimo nel marzo 2000 e poi perse gran parte del valore negli anni successivi. Lezione per la classe: la tecnologia era reale, molti piani economici no. Collegamento con il break even: un'impresa che non raggiunge mai il pareggio vive finché qualcuno la finanzia. Possibile parallelo prudente con l'entusiasmo attuale per l'AI, senza fare previsioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa dimostrò lo scoppio della bolla delle dot-com?</h2></div>
+  <div class="poll" data-id="u2-ict-bolla" data-tipo="quiz" data-risposta="C">
+    <ol><li>Che Internet era una moda passeggera</li><li>Che il commercio online non sarebbe mai servito alle imprese</li><li>Che la tecnologia era utile, ma molti modelli di business non stavano in piedi</li><li>Che le imprese tecnologiche non devono quotarsi in borsa</li></ol>
+    <p class="why">Dopo il 2000 il commercio elettronico è cresciuto moltissimo. A crollare furono le imprese senza ricavi sufficienti a coprire i costi: il problema era economico, non tecnologico.</p>
+  </div>
+  <aside class="notes">Risposta C. A e B sono smentite da ciò che è successo dopo. D è un'esagerazione: molte imprese tecnologiche quotate prosperano. Per l'orale: saper distinguere tra valore di una tecnologia e sostenibilità di un'impresa.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Una previsione del 1961</p><h2>L'informatica come l'elettricità</h2></div>
+  <figure class="citazione">
+    <blockquote>Se i computer del tipo che ho proposto diventeranno i computer del futuro, allora un giorno il calcolo potrà essere organizzato come un servizio pubblico, proprio come il sistema telefonico.</blockquote>
+    <figcaption><b>John McCarthy</b>, informatico, pioniere dell'intelligenza artificiale, discorso al centenario del MIT, 1961</figcaption>
+  </figure>
+  <p class="lead">Quarant'anni dopo arrivano gli Application Service Provider, poi il cloud: si paga il calcolo a consumo, come la luce.</p>
+  <aside class="notes">Traduzione nostra. Originale: "If computers of the kind I have advocated become the computers of the future, then computing may someday be organized as a public utility just as the telephone system is a public utility." McCarthy parlava del time-sharing (più utenti che usano lo stesso computer). Lo stesso McCarthy coniò l'espressione "intelligenza artificiale" nella proposta per il seminario di Dartmouth (1955-56).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Fare o comprare?</p><h2>L'outsourcing</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Perché affidare fuori</h3><ul class="points small"><li>Costi fissi che diventano variabili</li><li>Competenze specialistiche subito disponibili</li><li>Ci si concentra sul proprio core business</li></ul></div>
+    <div class="card bad"><h3>Che cosa si rischia</h3><ul class="points small"><li>Dipendenza dal fornitore</li><li>Perdita di competenze interne</li><li>Dati e sicurezza in mano ad altri</li></ul></div>
+  </div>
+  <div class="callout">Regola pratica: si tiene in casa ciò che distingue l'impresa dai concorrenti (<b>core</b>), si valuta di affidare fuori il resto. Il contratto fissa livelli di servizio misurabili (<b>SLA</b>).</div>
+  <aside class="notes">Varianti: offshoring (affidare a fornitori in Paesi lontani, spesso per costi più bassi), nearshoring (Paesi vicini), insourcing o backsourcing (riportare in casa). L'outsourcing informatico è molto diffuso: assistenza, gestione delle reti, sviluppo. SLA = Service Level Agreement, per esempio "ripristino del servizio entro 4 ore nel 99% dei casi" (valori di esempio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Una fabbrica di biciclette: in casa o fuori?</h2></div>
+  <div class="puzzle-categorie" data-id="u2-ict-core">
+    <div class="cat"><h4>Tenere in casa (core)</h4><ul><li>Progettazione dei telai</li><li>Know-how di saldatura</li><li>Rapporto con i rivenditori</li></ul></div>
+    <div class="cat"><h4>Si può affidare fuori</h4><ul><li>Pulizia dei locali</li><li>Calcolo delle buste paga</li><li>Server di posta elettronica</li><li>Trasporto ai negozi</li><li>Mensa aziendale</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. Discussione: per una startup di software anche la posta elettronica e i server sono non core e si comprano come servizio; per un fornitore di cloud invece i server sono il core. Ciò che è core dipende da che cosa vende l'impresa.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Make or buy: server in casa o cloud?</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Impresa di esempio. <b>Server in casa</b>: acquisto 6 000 € subito, poi 2 400 € l'anno (energia, manutenzione, backup). <b>Cloud</b>: migrazione 1 000 € subito, poi 320 € al mese.</p>
+      <ol class="steps small">
+        <li>In Calc: colonna Anno da 0 a 5, costo cumulato del server, costo cumulato del cloud.</li>
+        <li>Anno 0 = spese iniziali; ogni anno aggiungi il costo annuo.</li>
+        <li>Grafico a linee dei due cumulati; trova dove si incrociano.</li>
+        <li>Scrivi 2 fattori non economici. Salva <b>make-or-buy_cognome.ods</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> dopo 3 anni server 13 200 €, cloud 12 520 €; dopo 5 anni server 18 000 €, cloud 20 200 €. Le linee si incrociano tra il 3° e il 4° anno (circa 3,5 anni).</div>
+  </div>
+  <aside class="notes">Soluzione. Cloud annuo = 320 × 12 = 3 840 €. Server: 6 000, 8 400, 10 800, 13 200, 15 600, 18 000. Cloud: 1 000, 4 840, 8 680, 12 520, 16 360, 20 200. Incrocio: 6 000 + 2 400 t = 1 000 + 3 840 t → 5 000 = 1 440 t → t ≈ 3,47 anni. È lo stesso ragionamento del punto di pareggio: il server ha costi fissi iniziali più alti e costi correnti più bassi. Fattori non economici: dopo qualche anno il server va sostituito; competenze interne per gestirlo; sicurezza e continuità; flessibilità del cloud se l'impresa cresce; dove stanno i dati (GDPR). Numeri ipotetici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dall'ASP al cloud</p><h2>Noleggiare l'informatica</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>ASP</h3><p class="small">Fine anni '90: un Application Service Provider ospita un'applicazione nel suo centro dati e la noleggia ai clienti via rete.</p></div>
+    <div class="card soft"><h3>SaaS</h3><p class="small">Il software diventa un servizio web in abbonamento, con un'unica versione per migliaia di clienti.</p></div>
+    <div class="card fill"><h3>Cloud</h3><p class="small">Risorse di calcolo, archiviazione e applicazioni on demand, a consumo, scalabili in pochi minuti.</p></div>
+  </div>
+  <div class="callout">Modelli di distribuzione: cloud <b>pubblico</b> (condiviso tra molti clienti), <b>privato</b> (per una sola organizzazione), <b>ibrido</b> (un mix dei due).</div>
+  <aside class="notes">La definizione di riferimento del cloud è quella del NIST statunitense (SP 800-145, 2011): servizio on demand, accesso via rete, risorse condivise, elasticità rapida, servizio misurato; tre modelli di servizio (IaaS, PaaS, SaaS) e quattro di distribuzione (pubblico, privato, ibrido, di comunità). L'ASP spesso gestiva un'installazione separata per ogni cliente; il SaaS moderno è multi-tenant.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta lo schema</p><h2>IaaS, PaaS, SaaS: chi gestisce che cosa</h2></div>
+  <div class="puzzle-trascina" data-id="u2-ict-xaas" data-extra="ASP|On premise">
+    <div style="position:relative;width:1340px;height:500px">
+      <svg width="1340" height="500" viewBox="0 0 1340 500" aria-hidden="true">
+        <g font-family="DM Sans, sans-serif" font-size="26" fill="#172033">
+          <text x="270" y="108" text-anchor="end">Applicazione</text>
+          <text x="270" y="178" text-anchor="end">Runtime e middleware</text>
+          <text x="270" y="248" text-anchor="end">Sistema operativo</text>
+          <text x="270" y="318" text-anchor="end">Virtualizzazione</text>
+          <text x="270" y="388" text-anchor="end">Hardware e rete</text>
+        </g>
+        <g>
+          <rect x="300" y="70" width="300" height="62" rx="10" fill="#2f6fde"/><rect x="300" y="140" width="300" height="62" rx="10" fill="#2f6fde"/><rect x="300" y="210" width="300" height="62" rx="10" fill="#2f6fde"/><rect x="300" y="280" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="300" y="350" width="300" height="62" rx="10" fill="#dcdfe8"/>
+          <rect x="660" y="70" width="300" height="62" rx="10" fill="#2f6fde"/><rect x="660" y="140" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="660" y="210" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="660" y="280" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="660" y="350" width="300" height="62" rx="10" fill="#dcdfe8"/>
+          <rect x="1020" y="70" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="1020" y="140" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="1020" y="210" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="1020" y="280" width="300" height="62" rx="10" fill="#dcdfe8"/><rect x="1020" y="350" width="300" height="62" rx="10" fill="#dcdfe8"/>
+          <rect x="300" y="438" width="44" height="44" rx="8" fill="#2f6fde"/><rect x="760" y="438" width="44" height="44" rx="8" fill="#dcdfe8"/>
+        </g>
+      </svg>
+      <div style="position:absolute;left:300px;width:300px;top:0;display:flex;justify-content:center"><span class="slot" data-risposta="IaaS"></span></div>
+      <div style="position:absolute;left:660px;width:300px;top:0;display:flex;justify-content:center"><span class="slot" data-risposta="PaaS"></span></div>
+      <div style="position:absolute;left:1020px;width:300px;top:0;display:flex;justify-content:center"><span class="slot" data-risposta="SaaS"></span></div>
+      <span class="slot" data-risposta="Cliente" style="position:absolute;left:356px;top:432px"></span>
+      <span class="slot" data-risposta="Fornitore" style="position:absolute;left:816px;top:432px"></span>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: colonna con tre strati blu = IaaS (il cliente gestisce applicazione, runtime e sistema operativo; il fornitore virtualizzazione e hardware); un solo strato blu = PaaS (il cliente porta solo la sua applicazione); tutto grigio = SaaS (il cliente usa il servizio pronto). Legenda: blu = Cliente, grigio = Fornitore. Distrattori: ASP (l'antenato del SaaS) e On premise (tutto in casa: sarebbe una quarta colonna tutta blu). Attenzione, in ogni modello i dati e gli accessi degli utenti restano responsabilità del cliente (modello di responsabilità condivisa). Esempi: macchine virtuali a noleggio (IaaS), piattaforme che pubblicano il codice senza gestire server (PaaS), posta e documenti online (SaaS).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Un'impresa noleggia macchine virtuali e ci installa il suo gestionale. Chi aggiorna il sistema operativo?</h2></div>
+  <div class="poll" data-id="u2-ict-responsabile" data-tipo="quiz" data-risposta="B">
+    <ol><li>Il fornitore cloud: è tutto compreso</li><li>L'impresa, perché è un servizio IaaS</li><li>Nessuno: nel cloud gli aggiornamenti sono automatici</li><li>Il produttore del gestionale</li></ol>
+    <p class="why">Nello IaaS il fornitore gestisce hardware e virtualizzazione; dal sistema operativo in su la responsabilità è del cliente. "È nel cloud" non vuol dire "ci pensa qualcun altro".</p>
+  </div>
+  <aside class="notes">Risposta B. A e C sono i fraintendimenti più pericolosi: molte violazioni di sicurezza nascono da macchine in cloud mai aggiornate o da archivi lasciati pubblici per errore. D: il produttore del gestionale aggiorna il suo programma, non il sistema operativo del cliente. Collegamento con Sistemi e reti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>L'AI come servizio</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Modelli via API</h3><p class="small">Molte imprese non addestrano modelli propri: li usano come servizio, pagando a consumo. È la previsione di McCarthy applicata all'intelligenza artificiale.</p></div>
+    <div class="card soft"><h3>Dove stanno i dati?</h3><p class="small">Mandare documenti a un servizio esterno è una forma di outsourcing: valgono GDPR, contratti, luogo di conservazione dei dati e regole interne.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Anche lo Stato ragiona così: per la Pubblica Amministrazione italiana è nato il <b>Polo Strategico Nazionale</b>, un'infrastruttura cloud per ospitare dati e servizi delle amministrazioni sul territorio nazionale, nell'ambito della Strategia Cloud Italia.</p></div>
+  <aside class="notes">Le scelte make or buy e la valutazione dei fornitori valgono anche per l'AI: costo per richiesta (lezione sul break even), dipendenza dal fornitore, qualità, protezione dei dati. La Strategia Cloud Italia è del 2021; il Polo Strategico Nazionale è uno degli strumenti previsti, finanziato anche con il PNRR. Collegamento con il deck pa-digitale. Evitare cifre su costi o numero di amministrazioni migrate.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Il consiglio decide: che cosa affidare fuori?</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Agenzia di viaggi di esempio, 12 persone, due sedi. Oggi ha un vecchio server in ufficio, un tecnico esterno a chiamata, posta sul server, siti di prenotazione dei fornitori.</p>
+      <ol class="steps small">
+        <li>Ruoli: titolare, responsabile amministrativa, consulente IT, rappresentante dei dipendenti.</li>
+        <li>Per 4 attività (posta, gestionale, backup, assistenza ai PC) decidete: in casa, outsourcing o cloud (IaaS, PaaS, SaaS).</li>
+        <li>Tabella con criteri: costo, rischio, controllo dei dati, competenze. Voto da 1 a 5.</li>
+        <li>Consegnate <b>decisione-ict_gruppoN.pdf</b>.</li>
+      </ol>
+    </div>
+    <div class="check"><b>Controllo:</b> ogni decisione cita almeno due criteri; per i servizi in cloud è indicato il modello (IaaS, PaaS o SaaS); c'è almeno un rischio con una misura per ridurlo.</div>
+  </div>
+  <aside class="notes">Gioco di ruolo con tensioni naturali: il titolare guarda i costi, l'amministrativa i dati dei clienti (documenti d'identità, pagamenti), il consulente la sicurezza, i dipendenti la facilità d'uso. Soluzione plausibile: posta e documenti in SaaS; gestionale in SaaS se esiste uno specifico per agenzie, altrimenti su IaaS gestito dal consulente; backup su cloud con copia offline (regola 3-2-1); assistenza ai PC in outsourcing con un contratto con SLA. Valutare coerenza tra criteri e decisioni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u2-ict-uscita" data-extra="IaaS|franchising">
+    <p>Affidare a un'altra impresa un'attività non core si chiama <span class="slot" data-risposta="outsourcing"></span>.</p>
+    <p>PMI indipendenti che collaborano con un contratto formano una <span class="slot" data-risposta="rete"></span> di imprese.</p>
+    <p>Posta e documenti online pronti all'uso sono un servizio <span class="slot" data-risposta="SaaS"></span>.</p>
+    <p>Gli ordini automatici tra un'impresa e il suo fornitore sono commercio <span class="slot" data-risposta="B2B"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: outsourcing, rete, SaaS, B2B. Distrattori: IaaS, franchising.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Filiere, distretti, reti, consorzi, franchising</li>
+      <li>Internet abbassa i costi di collaborare: B2B, B2C, C2C</li>
+      <li>New economy: tecnologia vera, molti conti sbagliati</li>
+    </ul>
+    <ul class="points">
+      <li>Outsourcing: core in casa, il resto si valuta</li>
+      <li>ASP → SaaS → cloud; IaaS, PaaS, SaaS</li>
+      <li>Prossima lezione: la lean production</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame: il confronto server in casa / cloud con il grafico dei costi cumulati unisce GPOI, Sistemi e reti e matematica. Raccogliere le consegne su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

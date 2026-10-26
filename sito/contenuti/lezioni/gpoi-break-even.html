@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il valore e il punto di pareggio · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 2</p>
+  <h1>Il valore e il<br>punto di pareggio</h1>
+  <p class="lead">Ricavi, costi e profitto: quanti pezzi deve vendere un'impresa per non perdere soldi? Il diagramma di redditività e il break even point.</p>
+  <aside class="notes">Lezione del libro "Il concetto di valore nell'impresa". Obiettivi: distinguere ricavi, costi fissi e variabili, profitto; disegnare e leggere il diagramma di redditività; calcolare il punto di pareggio, il margine di contribuzione e il margine di sicurezza; fare analisi "what if" in Calc. Durata: 2-3 ore (i due laboratori sono di calcolo). Caso di esempio per tutta la lezione: un'impresa immaginaria che vende kit didattici con scheda a microcontrollore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo te un'impresa "crea valore" quando…</h2></div>
+  <div class="poll" data-id="u2-be-valore">
+    <ol><li>Fa profitto</li><li>Soddisfa i clienti</li><li>Dà lavoro alle persone</li><li>Inventa qualcosa di nuovo</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta: sono tutte forme di valore (per i soci, per i clienti, per i lavoratori, per la società). Far notare che un'impresa crea valore economico quando ciò che produce vale per i clienti più delle risorse che consuma: se i ricavi non coprono i costi, alla lunga non può fare nessuna delle altre cose. È il filo della lezione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre parole</p><h2>Ricavi, costi, profitto</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Ricavi</h3><p>Il denaro che entra dalle vendite.</p><p class="small muted">Ricavo totale = prezzo × quantità venduta</p></div>
+    <div class="card soft"><h3>Costi</h3><p>Il valore delle risorse usate per produrre: materiali, lavoro, affitti, energia.</p></div>
+    <div class="card fill"><h3>Profitto</h3><p>Ciò che resta: ricavi meno costi. Se è negativo è una perdita.</p></div>
+  </div>
+  <div class="formula"><small>La relazione di base</small>Profitto = Ricavi totali − Costi totali</div>
+  <aside class="notes">Il linguaggio aziendale usa anche "utile" (profitto contabile) e "reddito". Nel caso dei kit: prezzo 80 € a kit; se ne vende 1 000, ricavo totale 80 000 €. Ricordare la lezione precedente: il profitto è la remunerazione dell'imprenditore, l'unica incerta.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">A che cosa serve il profitto</p><h2>Non lo scopo, ma la prova</h2></div>
+  <figure class="citazione">
+    <blockquote>Il profitto non è la spiegazione, la causa o la ragione del comportamento e delle decisioni d'impresa, ma la verifica della loro validità.</blockquote>
+    <figcaption><b>Peter Drucker</b>, studioso di management, <i>The Practice of Management</i>, 1954</figcaption>
+  </figure>
+  <p class="lead">Un'impresa esiste per servire dei clienti; il profitto dice se lo sta facendo bene, a costi sostenibili.</p>
+  <aside class="notes">Traduzione nostra. Originale: "Profit is not the explanation, cause, or rationale of business behavior and business decisions, but the test of their validity." (cap. 7, "What is a business"). Nello stesso capitolo Drucker scrive la frase sul "creare un cliente", citata nell'Unità 1. Domanda: "un progetto che non copre i costi può essere comunque una buona idea?" (sì, se è un investimento o ha uno scopo sociale, ma va finanziato in altro modo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Due tipi di costo</p><h2>Costi fissi e costi variabili</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Fissi</h3><p>Non cambiano con la quantità prodotta, almeno entro un certo livello.</p><p class="small">Kit: affitto, stipendi dell'amministrazione, licenze annuali. <b>24 000 € l'anno</b>.</p></div>
+    <div class="card soft"><h3>Variabili</h3><p>Crescono con ogni pezzo prodotto.</p><p class="small">Kit: scheda, componenti, scatola, spedizione. <b>50 € a kit</b>.</p></div>
+  </div>
+  <div class="formula"><small>Costo totale per Q kit</small>CT = CF + cv × Q = 24 000 + 50 × Q</div>
+  <aside class="notes">"Almeno entro un certo livello": se la produzione cresce molto bisogna prendere un capannone più grande, e il costo fisso fa un gradino (costi fissi a scalini). Costo medio = CT / Q: con 1 000 kit è (24 000 + 50 000) / 1 000 = 74 € a kit. Con 2 000 kit è 62 €: le economie di scala nascono dai costi fissi divisi su più pezzi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Fisso o variabile, per l'impresa dei kit?</h2></div>
+  <div class="puzzle-categorie" data-id="u2-be-costi">
+    <div class="cat"><h4>Costo fisso</h4><ul><li>Affitto del laboratorio</li><li>Stipendio dell'amministrativa</li><li>Licenza annuale del CAD</li><li>Assicurazione</li></ul></div>
+    <div class="cat"><h4>Costo variabile</h4><ul><li>Scheda a microcontrollore</li><li>Scatola e imballaggio</li><li>Spedizione di ogni kit</li><li>Commissione sul pagamento</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nelle caselle. La commissione del sistema di pagamento è una percentuale su ogni vendita: variabile. Caso dubbio da discutere: la bolletta elettrica ha una parte fissa e una variabile (costo semivariabile). Le ore di un tecnico pagato a progetto sarebbero variabili, quelle di un dipendente a stipendio fisso no.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Se l'impresa raddoppia i kit prodotti, il costo fisso per ogni kit…</h2></div>
+  <div class="poll" data-id="u2-be-unitario" data-tipo="quiz" data-risposta="D">
+    <ol><li>raddoppia</li><li>resta uguale</li><li>aumenta un po'</li><li>si dimezza</li></ol>
+    <p class="why">Il costo fisso totale resta 24 000 €, ma si divide su un numero doppio di kit: per ogni kit si dimezza. Per questo produrre di più abbassa il costo medio.</p>
+  </div>
+  <aside class="notes">Risposta D. Il tranello è B: è il costo fisso totale a restare uguale, non quello unitario. Conti: con 800 kit il costo fisso per kit è 30 €, con 1 600 kit è 15 €. Il costo variabile unitario invece resta 50 € (se non ci sono sconti sugli acquisti).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta il grafico</p><h2>Il diagramma di redditività</h2></div>
+  <div class="puzzle-trascina" data-id="u2-be-grafico" data-extra="Domanda|Offerta">
+    <div class="row" style="align-items:flex-start">
+      <div style="position:relative;width:1100px;height:540px;flex:none">
+        <svg width="1100" height="540" viewBox="0 0 1100 540" aria-hidden="true">
+          <polygon points="90,382 616,235 90,470" fill="#fde4e1"/>
+          <polygon points="616,235 1010,59 1010,125" fill="#ddf3e8"/>
+          <line x1="90" y1="470" x2="90" y2="20" stroke="#172033" stroke-width="4"/>
+          <line x1="90" y1="470" x2="1040" y2="470" stroke="#172033" stroke-width="4"/>
+          <polygon points="90,8 80,30 100,30" fill="#172033"/>
+          <polygon points="1054,470 1032,460 1032,480" fill="#172033"/>
+          <text x="40" y="40" font-size="32" font-family="DM Sans, sans-serif" fill="#596179">€</text>
+          <line x1="90" y1="382" x2="1010" y2="382" stroke="#596179" stroke-width="6"/>
+          <line x1="90" y1="382" x2="1010" y2="125" stroke="#d0541f" stroke-width="6"/>
+          <line x1="90" y1="470" x2="1010" y2="59" stroke="#2f6fde" stroke-width="6"/>
+          <line x1="616" y1="235" x2="616" y2="470" stroke="#596179" stroke-width="3" stroke-dasharray="10 8"/>
+          <circle cx="616" cy="235" r="13" fill="#172033"/>
+          <text x="600" y="505" font-size="26" font-family="DM Sans, sans-serif" fill="#596179">800</text>
+          <text x="104" y="404" font-size="26" font-weight="700" font-family="DM Sans, sans-serif" fill="#b42318">perdita</text>
+          <text x="1018" y="104" font-size="26" font-weight="700" font-family="DM Sans, sans-serif" fill="#127048">utile</text>
+        </svg>
+        <span class="slot" data-risposta="Ricavi totali" style="position:absolute;left:600px;top:0px"></span>
+        <span class="slot" data-risposta="Costi totali" style="position:absolute;left:660px;top:250px"></span>
+        <span class="slot" data-risposta="Costi fissi" style="position:absolute;left:660px;top:396px"></span>
+        <span class="slot" data-risposta="Pareggio" style="position:absolute;left:400px;top:162px"></span>
+        <span class="slot" data-risposta="Quantità" style="position:absolute;left:820px;top:482px"></span>
+      </div>
+      <div class="card soft small"><p><b>Impresa dei kit</b></p><p>Costi fissi 24 000 €</p><p>Costo variabile 50 € a kit</p><p>Prezzo 80 € a kit</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: retta blu che parte da zero = Ricavi totali; retta arancione che parte dai costi fissi = Costi totali; retta grigia orizzontale = Costi fissi; punto di incontro = Pareggio (800 kit, 64 000 €); asse orizzontale = Quantità. Distrattori Domanda e Offerta: il grafico della lezione sul mercato ha assi simili ma significato diverso. A sinistra del pareggio l'area rossa è la perdita, a destra quella verde è l'utile. Il grafico è in scala.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il calcolo</p><h2>Il punto di pareggio (break even point)</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Al pareggio <b>ricavi totali = costi totali</b>: p × Q = CF + cv × Q.</p>
+      <p>Ogni kit venduto lascia <b>p − cv</b> per coprire i costi fissi: è il <mark>margine di contribuzione</mark> unitario.</p>
+      <p class="small muted">Kit: 80 − 50 = 30 € a kit. 24 000 / 30 = 800 kit, cioè 64 000 € di ricavi.</p>
+    </div>
+    <div class="formula"><small>Quantità di pareggio</small>Q* = <span class="hl">CF</span> / (p − cv)<small style="margin-top:18px">Margine di sicurezza = (Q prevista − Q*) / Q prevista</small></div>
+  </div>
+  <aside class="notes">Derivazione: pQ = CF + cvQ → Q(p − cv) = CF → Q* = CF / (p − cv). Se l'impresa prevede di vendere 1 000 kit: utile = 1 000 × 30 − 24 000 = 6 000 €; margine di sicurezza = (1 000 − 800) / 1 000 = 20%: le vendite possono calare del 20% prima di andare in perdita. Il risultato si arrotonda sempre per eccesso (non si vende un pezzo e mezzo). Se p ≤ cv il pareggio non esiste: ogni vendita aumenta la perdita.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto: trova il pareggio</h2></div>
+  <div class="puzzle-codice" data-risposta="1250" data-aiuto="prima calcola il margine di contribuzione: 45 − 33">
+    <p>Un laboratorio di stampa di esempio personalizza felpe per le scuole.</p>
+    <ul class="points small">
+      <li>Costi fissi annui: <b>15 000 €</b> (affitto, macchina da stampa in leasing, sito)</li>
+      <li>Costo variabile: <b>33 €</b> a felpa (felpa grezza, inchiostro, spedizione)</li>
+      <li>Prezzo di vendita: <b>45 €</b> a felpa</li>
+    </ul>
+    <p>Il codice è il numero di felpe del punto di pareggio.</p>
+    <div class="premio"><b>Aperto!</b> Margine di contribuzione 45 − 33 = 12 €. 15 000 / 12 = 1 250 felpe, cioè 56 250 € di ricavi.</div>
+  </div>
+  <aside class="notes">Codice: 1250. Squadre da 3, 4 minuti, solo carta e calcolatrice. Dopo tre tentativi sbagliati compare l'aiuto. Domanda di rilancio: "e se la scuola ne ordina 1 000?" Perdita: 1 000 × 12 − 15 000 = −3 000 €.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Il diagramma di redditività in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In A1:F1: <b>Quantità</b>, <b>CF</b>, <b>CV</b>, <b>CT</b>, <b>RT</b>, <b>Utile</b>.</li>
+      <li>In A2:A9 le quantità da 0 a 1 400, di 200 in 200.</li>
+      <li>B2 <code>=24000</code>, C2 <code>=50*A2</code>, D2 <code>=B2+C2</code>, E2 <code>=80*A2</code>, F2 <code>=E2-D2</code>. Trascina fino alla riga 9.</li>
+      <li>Seleziona le colonne A, B, D, E e inserisci un grafico <b>XY (dispersione)</b> con sole linee.</li>
+      <li>Aggiungi titolo e assi; evidenzia la riga in cui l'utile è zero.</li>
+      <li>Salva come <b>break-even_cognome.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> a 800 kit CT = RT = <b>64 000 €</b> e l'utile è 0. A 1 400 kit l'utile è <b>18 000 €</b>; a 0 kit è −24 000 €.</div>
+  </div>
+  <aside class="notes">Soluzione per riga: Q=0 CT 24 000 RT 0 utile −24 000; Q=200 CT 34 000 RT 16 000 utile −18 000; Q=400 CT 44 000 RT 32 000 −12 000; Q=600 CT 54 000 RT 48 000 −6 000; Q=800 64 000 / 64 000 / 0; Q=1 000 74 000 / 80 000 / 6 000; Q=1 200 84 000 / 96 000 / 12 000; Q=1 400 94 000 / 112 000 / 18 000. L'utile cresce di 6 000 € ogni 200 kit (200 × 30). Per selezionare colonne non adiacenti: tenere premuto Ctrl. Chi finisce colora le celle di F con la formattazione condizionata (rosso se negativo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Come si costruisce l'analisi di pareggio</h2></div>
+  <ol class="puzzle-ordina" data-id="u2-be-passi">
+    <li>Elenca tutti i costi e dividili in fissi e variabili</li>
+    <li>Calcola il costo variabile unitario e fissa il prezzo</li>
+    <li>Calcola il margine di contribuzione unitario</li>
+    <li>Dividi i costi fissi per il margine di contribuzione</li>
+    <li>Arrotonda per eccesso: è la quantità di pareggio</li>
+    <li>Confronta con le vendite previste: margine di sicurezza</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Errore frequente: dividere i costi fissi per il prezzo invece che per il margine di contribuzione (24 000 / 80 = 300 kit, sbagliato perché ignora i costi variabili). Lo stesso procedimento vale per un servizio: un abbonamento, una consulenza a ore, un corso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il prezzo dei kit scende da 80 a 70 €. Il punto di pareggio…</h2></div>
+  <div class="poll" data-id="u2-be-prezzo" data-tipo="quiz" data-risposta="A">
+    <ol><li>sale a 1 200 kit</li><li>scende a 700 kit</li><li>resta a 800 kit</li><li>sale a circa 914 kit</li></ol>
+    <p class="why">Il margine di contribuzione passa da 30 a 20 €: 24 000 / 20 = 1 200 kit. Il prezzo cala del 12,5% ma il pareggio sale del 50%, perché il margine si riduce di un terzo.</p>
+  </div>
+  <aside class="notes">Risposta A. La D (914) è di chi divide i vecchi ricavi di pareggio, 64 000 €, per il nuovo prezzo. La B è di chi pensa "prezzo più basso, più facile". Messaggio: gli sconti costano molto più di quanto sembri; per questo chi fa preventivi deve conoscere il proprio margine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il software e i suoi costi</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Software classico</h3><p class="small">Costi fissi altissimi (sviluppo), costo variabile quasi zero: un utente in più costa pochissimo. Superato il pareggio, ogni vendita è quasi tutta margine.</p></div>
+    <div class="card soft"><h3>Servizi di AI</h3><p class="small">Ogni richiesta a un modello di intelligenza artificiale consuma calcolo, energia e spesso un canone a consumo: il costo variabile per utente <b>non è più trascurabile</b>.</p></div>
+  </div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Molte app che integrano l'AI fanno pagare a consumo o con limiti di utilizzo: è il modo per tenere il <b>prezzo sopra il costo variabile</b> di ogni richiesta, condizione minima perché il pareggio esista.</p></div>
+  <aside class="notes">Collegamento con la formula: se p ≤ cv non c'è pareggio. Per un abbonamento a prezzo fisso con utilizzo illimitato, gli utenti che usano molto il servizio possono costare più di quanto pagano. Non citare listini specifici: cambiano spesso. Per l'orale: "come calcolerei il break even di un'app?" è una domanda naturale per un diplomato in informatica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>E se…? Analisi what-if</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo foglio. In A1:A3 <b>Costi fissi</b>, <b>Prezzo</b>, <b>Costo variabile</b>; in B1:B3 24000, 80, 50.</li>
+      <li>In B5 il pareggio: <code>=ARROTONDA.ECCESSO(B1/(B2-B3);0)</code>. In B6 il margine di sicurezza con 1 000 kit previsti.</li>
+      <li>Prova e annota: prezzo 70; costo variabile 45; costi fissi 30 000.</li>
+      <li>Con <b>Strumenti › Ricerca valore destinazione</b> trova il prezzo che porta il pareggio a 600 kit.</li>
+      <li>Salva come <b>what-if_cognome.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> base 800 kit e 20%. Prezzo 70: <b>1 200</b>. Costo variabile 45: <b>686</b>. Costi fissi 30 000: <b>1 000</b>. Pareggio a 600 kit: prezzo <b>90 €</b>.</div>
+  </div>
+  <aside class="notes">Soluzioni: B6 = (1000 − B5) / 1000 = 20% nel caso base. Prezzo 70 → 24 000 / 20 = 1 200, margine di sicurezza −20% (in perdita con 1 000 kit). Costo variabile 45 → 24 000 / 35 = 685,7 → 686. Costi fissi 30 000 → 30 000 / 30 = 1 000, margine di sicurezza 0%. Ricerca valore destinazione: per la ricerca conviene impostare come cella formula una cella senza arrotondamento, =B1/(B2-B3), valore destinazione 600, cella variabile B2: risultato 90 (24 000 / 600 = 40 di margine). Se il nome del menu fosse diverso nella versione installata, cercare "Ricerca valore destinazione" nella guida di LibreOffice.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le parole del valore</h2></div>
+  <dl class="puzzle-abbina" data-id="u2-be-termini">
+    <dt>Margine di contribuzione</dt><dd>Prezzo meno costo variabile unitario</dd>
+    <dt>Punto di pareggio</dt><dd>La quantità in cui ricavi e costi totali si eguagliano</dd>
+    <dt>Margine di sicurezza</dt><dd>Quanto possono calare le vendite prima della perdita</dd>
+    <dt>Costo medio</dt><dd>Costo totale diviso per la quantità prodotta</dd>
+    <dt>Profitto</dt><dd>Ricavi totali meno costi totali</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Chiedere per ciascuno il valore nel caso dei kit con 1 000 pezzi: margine di contribuzione 30 €, pareggio 800, margine di sicurezza 20%, costo medio 74 €, profitto 6 000 €.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u2-be-uscita" data-extra="variabile|perdita">
+    <p>Il profitto è la differenza tra ricavi e <span class="slot" data-risposta="costi"></span>.</p>
+    <p>L'affitto del laboratorio è un costo <span class="slot" data-risposta="fisso"></span>.</p>
+    <p>Quantità di pareggio = costi fissi diviso margine di <span class="slot" data-risposta="contribuzione"></span>.</p>
+    <p>Oltre il punto di pareggio l'impresa è in <span class="slot" data-risposta="utile"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: costi, fisso, contribuzione, utile. Distrattori: variabile, perdita.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Profitto = ricavi totali − costi totali</li>
+      <li>Costi fissi e variabili, costo medio</li>
+      <li>Diagramma di redditività: RT, CT, CF</li>
+    </ul>
+    <ul class="points">
+      <li>Q* = CF / (p − cv), arrotondato per eccesso</li>
+      <li>Margine di sicurezza: quanto spazio c'è</li>
+      <li>Gli sconti spostano molto il pareggio</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">All'esame il break even è uno degli argomenti di GPOI più facili da collegare: matematica (rette e intersezioni), informatica (il foglio di calcolo, il costo di un servizio cloud), PCTO (i costi dell'impresa ospitante). Nell'Unità 4 riprenderemo i costi dal punto di vista del progetto (CBS e preventivi). Raccogliere le consegne su Novaula.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

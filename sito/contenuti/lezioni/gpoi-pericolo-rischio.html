@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pericolo, danno e rischio · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 10</p>
+  <h1>Pericolo, danno<br>e rischio</h1>
+  <p class="lead">Il cavo spellato non è il rischio: è il pericolo. Impariamo le parole esatte, misuriamo i rischi con una matrice e scegliamo le misure nell'ordine giusto.</p>
+  <div class="meta"><span class="chip">R = P × D</span><span>I concetti relativi alla sicurezza</span></div>
+  <aside class="notes">Obiettivi: distinguere pericolo, danno e rischio secondo il D.Lgs. 81/2008; stimare il rischio con la matrice probabilità per danno; descrivere il processo di valutazione dei rischi e il DVR; distinguere prevenzione e protezione e conoscere la gerarchia delle misure. Durata indicativa: 2 ore. Il deck "sicurezza-lavoro-laboratorio" ha già introdotto la matrice in modo semplice: qui la usiamo per decidere priorità e la colleghiamo al risk management di progetto e di cybersecurity.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per chi lavora in una software house, qual è il rischio più alto?</h2></div>
+  <div class="poll" data-id="u10r-software">
+    <ol><li>Un incendio in ufficio</li><li>Disturbi alla vista e alla schiena</li><li>Una scossa elettrica</li><li>Stress e sovraccarico di lavoro</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione, 2 minuti. Annotare alla lavagna la risposta più votata: alla fine della lezione la rileggeremo con la formula R = P × D. Spunto: l'incendio fa più paura (danno grave) ma è raro; i disturbi a vista e schiena sono molto più probabili. Lo stress lavoro-correlato è un rischio che la legge chiede esplicitamente di valutare (art. 28).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le parole della legge</p><h2>Tre parole che non sono sinonimi</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">1</p><h3>Pericolo</h3><p>Proprietà intrinseca di qualcosa che <b>può</b> causare danni.</p><p class="muted">Il cavo spellato della ciabatta.</p></div>
+    <div class="card"><p class="num">2</p><h3>Danno</h3><p>La conseguenza negativa sulla persona: lesione o malattia.</p><p class="muted">L'ustione o l'arresto cardiaco per una scossa.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Rischio</h3><p>La probabilità che quel danno si verifichi davvero, nelle condizioni reali di lavoro.</p><p>Il cavo è sotto la scrivania e tutti ci passano vicino.</p></div>
+  </div>
+  <aside class="notes">D.Lgs. 81/2008, art. 2, comma 1: lettera r, pericolo = "proprietà o qualità intrinseca di un determinato fattore avente il potenziale di causare danni"; lettera s, rischio = "probabilità di raggiungimento del livello potenziale di danno nelle condizioni di impiego o di esposizione ad un determinato fattore o agente oppure alla loro combinazione". Il danno non è definito nell'art. 2, ma è la conseguenza (infortunio o malattia professionale). Messaggio: il pericolo spesso non si può togliere (la corrente a 230 V serve), il rischio sì si può ridurre. Esempio inverso: un leone è un pericolo; il rischio è alto nella savana, molto basso davanti alla vetrata dello zoo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Pericolo, danno o rischio?</h2></div>
+  <div class="puzzle-categorie" data-id="u10r-pdr" style="--cols:3">
+    <div class="cat"><h4>Pericolo</h4><ul><li>Pavimento bagnato</li><li>Toner della stampante</li><li>Scaffale alto e carico</li></ul></div>
+    <div class="cat"><h4>Danno</h4><ul><li>Frattura del polso</li><li>Mal di schiena cronico</li><li>Irritazione agli occhi</li></ul></div>
+    <div class="cat"><h4>Rischio</h4><ul><li>Probabilità di scivolare</li><li>Possibilità che cada una scatola</li></ul></div>
+  </div>
+  <aside class="notes">A coppie, 4 minuti. Regola pratica: il pericolo è una cosa o una situazione, il danno è una conseguenza sulla persona, il rischio contiene sempre l'idea di probabilità o possibilità. Discussione: "irritazione agli occhi" è il danno che può causare il toner (pericolo chimico) se si sostituisce la cartuccia senza precauzioni. Chiedere di trovare per ogni pericolo il suo danno e il suo rischio: si ottengono tre "catene".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Misurare il rischio</p><h2>Una formula semplice, una scala condivisa</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <div class="formula"><small>stima del rischio</small>R = <span class="hl">P</span> × <span class="hl">D</span></div>
+      <p>P è la <b>probabilità</b> che il danno accada, D il <b>danno</b> (o magnitudo): quanto è grave. Entrambi su una scala da 1 a 4.</p>
+    </div>
+    <table class="data compact">
+      <tr><th>Valore</th><th>Probabilità P</th><th>Danno D</th></tr>
+      <tr><td class="mono">1</td><td>Improbabile</td><td>Lieve</td></tr>
+      <tr><td class="mono">2</td><td>Poco probabile</td><td>Medio</td></tr>
+      <tr><td class="mono">3</td><td>Probabile</td><td>Grave</td></tr>
+      <tr><td class="mono">4</td><td>Molto probabile</td><td>Gravissimo</td></tr>
+    </table>
+  </div>
+  <p class="small muted">La legge non impone una scala: questa da 1 a 4 è molto diffusa, ma ogni azienda deve spiegare nel DVR i criteri che usa.</p>
+  <aside class="notes">Il D.Lgs. 81/2008 non prescrive un metodo di calcolo: l'art. 28, comma 2, chiede che il DVR indichi i criteri adottati per la valutazione. La matrice 4×4 è il metodo semplice più usato nelle piccole imprese; per rischi specifici (rumore, vibrazioni, chimico, movimentazione carichi) esistono metodi di misura e norme tecniche dedicate. Esempio da fare a voce: lieve = graffio guaribile subito; medio = infortunio di qualche giorno; grave = lesione con lunga inabilità; gravissimo = invalidità permanente o morte. Probabilità: "molto probabile" se ci sono già stati casi in azienda o nel settore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina sullo schema</p><h2>Completa la matrice dei rischi</h2></div>
+  <div class="puzzle-trascina" data-id="u10r-matrice" data-extra="Pericolo|12">
+    <div style="display:flex;gap:56px;align-items:flex-start">
+      <div style="position:relative;width:1100px;height:490px;flex:none">
+        <div style="position:absolute;left:360px;top:0;width:40px;height:380px;display:grid;grid-template-rows:repeat(4,1fr);text-align:center;align-items:center;font-family:var(--mono);font-size:28px;color:var(--muted)"><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        <div style="position:absolute;left:410px;top:0;width:680px;height:380px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:4px;font-family:var(--mono);font-size:32px;font-weight:700;text-align:center">
+          <span style="background:#fde0c8;display:grid;place-items:center;border-radius:10px">4</span><span style="background:#fde0c8;display:grid;place-items:center;border-radius:10px">8</span><span style="background:var(--bad-soft);display:grid;place-items:center;border-radius:10px">12</span><span style="background:var(--bad-soft);border-radius:10px"></span>
+          <span style="background:#fff3c4;display:grid;place-items:center;border-radius:10px">3</span><span style="background:#fde0c8;display:grid;place-items:center;border-radius:10px">6</span><span style="background:var(--bad-soft);display:grid;place-items:center;border-radius:10px">9</span><span style="background:var(--bad-soft);display:grid;place-items:center;border-radius:10px">12</span>
+          <span style="background:var(--ok-soft);display:grid;place-items:center;border-radius:10px">2</span><span style="background:#fff3c4;display:grid;place-items:center;border-radius:10px">4</span><span style="background:#fde0c8;border-radius:10px"></span><span style="background:#fde0c8;display:grid;place-items:center;border-radius:10px">8</span>
+          <span style="background:var(--ok-soft);display:grid;place-items:center;border-radius:10px">1</span><span style="background:var(--ok-soft);display:grid;place-items:center;border-radius:10px">2</span><span style="background:#fff3c4;display:grid;place-items:center;border-radius:10px">3</span><span style="background:#fff3c4;display:grid;place-items:center;border-radius:10px">4</span>
+        </div>
+        <div style="position:absolute;left:410px;top:386px;width:680px;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-family:var(--mono);font-size:28px;color:var(--muted)"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <span class="slot" data-risposta="Probabilità" style="position:absolute;left:0;top:160px"></span>
+        <span class="slot" data-risposta="Danno|Magnitudo" style="position:absolute;left:610px;top:432px"></span>
+        <span class="slot" data-risposta="16" style="position:absolute;left:955px;top:18px"></span>
+        <span class="slot" data-risposta="6" style="position:absolute;left:785px;top:210px"></span>
+      </div>
+      <div class="stack small">
+        <p><b>Legenda</b> (scala di esempio)</p>
+        <p><span style="display:inline-block;padding:6px 18px;border-radius:12px;font-weight:700;background:var(--ok-soft)">1–2 basso</span></p>
+        <p><span style="display:inline-block;padding:6px 18px;border-radius:12px;font-weight:700;background:#fff3c4">3–4 medio</span></p>
+        <p><span style="display:inline-block;padding:6px 18px;border-radius:12px;font-weight:700;background:#fde0c8">6–8 alto</span></p>
+        <p><span style="display:inline-block;padding:6px 18px;border-radius:12px;font-weight:700;background:var(--bad-soft)">9–16 molto alto</span></p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: asse verticale Probabilità, asse orizzontale Danno (accettato anche Magnitudo), casella in alto a destra 16 (P = 4, D = 4), casella P = 2, D = 3 vale 6. Distrattori: "Pericolo" (non è un asse della matrice: il pericolo è il punto di partenza, non una misura) e 12 (valore di P = 3, D = 4 o P = 4, D = 3). Far notare che la matrice è simmetrica nei numeri ma non nelle decisioni: molte aziende trattano con priorità i rischi con D = 4 anche se P è bassa. La classificazione per colori è un esempio nostro: nel DVR ogni azienda scrive la propria.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Da quale rischio parti?</h2></div>
+  <p class="small">Il quadro elettrico a 400 V è chiuso a chiave e lo apre solo l'elettricista: P = 1, D = 4. L'ingresso si allaga ogni volta che piove e si scivola: P = 3, D = 2.</p>
+  <div class="poll" data-id="u10r-priorita" data-tipo="quiz" data-risposta="B">
+    <ol><li>Dal quadro: il pericolo è più grave</li><li>Dall'ingresso: R = 6 contro R = 4</li><li>Indifferente: hanno lo stesso rischio</li><li>Da nessuno: sono entrambi sotto 9</li></ol>
+    <p class="why">Il rischio dell'ingresso è 3 × 2 = 6, quello del quadro 1 × 4 = 4: la priorità va all'ingresso. Il quadro però non si dimentica: resta chiuso, segnalato e verificato, perché il suo danno potenziale è gravissimo.</p>
+  </div>
+  <aside class="notes">La A è l'errore classico: confondere la gravità del pericolo con il rischio. La D è sbagliata perché anche un rischio medio va gestito (art. 15: eliminare o ridurre al minimo i rischi), la soglia serve solo a decidere le priorità. Discussione: la matrice aiuta a decidere, non sostituisce il giudizio. Un quadro chiuso ha P = 1 proprio grazie a una misura già presa (la chiave): se la chiave resta appesa alla porta, P sale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il processo</p><h2>Valutare i rischi: metti in ordine i passi</h2></div>
+  <ol class="puzzle-ordina" data-id="u10r-processo">
+    <li>Identificare i pericoli, reparto per reparto e mansione per mansione</li>
+    <li>Individuare chi è esposto, compresi i gruppi più vulnerabili</li>
+    <li>Stimare probabilità e danno di ogni rischio</li>
+    <li>Decidere le misure e le priorità</li>
+    <li>Scrivere il DVR con il programma delle misure</li>
+    <li>Verificare nel tempo e aggiornare la valutazione</li>
+  </ol>
+  <aside class="notes">A coppie, 3 minuti. La valutazione la fa il datore di lavoro in collaborazione con l'RSPP e con il medico competente (se previsto), dopo aver consultato l'RLS (art. 29). Gruppi vulnerabili citati dall'art. 28: lavoratrici in gravidanza, differenze di genere, età, provenienza da altri paesi, tipo di contratto (per esempio i nuovi assunti o gli stagisti). La valutazione va rifatta quando cambiano processi o organizzazione in modo significativo, dopo infortuni significativi o quando la sorveglianza sanitaria lo rende necessario: è un ciclo, come il PDCA che vedrete con le norme ISO.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La matrice dei rischi in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Calc intestazioni in A1:E1: <b>Pericolo, P, D, R, Classe</b>.</li>
+      <li>Righe 2-7: cavi sul pavimento 3 2; postazione PC non regolata 4 2; ciabatte in cascata 2 4; scaffale non fissato 1 4; reperibilità serale continua 3 3; uscita di emergenza ingombra 2 4.</li>
+      <li>In D2 <code>=B2*C2</code>; in E2 <code>=SE(D2&gt;=9;"Molto alto";SE(D2&gt;=6;"Alto";SE(D2&gt;=3;"Medio";"Basso")))</code>. Copia fino alla riga 7.</li>
+      <li>In E9 conta gli "Alto" con <code>=CONTA.SE(E2:E7;"Alto")</code>; ordina per R decrescente.</li>
+      <li>Salva come <b>matrice-rischi.ods</b> e consegnalo.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> in cima c'è la reperibilità serale con R = 9 (Molto alto), poi tre rischi con R = 8. In E9 leggi 4. La somma della colonna R è 43.</div>
+  </div>
+  <aside class="notes">Valori di R: cavi 6, postazione 8, ciabatte 8, scaffale 4, reperibilità 9, uscita ingombra 8; somma 43. Classi: Molto alto 1 (reperibilità), Alto 4 (cavi 6 e i tre da 8), Medio 1 (scaffale 4), Basso 0. Per ordinare: selezionare A1:E7, menu Dati, Ordina, per colonna D decrescente (verificare che la prima riga sia riconosciuta come intestazione). Facoltativo: formattazione condizionata con i colori della legenda. Domanda finale da scrivere nel file in G2: quale rischio affrontereste per primo e con quale misura? Il dato sorprendente per molti: in un ufficio il rischio più alto della lista è organizzativo (stress), non "fisico".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ridurre il rischio</p><h2>Due leve: abbassare P o abbassare D</h2></div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Prevenzione</h3><p>Misure che riducono la <b>probabilità</b> che il danno accada: progettazione, manutenzione, formazione, procedure.</p><p class="muted">Canaline per i cavi: nessuno inciampa.</p></div>
+    <div class="card fill"><h3>Protezione</h3><p>Misure che riducono la <b>gravità</b> del danno se l'evento accade: collettive prima, individuali (DPI) dopo.</p><p>Interruttore differenziale: la scossa dura una frazione di secondo.</p></div>
+  </div>
+  <div class="callout">Il rischio residuo non è mai zero: si porta a un livello accettabile e si tiene sotto controllo.</div>
+  <aside class="notes">Il D.Lgs. 81/2008 (art. 2, lettera n) definisce la prevenzione come il complesso delle misure necessarie, secondo la particolarità del lavoro, l'esperienza e la tecnica, per evitare o diminuire i rischi professionali. Nella pratica della valutazione si distingue: prevenzione agisce su P, protezione agisce su D. DPI = dispositivo di protezione individuale (art. 74): attrezzatura indossata dal lavoratore per proteggerlo da uno o più rischi. Disegnare alla lavagna la matrice: la prevenzione sposta il punto verso il basso, la protezione verso sinistra.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Prevenzione o protezione?</h2></div>
+  <div class="puzzle-categorie" data-id="u10r-prevprot">
+    <div class="cat"><h4>Prevenzione (riduce P)</h4><ul><li>Canaline per i cavi</li><li>Corso sull'uso della scala</li><li>Manutenzione delle ciabatte</li><li>Pause dal videoterminale</li></ul></div>
+    <div class="cat"><h4>Protezione (riduce D)</h4><ul><li>Interruttore differenziale</li><li>Estintore vicino al quadro</li><li>Guanti isolanti</li><li>Scarpe antinfortunistiche</li></ul></div>
+  </div>
+  <aside class="notes">A squadre, 4 minuti. Discussione utile: alcune misure lavorano su entrambe le leve (la formazione riduce la probabilità di errore ma insegna anche a reagire, riducendo il danno). L'estintore non impedisce l'incendio, ne limita le conseguenze: protezione. Guanti isolanti e scarpe antinfortunistiche sono DPI (protezione individuale); differenziale ed estintore sono protezione collettiva. Chiedere: quale delle otto misure verrebbe prima nella gerarchia della prossima slide?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La misura migliore è quella che toglie il pericolo</h2></div>
+  <figure class="citazione">
+    <blockquote>Quello che non hai, non può fuoriuscire.</blockquote>
+    <figcaption><b>Trevor Kletz</b>, ingegnere chimico inglese, pioniere della sicurezza dei processi, titolo di un suo articolo del 1978</figcaption>
+  </figure>
+  <div class="callout">Kletz parlava di impianti chimici: invece di proteggere un grande serbatoio di sostanza tossica, progettare il processo in modo da non doverlo avere. È la <b>sicurezza intrinseca</b>.</div>
+  <aside class="notes">Trevor Kletz (1922-2013) lavorò per ICI e poi alla Loughborough University; "What you don't have, can't leak" è il titolo del suo articolo pubblicato su Chemistry and Industry nel 1978, scritto dopo il disastro di Flixborough (1974). Traduzione nostra. Ricordare anche il disastro di Seveso (1976) che ha dato il nome alla direttiva europea sugli incidenti rilevanti. Domanda: un esempio di "sicurezza intrinseca" nel software? (Non conservare dati sensibili che non servono: un dato che non hai non può essere rubato. È lo stesso principio della minimizzazione dei dati del GDPR.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gerarchia delle misure</p><h2>Metti in ordine: che cosa si prova per primo?</h2></div>
+  <ol class="puzzle-ordina" data-id="u10r-gerarchia">
+    <li>Eliminare il pericolo</li>
+    <li>Sostituire ciò che è pericoloso con ciò che lo è meno</li>
+    <li>Misure tecniche e protezione collettiva</li>
+    <li>Misure organizzative, procedure e formazione</li>
+    <li>Dispositivi di protezione individuale (DPI)</li>
+  </ol>
+  <aside class="notes">Soluzione nell'ordine scritto. Fonti: D.Lgs. 81/2008, art. 15 (eliminazione dei rischi, sostituzione di ciò che è pericoloso con ciò che non lo è o lo è meno, priorità delle misure di protezione collettiva rispetto a quelle individuali) e la "gerarchia dei controlli" della ISO 45001:2018 (punto 8.1.2). I DPI sono l'ultima difesa perché dipendono dal comportamento di ogni singola persona e proteggono solo chi li indossa e solo se li indossa bene. Esempio: rumore della sala server. Eliminare: spostare i server in un data center o nel cloud; sostituire: macchine più silenziose; tecniche: pannelli fonoassorbenti; organizzative: ridurre il tempo di permanenza; DPI: cuffie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In magazzino a volte cadono scatole dallo scaffale più alto. Che cosa viene prima?</h2></div>
+  <div class="poll" data-id="u10r-scaffale" data-tipo="quiz" data-risposta="D">
+    <ol><li>Dare il casco a tutti quelli che entrano</li><li>Appendere il cartello "Attenzione, caduta materiali"</li><li>Un corso di formazione sullo stoccaggio</li><li>Non mettere più scatole pesanti in alto e fissare lo scaffale</li></ol>
+    <p class="why">Agire sulla fonte viene prima: se in alto non c'è niente di pesante e lo scaffale è fissato, il pericolo quasi sparisce. Cartello, formazione e casco sono utili, ma vengono dopo.</p>
+  </div>
+  <aside class="notes">Molti scelgono il casco perché è la misura "visibile". Ripassare la gerarchia: la D elimina o riduce alla fonte (misura tecnica e organizzativa sullo stoccaggio), la C è organizzativa, la B è segnaletica (Titolo V, informa ma non protegge), la A è un DPI. In un vero magazzino si fanno spesso tutte, ma nell'ordine giusto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e prevenzione</p><h2>Telecamere che "vedono" il rischio</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Visione artificiale e quasi incidenti</h3><p>Esistono sistemi di visione artificiale che riconoscono se un operatore indossa casco e gilet o se entra in una zona pericolosa vicino a un muletto, e software che analizzano le segnalazioni dei <b>quasi incidenti</b> per trovare schemi ricorrenti prima che arrivi l'infortunio.</p></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Il vantaggio</h3><p>Più dati per stimare la probabilità P in modo meno soggettivo.</p></div>
+    <div class="card bad"><h3>Il limite</h3><p>Le telecamere sui lavoratori toccano la privacy: in Italia servono un accordo sindacale o un'autorizzazione (Statuto dei lavoratori, art. 4) e il rispetto del GDPR.</p></div>
+  </div>
+  <aside class="notes">Quasi incidente (near miss): evento che avrebbe potuto causare un danno ma non l'ha causato. Herbert Heinrich, nel libro "Industrial Accident Prevention" (1931), propose la famosa piramide 1 infortunio grave, 29 lievi, 300 senza conseguenze: i rapporti numerici sono discussi dagli studiosi, ma l'idea di raccogliere i quasi incidenti è ancora alla base dei sistemi di gestione. Art. 4 della legge 300/1970: impianti audiovisivi e strumenti da cui deriva anche la possibilità di controllo a distanza dei lavoratori possono essere usati per esigenze organizzative, produttive, di sicurezza del lavoro e tutela del patrimonio, previo accordo sindacale o autorizzazione dell'Ispettorato. Non citare percentuali di efficacia: non ci sono dati generali affidabili.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Sopralluogo nel nostro laboratorio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Gruppi di 3: girate per il laboratorio e trovate 5 pericoli reali, senza toccare nulla.</li>
+      <li>Per ognuno scrivete chi è esposto, il danno possibile e una stima di P e D.</li>
+      <li>Calcolate R e proponete una misura, dicendo se è prevenzione o protezione.</li>
+      <li>Ordinate per R decrescente: la prima riga è la vostra priorità.</li>
+      <li>Salvate come <b>sopralluogo-lab.ods</b> e consegnate.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni pericolo è una cosa o una situazione (non "rischio di…"), ogni danno è una conseguenza sulla persona, ogni misura dice su quale leva agisce.</div>
+  </div>
+  <aside class="notes">Prima del sopralluogo ricordare: non aprire quadri, non spostare cavi, non salire su sedie. Pericoli tipici: ciabatte collegate in cascata, cavi di rete sul pavimento, zaini nelle vie di passaggio, schermi controluce, sedie non regolabili, finestre che si aprono sopra le postazioni. Confronto finale: i gruppi hanno dato valori diversi allo stesso pericolo? È normale: la stima è in parte soggettiva, per questo il DVR deve dichiarare i criteri. Le proposte migliori si possono girare al docente referente per la sicurezza della scuola.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>La stessa formula, tre mondi diversi</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Sicurezza sul lavoro</h3><p>Rischio = probabilità × danno alla persona. DVR, misure, verifiche.</p></div>
+    <div class="card"><h3>Progetti</h3><p>Rischio di progetto: ritardi, costi, requisiti. Registro dei rischi, piano di risposta.</p></div>
+    <div class="card"><h3>Cybersecurity</h3><p>Rischio per riservatezza, integrità e disponibilità dei dati. Minacce, vulnerabilità, contromisure.</p></div>
+  </div>
+  <div class="callout">All'orale fai vedere che il metodo è lo stesso: identificare, stimare, trattare, monitorare. Il risk based thinking delle norme ISO (unità 9) nasce da qui.</div>
+  <aside class="notes">Collegamenti: il risk management di progetto visto nell'unità 4, il pensiero basato sul rischio delle norme ISO (unità 9), la sicurezza informatica di Sistemi e reti. Una frase d'esempio: "Nella sicurezza informatica il pericolo si chiama minaccia, la debolezza che la rende possibile si chiama vulnerabilità, e il rischio si stima come in un DVR". Chiedere a due studenti di provare la frase a voce.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u10r-uscita" data-extra="DVR|DPI">
+    <p>Il <span class="slot" data-risposta="pericolo"></span> è una proprietà intrinseca che può causare danni; il <span class="slot" data-risposta="rischio"></span> è la probabilità che il danno accada davvero.</p>
+    <p>Nella matrice si stima R = P × D, dove D indica il <span class="slot" data-risposta="danno"></span>.</p>
+    <p>La <span class="slot" data-risposta="prevenzione"></span> riduce la probabilità, la <span class="slot" data-risposta="protezione"></span> riduce la gravità.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti, individuale. Soluzioni: pericolo, rischio, danno, prevenzione, protezione. Distrattori: DVR (il documento) e DPI (un tipo di protezione individuale). Riprendere il sondaggio iniziale: con R = P × D, quale rischio della software house è davvero più alto?</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Pericolo = proprietà intrinseca; rischio = probabilità del danno</li>
+      <li>R = P × D, con criteri dichiarati nel DVR</li>
+      <li>Valutare è un ciclo: identificare, stimare, decidere, verificare</li>
+    </ul>
+    <ul class="points">
+      <li>Prevenzione abbassa P, protezione abbassa D</li>
+      <li>Prima eliminare e sostituire, i DPI per ultimi</li>
+      <li>Lo stesso metodo vale per progetti e cybersecurity</li>
+    </ul>
+  </div>
+  <p class="lead">Hai un dubbio su una slide? Usa il pulsante <b>? Domande</b> in basso: lo vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: le figure della sicurezza, cioè chi fa la valutazione dei rischi, chi la controlla e chi rappresenta i lavoratori.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

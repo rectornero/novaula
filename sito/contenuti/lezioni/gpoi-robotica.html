@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La robotica · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="blu">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 7</p>
+  <h1>La robotica</h1>
+  <p class="lead">Da una parola inventata a teatro nel 1920 ai robot che lavorano accanto a noi: com'è fatto un robot, come si è evoluto, dove lavora e quanto rende.</p>
+  <aside class="notes">Obiettivi: definire il robot industriale, riconoscerne le parti, conoscere le forme principali e le tre generazioni, le applicazioni e le norme di sicurezza, calcolare il tempo di rientro di un investimento in un cobot. Durata indicativa: 2 ore. La lezione "robotica-lavoro" su Novaula tratta l'impatto dei robot e dell'AI sull'occupazione e l'AI Act: qui non lo ripetiamo, ci concentriamo sulla tecnica e sulla decisione d'impresa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Lavoreresti accanto a un robot, senza barriere tra voi?</h2></div>
+  <div class="poll" data-id="u7-accanto-robot">
+    <ol><li>Sì, volentieri</li><li>Sì, se so come si ferma</li><li>Preferirei di no</li><li>Dipende da che cosa fa</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di opinione. Tenere da parte la risposta B: è esattamente il ragionamento delle norme sui robot collaborativi (valutazione dei rischi, limiti di forza e velocità, arresto). La riprendiamo con il quiz sui cobot.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un po' di storia</p><h2>Una parola nata a teatro</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1920</p><h3>Karel Čapek</h3><p class="muted">Nel dramma R.U.R. compaiono i "robot", operai artificiali. Dal ceco <i>robota</i>: lavoro servile.</p></div>
+    <div class="card"><p class="num">1942</p><h3>Isaac Asimov</h3><p class="muted">Nei suoi racconti formula le tre leggi della robotica, parola che lui stesso aveva usato per primo.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">1961</p><h3>Unimate</h3><p>Il primo robot industriale lavora in uno stabilimento General Motors negli Stati Uniti.</p></div>
+  </div>
+  <aside class="notes">R.U.R. (Rossumovi Univerzální Roboti) è del 1920, rappresentato per la prima volta nel 1921; secondo lo stesso Karel Čapek la parola fu suggerita dal fratello Josef. Asimov usa la parola "robotics" nel racconto "Liar!" (1941) e formula le tre leggi in "Runaround" (1942). Unimate, progettato da George Devol e Joseph Engelberger, maneggiava pezzi di pressofusione caldi in uno stabilimento GM del New Jersey: un lavoro pericoloso per le persone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una legge nata in un racconto</p><h2>La prima legge della robotica</h2></div>
+  <figure class="citazione">
+    <blockquote>Un robot non può recare danno a un essere umano né può permettere che, a causa del proprio mancato intervento, un essere umano riceva danno.</blockquote>
+    <figcaption><b>Isaac Asimov</b>, scrittore e biochimico, racconto "Runaround" (in italiano "Circolo vizioso"), 1942</figcaption>
+  </figure>
+  <p class="lead">È fantascienza, ma la domanda è vera: oggi la sicurezza dei robot la garantiscono <b>norme tecniche</b> e la <b>valutazione dei rischi</b>.</p>
+  <aside class="notes">Traduzione italiana diffusa, verificata sull'originale ("A robot may not injure a human being or, through inaction, allow a human being to come to harm"). Le leggi di Asimov non sono norme: un robot industriale non "capisce" che cosa sia un danno. Chiedere: come fa allora un robot a non fare male? Sensori, limiti, recinzioni, arresto di emergenza: lo vedremo con le norme ISO 10218 e ISO/TS 15066.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Le tappe della robotica, dalla più antica</h2></div>
+  <ol class="puzzle-ordina" data-id="u7-tappe-robot">
+    <li>Debutta R.U.R., il dramma che inventa la parola robot</li>
+    <li>Asimov pubblica la sua prima legge della robotica</li>
+    <li>Unimate entra in una fabbrica General Motors</li>
+    <li>ASEA presenta un robot industriale tutto elettrico, controllato da microprocessore</li>
+    <li>Universal Robots vende il suo primo robot collaborativo</li>
+    <li>Esce la specifica tecnica ISO/TS 15066 sui robot collaborativi</li>
+  </ol>
+  <aside class="notes">Date: R.U.R. 1921 (scritto nel 1920); Runaround 1942; Unimate 1961; ASEA IRB 6 nel 1974 (l'azienda svedese poi confluita in ABB); Universal Robots UR5 nel 2008, considerato il primo cobot commerciale; ISO/TS 15066 nel 2016. Il tranello: il robot elettrico con microprocessore (anni Settanta) sembra recente, ma viene molto prima dei cobot. 3 minuti a coppie.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La definizione</p><h2>Che cos'è un robot industriale</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="lead">Un manipolatore <b>controllato automaticamente</b>, <b>riprogrammabile</b> e multiuso, programmabile su tre o più assi.</p>
+      <p class="small muted">Sintesi della definizione della norma ISO 8373.</p>
+    </div>
+    <div class="card soft"><h3>Le sue parti</h3><ul class="points small"><li><b>Manipolatore</b>: base, bracci, giunti</li><li><b>End effector</b>: pinza, ventosa, torcia</li><li><b>Controllore</b>: l'elettronica che lo guida</li><li><b>Teach pendant</b>: il terminale per programmarlo</li><li><b>Sensori</b>: posizione, forza, visione</li></ul></div>
+  </div>
+  <aside class="notes">La norma ISO 8373 (vocabolario della robotica, edizione 2021) definisce il robot come meccanismo programmato e azionato, con un certo grado di autonomia, per locomozione, manipolazione o posizionamento; il robot industriale è il manipolatore descritto sulla slide. "Riprogrammabile" è la parola chiave: una macchina automatica dedicata (che fa sempre e solo una cosa) non è un robot. Ogni giunto è un grado di libertà: è il gancio per il quiz successivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Quanti gradi di libertà servono per raggiungere un punto con qualunque orientamento?</h2></div>
+  <div class="poll" data-id="u7-gradi-liberta" data-tipo="quiz" data-risposta="C">
+    <ol><li>3</li><li>4</li><li>6</li><li>9</li></ol>
+    <p class="why">Ne servono 3 per la posizione (x, y, z) e 3 per l'orientamento della pinza (le tre rotazioni). Per questo i robot antropomorfi più diffusi hanno 6 assi.</p>
+  </div>
+  <aside class="notes">Chi risponde 3 pensa solo alla posizione: per avvitare una vite inclinata conta anche l'orientamento. I robot a 7 assi (ridondanti) esistono e servono ad aggirare gli ostacoli, come fa il nostro braccio (spalla, gomito, polso). Far provare con il braccio: tenendo ferma la mano su un punto del banco, possiamo ancora muovere il gomito.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Le parti di una cella robotizzata</h2></div>
+  <div class="puzzle-trascina" data-id="u7-parti-robot" data-extra="Gateway|Nastro">
+    <div style="position:relative;width:1600px;height:470px;font-size:28px">
+      <svg width="1600" height="470" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <line x1="0" y1="452" x2="960" y2="452" stroke="#dcdfe8" stroke-width="4"/>
+        <line x1="380" y1="420" x2="960" y2="420" stroke="#596179" stroke-width="5" stroke-dasharray="14 8"/>
+        <line x1="1260" y1="400" x2="1290" y2="400" stroke="#596179" stroke-width="5"/>
+        <rect x="180" y="370" width="200" height="82" rx="10" fill="#172033"/>
+        <line x1="280" y1="360" x2="440" y2="170" stroke="#2f6fde" stroke-width="44" stroke-linecap="round"/>
+        <line x1="440" y1="170" x2="680" y2="230" stroke="#2f6fde" stroke-width="34" stroke-linecap="round"/>
+        <circle cx="280" cy="360" r="28" fill="#fff" stroke="#172033" stroke-width="6"/>
+        <circle cx="440" cy="170" r="28" fill="#fff" stroke="#172033" stroke-width="6"/>
+        <circle cx="680" cy="230" r="20" fill="#fff" stroke="#172033" stroke-width="6"/>
+        <rect x="665" y="245" width="30" height="34" fill="#172033"/>
+        <line x1="662" y1="279" x2="662" y2="326" stroke="#172033" stroke-width="10"/>
+        <line x1="698" y1="279" x2="698" y2="326" stroke="#172033" stroke-width="10"/>
+        <line x1="500" y1="118" x2="462" y2="152" stroke="#596179" stroke-width="3"/>
+        <line x1="730" y1="320" x2="708" y2="310" stroke="#596179" stroke-width="3"/>
+      </svg>
+      <div style="position:absolute;left:0;top:384px"><span class="slot" data-risposta="Base"></span></div>
+      <div style="position:absolute;left:490px;top:60px"><span class="slot" data-risposta="Giunto"></span></div>
+      <div style="position:absolute;left:730px;top:290px"><span class="slot" data-risposta="Pinza"></span></div>
+      <div style="position:absolute;left:960px;top:300px;width:300px;height:150px;background:var(--night);color:var(--night-ink);border-radius:16px;padding:14px 16px"><span class="slot" data-risposta="Controllore"></span><p class="tiny" style="margin-top:6px">armadio elettrico</p></div>
+      <div style="position:absolute;left:1290px;top:330px;width:310px;height:120px;background:#fff;border:3px solid var(--line);border-radius:16px;padding:12px 10px"><span class="slot" data-risposta="Teach pendant"></span><p class="tiny muted">per programmarlo</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: Base (in basso a sinistra), Giunto (il cerchio al gomito), Pinza (è l'end effector), Controllore (l'armadio collegato dal cavo), Teach pendant (il terminale portatile). Distrattori: Gateway, Nastro. Domanda: dove sono i motori? Uno per ogni giunto, comandati dal controllore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le forme</p><h2>Robot diversi per lavori diversi</h2></div>
+  <div class="cols-4">
+    <div class="card"><h3>Antropomorfo</h3><p class="muted small">6 assi rotanti, come un braccio umano. Il più versatile.</p></div>
+    <div class="card"><h3>SCARA</h3><p class="muted small">Si muove su un piano, velocissimo nel montaggio.</p></div>
+    <div class="card"><h3>Delta</h3><p class="muted small">Tre bracci paralleli dall'alto: prende e posa al volo.</p></div>
+    <div class="card"><h3>Cartesiano</h3><p class="muted small">Tre assi lineari a portale, anche per carichi grandi.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="card soft"><h3>Mobili (AGV, AMR)</h3><p class="small">Trasportano materiali; gli AMR si orientano da soli tra gli ostacoli.</p></div>
+    <div class="card soft"><h3>Collaborativi (cobot)</h3><p class="small">Pensati per lavorare vicino alle persone, con limiti di forza e velocità.</p></div>
+  </div>
+  <aside class="notes">SCARA = Selective Compliance Assembly Robot Arm, sviluppato in Giappone alla fine degli anni Settanta. Il robot delta nasce da un'idea di Reymond Clavel (EPFL, anni Ottanta). AGV (Automated Guided Vehicle) segue percorsi fissi (linee, magneti); AMR (Autonomous Mobile Robot) costruisce una mappa e pianifica il percorso. Esempio italiano: Comau, a Torino, progetta e produce robot industriali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Quale robot per quale lavoro?</h2></div>
+  <dl class="puzzle-abbina" data-id="u7-robot-lavoro">
+    <dt>Antropomorfo a 6 assi</dt><dd>Saldatura a punti di una scocca d'auto</dd>
+    <dt>SCARA</dt><dd>Montaggio rapido di componenti su una scheda</dd>
+    <dt>Delta</dt><dd>Prelievo di cioccolatini dal nastro in movimento</dd>
+    <dt>Cartesiano a portale</dt><dd>Carico di lastre pesanti su una macchina utensile</dd>
+    <dt>AMR</dt><dd>Trasporto di carrelli tra magazzino e linee</dd>
+    <dt>Cobot</dt><dd>Avvitatura accanto all'operatore, senza recinzione</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritta. Il criterio: tipo di movimento (piano o nello spazio), velocità, carico, spazio di lavoro, vicinanza alle persone. Chiedere: per la saldatura della scocca si potrebbe usare un cobot? In genere no: carichi, velocità e scintille richiedono una cella protetta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">L'evoluzione</p><h2>Tre generazioni di robot</h2></div>
+  <div class="flow">
+    <div class="card"><p class="num">1ª</p><h3>Programmati</h3><p class="muted small">Ripetono la sequenza insegnata, punto per punto. Nessun sensore verso l'esterno. Anni Sessanta-Settanta.</p></div>
+    <div class="card soft"><p class="num">2ª</p><h3>Con sensori</h3><p class="muted small">Visione e forza: si adattano a piccole variazioni del pezzo. Anni Ottanta-Novanta.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3ª</p><h3>Intelligenti</h3><p class="small">Pianificano, imparano dai dati, collaborano con le persone. Oggi.</p></div>
+  </div>
+  <aside class="notes">È la classificazione più diffusa nei testi; le date sono indicative e i confini sfumati (molti robot in servizio oggi sono di prima e seconda generazione). Esempio per capire la differenza: se il pezzo arriva spostato di 2 cm, il robot di prima generazione afferra il vuoto; quello di seconda lo trova con la telecamera; quello di terza può imparare a prendere oggetti mai visti prima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Di che generazione è?</h2></div>
+  <div class="puzzle-categorie" data-id="u7-generazioni" style="--cols:3">
+    <div class="cat"><h4>1ª generazione</h4><ul><li>Ripete sempre la stessa traiettoria</li><li>Se il pezzo si sposta, sbaglia la presa</li></ul></div>
+    <div class="cat"><h4>2ª generazione</h4><ul><li>Una telecamera trova il pezzo</li><li>Un sensore di forza dosa la spinta</li><li>Segue il cordone di saldatura</li></ul></div>
+    <div class="cat"><h4>3ª generazione</h4><ul><li>Impara la presa da esempi</li><li>Pianifica il percorso tra ostacoli</li><li>Capisce istruzioni a voce</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritta. "Segue il cordone di saldatura" (seam tracking) usa un sensore per correggere la traiettoria: seconda generazione. Le carte della terza generazione si basano su tecniche di intelligenza artificiale. Squadre, 4 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Che cosa rende "collaborativa" un'applicazione con un robot?</h2></div>
+  <div class="poll" data-id="u7-cobot" data-tipo="quiz" data-risposta="D">
+    <ol><li>Il robot è piccolo e leggero</li><li>Il robot ha l'intelligenza artificiale</li><li>Il robot è dipinto di un colore ben visibile</li><li>Una valutazione dei rischi dimostra che persona e robot possono condividere lo spazio in sicurezza</li></ol>
+    <p class="why">Per le norme è l'applicazione a essere collaborativa, non il robot: un cobot che maneggia una lama affilata può richiedere comunque protezioni. Contano limiti di forza e velocità, monitoraggio dello spazio e valutazione dei rischi.</p>
+  </div>
+  <aside class="notes">Misconcezione diffusa: "è un cobot, quindi è sicuro". La specifica tecnica ISO/TS 15066 (2016) indica, tra l'altro, i limiti di forza e pressione ammessi nel contatto con le diverse parti del corpo; la ISO 10218 (parti 1 e 2) riguarda la sicurezza dei robot industriali e della loro integrazione in cella. Ricollegare alla risposta B del sondaggio iniziale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Quando si ripaga un cobot?</h2>
+  <div class="cols-2" style="grid-template-columns:1.6fr 1fr;align-items:start">
+    <ol class="steps small">
+      <li>Impresa di esempio: cobot per l'avvitatura, installato, 45.000 €. Benefici al mese: 1.500 € di scarti in meno e 2.250 € di produzione in più; manutenzione 250 €.</li>
+      <li>F1 <b>45000</b>, F2 risparmio netto <code>=1500+2250-250</code>, F3 <code>=F1/F2</code> (mesi di rientro).</li>
+      <li>A2:A26 i mesi da 0 a 24; B2 <code>=-$F$1+$F$2*A2</code> e copia in basso. Grafico a linee.</li>
+      <li>Scenario prudente: produzione in più solo 1.000 €. Che cosa cambia?</li>
+      <li>Salva come <b>rientro-cobot.ods</b> e consegna.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> F2 = 3.500 €, F3 = 12,86 mesi; mese 12: −3.000 €, mese 13: +500 €. Scenario prudente: F2 = 2.250 €, F3 = 20 mesi.</div>
+  </div>
+  <aside class="notes">Calcoli: 1500 + 2250 - 250 = 3500; 45000/3500 = 12,857; B al mese 12 = -45000 + 42000 = -3000; mese 13 = -45000 + 45500 = +500. Prudente: 1500 + 1000 - 250 = 2250; 45000/2250 = 20 (pareggio esatto al mese 20). Cifre inventate ma dello stesso ordine di grandezza di un piccolo progetto di automazione. È il tempo di rientro (payback period) dell'unità 4: semplice ma ignora il valore del denaro nel tempo. Discussione: l'operatore che prima avvitava che cosa fa adesso? (controllo qualità, gestione di più postazioni): collegare alla lezione robotica-lavoro e a Industria 5.0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le applicazioni</p><h2>Dove lavorano i robot</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Manifattura</h3><p class="muted small">saldatura, verniciatura, montaggio, pallettizzazione</p></div>
+    <div class="card"><h3>Logistica</h3><p class="muted small">AMR nei magazzini, prelievo dagli scaffali</p></div>
+    <div class="card"><h3>Medicina</h3><p class="muted small">chirurgia assistita, riabilitazione, laboratori</p></div>
+    <div class="card"><h3>Agroalimentare</h3><p class="muted small">mungitura robotizzata, raccolta, confezionamento</p></div>
+    <div class="card"><h3>Ispezione</h3><p class="muted small">droni e robot su tubazioni, ponti, impianti</p></div>
+    <div class="card"><h3>Ricerca</h3><p class="muted small">umanoidi come iCub dell'IIT di Genova</p></div>
+  </div>
+  <aside class="notes">La chirurgia robotica (per esempio il sistema da Vinci, approvato negli Stati Uniti nel 2000) non è autonoma: il robot esegue i movimenti del chirurgo, filtrando il tremore e scalando i movimenti. iCub è un robot umanoide open source sviluppato dall'Istituto Italiano di Tecnologia dal 2004, usato nella ricerca sull'apprendimento. Chiedere a chi ha fatto PCTO se ha visto robot e di che tipo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le parole</p><h2>Le regole della sicurezza</h2></div>
+  <div class="puzzle-trascina" data-id="u7-norme-robot" data-extra="9001|14001">
+    <p>La sicurezza dei robot industriali è trattata dalla norma ISO <span class="slot" data-risposta="10218"></span>.</p>
+    <p>Per le applicazioni collaborative c'è la specifica tecnica ISO/TS <span class="slot" data-risposta="15066"></span>.</p>
+    <p>Dal 2027 la Direttiva macchine sarà sostituita da un <span class="slot" data-risposta="regolamento"></span> europeo.</p>
+    <p>In Italia la salute e sicurezza sul lavoro è regolata dal D.Lgs. <span class="slot" data-risposta="81/2008"></span>.</p>
+  </div>
+  <aside class="notes">Soluzione: 10218, 15066, regolamento, 81/2008. Distrattori: 9001 (qualità) e 14001 (ambiente), che vedremo nell'unità 9. Il Regolamento (UE) 2023/1230 sulle macchine si applica dal 20 gennaio 2027 e, a differenza della direttiva, vale direttamente in tutti gli Stati senza recepimento; tiene conto anche dei sistemi che usano l'AI. La ISO 10218 ha due parti: robot (parte 1) e sistemi e celle robotizzate (parte 2); le edizioni del 2011 sono state aggiornate nel 2025. Il D.Lgs. 81/2008 è il tema dell'unità 10.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Robot che capiscono le istruzioni</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I laboratori di ricerca e alcune aziende stanno collegando i robot a <b>modelli di AI</b> addestrati su immagini, testi e movimenti: invece di programmare ogni punto, si può chiedere "metti i pezzi rossi nella cassetta". Alcuni costruttori stanno provando <b>robot umanoidi</b> in magazzini e fabbriche. Sono ancora sperimentazioni, non prodotti diffusi.</p></div>
+  <div class="callout">Un robot che "interpreta" un'istruzione può interpretarla male: nell'AI Act un'AI usata come componente di sicurezza di una macchina è considerata <b>ad alto rischio</b>.</div>
+  <aside class="notes">Non citare numeri di vendita o promesse dei produttori di umanoidi: sono annunci, non dati verificati. L'AI Act è il Regolamento (UE) 2024/1689; la lezione robotica-lavoro lo tratta in dettaglio. Messaggio coerente con Industria 5.0: la persona resta al centro e la responsabilità resta umana.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Progetta una cella di pallettizzazione</h2>
+  <div class="cols-2 wide-left" style="align-items:start">
+    <ol class="steps small">
+      <li>Scatole da 12 kg arrivano su un nastro, 6 al minuto: vanno impilate su pallet, a fine linea.</li>
+      <li>Scegliete il tipo di robot e l'end effector, motivando la scelta in due righe.</li>
+      <li>Su <b>app.diagrams.net</b> disegnate la pianta: robot, nastro, 2 pallet, zona dell'operatore.</li>
+      <li>Aggiungete almeno 3 misure di sicurezza (recinzione, barriera fotoelettrica, scanner laser, arresto di emergenza).</li>
+      <li>Salvate <b>cella-robot-gruppoN.drawio</b> ed esportate in PDF.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la scelta del robot tiene conto di carico e spazio di lavoro; l'operatore può cambiare un pallet pieno senza entrare nello spazio del robot in movimento.</div>
+  </div>
+  <aside class="notes">Soluzione tipica: robot antropomorfo a 4-6 assi o pallettizzatore dedicato, con pinza a ventosa o a forche; due postazioni pallet, così il robot lavora su una mentre l'operatore cambia l'altra; barriere fotoelettriche sull'accesso ai pallet, recinzione perimetrale, arresto di emergenza raggiungibile. Un cobot è possibile solo se carico e velocità lo permettono e la valutazione dei rischi lo conferma: 12 kg a 6 scatole al minuto è al limite, buon tema di discussione. Gruppi da 4; presentazione di 2 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">All'esame</p><h2>Come parlarne all'orale</h2></div>
+  <div class="cols-3">
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Definizione</h3><p>Quale parola non può mancare?</p></div><div class="retro"><p><b>Riprogrammabile</b>: è ciò che distingue un robot da una macchina automatica dedicata.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Decisione</h3><p>Come lo porti su GPOI?</p></div><div class="retro"><p>Con il tempo di rientro dell'investimento e la valutazione dei rischi: tecnica, costi e sicurezza insieme.</p></div></div>
+    <div class="flip" style="--h:330px"><div class="fronte"><h3>Collegamenti</h3><p>Quali materie?</p></div><div class="retro"><p>Sistemi (controllo, sensori), Informatica (AI), Storia e Italiano (Čapek, Asimov), sicurezza (unità 10).</p></div></div>
+  </div>
+  <aside class="notes">Girare le carte una alla volta. Ricordare che la lezione robotica-lavoro offre spunti per un collegamento con Educazione civica (lavoro e AI).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>La parola robot nasce nel 1920 in un dramma di Karel <span class="blank" data-risposta="Čapek|Capek|Ciapek"></span>.</p>
+    <p>La parola chiave della definizione di robot industriale è <span class="blank" data-risposta="riprogrammabile" style="--w:14ch"></span>.</p>
+    <p>Per posizione e orientamento qualunque servono <span class="blank" data-risposta="6|sei"></span> gradi di libertà.</p>
+    <p>Il robot pensato per lavorare vicino alle persone si chiama <span class="blank" data-risposta="cobot|collaborativo"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: Čapek (accettato anche Capek), riprogrammabile, 6, cobot (accettato anche collaborativo). Il confronto ignora maiuscole e accenti.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Robot industriale: manipolatore automatico e riprogrammabile</li>
+      <li>Parti: base, giunti, end effector, controllore, teach pendant</li>
+      <li>Forme diverse per lavori diversi; 6 assi per la piena libertà</li>
+    </ul>
+    <ul class="points">
+      <li>Tre generazioni: programmati, con sensori, intelligenti</li>
+      <li>Collaborativa è l'applicazione, dopo la valutazione dei rischi</li>
+      <li>Un robot si sceglie anche con i conti</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Fine dell'unità 7. Per il ripasso dell'unità: far costruire a ogni gruppo una mappa dei nove pilastri con un esempio visto in ciascuna lezione.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il monitoraggio e il controllo del progetto · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>Il monitoraggio<br>e il controllo</h1>
+  <p class="lead">Il piano è fatto, il budget anche. Adesso il progetto corre: come capire ogni settimana se siamo in ritardo, se spendiamo troppo e quanto costerà alla fine? La risposta ha un nome: Earned Value.</p>
+  <aside class="notes">Obiettivi: definire baseline, monitoraggio, controllo, scostamento e SAL; distinguere controllo preventivo, in itinere e consuntivo; misurare l'avanzamento; calcolare e interpretare PV, EV, AC, SV, CV, SPI, CPI, EAC. Durata indicativa: 2-3 ore. Serve LibreOffice Calc. Caso: l'e-commerce del Panificio Rossi (impresa di esempio) al giorno 10, con la curva S dei costi diretti costruita nella lezione sui costi (BAC 8 000 €, PV al giorno 10 = 4 680 €).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quando vi accorgete di essere indietro con lo studio?</h2></div>
+  <div class="poll" data-id="mc-indietro">
+    <ol><li>Con un piano settimanale, appena sgarro</li><li>Quando arriva il voto</li><li>La sera prima della verifica</li><li>Non succede mai</li></ol>
+  </div>
+  <aside class="notes">Di solito vincono B e C: ci si accorge del problema quando è troppo tardi per rimediare. Il monitoraggio serve proprio a vedere lo scostamento quando si può ancora correggere. Ricordare la frase di Brooks già vista nel deck gpoi-cpm: un progetto accumula un anno di ritardo "un giorno alla volta".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Definizioni preliminari</p><h2>Le parole del controllo</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Baseline</h3><p>Il piano approvato e "congelato" di tempi, costi e ambito: il metro con cui si misura tutto.</p></div>
+    <div class="card"><h3>Monitoraggio</h3><p>Raccogliere con regolarità i dati reali: ore lavorate, spese, attività finite.</p></div>
+    <div class="card soft"><h3>Controllo</h3><p>Confrontare reale e baseline, capire le cause e decidere le azioni correttive.</p></div>
+    <div class="card"><h3>SAL</h3><p>Stato di avanzamento lavori: la fotografia del progetto a una data, spesso legata ai pagamenti.</p></div>
+  </div>
+  <aside class="notes">Scostamento (varianza) = differenza tra reale e pianificato. Milestone = evento senza durata che segna un traguardo (fine analisi, messa online): i SAL vengono spesso fissati alle milestone. Nei contratti, anche pubblici, il SAL serve a pagare il fornitore in base al lavoro eseguito. La baseline si cambia solo con una richiesta di modifica approvata: altrimenti si "sposta il bersaglio" e il controllo non ha senso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il ciclo del controllo</h2></div>
+  <ol class="puzzle-ordina" data-id="mc-ciclo">
+    <li>Fissare la baseline approvata</li>
+    <li>Raccogliere i dati reali di tempi e costi</li>
+    <li>Confrontare reale e pianificato</li>
+    <li>Cercare le cause degli scostamenti</li>
+    <li>Decidere e applicare le azioni correttive</li>
+    <li>Aggiornare le previsioni e informare</li>
+  </ol>
+  <aside class="notes">Ordine come scritto, poi il ciclo ricomincia al SAL successivo. È lo stesso schema del ciclo PDCA di Deming (unità 8 e 9): pianifica, esegui, verifica, agisci. Domanda: che cosa succede se si salta il passo 4? Si applicano rimedi a caso (per esempio aggiungere persone, vedi Brooks).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tipologie di controllo</p><h2>Prima, durante, dopo</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Preventivo</h3><p>Prima di agire: si controllano requisiti, risorse e rischi per evitare gli errori.</p></div>
+    <div class="card fill"><h3>In itinere</h3><p>Durante: SAL periodici, confronto con la baseline, correzioni in corsa.</p></div>
+    <div class="card soft"><h3>Consuntivo</h3><p>Dopo: bilancio finale di tempi e costi, lezioni apprese per i prossimi progetti.</p></div>
+  </div>
+  <p>Si controllano <b>tempi</b>, <b>costi</b>, <b>qualità</b> e <b>ambito</b>: ogni modifica all'ambito passa da una richiesta di modifica approvata.</p>
+  <aside class="notes">Controllo preventivo = feed-forward, consuntivo = feedback. Il controllo dell'ambito evita lo "scope creep", la crescita silenziosa delle richieste ("già che ci siete, aggiungete anche…"): ogni richiesta del Sig. Rossi va valutata in tempi e costi e approvata prima di entrare nella baseline.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Che tipo di controllo è?</h2></div>
+  <div class="puzzle-categorie" data-id="mc-tipi" style="--cols:3">
+    <div class="cat"><h4>Preventivo</h4><ul><li>Revisione dei requisiti</li><li>Verifica delle competenze</li></ul></div>
+    <div class="cat"><h4>In itinere</h4><ul><li>Riunione di SAL del venerdì</li><li>Burndown aggiornato ogni giorno</li><li>Ore registrate sul timesheet</li></ul></div>
+    <div class="cat"><h4>Consuntivo</h4><ul><li>Costi finali contro budget</li><li>Riunione delle lezioni apprese</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Revisione dei requisiti e verifica delle competenze avvengono prima di sviluppare e assegnare. Burndown chart: grafico del lavoro rimanente usato in Scrum (deck agile-scrum-kanban). Timesheet: foglio ore con cui si raccoglie l'AC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Stato di avanzamento</p><h2>A che punto è un'attività?</h2></div>
+  <div class="cols-2 wide-left">
+    <ul class="points">
+      <li><b>0/100</b>: vale zero finché non è finita. Prudente.</li>
+      <li><b>50/50</b>: metà quando inizia, metà quando finisce.</li>
+      <li><b>Unità completate</b>: 30 prodotti caricati su 60 = 50%.</li>
+      <li><b>Milestone ponderate</b>: ogni traguardo vale una quota.</li>
+      <li><b>Percentuale stimata</b>: lo dice chi lavora. Rischiosa.</li>
+    </ul>
+    <div class="card soft"><h3>La sindrome del 90%</h3><p>"Sono al 90%" detto per tre settimane di fila. Le stime a occhio sono ottimiste: meglio criteri misurabili.</p></div>
+  </div>
+  <aside class="notes">Il metodo si sceglie all'inizio e resta lo stesso per tutto il progetto, altrimenti i SAL non sono confrontabili. Per attività brevi (1-2 settimane) 0/100 o 50/50 bastano; per attività lunghe servono unità o milestone. La "sindrome del 90%" è un fenomeno noto nella gestione dei progetti software: l'ultimo 10% (integrazione, bug) richiede molto più tempo del previsto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Al giorno 10 avevamo pianificato di spendere 4 680 €; ne abbiamo spesi 4 000. Siamo sotto budget?</h2></div>
+  <div class="poll" data-id="mc-sotto" data-tipo="quiz" data-risposta="D">
+    <ol><li>Sì, abbiamo risparmiato 680 €</li><li>No, siamo in ritardo di 680 €</li><li>Sì, del 15% circa</li><li>Non si può dire: manca il lavoro fatto</li></ol>
+    <p class="why">Spendere meno del previsto può voler dire risparmiare oppure aver fatto meno lavoro. Per saperlo serve un terzo numero: il valore del lavoro davvero completato, l'Earned Value.</p>
+  </div>
+  <aside class="notes">Il tranello è la A, la risposta "da bilancio di casa". Esempio: se il team ha lavorato poco perché era malato, avrà speso poco ma sarà molto indietro. Confrontare solo pianificato e speso è l'errore che l'Earned Value Management corregge: introduce la grandezza mancante.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Earned Value</p><h2>Tre numeri, tutti in euro</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><p class="num">PV</p><h3>Planned Value</h3><p>Quanto valeva il lavoro <b>pianificato</b> fino a oggi. È la curva S della baseline.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">EV</p><h3>Earned Value</h3><p>Quanto vale, a prezzi di budget, il lavoro <b>davvero fatto</b>: budget × % completata.</p></div>
+    <div class="card soft"><p class="num">AC</p><h3>Actual Cost</h3><p>Quanto abbiamo <b>speso davvero</b> per farlo, dal timesheet e dalle fatture.</p></div>
+  </div>
+  <p><b>BAC</b> (Budget at Completion) è il budget totale: il punto d'arrivo della curva PV.</p>
+  <aside class="notes">Nomi alternativi, ancora presenti in ProjectLibre e in molti libri: PV = BCWS (Budgeted Cost of Work Scheduled), EV = BCWP (Budgeted Cost of Work Performed), AC = ACWP (Actual Cost of Work Performed). Il trucco per ricordare: l'EV usa i prezzi del budget ma le quantità reali. Il metodo nasce negli anni Sessanta nei progetti della difesa statunitense ed è descritto nel PMBOK del PMI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Etichetta il grafico</p><h2>Fase 2 del Panificio: chi è chi?</h2></div>
+  <div class="puzzle-trascina" data-id="mc-grafico" data-extra="SPI|EAC">
+    <div class="row" style="align-items:flex-start">
+      <div style="position:relative;width:1110px;height:500px;flex:none">
+        <svg viewBox="0 0 1110 500" width="1110" height="500" font-family="DM Sans, system-ui, sans-serif" role="img" aria-label="Grafico Earned Value con tre curve da etichettare">
+          <line x1="100" y1="60" x2="1000" y2="60" stroke="#596179" stroke-width="3" stroke-dasharray="12 10"/>
+          <line x1="100" y1="460" x2="1010" y2="460" stroke="#172033" stroke-width="3"/><line x1="100" y1="40" x2="100" y2="460" stroke="#172033" stroke-width="3"/>
+          <g font-size="22" fill="#596179" text-anchor="end"><text x="88" y="468">0</text><text x="88" y="268">10 000</text><text x="88" y="68">20 000</text></g>
+          <g font-size="22" fill="#596179" text-anchor="middle"><text x="100" y="490">0</text><text x="550" y="490">5</text><text x="1000" y="490">10 settimane</text></g>
+          <polyline points="100,460 190,440 280,410 370,370 460,320 550,260 640,200 730,150 820,110 910,80 1000,60" fill="none" stroke="#9aa3b8" stroke-width="6" stroke-linejoin="round"/>
+          <polyline points="100,460 190,442 280,416 370,380 460,334 550,280" fill="none" stroke="#b42318" stroke-width="6" stroke-linejoin="round"/>
+          <polyline points="100,460 190,444 280,420 370,388 460,348 550,300" fill="none" stroke="#d0541f" stroke-width="6" stroke-linejoin="round" stroke-dasharray="2 0"/>
+          <line x1="550" y1="40" x2="550" y2="460" stroke="#172033" stroke-width="2" stroke-dasharray="6 8"/>
+          <text x="560" y="455" font-size="22" fill="#172033">oggi</text>
+          <line x1="552" y1="280" x2="600" y2="326" stroke="#b42318" stroke-width="3"/><line x1="552" y1="300" x2="600" y2="406" stroke="#d0541f" stroke-width="3"/>
+        </svg>
+        <span class="slot" data-risposta="BAC" style="position:absolute;left:120px;top:0"></span>
+        <span class="slot" data-risposta="PV" style="position:absolute;left:600px;top:92px"></span>
+        <span class="slot" data-risposta="AC" style="position:absolute;left:604px;top:300px"></span>
+        <span class="slot" data-risposta="EV" style="position:absolute;left:604px;top:380px"></span>
+      </div>
+      <div class="card soft" style="font-size:30px"><h3>Settimana 5</h3><p>Budget totale 20 000 €</p><p>Pianificato 10 000 €</p><p>Speso 9 000 €</p><p>Fatto: lavoro da 8 000 €</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: linea tratteggiata in alto = BAC (20 000); curva grigia che arriva al BAC = PV; curva rossa che si ferma a oggi a 9 000 = AC; curva arancione a 8 000 = EV. Distrattori: SPI ed EAC sono indici e previsioni, non curve. Progetto ipotetico: fase 2 del Panificio (app per gli ordini), 10 settimane, BAC 20 000 €. Questi numeri tornano nella slide successiva.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gli indicatori</p><h2>Scostamenti, indici e previsione</h2></div>
+  <table class="data compact">
+    <tr><th>Indicatore</th><th>Formula</th><th>Fase 2, settimana 5</th><th>Lettura</th></tr>
+    <tr><td>Schedule Variance</td><td class="mono">SV = EV − PV</td><td class="mono">8 000 − 10 000 = −2 000</td><td>in ritardo</td></tr>
+    <tr><td>Cost Variance</td><td class="mono">CV = EV − AC</td><td class="mono">8 000 − 9 000 = −1 000</td><td>sopra i costi</td></tr>
+    <tr><td>Schedule Performance Index</td><td class="mono">SPI = EV ÷ PV</td><td class="mono">0,80</td><td>80% del ritmo previsto</td></tr>
+    <tr><td>Cost Performance Index</td><td class="mono">CPI = EV ÷ AC</td><td class="mono">0,89</td><td>89 cent di lavoro per euro</td></tr>
+    <tr><td>Estimate at Completion</td><td class="mono">EAC = BAC ÷ CPI</td><td class="mono">22 500</td><td>costo finale previsto</td></tr>
+    <tr><td>Variance at Completion</td><td class="mono">VAC = BAC − EAC</td><td class="mono">−2 500</td><td>sforamento previsto</td></tr>
+  </table>
+  <p class="small">Regola: <b>negativo</b> o <b>minore di 1</b> è male. Positivo o maggiore di 1 è bene.</p>
+  <aside class="notes">Conti: CPI = 8 000 / 9 000 = 0,888… ≈ 0,89; EAC = 20 000 / (8 000/9 000) = 20 000 × 9 000 / 8 000 = 22 500 €; ETC (Estimate to Complete) = EAC − AC = 13 500 €. L'EAC = BAC/CPI presuppone che l'efficienza resti quella di oggi; se il problema è stato una tantum si usa EAC = AC + (BAC − EV) = 9 000 + 12 000 = 21 000. All'esame: saper leggere a parole gli indici vale più che ricordare le formule.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Che cosa ci dice l'indicatore?</h2></div>
+  <dl class="puzzle-abbina" data-id="mc-indici">
+    <dt>SPI &lt; 1</dt><dd>Si è fatto meno lavoro di quello pianificato</dd>
+    <dt>CPI &gt; 1</dt><dd>Il lavoro fatto vale più di quanto è costato</dd>
+    <dt>CV &lt; 0</dt><dd>Si è speso più del valore prodotto</dd>
+    <dt>SV = 0</dt><dd>L'avanzamento è in linea con il piano</dd>
+    <dt>EAC</dt><dd>La previsione del costo finale</dd>
+  </dl>
+  <aside class="notes">Soluzione come scritto. Far notare la frase per SPI: "meno lavoro di quello pianificato", non "il progetto finirà in ritardo": l'SPI non guarda il percorso critico (lo vedremo nel caso del Panificio, dove il ritardo di E è assorbito dal margine).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi le carte</p><h2>Dove sta il progetto nella matrice?</h2></div>
+  <div class="puzzle-categorie" data-id="mc-quadranti" style="--cols:2">
+    <div class="cat"><h4>In anticipo, sotto i costi</h4><ul><li>SPI 1,10 · CPI 1,05</li><li>SV +500 · CV +200</li></ul></div>
+    <div class="cat"><h4>In anticipo, sopra i costi</h4><ul><li>SPI 1,20 · CPI 0,85</li><li>SV +800 · CV −300</li></ul></div>
+    <div class="cat"><h4>In ritardo, sotto i costi</h4><ul><li>SPI 0,90 · CPI 1,15</li><li>SV −400 · CV +100</li></ul></div>
+    <div class="cat"><h4>In ritardo, sopra i costi</h4><ul><li>SPI 0,80 · CPI 0,89</li><li>SV −2 000 · CV −1 000</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto; l'ultima coppia è la fase 2 del Panificio. Discussione sul quadrante "in anticipo, sopra i costi": tipico quando si sono pagati straordinari per accelerare. "In ritardo, sotto i costi": spesso il team è sottodimensionato. A squadre, 4 minuti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Il CPI vale 0,80. Che cosa significa?</h2></div>
+  <div class="poll" data-id="mc-cpi" data-tipo="quiz" data-risposta="A">
+    <ol><li>Ogni euro speso ha prodotto 80 centesimi di lavoro</li><li>Abbiamo speso l'80% del budget</li><li>Il progetto è completo all'80%</li><li>Siamo in ritardo del 20%</li></ol>
+    <p class="why">CPI = EV ÷ AC: rapporta il valore prodotto alla spesa. Non dice quanto budget resta (B) né quanto lavoro è fatto (C), e non parla di tempi (D, che riguarda l'SPI).</p>
+  </div>
+  <aside class="notes">Errori frequenti: confondere CPI con percentuale di spesa (AC/BAC) o di completamento (EV/BAC). Con CPI 0,80 e BAC 8 000 € l'EAC è 10 000 €: è proprio il caso del Panificio che calcolate nel laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Misurare per governare</h2></div>
+  <figure class="citazione">
+    <blockquote>Non puoi controllare ciò che non puoi misurare.</blockquote>
+    <figcaption><b>Tom DeMarco</b>, ingegnere del software, in <i>Controlling Software Projects</i>, 1982</figcaption>
+  </figure>
+  <p class="lead">Nel 2009 lo stesso DeMarco scrisse che nei progetti software la misura conta meno del valore che il progetto crea. Chi ha ragione: il DeMarco del 1982 o quello del 2009?</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "You can't control what you can't measure", frase d'apertura del libro Controlling Software Projects: Management, Measurement and Estimation (1982). Nell'articolo "Software Engineering: An Idea Whose Time Has Come and Gone?" (IEEE Software, 2009) DeMarco ridimensiona la sua stessa affermazione: per i progetti che producono molto valore il controllo stretto dei costi è secondario. Discussione: tutte e due le cose sono vere; l'EV dice come sta andando, non se il progetto vale la pena.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>L'Earned Value del Panificio al giorno 10</h2>
+  <table class="data compact">
+    <tr><th>Attività</th><th>Budget €</th><th>% pianificata</th><th>% reale</th><th>Speso €</th></tr>
+    <tr><td>A Analisi requisiti</td><td class="mono">960</td><td class="mono">100</td><td class="mono">100</td><td class="mono">1 200</td></tr>
+    <tr><td>B Progettazione grafica</td><td class="mono">1 120</td><td class="mono">100</td><td class="mono">100</td><td class="mono">1 400</td></tr>
+    <tr><td>C Progettazione database</td><td class="mono">520</td><td class="mono">100</td><td class="mono">100</td><td class="mono">520</td></tr>
+    <tr><td>D Sviluppo front-end</td><td class="mono">1 560</td><td class="mono">50</td><td class="mono">50</td><td class="mono">780</td></tr>
+    <tr><td>E Sviluppo back-end</td><td class="mono">1 300</td><td class="mono">100</td><td class="mono">60</td><td class="mono">1 300</td></tr>
+  </table>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In Calc: PV = budget × % pianificata, EV = budget × % reale; somma PV, EV, AC.</li>
+      <li>Calcola SV, CV, SPI, CPI, EAC (BAC 8 000) e salva <b>ev-panificio.ods</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> PV 4 680 · EV 4 160 · AC 5 200 · CPI 0,80 · EAC 10 000.</div>
+  </div>
+  <aside class="notes">Soluzione completa: PV = 960 + 1 120 + 520 + 780 + 1 300 = 4 680 (coincide con la curva S); EV = 960 + 1 120 + 520 + 780 + 780 = 4 160; AC = 1 200 + 1 400 + 520 + 780 + 1 300 = 5 200. SV = −520; CV = −1 040; SPI = 0,889 ≈ 0,89; CPI = 0,80; EAC = 8 000 / 0,8 = 10 000; ETC = 4 800; VAC = −2 000. Le attività F-I non sono iniziate (PV, EV, AC = 0) e si possono omettere. Con % scritte come numeri (100, 50) la formula è =B2*C2/100.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>La riunione di SAL del giorno 10</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>Gruppi da 4: PM, programmatore back-end, analista, Sig. Rossi.</li>
+      <li>Partite dai numeri del laboratorio. Il back-end è al 60%: quando finirà E? E chi fa F, previsto ai giorni 11-12?</li>
+      <li>Decidete 3 azioni correttive, con chi e quando.</li>
+      <li>Scrivete il report di una pagina: stato, cause, azioni, nuova previsione. Salvate <b>sal-giorno10-gruppoN.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> il report cita SPI e CPI e li spiega a parole. La data di fine può restare il giorno 17: E ha 3 giorni di margine. Il costo no: 10 000 € contro 8 000 di budget diretto.</div>
+  </div>
+  <aside class="notes">Spunti: E finirà al giorno 12 (restano 2 giorni al ritmo pianificato); G inizia il giorno 14 dopo D, quindi la fine non slitta. Ma il programmatore back-end ai giorni 11-12 doveva fare F (livellata nella lezione sulle risorse): F va spostata ai giorni 13-14 (inizio al più tardi 14, margine quasi esaurito) o data a un'altra persona. Costi: l'EAC di 10 000 supera di 2 000 € il budget dei costi diretti, più della riserva per rischi di 1 000 € prevista nel preventivo: bisogna capire le cause (analisi e grafica più lunghe: requisiti poco chiari?) e parlarne con il cliente solo se cambia l'ambito. Il Sig. Rossi deve ricevere un'informazione chiara, non i dettagli interni: prepara la lezione sulla comunicazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida finale</p><h2>Apri il lucchetto del controllore</h2></div>
+  <div class="puzzle-codice" data-risposta="15000" data-aiuto="prima il CPI: 6 000 diviso 7 500">
+    <p>Un altro progetto: budget totale <b>12 000 €</b>. A metà strada il lavoro fatto vale <b>6 000 €</b> a prezzi di budget, ma ne sono stati spesi <b>7 500</b>.</p>
+    <p>Il codice è l'<b>EAC</b> in euro, se l'efficienza resta questa.</p>
+    <div class="premio"><b>Lucchetto aperto!</b> CPI = 6 000 ÷ 7 500 = 0,8; EAC = 12 000 ÷ 0,8 = 15 000 €.</div>
+  </div>
+  <aside class="notes">Codice 15000. Errori tipici: 9 600 (moltiplica per il CPI invece di dividere), 13 500 (somma AC e lavoro restante: è l'EAC "una tantum", AC + BAC − EV, valido se lo sforamento non si ripete: accettarlo nella discussione ma non apre il lucchetto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tecnologia e controllo</p><h2>Il cruscotto che si aggiorna da solo</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nei team di sviluppo le ore e le attività chiuse arrivano da strumenti come Jira o GitHub Projects, che disegnano da soli burndown e cruscotti. Alcuni strumenti usano l'AI per prevedere le date di fine o riassumere lo stato del progetto. Ma un modello è affidabile quanto i dati che riceve: se le ore non vengono registrate, il cruscotto mente con grande precisione.</p></div>
+  <div class="callout hl"><b>All'esame:</b> spiega l'EV con un grafico disegnato da te e un esempio numerico semplice, poi leggi gli indici a parole.</div>
+  <aside class="notes">Collegamento con informatica: un cruscotto di progetto è un'applicazione che interroga un database (timesheet, attività) e calcola indicatori come quelli di oggi. Proposta per chi è interessato: un piccolo script o un foglio collegato che calcola SPI e CPI. Evitare promesse sull'AI: le previsioni automatiche sono stime statistiche, vanno lette con le stesse cautele dell'EAC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="mc-uscita" data-extra="BAC|OBS">
+    <p>Il valore del lavoro pianificato fino a oggi è il <span class="slot" data-risposta="PV"></span>, quello del lavoro davvero fatto è l'<span class="slot" data-risposta="EV"></span>, la spesa reale è l'<span class="slot" data-risposta="AC"></span>. Se il <span class="slot" data-risposta="CPI"></span> è minore di 1 spendiamo troppo; la previsione del costo finale è l'<span class="slot" data-risposta="EAC"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: PV, EV, AC, CPI, EAC. Distrattori: BAC (il budget totale) e OBS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Baseline, monitoraggio, controllo, SAL</li>
+      <li>Controllo preventivo, in itinere, consuntivo</li>
+      <li>Avanzamento con criteri misurabili</li>
+    </ul>
+    <ul class="points">
+      <li>PV pianificato, EV fatto, AC speso</li>
+      <li>SPI e CPI: sotto 1 è male</li>
+      <li>EAC = BAC ÷ CPI</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: la gestione della comunicazione di progetto, cioè come dire al Sig. Rossi che il progetto costa di più senza perdere la sua fiducia.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

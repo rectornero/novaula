@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il document management · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="rosa">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 5</p>
+  <h1>Il document<br>management</h1>
+  <p class="lead">Acquisire, archiviare, ritrovare: come un'azienda governa migliaia di documenti e la conoscenza che ci sta dentro, a partire dai nomi dei file.</p>
+  <aside class="notes">Obiettivi: descrivere il ciclo di vita di un documento in un sistema di gestione documentale; distinguere contenuto e metadati; scegliere una regola di nomi per i file; distinguere conoscenza tacita ed esplicita. Durata: 2 ore. Riprende la lezione sulla codifica (codice, revisione, stato) e prepara la struttura delle cartelle del progetto di classe dell'Unità 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Ti chiedo un file che hai fatto in terza. Quanto ci metti a trovarlo?</h2></div>
+  <div class="poll" data-id="u5-trova-file">
+    <ol><li>Meno di un minuto</li><li>Qualche minuto, cercando un po'</li><li>So che c'è, ma non so dove</li><li>Credo di averlo perso</li></ol>
+  </div>
+  <aside class="notes">2 minuti. Chi risponde A: chiedere come fa (cartelle per anno e materia? ricerca per nome?). È esattamente ciò che fa un sistema di gestione documentale, su scala aziendale. Domanda di rilancio: e se il file l'avesse fatto un compagno che ha cambiato scuola? Ponte verso la conoscenza che se ne va con le persone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Gestione elettronica dei documenti</p><h2>Il ciclo di vita di un documento</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Acquisire</h3><p>Creare o scansionare, e registrare.</p></div>
+    <div class="card soft"><h3>Classificare</h3><p>Dare codice e metadati.</p></div>
+    <div class="card fill"><h3>Archiviare</h3><p>Salvare in modo sicuro, con le revisioni.</p></div>
+    <div class="card soft"><h3>Ritrovare</h3><p>Cercare, consultare, distribuire.</p></div>
+    <div class="card soft"><h3>Conservare</h3><p>Tenere a lungo, o scartare a norma.</p></div>
+  </div>
+  <div class="callout">Un <b>DMS</b> (Document Management System) è il software che governa questo ciclo: chi può leggere, chi può modificare, quale revisione è in vigore.</div>
+  <aside class="notes">Esempi di DMS: moduli documentali degli ERP, piattaforme come SharePoint o Alfresco, ma anche un Drive condiviso ben organizzato è una forma semplice di gestione documentale. Nelle pubbliche amministrazioni italiane la gestione documentale è regolata dal Codice dell'amministrazione digitale (D.Lgs. 82/2005) e dalle Linee guida AgID sulla formazione, gestione e conservazione dei documenti informatici. Non serve approfondire le norme: basta sapere che esistono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il verbale di collaudo, dalla firma all'archivio</h2></div>
+  <ol class="puzzle-ordina" data-id="u5-ciclo-dms">
+    <li>Il verbale firmato su carta viene scansionato</li>
+    <li>Il testo viene reso ricercabile con l'OCR</li>
+    <li>Si inseriscono codice, data, progetto e stato</li>
+    <li>Il file va nell'archivio del progetto, con i permessi giusti</li>
+    <li>Il cliente lo ritrova cercando "collaudo"</li>
+    <li>Finito il progetto, passa all'archivio di deposito</li>
+  </ol>
+  <aside class="notes">Ordine: scansione, OCR, metadati, archiviazione, ricerca, archivio di deposito. Senza OCR la ricerca per parola del passo 5 non funzionerebbe; senza metadati il documento sarebbe solo "scansione_0034.pdf". L'archivistica distingue archivio corrente (pratiche in corso), di deposito (pratiche chiuse ma ancora consultate) e storico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Acquisizione</p><h2>Nato digitale o portato in digitale</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Nato digitale</h3><ul class="points"><li>Scritto con Writer, Calc, un CAD, un gestionale</li><li>Firmato con firma digitale</li><li>Ricevuto via PEC o dal portale del cliente</li></ul></div>
+    <div class="card"><h3>Acquisito da carta</h3><ul class="points"><li>Scansionato a risoluzione adeguata</li><li><b>OCR</b>: il riconoscimento ottico trasforma l'immagine in testo</li><li>Controllato: l'OCR può sbagliare</li></ul></div>
+  </div>
+  <div class="callout">In entrambi i casi, al momento della registrazione il documento riceve i suoi <b>metadati</b>: le informazioni sul documento, non nel documento.</div>
+  <aside class="notes">OCR = Optical Character Recognition. Con i caratteri a mano l'OCR sbaglia di più; i numeri sbagliati in una tabella di misure sono pericolosi: per questo si controlla. PEC = posta elettronica certificata, molto usata in Italia per comunicazioni con valore legale. Metadati tipici: titolo, codice, autore, data, progetto, tipo, stato, parole chiave.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Contenuto o metadato?</h2></div>
+  <div class="puzzle-categorie" data-id="u5-metadati">
+    <div class="cat"><h4>Contenuto del documento</h4><ul><li>Il testo del verbale</li><li>La tabella dei costi</li><li>Il disegno della staffa</li><li>Le firme dei presenti</li></ul></div>
+    <div class="cat"><h4>Metadato</h4><ul><li>Data di registrazione</li><li>Nome dell'autore</li><li>Codice del progetto</li><li>Stato: approvato</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Le firme sono contenuto (stanno nel documento); l'autore registrato nel sistema è un metadato. Un caso da discutere: la data scritta in testa al verbale è contenuto, la data di registrazione nel DMS è un metadato, e possono essere diverse. Anche le foto del telefono hanno metadati (EXIF): data, modello, a volte la posizione GPS. Utile per parlare di privacy.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Scansioni un contratto di 40 pagine senza OCR. Che cosa ottieni?</h2></div>
+  <div class="poll" data-id="u5-ocr" data-tipo="quiz" data-risposta="C">
+    <ol><li>Un PDF in cui puoi cercare qualsiasi parola</li><li>Un file di testo modificabile con Writer</li><li>Un PDF che si legge bene ma in cui la ricerca non trova nulla</li><li>Un file illeggibile sugli altri computer</li></ol>
+    <p class="why">Senza OCR ogni pagina è solo un'immagine: per il computer non ci sono lettere, quindi la ricerca non trova nulla. Il documento resta leggibile da una persona.</p>
+  </div>
+  <aside class="notes">Molti scelgono A perché sono abituati ai PDF nati digitali, che contengono testo vero. Prova pratica in 30 secondi: aprire un PDF scansionato alla LIM e cercare una parola con Ctrl+F. Molti scanner e app per telefono fanno l'OCR in automatico: va controllato che sia attivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Archiviazione e conservazione</p><h2>Salvare non basta: bisogna poter ritrovare</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Struttura</h3><p>Cartelle per progetto e fase, uguali per tutti. I metadati permettono più viste.</p></div>
+    <div class="card soft"><h3>Sicurezza</h3><p>Permessi per ruolo e backup: per esempio la regola 3-2-1, tre copie, due supporti, una fuori sede.</p></div>
+    <div class="card soft"><h3>Durata</h3><p>Per conservare a lungo si usano formati stabili come il <b>PDF/A</b> (ISO 19005).</p></div>
+  </div>
+  <div class="callout"><b>All'esame</b>: se hai lavorato in gruppo in un PCTO, racconta come era organizzato l'archivio dei documenti e che cosa cambieresti. È un caso reale di document management.</div>
+  <aside class="notes">La regola 3-2-1 è una buona pratica diffusa, non una norma. PDF/A è la famiglia di norme ISO 19005 per l'archiviazione a lungo termine: incorpora i caratteri, vieta contenuti esterni o eseguibili. In Italia la conservazione dei documenti informatici con valore legale segue le Linee guida AgID e si appoggia a conservatori qualificati. Chiedere: in che formato salvereste la relazione finale da tenere dieci anni?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina le etichette</p><h2>Anatomia del nome di un file</h2></div>
+  <div class="puzzle-trascina" data-id="u5-nome-file" data-extra="Autore|Cartella">
+    <div class="formula" style="font-size:50px;padding:24px 40px"><small>Il nome completo, tutto attaccato</small>2026-10-26_NQ-VRB-004_riunione-tecnica_<span class="hl">rev1</span>.pdf</div>
+    <div class="row" style="gap:6px;align-items:flex-end;font-family:var(--mono);font-size:40px;font-weight:600">
+      <div class="stack" style="gap:16px;align-items:center"><span class="slot" data-risposta="Data"></span><span class="card soft" style="padding:18px 22px">2026-10-26</span></div>
+      <span style="padding-bottom:22px">_</span>
+      <div class="stack" style="gap:16px;align-items:center"><span class="slot" data-risposta="Codice"></span><span class="card soft" style="padding:18px 22px">NQ-VRB-004</span></div>
+      <span style="padding-bottom:22px">_</span>
+      <div class="stack" style="gap:16px;align-items:center"><span class="slot" data-risposta="Descrizione"></span><span class="card soft" style="padding:18px 22px">riunione-tecnica</span></div>
+      <span style="padding-bottom:22px">_</span>
+      <div class="stack" style="gap:16px;align-items:center"><span class="slot" data-risposta="Revisione"></span><span class="card fill" style="padding:18px 22px">rev1</span></div>
+      <div class="stack" style="gap:16px;align-items:center"><span class="slot" data-risposta="Formato"></span><span class="card soft" style="padding:18px 22px">.pdf</span></div>
+    </div>
+    <p class="small muted">Una regola di nomi possibile: data, codice, descrizione breve, revisione. Senza spazi né accenti.</p>
+  </div>
+  <aside class="notes">Soluzione: Data, Codice, Descrizione, Revisione, Formato. Distrattori: Autore (sta nei metadati, non serve nel nome) e Cartella. Far notare che il nome contiene già quasi tutto il cartiglio: anche fuori dal DMS (allegato a una mail) il file resta riconoscibile.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Nomi dei documenti</p><h2>Sei regole per nomi che non tradiscono</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Data nel formato <b>AAAA-MM-GG</b> (ISO 8601): ordine alfabetico = ordine cronologico</li>
+      <li>Zeri iniziali: 001, 002… 010, così 010 non finisce prima di 002</li>
+      <li>Niente spazi, accenti, apostrofi: usa trattini o trattini bassi</li>
+    </ul>
+    <ul class="points">
+      <li>Descrizione breve e minuscola: <code>riunione-tecnica</code></li>
+      <li>Revisione nel nome: <code>rev0</code>, <code>rev1</code></li>
+      <li>Mai "definitivo", "nuovo", "ultimo": domani non lo saranno più</li>
+    </ul>
+  </div>
+  <div class="callout hl">La regola si scrive una volta, in una procedura, e la usano tutti: un nome perfetto ma diverso da quello dei colleghi è comunque un problema.</div>
+  <aside class="notes">Spazi e accenti creano problemi negli indirizzi web, nei programmi da riga di comando, nel passaggio tra sistemi operativi diversi. Collegare al quiz sul versionamento della lezione precedente: "v1.10" prima di "v1.9" in ordine alfabetico. La regola di nomi del progetto di classe dell'Unità 6 sarà proprio questa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Quale formato mette in ordine cronologico i file, se li ordini per nome?</h2></div>
+  <div class="poll" data-id="u5-data-ordine" data-tipo="quiz" data-risposta="B">
+    <ol><li>26-10-2026_verbale</li><li>2026-10-26_verbale</li><li>26ott2026_verbale</li><li>Tutti, il computer riconosce le date</li></ol>
+    <p class="why">L'ordinamento per nome confronta i caratteri da sinistra: con anno, mese e giorno in quest'ordine, l'ordine alfabetico coincide con quello cronologico. Con il giorno davanti, il 01 di ogni mese finisce prima del 26 di quello precedente.</p>
+  </div>
+  <aside class="notes">La A sembra "giusta" perché è il formato italiano. Esempio alla lavagna: 01-11-2026 viene prima di 26-10-2026 in ordine alfabetico, anche se è successivo. La D è falsa: Esplora file ordina i nomi come testo (con qualche accorgimento per i numeri), non riconosce le date scritte nel nome.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Metti ordine nei file del progetto</h2>
+  <div class="cols-2" style="gap:40px">
+    <div class="stack">
+      <ol class="steps small">
+        <li>Crea la cartella <b>NQ</b> con sottocartelle 01_avvio, 02_pianificazione, 03_realizzazione, 04_chiusura.</li>
+        <li>Crea cinque file vuoti con i nomi disordinati della tabella.</li>
+        <li>Rinominali con la regola data_codice_descrizione_rev e mettili nella fase giusta.</li>
+        <li>Fai uno screenshot di ogni cartella aperta e consegna <b>NQ-archivio.pdf</b>.</li>
+      </ol>
+      <div class="check"><b>Controllo:</b> in 02_pianificazione i requisiti del 12 ottobre vengono prima del Gantt del 19.</div>
+    </div>
+    <table class="data compact">
+      <tr><th>Nome disordinato</th><th>Data</th><th>Codice, rev.</th></tr>
+      <tr><td>verbale primo incontro</td><td>05/10</td><td class="mono">VRB-001, 0</td></tr>
+      <tr><td>requisiti NUOVA</td><td>12/10</td><td class="mono">SPC-001, 2</td></tr>
+      <tr><td>Gantt DEF</td><td>19/10</td><td class="mono">PRG-002, 1</td></tr>
+      <tr><td>test login ok</td><td>16/11</td><td class="mono">TST-001, 0</td></tr>
+      <tr><td>relazione finale bozza</td><td>14/12</td><td class="mono">REL-001, 0</td></tr>
+    </table>
+  </div>
+  <aside class="notes">Anno di tutte le date: 2026; codici con prefisso NQ-. Nomi attesi (estensione libera): 01_avvio: 2026-10-05_NQ-VRB-001_kickoff_rev0; 02_pianificazione: 2026-10-12_NQ-SPC-001_requisiti_rev2 e 2026-10-19_NQ-PRG-002_gantt_rev1; 03_realizzazione: 2026-11-16_NQ-TST-001_test-login_rev0; 04_chiusura: 2026-12-14_NQ-REL-001_relazione-finale_rev0. La parola "bozza" non va nel nome: è uno stato, va nei metadati o nel cartiglio. Lo screenshot si fa con Win+Maiusc+S; il PDF si crea incollando le immagini in Writer ed esportando.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La conoscenza in azienda</p><h2>Non tutto quello che si sa è scritto</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Conoscenza esplicita</h3><p>Sta nei documenti: procedure, manuali, disegni, wiki. Si archivia e si copia facilmente.</p></div>
+    <div class="card fill"><h3>Conoscenza tacita</h3><p>Sta nelle persone: esperienza, intuito, "trucchi del mestiere". Se ne va con chi la possiede.</p></div>
+  </div>
+  <figure class="citazione">
+    <blockquote>Sappiamo più di quanto sappiamo dire.</blockquote>
+    <figcaption><b>Michael Polanyi</b>, chimico e filosofo, «The Tacit Dimension», 1966</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra: "We can know more than we can tell" (Polanyi, The Tacit Dimension, 1966, cap. 1). Esempio: andare in bicicletta, riconoscere un volto. Il knowledge management cerca di trasformare la conoscenza tacita in esplicita quando serve, e di farla circolare. Ikujiro Nonaka e Hirotaka Takeuchi (The Knowledge-Creating Company, 1995) hanno descritto quattro passaggi: li vediamo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Tacita o esplicita?</h2></div>
+  <div class="puzzle-categorie" data-id="u5-tacita">
+    <div class="cat"><h4>Esplicita</h4><ul><li>Procedura di installazione</li><li>Wiki del reparto IT</li><li>Manuale del gestionale</li><li>Verbale della riunione</li></ul></div>
+    <div class="cat"><h4>Tacita</h4><ul><li>Capire al volo un cliente arrabbiato</li><li>Sentire un guasto dal rumore</li><li>Il colpo d'occhio del saldatore</li><li>Guidare una riunione difficile</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione nell'ordine scritto. Discussione: si può rendere esplicito "sentire un guasto dal rumore"? In parte sì: un tecnico può descrivere i suoni tipici, oppure si registrano e si analizzano i dati delle vibrazioni (manutenzione predittiva, Unità 7). La parte che resta tacita si trasmette affiancando le persone.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le quattro strade della conoscenza (Nonaka e Takeuchi)</h2></div>
+  <dl class="puzzle-abbina" data-id="u5-seci">
+    <dt>Socializzazione</dt><dd>L'apprendista impara lavorando accanto all'esperto</dd>
+    <dt>Esternalizzazione</dt><dd>L'esperto mette per iscritto i suoi trucchi</dd>
+    <dt>Combinazione</dt><dd>Tre manuali diversi diventano una sola wiki</dd>
+    <dt>Interiorizzazione</dt><dd>Il nuovo assunto legge la guida e con la pratica la fa sua</dd>
+  </dl>
+  <aside class="notes">Modello SECI (1995). Da tacita a tacita: socializzazione; da tacita a esplicita: esternalizzazione; da esplicita a esplicita: combinazione; da esplicita a tacita: interiorizzazione. Il document management lavora soprattutto su esternalizzazione e combinazione. Il PCTO è un esempio di socializzazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ponte con l'oggi</p><h2>Un assistente che ha letto tutti i documenti</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Ricerca con l'AI nei documenti aziendali</h3><p>Molte aziende collegano un assistente AI al proprio archivio: la domanda "qual è la coppia di serraggio della staffa?" non cerca una parola, ma recupera i passaggi pertinenti dei documenti e risponde citandoli (si chiama <b>RAG</b>, generazione aumentata dal recupero).</p></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Funziona se…</h3><p>i documenti sono leggibili (OCR), con metadati, e solo le revisioni in vigore sono indicizzate.</p></div>
+    <div class="card bad"><h3>Sbaglia se…</h3><p>trova la Rev. 0 superata e la presenta come vera. L'AI eredita il disordine dell'archivio.</p></div>
+  </div>
+  <aside class="notes">RAG = Retrieval-Augmented Generation. Messaggio chiave: l'AI non sostituisce il document management, lo rende più importante. Una risposta va sempre verificata sul documento citato. Domanda: che cosa dovrebbe fare il sistema quando trova due revisioni diverse dello stesso documento? (Usare quella "approvata e in vigore", il che richiede lo stato nei metadati.)</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 30 minuti</span></p>
+  <h2>Dalla testa alla carta</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In coppia. A sceglie una cosa che sa fare bene al computer (un'impostazione, un trucco di Calc, un comando).</li>
+      <li>A la spiega a voce per 5 minuti, senza scrivere. B prende appunti.</li>
+      <li>B scrive una procedura di una pagina, con codice <b>KB-001</b>, titolo, autore, data, parole chiave.</li>
+      <li>A la prova seguendo solo il testo e segna i punti mancanti; B corregge e passa a rev1.</li>
+      <li>Consegnate <b>AAAA-MM-GG_KB-001_titolo_rev1.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> la procedura ha passi numerati e ogni passo ha un risultato visibile. La rev1 contiene almeno una correzione nata dalla prova di A: è l'esternalizzazione in pratica.</div>
+  </div>
+  <aside class="notes">KB = knowledge base. Se resta tempo, invertire i ruoli. Sostituire AAAA-MM-GG e "titolo" con i valori veri (per esempio 2026-11-03_KB-001_stampa-pdf-a_rev1.odt). Raccogliere le procedure in una cartella condivisa della classe: è la prima wiki di 5F, utile anche per l'Unità 6. Valutazione: chiarezza dei passi, metadati completi, rispetto della regola di nomi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u5-uscita-dms" data-extra="esplicita|backup">
+    <p>Autore, data e progetto registrati nel sistema sono i <span class="slot" data-risposta="metadati"></span> del documento.</p>
+    <p>Per cercare parole in un documento scansionato serve l'<span class="slot" data-risposta="OCR"></span>.</p>
+    <p>Nei nomi dei file la data si scrive <span class="slot" data-risposta="AAAA-MM-GG"></span>; per conservare a lungo si usa il <span class="slot" data-risposta="PDF/A"></span>.</p>
+    <p>L'esperienza non scritta delle persone è conoscenza <span class="slot" data-risposta="tacita"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: metadati, OCR, AAAA-MM-GG, PDF/A, tacita. Distrattori: esplicita, backup.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Ciclo: acquisire, classificare, archiviare, ritrovare, conservare</li>
+      <li>OCR per i documenti di carta, metadati per tutti</li>
+      <li>Backup, permessi e formati stabili come il PDF/A</li>
+    </ul>
+    <ul class="points">
+      <li>Nomi: AAAA-MM-GG, codice, descrizione, revisione</li>
+      <li>Conoscenza esplicita e tacita, modello SECI</li>
+      <li>L'AI che cerca nei documenti eredita il loro ordine</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: i manuali e come si scrivono buone istruzioni. Le procedure KB-001 della classe saranno il punto di partenza.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

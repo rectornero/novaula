@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Produzione e qualità · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="verde">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 8</p>
+  <h1>Produzione<br>e qualità</h1>
+  <p class="lead">Cinque strumenti per costruire la qualità dentro Verdino invece di cercare i difetti alla fine: PDCA, gestione delle modifiche, QFD, FMEA e DFM/A.</p>
+  <aside class="notes">Obiettivi: applicare il ciclo PDCA a un problema reale; conoscere il processo di gestione delle modifiche; leggere una casa della qualità (QFD); compilare una FMEA con l'indice di priorità di rischio; riconoscere le regole del DFM/A. Caso guida: Verdino e la perdita d'acqua dal tappo emersa nel beta test. Durata indicativa: 3 ore (si può dividere in due lezioni: PDCA, modifiche e QFD; poi FMEA e DFM/A).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Per avere vasi senza difetti, che cosa conviene di più?</h2></div>
+  <div class="poll" data-id="u8-ispezione">
+    <ol><li>Controllare tutti i vasi alla fine della linea</li><li>Progettare vaso e montaggio in modo che sia difficile sbagliare</li><li>Pagare di più gli operatori che sbagliano meno</li><li>Comprare componenti più costosi</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta del tutto sbagliata, ma la B è il cuore della lezione: la qualità si costruisce in progettazione e nel processo, non si aggiunge alla fine con le ispezioni. Riprendere il risultato dopo la citazione di Deming. La C apre una discussione: Deming era contrario a premiare o punire i singoli per problemi che dipendono dal sistema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il ciclo PDCA</p><h2>Migliorare un giro alla volta</h2></div>
+  <div class="cols-4">
+    <div class="card soft"><p class="num">P</p><h3>Plan</h3><p class="small">Capire il problema e la causa, fissare un obiettivo misurabile, pianificare.</p></div>
+    <div class="card soft"><p class="num">D</p><h3>Do</h3><p class="small">Provare la soluzione in piccolo.</p></div>
+    <div class="card soft"><p class="num">C</p><h3>Check</h3><p class="small">Misurare: l'obiettivo è raggiunto?</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">A</p><h3>Act</h3><p class="small">Se funziona, renderla standard; se no, ricominciare.</p></div>
+  </div>
+  <div class="callout">Il ciclo non finisce: dopo Act si riparte con un nuovo Plan. È il <b>miglioramento continuo</b>.</div>
+  <aside class="notes">In italiano: pianificare, fare, verificare, agire. Il PDCA è alla base delle norme ISO sui sistemi di gestione (unità 9: ISO 9001:2015) e del kaizen giapponese (unità 2: lean production). Errore tipico: saltare Check, cioè applicare una soluzione senza misurare se ha funzionato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il PDCA su Verdino</p><h2>Il tappo perde: trascina ogni fase nella ruota</h2></div>
+  <div class="puzzle-trascina" data-id="u8-pdca" data-extra="Design">
+    <div style="position:relative;width:1660px;height:480px;font-size:30px">
+      <svg width="480" height="480" viewBox="0 0 480 480" style="position:absolute;left:0;top:0" aria-hidden="true">
+        <circle cx="240" cy="240" r="228" fill="#daf2e8" stroke="#11845f" stroke-width="6"/>
+        <line x1="240" y1="12" x2="240" y2="468" stroke="#11845f" stroke-width="5"/>
+        <line x1="12" y1="240" x2="468" y2="240" stroke="#11845f" stroke-width="5"/>
+        <g font-family="Bricolage Grotesque, sans-serif" font-weight="750" font-size="40" fill="#11845f">
+          <text x="300" y="215">1</text><text x="300" y="295">2</text><text x="160" y="295">3</text><text x="160" y="215">4</text>
+        </g>
+      </svg>
+      <span class="slot" data-risposta="Plan" style="position:absolute;left:262px;top:96px"></span>
+      <span class="slot" data-risposta="Do" style="position:absolute;left:262px;top:330px"></span>
+      <span class="slot" data-risposta="Check" style="position:absolute;left:46px;top:330px"></span>
+      <span class="slot" data-risposta="Act" style="position:absolute;left:66px;top:96px"></span>
+      <div class="stack" style="position:absolute;left:560px;top:20px;width:1100px;font-size:32px;gap:26px">
+        <p><b>1</b> · Si cerca la causa (guarnizione schiacciata) e si fissa l'obiettivo: zero perdite su 200 vasi.</p>
+        <p><b>2</b> · Si monta una guarnizione più spessa sui 200 vasi della preserie.</p>
+        <p><b>3</b> · Si fa la prova di tenuta: quante perdite? Zero: obiettivo raggiunto.</p>
+        <p><b>4</b> · Si aggiornano disegno, distinta e istruzione operativa: la nuova guarnizione diventa lo standard.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Soluzione: 1 Plan, 2 Do, 3 Check, 4 Act (la ruota gira in senso orario). Distrattore: Design. Se la prova avesse mostrato ancora 3 perdite su 200, in Act si sarebbe deciso di ripartire con un nuovo Plan (altra causa possibile: il filetto del tappo). Il punto 4 introduce la gestione delle modifiche.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Chi ha ideato il ciclo da cui nasce il PDCA?</h2></div>
+  <div class="poll" data-id="u8-shewhart" data-tipo="quiz" data-risposta="C">
+    <ol><li>W. Edwards Deming</li><li>La Toyota, negli anni Settanta</li><li>Walter Shewhart, statistico dei Bell Labs</li><li>L'ISO, con la norma 9001</li></ol>
+    <p class="why">Il ciclo nasce da Walter Shewhart negli anni Trenta. Deming lo diffuse in Giappone dal 1950, tanto che si chiama anche "ciclo di Deming"; lui stesso preferiva la versione PDSA, con Study al posto di Check.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono Deming: è il classico caso in cui il nome popolare di un'idea non coincide con chi l'ha proposta per primo. Shewhart, ai Bell Telephone Laboratories, inventò anche le carte di controllo statistico. Deming spiegava di preferire "Study" perché "Check" fa pensare a un semplice controllo, mentre la fase richiede di studiare i risultati e imparare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>La qualità non si aggiunge alla fine</h2></div>
+  <figure class="citazione">
+    <blockquote>Smettete di dipendere dall'ispezione per ottenere la qualità. Costruite la qualità nel prodotto fin dall'inizio.</blockquote>
+    <figcaption><b>W. Edwards Deming</b>, statistico e consulente di management, terzo dei suoi 14 punti, Out of the Crisis, 1986</figcaption>
+  </figure>
+  <aside class="notes">Traduzione nostra e leggermente abbreviata dall'inglese: "Cease dependence on inspection to achieve quality. Eliminate the need for inspection on a mass basis by building quality into the product in the first place." Deming (1900-1993) lavorò in Giappone dal 1950 ed è considerato uno dei padri della qualità moderna. Riprendere il sondaggio iniziale: l'opzione B era la sua. Non vuol dire abolire i controlli (Verdino ha un collaudo finale), ma non affidare la qualità solo a quelli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La gestione delle modifiche</p><h2>Cambiare un pezzo senza creare caos</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Una modifica al prodotto tocca disegni, distinta base, ciclo di lavorazione, istruzioni, scorte di magazzino, fornitori e documenti per i clienti.</p>
+      <p class="muted">Per questo ogni modifica segue una procedura scritta, con una richiesta, una valutazione, un'approvazione e una nuova revisione dei documenti.</p>
+    </div>
+    <div class="card night"><h3>Domande prima di dire sì</h3><ul class="points"><li>Quanto costa?</li><li>Che cosa facciamo dei pezzi vecchi?</li><li>Da quale vaso si cambia?</li></ul></div>
+  </div>
+  <aside class="notes">In inglese si parla di Engineering Change Request (richiesta) ed Engineering Change Order (ordine di modifica). Esempio Verdino: con la nuova guarnizione, le 500 guarnizioni vecchie in magazzino si usano fino a esaurimento o si buttano? Dal vaso numero quanti si monta la nuova? Collegamento con l'unità 5: versioni e revisioni dei documenti, controllo dello stato. È anche un requisito della ISO 9001 (controllo delle modifiche).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine la procedura di modifica</h2></div>
+  <ol class="puzzle-ordina" data-id="u8-modifica">
+    <li>Si apre una richiesta di modifica</li>
+    <li>Si valuta l'impatto su costi, tempi e scorte</li>
+    <li>Il responsabile approva o respinge</li>
+    <li>Si aggiorna il disegno con una nuova revisione</li>
+    <li>Si aggiornano distinta, ciclo e istruzioni</li>
+    <li>Si comunica da quale pezzo parte la modifica</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Errore tipico: aggiornare il disegno prima dell'approvazione. Collegamento con l'informatica: è lo stesso flusso di una pull request (richiesta, revisione, approvazione, merge, rilascio con numero di versione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il QFD</p><h2>La casa della qualità: dalla voce del cliente ai numeri</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Il <b>Quality Function Deployment</b> collega i bisogni del cliente (<i>che cosa</i>) alle caratteristiche tecniche (<i>come</i>) in una matrice.</p>
+      <ul class="points">
+        <li>Righe: i bisogni con la loro importanza</li>
+        <li>Colonne: le caratteristiche misurabili</li>
+        <li>Celle: relazione forte 9, media 3, debole 1</li>
+        <li>Tetto: come le caratteristiche si influenzano</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Risultato</h3><p>Il punteggio di ogni colonna dice su quale caratteristica tecnica concentrare tempo e denaro.</p></div>
+  </div>
+  <aside class="notes">Il QFD nasce in Giappone con Yoji Akao (fine anni Sessanta); la forma a "casa" viene dalla sua applicazione nei cantieri navali Mitsubishi di Kobe negli anni Settanta. La scala 9-3-1 è la più usata. Collegamento con la lezione sulla pianificazione: l'importanza dei bisogni viene dal questionario; e con il concept: le caratteristiche diventano le specifiche obiettivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Apri il lucchetto con la casa della qualità</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Bisogno</th><th>Imp.</th><th>Volume serbatoio</th><th>Rumore pompa</th><th>Passi di setup</th></tr>
+      <tr><td>Lunga autonomia</td><td class="mono">5</td><td class="mono">9</td><td class="mono">0</td><td class="mono">0</td></tr>
+      <tr><td>Silenzioso</td><td class="mono">3</td><td class="mono">3</td><td class="mono">9</td><td class="mono">0</td></tr>
+      <tr><td>Facile da usare</td><td class="mono">4</td><td class="mono">1</td><td class="mono">0</td><td class="mono">9</td></tr>
+    </table>
+    <div class="puzzle-codice" data-risposta="58" data-aiuto="5 × 9 + 3 × 3 + 4 × 1">
+      <p>Punteggio di una colonna = somma di importanza × relazione. Qual è il punteggio del <b>volume del serbatoio</b>?</p>
+      <div class="premio"><b>Aperto!</b> 45 + 9 + 4 = 58. Rumore 27, setup 36: il serbatoio è la priorità.</div>
+    </div>
+  </div>
+  <aside class="notes">Codice 58. Calcoli: serbatoio 5×9 + 3×3 + 4×1 = 58; rumore 3×9 = 27; passi di setup 4×9 = 36. Relazioni discutibili da far argomentare: un serbatoio più grande fa partire la pompa meno spesso (relazione media con il silenzio) e si riempie meno spesso (relazione debole con la facilità d'uso). Valori ipotetici.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La FMEA</p><h2>Che cosa può andare storto, e quanto è grave?</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>La <b>Failure Mode and Effects Analysis</b> elenca per ogni parte i modi di guasto, i loro effetti e le cause, e dà tre voti da 1 a 10.</p>
+      <div class="formula" style="font-size:48px"><small>Indice di priorità di rischio</small>RPN = <span class="hl">S</span> × <span class="hl">O</span> × <span class="hl">D</span><small>gravità · probabilità · difficoltà di rilevarlo</small></div>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un modello linguistico può proporre modi di guasto partendo da FMEA di prodotti simili: un buon punto di partenza, mai l'ultima parola. Se l'AI entra nei processi aziendali, la norma <b>ISO/IEC 42001:2023</b> descrive un sistema di gestione dell'AI, con lo stesso spirito PDCA delle altre norme ISO.</p></div>
+  </div>
+  <aside class="notes">S = severity (gravità dell'effetto), O = occurrence (probabilità che la causa si verifichi), D = detection (10 = quasi impossibile da rilevare prima che arrivi al cliente). L'RPN va da 1 a 1000. Il manuale AIAG-VDA del 2019, usato nell'automotive, ha sostituito l'RPN con una tabella di priorità d'azione (Action Priority) proprio per i limiti che vedremo nel quiz. La FMEA nasce in ambito militare statunitense alla fine degli anni Quaranta. ISO/IEC 42001 è stata pubblicata a dicembre 2023.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Modo di guasto, effetto o causa?</h2></div>
+  <div class="puzzle-categorie" data-id="u8-fmea-colonne" style="--cols:3">
+    <div class="cat"><h4>Modo di guasto</h4><ul><li>La pompa non parte</li><li>Il tappo perde acqua</li></ul></div>
+    <div class="cat"><h4>Effetto</h4><ul><li>La pianta secca</li><li>Il mobile si macchia</li></ul></div>
+    <div class="cat"><h4>Causa</h4><ul><li>Calcare nella pompa</li><li>Guarnizione schiacciata</li><li>Vano scheda non stagno</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come nei contenitori. Regola pratica: il modo di guasto è come il pezzo smette di fare la sua funzione; l'effetto è ciò che vede il cliente; la causa è il perché. Coppie: calcare → la pompa non parte → la pianta secca; guarnizione schiacciata → il tappo perde → il mobile si macchia. Il vano non stagno è la causa di un altro guasto (cortocircuito), che ritroviamo nel laboratorio.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La FMEA di Verdino in Calc</h2>
+  <table class="data compact">
+    <tr><th>Modo di guasto</th><th>Effetto</th><th>Causa</th><th>S</th><th>O</th><th>D</th></tr>
+    <tr><td>Perdita dal tappo</td><td>Mobile bagnato</td><td>Guarnizione schiacciata</td><td class="mono">6</td><td class="mono">5</td><td class="mono">3</td></tr>
+    <tr><td>Pompa bloccata</td><td>Pianta non annaffiata</td><td>Calcare</td><td class="mono">7</td><td class="mono">3</td><td class="mono">4</td></tr>
+    <tr><td>Sensore corroso</td><td>Troppa acqua</td><td>Elettrodi esposti</td><td class="mono">6</td><td class="mono">2</td><td class="mono">6</td></tr>
+    <tr><td>Cortocircuito</td><td>Guasto e surriscaldamento</td><td>Vano non stagno</td><td class="mono">9</td><td class="mono">2</td><td class="mono">5</td></tr>
+    <tr><td>App non si collega</td><td>Niente notifiche</td><td>Rete solo a 5 GHz</td><td class="mono">4</td><td class="mono">6</td><td class="mono">2</td></tr>
+  </table>
+  <div class="cols-2 wide-left">
+    <p class="small">Copia la tabella in A1:F6. In G2 <code>=D2*E2*F2</code> fino a G6; in H2 <code>=SE(D2&gt;=9;"PRIORITÀ";"")</code>. Ordina per RPN decrescente. Salva <b>fmea-verdino.ods</b> e consegna.</p>
+    <div class="check small"><b>Controllo:</b> RPN 90, 90, 84, 72, 48; solo il cortocircuito è segnato PRIORITÀ.</div>
+  </div>
+  <aside class="notes">Calcoli: perdita 6×5×3 = 90; pompa 7×3×4 = 84; sensore 6×2×6 = 72; cortocircuito 9×2×5 = 90; app 4×6×2 = 48. Ordinamento: Dati, Ordina, colonna G decrescente. I due 90 a pari merito sono il punto chiave: hanno lo stesso RPN ma il cortocircuito ha gravità 9 (sicurezza), quindi va affrontato per primo. Le schede ESP32 e simili usano il Wi-Fi a 2,4 GHz: da qui la causa dell'ultima riga. Azioni correttive: guarnizione nuova (già fatta col PDCA), filtro sul pescaggio, sensore capacitivo con elettrodi rivestiti, vano stagno con guarnizione, guida all'app.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Due rischi: quale affronti per primo?</h2></div>
+  <div class="poll" data-id="u8-rpn" data-tipo="quiz" data-risposta="A">
+    <ol><li>S = 10, O = 2, D = 5: RPN 100, rischio di scossa</li><li>S = 2, O = 10, D = 6: RPN 120, graffio estetico</li><li>Quello con RPN più alto, sempre</li><li>Si estrae a sorte: hanno RPN simile</li></ol>
+    <p class="why">L'RPN da solo inganna: un graffio frequente può superare un rischio per la sicurezza. Quando la gravità è 9 o 10, l'azione è prioritaria qualunque sia il prodotto dei tre numeri.</p>
+  </div>
+  <aside class="notes">Il trabocchetto: B e C seguono la regola meccanica "RPN più alto prima". È proprio il limite che ha portato il manuale AIAG-VDA (2019) a introdurre la priorità d'azione, che dà più peso alla gravità. Collegamento con l'unità 10 (sicurezza) e con la matrice probabilità/impatto del risk management dell'unità 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il DFM/A</p><h2>Progettare per fabbricare e montare</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Meno pezzi</b>: ogni pezzo in meno è un codice, un ordine e un montaggio in meno</li>
+      <li><b>Incastri a scatto</b> al posto di viti, dove possibile</li>
+      <li><b>Montaggio dall'alto</b>, senza girare il pezzo</li>
+      <li><b>Un solo verso</b> possibile: impossibile montare al contrario</li>
+    </ul>
+    <div class="card soft"><h3>Design for Manufacturing and Assembly</h3><p>Metodo diffuso negli anni Ottanta da Geoffrey Boothroyd e Peter Dewhurst: si valuta ogni pezzo chiedendosi se deve davvero essere separato dagli altri.</p></div>
+  </div>
+  <aside class="notes">Le tre domande classiche per decidere se un pezzo deve restare separato: si muove rispetto agli altri? Deve essere di un materiale diverso? Deve potersi smontare per manutenzione o montaggio? Se la risposta è no a tutte, il pezzo si può unire a un altro. Per Verdino la pompa resta separata (manutenzione), ma il coperchio del vano e la sua guarnizione potrebbero diventare un pezzo unico stampato in due materiali. Il "un solo verso" è il principio giapponese poka-yoke (a prova di errore).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Buona regola DFA o da evitare?</h2></div>
+  <div class="puzzle-categorie" data-id="u8-dfa">
+    <div class="cat"><h4>Buona regola</h4><ul><li>Incastri a scatto</li><li>Un solo tipo di vite</li><li>Pezzi montati dall'alto</li><li>Un solo verso di montaggio</li></ul></div>
+    <div class="cat"><h4>Da evitare</h4><ul><li>Cavi saldati a mano</li><li>Pezzi montabili al contrario</li><li>Viti di tre misure</li><li>Girare il vaso a metà montaggio</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come nei contenitori. Discussione: i cavi saldati a mano richiedono tempo e abilità e sono una fonte di difetti; meglio connettori a innesto con un solo verso. Collegare con l'analisi del valore (un solo tipo di vite) e con la progettazione concorrente: queste regole le porta al tavolo chi monta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 25 minuti</span></p>
+  <h2>Smontate una penna a scatto</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps">
+      <li>In gruppi di tre, smontate con cura una penna a scatto e mettete i pezzi in fila.</li>
+      <li>In Writer, tabella: <b>Pezzo</b>, <b>Funzione</b>, <b>Si muove? Materiale diverso? Va smontato?</b></li>
+      <li>Segnate i pezzi con tre "no": sono candidati da unire.</li>
+      <li>Proponete 2 modifiche DFA e il nuovo numero di pezzi.</li>
+      <li>Salvate come <b>dfa-penna.odt</b> e consegnate. Rimontate la penna!</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> ogni pezzo ha una funzione scritta come verbo + oggetto; le proposte riducono il numero di pezzi o semplificano il montaggio, senza togliere funzioni.</div>
+  </div>
+  <aside class="notes">Una penna a scatto tipica ha tra 6 e 10 pezzi (fusto, puntale, molla, refill, pulsante, meccanismo a camme, clip). La molla deve restare separata (si muove ed è di metallo); la clip si può spesso stampare insieme al fusto. Portare in classe penne economiche, una per gruppo. Collegamento con l'albero delle funzioni della lezione sul concept.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ripasso</p><h2>Abbina ogni strumento alla domanda a cui risponde</h2></div>
+  <dl class="puzzle-abbina" data-id="u8-strumenti-qualita">
+    <dt>PDCA</dt><dd>Come miglioro un processo, un giro alla volta?</dd>
+    <dt>Gestione delle modifiche</dt><dd>Come cambio un disegno senza creare confusione?</dd>
+    <dt>QFD</dt><dd>Quali caratteristiche tecniche contano di più per il cliente?</dd>
+    <dt>FMEA</dt><dd>Che cosa può guastarsi e quanto è grave?</dd>
+    <dt>DFM/A</dt><dd>Come rendo il prodotto facile da fabbricare e montare?</dd>
+  </dl>
+  <aside class="notes">Ripasso a squadre. All'esame: scegliere uno strumento e raccontarlo su un esempio proprio (anche un progetto informatico: una FMEA di un'app ha modi di guasto come "il login fallisce" con effetti e cause). È un modo concreto di mostrare collegamenti tra GPOI e Informatica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole al posto giusto</h2></div>
+  <div class="puzzle-trascina" data-id="u8-uscita-qualita" data-extra="Deming|prezzo">
+    <p>Il ciclo PDCA nasce dalle idee di Walter <span class="slot" data-risposta="Shewhart"></span>.</p>
+    <p>Nella casa della qualità i bisogni del cliente si collegano alle caratteristiche <span class="slot" data-risposta="tecniche"></span>.</p>
+    <p>Nella FMEA l'RPN è il prodotto di gravità, probabilità e <span class="slot" data-risposta="rilevabilità"></span>.</p>
+    <p>Il DFA cerca di ridurre il numero di <span class="slot" data-risposta="pezzi"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzione: Shewhart, tecniche, rilevabilità, pezzi. Distrattori: Deming (che diffuse il ciclo ma non lo ideò) e prezzo.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>PDCA: Plan, Do, Check, Act, e si riparte</li>
+      <li>Modifiche: richiesta, valutazione, approvazione, revisione</li>
+      <li>QFD: dal "che cosa" al "come", con i numeri</li>
+    </ul>
+    <ul class="points">
+      <li>FMEA: RPN = S × O × D, ma la gravità conta di più</li>
+      <li>DFM/A: meno pezzi, montaggio semplice</li>
+      <li>La qualità si costruisce, non si ispeziona</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Prossima lezione: il Six Sigma e la qualità (DMAIC, lean Six Sigma).</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

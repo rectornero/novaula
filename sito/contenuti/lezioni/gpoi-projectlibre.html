@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pianificare con ProjectLibre · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Unità 4</p>
+  <h1>Pianificare le attività<br>con ProjectLibre</h1>
+  <p class="lead">Laboratorio: il progetto dell'e-commerce entra in un vero software di project management. Attività, durate, dipendenze, risorse, baseline.</p>
+  <aside class="notes">Lezione di laboratorio. Obiettivi: creare un progetto in ProjectLibre con data di inizio, attività, durate e predecessori; leggere Gantt, reticolo e percorso critico calcolati dal programma; inserire e assegnare risorse con tariffa oraria; salvare una baseline e vedere l'effetto di un ritardo. Durata: 3 ore (tre laboratori). Preparazione: ProjectLibre installato su tutti i PC (gratuito, open source, nessun account; si scarica dal sito ufficiale projectlibre.com o da SourceForge). Provare prima l'installazione su un PC del laboratorio: alcune versioni richiedono Java. Caso: l'e-commerce del Panificio Rossi (impresa di esempio) delle lezioni precedenti, con i risultati del CPM già noti: servono per verificare il lavoro del software.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Hai mai usato un software per organizzare un progetto?</h2></div>
+  <div class="poll" data-id="u4-pl-software">
+    <ol><li>Mai</li><li>Solo board come Trello o simili</li><li>Microsoft Project, ProjectLibre o simili</li><li>Fogli di calcolo e basta</li></ol>
+  </div>
+  <aside class="notes">Rompighiaccio per capire il punto di partenza. Chi ha usato le board Kanban (deck "agile-scrum-kanban") conosce la gestione del flusso di lavoro; oggi si usa invece un software a pianificazione "predittiva", che calcola date e percorso critico come abbiamo fatto a mano nelle lezioni sul CPM e sul Gantt.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>ProjectLibre in breve</h2></div>
+  <div class="cols-3">
+    <div class="card soft"><h3>Gratuito e aperto</h3><p class="small">Software open source per Windows, macOS e Linux. Si installa sul PC, non serve un account.</p></div>
+    <div class="card soft"><h3>Compatibile</h3><p class="small">Apre i file di Microsoft Project (.mpp) e salva nel suo formato <b>.pod</b>.</p></div>
+    <div class="card soft"><h3>Fa i conti per te</h3><p class="small">Calcola date, percorso critico e costi. Tu decidi attività, durate, legami e risorse.</p></div>
+  </div>
+  <div class="callout">Prima regola: <b>il software non pianifica al posto tuo</b>. Se le durate o i legami sono sbagliati, il Gantt sarà preciso e sbagliato.</div>
+  <aside class="notes">ProjectLibre è nato come continuazione di OpenProj ed è un'alternativa gratuita a Microsoft Project, con un'interfaccia simile (barra multifunzione, vista Gantt con tabella a sinistra). L'interfaccia può essere in italiano o in inglese a seconda della versione e delle impostazioni del sistema: nelle slide indichiamo i nomi italiani con l'inglese tra parentesi quando serve. Esiste anche un servizio cloud a pagamento con lo stesso nome: noi usiamo la versione desktop gratuita.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le viste di ProjectLibre: a che cosa servono?</h2></div>
+  <dl class="puzzle-abbina" data-id="u4-pl-viste">
+    <dt>Gantt</dt><dd>Tabella delle attività e barre sul calendario</dd>
+    <dt>Rete (Network)</dt><dd>Il reticolo con le attività sui nodi</dd>
+    <dt>WBS</dt><dd>L'albero della scomposizione del lavoro</dd>
+    <dt>Risorse (Resources)</dt><dd>Le persone e i materiali, con le tariffe</dd>
+    <dt>Istogramma (Histogram)</dt><dd>Il carico di lavoro di una risorsa nel tempo</dd>
+  </dl>
+  <aside class="notes">Le viste si scelgono dai pulsanti della barra multifunzione (scheda Vista/View) o dal pannello laterale, secondo la versione. Sono viste diverse degli stessi dati: un cambiamento nel Gantt si vede subito nella Rete e nella WBS. Collegare ogni vista alla lezione in cui l'abbiamo costruita a mano: WBS (avvio e pianificazione), Rete (reticoli e CPM), Gantt (pianificazione delle attività), Risorse e Istogramma (prossime lezioni sulle risorse umane).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Il flusso di lavoro in ProjectLibre</h2></div>
+  <ol class="puzzle-ordina" data-id="u4-pl-flusso">
+    <li>Nuovo progetto: nome e data di inizio</li>
+    <li>Scrivi le attività con le loro durate</li>
+    <li>Collega le attività con i predecessori</li>
+    <li>Controlla date e percorso critico</li>
+    <li>Inserisci le risorse e assegnale alle attività</li>
+    <li>Salva la baseline del piano approvato</li>
+    <li>Aggiorna l'avanzamento durante il progetto</li>
+  </ol>
+  <aside class="notes">Ordine come scritto, che è anche l'ordine dei tre laboratori di oggi. Il controllo di date e percorso critico prima delle risorse è una scelta didattica: così si verifica il calcolo CPM fatto a mano (17 giorni) prima di complicare il modello. Le risorse si possono anche inserire prima dei legami: accettare lo scambio 3-5 se motivato, non lo spostamento della baseline prima della pianificazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si scrive</p><h2>Le colonne della tabella del Gantt</h2></div>
+  <div class="cols-2">
+    <ul class="points small">
+      <li><b>Nome</b>: un'attività per riga; la riga ha un numero (ID)</li>
+      <li><b>Durata</b>: scrivi <code>3</code> e diventa "3 giorni"; il punto interrogativo indica una durata solo stimata</li>
+      <li><b>Inizio</b> e <b>Fine</b>: non scriverle a mano, le calcola il programma</li>
+      <li><b>Predecessori</b>: l'ID dell'attività che viene prima, per esempio <code>2</code></li>
+      <li><b>Nomi risorse</b>: chi fa il lavoro</li>
+    </ul>
+    <div class="stack">
+      <div class="card soft"><h3>Il vincolo nascosto</h3><p class="small">Se scrivi una data di inizio a mano, ProjectLibre la blocca (vincolo "Non iniziare prima di"): l'attività non si sposterà più con i predecessori.</p></div>
+      <p class="small muted">Più predecessori: separali come nella slide 8. Altri tipi di legame: <code>2SS</code>, <code>2FF</code>, ritardo <code>2FS+1</code>.</p>
+    </div>
+  </div>
+  <aside class="notes">Il vincolo nascosto è l'errore più frequente: gli studenti scrivono le date "per farle tornare" e poi il percorso critico non funziona più. Se succede: Informazioni attività (doppio clic sulla riga), scheda Avanzate, tipo di vincolo "Il più presto possibile" (As Soon As Possible). La sintassi dei legami (2SS, 2FS+1 giorno) è quella di Microsoft Project, che ProjectLibre riprende; il separatore tra più predecessori può essere il punto e virgola o la virgola a seconda della versione e delle impostazioni internazionali: provare prima sul PC del laboratorio. In alternativa si collegano due attività selezionandole e usando il pulsante di collegamento (Link) della barra, oppure trascinando con il mouse da una barra all'altra nel Gantt.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 35 minuti</span></p>
+  <h2>Attività, durate e legami dell'e-commerce</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri ProjectLibre, crea un nuovo progetto: nome <b>E-commerce Panificio Rossi</b>, inizio <b>09/11/2026</b>.</li>
+      <li>Nella tabella del Gantt scrivi le nove attività da A a I, nello stesso ordine della tabella delle precedenze, con le durate in giorni.</li>
+      <li>Nella colonna Predecessori collega le attività (ID 1 = A, 2 = B, …).</li>
+      <li>Aggiungi una decima riga <b>Sito online</b> con durata <b>0</b> e predecessore 9: diventa una milestone.</li>
+      <li>Apri anche la vista Rete. Salva come <b>panificio-cognome.pod</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Analisi comincia lunedì 9/11/2026, Sito online cade martedì 1/12/2026. Barre critiche: Analisi, Grafica, Front-end, Test, Messa online.</div>
+  </div>
+  <aside class="notes">Predecessori per ID: B 1; C 1; D 2; E 3; F 3; G 4 e 5; H 6; I 7 e 8; Sito online 9. Date attese: A 9/11-11/11; B 12/11-17/11; C 12/11-13/11; D 18/11-25/11; E 16/11-20/11; F 16/11-17/11; G 26/11-30/11; H 18/11; I 1/12; milestone 1/12. Se la fine non è il 1° dicembre: cercare date scritte a mano (vincoli), un legame mancante su G o I, o un calendario diverso (il calendario standard è lunedì-venerdì, 8 ore al giorno). Nel Gantt di ProjectLibre le attività critiche sono di solito in rosso. Chi finisce prima prova a rientrare le attività sotto cinque voci di riepilogo come nella WBS (frecce di rientro nella barra): gli ID cambiano, ma i legami restano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Trascina nella tabella</p><h2>Completa la colonna dei predecessori</h2></div>
+  <div class="puzzle-trascina" data-id="u4-pl-predecessori" data-extra="1;2|6">
+    <table class="data compact" style="line-height:1.15">
+      <tr><th style="padding:5px 20px">ID</th><th style="padding:5px 20px">Nome</th><th style="padding:5px 20px">Durata</th><th style="padding:5px 20px">Inizio</th><th style="padding:5px 20px">Fine</th><th style="padding:5px 20px">Predecessori</th></tr>
+      <tr><td style="padding:5px 20px">1</td><td style="padding:5px 20px">Analisi</td><td style="padding:5px 20px">3 giorni</td><td style="padding:5px 20px">09/11/26</td><td style="padding:5px 20px">11/11/26</td><td style="padding:5px 20px"></td></tr>
+      <tr><td style="padding:5px 20px">2</td><td style="padding:5px 20px">Grafica</td><td style="padding:5px 20px">4 giorni</td><td style="padding:5px 20px">12/11/26</td><td style="padding:5px 20px">17/11/26</td><td style="padding:5px 20px">1</td></tr>
+      <tr><td style="padding:5px 20px">3</td><td style="padding:5px 20px">Database</td><td style="padding:5px 20px">2 giorni</td><td style="padding:5px 20px">12/11/26</td><td style="padding:5px 20px">13/11/26</td><td style="padding:5px 20px">1</td></tr>
+      <tr><td style="padding:5px 20px">4</td><td style="padding:5px 20px">Front-end</td><td style="padding:5px 20px">6 giorni</td><td style="padding:5px 20px">18/11/26</td><td style="padding:5px 20px">25/11/26</td><td style="padding:5px 20px"><span class="slot" style="min-height:36px;padding:0 4px" data-risposta="2"></span></td></tr>
+      <tr><td style="padding:5px 20px">5</td><td style="padding:5px 20px">Back-end</td><td style="padding:5px 20px">5 giorni</td><td style="padding:5px 20px">16/11/26</td><td style="padding:5px 20px">20/11/26</td><td style="padding:5px 20px">3</td></tr>
+      <tr><td style="padding:5px 20px">6</td><td style="padding:5px 20px">Catalogo</td><td style="padding:5px 20px">2 giorni</td><td style="padding:5px 20px">16/11/26</td><td style="padding:5px 20px">17/11/26</td><td style="padding:5px 20px"><span class="slot" style="min-height:36px;padding:0 4px" data-risposta="3"></span></td></tr>
+      <tr><td style="padding:5px 20px">7</td><td style="padding:5px 20px">Test</td><td style="padding:5px 20px">3 giorni</td><td style="padding:5px 20px">26/11/26</td><td style="padding:5px 20px">30/11/26</td><td style="padding:5px 20px"><span class="slot" style="min-height:36px;padding:0 4px" data-risposta="4;5"></span></td></tr>
+      <tr><td style="padding:5px 20px">8</td><td style="padding:5px 20px">Formazione</td><td style="padding:5px 20px">1 giorno</td><td style="padding:5px 20px">18/11/26</td><td style="padding:5px 20px">18/11/26</td><td style="padding:5px 20px">6</td></tr>
+      <tr><td style="padding:5px 20px">9</td><td style="padding:5px 20px">Messa online</td><td style="padding:5px 20px">1 giorno</td><td style="padding:5px 20px">01/12/26</td><td style="padding:5px 20px">01/12/26</td><td style="padding:5px 20px"><span class="slot" style="min-height:36px;padding:0 4px" data-risposta="7;8"></span></td></tr>
+    </table>
+  </div>
+  <aside class="notes">Soluzione: Front-end 2, Catalogo 3, Test 4;5, Messa online 7;8. Distrattori: "1;2" e "6". Si può fare anche senza la tabella delle precedenze, ragionando sulle date: il Test comincia il 26/11, il giorno dopo la fine del Front-end (25/11), che è l'ultimo dei suoi predecessori a finire. Il Back-end finisce il 20/11: è un predecessore anche lui, ma non è quello che "comanda". Domanda: da quale data si capisce che la Formazione segue il Catalogo e non il Database?</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Hai scritto attività e durate, ma nessun predecessore. Quando finisce il progetto secondo ProjectLibre?</h2></div>
+  <div class="poll" data-id="u4-pl-senza-legami" data-tipo="quiz" data-risposta="A">
+    <ol><li>Lunedì 16 novembre</li><li>Martedì 1° dicembre, come nel CPM</li><li>27 giorni lavorativi dopo l'inizio, la somma delle durate</li><li>Non calcola nessuna data finché mancano i legami</li></ol>
+    <p class="why">Senza legami tutte le attività cominciano il 9 novembre, data di inizio del progetto. La fine è quella dell'attività più lunga, il front-end: 6 giorni lavorativi, cioè lunedì 16 novembre. Un Gantt "a scaletta" che parte tutto lo stesso giorno è il segnale che mancano i predecessori.</p>
+  </div>
+  <aside class="notes">B è la risposta di chi pensa che il software "sappia" la logica; C di chi pensa che le attività si mettano in fila da sole (la somma delle durate è 3+4+2+6+5+2+3+1+1 = 27). D è plausibile ma falsa: ProjectLibre calcola sempre le date. Conteggio: 9, 10, 11, 12, 13, 16 novembre = 6 giorni lavorativi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Le risorse</p><h2>Chi fa il lavoro, e quanto costa all'ora</h2></div>
+  <div class="cols-2">
+    <table class="data compact">
+      <tr><th>Risorsa</th><th>Ruolo</th><th>Tariffa</th><th>Attività</th></tr>
+      <tr><td>Sara</td><td>Analista e PM</td><td class="mono">40 €/h</td><td>A, G</td></tr>
+      <tr><td>Luca</td><td>Grafico e front-end</td><td class="mono">35 €/h</td><td>B, D</td></tr>
+      <tr><td>Marco</td><td>Sviluppatore</td><td class="mono">38 €/h</td><td>C, E, I</td></tr>
+      <tr><td>Giulia</td><td>Contenuti</td><td class="mono">28 €/h</td><td>F, H</td></tr>
+    </table>
+    <ul class="points small">
+      <li>Nella vista Risorse: nome, tipo <b>Lavoro</b>, tariffa standard</li>
+      <li>Nel Gantt, colonna Nomi risorse: scegli la persona</li>
+      <li>Una persona al 100% lavora 8 ore al giorno: ore = durata × 8</li>
+      <li>Il costo è ore × tariffa: ProjectLibre lo calcola da solo</li>
+    </ul>
+  </div>
+  <aside class="notes">Team e tariffe sono ipotetici (impresa di esempio). Le tariffe sono costi interni orari per l'impresa, non stipendi netti. Le assegnazioni sono state scelte senza sovrapposizioni: Marco lavora sul database nei giorni 4-5, sul back-end nei giorni 6-10, sulla messa online il giorno 17; Luca sulla grafica nei giorni 4-7 e sul front-end nei giorni 8-13. Il tema delle risorse (OBS, matrice delle responsabilità, livellamento) è approfondito nella lezione "La gestione delle risorse umane"; i costi nella lezione sui costi di progetto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dividi in categorie</p><h2>Chi lo fa: il software o il project manager?</h2></div>
+  <div class="puzzle-categorie" data-id="u4-pl-chi">
+    <div class="cat"><h4>Lo calcola ProjectLibre</h4><ul><li>Date di inizio e fine</li><li>Percorso critico</li><li>Ricalcolo dopo un ritardo</li><li>Costo: ore × tariffa</li></ul></div>
+    <div class="cat"><h4>Lo decide il project manager</h4><ul><li>Stima delle durate</li><li>Scelta dei predecessori</li><li>Chi fa che cosa</li><li>Data promessa al cliente</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. La "data promessa al cliente" è il punto di discussione: il software calcola una data, ma la promessa è una decisione del PM, che può aggiungere un margine (ricordare il laboratorio PERT: 15 o 17 giorni?). Messaggio: il software automatizza i calcoli che abbiamo fatto a mano; le decisioni restano umane.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Più persone non vuol dire sempre meno tempo</h2></div>
+  <figure class="citazione">
+    <blockquote>Per portare a termine una gravidanza servono nove mesi, qualunque sia il numero delle donne incaricate.</blockquote>
+    <figcaption><b>Fred Brooks</b>, responsabile del sistema operativo IBM OS/360, "The Mythical Man-Month", 1975</figcaption>
+  </figure>
+  <p class="lead">Quando assegni due persone a un'attività, il software può accorciarne la durata. Ma non tutte le attività si possono dividere: la formazione dei commessi dura un giorno anche con due formatori.</p>
+  <aside class="notes">Traduzione nostra dall'inglese: "The bearing of a child takes nine months, no matter how many women are assigned" (F. P. Brooks, The Mythical Man-Month, capitolo 2, 1975). Brooks distingue le attività perfettamente divisibili (raccogliere il cotone), quelle non divisibili per vincoli sequenziali e quelle che richiedono comunicazione tra le persone, dove aggiungere gente può anche peggiorare le cose. In ProjectLibre, se si aggiunge una seconda risorsa a un'attività, la durata può cambiare o no a seconda del tipo di attività impostato in Informazioni attività: far provare e osservare, senza dare per scontato il risultato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Risorse, costi e una persona di troppo</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>panificio-cognome.pod</b>. Nella vista Risorse inserisci Sara, Luca, Marco e Giulia con le tariffe della slide 10.</li>
+      <li>Torna al Gantt e assegna le risorse con la colonna Nomi risorse.</li>
+      <li>Aggiungi la colonna <b>Costo</b> (tasto destro sull'intestazione delle colonne) e leggi il costo totale del progetto.</li>
+      <li>Ora assegna a <b>Marco</b> anche il front-end, al posto di Luca. Guarda la vista Risorse o l'Istogramma: che cosa succede a Marco nei giorni 8-10?</li>
+      <li>Rimetti Luca sul front-end. Salva e scrivi la risposta al punto 4 in <b>risorse-cognome.odt</b>.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> costo totale <b>7 824 €</b>. Con Marco su front-end e back-end, nei giorni 8-10 deve lavorare 16 ore al giorno: è <b>sovrallocato</b>, e ProjectLibre lo segnala in rosso.</div>
+  </div>
+  <aside class="notes">Costi per attività (ore × tariffa): A 24 × 40 = 960; B 32 × 35 = 1 120; C 16 × 38 = 608; D 48 × 35 = 1 680; E 40 × 38 = 1 520; F 16 × 28 = 448; G 24 × 40 = 960; H 8 × 28 = 224; I 8 × 38 = 304. Totale 7 824 €. Per persona: Sara 1 920, Luca 2 800, Marco 2 432, Giulia 672. Con Marco sul front-end (giorni 8-13) e sul back-end (giorni 6-10) le attività si sovrappongono nei giorni 8, 9 e 10. ProjectLibre non sposta da solo le attività: segnala la sovrallocazione (nome della risorsa in rosso, barra sopra il limite nell'Istogramma). Come risolverla (livellamento) è tema della lezione sulle risorse umane. Se la colonna Costo non compare con quel nome, cercarla nell'elenco delle colonne disponibili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Nel Gantt di ProjectLibre alcune barre sono rosse. Che cosa indicano?</h2></div>
+  <div class="poll" data-id="u4-pl-rosso" data-tipo="quiz" data-risposta="C">
+    <ol><li>Attività in ritardo rispetto a oggi</li><li>Attività con una risorsa sovrallocata</li><li>Attività sul percorso critico</li><li>Attività senza risorse assegnate</li></ol>
+    <p class="why">Nella vista Gantt le barre rosse sono le attività critiche, con slittamento zero: le stesse che abbiamo trovato a mano con il CPM. La sovrallocazione si segnala invece sulle risorse.</p>
+  </div>
+  <aside class="notes">A è il distrattore più forte: il rosso fa pensare a un allarme. Ma in fase di pianificazione nessuna attività è "in ritardo": non è ancora cominciata. Verificare sullo schermo che le barre rosse siano Analisi, Grafica, Front-end, Test e Messa online. I colori esatti possono cambiare con la versione: far verificare sul proprio PC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Baseline e avanzamento</p><h2>Fotografare il piano, poi confrontarlo con la realtà</h2></div>
+  <div class="cols-3">
+    <div class="card"><p class="num">1</p><h3>Salva la baseline</h3><p class="small">Comando "Salva baseline" (Save Baseline): il programma memorizza date, durate e costi del piano approvato.</p></div>
+    <div class="card"><p class="num">2</p><h3>Aggiorna</h3><p class="small">Durante il progetto scrivi la % completata e le durate reali delle attività.</p></div>
+    <div class="card fill"><p class="num" style="color:#fff">3</p><h3>Confronta</h3><p class="small">Il Gantt mostra la barra della baseline sotto quella attuale: vedi subito dove e di quanto si è slittato.</p></div>
+  </div>
+  <p class="lead">Senza baseline non c'è controllo: sapresti dove sei, ma non dove dovevi essere.</p>
+  <aside class="notes">Il comando di baseline si trova nella barra multifunzione (scheda del progetto o del monitoraggio/Tracking, secondo la versione). Per vedere le barre della baseline può essere necessario scegliere una vista di Gantt di controllo (Tracking Gantt). La baseline prepara la lezione sul monitoraggio e l'Earned Value, dove si confronteranno anche i costi previsti e quelli reali.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La grafica ritarda: che cosa vede il project manager?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri il progetto con le risorse e <b>salva la baseline</b>.</li>
+      <li>Imposta Analisi al 100% completata.</li>
+      <li>Il cliente chiede due revisioni in più: porta la durata della Grafica da 4 a <b>6 giorni</b>.</li>
+      <li>Leggi la nuova data di Sito online e controlla se il percorso critico è cambiato.</li>
+      <li>Fai uno screenshot del Gantt (tasto Windows + Maiusc + S), incollalo in Writer con due righe di commento per il cliente. Salva <b>ritardo-cognome.odt</b> e il progetto.</li>
+    </ol>
+    <div class="check"><b>Controllo:</b> Sito online passa da martedì 1/12 a <b>giovedì 3/12/2026</b>, due giorni lavorativi dopo. Il percorso critico resta Analisi, Grafica, Front-end, Test, Messa online.</div>
+  </div>
+  <aside class="notes">Calcolo: il percorso A-B-D-G-I diventa 3 + 6 + 6 + 3 + 1 = 19 giorni lavorativi; il 19° giorno a partire da lunedì 9 novembre è giovedì 3 dicembre (18° mercoledì 2). Il back-end e il catalogo non cambiano date. Il costo aumenta di 2 giorni × 8 ore × 35 € = 560 € (da 7 824 a 8 384 €): chiedere se l'hanno notato e chi deve pagarlo, visto che le revisioni le ha chieste il cliente (collegamento al project charter e all'ambito). Commento per il cliente atteso: data nuova, motivo, costo aggiuntivo, richiesta di approvazione.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Ieri e oggi</p><h2>Lo stesso progetto, molti strumenti</h2></div>
+  <div class="oggi"><p class="oggi-tag">Oggi</p><p>I file di progetto passano da un programma all'altro: ProjectLibre legge i file di Microsoft Project, e molti strumenti esportano in XML o CSV. Diversi software commerciali hanno aggiunto assistenti di AI che propongono attività, durate o rischi a partire da una descrizione. Il motore di calcolo sotto, però, è sempre il CPM che hai fatto a mano: date al più presto, al più tardi, slittamenti, percorso critico.</p></div>
+  <div class="callout hl"><b>All'esame:</b> un file ProjectLibre del progetto di PCTO o del progetto di Informatica, con Gantt, percorso critico e baseline, è un materiale concreto da mostrare. Saper spiegare perché una data è quella è più importante del disegno.</div>
+  <aside class="notes">Non citare funzioni AI di prodotti specifici, che cambiano spesso. Il formato XML di Microsoft Project è un formato di scambio diffuso. Il consiglio per l'esame è un metodo di presentazione, non una regola ministeriale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Trascina le parole prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="u4-pl-uscita" data-extra="Excel|WBS">
+    <p>ProjectLibre salva i progetti in file con estensione <span class="slot" data-risposta=".pod|pod"></span>.</p>
+    <p>Una riga con durata <span class="slot" data-risposta="0|zero"></span> diventa una milestone.</p>
+    <p>Se una persona ha più lavoro di quante ore ha a disposizione, è <span class="slot" data-risposta="sovrallocata"></span>.</p>
+    <p>La fotografia del piano approvato si chiama <span class="slot" data-risposta="baseline"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Tre minuti. Soluzioni: .pod, 0, sovrallocata, baseline. Distrattori: Excel, WBS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Nuovo progetto con data di inizio, attività e durate</li>
+      <li>Predecessori per ID; niente date scritte a mano</li>
+      <li>Gantt, Rete e WBS sono viste degli stessi dati</li>
+    </ul>
+    <ul class="points">
+      <li>Risorse con tariffa: il costo è ore × tariffa</li>
+      <li>Sovrallocazione: il software la segnala, il PM la risolve</li>
+      <li>Baseline per confrontare piano e realtà</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Raccogliere i file .pod e i documenti dei tre laboratori dal pulsante di consegna. Il file del progetto servirà nelle lezioni successive su risorse, costi e monitoraggio.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
