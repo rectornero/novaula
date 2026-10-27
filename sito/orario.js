@@ -10,21 +10,21 @@
 
   // [giorno 1=lun, inizio, fine, classe, materia, aula, nota]
   var DEFAULT = [
-    [1, "08:00", "09:55", "1d", "Info. Reti · Lab", "TC02 LI", "CAR_24"],
-    [1, "09:55", "10:55", "1e", "Info. Reti", "2B01 TB1"],
-    [1, "10:55", "11:55", "5f", "GPO · Lab", "4B01 LI", "CAR_23"],
-    [2, "08:00", "09:55", "5g", "TPSI · Lab", "4B02", "GUE_75"],
-    [2, "09:55", "10:55", "3g", "TPSI · Lab", "TC02 LI", "SCA_131"],
-    [3, "08:00", "08:55", "1e", "Info. Reti", "2B01 TB1"],
-    [3, "08:55", "09:55", "5g", "TPSI · Lab", "4B02", "GUE_75"],
-    [3, "09:55", "10:55", "1d", "Info. Reti", "2B01 TB1"],
-    [3, "10:55", "11:55", "5f", "GPO", "1C04"],
-    [4, "08:00", "08:55", "1d", "Info. Reti", "2B06 TB2"],
-    [4, "08:55", "09:55", "3g", "TPSI", "3B03"],
-    [5, "08:00", "08:55", "5f", "GPO", "1C04"],
-    [5, "08:55", "10:55", "1e", "Info. Reti · Lab", "TC02 LI", "SCA_131"],
-    [5, "11:55", "12:45", "3g", "TPSI", "3B04"],
-    [5, "12:45", "13:35", "5g", "TPSI", "1C05"]
+    [1, "08:00", "09:50", "5g", "TPSI · Lab", "4B02 LI", "GUE_77"],
+    [1, "09:50", "10:50", "5f", "GPO · Lab", "4B01 LI", "CAR_24"],
+    [1, "11:50", "12:45", "3g", "TPSI", "3B03"],
+    [1, "12:45", "13:35", "1e", "Info. Reti", "2B01 TB1"],
+    [2, "08:00", "09:50", "1d", "Info. Reti · Lab", "TC02 LI", "CAR_25"],
+    [2, "09:50", "10:50", "5g", "TPSI · Lab", "4B02 LI", "GUE_77"],
+    [2, "10:50", "11:50", "3g", "TPSI", "3B03"],
+    [3, "08:00", "08:55", "1d", "Info. Reti", "2B01 TB1"],
+    [3, "08:55", "09:50", "5f", "GPO", "1C03"],
+    [3, "09:50", "10:50", "5g", "TPSI", "2C05"],
+    [4, "08:00", "09:50", "1e", "Info. Reti · Lab", "TC02 LI", "SCA_133"],
+    [4, "09:50", "10:50", "5f", "GPO", "1C05"],
+    [4, "10:50", "11:50", "3g", "TPSI · Lab", "TC02 LI", "SCA_133"],
+    [5, "10:50", "11:50", "1e", "Info. Reti", "2B01 TB1"],
+    [5, "12:45", "13:35", "1d", "Info. Reti", "2B01 TB1"]
   ].map(function (r) { return { weekday: r[0], starts: r[1], ends: r[2], class_id: r[3], subject: r[4], room: r[5] || null, note: r[6] || null }; });
   // Aule: piano + edificio + numero, es. "2B01" = 2º piano, edificio B, aula 01; "TC02" = piano terra, edificio C.
   // B e C sono collegati; A (e ogni altro edificio) è separato: si esce e si rientra.
@@ -110,7 +110,7 @@
   }
 
   /* ---------- Orario completo: #/docente/orario[/giorno] ---------- */
-  var BELLS = ["08:00", "08:55", "09:55", "10:55", "11:55", "12:45", "13:35", "14:25"];
+  var BELLS = ["08:00", "08:55", "09:50", "10:50", "11:50", "12:45", "13:35", "14:25"];
   // Ore di lezione coperte da una riga: { from: 1, to: 2 } = 1ª–2ª ora (null se fuori dalla campanella)
   function periods(r) {
     var a = BELLS.indexOf(String(r.starts).slice(0, 5)), b = BELLS.indexOf(String(r.ends).slice(0, 5));

@@ -5,6 +5,15 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.16.1 (26 Oct 2026): new teacher timetable
+- The teacher timetable is replaced with the new one from the school site (ORARIO DOCENTE Di_54): 15 lessons, with
+  the 3E, 5F and 5G hours moved and new rooms and lab codes. The old timetable is gone.
+- New bell times: 8.00, 8.55, 9.50, 10.50, 11.50, 12.45, 13.35 (the third, fourth and fifth hours now start 5 minutes
+  earlier). The live lesson card, the full timetable page and the week grid use them.
+- The phone notification settings no longer promise an alert at the start of each lesson (switched off in 2.15.1).
+- The daily wage push follows the new last-lesson times on its own (trigger on `timetable`); lesson-start alerts stay off.
+  SQL: `aggiornamenti/2026-10-26-orario-nuovo.sql`. Service worker cache `classe-v35`.
+
 ## 2.16.0 (26 Oct 2026): 5F GPOI full course with drag-and-drop exercises
 - 5F GPOI now has the whole textbook program: 73 interactive lesson decks, one per textbook lesson across the ten
   units (from "L'impresa" to "Il rischio elettrico"), each with its PDF. They appear in the class's Materiali and are
