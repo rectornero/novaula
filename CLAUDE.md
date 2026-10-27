@@ -34,9 +34,14 @@ credit balance: 1,000 credits a month plus bought packs. When it hits zero, ever
 deploy 15 credits; compute and database compute 10 credits per GB-hour; bandwidth 20 credits per GB; web requests 2
 credits per 10,000; AI Gateway 180 credits per USD. Deploy Previews and branch deploys are free.
 
-- Every push to `main` that changes `sito/` or `netlify.toml` is a production deploy (other pushes are skipped by the
-  `ignore` command in `netlify.toml`). Test on branches (free). Batch changes into as few production deploys as
-  possible, at most one per school day, and ask Nero before deploying while credits are low.
+- Merging to `main` does NOT deploy. Production publishes only when the newest commit on `main` has `[release]` in its
+  title (the `ignore` command in `netlify.toml`); every other push is skipped. Deploy Previews still build (free).
+- Release procedure: threads merge their PRs to `main` freely, never with `[release]` in a title. When Nero says
+  "publish", or the batch he asked for is done, ONE session (normally the coordinator, or the thread it names) makes
+  the release: fetch fresh `main`, check VERSION in `sito/app.js` and the CHANGELOG entry match the newest version, then
+  push one commit (or squash-merge one PR) titled `Novaula X.Y.Z [release]`. That is one deploy, 15 credits. Never put
+  `[release]` in a PR or commit title for anything else, and at most one release per school day. Ask Nero before
+  releasing while credits are low.
 - No scheduled job or polling loop touches the database on every run. Gate it on a cheap check (such as a note of when
   there is next work), or use delayed or event-driven scheduling instead of polling. This also holds for Supabase
   pg_cron: `novaula-riunioni` is scheduled only for the next meeting alert, `novaula-paga` only at lesson end minutes
