@@ -98,7 +98,8 @@
     (ok(r[2]) || []).forEach(function (f) { files[f.test_id] = f; });
     var scans = r[6].error ? [] : r[6].data; // tabella non ancora creata: niente posta in arrivo
     return {
-      today: today, slots: ok(r[0]) || [], tests: ok(r[1]) || [], files: files, students: ok(r[3]) || [], marks: ok(r[4]) || [],
+      // l'orario è facoltativo: senza (permessi o tabella vuota) mancano solo i giorni di lezione
+      today: today, slots: r[0].error ? [] : r[0].data || [], tests: ok(r[1]) || [], files: files, students: ok(r[3]) || [], marks: ok(r[4]) || [],
       plan: Object.assign({}, DEF_PLAN, (settings.piano && settings.piano.weights) || {}),
       term: currentTerm(settings.tutte && settings.tutte.terms, today), scans: scans || [], scansReady: !r[6].error
     };

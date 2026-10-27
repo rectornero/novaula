@@ -5,6 +5,12 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.18.1 (27 Oct 2026): planner works even without the timetable
+- The Piano valutazioni no longer stops with "permission denied for table timetable": without the timetable it still
+  shows marks, tests, printing and the scan inbox, only without lesson-day suggestions. The database fix (read access
+  to `timetable` for the logged-in teacher, still teacher-only through its rule) is at the end of
+  `aggiornamenti/2026-10-27-valutazioni.sql`. Service worker cache `classe-v38`.
+
 ## 2.18.0 (27 Oct 2026): evaluation planner, printing for the print shop, scan inbox
 - New **📝 Piano valutazioni** in Area docente (teacher only), made for the phone. For each class it shows the
   current term and how long is left, every student's confirmed marks in the term against a target (default 3 marks,

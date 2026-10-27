@@ -300,3 +300,6 @@ begin
   on conflict (submission_id, student_id) where submission_id is not null
   do update set proposed_label = excluded.proposed_label, proposed_value = excluded.proposed_value, updated_at = now();
 end $$;
+
+-- Il piano legge l'orario (le righe restano visibili solo al docente per la regola "timetable teacher")
+grant select on timetable to authenticated;
