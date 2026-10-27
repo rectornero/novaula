@@ -5,6 +5,16 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.17.0 (27 Oct 2026): send a phone notification to every student
+- New "📣 Notifica a tutti" box in Area docente, visible only to the teacher: type a message (up to 300
+  characters), pick "Tutte le classi" or one class, and it arrives straight away as a phone notification for every
+  student who turned notifications on. The teacher gets a copy as confirmation and sees how many phones it reached.
+  A second tap confirms the send, since a notification can't be taken back.
+- Unlike a class announcement, it doesn't stay pinned on the class page. It is event-driven: one call to the
+  existing `notifiche` Edge Function per send, no schedules or polling.
+  SQL: `aggiornamenti/2026-10-27-notifica-tutti.sql` (new `teacher_push_broadcast` function), already applied.
+  Edge Function `notifiche` redeployed with the new `messaggio` type. Service worker cache `classe-v36`.
+
 ## 2.16.1 (26 Oct 2026): new teacher timetable
 - The teacher timetable is replaced with the new one from the school site (ORARIO DOCENTE Di_54): 15 lessons, with
   the 3E, 5F and 5G hours moved and new rooms and lab codes. The old timetable is gone.

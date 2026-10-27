@@ -3,7 +3,7 @@
 //   GET  (o POST {op:"chiave"})       -> {key} chiave VAPID pubblica per l'iscrizione nel browser
 //                                       (la coppia di chiavi nasce qui al primo uso e resta in private_settings)
 //   POST {tipo, ids|endpoint,owner}   -> solo dai trigger del database, con header x-novaula-push = private_settings.push_token
-//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | riunione | prova
+//        tipo: voti | materiali | personali | aiuto | lezione | avviso | paga | riunione | messaggio | prova
 // I voti con status 'proposto' (proposte di Claude non ancora viste dal docente) non vengono mai inviati.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
@@ -205,6 +205,26 @@ async function build(body: Record<string, unknown>): Promise<[Sub[], Msg][]> {
         url: m.link || SITE + "#/docente/riunioni", tag: "riunione-" + m.id, alarm: true,
         ttl: Math.max(60, Math.round((end - Date.now()) / 1000)),
       }]);
+    }
+  }
+  // messaggio del docente (teacher_push_broadcast): a tutti gli studenti iscritti, o a quelli di una classe; al docente una copia
+  if (body.tipo === "messaggio" && typeof body.body === "string" && body.body.trim()) {
+    const cid = typeof body.class_id === "string" ? body.class_id : null;
+    let q = sb.from("push_subscriptions").select("endpoint, owner, p256dh, auth, student_id").not("student_id", "is", null).is("disabled_at", null);
+    if (cid) {
+      const { data: studs } = await sb.from("students").select("id").eq("class_id", cid);
+      q = q.in("student_id", (studs || []).map((s) => s.id));
+    }
+    const { data: subs, error } = await q;
+    if (error) throw error;
+    const names = await classNames();
+    const where = cid ? names.get(cid) || cid.toUpperCase() : "";
+    const text = cut(body.body, 300), tag = "messaggio-" + Date.now();
+    const url = cid ? `${SITE}#/c/${cid}` : SITE;
+    if (subs?.length) {
+      out.push([subs, { title: "📣 Messaggio del docente" + (where ? " · " + where : ""), body: text, url, tag }]);
+      const teacher = await subsFor("owner", ["docente"]);
+      if (teacher.length) out.push([teacher, { title: "📣 Inviato a " + (where || "tutte le classi"), body: text, url, tag }]);
     }
   }
   return out;

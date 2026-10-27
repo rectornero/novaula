@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.16.1";
+  var VERSION = "2.17.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -1033,6 +1033,7 @@
         var r = await api.client.rpc("teacher_push_subscribe", { p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }); if (r.error) throw r.error;
       } })));
       if (window.NovaulaRiunioni && api.client) window.NovaulaRiunioni.board(app, rnCtx());
+      if (window.NovaulaAvvisi && api.client && window.NovaulaAvvisi.broadcast) window.NovaulaAvvisi.broadcast(app, avCtx());
       if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.board(app, avCtx());
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
