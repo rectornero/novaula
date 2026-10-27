@@ -1,9 +1,11 @@
-# Netlify pubblica la cartella "sito" a ogni push sul ramo main.
+# Netlify pubblica la cartella "sito" dal ramo main, ma SOLO quando il commit in cima a main ha "[release]"
+# nel titolo (per esempio "Novaula 2.18.0 [release]"). Gli altri merge su main non pubblicano nulla.
 # Ogni pubblicazione in produzione costa 15 crediti del team Netlify (condivisi con gli altri siti di Nero):
-# unire le modifiche a gruppi (più PR in un solo merge su main) invece di un deploy per ogni piccola modifica.
+# i thread uniscono liberamente su main, poi un solo commit di rilascio pubblica tutto insieme.
 [build]
   publish = "sito"
   command = ""
-  # Salta la pubblicazione se il push non cambia né "sito" né questo file
-  # (per esempio solo CHANGELOG, SQL in aggiornamenti/, strumenti/ o supabase/).
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- sito/ netlify.toml"
+  # Codice d'uscita 0 = salta la pubblicazione, 1 = pubblica.
+  # Produzione: pubblica solo con "[release]" nel titolo dell'ultimo commit.
+  # Anteprime (Deploy Preview, rami; gratuite): pubblica solo se cambiano "sito" o questo file.
+  ignore = 'if [ "${CONTEXT:-production}" = production ]; then ! git log -1 --format=%s | grep -qF "[release]"; else git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- sito/ netlify.toml; fi'
