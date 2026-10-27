@@ -25,6 +25,17 @@ Comandi
   salta SUBMISSION_ID "motivo"
       la consegna non si può correggere in automatico: non verrà più riproposta e il docente
       vede il motivo in Area docente (con "Riprova" la rimette in coda)
+  scansioni [--dir lavoro]
+      verifiche su carta scansionate dal docente (Piano valutazioni → Posta in arrivo): per ognuna
+      scarica in <dir>/scan-<id>/ la scansione in PDF, testo e soluzioni della verifica e manifest.json
+      con l'elenco della classe e il codice stampato su ogni copia; se non ce ne sono scrive
+      "Nessuna scansione nuova."
+  dividi <dir>/scan-<id>/manifest.json divisione.json
+      divisione.json = {"copie": [{"student_id": "...", "pagine": [1, 2]}], "non_assegnate": [5],
+      "nota": "facoltativa"}; ogni copia diventa la consegna dello studente (compito nascosto della
+      verifica) e la scansione si chiude: poi «scarica --nuove» la propone per la correzione normale
+  scansione-errore SCAN_ID "motivo"
+      la scansione non si può dividere (illeggibile, verifica sbagliata): il docente vede il motivo
 
 correzione.json
   {"studente": "Mario Rossi", "classe": "5G", "compito": "Backlog e sprint plan",
@@ -458,6 +469,73 @@ def cmd_salta(a):
     print(f"Saltata: {a.submission_id} ({a.motivo})")
 
 
+def codice(student_id):
+    """Codice stampato su ogni pagina della copia di uno studente (uguale a valutazioni.js)."""
+    return student_id.replace("-", "")[:4].upper()
+
+
+def cmd_scansioni(a):
+    lista = chiama("scansioni")
+    if not lista:
+        print("Nessuna scansione nuova.")
+        return
+    for sc in lista:
+        cartella = os.path.join(a.dir, f"scan-{sc['id'][:8]}")
+        os.makedirs(cartella, exist_ok=True)
+        ext = os.path.splitext(sc.get("file_name") or sc["file_path"])[1].lower() or ".pdf"
+        orig = os.path.join(cartella, "originale" + ext)
+        scarica_url(sc["url"], orig)
+        pdf = os.path.join(cartella, "scansione.pdf")
+        letto = in_pdf(orig, pdf)
+        t = sc["test"]
+        for chiave, nome in (("test_url", "verifica.pdf"), ("solutions_url", "soluzioni.pdf")):
+            if t.get(chiave):
+                url = t[chiave] if t[chiave].startswith("http") else SITO + "/" + t[chiave].lstrip("/")
+                try:
+                    scarica_url(url, os.path.join(cartella, nome))
+                except Exception as e:
+                    print(f"  {nome} non scaricato ({e})")
+        studenti = [dict(s, codice=codice(s["id"])) for s in sc.get("students") or []]
+        doppi = sorted({s["codice"] for s in studenti if sum(x["codice"] == s["codice"] for x in studenti) > 1})
+        pagine = pymupdf.open(pdf).page_count if letto else 0
+        manifest = {"scan_id": sc["id"], "classe": sc["class_name"], "class_id": sc["class_id"], "verifica": t,
+                    "file_name": sc.get("file_name"), "pdf": "scansione.pdf" if letto else None, "pagine": pagine,
+                    "studenti": studenti, "codici_doppi": doppi}
+        with open(os.path.join(cartella, "manifest.json"), "w", encoding="utf-8") as f:
+            json.dump(manifest, f, ensure_ascii=False, indent=2)
+        print(f"{cartella}: {sc['class_name']} · {t['title']} · {pagine} pagine · {len(studenti)} studenti")
+
+
+def cmd_dividi(a):
+    with open(a.manifest, encoding="utf-8") as f:
+        m = json.load(f)
+    with open(a.json, encoding="utf-8") as f:
+        d = json.load(f)
+    src = pymupdf.open(os.path.join(os.path.dirname(a.manifest), m["pdf"]))
+    ok = 0
+    for c in d.get("copie", []):
+        pagine = [p for p in c.get("pagine", []) if 1 <= p <= src.page_count]
+        if not pagine:
+            continue
+        doc = pymupdf.open()
+        for p in pagine:
+            doc.insert_pdf(src, from_page=p - 1, to_page=p - 1)
+        b64 = base64.b64encode(doc.tobytes(garbage=3, deflate=True)).decode()
+        r = chiama("dividi", scan_id=m["scan_id"], student_id=c["student_id"], pdf_base64=b64)
+        ok += 1
+        print(f"Copia caricata: {c['student_id'][:8]} pagine {pagine}" + (" (sostituita)" if r.get("gia_presente") else ""))
+    nota = d.get("nota") or ""
+    if d.get("non_assegnate"):
+        nota = (nota + " " if nota else "") + "Pagine senza studente: " + ", ".join(map(str, d["non_assegnate"])) + "."
+    chiama("scansione_fatta", scan_id=m["scan_id"], stato="fatta", nota=nota or None, studenti=ok)
+    print(f"Scansione chiusa: {ok} copie.")
+
+
+def cmd_scansione_errore(a):
+    chiama("scansione_fatta", scan_id=a.scan_id, stato="errore", nota=a.motivo)
+    print(f"Scansione segnata con errore: {a.motivo}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -483,8 +561,17 @@ def main():
     s = sub.add_parser("salta")
     s.add_argument("submission_id")
     s.add_argument("motivo")
+    s = sub.add_parser("scansioni")
+    s.add_argument("--dir", default="scansioni")
+    s = sub.add_parser("dividi")
+    s.add_argument("manifest")
+    s.add_argument("json")
+    s = sub.add_parser("scansione-errore")
+    s.add_argument("scan_id")
+    s.add_argument("motivo")
     a = ap.parse_args()
-    {"scarica": cmd_scarica, "pagine": cmd_pagine, "annota": cmd_annota, "carica": cmd_carica, "salta": cmd_salta}[a.cmd](a)
+    {"scarica": cmd_scarica, "pagine": cmd_pagine, "annota": cmd_annota, "carica": cmd_carica, "salta": cmd_salta,
+     "scansioni": cmd_scansioni, "dividi": cmd_dividi, "scansione-errore": cmd_scansione_errore}[a.cmd](a)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.17.0";
+  var VERSION = "2.18.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -391,6 +391,7 @@
     setPage("");
     nowBoard();
     if (api.isTeacher() && api.client && window.NovaulaRiunioni) window.NovaulaRiunioni.strip(app, rnCtx());
+    if (api.isTeacher() && api.client && window.NovaulaValutazioni) window.NovaulaValutazioni.week(app, vlCtx());
     var today = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
     var last = store("last-class");
     app.appendChild(h("section", { class: "hello" },
@@ -622,7 +623,8 @@
     var waiting = api.isTeacher() ? items.filter(function (a) { return a.topic_id && !a.due_date; }) : [];
     // Consegne dalle slide di laboratorio: le vede solo il docente, in fondo (lo studente le ritrova nel profilo)
     var fromSlides = items.filter(function (a) { return a.deck; });
-    items = items.filter(function (a) { return waiting.indexOf(a) < 0 && !a.deck; });
+    // Copie scansionate delle verifiche su carta (compito nascosto legato alla verifica): passano solo dalle correzioni
+    items = items.filter(function (a) { return waiting.indexOf(a) < 0 && !a.deck && !a.test_id; });
     var todayIso = isoDays(0);
     items.sort(function (a, b) {
       var la = a.due_date && a.due_date < todayIso, lb = b.due_date && b.due_date < todayIso;
@@ -857,6 +859,10 @@
   function rnCtx() {
     return { h: h, sb: api.client, isTeacher: api.isTeacher, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classes: classes };
   }
+  // Aiuti per valutazioni.js
+  function vlCtx() {
+    return { h: h, sb: api.client, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classColor: classColor, classes: classes, route: route };
+  }
   // Aiuti per profili.js
   function pctx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
@@ -1004,6 +1010,11 @@
       window.NovaulaPagella.page(app, Object.assign(pctx(), { classes: classes }));
       return;
     }
+    if (api.isTeacher() && /^#\/docente\/valutazioni/.test(location.hash) && window.NovaulaValutazioni) {
+      setPage("Piano valutazioni");
+      window.NovaulaValutazioni.page(app, vlCtx());
+      return;
+    }
     if (api.isTeacher() && /^#\/docente\/riunioni/.test(location.hash) && window.NovaulaRiunioni && api.client) {
       setPage("Riunioni");
       window.NovaulaRiunioni.page(app, rnCtx());
@@ -1025,6 +1036,7 @@
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
           window.NovaulaOrarioPage ? h("a", { class: "btn", href: "#/docente/orario", text: "📅 Orario completo" }) : null,
           window.NovaulaRiunioni && api.client ? h("a", { class: "btn", href: "#/docente/riunioni", text: "🎥 Riunioni" }) : null,
+          window.NovaulaValutazioni && api.client ? h("a", { class: "btn", href: "#/docente/valutazioni", text: "📝 Piano valutazioni" }) : null,
           window.NovaulaPagella && api.client ? h("a", { class: "btn", href: "#/docente/pagella", text: "Pagella" }) : null,
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
@@ -1032,6 +1044,7 @@
       if (window.NovaulaNotifiche && api.client) app.appendChild(h("div", { class: "card" }, window.NovaulaNotifiche.panel({ h: h, sb: api.client, toast: toast, errText: errText, owner: "docente", subscribe: async function (ep, p256dh, auth) {
         var r = await api.client.rpc("teacher_push_subscribe", { p_endpoint: ep, p_p256dh: p256dh, p_auth: auth }); if (r.error) throw r.error;
       } })));
+      if (window.NovaulaValutazioni && api.client) window.NovaulaValutazioni.week(app, vlCtx());
       if (window.NovaulaRiunioni && api.client) window.NovaulaRiunioni.board(app, rnCtx());
       if (window.NovaulaAvvisi && api.client && window.NovaulaAvvisi.broadcast) window.NovaulaAvvisi.broadcast(app, avCtx());
       if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.board(app, avCtx());

@@ -5,6 +5,36 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.18.0 (27 Oct 2026): evaluation planner, printing for the print shop, scan inbox
+- New **📝 Piano valutazioni** in Area docente (teacher only), made for the phone. For each class it shows the
+  current term and how long is left, every student's confirmed marks in the term against a target (default 3 marks,
+  at least 1 written test and 1 oral, editable in «Impostazioni»), and who is behind, on track or fine.
+- «Da fare» lists what needs doing: tests already given with no marks yet (enter the whole class in one go), test
+  dates that fall on a day without a lesson with that class (one tap moves them to the nearest lesson), and missing
+  written tests in the term, with a proposed date on a lesson day away from other tests and the topics estimated from
+  the Programma. «✓ Conferma la verifica» creates it, and students see it in the Verifiche tab.
+- «Da interrogare» spreads the students who still need an oral (or enough marks) over the remaining lessons; tap a
+  name, tap the mark (4…10, ½, +/-) and save. Any student row opens the same quick mark.
+- «🖨 Stampa» on each test builds one PDF with a copy for every student (absent students can be unticked) plus spare
+  copies with a blank name line. Every page has a band with name, class, test date, page and a short code, so Claude
+  can tell whose page it is in a scan. Fronte/retro keeps each copy on its own sheets. Then «⬇ Scarica»,
+  «Condividi» (the phone's share sheet, with the PDF attached) or «✉ Email alla cartoleria», which opens the mail
+  app with the print shop's address, subject (class, test, copies) and message filled in and a download link that
+  lasts 7 days (a mail link can't carry an attachment). The PDF library (`vendor/pdf-lib.min.js`) loads only when
+  printing.
+- «📥 Scansioni» on each test is the inbox for scanned papers (one PDF for the whole class, or photos). They wait
+  until Nero asks Claude in the project ("correct the scans"): Claude splits them per student by the printed
+  code and marks them like hand-ins (`strumenti/SCANSIONI.md`, new `correggi.py scansioni` / `dividi`). Proposed
+  marks stay hidden until Nero accepts them. No scheduled job.
+- «Elenco della classe»: paste a class list from the register or Excel (surname first or name first, CAPS surnames
+  and «De Luca» style surnames handled, editable preview); existing students are skipped.
+- A «Valutazioni della settimana» box on the teacher's home page and in Area docente lists the next 7 days' tests
+  and orals by day, plus tests to mark, dates to confirm, missing class lists and scans waiting for Claude. The
+  Friday weekly summary also gets each class's term status (`evaluation` in `weekly_summary_data`).
+  Everything is read only when a page opens: no timers, no polling, no new background job.
+  SQL: `aggiornamenti/2026-10-27-valutazioni.sql`. Edge Function `correzioni` updated. Service worker cache
+  `classe-v37`.
+
 ## 2.17.0 (27 Oct 2026): send a phone notification to every student
 - New "📣 Notifica a tutti" box in Area docente, visible only to the teacher: type a message (up to 300
   characters), pick "Tutte le classi" or one class, and it arrives straight away as a phone notification for every
