@@ -42,6 +42,10 @@ credits per 10,000; AI Gateway 180 credits per USD. Deploy Previews and branch d
   push one commit (or squash-merge one PR) titled `Novaula X.Y.Z [release]`. That is one deploy, 15 credits. Never put
   `[release]` in a PR or commit title for anything else, and at most one release per school day. Ask Nero before
   releasing while credits are low.
+- Always log wasted credits: any avoidable Netlify credit spend (an extra or unplanned production deploy, a runaway
+  job or poll, unapproved AI Gateway use) gets a row in `/mnt/project-files/management/netlify-audit/wasted-credits.md`
+  (date, what, credits, cause, prevention), with the running total updated, and you tell Nero in the same turn. Log
+  your own mistakes too, as soon as you notice them.
 - No scheduled job or polling loop touches the database on every run. Gate it on a cheap check (such as a note of when
   there is next work), or use delayed or event-driven scheduling instead of polling. This also holds for Supabase
   pg_cron: `novaula-riunioni` is scheduled only for the next meeting alert, `novaula-paga` only at lesson end minutes
