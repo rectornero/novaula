@@ -1,16 +1,17 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Quiz ciclo di progetto</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
 <style>
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-wght-normal.woff2) format("woff2")}
+@font-face{font-family:"Atkinson Hyperlegible";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/atkinson-hyperlegible-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Atkinson Hyperlegible";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/atkinson-hyperlegible-latin-700-normal.woff2) format("woff2")}
 /* Layout: one-screen "regia" for the interactive whiteboard: header bar, then a single stage (start → question → summary). Huge touch targets, readable from the back row. */
 :root{
   --bg:#EEF0F5; --surface:#FFFFFF; --ink:#141B2D; --muted:#566079; --line:#D5DAE5;
   --accent:#C2561C; --accent-soft:#F7E2D5;
   --a:#2B5F9E; --b:#B8521B; --c:#1F7A4B; --d:#6E479E; --on-opt:#FFFFFF;
   --good:#1F7A4B; --good-soft:#DDF0E5; --warn:#B8521B; --warn-soft:#F7E2D5;
-  --display:'Rubik', 'Trebuchet MS', Arial, sans-serif;
-  --body:'Nunito Sans', Verdana, Arial, sans-serif;
+  --display:'Bricolage Grotesque', 'Trebuchet MS', Arial, sans-serif;
+  --body:'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
   --radius:16px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){

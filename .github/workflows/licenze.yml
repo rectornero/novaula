@@ -1,0 +1,26 @@
+# Licensing audit of sito/ (strumenti/audit-licenze.mjs): every file registered, licensed and self-hosted.
+# Runs on GitHub's free minutes (about 1 minute per run), never on Netlify, and never touches the database.
+# A failed run shows a red check on the commit or pull request; the Licensing office fixes it.
+name: Licensing audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "15 6 * * 1-6"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Audit sito/
+        run: node strumenti/audit-licenze.mjs

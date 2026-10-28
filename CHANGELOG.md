@@ -5,6 +5,16 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.18.2 (28 Oct 2026): license notices and a licensing check
+- The fonts now ship with their SIL Open Font License text (`sito/fonts/OFL.txt`) and supabase-js with its MIT
+  license (`sito/vendor/supabase.LICENSE.md`), as both licenses require. `THIRD-PARTY.md` lists every third-party
+  file in the site.
+- The «Quiz ciclo di progetto» no longer loads its fonts from Google Fonts, so opening it no longer sends students'
+  IP addresses to Google. It now uses the app's own Bricolage Grotesque and Atkinson Hyperlegible.
+- New licensing check (`strumenti/audit-licenze.mjs`, GitHub Actions, no Netlify credits): on every push, pull
+  request and weekday morning it checks that each file in `sito/` is registered and licensed, images carry
+  provenance, and no page loads from third-party hosts. No SQL needed.
+
 ## 2.18.1 (27 Oct 2026): planner works even without the timetable
 - The Piano valutazioni no longer stops with "permission denied for table timetable": without the timetable it still
   shows marks, tests, printing and the scan inbox, only without lesson-day suggestions. The database fix (read access
