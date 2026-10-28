@@ -28,6 +28,12 @@ This studio tracks its work in Artache. The `artache` MCP tools talk to it.
 - Never put student data in Artache: no student names, marks, hand-ins, PINs, tokens, keys or anything read from the
   Supabase database. App progress and release notes only.
 
+### Artache: this project
+Artache project name: `rectornero/novaula` (use exactly this as `project`).
+Post only what the changelog can't show: classroom feedback after a feature is used with students; a course program finished (e.g. 5F GPOI); an incident or outage; a production deploy blocked or out of step with main; a decision Nero must make about the platform.
+Posts are in English even though the app UI is Italian. Never include student names or personal data.
+At the end of each session, ask: did anything here change what Nero would decide or plan? Post only if yes.
+
 ## Netlify credits
 All of Nero's sites (laventina, artache, novaula, ai-ice, tzero) share one Netlify team, "overgame-director", with one
 credit balance: 1,000 credits a month plus bought packs. When it hits zero, every site is paused. Prices: production
