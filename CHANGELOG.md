@@ -48,6 +48,7 @@ for, and stays on. Agenda, class and Classroom now come together in one place.
   students can only send, at most 30 an hour) and `aggiornamenti/2026-10-29-agenda.sql` (table `calendar_events`, `classes.classroom_url`,
   `students.learning_plan` and `plan_note`, `school_day_off()`, `wage_push()` updated). No cron and no polling: the
   agenda reads the database only when a page opens. Service worker cache `classe-v39`.
+- Released 29 Oct 2026 with both SQL files applied to Supabase the same morning. Also ships 2.18.1 and 2.18.2.
 
 ## 2.18.2 (28 Oct 2026): license notices and a licensing check
 - The fonts now ship with their SIL Open Font License text (`sito/fonts/OFL.txt`) and supabase-js with its MIT
