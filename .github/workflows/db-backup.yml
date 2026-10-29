@@ -1,0 +1,75 @@
+# Backs up the Supabase database and keeps the free project from pausing over long breaks.
+# Runs on GitHub Actions only: no Netlify credits. Twice a week (Monday and Thursday), so the gap is never more
+# than 4 days and the 7-day inactivity pause never triggers, Christmas included. Run it by hand before every migration.
+#
+# Needs two repository secrets (Settings > Secrets and variables > Actions):
+#   SUPABASE_DB_URL     the Session pooler connection string from Supabase (Connect > Session pooler), with the
+#                       password filled in. The direct connection is IPv6-only and GitHub runners can't reach it.
+#   BACKUP_PASSPHRASE   any long passphrase; the dump is encrypted with it (it holds student data). Keep a copy
+#                       outside GitHub, or the backups can't be opened.
+# Without them the job still pings the project (keep-alive) and skips the dump with a warning.
+#
+# Restore: download the artifact from the run, then
+#   gpg --decrypt novaula-*.dump.gpg > novaula.dump
+#   pg_restore --clean --if-exists --no-owner --no-privileges -d "$SUPABASE_DB_URL" novaula.dump
+name: Database backup
+
+on:
+  schedule:
+    - cron: "17 3 * * 1,4"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why (e.g. before aggiornamenti/2026-10-29-agenda.sql)"
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - name: Keep-alive ping
+        run: |
+          curl -sS -o /dev/null -w "REST %{http_code}\n" \
+            "https://pplpkabznbihovqwzenq.supabase.co/rest/v1/classes?select=id&limit=1" \
+            -H "apikey: sb_publishable_GESZSdYcqNonVTqIEvJxaw_sEC9clnR" || true
+
+      - name: Install pg_dump 17
+        if: env.SUPABASE_DB_URL != '' && env.BACKUP_PASSPHRASE != ''
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSo /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Dump and encrypt
+        if: env.SUPABASE_DB_URL != '' && env.BACKUP_PASSPHRASE != ''
+        run: |
+          name="novaula-$(date -u +%Y-%m-%dT%H%M)"
+          /usr/lib/postgresql/17/bin/pg_dump "$SUPABASE_DB_URL" --format=custom --no-owner --no-privileges \
+            --schema=public --schema=auth --schema=storage --file="$name.dump"
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
+            --symmetric --cipher-algo AES256 --output "$name.dump.gpg" "$name.dump"
+          rm "$name.dump"
+          ls -l "$name.dump.gpg"
+          echo "NAME=$name" >> "$GITHUB_ENV"
+
+      - name: Keep the encrypted dump for 35 days
+        if: env.NAME != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME }}
+          path: ${{ env.NAME }}.dump.gpg
+          retention-days: 35
+          compression-level: 0
+
+      - name: Warn when secrets are missing
+        if: env.SUPABASE_DB_URL == '' || env.BACKUP_PASSPHRASE == ''
+        run: echo "::warning::SUPABASE_DB_URL or BACKUP_PASSPHRASE is not set, so only the keep-alive ping ran."
