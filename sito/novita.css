@@ -7,5 +7,5 @@
 .nv-date{margin:0;font-size:.85rem}
 .nv-motto{margin:4px 0 2px;font-style:italic;color:var(--ink);border-left:4px solid var(--hl);padding-left:10px}
 .nv-list{margin:4px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
-.nv-current{border-color:var(--accent);border-width:2px}
+.nv-current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
 .version a{color:inherit}
