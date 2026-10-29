@@ -8,6 +8,9 @@
 
   // Dalla più nuova. nome e motto solo per le versioni che hanno un nome.
   var NOVITA = [
+    { v: "2.19.1", data: "29 ottobre 2026", punti: [
+        "Il prof rivede il percorso da un'aula all'altra proprio quando suona la campanella."
+      ] },
     { v: "2.19.0", data: "29 ottobre 2026", nome: "Definitely not EoS",
       motto: "EoS = End of Service, quando un gioco spegne i server per sempre. Qui no: si fanno le patch che chiedete voi, e Novaula resta accesa, con agenda, classe e Classroom tutte unite.",
       punti: [

@@ -5,6 +5,15 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.19.1 (29 Oct 2026): the route between lessons is back at the bell
+- Fix: the «🧭 Percorso» to the next room only sat on the «Dopo» card, which disappears the moment the bell rings and
+  the next lesson becomes «Adesso». So at the one time the teacher is walking between rooms, the route was gone
+  (and for the day's last lesson it never showed at the bell at all). The «Adesso» card now shows the route from the
+  previous room for the first 10 minutes of a lesson, when the previous lesson ended at most 10 minutes earlier.
+- «La tua giornata»: each lesson after the first shows the route from the previous lesson's room
+  («🧭 2B01 → 1C03: …»), highlighted in red when the room is far away and there is no break.
+- No SQL.
+
 ## 2.19.0 (29 Oct 2026): «Definitely not EoS»: daily agenda, students' week, Google Classroom, patch notes
 Named by Nero with a wink at a game reaching its end of service (EoS): Novaula keeps patching what its users ask
 for, and stays on. Agenda, class and Classroom now come together in one place.
