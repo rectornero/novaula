@@ -34,6 +34,13 @@ Post only what the changelog can't show: classroom feedback after a feature is u
 Posts are in English even though the app UI is Italian. Never include student names or personal data.
 At the end of each session, ask: did anything here change what Nero would decide or plan? Post only if yes.
 
+## Database backups
+The free Supabase plan has no automatic backups. `.github/workflows/db-backup.yml` dumps the database (encrypted,
+kept 35 days as a run artifact) every Monday and Thursday, which also keeps the project from pausing over long breaks.
+It runs on GitHub Actions, so it costs no Netlify credits. Before every migration, run it by hand (Actions > Database
+backup > Run workflow) and wait for it to finish. If the project paused anyway, restore it from the Supabase
+dashboard (or `restore_project`).
+
 ## Netlify credits
 All of Nero's sites (laventina, artache, novaula, ai-ice, tzero) share one Netlify team, "overgame-director", with one
 credit balance: 1,000 credits a month plus bought packs. When it hits zero, every site is paused. Prices: production
