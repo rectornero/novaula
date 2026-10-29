@@ -5,6 +5,34 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 2.19.0 (29 Oct 2026): «Definitely not EoS»: daily agenda, students' week, Google Classroom, patch notes
+Named by Nero with a wink at a game reaching its end of service (EoS): Novaula keeps patching what its users ask
+for, and stays on. Agenda, class and Classroom now come together in one place.
+- Students: the Programma tab of each class opens with **«La tua settimana»**: the next lesson and its room, tests in
+  the next 3 weeks with a revision plan (one recent topic and its slides per evening, then the practice test),
+  homework due within a week and the next school holiday (Lazio 2026/27 calendar).
+- Google Classroom without a Google login: a «Classroom ↗» button on each class page once the teacher saves the
+  class link, and «Condividi su Classroom» on homework and tests for the teacher (Google's own share link, prefilled).
+- New public **«Novità»** page (`#/novita`, `sito/novita.js`): every release since 1.0.0 in plain Italian for
+  students, newest first, linked from the version line at the bottom of the home page and of Area docente. Releases
+  newer than `VERSION` stay hidden. From now on every release adds an entry there too.
+- Teacher home: new **«La tua giornata»**, a checklist of the day ticked on the phone. Before lessons: circulars,
+  the parent-meeting hour, councils. In class: every lesson with room and register duties, plus that day's test,
+  orals and the PDP/PEI measures to prepare. After lessons: tests to mark (a warning from day 10 of the usual 15),
+  copies to print for tomorrow, hand-ins that just closed, and the Friday/Monday routine. «In arrivo» lists the next
+  21 days of deadlines and counts down to the end of the term, with how many students are still short of marks.
+- New **🗓️ Agenda e calendario** page in Area docente: the 2026/27 school year (Lazio calendar, national holidays, PEI
+  by 31 October, the 15 May document for fifth years; usual-practice dates marked «da confermare»), a form for the
+  school's own dates (scrutini, pagellino, bridges), the weekly parent-meeting hour, PDP/PEI flags per student with
+  the measures to prepare (teacher only), the Google Classroom link of each class, and where each rule comes from.
+- Pagella: new **📋 Pacchetto scrutinio**: the proposed mark and an editable draft comment for every student (level,
+  trend, written vs oral, homework, too few marks, PDP/PEI), with «Copia» per student and «Copia tutto» for Excel or
+  the register.
+- The daily wage notification no longer goes out on school holidays (`school_day_off()`).
+  SQL: `aggiornamenti/2026-10-29-agenda.sql` (table `calendar_events`, `classes.classroom_url`,
+  `students.learning_plan` and `plan_note`, `school_day_off()`, `wage_push()` updated). No cron and no polling: the
+  agenda reads the database only when a page opens. Service worker cache `classe-v39`.
+
 ## 2.18.2 (28 Oct 2026): license notices and a licensing check
 - The fonts now ship with their SIL Open Font License text (`sito/fonts/OFL.txt`) and supabase-js with its MIT
   license (`sito/vendor/supabase.LICENSE.md`), as both licenses require. `THIRD-PARTY.md` lists every third-party

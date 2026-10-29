@@ -734,5 +734,5 @@
     }).catch(function (e) { card.replaceChildren(x.notice("err", x.errText(e))); });
   }
 
-  window.NovaulaValutazioni = { page: page, week: week, _test: { parseRoster: parseRoster, holiday: holiday, easter: easter, classPlan: classPlan, proposeTests: proposeTests, code: code } };
+  window.NovaulaValutazioni = { page: page, week: week, data: loadAll, plan: classPlan, _test: { parseRoster: parseRoster, holiday: holiday, easter: easter, classPlan: classPlan, proposeTests: proposeTests, code: code } };
 })();

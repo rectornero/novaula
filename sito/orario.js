@@ -301,6 +301,8 @@
   };
 
   window.NovaulaOrarioRoute = route; // per prove dalla console
+  // per agenda.js: righe dell'orario (tabella o copia incorporata) e ore della lezione
+  window.NovaulaOrarioData = { load: load, ordinal: function (r) { return ordinal(periods(r)); } };
 
   window.NovaulaOrario = function (box, x) {
     var h = x.h, timer = null, rows = null, stopped = false;

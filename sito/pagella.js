@@ -141,6 +141,7 @@
           h("td", null, h("span", { class: "mk big " + tone(r.proposal), text: r.proposal == null ? "–" : String(r.proposal) })));
       }));
       tableBox.replaceChildren(h("table", { class: "pg-table" }, h("thead", null, head), body));
+      if (window.NovaulaAgenda && window.NovaulaAgenda.scrutinio) tableBox.appendChild(window.NovaulaAgenda.scrutinio(rows, p, x, state.cid));
     }
 
     /* Pesi e periodi */

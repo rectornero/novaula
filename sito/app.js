@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.18.2";
+  var VERSION = "2.19.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var MAX_UPLOAD = 20 * 1024 * 1024;
@@ -390,6 +390,7 @@
   function homePage() {
     setPage("");
     nowBoard();
+    if (api.isTeacher() && api.client && window.NovaulaAgenda) window.NovaulaAgenda.today(app, agCtx());
     if (api.isTeacher() && api.client && window.NovaulaRiunioni) window.NovaulaRiunioni.strip(app, rnCtx());
     if (api.isTeacher() && api.client && window.NovaulaValutazioni) window.NovaulaValutazioni.week(app, vlCtx());
     var today = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
@@ -425,6 +426,7 @@
     app.appendChild(h("header", { class: "class-head", style: "--cc:" + classColor(c) },
       h("div", { class: "class-top" },
         h("a", { class: "back", href: "#/", text: "← Tutte le classi" }),
+        c.classroom_url ? h("a", { class: "btn classroom-link", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Classroom ↗" }) : null,
         window.NovaulaProfili && api.client ? window.NovaulaProfili.chip(c, pctx()) : null),
       h("h1", null, h("span", { class: "code", text: p[0] }), " ", h("span", { class: "subject", text: p[1] }))
     ));
@@ -436,6 +438,9 @@
     app.appendChild(h("nav", { class: "tabs", style: "--cc:" + classColor(c), "aria-label": "Sezioni" }, [["programma", "Programma"], ["materiali", "Materiali"], ["compiti", "Compiti"], ["verifiche", "Verifiche"], ["aiuto", "Aiuto"], ["chat", "Chat"]].map(function (t) {
       return h("a", { href: "#/c/" + id + "/" + t[0], "aria-current": t[0] === tab || (tab === "domande" && t[0] === "chat") ? "page" : null }, icon(t[0]), h("span", { text: t[1] }));
     })));
+    // «La tua settimana» in cima al programma: prossima lezione, verifiche, consegne, piano di ripasso
+    if (tab === "programma" && window.NovaulaAgenda) window.NovaulaAgenda.student(app, Object.assign(agCtx(), { teacher: api.isTeacher(),
+      tests: api.tests, assignments: api.assignments, topics: api.topics, materials: api.materials, openHref: openHref }), c);
     var box = h("section", { class: "list" });
     app.appendChild(box);
     if (tab === "materiali") materialsTab(c, box);
@@ -654,6 +659,8 @@
           h("a", { class: "btn", href: openHref(a.pdf_url, c.id, "compiti", { url: a.pdf_url, title: a.title }), target: "_blank", rel: "noopener", text: "Apri la scheda (PDF)" }),
           h("a", { class: "btn link", href: a.pdf_url, download: a.pdf_url.split("/").pop(), text: "Scarica" }))
       );
+      if (api.isTeacher() && window.NovaulaAgenda) card.appendChild(h("div", { class: "row" }, window.NovaulaAgenda.share(agCtx(), shareUrl(c, "compiti"), a.title,
+        (a.due_date ? "Consegna entro il " + fmtDate(a.due_date) + " su Novaula. " : "") + (a.description || ""))));
       card.appendChild(api.isTeacher() ? teacherSubmissions(a) : window.NovaulaProfili && api.client ? window.NovaulaProfili.submitForm(a, c, pctx()) : submitForm(a, c));
       box.appendChild(card);
     });
@@ -735,6 +742,8 @@
           h("div", { class: "stack" },
             h("p", { class: "muted small", text: t.done ? "Testo e soluzioni sono visibili agli studenti." : "Testo e soluzioni li vedi solo tu finché non segni la verifica come svolta." }),
             h("label", null, "Data della verifica", date),
+            window.NovaulaAgenda ? h("div", { class: "row" }, window.NovaulaAgenda.share(agCtx(), shareUrl(c, "verifiche"), "Verifica: " + t.title,
+              (t.test_date ? "Verifica il " + fmtDate(t.test_date) + ". " : "") + "La simulazione per prepararsi è su Novaula.")) : null,
             h("div", { class: "row" }, h("button", { class: "btn", type: "button", text: t.done ? "Segna da svolgere (nascondi testo e soluzioni)" : "Segna come svolta (pubblica testo e soluzioni)", onclick: async function () {
               try { await api.updateTest(t.id, { done: !t.done }); route(); } catch (e) { toast(errText(e)); }
             } })))));
@@ -863,6 +872,11 @@
   function vlCtx() {
     return { h: h, sb: api.client, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classColor: classColor, classes: classes, route: route };
   }
+  // Aiuti per agenda.js
+  function agCtx() {
+    return { h: h, sb: api.client, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classColor: classColor, classes: classes, route: route };
+  }
+  function shareUrl(c, tab) { return location.origin + location.pathname + "#/c/" + c.id + "/" + tab; }
   // Aiuti per profili.js
   function pctx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
@@ -1015,6 +1029,11 @@
       window.NovaulaValutazioni.page(app, vlCtx());
       return;
     }
+    if (api.isTeacher() && /^#\/docente\/agenda/.test(location.hash) && window.NovaulaAgenda && api.client) {
+      setPage("Agenda");
+      window.NovaulaAgenda.page(app, agCtx());
+      return;
+    }
     if (api.isTeacher() && /^#\/docente\/riunioni/.test(location.hash) && window.NovaulaRiunioni && api.client) {
       setPage("Riunioni");
       window.NovaulaRiunioni.page(app, rnCtx());
@@ -1034,6 +1053,7 @@
         h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
+          window.NovaulaAgenda && api.client ? h("a", { class: "btn", href: "#/docente/agenda", text: "🗓️ Agenda e calendario" }) : null,
           window.NovaulaOrarioPage ? h("a", { class: "btn", href: "#/docente/orario", text: "📅 Orario completo" }) : null,
           window.NovaulaRiunioni && api.client ? h("a", { class: "btn", href: "#/docente/riunioni", text: "🎥 Riunioni" }) : null,
           window.NovaulaValutazioni && api.client ? h("a", { class: "btn", href: "#/docente/valutazioni", text: "📝 Piano valutazioni" }) : null,

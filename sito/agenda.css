@@ -1,0 +1,83 @@
+/* Novaula · Agenda (agenda.js): «La tua giornata», «La tua settimana», calendario dell'anno, Classroom, scrutinio */
+.ag{display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--hl)}
+.ag.all-done{border-top-color:var(--ok)}
+.ag-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ag-count{font:800 .9rem/1 var(--body);color:var(--muted);background:var(--soft);padding:6px 12px;border-radius:999px}
+.ag.all-done .ag-count{background:var(--ok-soft);color:var(--ok)}
+.ag-h{font:800 .78rem/1.2 var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:6px 0 0}
+.ag-off{background:var(--soft);border-radius:12px;padding:10px 14px;font-weight:700}
+.ag-list,.ag-ahead,.ag-events,.ag-pdp,.ag-scr-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ag-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line);border-left:0}
+.ag-item:first-child{border-top:0}
+.ag-item[style]{box-shadow:inset 4px 0 0 var(--cc);padding-left:12px;border-radius:2px}
+.ag-check{display:grid;place-items:center;min-width:44px;min-height:44px;margin:-8px -6px -8px -10px;cursor:pointer}
+.ag-check input{width:24px;height:24px;accent-color:var(--ok);cursor:pointer}
+.ag-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ag-text a{color:var(--ink);text-decoration-color:var(--line);text-underline-offset:3px}
+.ag-time{font-variant-numeric:tabular-nums;color:var(--cc,var(--accent))}
+.ag-sub{font-size:.88rem;color:var(--muted)}
+.ag-extra{font-size:.92rem;font-weight:700;background:color-mix(in srgb,var(--hl) 30%,transparent);border-radius:8px;padding:4px 8px;margin-top:4px;width:fit-content;max-width:100%}
+.ag-item.done .ag-text,.ag-item.done .ag-sub{text-decoration:line-through;color:var(--muted)}
+.ag-item.done .ag-extra{opacity:.6}
+.ag-item.warn .ag-sub{color:var(--danger);font-weight:700}
+.ag-ahead li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.ag-ahead li:first-child{border-top:0}
+.ag-ahead li.warn>div>a,.ag-ahead li.warn>div>p:first-child,.ag-ahead li.warn>a{color:var(--danger);font-weight:700}
+.ag-ic{flex:none;width:24px;text-align:center}
+.ag-rev ol{margin:4px 0 0;padding-left:20px;font-size:.92rem;display:flex;flex-direction:column;gap:2px}
+
+/* Studenti */
+.ag-st{border-top:4px solid var(--cc);display:flex;flex-direction:column;gap:8px}
+.ag-gc-btn{min-height:40px}
+.classroom-link{min-height:36px;padding:6px 12px;font-size:.88rem}
+
+/* Calendario */
+.ag-cal,.ag-ric,.ag-gc,.ag-pdp-card{display:flex;flex-direction:column;gap:10px}
+.ag-month{display:flex;flex-direction:column;gap:4px}
+.ag-month .ag-h{text-transform:capitalize;letter-spacing:.02em;font-size:.95rem;color:var(--ink)}
+.ag-ev{display:grid;grid-template-columns:84px 1fr auto;gap:10px;align-items:start;padding:8px 0;border-top:1px solid var(--line)}
+.ag-ev:first-child{border-top:0}
+.ag-ev[style]{box-shadow:inset 4px 0 0 var(--cc);padding-left:10px}
+.ag-ev.past{opacity:.55}
+.ag-ev.now{background:color-mix(in srgb,var(--hl) 25%,transparent);border-radius:10px;padding-inline:8px}
+.ag-date{font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent)}
+.ag-src{font-weight:700}
+.ag-src.prassi{color:var(--danger)}
+.ag-src.scuola{color:var(--ok)}
+.ag-form,.ag-ric-form{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:12px;background:var(--soft)}
+.ag-ric-form{display:grid;grid-template-columns:repeat(3,1fr);align-items:end}
+.ag-ric-form .ag-wide,.ag-ric-form button{grid-column:1/-1}
+.ag-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ag-cal label,.ag-ric label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:.92rem}
+.ag-cal label.ag-inline{flex-direction:row;align-items:center;gap:8px;font-weight:400}
+.ag-cal input,.ag-cal select,.ag-ric input,.ag-ric select,.ag-gc input,.ag-pdp-card select,.ag-pdp-card input,.ag-scr textarea{
+  width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-weight:400}
+.ag-cal input[type=checkbox]{width:22px;height:22px;min-height:0;flex:none}
+.ag-gc-row{display:grid;grid-template-columns:48px 1fr auto;gap:8px;align-items:center}
+.ag-gc-row b{color:var(--cc);font-family:var(--display)}
+.ag-pdp li{display:grid;grid-template-columns:1fr 96px auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.ag-pdp li:first-child{border-top:0}
+.ag-pdp li input{grid-column:1/-1;grid-row:2}
+.ag-pdp-card>select{max-width:280px}
+.ag-rules dl{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;margin:10px 0 0}
+.ag-rules dt{font-weight:800}
+.ag-rules dd{margin:0;color:var(--muted)}
+.ag-rules summary{cursor:pointer}
+
+/* Pacchetto scrutinio (Pagella) */
+.ag-scr{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.ag-scr summary{cursor:pointer;font-size:1rem;color:var(--ink)}
+.ag-scr-list li{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-top:1px solid var(--line)}
+.ag-scr-list li:first-child{border-top:0}
+.ag-scr-head{display:flex;align-items:center;gap:8px}
+.ag-scr-head .mk{margin-left:auto}
+.ag-scr textarea{resize:vertical;line-height:1.45}
+@media (max-width:520px){
+  .ag-ev{grid-template-columns:64px 1fr}
+  .ag-ev>.btn{grid-column:2;justify-self:start}
+  .ag-two,.ag-ric-form{grid-template-columns:1fr}
+  .ag-gc-row{grid-template-columns:40px 1fr}
+  .ag-gc-row button{grid-column:2;justify-self:start}
+  .ag-rules dl{grid-template-columns:1fr}
+}
+@media print{.ag-check{display:none}}
