@@ -8,13 +8,13 @@
 
   // Dalla più nuova. nome e motto solo per le versioni che hanno un nome.
   var NOVITA = [
-    { v: "2.19.0", data: "ottobre 2026", nome: "Patch Unite",
-      motto: "Altrove spengono i server. Qui invece si fanno le patch che chiedete voi, e la luce resta accesa: agenda, classe e Classroom, tutte unite.",
+    { v: "2.19.0", data: "ottobre 2026", nome: "Definitely not EoS",
+      motto: "EoS = End of Service, quando un gioco spegne i server per sempre. Qui no: si fanno le patch che chiedete voi, e Novaula resta accesa, con agenda, classe e Classroom tutte unite.",
       punti: [
-        "Nuovo riquadro «La tua settimana» nella pagina della classe: la prossima lezione con l'aula, le verifiche e i compiti in arrivo.",
-        "Un piccolo piano di ripasso: quali presentazioni rivedere nei giorni prima di una verifica.",
+        "Nella scheda «Programma» di ogni classe c'è il nuovo riquadro «La tua settimana»: la prossima lezione con l'aula, le verifiche delle prossime 3 settimane e i compiti in scadenza entro una settimana.",
+        "Per ogni verifica, un piano di ripasso: ogni sera un argomento recente con le sue slide, e alla fine la verifica di prova.",
         "Il conto alla rovescia per le prossime vacanze, dal calendario scolastico del Lazio 2026/27.",
-        "Un pulsante che apre direttamente il Google Classroom della tua classe.",
+        "Il pulsante «Classroom ↗» apre il Google Classroom della tua classe (appena il prof salva il link), senza accedere a Google da Novaula.",
         "Questa pagina, «Novità»: tutto quello che è cambiato in Novaula, versione per versione."
       ] },
     { v: "2.18.2", data: "28 ottobre 2026", punti: [
