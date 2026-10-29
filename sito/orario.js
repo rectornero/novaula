@@ -30,6 +30,7 @@
   // B e C sono collegati; A (e ogni altro edificio) è separato: si esce e si rientra.
   var LINKED = { B: "C", C: "B" };
   var LINK_FLOORS = null; // piani in cui c'è il passaggio B–C (es. [0, 1]); null = su tutti i piani
+  var ARRIVE_MIN = 10; // per quanti minuti dopo la campanella la carta «Adesso» mostra il percorso dall'aula di prima
   var DAYS = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
   var cache = null;
 
@@ -342,6 +343,19 @@
         h("ol", null, rt.steps.map(function (t) { return h("li", { text: t }); })),
         rt.far && tight && h("span", { class: "now-route-warn", text: "Cambio d'ora senza pausa e aula lontana: avviati appena suona" }));
     }
+    // Appena suona: la lezione in corso è già «Adesso» e il riquadro «Dopo» non c'è più, quindi il percorso
+    // dall'aula di prima va sulla carta «Adesso» per i primi minuti della lezione, finché ci si sta spostando
+    function arriveBox(s) {
+      var c = s.current;
+      if (!c || s.t - mins(c.starts) >= ARRIVE_MIN) return null;
+      var prev = s.today.filter(function (r) { return mins(r.ends) <= mins(c.starts); }).pop();
+      if (!prev || mins(c.starts) - mins(prev.ends) > ARRIVE_MIN) return null;
+      var rt = route(prev.room, c.room);
+      if (!rt || /^Resti/.test(rt.steps[0])) return null;
+      return h("span", { class: "now-route" + (rt.far ? " far" : "") },
+        h("span", { class: "now-route-h" }, "🧭 Percorso da ", h("b", { text: parseRoom(prev.room).code })),
+        h("ol", null, rt.steps.map(function (t) { return h("li", { text: t }); })));
+    }
     function whenNext(s) {
       var n = s.next;
       if (!s.nextDay) return "alle " + hhmm(n.starts) + " · tra " + span(Math.max(1, Math.round(mins(n.starts) - s.t)));
@@ -360,6 +374,7 @@
           h("span", { class: "now-code", text: c.code }),
           h("span", { class: "now-subject", text: s.current.subject }),
           place(s.current),
+          arriveBox(s),
           h("span", { class: "now-bar", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": String(Math.round(pct)) },
             h("span", { style: "width:" + pct.toFixed(1) + "%" })),
           h("span", { class: "now-time" },

@@ -19,6 +19,9 @@
 .ag-extra{font-size:.92rem;font-weight:700;background:color-mix(in srgb,var(--hl) 30%,transparent);border-radius:8px;padding:4px 8px;margin-top:4px;width:fit-content;max-width:100%}
 .ag-item.done .ag-text,.ag-item.done .ag-sub{text-decoration:line-through;color:var(--muted)}
 .ag-item.done .ag-extra{opacity:.6}
+.ag-route{font-size:.92rem;background:var(--soft);border-radius:8px;padding:4px 8px;margin-top:4px;width:fit-content;max-width:100%}
+.ag-route.far{background:color-mix(in srgb,var(--danger) 10%,var(--card))}
+.ag-item.done .ag-route{opacity:.6}
 .ag-item.warn .ag-sub{color:var(--danger);font-weight:700}
 .ag-ahead li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
 .ag-ahead li:first-child{border-top:0}

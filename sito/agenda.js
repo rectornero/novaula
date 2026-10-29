@@ -128,6 +128,13 @@
     };
   }
 
+  // Come arrivare in aula dalla lezione di prima (orario.js): null se manca l'aula o è la stessa
+  function moveTo(prev, r) {
+    var rt = window.NovaulaOrarioRoute && window.NovaulaOrarioRoute(prev.room, r.room);
+    if (!rt || /^Resti/.test(rt.steps[0])) return null;
+    return { from: String(prev.room).split(" ")[0], to: String(r.room).split(" ")[0], steps: rt.steps, far: rt.far, tight: prev.ends >= r.starts };
+  }
+
   // Le voci della giornata, in tre gruppi: prima, in classe, dopo
   function buildDay(T, x) {
     var t = T.today, events = allEvents(T.custom), D = T.D, classes = x.classes || [];
@@ -147,14 +154,15 @@
     before.sort(function (a, b) { return (a.time || "") < (b.time || "") ? -1 : 1; });
     if (!off) {
       before.unshift({ id: "circ", text: "Leggi circolari e avvisi sul registro elettronico", sub: "Prima della prima ora: sostituzioni, uscite, comunicazioni" });
-      T.slots.filter(function (r) { return r.weekday === wd(t); }).sort(function (a, b) { return a.starts < b.starts ? -1 : 1; }).forEach(function (r) {
+      T.slots.filter(function (r) { return r.weekday === wd(t); }).sort(function (a, b) { return a.starts < b.starts ? -1 : 1; }).forEach(function (r, k, day) {
         var c = x.findClass(r.class_id), P = plans[r.class_id], extra = [];
         var test = P && P.tests.filter(function (k) { return k.test_date === t; })[0];
         if (test) extra.push("✍ Verifica «" + test.title + "»: porta le copie");
         if (test) extra = extra.concat(planLines(T, r.class_id));
         if (P && P.orals[t]) extra.push("🗣 Interroga " + P.orals[t].map(function (o) { return o.s.last_name; }).join(", "));
         lessons.push({ id: "l-" + r.starts, time: hhmm(r.starts), text: tag(c, r.class_id) + " · " + (r.subject || "") + (r.room ? " · aula " + r.room : ""),
-          sub: "Registro: firma, assenze, argomento e compiti per casa", extra: extra, href: "#/c/" + r.class_id + "/programma", cls: c, lesson: r });
+          sub: "Registro: firma, assenze, argomento e compiti per casa", extra: extra, href: "#/c/" + r.class_id + "/programma", cls: c, lesson: r,
+          route: k ? moveTo(day[k - 1], r) : null });
       });
     }
     classes.forEach(function (c) {
@@ -326,6 +334,8 @@
           h("p", { class: "ag-text" }, i.time ? h("b", { class: "ag-time", text: i.time + " " }) : null,
             i.href ? h("a", { href: i.href, target: i.ext ? "_blank" : null, rel: i.ext ? "noopener" : null, text: i.text }) : i.text),
           i.sub ? h("p", { class: "ag-sub", text: i.sub }) : null,
+          i.route ? h("p", { class: "ag-route" + (i.route.far && i.route.tight ? " far" : "") },
+            "🧭 ", h("b", { text: i.route.from }), " → ", h("b", { text: i.route.to }), ": " + i.route.steps.join(" · ")) : null,
           (i.extra || []).map(function (e) { return h("p", { class: "ag-extra", text: e }); }),
           i.lesson && T.logReady && T.absReady ? lessonPanel(T, x, i.lesson) : null));
       cb.addEventListener("change", function () {
