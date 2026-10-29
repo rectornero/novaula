@@ -1,0 +1,11 @@
+/* Novaula · Novità (note di versione pubbliche) */
+.nv{gap:16px}
+.nv-entry{gap:6px}
+.nv-entry h2.nv-v{margin:0;font-family:var(--display);font-size:1.15rem;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.nv-name{font-size:1.05rem;color:var(--accent)}
+.nv-badge{flex:none;white-space:nowrap;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--hl);color:var(--hl-ink)}
+.nv-date{margin:0;font-size:.85rem}
+.nv-motto{margin:4px 0 2px;font-style:italic;color:var(--ink);border-left:4px solid var(--hl);padding-left:10px}
+.nv-list{margin:4px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.nv-current{border-color:var(--accent);border-width:2px}
+.version a{color:inherit}

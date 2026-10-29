@@ -411,7 +411,7 @@
     app.appendChild(grid);
     if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.badges(grid, avCtx());
     app.appendChild(h("p", { class: "tip", text: "Consiglio: aggiungi Novaula alla schermata Home del telefono per aprirla come un'app." }));
-    app.appendChild(h("p", { class: "version", text: "Novaula " + VERSION }));
+    app.appendChild(versionLine());
   }
 
   function classPage(id, tab) {
@@ -1051,7 +1051,7 @@
       if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
       if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
       if (window.NovaulaRiepilogo && api.client) window.NovaulaRiepilogo.board(app, { h: h, sb: api.client, findClass: findClass, notice: notice, errText: errText });
-      app.appendChild(h("p", { class: "version", text: "Novaula " + VERSION }));
+      app.appendChild(versionLine());
       var qbox = h("section", { class: "list" }, h("p", { class: "empty", text: "Caricamento delle domande…" }));
       app.appendChild(h("h2", { text: "Domande senza risposta" }));
       app.appendChild(qbox);
@@ -1085,11 +1085,23 @@
     app.appendChild(form);
   }
 
+  /* ---------- Novità (note di versione, pubbliche) ---------- */
+  function versionLine() {
+    return h("p", { class: "version" }, h("a", { href: "#/novita", text: "Novaula " + VERSION + " · Novità" }));
+  }
+
+  function novitaPage() {
+    setPage("Novità");
+    if (window.NovaulaNovita) window.NovaulaNovita.page(app, { h: h, version: VERSION });
+    else app.appendChild(versionLine());
+  }
+
   /* ---------- Avvio ---------- */
   function route() {
     var parts = (location.hash || "#/").slice(2).split("/");
     if (parts[0] === "c") classPage(parts[1], parts[2]);
     else if (parts[0] === "docente") teacherPage();
+    else if (parts[0] === "novita") novitaPage();
     else homePage();
     document.getElementById("teacherLink").textContent = api.isTeacher() ? "Docente ✓" : "Area docente";
     // sveglia delle riunioni: suona in qualunque pagina finché Novaula è aperto
