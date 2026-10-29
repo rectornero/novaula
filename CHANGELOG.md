@@ -36,6 +36,13 @@ for, and stays on. Agenda, class and Classroom now come together in one place.
   shows up under «Dopo le lezioni» as «Recupero della verifica …» (red after 14 days).
 - Students: a **💡 Suggerisci** button in «La tua settimana» sends an idea or a problem, anonymous, to the teacher only.
   New ones appear in the day's checklist and in «Suggerimenti degli studenti» on the agenda page (Visto / Fatto).
+- New **Informativa privacy** for students and families (`sito/privacy.html`, a static page that also opens outside
+  the app): what data Novaula keeps, why (the school's teaching task; PDP/PEI flags under art. 9), the AI-assisted
+  corrections, Supabase (Frankfurt), Netlify and Anthropic as processors, retention until 30 September after the
+  school year, rights and contacts. Linked from the version line and from the student profile and «Chi sei?»
+  screens. The controller is the school (ITIS Enrico Fermi, through the Dirigente Scolastico); school and DPO contacts point to
+  the school's own Privacy page until Nero sends the DPO's email. Also lists GitHub (encrypted database backups, kept
+  35 days) and the lesson absences.
 - The daily wage notification no longer goes out on school holidays (`school_day_off()`).
   SQL: `aggiornamenti/2026-10-29-registro.sql` (tables `absences`, `lesson_log`, teacher only, and `feedback`, which
   students can only send, at most 30 an hour) and `aggiornamenti/2026-10-29-agenda.sql` (table `calendar_events`, `classes.classroom_url`,

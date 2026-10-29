@@ -115,6 +115,7 @@
         h("p", { class: "muted", text: "Tocca il tuo nome. Se non c'è ancora, crea il tuo profilo qui sotto: basta farlo una volta." })),
       search, list, pinBox));
     box.appendChild(createForm(c, x));
+    box.appendChild(privacyLine(h));
     var people = [];
     try { people = ok(await x.sb.rpc("class_students", { p_class: c.id })); } catch (e) { list.replaceChildren(x.notice("err", x.errText(e))); return; }
     function paint() {
@@ -291,6 +292,13 @@
       (d.requests || []).map(function (q) {
         return h("p", { class: "small pf-req" + (q.done ? " done" : "") }, h("span", { text: q.done ? "✓ " : "⏳ " }), q.body, h("span", { class: "muted", text: " · " + x.fmtTime(q.created_at) }));
       }), rf));
+    box.appendChild(privacyLine(h));
+  }
+
+  // Link all'informativa (art. 13 GDPR) dove lo studente crea e usa il profilo
+  function privacyLine(h) {
+    return h("p", { class: "small muted pf-privacy" }, "Come usiamo i tuoi dati: ",
+      h("a", { href: "privacy.html", text: "informativa privacy" }), ".");
   }
 
   function pinTools(c, x, st) {

@@ -15,7 +15,8 @@
         "Per ogni verifica, un piano di ripasso: ogni sera un argomento recente con le sue slide, e alla fine la verifica di prova.",
         "Il conto alla rovescia per le prossime vacanze, dal calendario scolastico del Lazio 2026/27.",
         "Il pulsante «Classroom ↗» apre il Google Classroom della tua classe (appena il prof salva il link), senza accedere a Google da Novaula.",
-        "Questa pagina, «Novità»: tutto quello che è cambiato in Novaula, versione per versione."
+        "Questa pagina, «Novità»: tutto quello che è cambiato in Novaula, versione per versione.",
+        "La nuova «Informativa privacy» spiega quali tuoi dati usa Novaula, perché, per quanto tempo e quali diritti avete tu e la tua famiglia. La trovi in fondo alla home e nella pagina del tuo profilo."
       ] },
     { v: "2.18.2", data: "28 ottobre 2026", punti: [
         "Il «Quiz ciclo di progetto» ora usa i caratteri di Novaula invece di caricarli da Google: aprendolo, nessun tuo dato va a Google.",
