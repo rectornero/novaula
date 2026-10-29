@@ -8,7 +8,8 @@
      window.NovaulaAgenda.student(contenitore, aiuti, c)   pagina della classe: «La tua settimana» per gli studenti
      window.NovaulaAgenda.share(aiuti, url, titolo, testo) pulsante «Condividi su Classroom» (solo link, nessun accesso a Google)
      window.NovaulaAgenda.scrutinio(righe, periodo, aiuti, classe) Pagella: voti proposti e bozze di giudizio da copiare sul registro
-   Studenti con PDP/PEI: colonne students.learning_plan e plan_note (solo docente). Ore di ricevimento: grade_settings scope 'agenda'. */
+   Studenti con PDP/PEI: colonne students.learning_plan e plan_note (solo docente). Ore di ricevimento: grade_settings scope 'agenda'.
+   Assenze (absences), argomento dell'ora (lesson_log) e suggerimenti degli studenti (feedback): aggiornamenti/2026-10-29-registro.sql. */
 (function () {
   "use strict";
 
@@ -108,7 +109,10 @@
       sb.from("assignments").select("id, class_id, title, due_date, deck, test_id").gte("due_date", addDays(t, -3)).lte("due_date", t),
       sb.from("calendar_events").select("*").gte("day", y + "-09-01").order("day"),
       sb.from("students").select("id, class_id, first_name, last_name, learning_plan, plan_note").not("learning_plan", "is", null),
-      sb.from("grade_settings").select("weights").eq("scope", "agenda").maybeSingle()
+      sb.from("grade_settings").select("weights").eq("scope", "agenda").maybeSingle(),
+      sb.from("absences").select("id, class_id, student_id, day").gte("day", addDays(t, -45)),
+      sb.from("lesson_log").select("*").eq("day", t),
+      sb.from("feedback").select("id", { count: "exact", head: true }).eq("status", "nuovo")
     ]);
     var D = r[1];
     return {
@@ -117,7 +121,10 @@
       due: r[3].error ? [] : (r[3].data || []).filter(function (a) { return !a.deck && !a.test_id; }),
       custom: r[4].error ? [] : r[4].data || [], customReady: !r[4].error,
       plans: r[5].error ? [] : r[5].data || [], plansReady: !r[5].error,
-      settings: (!r[6].error && r[6].data && r[6].data.weights) || {}
+      settings: (!r[6].error && r[6].data && r[6].data.weights) || {},
+      absences: r[7].error ? [] : r[7].data || [], absReady: !r[7].error,
+      logs: r[8].error ? [] : r[8].data || [], logReady: !r[8].error,
+      newFeedback: r[9].error ? 0 : r[9].count || 0
     };
   }
 
@@ -147,7 +154,7 @@
         if (test) extra = extra.concat(planLines(T, r.class_id));
         if (P && P.orals[t]) extra.push("🗣 Interroga " + P.orals[t].map(function (o) { return o.s.last_name; }).join(", "));
         lessons.push({ id: "l-" + r.starts, time: hhmm(r.starts), text: tag(c, r.class_id) + " · " + (r.subject || "") + (r.room ? " · aula " + r.room : ""),
-          sub: "Registro: firma, assenze, argomento e compiti per casa", extra: extra, href: "#/c/" + r.class_id + "/programma", cls: c });
+          sub: "Registro: firma, assenze, argomento e compiti per casa", extra: extra, href: "#/c/" + r.class_id + "/programma", cls: c, lesson: r });
       });
     }
     classes.forEach(function (c) {
@@ -164,6 +171,20 @@
           extra: planLines(T, c.id) });
       });
     });
+    // Recuperi: assenti nel giorno di una verifica degli ultimi 45 giorni, senza voto per quella verifica
+    if (D) classes.forEach(function (c) {
+      var P = plans[c.id];
+      if (!P) return;
+      P.tests.filter(function (k) { return k.test_date && k.test_date < t && k.test_date >= addDays(t, -45); }).forEach(function (k) {
+        var marked = {};
+        D.marks.forEach(function (m) { if (m.test_id === k.id) marked[m.student_id] = true; });
+        var who = T.absences.filter(function (a) { return a.class_id === c.id && a.day === k.test_date && !marked[a.student_id]; })
+          .map(function (a) { var st = D.students.filter(function (z) { return z.id === a.student_id; })[0]; return st ? st.last_name : null; }).filter(Boolean);
+        if (who.length) after.push({ id: "r-" + k.id, text: "Recupero della verifica «" + k.title + "» (" + tag(c) + ")", sub: "Assenti il " + dm(k.test_date) + ": " + who.join(", "),
+          warn: diffDays(k.test_date, t) >= 14, href: "#/docente/valutazioni/" + c.id, cls: c });
+      });
+    });
+    if (T.newFeedback) after.push({ id: "f-" + T.newFeedback, text: "Leggi " + (T.newFeedback === 1 ? "il nuovo suggerimento" : "i " + T.newFeedback + " nuovi suggerimenti") + " degli studenti", href: "#/docente/agenda" });
     T.due.forEach(function (a) {
       var c = x.findClass(a.class_id);
       after.push({ id: "c-" + a.id, text: "Guarda le consegne di «" + a.title + "» (" + tag(c, a.class_id) + ")",
@@ -195,6 +216,83 @@
     ahead.sort(function (a, b) { return a.day < b.day ? -1 : 1; });
     return { off: off, reason: offReason(t, events), next: nextSchoolDay(t, events), before: before, lessons: lessons, after: after, ahead: ahead };
   }
+  /* ---------- Registro di quest'ora: assenti e argomento in una riga ---------- */
+  function lessonPanel(T, x, r) {
+    var h = x.h, t = T.today, cid = r.class_id, starts = String(r.starts).slice(0, 5);
+    var log = T.logs.filter(function (l) { return l.class_id === cid && l.starts === starts; })[0];
+    var sum = h("summary", { text: log ? "📋 Registro di quest'ora ✓" : "📋 Registro di quest'ora" });
+    var body = h("div", { class: "ag-reg" });
+    var det = h("details", { class: "ag-reg-det" }, sum, body);
+    var built = false;
+    det.addEventListener("toggle", async function () {
+      if (!det.open || built) return;
+      built = true;
+      put(body, h("p", { class: "small muted", text: "Caricamento…" }));
+      var q = await Promise.all([
+        x.sb.from("students").select("id, first_name, last_name").eq("class_id", cid).order("last_name").order("first_name"),
+        x.sb.from("topics").select("id, title, done, position").eq("class_id", cid).order("position")
+      ]);
+      if (q[0].error || q[1].error) { put(body, x.notice("err", x.errText(q[0].error || q[1].error))); built = false; return; }
+      var students = q[0].data || [], topics = q[1].data || [], chosen = null;
+      function absent() { return students.filter(function (s) { return T.absences.some(function (a) { return a.student_id === s.id && a.day === t; }); }); }
+      var line = h("p", { class: "ag-line" });
+      var text = h("input", { type: "text", maxlength: 300, value: log ? log.text : "", placeholder: "Che cosa avete fatto in quest'ora", "aria-label": "Argomento svolto" });
+      var markDone = h("input", { type: "checkbox", checked: true });
+      var markRow = h("label", { class: "ag-inline", hidden: true }, markDone, "Segna l'argomento come svolto nel programma");
+      function paintLine() {
+        var a = absent().map(function (s) { return s.last_name + " " + s.first_name; });
+        line.textContent = (text.value.trim() ? "Argomento: " + text.value.trim().replace(/\.$/, "") + "." : "Argomento: …") + (a.length ? " Assenti: " + a.join(", ") + "." : " Nessun assente.");
+      }
+      text.addEventListener("input", function () { chosen = null; markRow.hidden = true; paintLine(); });
+      var chips = students.map(function (s) {
+        var b = h("button", { class: "ag-chip", type: "button", text: s.last_name + " " + s.first_name.charAt(0) + "." });
+        function mark() { b.setAttribute("aria-pressed", String(absent().indexOf(s) >= 0)); }
+        b.addEventListener("click", async function () {
+          b.disabled = true;
+          var cur = T.absences.filter(function (a) { return a.student_id === s.id && a.day === t; })[0], res;
+          if (cur) { res = await x.sb.from("absences").delete().eq("id", cur.id); if (!res.error) T.absences = T.absences.filter(function (a) { return a !== cur; }); }
+          else { res = await x.sb.from("absences").insert({ class_id: cid, student_id: s.id, day: t }).select("id, class_id, student_id, day").single(); if (!res.error) T.absences.push(res.data); }
+          b.disabled = false;
+          if (res.error) x.toast(x.errText(res.error));
+          mark(); paintLine();
+        });
+        mark();
+        return b;
+      });
+      var next = topics.filter(function (tp) { return tp.done === false; }).slice(0, 2), prev = topics.filter(function (tp) { return tp.done !== false; }).slice(-2);
+      var topicChips = prev.concat(next).map(function (tp) {
+        return h("button", { class: "ag-chip topic" + (tp.done === false ? " next" : ""), type: "button", text: tp.title, onclick: function () {
+          text.value = tp.title; chosen = tp; markRow.hidden = tp.done !== false; paintLine();
+        } });
+      });
+      var save = h("button", { class: "btn primary", type: "button", text: "Salva e copia" });
+      save.addEventListener("click", async function () {
+        var v = text.value.trim();
+        if (!v) { x.toast("Scrivi o tocca l'argomento."); return; }
+        save.disabled = true;
+        var res = await x.sb.from("lesson_log").upsert({ class_id: cid, day: t, starts: starts, text: v, topic_id: chosen ? chosen.id : null }, { onConflict: "class_id,day,starts" }).select("*").single();
+        if (!res.error && chosen && chosen.done === false && markDone.checked) {
+          var u = await x.sb.from("topics").update({ done: true }).eq("id", chosen.id);
+          if (!u.error) { chosen.done = true; markRow.hidden = true; }
+        }
+        save.disabled = false;
+        if (res.error) { x.toast(x.errText(res.error)); return; }
+        T.logs = T.logs.filter(function (l) { return l !== log; }).concat([res.data]); log = res.data;
+        sum.textContent = "📋 Registro di quest'ora ✓";
+        copy(x, line.textContent);
+      });
+      put(body,
+        h("p", { class: "ag-sub", text: "Assenti oggi (tocca per segnare):" }),
+        students.length ? h("div", { class: "ag-chips" }, chips) : h("p", { class: "small muted", text: "Manca l'elenco della classe." }),
+        h("p", { class: "ag-sub", text: "Argomento:" }),
+        topicChips.length ? h("div", { class: "ag-chips" }, topicChips) : null,
+        text, markRow, line,
+        h("div", { class: "row" }, save, h("button", { class: "btn link", type: "button", text: "Copia", onclick: function () { copy(x, line.textContent); } })));
+      paintLine();
+    });
+    return det;
+  }
+
   // Misure di PDP/PEI da preparare per una verifica
   function planLines(T, cid) {
     return T.plans.filter(function (p) { return p.class_id === cid && p.learning_plan; }).map(function (p) {
@@ -228,7 +326,8 @@
           h("p", { class: "ag-text" }, i.time ? h("b", { class: "ag-time", text: i.time + " " }) : null,
             i.href ? h("a", { href: i.href, target: i.ext ? "_blank" : null, rel: i.ext ? "noopener" : null, text: i.text }) : i.text),
           i.sub ? h("p", { class: "ag-sub", text: i.sub }) : null,
-          (i.extra || []).map(function (e) { return h("p", { class: "ag-extra", text: e }); })));
+          (i.extra || []).map(function (e) { return h("p", { class: "ag-extra", text: e }); }),
+          i.lesson && T.logReady && T.absReady ? lessonPanel(T, x, i.lesson) : null));
       cb.addEventListener("change", function () {
         if (cb.checked) done[i.id] = true; else delete done[i.id];
         li.classList.toggle("done", cb.checked); ticks(T.today, done); upd();
@@ -264,7 +363,8 @@
     var dayBox = h("div"), calBox = h("section", { class: "card ag-cal" }, h("p", { class: "small muted", text: "Caricamento del calendario…" }));
     root.appendChild(dayBox);
     root.appendChild(calBox);
-    var ricBox = h("div"), pdpBox = h("div");
+    var ricBox = h("div"), pdpBox = h("div"), fbBox = h("div");
+    root.appendChild(fbBox);
     root.appendChild(ricBox);
     root.appendChild(classroomCard(x));
     root.appendChild(pdpBox);
@@ -278,6 +378,7 @@
       renderCalendar(calBox, T, x, reload);
       ricBox.replaceChildren(colloquiCard(T, x, reload));
       pdpBox.replaceChildren(pdpCard(T, x));
+      fbBox.replaceChildren(feedbackCard(x));
     }
     reload();
   }
@@ -338,6 +439,30 @@
       reload();
     });
     return f;
+  }
+
+  // Suggerimenti degli studenti (anonimi): nuovi in cima, «Visto» e «Fatto»
+  function feedbackCard(x) {
+    var h = x.h, card = h("section", { class: "card ag-fb", id: "suggerimenti" }, h("p", { class: "small muted", text: "Caricamento dei suggerimenti…" }));
+    async function load() {
+      var r = await x.sb.from("feedback").select("*").neq("status", "fatto").order("created_at", { ascending: false }).limit(50);
+      if (r.error) { put(card, h("h2", { text: "Suggerimenti degli studenti" }), h("p", { class: "notice warn", text: "Serve l'aggiornamento del database 2026-10-29-registro.sql." })); return; }
+      var list = r.data || [];
+      put(card, h("h2", { text: "Suggerimenti degli studenti" }),
+        h("p", { class: "small muted", text: "Arrivano dal pulsante «💡 Suggerisci» nelle pagine delle classi, senza nome. «Fatto» li toglie dall'elenco." }),
+        list.length ? h("ul", { class: "ag-events" }, list.map(function (f) {
+          var c = f.class_id && x.findClass(f.class_id);
+          function set(st) { return async function () { var q = await x.sb.from("feedback").update({ status: st }).eq("id", f.id); if (q.error) x.toast(x.errText(q.error)); else load(); }; }
+          return h("li", { class: "ag-ev" + (f.status === "nuovo" ? " now" : ""), style: c ? "--cc:" + x.classColor(c) : null },
+            h("span", { class: "ag-date", text: (f.kind === "problema" ? "🐞 " : "💡 ") + dm(f.created_at.slice(0, 10)) }),
+            h("div", null, h("p", { text: f.text }), h("p", { class: "ag-sub", text: (c ? tag(c) + " · " : "") + (f.status === "nuovo" ? "nuovo" : "visto") })),
+            h("div", { class: "row" },
+              f.status === "nuovo" ? h("button", { class: "btn link", type: "button", text: "Visto", onclick: set("visto") }) : null,
+              h("button", { class: "btn link", type: "button", text: "Fatto", onclick: set("fatto") })));
+        })) : h("p", { class: "small muted", text: "Nessun suggerimento in attesa." }));
+    }
+    load();
+    return card;
   }
 
   function colloquiCard(T, x, reload) {
@@ -476,6 +601,7 @@
         h("div", { class: "ag-head" }, h("h2", { text: "La tua settimana" }),
           c.classroom_url ? h("a", { class: "btn ag-gc-btn", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Google Classroom ↗" }) : null),
         lines.length > (next ? 1 : 0) || ev ? h("ul", { class: "ag-ahead" }, lines) : h("p", { class: "small muted", text: "Niente verifiche o consegne nei prossimi giorni." }),
+        x.sb && !x.teacher ? feedbackForm(x, c) : null,
         x.teacher ? h("p", { class: "small muted", text: "Così la vedono gli studenti." }) : null);
     });
     return card;
@@ -569,6 +695,26 @@
     var done = function () { x.toast("Copiato."); };
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { x.toast("Non riesco a copiare: seleziona il testo a mano."); });
     else x.toast("Non riesco a copiare: seleziona il testo a mano.");
+  }
+
+  // Pulsante «Suggerisci»: un'idea o un problema, senza nome, lo legge solo il docente
+  function feedbackForm(x, c) {
+    var h = x.h;
+    var kind = h("select", { "aria-label": "Tipo" }, h("option", { value: "idea", text: "💡 Un'idea per Novaula" }), h("option", { value: "problema", text: "🐞 Qualcosa non funziona" }));
+    var ta = h("textarea", { rows: 3, maxlength: 500, required: true, placeholder: "Scrivi qui. Non serve il nome: il messaggio arriva solo al prof." });
+    var f = h("form", { class: "ag-fb-form" }, kind, ta, h("button", { class: "btn primary", type: "submit", text: "Invia" }));
+    var det = h("details", { class: "ag-fb-det" }, h("summary", { text: "💡 Suggerisci un'idea o segnala un problema" }), f);
+    f.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var v = ta.value.trim();
+      if (v.length < 3) return;
+      var btn = f.querySelector("button"); btn.disabled = true;
+      var r = await x.sb.from("feedback").insert({ class_id: c.id, kind: kind.value, text: v });
+      btn.disabled = false;
+      if (r.error) { x.toast(/Troppi/.test(r.error.message || "") ? r.error.message : "Non inviato, riprova più tardi."); return; }
+      put(det, h("p", { class: "notice ok", text: "Grazie! Il prof lo legge nella sua agenda." }));
+    });
+    return det;
   }
 
   function nextLesson(rows, events) {

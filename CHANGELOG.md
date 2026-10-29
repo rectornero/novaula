@@ -28,8 +28,17 @@ for, and stays on. Agenda, class and Classroom now come together in one place.
 - Pagella: new **📋 Pacchetto scrutinio**: the proposed mark and an editable draft comment for every student (level,
   trend, written vs oral, homework, too few marks, PDP/PEI), with «Copia» per student and «Copia tutto» for Excel or
   the register.
+- Each lesson in «La tua giornata» has a **📋 Registro di quest'ora** panel: tap who is absent, tap the topic (the
+  last topics done and the next ones in the programme, or type it), and «Salva e copia» saves it and copies one line
+  («Argomento: … Assenti: …») to paste into the registro elettronico. Choosing the next topic can also mark it done in
+  the programme.
+- Absences feed **make-ups**: a student absent on the day of a test from the last 45 days, with no mark for it,
+  shows up under «Dopo le lezioni» as «Recupero della verifica …» (red after 14 days).
+- Students: a **💡 Suggerisci** button in «La tua settimana» sends an idea or a problem, anonymous, to the teacher only.
+  New ones appear in the day's checklist and in «Suggerimenti degli studenti» on the agenda page (Visto / Fatto).
 - The daily wage notification no longer goes out on school holidays (`school_day_off()`).
-  SQL: `aggiornamenti/2026-10-29-agenda.sql` (table `calendar_events`, `classes.classroom_url`,
+  SQL: `aggiornamenti/2026-10-29-registro.sql` (tables `absences`, `lesson_log`, teacher only, and `feedback`, which
+  students can only send, at most 30 an hour) and `aggiornamenti/2026-10-29-agenda.sql` (table `calendar_events`, `classes.classroom_url`,
   `students.learning_plan` and `plan_note`, `school_day_off()`, `wage_push()` updated). No cron and no polling: the
   agenda reads the database only when a page opens. Service worker cache `classe-v39`.
 

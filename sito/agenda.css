@@ -81,3 +81,24 @@
   .ag-rules dl{grid-template-columns:1fr}
 }
 @media print{.ag-check{display:none}}
+
+/* Registro di quest'ora: assenti e argomento */
+.ag-reg-det{margin-top:6px}
+.ag-reg-det>summary{cursor:pointer;font-weight:700;font-size:.92rem;color:var(--accent);min-height:36px;display:flex;align-items:center}
+.ag-reg{display:flex;flex-direction:column;gap:8px;padding:10px;margin-top:4px;border-radius:12px;background:var(--soft)}
+.ag-reg input[type=text]{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit}
+.ag-reg .ag-inline{display:flex;flex-direction:row;align-items:center;gap:8px;font-size:.9rem;font-weight:400}
+.ag-reg [hidden],.ag-pdp [hidden]{display:none}
+.ag-reg .ag-inline input{width:20px;height:20px}
+.ag-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ag-chip{min-height:40px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 .88rem/1.2 var(--body);cursor:pointer;text-align:left}
+.ag-chip[aria-pressed="true"]{background:var(--danger);border-color:var(--danger);color:#fff}
+.ag-chip.topic{border-style:dashed}
+.ag-chip.topic.next{border-color:var(--accent);border-style:solid}
+.ag-line{font-size:.92rem;padding:8px 10px;border-radius:10px;background:var(--card);border:1px dashed var(--line);user-select:all}
+
+/* Suggerimenti degli studenti */
+.ag-fb{display:flex;flex-direction:column;gap:10px}
+.ag-fb-det>summary{cursor:pointer;font-weight:700;font-size:.92rem;color:var(--accent);min-height:40px;display:flex;align-items:center}
+.ag-fb-form{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.ag-fb-form select,.ag-fb-form textarea{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit}
