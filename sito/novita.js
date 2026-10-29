@@ -8,7 +8,7 @@
 
   // Dalla più nuova. nome e motto solo per le versioni che hanno un nome.
   var NOVITA = [
-    { v: "2.19.0", data: "ottobre 2026", nome: "Definitely not EoS",
+    { v: "2.19.0", data: "29 ottobre 2026", nome: "Definitely not EoS",
       motto: "EoS = End of Service, quando un gioco spegne i server per sempre. Qui no: si fanno le patch che chiedete voi, e Novaula resta accesa, con agenda, classe e Classroom tutte unite.",
       punti: [
         "Nella scheda «Programma» di ogni classe c'è il nuovo riquadro «La tua settimana»: la prossima lezione con l'aula, le verifiche delle prossime 3 settimane e i compiti in scadenza entro una settimana.",
