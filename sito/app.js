@@ -1107,7 +1107,8 @@
 
   /* ---------- Novità (note di versione, pubbliche) ---------- */
   function versionLine() {
-    return h("p", { class: "version" }, h("a", { href: "#/novita", text: "Novaula " + VERSION + " · Novità" }));
+    return h("p", { class: "version" }, h("a", { href: "#/novita", text: "Novaula " + VERSION + " · Novità" }),
+      " · ", h("a", { href: "privacy.html", text: "Privacy" }));
   }
 
   function novitaPage() {
