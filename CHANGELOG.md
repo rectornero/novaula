@@ -37,6 +37,9 @@ goes, and hand-ins and marks move to Google Classroom and the school register. S
   cleared after about 7 days, technical logs only, Netlify/Supabase/GitHub as providers, and how the pre-3.0.0 data is
   deleted. Licensing audit fixes to the wipe SQL: it also strips «Assenti: …» from the 2.19.0 lesson-log lines, and
   the `stampe` bucket is emptied but kept (the planner's print-shop PDF still uses it).
+- Released 5 Nov 2026 together with 2.19.1. Database backups: no backup with student data was ever stored. The
+  backup job ran only its keep-alive (its secrets were never set), and Nero chose to wipe without a backup, so there
+  are no old backup artifacts to delete.
 
 ## 2.19.1 (29 Oct 2026): the route between lessons is back at the bell
 - Fix: the «🧭 Percorso» to the next room only sat on the «Dopo» card, which disappears the moment the bell rings and
