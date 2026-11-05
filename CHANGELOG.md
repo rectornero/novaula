@@ -5,6 +5,35 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 3.0.0 (5 Nov 2026): Novaula without personal data
+Nero's decision: Novaula becomes a materials-only platform. Lessons, programme, materials, homework as a task list,
+tests and practice tests, quizzes, agenda and timetable stay; everything that stored who a student is or how they did
+goes, and hand-ins and marks move to Google Classroom and the school register. Spec:
+`management/licensing/no-personal-data.md` (Licensing). MAJOR because the way students use the app changes.
+- Removed: student profiles, PINs and «Chi sei?» (`profili.js/css`), the Pagella and scrutinio pack (`pagella.js/css`),
+  Claude corrections and scanned tests (`correzioni.js/css`, `supabase/functions/correzioni`, `strumenti/correggi.py`
+  and its guides; see `strumenti/ARCHIVIO.md`), the hand-in form, the teacher's hand-in lists and slide hand-ins.
+- Homework and lab slides: students see «Consegna su Classroom ↗» (the class's Classroom link) instead of an upload
+  form or the 📎 Consegna panel.
+- Evaluation planner (`valutazioni.js`): tests only. Proposed test dates on lesson days, dates to move, tests to mark
+  as done (so students see text and solutions). No students, marks, orals, roster or scan inbox. Printing makes
+  identical copies with a blank «Nome e cognome» line, no names or codes. Terms are now edited here (Pagella is gone).
+- Agenda (`agenda.js`): no absences, make-up tests, PDP/PEI flags or scrutinio pack. «Registro di quest'ora» keeps
+  only the topic line. Test-day reminders say to prepare the PDP/PEI measures without naming anyone.
+- Help desk, help-desk replies, class chat and slide questions are anonymous: database triggers store «Studente» or
+  «Docente» whatever the browser sends, and no help-desk images. Chat and help desk older than 7 days are deleted
+  when the teacher opens Area docente or a class chat (`anon_cleanup()`, no cron). The screens show the line
+  «Non scrivere nomi, voti o dati personali» and have no name field or photo upload.
+- Push notifications go to the teacher only (client and the `notifiche` Edge Function). «Notifica a tutti» to
+  students is gone; class announcements stay on the class page.
+- LIM tools: the draw picks a register number (1 to N, set per class on the device); the seating plan is gone.
+- Weekly summary (`weekly_summary_data`, the Area docente summary box): counts only (open help-desk questions, stuck, open slide
+  questions), next week's homework and tests, and the term outlook. No names, hand-ins or marks.
+- SQL, in this order: `aggiornamenti/2026-11-05-anonimo.sql` (additive: anonymising triggers, `helpdesk_ask` without
+  name or image, `anon_cleanup`, slim `evaluation_plan` and `weekly_summary_data`), then after the release Nero runs
+  `aggiornamenti/2026-11-05-senza-dati-personali.sql` (World Build: drops the student tables, functions and buckets).
+  Deploy the teacher-only `notifiche` Edge Function with the release.
+
 ## 2.19.1 (29 Oct 2026): the route between lessons is back at the bell
 - Fix: the «🧭 Percorso» to the next room only sat on the «Dopo» card, which disappears the moment the bell rings and
   the next lesson becomes «Adesso». So at the one time the teacher is walking between rooms, the route was gone

@@ -4,10 +4,9 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "2.19.1";
+  var VERSION = "3.0.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
-  var MAX_UPLOAD = 20 * 1024 * 1024;
   var app = document.getElementById("app");
 
   /* ---------- Piccoli aiuti ---------- */
@@ -48,11 +47,6 @@
   }
   function uid() {
     return (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
-  }
-  // File di una consegna: tutti quelli allegati (consegne dalle slide) o il solo file_path
-  function filesOf(s) {
-    if (s.files && s.files.length) return s.files;
-    return s.file_path ? [{ path: s.file_path, name: s.file_name }] : [];
   }
   // Materiale che è un file (caricato o in /contenuti) e non un link a un sito
   function isFile(m) {
@@ -192,30 +186,9 @@
       deleteQuestion: async function (q) { ok(await sb.from("slide_questions").delete().eq("id", q.id)); },
       assignments: async function (c) { return ok(await sb.from("assignments").select("*").eq("class_id", c).order("created_at", { ascending: false })); },
       addAssignment: async function (row) { ok(await sb.from("assignments").insert(row)); },
-      deleteAssignment: async function (a) {
-        var subs = ok(await sb.from("submissions").select("file_path, files").eq("assignment_id", a.id));
-        var paths = [].concat.apply([], subs.map(filesOf)).map(function (f) { return f.path; });
-        if (paths.length) await sb.storage.from("consegne").remove(paths);
-        ok(await sb.from("assignments").delete().eq("id", a.id));
-      },
-      submit: async function (row, file, classId) {
-        if (file) {
-          var path = classId + "/" + row.assignment_id + "/" + uid() + "-" + safeName(file.name);
-          ok(await sb.storage.from("consegne").upload(path, file, { contentType: file.type || undefined }));
-          row.file_path = path; row.file_name = file.name;
-        }
-        ok(await sb.from("submissions").insert(row));
-      },
-      submissions: async function (aid) { return ok(await sb.from("submissions").select("*").eq("assignment_id", aid).order("created_at")); },
-      submissionUrl: async function (s, f) {
-        f = f || { path: s.file_path, name: s.file_name };
-        return ok(await sb.storage.from("consegne").createSignedUrl(f.path, 3600, { download: f.name || true })).signedUrl;
-      },
-      deleteSubmission: async function (s) {
-        var paths = filesOf(s).map(function (f) { return f.path; });
-        if (paths.length) await sb.storage.from("consegne").remove(paths);
-        ok(await sb.from("submissions").delete().eq("id", s.id));
-      },
+      deleteAssignment: async function (a) { ok(await sb.from("assignments").delete().eq("id", a.id)); },
+      // Senza dati personali: chat e sportello si svuotano dopo 7 giorni (lo lancia il docente quando apre l'Area docente o una chat)
+      cleanup: async function () { try { await sb.rpc("anon_cleanup"); } catch (e) {} },
       messages: async function (c) {
         var rows = ok(await sb.from("messages").select("*").eq("class_id", c).order("created_at", { ascending: false }).limit(150));
         return rows.reverse();
@@ -242,7 +215,7 @@
         { id: "1d", name: "1D Informatica", sort: 1 }, { id: "1e", name: "1E Informatica", sort: 2 },
         { id: "3g", name: "3E TPSI", sort: 3 }, { id: "5f", name: "5F GPOI", sort: 4 }, { id: "5g", name: "5G TPSI", sort: 5 }
       ],
-      materials: [], assignments: [], submissions: [], messages: [], seq: 1
+      materials: [], assignments: [], messages: [], seq: 1
     };
     db.topics = db.topics || [];
     var seedTime = Date.now() - 86400000;
@@ -334,17 +307,8 @@
         });
       },
       addAssignment: async function (row) { db.assignments.push(Object.assign({ id: uid(), created_at: new Date().toISOString() }, row)); save(); },
-      deleteAssignment: async function (a) {
-        db.assignments = db.assignments.filter(function (x) { return x.id !== a.id; });
-        db.submissions = db.submissions.filter(function (x) { return x.assignment_id !== a.id; }); save();
-      },
-      submit: async function (row, file) {
-        if (file) { row.file_path = await readFile(file); row.file_name = file.name; }
-        db.submissions.push(Object.assign({ id: uid(), created_at: new Date().toISOString() }, row)); save();
-      },
-      submissions: async function (aid) { return db.submissions.filter(function (x) { return x.assignment_id === aid; }); },
-      submissionUrl: async function (s) { return s.file_path || "#"; },
-      deleteSubmission: async function (s) { db.submissions = db.submissions.filter(function (x) { return x.id !== s.id; }); save(); },
+      deleteAssignment: async function (a) { db.assignments = db.assignments.filter(function (x) { return x.id !== a.id; }); save(); },
+      cleanup: async function () {},
       messages: async function (c) { return db.messages.filter(function (x) { return x.class_id === c; }).slice(-150); },
       send: async function (row) {
         var m = Object.assign({ id: db.seq++, created_at: new Date().toISOString() }, row);
@@ -419,15 +383,14 @@
     var c = findClass(id);
     if (!c) return homePage();
     tab = (tab || "").split("?")[0];
-    tab = ["programma", "materiali", "compiti", "verifiche", "chat", "domande", "aiuto", "profilo"].indexOf(tab) >= 0 ? tab : "programma";
+    tab = ["programma", "materiali", "compiti", "verifiche", "chat", "domande", "aiuto"].indexOf(tab) >= 0 ? tab : "programma";
     setPage(c.name);
     store("last-class", id);
     var p = classParts(c);
     app.appendChild(h("header", { class: "class-head", style: "--cc:" + classColor(c) },
       h("div", { class: "class-top" },
         h("a", { class: "back", href: "#/", text: "← Tutte le classi" }),
-        c.classroom_url ? h("a", { class: "btn classroom-link", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Classroom ↗" }) : null,
-        window.NovaulaProfili && api.client ? window.NovaulaProfili.chip(c, pctx()) : null),
+        c.classroom_url ? h("a", { class: "btn classroom-link", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Classroom ↗" }) : null),
       h("h1", null, h("span", { class: "code", text: p[0] }), " ", h("span", { class: "subject", text: p[1] }))
     ));
     if (window.NovaulaAvvisi && api.client) {
@@ -448,7 +411,6 @@
     else if (tab === "compiti") assignmentsTab(c, box);
     else if (tab === "verifiche") testsTab(c, box);
     else if (tab === "domande") questionsTab(c, box);
-    else if (tab === "profilo" && window.NovaulaProfili) window.NovaulaProfili.page(c, box, pctx());
     else if (tab === "aiuto" && window.NovaulaHelpdesk) stopChat = window.NovaulaHelpdesk(c, box, { h: h, api: api, store: store, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, fmtTime: fmtTime, hue: hue, initials: initials, cc: classColor(c) });
     else chatTab(c, box);
   }
@@ -626,9 +588,7 @@
     if (api.isTeacher()) box.appendChild(addAssignmentForm(c));
     // In attesa = collegati a un argomento non ancora svolto (li vede solo il docente)
     var waiting = api.isTeacher() ? items.filter(function (a) { return a.topic_id && !a.due_date; }) : [];
-    // Consegne dalle slide di laboratorio: le vede solo il docente, in fondo (lo studente le ritrova nel profilo)
-    var fromSlides = items.filter(function (a) { return a.deck; });
-    // Copie scansionate delle verifiche su carta (compito nascosto legato alla verifica): passano solo dalle correzioni
+    // Righe tecniche delle vecchie consegne (slide, scansioni): non si mostrano più
     items = items.filter(function (a) { return waiting.indexOf(a) < 0 && !a.deck && !a.test_id; });
     var todayIso = isoDays(0);
     items.sort(function (a, b) {
@@ -661,7 +621,7 @@
       );
       if (api.isTeacher() && window.NovaulaAgenda) card.appendChild(h("div", { class: "row" }, window.NovaulaAgenda.share(agCtx(), shareUrl(c, "compiti"), a.title,
         (a.due_date ? "Consegna entro il " + fmtDate(a.due_date) + " su Novaula. " : "") + (a.description || ""))));
-      card.appendChild(api.isTeacher() ? teacherSubmissions(a) : window.NovaulaProfili && api.client ? window.NovaulaProfili.submitForm(a, c, pctx()) : submitForm(a, c));
+      card.appendChild(api.isTeacher() ? teacherActions(a) : handIn(c));
       box.appendChild(card);
     });
     if (waiting.length) {
@@ -680,28 +640,6 @@
       });
       box.appendChild(h("details", { class: "teacher" }, h("summary", { text: "Docente: compiti in attesa (" + waiting.length + ")" }), wl));
     }
-    if (api.isTeacher() && fromSlides.length) box.appendChild(slideSubmissions(c, fromSlides));
-  }
-
-  // Docente: un "Lavoro in classe" per ogni slide di laboratorio che ha ricevuto consegne, raggruppati per lezione
-  function slideSubmissions(c, list) {
-    var decks = {}, order = [];
-    list.forEach(function (a) { if (!decks[a.deck]) { decks[a.deck] = []; order.push(a.deck); } decks[a.deck].push(a); });
-    var wrap = h("div", { class: "stack" });
-    order.forEach(function (d) {
-      var group = decks[d].sort(function (a, b) { return a.slide - b.slide; });
-      wrap.appendChild(h("h3", { class: "slide-deck", text: group[0].title.replace(/ · slide \d+.*$/, "") }));
-      group.forEach(function (a) {
-        wrap.appendChild(h("article", { class: "card assignment from-slide" },
-          h("div", { class: "row" },
-            h("h3", { text: "Slide " + a.slide + (/: (.+)$/.exec(a.title) ? ": " + /: (.+)$/.exec(a.title)[1] : "") }),
-            h("a", { class: "btn link", href: "contenuti/lezioni/" + a.deck + ".html?da=c%2F" + c.id + "%2Fcompiti#" + a.slide, target: "_blank", rel: "noopener", text: "Apri la slide" })),
-          teacherSubmissions(a)));
-      });
-    });
-    return h("details", { class: "teacher", open: true }, h("summary", { text: "Docente: consegne dalle slide (" + list.length + ")" }),
-      h("p", { class: "muted small", text: "Sulle slide «Al computer» gli studenti hanno il pulsante 📎 Consegna. Ogni slide che riceve consegne compare qui come lavoro in classe, con correzioni e voti come gli altri compiti." }),
-      wrap);
   }
 
   /* Verifiche */
@@ -819,47 +757,13 @@
     return h("details", { class: "teacher" }, h("summary", { text: "Docente: assegna un compito" }), form);
   }
 
-  function submitForm(a, c) {
-    var msg = h("div");
-    var doneKey = "consegnato-" + a.id;
-    var done = store(doneKey);
-    var form = h("form", { class: "stack" },
-      h("label", null, "Nome e cognome", h("input", { type: "text", name: "name", required: true, minlength: 2, maxlength: 80, autocomplete: "name", value: store("student-name") || "" })),
-      h("label", null, "File del compito (max 20 MB)", h("input", { type: "file", name: "file" })),
-      h("label", null, "Nota per il docente (facoltativa)", h("textarea", { name: "note", maxlength: 2000 })),
-      h("button", { class: "btn primary", type: "submit", text: done ? "Consegna di nuovo" : "Consegna il compito" }),
-      msg
-    );
-    if (done) msg.appendChild(notice("ok", "Hai già consegnato da questo dispositivo (" + fmtTime(done) + ")."));
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      var f = form.elements, file = f.file.files[0], name = f.name.value.trim();
-      if (!file && !f.note.value.trim()) { msg.replaceChildren(notice("err", "Allega un file oppure scrivi una nota.")); return; }
-      if (file && file.size > MAX_UPLOAD) { msg.replaceChildren(notice("err", "Il file supera 20 MB. Comprimilo o dividilo.")); return; }
-      var btn = form.querySelector("button");
-      btn.disabled = true; btn.textContent = "Invio in corso…";
-      try {
-        await api.submit({ assignment_id: a.id, student_name: name, note: f.note.value.trim() || null }, file, c.id);
-        store("student-name", name);
-        var now = new Date().toISOString();
-        store(doneKey, now);
-        form.reset(); f.name.value = name;
-        msg.replaceChildren(notice("ok", "Compito consegnato (" + fmtTime(now) + "). Grazie, " + name + "!"));
-        btn.textContent = "Consegna di nuovo";
-      } catch (err) {
-        msg.replaceChildren(notice("err", errText(err)));
-        btn.textContent = "Consegna il compito";
-      }
-      btn.disabled = false;
-    });
-    return h("details", { open: !done }, h("summary", { class: "btn", text: done ? "Consegnato ✓" : "Consegna" }), form);
+  // Senza dati personali: si consegna su Google Classroom, Novaula non raccoglie file né nomi
+  function handIn(c) {
+    return c.classroom_url
+      ? h("div", { class: "row" }, h("a", { class: "btn primary", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Consegna su Classroom ↗" }))
+      : h("p", { class: "muted small", text: "Consegna su Google Classroom, come indica il docente." });
   }
 
-  function corrCtx() {
-    var x = { h: h, sb: api.client, findClass: findClass, toast: toast, errText: errText, notice: notice };
-    if (window.NovaulaProfili && api.client) x.extra = function (c) { return window.NovaulaProfili.correctionExtra(c, pctx()); };
-    return x;
-  }
   // Aiuti per avvisi.js
   function avCtx() {
     return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classes: classes };
@@ -877,53 +781,14 @@
     return { h: h, sb: api.client, toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn, findClass: findClass, classColor: classColor, classes: classes, route: route };
   }
   function shareUrl(c, tab) { return location.origin + location.pathname + "#/c/" + c.id + "/" + tab; }
-  // Aiuti per profili.js
-  function pctx() {
-    return { h: h, sb: api.client, teacher: api.isTeacher(), toast: toast, errText: errText, notice: notice, confirmBtn: confirmBtn,
-      fmtDate: fmtDate, fmtTime: fmtTime, findClass: findClass, route: route, openHref: openHref, kindOf: kindOf, uid: uid, safeName: safeName };
-  }
-
-  function teacherSubmissions(a) {
-    var list = h("div", { class: "subs" });
-    var det = h("details", { class: "teacher" }, h("summary", { text: "Consegne ricevute" }), list,
-      window.NovaulaCorrezioni && api.client ? window.NovaulaCorrezioni.autoToggle(a, corrCtx()) : null,
-      h("div", { class: "row" }, confirmBtn("Elimina compito e consegne", "btn danger", async function () { await api.deleteAssignment(a); route(); }))
-    );
-    det.addEventListener("toggle", async function () {
-      if (!det.open) return;
-      list.replaceChildren(h("p", { class: "muted", text: "Caricamento…" }));
-      try {
-        var subs = await api.submissions(a.id);
-        var corr = window.NovaulaCorrezioni && api.client ? await window.NovaulaCorrezioni.forAssignment(a.id, corrCtx()).catch(function () { return null; }) : null;
-        var prof = window.NovaulaProfili && api.client ? await window.NovaulaProfili.forAssignment(a, subs, Object.assign(pctx(), { reopen: function () { det.open = false; det.open = true; } })).catch(function () { return null; }) : null;
-        list.textContent = "";
-        if (!subs.length) list.appendChild(h("p", { class: "muted", text: "Nessuna consegna finora." }));
-        else list.appendChild(h("p", { class: "muted small", text: subs.length + (subs.length === 1 ? " consegna" : " consegne") }));
-        subs.forEach(function (s) {
-          list.appendChild(h("div", { class: "sub" },
-            h("div", { class: "row" }, h("b", { text: s.student_name }), h("span", { class: "muted small", text: fmtTime(s.created_at) })),
-            s.note && h("p", { class: "desc small", text: s.note }),
-            h("div", { class: "row" },
-              filesOf(s).map(function (f) {
-                return h("button", { class: "btn", type: "button", text: "Scarica " + (f.name || "file"), onclick: async function () {
-                  try { var u = await api.submissionUrl(s, f); var link = h("a", { href: u, download: f.name || "consegna", target: "_blank", rel: "noopener" }); document.body.appendChild(link); link.click(); link.remove(); }
-                  catch (e) { toast(errText(e)); }
-                } });
-              }),
-              confirmBtn("Elimina", "btn link", async function () { await api.deleteSubmission(s); det.open = false; det.open = true; })
-            ),
-            corr && corr(s, a.title),
-            prof && prof(s)
-          ));
-        });
-      } catch (e) { list.replaceChildren(notice("err", errText(e))); }
-    });
-    return det;
+  function teacherActions(a) {
+    return h("div", { class: "row" }, confirmBtn("Elimina compito", "btn link danger", async function () { await api.deleteAssignment(a); route(); }));
   }
 
   /* Chat */
   async function chatTab(c, box) {
     var teacher = api.isTeacher();
+    if (teacher) api.cleanup();
     var qlink = h("a", { class: "card qlink", href: "#/c/" + c.id + "/domande" }, icon("domande"), h("span", { text: "Domande sulle slide" }), h("b", { class: "qcount" }));
     box.appendChild(qlink);
     api.questions(c.id).then(function (l) {
@@ -1019,11 +884,6 @@
 
   /* Area docente */
   function teacherPage() {
-    if (api.isTeacher() && /^#\/docente\/pagella/.test(location.hash) && window.NovaulaPagella) {
-      setPage("Pagella");
-      window.NovaulaPagella.page(app, Object.assign(pctx(), { classes: classes }));
-      return;
-    }
     if (api.isTeacher() && /^#\/docente\/valutazioni/.test(location.hash) && window.NovaulaValutazioni) {
       setPage("Piano valutazioni");
       window.NovaulaValutazioni.page(app, vlCtx());
@@ -1048,6 +908,7 @@
     app.appendChild(h("a", { class: "back", href: "#/", text: "← Tutte le classi" }));
     app.appendChild(h("h1", { text: "Area docente" }));
     if (api.isTeacher()) {
+      api.cleanup();
       nowBoard();
       app.appendChild(h("div", { class: "card" },
         h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
@@ -1057,7 +918,6 @@
           window.NovaulaOrarioPage ? h("a", { class: "btn", href: "#/docente/orario", text: "📅 Orario completo" }) : null,
           window.NovaulaRiunioni && api.client ? h("a", { class: "btn", href: "#/docente/riunioni", text: "🎥 Riunioni" }) : null,
           window.NovaulaValutazioni && api.client ? h("a", { class: "btn", href: "#/docente/valutazioni", text: "📝 Piano valutazioni" }) : null,
-          window.NovaulaPagella && api.client ? h("a", { class: "btn", href: "#/docente/pagella", text: "Pagella" }) : null,
           h("button", { class: "btn", type: "button", text: "Esci", onclick: async function () { await api.signOut(); route(); } })
         )
       ));
@@ -1066,10 +926,7 @@
       } })));
       if (window.NovaulaValutazioni && api.client) window.NovaulaValutazioni.week(app, vlCtx());
       if (window.NovaulaRiunioni && api.client) window.NovaulaRiunioni.board(app, rnCtx());
-      if (window.NovaulaAvvisi && api.client && window.NovaulaAvvisi.broadcast) window.NovaulaAvvisi.broadcast(app, avCtx());
       if (window.NovaulaAvvisi && api.client) window.NovaulaAvvisi.board(app, avCtx());
-      if (window.NovaulaCorrezioni && api.client) window.NovaulaCorrezioni.board(app, corrCtx());
-      if (window.NovaulaProfili && api.client) window.NovaulaProfili.board(app, pctx());
       if (window.NovaulaRiepilogo && api.client) window.NovaulaRiepilogo.board(app, { h: h, sb: api.client, findClass: findClass, notice: notice, errText: errText });
       app.appendChild(versionLine());
       var qbox = h("section", { class: "list" }, h("p", { class: "empty", text: "Caricamento delle domande…" }));

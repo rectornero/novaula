@@ -1,13 +1,11 @@
 /* Novaula · Avvisi di classe.
    Il docente scrive un avviso breve a una o più classi: resta fisso in cima alla pagina della classe fino a fine
-   giornata (o fino a domani sera), poi sparisce da solo. Ogni nuovo avviso manda una notifica sul telefono agli
-   studenti iscritti della classe e al docente (funzione Edge "notifiche", vedi aggiornamenti/2026-10-23-avvisi.sql).
+   giornata (o fino a domani sera), poi sparisce da solo. Senza dati personali (3.0.0) gli studenti non si iscrivono
+   alle notifiche: l'avviso in pagina è il loro canale; al docente arriva una copia sul telefono (funzione Edge "notifiche").
    app.js chiama:
      window.NovaulaAvvisi.bar(classe, aiuti)        -> { el, stop } avvisi fissati sotto il titolo della classe
      window.NovaulaAvvisi.badges(contenitore, aiuti) segna «📌 Avviso» sui pulsanti delle classi in home
-     window.NovaulaAvvisi.board(contenitore, aiuti)  riquadro "Avvisi di classe" in Area docente
-     window.NovaulaAvvisi.broadcast(contenitore, aiuti) riquadro "Notifica a tutti" in Area docente
-       (solo notifica sul telefono, non resta in pagina: aggiornamenti/2026-10-27-notifica-tutti.sql) */
+     window.NovaulaAvvisi.board(contenitore, aiuti)  riquadro "Avvisi di classe" in Area docente */
 (function () {
   "use strict";
 
@@ -77,7 +75,7 @@
       picks,
       h("label", null, "Resta in alto", h("select", { name: "days" },
         h("option", { value: "0", text: "fino a stasera" }), h("option", { value: "1", text: "fino a domani sera" }))),
-      h("p", { class: "small muted", text: "Arriva subito come notifica agli studenti della classe che le hanno attivate, e anche a te come prova." }),
+      h("p", { class: "small muted", text: "Gli studenti lo vedono in cima alla pagina della classe; a te arriva una copia sul telefono come prova." }),
       h("button", { class: "btn primary", type: "submit", text: "Pubblica l'avviso" }),
       msg);
     f.addEventListener("submit", async function (e) {
@@ -150,53 +148,12 @@
       }).catch(function () {});
     },
 
-    broadcast: function (box, x) {
-      var h = x.h, classes = x.classes || [], msg = h("div");
-      var text = h("textarea", { name: "body", required: true, maxlength: 300, rows: 3, placeholder: "Es. Domani niente lezione alla prima ora: entrate alle 8.55." });
-      var count = h("span", { class: "small muted", text: "0/300" });
-      text.addEventListener("input", function () { count.textContent = text.value.length + "/300"; });
-      var who = h("select", { name: "cls" }, h("option", { value: "", text: "Tutte le classi" }),
-        classes.map(function (c) { return h("option", { value: c.id, text: c.name }); }));
-      var f = h("form", { class: "stack" },
-        h("label", null, "Messaggio", text), count,
-        h("label", null, "A chi", who),
-        h("p", { class: "small muted", text: "Arriva subito sul telefono degli studenti che hanno attivato le notifiche (e a te una copia). Non resta nella pagina della classe: per quello usa un avviso di classe." }),
-        h("button", { class: "btn primary", type: "submit", text: "📣 Invia la notifica" }),
-        msg);
-      var armed = false, timer;
-      var btn = f.querySelector('button[type="submit"]');
-      function disarm() { armed = false; clearTimeout(timer); btn.textContent = "📣 Invia la notifica"; }
-      f.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        var body = text.value.trim();
-        if (!body) return;
-        // secondo tocco per confermare: una notifica inviata non si può ritirare
-        if (!armed) {
-          armed = true; btn.textContent = "Tocca di nuovo per inviare a " + (who.value ? who.selectedOptions[0].textContent : "tutte le classi");
-          timer = setTimeout(disarm, 5000);
-          return;
-        }
-        disarm(); btn.disabled = true;
-        try {
-          var res = await x.sb.rpc("teacher_push_broadcast", { p_body: body, p_class: who.value || null });
-          if (res.error) throw res.error;
-          var n = res.data || 0;
-          if (n) { f.reset(); count.textContent = "0/300"; msg.textContent = ""; x.toast("Notifica inviata a " + n + (n === 1 ? " telefono." : " telefoni.")); }
-          else msg.replaceChildren(x.notice("err", "Nessuno studente " + (who.value ? "di questa classe " : "") + "ha ancora attivato le notifiche: il messaggio non è partito."));
-        } catch (err) { msg.replaceChildren(x.notice("err", x.errText(err))); }
-        btn.disabled = false;
-      });
-      [text, who].forEach(function (el) { el.addEventListener("input", disarm); });
-      box.appendChild(h("h2", { text: "📣 Notifica a tutti" }));
-      box.appendChild(h("section", { class: "card av-board" }, h("details", { class: "teacher av-new" }, h("summary", { text: "Scrivi una notifica" }), f)));
-    },
-
     board: function (box, x) {
       var h = x.h, classes = x.classes || [];
       var list = h("div", { class: "av-list" });
       var det = h("details", { class: "teacher av-new" }, h("summary", { text: "Nuovo avviso" }));
       var sec = h("section", { class: "card av-board" },
-        h("p", { class: "small muted", text: "Un avviso resta fisso in cima alla pagina della classe (in tutte le schede, chat compresa) e sparisce da solo a fine giornata. Gli studenti con le notifiche attive lo ricevono subito sul telefono." }),
+        h("p", { class: "small muted", text: "Un avviso resta fisso in cima alla pagina della classe (in tutte le schede, chat compresa) e sparisce da solo a fine giornata. Per i compiti e le scadenze usa anche Classroom." }),
         list, det);
       det.appendChild(form(h, x, classes, function () { det.open = false; refresh(); }));
       box.appendChild(h("h2", { text: "📌 Avvisi di classe" }));

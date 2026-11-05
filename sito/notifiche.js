@@ -1,7 +1,7 @@
 /* Novaula · Notifiche sul telefono (Web Push, vedi aggiornamenti/2026-10-20-notifiche.sql e
-   supabase/functions/notifiche). Lo studente le attiva nel suo profilo, il docente in Area docente.
+   supabase/functions/notifiche). Solo per il docente, in Area docente: dalla 3.0.0 gli studenti non si iscrivono.
    Su iPhone funzionano solo dopo «Aggiungi alla schermata Home» (iOS 16.4 o successivo).
-   Chiamato da profili.js e app.js:
+   Chiamato da app.js:
      NovaulaNotifiche.panel({ h, sb, toast, errText, owner, subscribe(endpoint, p256dh, auth) }) -> elemento */
 (function () {
   "use strict";
@@ -57,7 +57,7 @@
 
     async function draw() {
       var title = h("b", { text: "🔔 Notifiche sul telefono" });
-      var what = o.owner === "docente" ? "Un avviso per ogni nuova domanda nella scheda Aiuto, per gli avvisi di classe, le riunioni e la paga del giorno." : "Un avviso per gli avvisi di classe e per nuovi voti, lavori da rifare e nuovi materiali.";
+      var what = o.owner === "docente" ? "Un avviso per ogni nuova domanda nella scheda Aiuto, per gli avvisi di classe, le riunioni e la paga del giorno." : "Un avviso per gli avvisi di classe.";
       if (isIOS() && !standalone()) {
         box.replaceChildren(title, h("p", { class: "small", text: what }),
           h("p", { class: "small push-hint" }, "Su iPhone funzionano solo dall'app: tocca ", h("b", { text: "Condividi" }), " (il quadrato con la freccia ⬆️), poi ",

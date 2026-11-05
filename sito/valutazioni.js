@@ -1,23 +1,17 @@
-/* Novaula · Piano delle valutazioni, solo per il docente (vedi aggiornamenti/2026-10-27-valutazioni.sql).
-   Per ogni classe: quanto manca alla fine del periodo, quanti voti ha ogni studente e quanti ne servono,
-   date di verifica suggerite sui giorni di lezione (si confermano con un tocco), chi interrogare nelle
-   prossime lezioni, voto rapido, elenco della classe da incollare.
-   Stampa: un PDF con una copia della verifica per ogni studente, con nome, classe, data, pagina e codice
-   su ogni pagina (così Claude riconosce di chi è ogni foglio scansionato); si scarica, si condivide o si
-   manda alla cartoleria con l'email già compilata.
-   Posta in arrivo: le verifiche scansionate aspettano Claude, che su richiesta le divide per studente e le
-   corregge (strumenti/SCANSIONI.md); i voti proposti restano nascosti finché il docente non li accetta.
+/* Novaula · Piano delle verifiche, solo per il docente. Senza dati personali (3.0.0): niente studenti né voti,
+   i voti stanno sul registro elettronico. Per ogni classe: quanto manca alla fine del periodo, verifiche scritte
+   da fissare sui giorni di lezione (si confermano con un tocco), date da spostare, verifiche da segnare come svolte
+   (così gli studenti vedono testo e soluzioni), stampa delle copie (tutte uguali, senza nomi) ed email alla cartoleria.
    Nessun timer e nessun lavoro pianificato: i dati si leggono solo quando si apre la pagina.
    app.js chiama:
      NovaulaValutazioni.page(contenitore, aiuti)   #/docente/valutazioni
-     NovaulaValutazioni.week(contenitore, aiuti)   riquadro «Questa settimana» nella home e in Area docente */
+     NovaulaValutazioni.week(contenitore, aiuti)   riquadro «Verifiche della settimana» in Area docente
+   agenda.js usa NovaulaValutazioni.data(sb) e .plan(D, classe). */
 (function () {
   "use strict";
 
   var DEF_TERMS = [{ name: "Trimestre", from: "09-01", to: "12-31" }, { name: "Pentamestre", from: "01-01", to: "06-30" }];
-  var DEF_PLAN = { min_marks: 3, min_verifica: 1, min_orale: 1, print_email: "", print_notes: "A4, bianco e nero, fronte/retro", signature: "" };
-  var CATS = [["orale", "Interrogazione"], ["verifica", "Verifica"], ["classe", "Lavoro in classe"], ["compito", "Compito a casa"], ["progetto", "Progetto"], ["altro", "Altro"]];
-  var QUICK = ["4", "5", "5½", "6-", "6", "6½", "7", "7½", "8", "8½", "9", "10"];
+  var DEF_PLAN = { min_verifica: 1, print_email: "", print_notes: "A4, bianco e nero, fronte/retro", signature: "" };
   var DAYS = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
   var PREF = "novaula-valutazioni";
 
@@ -32,17 +26,7 @@
   function dmy(s) { var d = dateOf(s); return String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear(); }
   function schoolYear(s) { var y = +s.slice(0, 4), m = +s.slice(5, 7); return m >= 9 ? y : y - 1; }
   function md(year, s) { return (+s.slice(0, 2) >= 9 ? year : year + 1) + "-" + s; }
-  function fullName(s) { return s.last_name + " " + s.first_name; }
-  // Codice stampato su ogni pagina della copia di uno studente (uguale a strumenti/correggi.py)
-  function code(id) { return id.replace(/-/g, "").slice(0, 4).toUpperCase(); }
-  function markValue(label) {
-    var m = /^(\d{1,2})(?:[.,](\d{1,2}))?\s*(\+|-|½|1\/2|e mezzo)?/.exec(String(label || "").trim());
-    if (!m) return null;
-    var v = +m[1] + (m[2] ? +("0." + m[2]) : 0);
-    if (m[3] === "+") v += 0.25; else if (m[3] === "-") v -= 0.25; else if (m[3]) v += 0.5;
-    return v >= 0 && v <= 10 ? v : null;
-  }
-  function safeName(n) { return (n || "file").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9._-]+/g, "_").slice(-80) || "file"; }
+  function safeName(n) { return (n || "file").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9._-]+/g, "_").slice(-80) || "file"; }
   function uid() { return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2); }
   function pref(v) {
     try { if (v === undefined) return JSON.parse(localStorage.getItem(PREF) || "{}"); localStorage.setItem(PREF, JSON.stringify(v)); } catch (e) { return {}; }
@@ -82,26 +66,23 @@
 
   /* ---------- Dati ---------- */
   async function loadAll(sb) {
-    var today = todayIso(), y = schoolYear(today);
+    var today = todayIso();
     var r = await Promise.all([
       sb.from("timetable").select("weekday, starts, ends, class_id, room"),
       sb.from("tests").select("*").order("test_date"),
       sb.from("test_files").select("test_id, test_url, solutions_url"),
-      sb.from("students").select("id, class_id, first_name, last_name").order("last_name").order("first_name"),
-      sb.from("marks").select("id, student_id, class_id, category, status, value, label, title, mark_date, test_id").gte("mark_date", y + "-09-01"),
-      sb.from("grade_settings").select("*"),
-      sb.from("test_scans").select("*").order("created_at", { ascending: false }).limit(60)
+      sb.from("grade_settings").select("*").in("scope", ["tutte", "piano"])
     ]);
     var settings = {};
-    (ok(r[5]) || []).forEach(function (g) { settings[g.scope] = g; });
+    (ok(r[3]) || []).forEach(function (g) { settings[g.scope] = g; });
     var files = {};
     (ok(r[2]) || []).forEach(function (f) { files[f.test_id] = f; });
-    var scans = r[6].error ? [] : r[6].data; // tabella non ancora creata: niente posta in arrivo
+    var terms = settings.tutte && settings.tutte.terms && settings.tutte.terms.length ? settings.tutte.terms : DEF_TERMS;
+    var plan = Object.assign({}, DEF_PLAN, (settings.piano && settings.piano.weights) || {});
     return {
       // l'orario è facoltativo: senza (permessi o tabella vuota) mancano solo i giorni di lezione
-      today: today, slots: r[0].error ? [] : r[0].data || [], tests: ok(r[1]) || [], files: files, students: ok(r[3]) || [], marks: ok(r[4]) || [],
-      plan: Object.assign({}, DEF_PLAN, (settings.piano && settings.piano.weights) || {}),
-      term: currentTerm(settings.tutte && settings.tutte.terms, today), scans: scans || [], scansReady: !r[6].error
+      today: today, slots: r[0].error ? [] : r[0].data || [], tests: ok(r[1]) || [], files: files,
+      plan: plan, terms: terms, term: currentTerm(terms, today)
     };
   }
 
@@ -110,43 +91,18 @@
     var T = D.term, today = D.today, P = D.plan;
     var slots = D.slots.filter(function (r) { return r.class_id === cid; });
     var tests = D.tests.filter(function (t) { return t.class_id === cid; });
-    var students = D.students.filter(function (s) { return s.class_id === cid; });
-    var marks = D.marks.filter(function (m) { return m.class_id === cid; });
     var from = T ? (T.from > today ? T.from : today) : today, to = T ? T.to : today;
     var lessons = T ? lessonDays(slots, from, to) : [];
-    var markedTests = {};
-    marks.forEach(function (m) { if (m.test_id) markedTests[m.test_id] = (markedTests[m.test_id] || 0) + 1; });
     var inTerm = function (d) { return T && d && d >= T.from && d <= T.to; };
     var termTests = tests.filter(function (t) { return inTerm(t.test_date); });
-    var upcoming = termTests.filter(function (t) { return t.test_date >= today && !markedTests[t.id]; });
+    var upcoming = termTests.filter(function (t) { return t.test_date >= today; });
     var testDays = {};
     tests.forEach(function (t) { if (t.test_date) testDays[t.test_date] = t; });
-
-    // Voti di ogni studente nel periodo (contano solo quelli confermati)
-    var rows = students.map(function (s) {
-      var ms = marks.filter(function (m) { return m.student_id === s.id && inTerm(m.mark_date); });
-      var conf = ms.filter(function (m) { return m.status === "confermato" && m.value != null; });
-      var n = conf.length, ver = conf.filter(function (m) { return m.category === "verifica"; }).length, ora = conf.filter(function (m) { return m.category === "orale"; }).length;
-      var pending = ms.filter(function (m) { return m.status === "proposto"; }).length;
-      var expect = n + pending + upcoming.length, expVer = ver + pending + upcoming.length;
-      var needOral = ora < P.min_orale, needMore = expect < P.min_marks;
-      var status = n >= P.min_marks && ver >= P.min_verifica && ora >= P.min_orale ? "ok" : (!needOral && !needMore && expVer >= P.min_verifica ? "track" : "behind");
-      return { s: s, n: n, ver: ver, ora: ora, pending: pending, status: status, needOral: needOral || needMore, last: conf.reduce(function (a, m) { return m.mark_date > a ? m.mark_date : a; }, "") };
-    });
-    rows.sort(function (a, b) { return (a.status === "behind" ? 0 : a.status === "track" ? 1 : 2) - (b.status === "behind" ? 0 : b.status === "track" ? 1 : 2) || a.n - b.n || a.ora - b.ora || (a.last < b.last ? -1 : a.last > b.last ? 1 : 0) || (fullName(a.s) < fullName(b.s) ? -1 : 1); });
-
-    // Interrogazioni: chi ne ha bisogno, distribuito sulle lezioni rimaste (non nei giorni di verifica)
-    var oralLessons = lessons.filter(function (l) { return !testDays[l.date]; });
-    var queue = rows.filter(function (r) { return r.needOral; });
-    var perLesson = queue.length ? Math.max(1, Math.min(4, Math.ceil(queue.length / Math.max(1, oralLessons.length)))) : 0;
-    var orals = {};
-    oralLessons.forEach(function (l, i) { var g = queue.slice(i * perLesson, (i + 1) * perLesson); if (g.length) orals[l.date] = g; });
 
     // Cose da fare
     var todo = [];
     tests.forEach(function (t) {
-      if (t.test_date && t.test_date < today && t.test_date >= schoolYear(today) + "-09-01" && !markedTests[t.id] && students.length)
-        todo.push({ kind: "mark", test: t });
+      if (t.test_date && t.test_date < today && t.test_date >= schoolYear(today) + "-09-01" && !t.done) todo.push({ kind: "done", test: t });
     });
     upcoming.forEach(function (t) {
       if (slots.length && !lessons.some(function (l) { return l.date === t.test_date; })) {
@@ -155,12 +111,9 @@
       }
     });
     var missing = Math.max(0, P.min_verifica - termTests.length);
-    var proposals = proposeTests(D, cid, lessons, testDays, missing);
-    proposals.forEach(function (p) { todo.push({ kind: "new", proposal: p }); });
-    if (!students.length) todo.push({ kind: "roster" });
+    proposeTests(D, cid, lessons, testDays, missing).forEach(function (p) { todo.push({ kind: "new", proposal: p }); });
 
-    return { cid: cid, slots: slots, tests: tests, termTests: termTests, students: students, rows: rows, lessons: lessons, orals: orals,
-      todo: todo, markedTests: markedTests, testDays: testDays, upcoming: upcoming };
+    return { cid: cid, slots: slots, tests: tests, termTests: termTests, lessons: lessons, todo: todo, testDays: testDays, upcoming: upcoming };
   }
   function nearestLesson(list, target) {
     var best = null;
@@ -214,7 +167,7 @@
       body.appendChild(h("p", { class: "vl-term" },
         T ? h("b", { text: T.name }) : h("b", { text: "Nessun periodo in corso" }),
         T ? " · fino al " + dmy(T.to) + " · " + (weeks === 1 ? "ultima settimana" : "mancano " + weeks + " settimane") : "",
-        h("span", { class: "muted", text: " · obiettivo per studente: " + D.plan.min_marks + " voti, di cui almeno " + D.plan.min_verifica + " verifica e " + D.plan.min_orale + " interrogazione" })));
+        h("span", { class: "muted", text: " · almeno " + D.plan.min_verifica + (D.plan.min_verifica === 1 ? " verifica scritta" : " verifiche scritte") + " per periodo · i voti vanno sul registro elettronico" })));
       body.appendChild(h("nav", { class: "vl-classes", "aria-label": "Classe" }, classes.map(function (k) {
         var n = classPlan(D, k.id).todo.length;
         return h("button", { type: "button", class: "vl-cls", style: "--cc:" + x.classColor(k), "aria-pressed": k.id === state.cid ? "true" : "false",
@@ -224,11 +177,7 @@
       var wrap = h("div", { class: "vl-body", style: "--cc:" + x.classColor(c) });
       body.appendChild(wrap);
       wrap.appendChild(todoCard(ctx, c, cp));
-      wrap.appendChild(oralsCard(ctx, c, cp));
-      wrap.appendChild(studentsCard(ctx, c, cp));
       wrap.appendChild(testsCard(ctx, c, cp));
-      wrap.appendChild(inboxCard(ctx));
-      wrap.appendChild(rosterCard(ctx, c, cp));
       wrap.appendChild(settingsCard(ctx));
     }
     render();
@@ -238,18 +187,16 @@
     return h("section", { class: "card vl-card" }, h("h2", { class: "vl-h" }, title, sub ? h("span", { class: "vl-sub", text: sub }) : null));
   }
 
-  // «Da fare»: voti da registrare, date da sistemare, verifiche da fissare, elenco mancante
+  // «Da fare»: verifiche da segnare come svolte, date da sistemare, verifiche da fissare
   function todoCard(ctx, c, cp) {
     var h = ctx.h, x = ctx.x, card = section(h, "Da fare", cp.todo.length ? String(cp.todo.length) : "tutto in ordine");
     if (!cp.todo.length) { card.appendChild(h("p", { class: "small muted", text: "Niente da sistemare in questa classe per ora." })); return card; }
     var topics = null;
     cp.todo.forEach(function (t) {
-      if (t.kind === "mark") {
+      if (t.kind === "done") {
         card.appendChild(h("div", { class: "vl-todo warn" },
-          h("p", null, h("b", { text: "Registra i voti: " }), t.test.title, h("span", { class: "muted", text: " · " + day(t.test.test_date) })),
-          h("div", { class: "row" },
-            h("button", { class: "btn primary", type: "button", text: "Inserisci i voti", onclick: function (e) { openTestMarks(ctx, c, cp, t.test, e.target.closest(".vl-todo")); } }),
-            ctx.D().scansReady ? h("a", { class: "btn", href: "#vl-test-" + t.test.id, text: "📥 Carica le scansioni" }) : null)));
+          h("p", null, h("b", { text: "Segna come svolta: " }), t.test.title, h("span", { class: "muted", text: " · " + day(t.test.test_date) + " · così gli studenti vedono testo e soluzioni" })),
+          h("div", { class: "row" }, h("button", { class: "btn primary", type: "button", text: "✓ Svolta", onclick: function (e) { markDone(ctx, t.test, e.target); } }))));
       } else if (t.kind === "move") {
         card.appendChild(h("div", { class: "vl-todo" },
           h("p", null, h("b", { text: "Data senza lezione: " }), t.test.title + " è fissata " + day(t.test.test_date) + ", ma quel giorno non hai " + c.name.split(" ")[0] + "."),
@@ -265,10 +212,6 @@
         card.appendChild(box);
         topics = topics || x.sb.from("topics").select("id, position, title, done").eq("class_id", c.id).order("position").then(ok);
         newTestForm(ctx, c, cp, t.proposal, box, topics);
-      } else if (t.kind === "roster") {
-        card.appendChild(h("div", { class: "vl-todo" },
-          h("p", null, h("b", { text: "Manca l'elenco della classe. " }), "Incollalo una volta: poi gli studenti scelgono il proprio nome e i voti si contano qui."),
-          h("div", { class: "row" }, h("a", { class: "btn primary", href: "#vl-roster", text: "Incolla l'elenco" }))));
       }
     });
     return card;
@@ -303,103 +246,14 @@
     } })));
   }
 
-  // Interrogazioni suggerite nelle prossime lezioni
-  function oralsCard(ctx, c, cp) {
-    var h = ctx.h, card = section(h, "Da interrogare");
-    var dates = Object.keys(cp.orals).sort().slice(0, 4);
-    if (!cp.students.length) { card.appendChild(h("p", { class: "small muted", text: "Appena c'è l'elenco della classe, qui trovi chi interrogare a ogni lezione." })); return card; }
-    if (!dates.length) { card.appendChild(h("p", { class: "small muted", text: "Tutti hanno (o avranno con le verifiche fissate) i voti che servono." })); return card; }
-    card.appendChild(h("p", { class: "small muted", text: "Chi ha meno voti o nessuna interrogazione, distribuito sulle lezioni che restano. Tocca un nome per mettere il voto." }));
-    dates.forEach(function (d) {
-      card.appendChild(h("div", { class: "vl-oral" }, h("span", { class: "vl-date", text: day(d) + (d === ctx.D().today ? " · oggi" : "") }),
-        h("div", { class: "chips" }, cp.orals[d].map(function (r) {
-          return h("button", { type: "button", class: "chip vl-name", onclick: function (e) { quickMark(ctx, c, r.s, e.target.closest(".vl-oral"), "orale"); } }, r.s.last_name + " " + r.s.first_name[0] + ".");
-        }))));
-    });
-    return card;
+  async function markDone(ctx, t, btn) {
+    var x = ctx.x;
+    btn.disabled = true;
+    try { ok(await x.sb.from("tests").update({ done: true }).eq("id", t.id)); x.toast("«" + t.title + "» segnata come svolta."); ctx.reload(); }
+    catch (err) { btn.disabled = false; x.toast(x.errText(err)); }
   }
 
-  // Studenti: voti nel periodo e stato
-  function studentsCard(ctx, c, cp) {
-    var h = ctx.h, P = ctx.D().plan, card = section(h, "Studenti", cp.students.length ? cp.rows.filter(function (r) { return r.status === "behind"; }).length + " indietro" : "");
-    if (!cp.students.length) { card.appendChild(h("p", { class: "small muted", text: "Nessuno studente in questa classe." })); return card; }
-    var LBL = { ok: "a posto", track: "in arrivo", behind: "indietro" };
-    card.appendChild(h("ul", { class: "vl-list" }, cp.rows.map(function (r) {
-      var li = h("li", { class: "vl-st " + r.status },
-        h("button", { type: "button", class: "vl-st-btn", onclick: function () { quickMark(ctx, c, r.s, li); } },
-          h("span", { class: "vl-st-name", text: fullName(r.s) }),
-          h("span", { class: "vl-st-n", title: "voti confermati nel periodo" }, h("b", { text: r.n + "/" + P.min_marks }), " voti"),
-          h("span", { class: "vl-st-cats" }, h("span", { class: r.ver >= P.min_verifica ? "on" : "", text: "✍ " + r.ver }), h("span", { class: r.ora >= P.min_orale ? "on" : "", text: "🗣 " + r.ora }),
-            r.pending ? h("span", { class: "on", text: "⏳ " + r.pending }) : null),
-          h("span", { class: "vl-st-badge", text: LBL[r.status] })));
-      return li;
-    })));
-    card.appendChild(h("p", { class: "small muted", text: "✍ verifiche · 🗣 interrogazioni · ⏳ voti proposti da Claude da confermare (in «Studenti e voti» della classe). «In arrivo» = arriva all'obiettivo con le verifiche già fissate." }));
-    return card;
-  }
-
-  function quickMark(ctx, c, s, host, cat) {
-    var h = ctx.h, x = ctx.x;
-    var old = host.querySelector(".vl-quick");
-    if (old) { old.remove(); return; }
-    var sel = h("select", { "aria-label": "Tipo" }, CATS.map(function (k) { return h("option", { value: k[0], text: k[1], selected: k[0] === (cat || "orale") ? true : null }); }));
-    var label = h("input", { type: "text", maxlength: 12, inputmode: "decimal", placeholder: "7½", "aria-label": "Voto" });
-    var title = h("input", { type: "text", maxlength: 200, value: "Interrogazione", "aria-label": "Titolo" });
-    var date = h("input", { type: "date", value: todayIso(), "aria-label": "Data" });
-    sel.addEventListener("change", function () { var k = CATS.filter(function (z) { return z[0] === sel.value; })[0]; if (k) title.value = k[1]; });
-    var form = h("form", { class: "vl-quick stack" },
-      h("p", { class: "small" }, h("b", { text: fullName(s) })),
-      h("div", { class: "vl-grades" }, QUICK.map(function (q) {
-        return h("button", { type: "button", class: "vl-g", text: q, onclick: function () { label.value = q; form.querySelectorAll(".vl-g").forEach(function (b) { b.classList.toggle("sel", b.textContent === q); }); } });
-      })),
-      h("div", { class: "vl-two" }, h("label", null, "Voto", label), h("label", null, "Tipo", sel)),
-      h("div", { class: "vl-two" }, h("label", null, "Titolo", title), h("label", null, "Data", date)),
-      h("div", { class: "row" }, h("button", { class: "btn primary", type: "submit", text: "Salva il voto" }), h("button", { class: "btn link", type: "button", text: "Chiudi", onclick: function () { form.remove(); } })));
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      var v = markValue(label.value);
-      if (v == null) { x.toast("Voto non valido: scrivi per esempio 7, 7+, 6½, 6,5."); return; }
-      form.querySelector('button[type="submit"]').disabled = true;
-      try {
-        ok(await x.sb.from("marks").insert({ student_id: s.id, class_id: c.id, category: sel.value, title: title.value.trim() || "Voto", label: label.value.trim().slice(0, 12), value: v, status: "confermato", source: "docente", mark_date: date.value || todayIso() }));
-        x.toast("Voto salvato: " + fullName(s) + " " + label.value.trim() + ".");
-        ctx.reload();
-      } catch (err) { form.querySelector('button[type="submit"]').disabled = false; x.toast(x.errText(err)); }
-    });
-    host.appendChild(form);
-    label.focus();
-  }
-
-  // Voti di una verifica per tutta la classe
-  function openTestMarks(ctx, c, cp, t, host) {
-    var h = ctx.h, x = ctx.x;
-    var old = host.querySelector(".vl-bulk");
-    if (old) { old.remove(); return; }
-    var rows = cp.students.map(function (s) {
-      return h("label", { class: "vl-bulk-row" }, h("span", { text: fullName(s) }), h("input", { type: "text", maxlength: 12, inputmode: "decimal", placeholder: "–", "data-id": s.id, enterkeyhint: "next" }));
-    });
-    var form = h("form", { class: "vl-bulk stack" }, h("p", { class: "small muted", text: "Lascia vuoto chi era assente. Formati: 7, 7+, 7-, 6½, 6,5." }), h("div", { class: "vl-bulk-grid" }, rows),
-      h("div", { class: "row" }, h("button", { class: "btn primary", type: "submit", text: "Salva i voti" })));
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      var out = [], bad = [];
-      cp.students.forEach(function (s) {
-        var v = form.querySelector('[data-id="' + s.id + '"]').value.trim();
-        if (!v) return;
-        var n = markValue(v);
-        if (n == null) bad.push(fullName(s));
-        else out.push({ student_id: s.id, class_id: c.id, category: "verifica", title: t.title, label: v.slice(0, 12), value: n, status: "confermato", source: "docente", test_id: t.id, mark_date: t.test_date || todayIso() });
-      });
-      if (bad.length) { x.toast("Voto non valido per: " + bad.join(", ")); return; }
-      if (!out.length) { x.toast("Nessun voto da salvare."); return; }
-      form.querySelector('button[type="submit"]').disabled = true;
-      try { ok(await x.sb.from("marks").insert(out)); x.toast(out.length + " voti salvati."); ctx.reload(); }
-      catch (err) { form.querySelector('button[type="submit"]').disabled = false; x.toast(x.errText(err)); }
-    });
-    host.appendChild(form);
-  }
-
-  // Verifiche dell'anno: date, stampa, scansioni
+  // Verifiche dell'anno: date, svolta, stampa
   function testsCard(ctx, c, cp) {
     var h = ctx.h, x = ctx.x, D = ctx.D(), card = section(h, "Verifiche", cp.termTests.length + " nel periodo");
     var list = cp.tests.filter(function (t) { return !t.test_date || t.test_date >= schoolYear(D.today) + "-09-01"; });
@@ -407,8 +261,7 @@
     var lessonSet = {};
     lessonDays(cp.slots, schoolYear(D.today) + "-09-01", (schoolYear(D.today) + 1) + "-06-30").forEach(function (l) { lessonSet[l.date] = true; });
     list.forEach(function (t) {
-      var past = t.test_date && t.test_date < D.today, marked = cp.markedTests[t.id];
-      var scans = D.scans.filter(function (s) { return s.test_id === t.id; });
+      var past = t.test_date && t.test_date < D.today;
       var date = h("input", { type: "date", value: t.test_date || "", "aria-label": "Data di " + t.title });
       date.addEventListener("change", async function () {
         try { ok(await x.sb.from("tests").update({ test_date: date.value || null }).eq("id", t.id)); x.toast(date.value ? "Data salvata: " + day(date.value) + (lessonSet[date.value] || !cp.slots.length ? "." : " (attenzione: quel giorno non hai lezione con la classe)") : "Data tolta."); ctx.reload(); }
@@ -419,12 +272,11 @@
         h("div", { class: "vl-test-head" },
           h("span", { class: "vl-date", text: t.test_date ? day(t.test_date) : "senza data" }),
           h("b", { text: t.title }),
-          h("span", { class: "vl-state", text: marked ? "✓ " + marked + " voti" : past ? "voti da registrare" : t.test_date && !lessonSet[t.test_date] && cp.slots.length ? "⚠ giorno senza lezione" : "" })),
+          h("span", { class: "vl-state", text: t.done ? "✓ svolta" : past ? "da segnare come svolta" : t.test_date && !lessonSet[t.test_date] && cp.slots.length ? "⚠ giorno senza lezione" : "" })),
         h("div", { class: "row" },
           h("label", { class: "vl-inline" }, "Data ", date),
-          h("button", { class: "btn", type: "button", text: "🖨 Stampa", onclick: function () { printPanel(ctx, c, cp, t, tools); } }),
-          D.scansReady ? h("button", { class: "btn", type: "button", text: "📥 Scansioni" + (scans.length ? " (" + scans.length + ")" : ""), onclick: function () { scanPanel(ctx, c, t, tools, scans); } }) : null,
-          past && !marked && cp.students.length ? h("button", { class: "btn", type: "button", text: "Voti", onclick: function () { openTestMarks(ctx, c, cp, t, tools); } }) : null),
+          h("button", { class: "btn", type: "button", text: "🖨 Stampa", onclick: function () { printPanel(ctx, c, t, tools); } }),
+          past && !t.done ? h("button", { class: "btn", type: "button", text: "✓ Svolta", onclick: function (e) { markDone(ctx, t, e.target); } }) : null),
         tools);
       card.appendChild(item);
     });
@@ -455,8 +307,8 @@
     var src = await L.PDFDocument.load(o.bytes, { ignoreEncryption: true });
     var n = src.getPageCount();
     var emb = await out.embedPdf(o.bytes, Array.from({ length: n }, function (_, i) { return i; }));
-    var copies = o.students.map(function (s) { return { name: fullName(s), code: code(s.id) }; });
-    for (var k = 0; k < o.blank; k++) copies.push({ name: null, code: "X" + (k + 1) });
+    var copies = [];
+    for (var k = 0; k < o.copies; k++) copies.push({ code: String(k + 1) });
     var ink = L.rgb(0.1, 0.13, 0.25), grey = L.rgb(0.35, 0.37, 0.45);
     copies.forEach(function (cp) {
       for (var i = 0; i < n; i++) {
@@ -467,8 +319,8 @@
         var band = 20, y = ht - band;
         pg.drawRectangle({ x: 0, y: y, width: w, height: band, color: L.rgb(1, 1, 1) });
         pg.drawLine({ start: { x: 24, y: y }, end: { x: w - 24, y: y }, thickness: 0.6, color: grey });
-        var left = cp.name ? latin(cp.name) : "Nome e cognome: ______________________";
-        var right = latin(o.classCode + " · " + dmy(o.date) + " · pag. " + (i + 1) + "/" + n + " · cod. " + cp.code);
+        var left = "Nome e cognome: ______________________";
+        var right = latin(o.classCode + " · " + dmy(o.date) + " · pag. " + (i + 1) + "/" + n);
         var size = 9, rw = font.widthOfTextAtSize(right, size);
         var room = w - 48 - rw - 12, mid = latin(o.short);
         while (mid.length > 3 && bold.widthOfTextAtSize(left, size + 1) + font.widthOfTextAtSize("  " + mid, size) > room) mid = mid.slice(0, -2);
@@ -484,7 +336,7 @@
     return { bytes: bytes, copies: copies.length, pages: out.getPageCount(), sheets: Math.ceil(out.getPageCount() / (o.duplex ? 2 : 1)) };
   }
 
-  function printPanel(ctx, c, cp, t, tools) {
+  function printPanel(ctx, c, t, tools) {
     var h = ctx.h, x = ctx.x, D = ctx.D();
     if (tools.querySelector(".vl-print")) { tools.replaceChildren(); return; }
     tools.replaceChildren();
@@ -496,18 +348,14 @@
     var fileRow = h("label", null, "PDF della verifica", file);
     function sync() { fileRow.hidden = srcSel.value !== "file"; }
     srcSel.addEventListener("change", sync); sync();
-    var checks = cp.students.map(function (s) { return h("input", { type: "checkbox", checked: true, "data-id": s.id, "aria-label": fullName(s) }); });
-    var blank = h("input", { type: "number", min: 0, max: 30, value: cp.students.length ? 2 : 25, inputmode: "numeric", "aria-label": "Copie senza nome" });
+    var count = h("input", { type: "number", min: 1, max: 40, value: pref()["copie-" + c.id] || 25, inputmode: "numeric", "aria-label": "Numero di copie" });
     var duplex = h("input", { type: "checkbox", checked: /fronte\/retro/i.test(D.plan.print_notes) ? true : null });
     var msg = h("div"), result = h("div", { class: "stack" });
     var go = h("button", { class: "btn primary", type: "button", text: "Prepara il PDF" });
     var panel = h("div", { class: "vl-print stack" },
-      h("p", { class: "small muted", text: "Una copia per studente con nome, classe, data della verifica, pagina e un codice in alto su ogni pagina: Claude riconosce così di chi è ogni foglio scansionato." }),
+      h("p", { class: "small muted", text: "Copie tutte uguali, con la riga «Nome e cognome» da compilare a mano e classe, data e pagina in alto. Novaula non stampa nomi." }),
       h("label", null, "Testo", srcSel), fileRow,
-      cp.students.length ? h("details", { class: "vl-who" }, h("summary", { text: "Copie con il nome: " + cp.students.length + " studenti (tocca per togliere gli assenti)" }),
-        h("div", { class: "vl-checks" }, cp.students.map(function (s, i) { return h("label", { class: "check-row" }, checks[i], h("span", { text: fullName(s) })); })))
-        : h("p", { class: "small muted", text: "Non c'è ancora l'elenco della classe: le copie avranno la riga «Nome e cognome» da compilare." }),
-      h("div", { class: "vl-two" }, h("label", null, "Copie in più senza nome", blank), h("label", { class: "check-row" }, duplex, h("span", { text: "Fronte/retro (ogni copia su fogli suoi)" }))),
+      h("div", { class: "vl-two" }, h("label", null, "Numero di copie", count), h("label", { class: "check-row" }, duplex, h("span", { text: "Fronte/retro (ogni copia su fogli suoi)" }))),
       h("div", { class: "row" }, go), msg, result);
     tools.appendChild(panel);
     go.addEventListener("click", async function () {
@@ -523,8 +371,8 @@
           if (!file.files[0]) throw new Error("scegli il PDF della verifica.");
           bytes = new Uint8Array(await file.files[0].arrayBuffer());
         }
-        var who = cp.students.filter(function (s, i) { return checks[i].checked; });
-        var res = await buildPrint({ bytes: bytes, students: who, blank: Math.max(0, Math.min(30, +blank.value || 0)), duplex: duplex.checked,
+        var n = Math.max(1, Math.min(40, +count.value || 1)), pp = pref(); pp["copie-" + c.id] = n; pref(pp);
+        var res = await buildPrint({ bytes: bytes, copies: n, duplex: duplex.checked,
           title: c.name + " - " + t.title, short: t.title, classCode: c.name.split(" ")[0], date: t.test_date || todayIso() });
         var name = safeName(c.name.split(" ")[0] + "-" + t.title).slice(0, 60) + "-stampa.pdf";
         var blob = new Blob([res.bytes], { type: "application/pdf" });
@@ -568,171 +416,68 @@
   }
   function fmtLong(s) { return dateOf(s).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" }); }
 
-  /* ---------- Posta in arrivo delle scansioni ---------- */
-  var SCAN_STATE = { nuova: "in attesa di Claude", fatta: "divisa per studente: correzioni in Area docente", errore: "da rivedere" };
-  function scanPanel(ctx, c, t, tools, scans) {
-    var h = ctx.h, x = ctx.x;
-    if (tools.querySelector(".vl-scan")) { tools.replaceChildren(); return; }
-    tools.replaceChildren();
-    var file = h("input", { type: "file", accept: "application/pdf,image/*", multiple: true, "aria-label": "Scansioni" });
-    var msg = h("div");
-    var panel = h("div", { class: "vl-scan stack" },
-      h("p", { class: "small muted", text: "Carica il PDF della scansione (anche tutta la classe in un file solo, in qualsiasi ordine) o le foto dei fogli. Claude legge nome e codice in alto su ogni pagina, divide le copie per studente e propone un voto, che resta nascosto finché non lo accetti." }),
-      h("label", null, "File", file),
-      h("div", { class: "row" }, h("button", { class: "btn primary", type: "button", text: "📥 Carica", onclick: async function (e) {
-        if (!file.files.length) { x.toast("Scegli prima il file."); return; }
-        e.target.disabled = true;
-        try {
-          for (var i = 0; i < file.files.length; i++) {
-            var f = file.files[i], path = c.id + "/" + t.id + "/" + uid() + "-" + safeName(f.name);
-            if (f.size > 100 * 1024 * 1024) throw new Error(f.name + " è più grande di 100 MB.");
-            ok(await x.sb.storage.from("scansioni").upload(path, f, { contentType: f.type || undefined }));
-            ok(await x.sb.from("test_scans").insert({ test_id: t.id, class_id: c.id, file_path: path, file_name: f.name.slice(0, 200) }));
-          }
-          msg.replaceChildren(askClaude(h, x));
-          ctx.reload();
-        } catch (err) { msg.replaceChildren(x.notice("err", x.errText(err))); }
-        e.target.disabled = false;
-      } })), msg,
-      scans.length ? h("ul", { class: "vl-scans" }, scans.map(function (s) { return scanLine(h, s); })) : null);
-    tools.appendChild(panel);
-  }
-  function askClaude(h, x) {
-    var phrase = "Correggi le scansioni delle verifiche";
-    return h("div", { class: "notice ok stack" }, h("span", { text: "Caricata. Quando vuoi la prima correzione, scrivi a Claude nel progetto Novaula:" }),
-      h("div", { class: "row" }, h("code", { text: "«" + phrase + "»" }), h("button", { class: "btn link", type: "button", text: "Copia", onclick: function () {
-        (navigator.clipboard ? navigator.clipboard.writeText(phrase) : Promise.reject()).then(function () { x.toast("Copiato."); }, function () {});
-      } })));
-  }
-  function scanLine(h, s) {
-    return h("li", { class: "vl-scan-line " + s.status },
-      h("span", { text: (s.file_name || "scansione") + " · " + day(s.created_at.slice(0, 10)) }),
-      h("span", { class: "vl-scan-st", text: SCAN_STATE[s.status] + (s.status === "fatta" && s.students ? " (" + s.students + " copie)" : "") }),
-      s.note ? h("span", { class: "small muted", text: s.note }) : null);
-  }
-  function inboxCard(ctx) {
-    var h = ctx.h, D = ctx.D(), x = ctx.x;
-    var card = section(h, "Posta in arrivo", "scansioni");
-    if (!D.scansReady) { card.appendChild(h("p", { class: "small muted", text: "La posta in arrivo si attiva con l'aggiornamento del database di questa versione." })); return card; }
-    var waiting = D.scans.filter(function (s) { return s.status === "nuova"; });
-    var recent = D.scans.slice(0, 8);
-    if (!recent.length) { card.appendChild(h("p", { class: "small muted", text: "Nessuna scansione. Dopo una verifica su carta, tocca «📥 Scansioni» accanto alla verifica." })); return card; }
-    if (waiting.length) card.appendChild(askClaude(h, x));
-    var testOf = {}; D.tests.forEach(function (t) { testOf[t.id] = t; });
-    card.appendChild(h("ul", { class: "vl-scans" }, recent.map(function (s) {
-      var t = testOf[s.test_id], cl = x.findClass(s.class_id);
-      var li = scanLine(h, s);
-      li.insertBefore(h("b", { text: (cl ? cl.name.split(" ")[0] : s.class_id) + " · " + (t ? t.title : "verifica") }), li.firstChild);
-      return li;
-    })));
-    return card;
-  }
-
-  /* ---------- Elenco della classe ---------- */
-  var PARTICLES = /^(de|di|del|della|dello|dei|degli|da|dal|dalla|la|lo|li|le|van|von|mc|mac|d'|dell'|de')$/i;
-  function parseRoster(text, firstFirst) {
-    return text.split(/\r?\n/).map(function (l) { return l.replace(/^\s*\d+\s*[.)\-]?\s+/, "").replace(/\s+/g, " ").trim(); }).filter(Boolean).map(function (l) {
-      var cells = l.split(/\t|;|,/).map(function (s) { return s.trim(); }).filter(Boolean);
-      if (cells.length >= 2) return firstFirst ? { first: cells[0], last: cells.slice(1).join(" ") } : { last: cells[0], first: cells.slice(1).join(" ") };
-      var w = l.split(" ");
-      if (w.length < 2) return { last: l, first: "" };
-      if (firstFirst) { var j = w.length - 1; while (j > 1 && PARTICLES.test(w[j - 1])) j--; return { first: w.slice(0, j).join(" "), last: w.slice(j).join(" ") }; }
-      var k = 1; while (k < w.length - 1 && PARTICLES.test(w[k - 1])) k++;
-      // cognomi tutti maiuscoli (come nei registri): "DE LUCA Marco Antonio"
-      if (w[0] === w[0].toUpperCase() && /[A-Z]/.test(w[0])) { k = 0; while (k < w.length - 1 && w[k] === w[k].toUpperCase()) k++; k = Math.max(1, k); }
-      return { last: w.slice(0, k).join(" "), first: w.slice(k).join(" ") };
-    });
-  }
-  function rosterCard(ctx, c, cp) {
-    var h = ctx.h, x = ctx.x;
-    var ta = h("textarea", { rows: 6, placeholder: "Un nome per riga, per esempio:\nRossi Mario\nDE LUCA Anna Maria\nBianchi, Luca", "aria-label": "Elenco della classe" });
-    var order = h("select", { "aria-label": "Ordine" }, h("option", { value: "last", text: "Cognome e poi nome" }), h("option", { value: "first", text: "Nome e poi cognome" }));
-    var preview = h("div", { class: "stack" });
-    var card = h("details", { class: "card vl-card", id: "vl-roster", open: cp.students.length ? null : true },
-      h("summary", { class: "vl-h" }, "Elenco della classe", h("span", { class: "vl-sub", text: cp.students.length + " studenti" })),
-      h("p", { class: "small muted", text: "Incolla l'elenco dal registro (anche da Excel). Chi c'è già viene saltato; gli studenti poi scelgono il proprio nome in «Il mio profilo» e mettono il PIN." }),
-      ta, h("label", null, "Ordine dei nomi", order),
-      h("div", { class: "row" }, h("button", { class: "btn", type: "button", text: "Controlla i nomi", onclick: show })), preview);
-    var have = {};
-    cp.students.forEach(function (s) { have[(s.first_name + " " + s.last_name).toLowerCase().replace(/\s+/g, " ")] = true; });
-    function show() {
-      var rows = parseRoster(ta.value, order.value === "first");
-      if (!rows.length) { preview.replaceChildren(x.notice("err", "Incolla almeno un nome.")); return; }
-      var items = rows.map(function (r) {
-        var last = h("input", { type: "text", value: r.last, maxlength: 40, "aria-label": "Cognome" }), first = h("input", { type: "text", value: r.first, maxlength: 40, "aria-label": "Nome" });
-        var row = h("div", { class: "vl-ros" }, last, first,
-          h("button", { class: "btn link", type: "button", text: "⇄", "aria-label": "Scambia nome e cognome", onclick: function () { var v = last.value; last.value = first.value; first.value = v; } }),
-          h("button", { class: "btn link danger", type: "button", text: "✕", "aria-label": "Togli", onclick: function () { row.remove(); } }));
-        if (have[(r.first + " " + r.last).toLowerCase().replace(/\s+/g, " ")]) row.appendChild(h("span", { class: "small muted", text: "c'è già" }));
-        return row;
-      });
-      var save = h("button", { class: "btn primary", type: "button", text: "Aggiungi " + rows.length + " studenti" });
-      save.addEventListener("click", async function () {
-        var list = Array.prototype.map.call(preview.querySelectorAll(".vl-ros"), function (r) { var i = r.querySelectorAll("input"); return { last: i[0].value.trim(), first: i[1].value.trim() }; })
-          .filter(function (r) { return r.last && r.first; });
-        if (!list.length) return;
-        save.disabled = true;
-        try {
-          var out = ok(await x.sb.rpc("teacher_add_students", { p_class: c.id, p_rows: list }));
-          x.toast(out.added + " studenti aggiunti" + (out.skipped ? ", " + out.skipped + " saltati (già presenti o incompleti)" : "") + ".");
-          ctx.reload();
-        } catch (e) { save.disabled = false; x.toast(x.errText(e)); }
-      });
-      preview.replaceChildren(h("p", { class: "small muted", text: "Controlla: a sinistra il cognome, a destra il nome. ⇄ li scambia." }), h("div", { class: "vl-ros-list" }, items), h("div", { class: "row" }, save));
-    }
-    return card;
-  }
-
   /* ---------- Impostazioni ---------- */
   function settingsCard(ctx) {
-    var h = ctx.h, x = ctx.x, P = ctx.D().plan;
-    function num(k, label) { return h("label", null, label, h("input", { type: "number", min: 0, max: 12, value: P[k], name: k, inputmode: "numeric" })); }
+    var h = ctx.h, x = ctx.x, D = ctx.D(), P = D.plan;
+    var terms = (D.terms || DEF_TERMS).slice(0, 3);
+    while (terms.length < 2) terms.push({ name: "", from: "", to: "" });
+    function mmdd(v) { return /^\d{2}-\d{2}$/.test(v) ? v : ""; }
+    var termRows = terms.map(function (t, i) {
+      return h("div", { class: "vl-three" },
+        h("label", null, "Periodo " + (i + 1), h("input", { type: "text", name: "tn" + i, value: t.name || "", maxlength: 40, placeholder: i ? "Pentamestre" : "Trimestre" })),
+        h("label", null, "Dal (MM-GG)", h("input", { type: "text", name: "tf" + i, value: t.from || "", maxlength: 5, placeholder: "09-01", inputmode: "numeric" })),
+        h("label", null, "Al (MM-GG)", h("input", { type: "text", name: "tt" + i, value: t.to || "", maxlength: 5, placeholder: "12-31", inputmode: "numeric" })));
+    });
     var form = h("form", { class: "stack" },
-      h("p", { class: "small muted", text: "Valgono per tutte le classi e per ogni periodo (i periodi si cambiano nella Pagella)." }),
-      h("div", { class: "vl-three" }, num("min_marks", "Voti minimi"), num("min_verifica", "di cui verifiche"), num("min_orale", "di cui interrogazioni")),
+      h("p", { class: "small muted", text: "Valgono per tutte le classi. Le date dei periodi le decide il collegio docenti." }),
+      termRows,
+      h("label", null, "Verifiche scritte per periodo (minimo)", h("input", { type: "number", min: 0, max: 12, value: P.min_verifica, name: "min_verifica", inputmode: "numeric" })),
       h("label", null, "Email della cartoleria", h("input", { type: "email", name: "print_email", value: P.print_email, placeholder: "cartoleria@esempio.it", autocomplete: "off" })),
       h("label", null, "Istruzioni di stampa", h("input", { type: "text", name: "print_notes", value: P.print_notes, maxlength: 200 })),
       h("label", null, "Firma dell'email", h("input", { type: "text", name: "signature", value: P.signature, maxlength: 100, placeholder: "Prof. …" })),
       h("div", { class: "row" }, h("button", { class: "btn primary", type: "submit", text: "Salva" })));
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
-      var f = form.elements, w = {
-        min_marks: Math.max(0, +f.min_marks.value || 0), min_verifica: Math.max(0, +f.min_verifica.value || 0), min_orale: Math.max(0, +f.min_orale.value || 0),
-        print_email: f.print_email.value.trim(), print_notes: f.print_notes.value.trim(), signature: f.signature.value.trim() };
-      try { ok(await x.sb.from("grade_settings").upsert({ scope: "piano", weights: w, updated_at: new Date().toISOString() })); x.toast("Impostazioni salvate."); ctx.reload(); }
-      catch (err) { x.toast(x.errText(err)); }
+      var f = form.elements, list = [];
+      terms.forEach(function (t, i) {
+        var n = f["tn" + i].value.trim(), a = mmdd(f["tf" + i].value.trim()), b = mmdd(f["tt" + i].value.trim());
+        if (n && a && b) list.push({ name: n, from: a, to: b });
+      });
+      if (!list.length) { x.toast("Serve almeno un periodo con nome e date (MM-GG)."); return; }
+      var w = { min_verifica: Math.max(0, +f.min_verifica.value || 0), print_email: f.print_email.value.trim(), print_notes: f.print_notes.value.trim(), signature: f.signature.value.trim() };
+      var now = new Date().toISOString();
+      try {
+        ok(await x.sb.from("grade_settings").upsert([{ scope: "piano", weights: w, updated_at: now }, { scope: "tutte", terms: list, updated_at: now }]));
+        x.toast("Impostazioni salvate."); ctx.reload();
+      } catch (err) { x.toast(x.errText(err)); }
     });
-    return h("details", { class: "card vl-card" }, h("summary", { class: "vl-h" }, "Impostazioni", h("span", { class: "vl-sub", text: "obiettivi e cartoleria" })), form);
+    return h("details", { class: "card vl-card" }, h("summary", { class: "vl-h" }, "Impostazioni", h("span", { class: "vl-sub", text: "periodi e cartoleria" })), form);
   }
 
-  /* ---------- «Questa settimana» (home e Area docente) ---------- */
+  /* ---------- «Verifiche della settimana» (Area docente) ---------- */
   function week(box, x) {
     if (!x.sb) return;
-    var h = x.h, card = h("section", { class: "card vl-week" }, h("p", { class: "small muted", text: "Caricamento delle valutazioni…" }));
+    var h = x.h, card = h("section", { class: "card vl-week" }, h("p", { class: "small muted", text: "Caricamento delle verifiche…" }));
     box.appendChild(card);
     loadAll(x.sb).then(function (D) {
       var classes = x.classes || [], end = addDays(D.today, 6), lines = {}, alerts = [];
       classes.forEach(function (c) {
         var cp = classPlan(D, c.id), tag = c.name.split(" ")[0];
         cp.tests.forEach(function (t) { if (t.test_date >= D.today && t.test_date <= end) (lines[t.test_date] = lines[t.test_date] || []).push({ c: c, text: "✍ Verifica: " + t.title }); });
-        Object.keys(cp.orals).forEach(function (d) { if (d <= end) (lines[d] = lines[d] || []).push({ c: c, text: "🗣 Interroga " + cp.orals[d].map(function (r) { return r.s.last_name; }).join(", ") }); });
-        var mk = cp.todo.filter(function (t) { return t.kind === "mark"; }).length, mv = cp.todo.filter(function (t) { return t.kind === "move" || t.kind === "new"; }).length;
-        if (mk) alerts.push(tag + ": " + mk + (mk === 1 ? " verifica da registrare" : " verifiche da registrare"));
+        var dn = cp.todo.filter(function (t) { return t.kind === "done"; }).length, mv = cp.todo.filter(function (t) { return t.kind === "move" || t.kind === "new"; }).length;
+        if (dn) alerts.push(tag + ": " + dn + (dn === 1 ? " verifica da segnare come svolta" : " verifiche da segnare come svolte"));
         if (mv) alerts.push(tag + ": " + mv + (mv === 1 ? " data da confermare" : " date da confermare"));
-        if (!cp.students.length) alerts.push(tag + ": manca l'elenco");
       });
-      var waiting = D.scans.filter(function (s) { return s.status === "nuova"; }).length;
-      if (waiting) alerts.unshift(waiting + (waiting === 1 ? " scansione aspetta" : " scansioni aspettano") + " Claude");
       var days = Object.keys(lines).sort();
       card.replaceChildren(
-        h("div", { class: "vl-week-head" }, h("h2", { text: "Valutazioni della settimana" }), h("a", { class: "btn", href: "#/docente/valutazioni", text: "Apri il piano →" })),
+        h("div", { class: "vl-week-head" }, h("h2", { text: "Verifiche della settimana" }), h("a", { class: "btn", href: "#/docente/valutazioni", text: "Apri il piano →" })),
         alerts.length ? h("ul", { class: "vl-alerts" }, alerts.slice(0, 6).map(function (a) { return h("li", { text: a }); })) : null,
         days.length ? h("ul", { class: "vl-days" }, days.map(function (d) {
           return h("li", null, h("span", { class: "vl-date", text: d === D.today ? "oggi" : day(d) }),
             h("div", null, lines[d].map(function (l) { return h("a", { class: "vl-line", href: "#/docente/valutazioni/" + l.c.id, style: "--cc:" + x.classColor(l.c) }, h("b", { text: l.c.name.split(" ")[0] + " " }), l.text); })));
-        })) : h("p", { class: "small muted", text: alerts.length ? "Nessuna verifica o interrogazione in programma nei prossimi 7 giorni." : "Niente in programma nei prossimi 7 giorni: tutto in ordine." }));
+        })) : h("p", { class: "small muted", text: alerts.length ? "Nessuna verifica nei prossimi 7 giorni." : "Niente in programma nei prossimi 7 giorni: tutto in ordine." }));
     }).catch(function (e) { card.replaceChildren(x.notice("err", x.errText(e))); });
   }
 
-  window.NovaulaValutazioni = { page: page, week: week, data: loadAll, plan: classPlan, _test: { parseRoster: parseRoster, holiday: holiday, easter: easter, classPlan: classPlan, proposeTests: proposeTests, code: code } };
+  window.NovaulaValutazioni = { page: page, week: week, data: loadAll, plan: classPlan, _test: { holiday: holiday, easter: easter, classPlan: classPlan, proposeTests: proposeTests } };
 })();

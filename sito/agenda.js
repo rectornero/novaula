@@ -7,9 +7,9 @@
      window.NovaulaAgenda.page(contenitore, aiuti)         pagina #/docente/agenda: giornata, calendario dell'anno, link Classroom
      window.NovaulaAgenda.student(contenitore, aiuti, c)   pagina della classe: «La tua settimana» per gli studenti
      window.NovaulaAgenda.share(aiuti, url, titolo, testo) pulsante «Condividi su Classroom» (solo link, nessun accesso a Google)
-     window.NovaulaAgenda.scrutinio(righe, periodo, aiuti, classe) Pagella: voti proposti e bozze di giudizio da copiare sul registro
-   Studenti con PDP/PEI: colonne students.learning_plan e plan_note (solo docente). Ore di ricevimento: grade_settings scope 'agenda'.
-   Assenze (absences), argomento dell'ora (lesson_log) e suggerimenti degli studenti (feedback): aggiornamenti/2026-10-29-registro.sql. */
+   Senza dati personali (3.0.0): niente studenti, assenze, voti o PDP/PEI; quelli stanno sul registro elettronico.
+   Ore di ricevimento: grade_settings scope 'agenda'. Argomento dell'ora (lesson_log) e suggerimenti anonimi degli studenti
+   (feedback): aggiornamenti/2026-10-29-registro.sql. */
 (function () {
   "use strict";
 
@@ -108,9 +108,7 @@
       sb.from("meetings").select("id, kind, title, class_id, starts_at, link").gte("starts_at", start.toISOString()).lt("starts_at", end.toISOString()).order("starts_at"),
       sb.from("assignments").select("id, class_id, title, due_date, deck, test_id").gte("due_date", addDays(t, -3)).lte("due_date", t),
       sb.from("calendar_events").select("*").gte("day", y + "-09-01").order("day"),
-      sb.from("students").select("id, class_id, first_name, last_name, learning_plan, plan_note").not("learning_plan", "is", null),
       sb.from("grade_settings").select("weights").eq("scope", "agenda").maybeSingle(),
-      sb.from("absences").select("id, class_id, student_id, day").gte("day", addDays(t, -45)),
       sb.from("lesson_log").select("*").eq("day", t),
       sb.from("feedback").select("id", { count: "exact", head: true }).eq("status", "nuovo")
     ]);
@@ -120,11 +118,9 @@
       meetings: r[2].error ? [] : r[2].data || [],
       due: r[3].error ? [] : (r[3].data || []).filter(function (a) { return !a.deck && !a.test_id; }),
       custom: r[4].error ? [] : r[4].data || [], customReady: !r[4].error,
-      plans: r[5].error ? [] : r[5].data || [], plansReady: !r[5].error,
-      settings: (!r[6].error && r[6].data && r[6].data.weights) || {},
-      absences: r[7].error ? [] : r[7].data || [], absReady: !r[7].error,
-      logs: r[8].error ? [] : r[8].data || [], logReady: !r[8].error,
-      newFeedback: r[9].error ? 0 : r[9].count || 0
+      settings: (!r[5].error && r[5].data && r[5].data.weights) || {},
+      logs: r[6].error ? [] : r[6].data || [], logReady: !r[6].error,
+      newFeedback: r[7].error ? 0 : r[7].count || 0
     };
   }
 
@@ -145,11 +141,11 @@
     T.meetings.forEach(function (m) {
       var c = m.class_id && x.findClass(m.class_id), d = new Date(m.starts_at);
       before.push({ id: "m-" + m.id, time: pad(d.getHours()) + "." + pad(d.getMinutes()), text: (m.kind === "cdc" ? "Consiglio di classe" : m.kind === "glo" ? "GLO" : m.title) + (c ? " " + tag(c) : ""),
-        sub: "Prepara la situazione della classe (voti e assenze) prima della riunione", href: m.link || "#/docente/riunioni", ext: !!m.link, cls: c });
+        sub: "Prepara la situazione della classe dal registro elettronico", href: m.link || "#/docente/riunioni", ext: !!m.link, cls: c });
     });
     if (!off) (T.settings.colloqui || []).filter(function (k) { return +k.weekday === wd(t); }).forEach(function (k, i) {
       before.push({ id: "ric-" + i, time: hhmm(k.starts), text: "Ricevimento genitori " + hhmm(k.starts) + "–" + hhmm(k.ends) + (k.note ? " · " + k.note : ""),
-        sub: "Controlla le prenotazioni sul registro elettronico e tieni aperta la Pagella" });
+        sub: "Controlla le prenotazioni sul registro elettronico" });
     });
     before.sort(function (a, b) { return (a.time || "") < (b.time || "") ? -1 : 1; });
     if (!off) {
@@ -158,8 +154,6 @@
         var c = x.findClass(r.class_id), P = plans[r.class_id], extra = [];
         var test = P && P.tests.filter(function (k) { return k.test_date === t; })[0];
         if (test) extra.push("✍ Verifica «" + test.title + "»: porta le copie");
-        if (test) extra = extra.concat(planLines(T, r.class_id));
-        if (P && P.orals[t]) extra.push("🗣 Interroga " + P.orals[t].map(function (o) { return o.s.last_name; }).join(", "));
         lessons.push({ id: "l-" + r.starts, time: hhmm(r.starts), text: tag(c, r.class_id) + " · " + (r.subject || "") + (r.room ? " · aula " + r.room : ""),
           sub: "Registro: firma, assenze, argomento e compiti per casa", extra: extra, href: "#/c/" + r.class_id + "/programma", cls: c, lesson: r,
           route: k ? moveTo(day[k - 1], r) : null });
@@ -168,34 +162,21 @@
     classes.forEach(function (c) {
       var P = plans[c.id];
       if (!P) return;
-      P.todo.filter(function (k) { return k.kind === "mark"; }).forEach(function (k) {
+      P.todo.filter(function (k) { return k.kind === "done"; }).forEach(function (k) {
         var ago = diffDays(k.test.test_date, t);
-        after.push({ id: "v-" + k.test.id, text: "Correggi e registra la verifica «" + k.test.title + "» (" + tag(c) + ")",
+        after.push({ id: "v-" + k.test.id, text: "Correggi la verifica «" + k.test.title + "» (" + tag(c) + "), voti sul registro, poi segnala come svolta",
           sub: "Fatta " + (ago === 1 ? "ieri" : ago + " giorni fa") + (ago >= 10 ? ": di solito va riconsegnata entro 15 giorni" : ""), warn: ago >= 10, href: "#/docente/valutazioni/" + c.id, cls: c });
       });
       var tomorrow = nextSchoolDay(t, events);
       P.tests.filter(function (k) { return k.test_date === tomorrow; }).forEach(function (k) {
         after.push({ id: "p-" + k.id, text: "Stampa le copie per la verifica di " + short(tomorrow) + " in " + tag(c) + ": «" + k.title + "»", href: "#/docente/valutazioni/" + c.id, cls: c,
-          extra: planLines(T, c.id) });
-      });
-    });
-    // Recuperi: assenti nel giorno di una verifica degli ultimi 45 giorni, senza voto per quella verifica
-    if (D) classes.forEach(function (c) {
-      var P = plans[c.id];
-      if (!P) return;
-      P.tests.filter(function (k) { return k.test_date && k.test_date < t && k.test_date >= addDays(t, -45); }).forEach(function (k) {
-        var marked = {};
-        D.marks.forEach(function (m) { if (m.test_id === k.id) marked[m.student_id] = true; });
-        var who = T.absences.filter(function (a) { return a.class_id === c.id && a.day === k.test_date && !marked[a.student_id]; })
-          .map(function (a) { var st = D.students.filter(function (z) { return z.id === a.student_id; })[0]; return st ? st.last_name : null; }).filter(Boolean);
-        if (who.length) after.push({ id: "r-" + k.id, text: "Recupero della verifica «" + k.title + "» (" + tag(c) + ")", sub: "Assenti il " + dm(k.test_date) + ": " + who.join(", "),
-          warn: diffDays(k.test_date, t) >= 14, href: "#/docente/valutazioni/" + c.id, cls: c });
+          sub: "Prepara anche le misure previste dai PDP e PEI della classe" });
       });
     });
     if (T.newFeedback) after.push({ id: "f-" + T.newFeedback, text: "Leggi " + (T.newFeedback === 1 ? "il nuovo suggerimento" : "i " + T.newFeedback + " nuovi suggerimenti") + " degli studenti", href: "#/docente/agenda" });
     T.due.forEach(function (a) {
       var c = x.findClass(a.class_id);
-      after.push({ id: "c-" + a.id, text: "Guarda le consegne di «" + a.title + "» (" + tag(c, a.class_id) + ")",
+      after.push({ id: "c-" + a.id, text: "Guarda le consegne di «" + a.title + "» su Classroom (" + tag(c, a.class_id) + ")",
         sub: a.due_date === t ? "Scadono oggi" : "Scadute " + (diffDays(a.due_date, t) === 1 ? "ieri" : short(a.due_date)), href: "#/c/" + a.class_id + "/compiti", cls: c });
     });
     if (!off && wd(t) === 5) after.push({ id: "w-fri", text: "Riporta sul registro elettronico i voti della settimana", sub: "E guarda cosa c'è in programma la prossima" });
@@ -205,13 +186,8 @@
     var term = D && D.term;
     if (term && term.to >= t && term.from <= t) {
       var lastDay = lastSchoolDay(term.to, events), left = diffDays(t, lastDay);
-      var behind = [];
-      if (left <= 30) classes.forEach(function (c) {
-        var P = plans[c.id], n = P ? P.rows.filter(function (row) { return row.status === "behind"; }).length : 0;
-        if (n) behind.push(tag(c) + " " + n);
-      });
       ahead.push({ day: lastDay, icon: "🏁", text: "Fine del " + term.name.toLowerCase() + ": ultime lezioni " + inDays(left) + " (" + short(lastDay) + ")",
-        sub: behind.length ? "Studenti sotto il minimo di voti: " + behind.join(", ") : left <= 30 ? "Tutti hanno i voti minimi" : null, warn: behind.length > 0, href: "#/docente/valutazioni" });
+        sub: left <= 30 ? "Controlla sul registro che ogni studente abbia i voti minimi" : null, href: "#/docente/valutazioni" });
     }
     events.forEach(function (e) {
       var to = e.until || e.day;
@@ -224,7 +200,7 @@
     ahead.sort(function (a, b) { return a.day < b.day ? -1 : 1; });
     return { off: off, reason: offReason(t, events), next: nextSchoolDay(t, events), before: before, lessons: lessons, after: after, ahead: ahead };
   }
-  /* ---------- Registro di quest'ora: assenti e argomento in una riga ---------- */
+  /* ---------- Registro di quest'ora: l'argomento in una riga (le assenze si segnano sul registro elettronico) ---------- */
   function lessonPanel(T, x, r) {
     var h = x.h, t = T.today, cid = r.class_id, starts = String(r.starts).slice(0, 5);
     var log = T.logs.filter(function (l) { return l.class_id === cid && l.starts === starts; })[0];
@@ -236,37 +212,17 @@
       if (!det.open || built) return;
       built = true;
       put(body, h("p", { class: "small muted", text: "Caricamento…" }));
-      var q = await Promise.all([
-        x.sb.from("students").select("id, first_name, last_name").eq("class_id", cid).order("last_name").order("first_name"),
-        x.sb.from("topics").select("id, title, done, position").eq("class_id", cid).order("position")
-      ]);
-      if (q[0].error || q[1].error) { put(body, x.notice("err", x.errText(q[0].error || q[1].error))); built = false; return; }
-      var students = q[0].data || [], topics = q[1].data || [], chosen = null;
-      function absent() { return students.filter(function (s) { return T.absences.some(function (a) { return a.student_id === s.id && a.day === t; }); }); }
+      var q = await x.sb.from("topics").select("id, title, done, position").eq("class_id", cid).order("position");
+      if (q.error) { put(body, x.notice("err", x.errText(q.error))); built = false; return; }
+      var topics = q.data || [], chosen = null;
       var line = h("p", { class: "ag-line" });
       var text = h("input", { type: "text", maxlength: 300, value: log ? log.text : "", placeholder: "Che cosa avete fatto in quest'ora", "aria-label": "Argomento svolto" });
       var markDone = h("input", { type: "checkbox", checked: true });
       var markRow = h("label", { class: "ag-inline", hidden: true }, markDone, "Segna l'argomento come svolto nel programma");
       function paintLine() {
-        var a = absent().map(function (s) { return s.last_name + " " + s.first_name; });
-        line.textContent = (text.value.trim() ? "Argomento: " + text.value.trim().replace(/\.$/, "") + "." : "Argomento: …") + (a.length ? " Assenti: " + a.join(", ") + "." : " Nessun assente.");
+        line.textContent = text.value.trim() ? "Argomento: " + text.value.trim().replace(/\.$/, "") + "." : "Argomento: …";
       }
       text.addEventListener("input", function () { chosen = null; markRow.hidden = true; paintLine(); });
-      var chips = students.map(function (s) {
-        var b = h("button", { class: "ag-chip", type: "button", text: s.last_name + " " + s.first_name.charAt(0) + "." });
-        function mark() { b.setAttribute("aria-pressed", String(absent().indexOf(s) >= 0)); }
-        b.addEventListener("click", async function () {
-          b.disabled = true;
-          var cur = T.absences.filter(function (a) { return a.student_id === s.id && a.day === t; })[0], res;
-          if (cur) { res = await x.sb.from("absences").delete().eq("id", cur.id); if (!res.error) T.absences = T.absences.filter(function (a) { return a !== cur; }); }
-          else { res = await x.sb.from("absences").insert({ class_id: cid, student_id: s.id, day: t }).select("id, class_id, student_id, day").single(); if (!res.error) T.absences.push(res.data); }
-          b.disabled = false;
-          if (res.error) x.toast(x.errText(res.error));
-          mark(); paintLine();
-        });
-        mark();
-        return b;
-      });
       var next = topics.filter(function (tp) { return tp.done === false; }).slice(0, 2), prev = topics.filter(function (tp) { return tp.done !== false; }).slice(-2);
       var topicChips = prev.concat(next).map(function (tp) {
         return h("button", { class: "ag-chip topic" + (tp.done === false ? " next" : ""), type: "button", text: tp.title, onclick: function () {
@@ -290,8 +246,6 @@
         copy(x, line.textContent);
       });
       put(body,
-        h("p", { class: "ag-sub", text: "Assenti oggi (tocca per segnare):" }),
-        students.length ? h("div", { class: "ag-chips" }, chips) : h("p", { class: "small muted", text: "Manca l'elenco della classe." }),
         h("p", { class: "ag-sub", text: "Argomento:" }),
         topicChips.length ? h("div", { class: "ag-chips" }, topicChips) : null,
         text, markRow, line,
@@ -301,12 +255,6 @@
     return det;
   }
 
-  // Misure di PDP/PEI da preparare per una verifica
-  function planLines(T, cid) {
-    return T.plans.filter(function (p) { return p.class_id === cid && p.learning_plan; }).map(function (p) {
-      return "♿ " + p.last_name + " " + p.first_name + " (" + String(p.learning_plan).toUpperCase() + "): " + (p.plan_note || "prepara le misure compensative e dispensative previste");
-    });
-  }
   function nextSchoolDay(s, events) {
     for (var d = addDays(s, 1), i = 0; i < 60; i++, d = addDays(d, 1)) if (!offDay(d, events)) return d;
     return null;
@@ -337,7 +285,7 @@
           i.route ? h("p", { class: "ag-route" + (i.route.far && i.route.tight ? " far" : "") },
             "🧭 ", h("b", { text: i.route.from }), " → ", h("b", { text: i.route.to }), ": " + i.route.steps.join(" · ")) : null,
           (i.extra || []).map(function (e) { return h("p", { class: "ag-extra", text: e }); }),
-          i.lesson && T.logReady && T.absReady ? lessonPanel(T, x, i.lesson) : null));
+          i.lesson && T.logReady ? lessonPanel(T, x, i.lesson) : null));
       cb.addEventListener("change", function () {
         if (cb.checked) done[i.id] = true; else delete done[i.id];
         li.classList.toggle("done", cb.checked); ticks(T.today, done); upd();
@@ -373,11 +321,10 @@
     var dayBox = h("div"), calBox = h("section", { class: "card ag-cal" }, h("p", { class: "small muted", text: "Caricamento del calendario…" }));
     root.appendChild(dayBox);
     root.appendChild(calBox);
-    var ricBox = h("div"), pdpBox = h("div"), fbBox = h("div");
+    var ricBox = h("div"), fbBox = h("div");
     root.appendChild(fbBox);
     root.appendChild(ricBox);
     root.appendChild(classroomCard(x));
-    root.appendChild(pdpBox);
     root.appendChild(rulesCard(h));
     async function reload() {
       var T;
@@ -387,7 +334,6 @@
       renderDay(dc, T, x);
       renderCalendar(calBox, T, x, reload);
       ricBox.replaceChildren(colloquiCard(T, x, reload));
-      pdpBox.replaceChildren(pdpCard(T, x));
       fbBox.replaceChildren(feedbackCard(x));
     }
     reload();
@@ -505,37 +451,6 @@
       f);
   }
 
-  function pdpCard(T, x) {
-    var h = x.h, classes = x.classes || [], body = h("div", { class: "ag-pdp-body" });
-    if (!T.plansReady) return h("section", { class: "card" }, h("h2", { text: "PDP e PEI" }), h("p", { class: "notice warn", text: "Serve l'aggiornamento del database 2026-10-29-agenda.sql." }));
-    var sel = h("select", { "aria-label": "Classe" }, classes.map(function (c) { return h("option", { value: c.id, text: c.name }); }));
-    async function show() {
-      body.replaceChildren(h("p", { class: "small muted", text: "Caricamento…" }));
-      var r = await x.sb.from("students").select("id, first_name, last_name, learning_plan, plan_note").eq("class_id", sel.value).order("last_name").order("first_name");
-      if (r.error) { body.replaceChildren(x.notice("err", x.errText(r.error))); return; }
-      if (!r.data.length) { body.replaceChildren(h("p", { class: "small muted", text: "Nessuno studente in questa classe." })); return; }
-      body.replaceChildren(h("ul", { class: "ag-pdp" }, r.data.map(function (s) {
-        var kind = h("select", { "aria-label": "Piano di " + s.first_name + " " + s.last_name }, [["", "—"], ["pdp", "PDP"], ["pei", "PEI"]].map(function (o) { return h("option", { value: o[0], text: o[1], selected: (s.learning_plan || "") === o[0] ? true : null }); }));
-        var note = h("input", { type: "text", maxlength: 200, value: s.plan_note || "", placeholder: "Misure: tempo in più, mappe, prova ridotta…", hidden: !s.learning_plan ? true : null });
-        var btn = h("button", { class: "btn", type: "button", text: "Salva" });
-        kind.addEventListener("change", function () { note.hidden = !kind.value; });
-        btn.addEventListener("click", async function () {
-          btn.disabled = true;
-          var q = await x.sb.from("students").update({ learning_plan: kind.value || null, plan_note: kind.value ? note.value.trim() || null : null }).eq("id", s.id);
-          btn.disabled = false;
-          x.toast(q.error ? x.errText(q.error) : "Salvato.");
-        });
-        return h("li", null, h("b", { text: s.last_name + " " + s.first_name }), kind, note, btn);
-      })));
-    }
-    sel.addEventListener("change", show);
-    show();
-    return h("section", { class: "card ag-pdp-card" },
-      h("h2", { text: "PDP e PEI" }),
-      h("p", { class: "small muted", text: "Segna chi ha un piano personalizzato e le misure da preparare: la giornata te le ricorda il giorno prima e il giorno della verifica. Resta solo qui, visibile a te." }),
-      sel, body);
-  }
-
   function classroomCard(x) {
     var h = x.h;
     return h("section", { class: "card ag-gc" },
@@ -634,73 +549,6 @@
     return h("div", { class: "ag-rev" }, h("p", { class: "ag-sub", text: "Piano di ripasso:" }), h("ol", null, steps));
   }
 
-  /* ---------- Pacchetto scrutinio (Pagella) ---------- */
-  function band(v) { return v >= 9 ? "ottimo" : v >= 8 ? "buono" : v >= 7 ? "discreto" : v >= 6 ? "sufficiente" : v >= 5 ? "non ancora sufficiente" : "insufficiente"; }
-  function nf(v) { return (Math.round(v * 10) / 10).toLocaleString("it-IT"); }
-  function comment(row, plan, minMarks) {
-    var r = row.r, out = [];
-    if (r.weighted == null) return "Non classificabile: nessuna valutazione confermata nel periodo.";
-    out.push("Ha raggiunto un livello " + band(r.weighted) + " negli obiettivi della disciplina (" + r.n + (r.n === 1 ? " valutazione" : " valutazioni") + ", media " + nf(r.weighted) + ").");
-    var conf = row.marks.filter(function (m) { return m.status === "confermato" && m.value != null; }).sort(function (a, b) { return a.mark_date < b.mark_date ? -1 : 1; });
-    if (conf.length >= 4) {
-      var half = Math.floor(conf.length / 2), a = conf.slice(0, half), b = conf.slice(half);
-      var ma = a.reduce(function (s, m) { return s + +m.value; }, 0) / a.length, mb = b.reduce(function (s, m) { return s + +m.value; }, 0) / b.length;
-      if (mb - ma >= 1) out.push("Il rendimento è in miglioramento nel corso del periodo.");
-      else if (ma - mb >= 1) out.push("Il rendimento è calato nelle ultime prove.");
-    }
-    var ver = r.cats.verifica, ora = r.cats.orale, com = r.cats.compito;
-    if (ver && ora && ver.n && ora.n && Math.abs(ver.avg - ora.avg) >= 1.5) out.push(ver.avg > ora.avg ? "Le prove scritte sono migliori dell'esposizione orale, da curare." : "L'esposizione orale è migliore delle prove scritte, da consolidare.");
-    if (com && com.n && com.avg < 6) out.push("Il lavoro a casa va svolto con più regolarità.");
-    if (r.n < minMarks) out.push("Le valutazioni sono ancora poche: serve almeno un'altra prova.");
-    if (r.proposal < 6) out.push("Si consiglia un recupero degli argomenti del periodo con studio individuale guidato.");
-    if (plan) out.push("Valutazione svolta secondo le misure previste dal " + plan.toUpperCase() + ".");
-    return out.join(" ");
-  }
-  function scrutinio(rows, period, x, cid) {
-    var h = x.h, key = "novaula-scrutinio-" + cid + "-" + period.from, saved = {};
-    try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) { saved = {}; }
-    function keep() { try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) { /* solo comodità */ } }
-    var body = h("div", { class: "ag-scr-body" }, h("p", { class: "small muted", text: "Preparo voti e giudizi…" }));
-    var det = h("details", { class: "card ag-scr" },
-      h("summary", { class: "ag-h", text: "📋 Pacchetto scrutinio · " + period.name }),
-      h("p", { class: "small muted", text: "Voto proposto (media ponderata arrotondata) e una bozza di giudizio per ogni studente, da rileggere e copiare nel registro elettronico. Le modifiche restano su questo dispositivo." }),
-      body);
-    var built = false;
-    det.addEventListener("toggle", async function () {
-      if (!det.open || built) return;
-      built = true;
-      var plans = {}, minMarks = 3;
-      if (x.sb) {
-        var q = await Promise.all([
-          x.sb.from("students").select("id, learning_plan").eq("class_id", cid).not("learning_plan", "is", null),
-          x.sb.from("grade_settings").select("weights").eq("scope", "piano").maybeSingle()
-        ]);
-        if (!q[0].error) (q[0].data || []).forEach(function (s) { plans[s.id] = s.learning_plan; });
-        if (!q[1].error && q[1].data && q[1].data.weights && q[1].data.weights.min_marks) minMarks = +q[1].data.weights.min_marks;
-      }
-      var areas = [];
-      var list = rows.map(function (row) {
-        var name = (row.s.last_name || "") + " " + (row.s.first_name || "");
-        var ta = h("textarea", { rows: 3, "aria-label": "Giudizio di " + name });
-        ta.value = saved[row.s.id] != null ? saved[row.s.id] : comment(row, plans[row.s.id], minMarks);
-        ta.addEventListener("input", function () { saved[row.s.id] = ta.value; keep(); });
-        areas.push({ name: name, mark: row.r.proposal, ta: ta });
-        return h("li", null,
-          h("div", { class: "ag-scr-head" }, h("b", { text: name }), plans[row.s.id] ? h("span", { class: "badge", text: plans[row.s.id].toUpperCase() }) : null,
-            h("span", { class: "mk big", text: row.r.proposal == null ? "NC" : String(row.r.proposal) })),
-          ta,
-          h("div", { class: "row" },
-            h("button", { class: "btn link", type: "button", text: "Copia", onclick: function () { copy(x, ta.value); } }),
-            h("button", { class: "btn link", type: "button", text: "Rigenera", onclick: function () { delete saved[row.s.id]; keep(); ta.value = comment(row, plans[row.s.id], minMarks); } })));
-      });
-      put(body, 
-        h("div", { class: "row" }, h("button", { class: "btn primary", type: "button", text: "Copia tutto (per Excel)", onclick: function () {
-          copy(x, ["Studente\tVoto proposto\tGiudizio"].concat(areas.map(function (a) { return a.name + "\t" + (a.mark == null ? "NC" : a.mark) + "\t" + a.ta.value.replace(/\s+/g, " "); })).join("\n"));
-        } })),
-        h("ol", { class: "ag-scr-list" }, list));
-    });
-    return det;
-  }
   function copy(x, text) {
     var done = function () { x.toast("Copiato."); };
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { x.toast("Non riesco a copiare: seleziona il testo a mano."); });
@@ -746,6 +594,6 @@
     return x.h("a", { class: "btn link ag-share", href: "https://classroom.google.com/share?" + q, target: "_blank", rel: "noopener", text: "Condividi su Classroom" });
   }
 
-  window.NovaulaAgenda = { today: today, page: page, student: student, share: share, scrutinio: scrutinio,
-    _test: { allEvents: allEvents, offDay: offDay, buildDay: buildDay, nextLesson: nextLesson, lastSchoolDay: lastSchoolDay, comment: comment } };
+  window.NovaulaAgenda = { today: today, page: page, student: student, share: share,
+    _test: { allEvents: allEvents, offDay: offDay, buildDay: buildDay, nextLesson: nextLesson, lastSchoolDay: lastSchoolDay } };
 })();
