@@ -6,8 +6,9 @@
 -- Prima:  1. il backup («Database backup» su GitHub, eseguito a mano, finito con l'artifact cifrato);
 --         2. il rilascio che toglie dal sito profili, consegne e voti, già online (altrimenti il sito vecchio
 --            chiamerebbe funzioni che qui spariscono);
---         3. l'SQL di Systems per la stessa versione, se c'è (sostituisce evaluation_plan e weekly_summary_data
---            senza studenti né voti). Questo file si ferma da solo se quelle due funzioni leggono ancora i voti.
+--         3. aggiornamenti/2026-11-05-anonimo.sql di Systems (nuova helpdesk_ask, trigger anonimi, evaluation_plan e
+--            weekly_summary_data senza studenti né voti) e la funzione «notifiche» solo per il docente.
+--            Questo file si ferma da solo se evaluation_plan o weekly_summary_data leggono ancora i voti.
 -- Dopo:   svuotare ed eliminare dalla dashboard i bucket consegne, correzioni, scansioni, personali, aiuto, stampe,
 --         ed eliminare la Edge Function «correzioni».
 -- Si può rieseguire: usa sempre "if exists".
@@ -81,6 +82,10 @@ update messages set author = case when is_teacher then 'Docente' else 'Studente'
 update helpdesk set author = 'Studente', image_path = null;
 update helpdesk_replies set author = case when is_teacher then 'Docente' else 'Studente' end;
 update slide_questions set name = 'Studente';
+-- La vecchia helpdesk_ask chiedeva il nome (8 argomenti); quella nuova di Systems (6 argomenti) resta.
+drop function if exists helpdesk_ask(text, text, text, text, boolean, text, text, text);
+-- Pesi e periodi dei voti per singola classe o studente: restano solo quelli di tutte le classi e l'agenda.
+delete from grade_settings where scope not in ('tutte', 'agenda');
 
 -- 6. Controllo finale: nessuna tabella o colonna con dati di uno studente.
 do $$
