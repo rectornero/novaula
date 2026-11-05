@@ -35,14 +35,9 @@
     return {
       list: async function (c) { return ok(await sb.from("helpdesk").select("*").eq("class_id", c).order("created_at", { ascending: false }).limit(300)); },
       ask: async function (row, key) {
-        return ok(await sb.rpc("helpdesk_ask", { p_class: row.class_id, p_author: row.author, p_body: row.body, p_tag: row.tag, p_stuck: row.stuck, p_seat: row.seat, p_key: key, p_image: row.image_path || null }));
+        // senza autore né immagine: il database scrive «Studente»
+        return ok(await sb.rpc("helpdesk_ask", { p_class: row.class_id, p_body: row.body, p_tag: row.tag, p_stuck: row.stuck, p_seat: row.seat, p_key: key }));
       },
-      uploadImage: async function (c, blob) {
-        var path = c + "/" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10) + (blob.type === "image/png" ? ".png" : ".jpg");
-        ok(await sb.storage.from("aiuto").upload(path, blob, { contentType: blob.type, upsert: false }));
-        return path;
-      },
-      imageUrl: function (path) { return sb.storage.from("aiuto").getPublicUrl(path).data.publicUrl; },
       replies: async function (c) { return ok(await sb.from("helpdesk_replies").select("*").eq("class_id", c).order("created_at").limit(1000)); },
       addReply: async function (row) { ok(await sb.from("helpdesk_replies").insert(row)); },
       deleteReply: async function (id) { ok(await sb.from("helpdesk_replies").delete().eq("id", id)); },
@@ -50,15 +45,10 @@
       withdraw: async function (id, key) { ok(await sb.rpc("helpdesk_withdraw", { p_id: id, p_key: key })); },
       metoo: async function (id, delta) { ok(await sb.rpc("helpdesk_metoo", { p_id: id, p_delta: delta })); },
       update: async function (id, patch) { ok(await sb.from("helpdesk").update(patch).eq("id", id)); },
-      remove: async function (t) {
-        ok(await sb.from("helpdesk").delete().eq("id", t.id));
-        if (t.image_path) await sb.storage.from("aiuto").remove([t.image_path]);
-      },
+      remove: async function (t) { ok(await sb.from("helpdesk").delete().eq("id", t.id)); },
       addFaq: async function (row) { ok(await sb.from("helpdesk").insert(row)); },
       clearResolved: async function (c) {
-        var gone = ok(await sb.from("helpdesk").delete().eq("class_id", c).eq("status", "risolta").eq("pinned", false).select("image_path"));
-        var paths = gone.map(function (t) { return t.image_path; }).filter(Boolean);
-        if (paths.length) await sb.storage.from("aiuto").remove(paths);
+        ok(await sb.from("helpdesk").delete().eq("class_id", c).eq("status", "risolta").eq("pinned", false));
       },
       watch: function (c, cb) {
         var ch = sb.channel("helpdesk-" + c)
@@ -86,18 +76,13 @@
       list: async function (c) { return load().filter(function (t) { return t.class_id === c; }).sort(function (a, b) { return a.created_at < b.created_at ? 1 : -1; }); },
       ask: async function (row, key) {
         var l = load();
-        var mine = l.filter(function (t) { return t.class_id === row.class_id && t.author === row.author; });
+        var mine = l.filter(function (t) { return t.class_id === row.class_id && t._key; });
         if (mine.some(function (t) { return Date.now() - new Date(t.created_at) < 15000; })) throw new Error("Aspetta qualche secondo prima di fare un'altra domanda.");
         if (mine.filter(function (t) { return t.status !== "risolta"; }).length >= 5) throw new Error("Hai già 5 domande aperte: segna come risolte quelle che non ti servono più.");
         var now = new Date().toISOString();
         var t = Object.assign({ id: newId(), status: "nuova", answer: null, pinned: false, metoo: 0, created_at: now, updated_at: now, _key: key }, row);
         l.push(t); save(l); return t.id;
       },
-      // In demo l'immagine resta nel browser come data URL
-      uploadImage: async function (c, blob) {
-        return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); });
-      },
-      imageUrl: function (path) { return path; },
       replies: async function (c) { return rload().filter(function (r) { return r.class_id === c; }); },
       addReply: async function (row) { var l = rload(); l.push(Object.assign({ id: Date.now() + Math.random(), created_at: new Date().toISOString() }, row)); rsave(l); },
       deleteReply: async function (id) { rsave(rload().filter(function (r) { return r.id !== id; })); },
@@ -133,31 +118,8 @@
     var a = new Uint8Array(16); crypto.getRandomValues(a);
     return Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
   }
-  // Riduce foto e screenshot a max 1600 px in JPEG: si caricano in un attimo anche col 4G
-  function shrink(file) {
-    return new Promise(function (res, rej) {
-      var url = URL.createObjectURL(file), img = new Image();
-      img.onload = function () {
-        var w = img.naturalWidth, ht = img.naturalHeight, k = Math.min(1, 1600 / Math.max(w, ht));
-        var cv = document.createElement("canvas"); cv.width = Math.round(w * k); cv.height = Math.round(ht * k);
-        var g = cv.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height);
-        URL.revokeObjectURL(url);
-        cv.toBlob(function (b) { if (b) res(b); else rej(new Error("Immagine non leggibile.")); }, "image/jpeg", 0.82);
-      };
-      img.onerror = function () { URL.revokeObjectURL(url); rej(new Error("Immagine non leggibile: prova con un'altra foto o uno screenshot.")); };
-      img.src = url;
-    });
-  }
-  function zoom(url) {
-    function close() { ov.remove(); document.removeEventListener("keydown", onKey); }
-    function onKey(e) { if (e.key === "Escape") close(); }
-    var ov = document.createElement("div");
-    ov.className = "hd-zoom"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Immagine allegata");
-    var im = document.createElement("img"); im.src = url; im.alt = "Immagine allegata";
-    var x = document.createElement("button"); x.type = "button"; x.className = "hd-zoom-x"; x.textContent = "✕ Chiudi";
-    ov.append(im, x); ov.addEventListener("click", close); document.addEventListener("keydown", onKey);
-    document.body.appendChild(ov); x.focus();
-  }
+  // Aiuto anonimo: nessun nome e nessuna immagine (le foto dello schermo possono mostrare nomi)
+  var STUDENT = "Studente";
   function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
   var audio;
   function ding() {
@@ -183,7 +145,7 @@
     var tickets = [], known = null, stopped = false, pending = false;
     var col = store("hd-col") || "aperte";
     var drafts = {}, openReply = null;
-    var reps = {}, openComments = {}, knownReps = null;
+    var reps = {}, openComments = {}, knownReps = null, sentReply = {};
 
     var root = h("div", { class: "hd" + (teacher ? " hd-teacher" : ""), style: "--cc:" + ctx.cc });
     var main = h("div", { class: "hd-main" });
@@ -193,7 +155,7 @@
     root.appendChild(main);
     main.appendChild(h("p", { class: "empty", text: "Caricamento…" }));
 
-    /* Aggiornamento dati: tempo reale + controllo ogni 15 secondi come riserva */
+    /* Aggiornamento dati: tempo reale + controllo ogni minuto come riserva */
     var timer;
     async function refresh() {
       if (stopped) return;
@@ -239,10 +201,10 @@
       var rc = {};
       Object.keys(reps).forEach(function (id) { rc[id] = reps[id].length; });
       if (knownReps && !teacher) {
-        var me = store("chat-name");
         Object.keys(mine).forEach(function (id) {
-          var l = reps[id] || [];
-          if (l.length > (knownReps[id] || 0) && l[l.length - 1].author !== me) { toast(l[l.length - 1].author + " ha commentato la tua domanda."); buzz(60); }
+          var l = reps[id] || [], n = l.length;
+          if (sentReply[id]) { delete sentReply[id]; return; }
+          if (n > (knownReps[id] || 0)) { toast((l[n - 1].is_teacher ? "Il docente" : "Un compagno") + " ha commentato la tua domanda."); buzz(60); }
         });
       }
       knownReps = rc;
@@ -254,13 +216,6 @@
     }
 
     /* ---------- Pezzi comuni ---------- */
-    function picture(t) {
-      if (!t.image_path) return null;
-      var url = db.imageUrl(t.image_path);
-      return h("button", { class: "hd-img", type: "button", "aria-label": "Ingrandisci l'immagine", onclick: function () { zoom(url); } },
-        h("img", { src: url, alt: "Immagine allegata alla domanda", loading: "lazy" }));
-    }
-
     // Commenti sotto la domanda: chiusi mostrano l'ultimo, aperti la conversazione e il campo per scrivere
     function comments(t) {
       var list = reps[t.id] || [];
@@ -273,29 +228,26 @@
       if (!open) {
         var last = list[list.length - 1];
         return h("div", { class: "hd-comments" }, toggle,
-          last ? h("p", { class: "hd-c-last" }, h("b", { text: (last.is_teacher ? "Docente" : last.author) + ": " }), last.body) : null);
+          last ? h("p", { class: "hd-c-last" }, h("b", { text: (last.is_teacher ? "Docente" : STUDENT) + ": " }), last.body) : null);
       }
-      var who = teacher ? "Docente" : (store("chat-name") || "");
-      var nameIn = !teacher && !who ? h("input", { type: "text", class: "hd-cname", maxlength: 40, placeholder: "Il tuo nome", autocomplete: "nickname", "aria-label": "Il tuo nome" }) : null;
       var input = h("input", { type: "text", class: "hd-cin", maxlength: 600, placeholder: teacher ? "Scrivi alla classe…" : "Scrivi un commento…", enterkeyhint: "send", "aria-label": "Commento", autocomplete: "off" });
       var send = h("button", { class: "btn primary", type: "submit", "aria-label": "Invia commento", text: "Invia" });
-      var f = h("form", { class: "hd-cform" }, nameIn, h("div", { class: "hd-crow" }, input, send));
+      var f = h("form", { class: "hd-cform" }, h("div", { class: "hd-crow" }, input, send));
       f.addEventListener("submit", async function (e) {
         e.preventDefault();
-        var body = input.value.trim(), author = teacher ? "Docente" : (nameIn ? nameIn.value.trim() : who).slice(0, 40);
+        var body = input.value.trim(), author = teacher ? "Docente" : STUDENT;
         if (!body) return;
-        if (author.length < 2) { toast("Scrivi il tuo nome (almeno 2 lettere)."); if (nameIn) nameIn.focus(); return; }
         send.disabled = true;
         try {
           await db.addReply({ ticket_id: t.id, class_id: c.id, author: author, body: body, is_teacher: teacher });
-          if (!teacher) store("chat-name", author);
+          if (!teacher) sentReply[t.id] = true;
           input.value = ""; input.blur(); refresh();
         } catch (err) { toast(errText(err)); send.disabled = false; }
       });
       return h("div", { class: "hd-comments is-open" }, toggle,
         list.length ? h("ul", { class: "hd-clist" }, list.map(function (r) {
           return h("li", { class: r.is_teacher ? "is-teacher" : "" },
-            h("div", { class: "hd-cmeta" }, h("b", { text: r.is_teacher ? "★ Docente" : r.author }), h("span", { "data-ago": r.created_at, text: ago(r.created_at) || ctx.fmtTime(r.created_at) }),
+            h("div", { class: "hd-cmeta" }, h("b", { text: r.is_teacher ? "★ Docente" : STUDENT }), h("span", { "data-ago": r.created_at, text: ago(r.created_at) || ctx.fmtTime(r.created_at) }),
               teacher ? ctx.confirmBtn("elimina", "btn link small", async function () { await db.deleteReply(r.id); refresh(); }) : null),
             h("p", { text: r.body }));
         })) : h("p", { class: "muted small", text: "Nessun commento: se sai la risposta, aiuta tu!" }),
@@ -330,7 +282,6 @@
           return h("article", { class: "hd-note", style: "--tilt:" + ((i % 3) - 1) * 0.7 + "deg" },
             h("div", { class: "row" }, tagChip(t)),
             h("p", { class: "hd-q", text: t.body }),
-            picture(t),
             h("p", { class: "hd-a" }, h("mark", { text: t.answer })),
             teacher && h("div", { class: "row hd-note-tools" },
               h("button", { class: "btn link", type: "button", text: "Togli dalle FAQ", onclick: function () { act(db.update(t.id, { pinned: false })); } }),
@@ -346,7 +297,6 @@
     /* ---------- Studente ---------- */
     var form, nameLine, hint;
     function studentShell() {
-      var name = store("chat-name") || "";
       var input = h("textarea", { name: "body", required: true, minlength: 3, maxlength: 1000, rows: 3, enterkeyhint: "send",
         placeholder: "Es. Nell'esercizio 3 non capisco cosa vuol dire «media pesata»", "aria-label": "La tua domanda" });
       var tagBox = h("div", { class: "hd-tags", role: "radiogroup", "aria-label": "Argomento" }, TAGS.map(function (t, i) {
@@ -358,61 +308,36 @@
         h("span", { class: "hd-switch", "aria-hidden": "true" }),
         h("span", null, h("b", { text: "Sono bloccato" }), h("span", { class: "muted small", text: "non riesco ad andare avanti" })));
       var seat = h("input", { type: "text", name: "seat", maxlength: 20, placeholder: "Es. PC 12, 2ª fila", value: store("hd-seat") || "", autocomplete: "off", enterkeyhint: "done" });
-      var nameIn = h("input", { type: "text", name: "author", required: true, minlength: 2, maxlength: 40, value: name, autocomplete: "nickname", placeholder: "Nome e iniziale del cognome", enterkeyhint: "next" });
       var send = h("button", { class: "btn primary hd-send", type: "submit" }, h("span", { "aria-hidden": "true", text: "✋" }), "Invia la domanda");
       var msg = h("div", { "aria-live": "polite" });
       hint = h("div", { class: "hd-hint", hidden: true });
-      nameLine = h("div", { class: "hd-name" });
-      // Foto o screenshot: dal telefono apre fotocamera/galleria, sul PC si può anche incollare (Ctrl+V)
-      var pic = null;
-      var picPrev = h("div", { class: "hd-pic", hidden: true });
-      var picIn = h("input", { type: "file", accept: "image/*", class: "hd-file", "aria-label": "Allega una foto o uno screenshot" });
-      var picBtn = h("label", { class: "btn hd-picbtn" }, picIn, h("span", { "aria-hidden": "true", text: "📷" }), "Aggiungi foto o screenshot");
-      async function setPic(file) {
-        try {
-          pic = await shrink(file);
-          picPrev.hidden = false; picBtn.hidden = true;
-          picPrev.replaceChildren(h("img", { src: URL.createObjectURL(pic), alt: "Anteprima dell'immagine" }),
-            h("button", { class: "hd-pic-x", type: "button", "aria-label": "Togli l'immagine", text: "✕", onclick: clearPic }));
-        } catch (err) { toast(err.message); }
-      }
-      function clearPic() { pic = null; picPrev.hidden = true; picPrev.textContent = ""; picBtn.hidden = false; }
-      picIn.addEventListener("change", function () { if (picIn.files[0]) setPic(picIn.files[0]); picIn.value = ""; });
-      input.addEventListener("paste", function (e) {
-        var item = [].filter.call((e.clipboardData && e.clipboardData.items) || [], function (i) { return i.type.indexOf("image/") === 0; })[0];
-        if (item) { e.preventDefault(); setPic(item.getAsFile()); }
-      });
+      nameLine = h("p", { class: "hd-name" }, "Domandi come ", h("b", { text: STUDENT }), ", senza nome. ",
+        h("b", { class: "no-names", text: "Non scrivere nomi, voti o dati personali." }));
 
       form = h("form", { class: "card hd-ask", novalidate: true },
         h("div", { class: "hd-ask-head" },
           h("h2", null, "Hai un dubbio? ", h("span", { class: "mark", text: "Scrivilo qui" })),
           h("p", { class: "muted", text: "Niente mano alzata: il docente vede la tua domanda e ti risponde appena può. Intanto vai avanti col lavoro." })),
-        input, hint, h("div", { class: "hd-picrow" }, picBtn, picPrev), tagBox, stuck,
+        input, hint, tagBox, stuck,
         h("div", { class: "hd-fields" },
-          h("label", { class: "hd-name-field" }, "Il tuo nome", nameIn),
           h("label", null, h("span", null, "Dove sei ", h("span", { class: "muted small", text: "(facoltativo)" })), seat)),
-        send, msg);
-      if (name) { form.querySelector(".hd-name-field").hidden = true; nameLine.append("Domandi come ", h("b", { text: name }), " · ", h("button", { class: "btn link", type: "button", text: "cambia", onclick: function () { form.querySelector(".hd-name-field").hidden = false; nameLine.hidden = true; nameIn.focus(); } })); form.insertBefore(nameLine, send); }
+        nameLine, send, msg);
 
       input.addEventListener("input", function () { suggest(input.value); });
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
-        var body = input.value.trim(), author = nameIn.value.trim().slice(0, 40);
+        var body = input.value.trim();
         if (body.length < 3) { msg.replaceChildren(ctx.notice("err", "Scrivi la domanda (almeno qualche parola).")); input.focus(); return; }
-        if (author.length < 2) { form.querySelector(".hd-name-field").hidden = false; msg.replaceChildren(ctx.notice("err", "Scrivi il tuo nome, così il docente sa chi aiutare.")); nameIn.focus(); return; }
         send.disabled = true;
         try {
-          var key = randKey(), image = null;
-          if (pic) image = await db.uploadImage(c.id, pic);
-          var id = await db.ask({ class_id: c.id, author: author, body: body, tag: (form.querySelector('input[name="tag"]:checked') || {}).value || "altro", stuck: form.elements.stuck.checked, seat: seat.value.trim() || null, image_path: image }, key);
-          clearPic();
+          var key = randKey();
+          var id = await db.ask({ class_id: c.id, author: STUDENT, body: body, tag: (form.querySelector('input[name="tag"]:checked') || {}).value || "altro", stuck: form.elements.stuck.checked, seat: seat.value.trim() || null }, key);
           mine[id] = key; store(MINE_KEY, JSON.stringify(mine));
-          store("chat-name", author); store("hd-seat", seat.value.trim());
+          store("hd-seat", seat.value.trim());
           input.value = ""; form.elements.stuck.checked = false; hint.hidden = true;
           msg.replaceChildren(ctx.notice("ok", "Domanda inviata! Continua a lavorare: qui sotto vedi quando il docente risponde."));
           setTimeout(function () { msg.textContent = ""; }, 6000);
           buzz(40);
-          if (!nameLine.parentNode || nameLine.hidden) { nameLine.hidden = false; nameLine.replaceChildren("Domandi come ", h("b", { text: author })); form.insertBefore(nameLine, send); form.querySelector(".hd-name-field").hidden = true; }
           await refresh();
         } catch (err) { msg.replaceChildren(ctx.notice("err", err && err.message && !/fetch|network/i.test(err.message) ? err.message : errText(err))); }
         send.disabled = false;
@@ -466,8 +391,8 @@
           h("summary", null, "Risposte di oggi ", h("span", { class: "hd-count", text: String(answered.length) })),
           answered.map(function (t) {
             return h("article", { class: "card hd-card is-done", "data-id": t.id },
-              h("div", { class: "hd-meta" }, tagChip(t), h("b", { text: t.author }), when(t)),
-              h("p", { class: "hd-q", text: t.body }), picture(t), h("p", { class: "hd-answer" }, h("span", { class: "hd-answer-who", text: "Docente" }), t.answer),
+              h("div", { class: "hd-meta" }, tagChip(t), h("b", { text: STUDENT }), when(t)),
+              h("p", { class: "hd-q", text: t.body }), h("p", { class: "hd-answer" }, h("span", { class: "hd-answer-who", text: "Docente" }), t.answer),
               comments(t));
           })));
       }
@@ -490,7 +415,6 @@
       return h("article", { class: "card hd-card is-mine", "data-st": t.status, "data-id": t.id },
         h("div", { class: "hd-meta" }, statusPill(t), tagChip(t), t.stuck && !done ? h("span", { class: "hd-flag", text: "Bloccato" }) : null, when(t)),
         h("p", { class: "hd-q", text: t.body }),
-        picture(t),
         !done && steps(t),
         line && h("p", { class: "hd-line", text: line }),
         t.answer && h("p", { class: "hd-answer" }, h("span", { class: "hd-answer-who", text: "Docente" }), t.answer),
@@ -503,9 +427,8 @@
     function otherCard(t) {
       var voted = !!votes[t.id];
       return h("article", { class: "card hd-card hd-other", "data-st": t.status, "data-id": t.id },
-        h("div", { class: "hd-meta" }, tagChip(t), h("b", { text: t.author }), when(t), t.status === "arrivo" ? statusPill(t) : null),
+        h("div", { class: "hd-meta" }, tagChip(t), h("b", { text: STUDENT }), when(t), t.status === "arrivo" ? statusPill(t) : null),
         h("p", { class: "hd-q", text: t.body }),
-        picture(t),
         h("div", { class: "row" },
           h("button", { class: "btn hd-metoo" + (voted ? " on" : ""), type: "button", "aria-pressed": voted ? "true" : "false", onclick: function () {
             if (voted) delete votes[t.id]; else votes[t.id] = 1;
@@ -613,10 +536,9 @@
         h("div", { class: "hd-meta" }, statusPill(t), tagChip(t), t.stuck && !done ? h("span", { class: "hd-flag", text: "Bloccato" }) : null,
           t.pinned ? h("span", { class: "hd-flag pin", text: "📌 FAQ" }) : null),
         h("div", { class: "hd-who" },
-          h("span", { class: "avatar", style: "--av:" + ctx.hue(t.author), "aria-hidden": "true", text: ctx.initials(t.author) }),
-          h("b", { text: t.author }), t.seat ? h("span", { class: "hd-seat", text: "📍 " + t.seat }) : null, when(t)),
+          h("span", { class: "avatar", style: "--av:" + ctx.hue(t.seat || String(t.id)), "aria-hidden": "true", text: "S" }),
+          h("b", { text: STUDENT }), t.seat ? h("span", { class: "hd-seat", text: "📍 " + t.seat }) : null, when(t)),
         h("p", { class: "hd-q", text: t.body }),
-        picture(t),
         t.metoo ? h("p", { class: "hd-metoo-n", text: "🙋 +" + t.metoo + (t.metoo === 1 ? " compagno ha" : " compagni hanno") + " lo stesso dubbio" }) : null,
         t.answer && !editing ? h("p", { class: "hd-answer" }, h("span", { class: "hd-answer-who", text: "Risposta" }), t.answer) : null,
         h("div", { class: "hd-actions" },
@@ -636,7 +558,6 @@
     }
 
     return function stop() {
-      var z = document.querySelector(".hd-zoom"); if (z) z.remove();
       stopped = true; unwatch(); clearInterval(poll); clearInterval(tick); clearTimeout(timer);
       document.removeEventListener("visibilitychange", onVisible);
     };

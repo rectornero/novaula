@@ -127,6 +127,7 @@ input[type=file]{font-size:.95rem;font-weight:400;padding:10px;border:2px dashed
 .notice{padding:11px 14px;border-radius:12px;font-size:.95rem;font-weight:700}
 .notice.ok{background:var(--ok-soft);color:var(--ok)}
 .notice.err{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+.notice.hand-in-note{background:var(--soft);color:var(--ink);font-weight:600}
 details.teacher{background:color-mix(in srgb,var(--hl) 22%,var(--card));border:1px solid color-mix(in srgb,var(--hl) 70%,var(--line));border-radius:var(--radius);padding:14px 18px}
 details.teacher summary{cursor:pointer;font-weight:800;display:flex;align-items:center;gap:8px}
 details.teacher summary::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--hl);color:var(--hl-ink);font-weight:800}
@@ -151,6 +152,7 @@ details.teacher form{margin-top:14px}
 .composer{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}
 .composer textarea{min-height:46px;height:46px;flex:1;border-radius:999px;padding:11px 16px;resize:none}
 .who{font-size:.85rem;color:var(--muted);padding:8px 14px;background:var(--card);border-top:1px solid var(--line)}
+.who .no-names{color:var(--ink);font-weight:700;background:linear-gradient(transparent 55%,color-mix(in srgb,var(--hl) 45%,transparent) 55%)}
 .name-form{display:flex;flex-direction:column;gap:6px}
 .name-form .row{display:flex;gap:8px}
 .name-form input{flex:1;min-width:0}

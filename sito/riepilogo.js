@@ -1,6 +1,6 @@
 /* Novaula · Riepilogo settimanale, solo per il docente.
-   Domande aperte in Aiuto, consegne mancanti, segnalazioni di coerenza e compiti della prossima settimana,
-   classe per classe (funzione teacher_weekly_summary, vedi aggiornamenti/2026-10-20-riepilogo.sql).
+   Quante domande sono aperte in Aiuto e i compiti e le verifiche della prossima settimana, classe per classe.
+   Senza dati personali: nessun nome, nessuna consegna, nessun voto (funzione teacher_weekly_summary, vedi aggiornamenti/2026-10-20-riepilogo.sql).
    Lo stesso riepilogo arriva ogni venerdì pomeriggio nel progetto Novaula su Claude.
    app.js chiama:
      window.NovaulaRiepilogo.board(contenitore, aiuti)   riquadro "Riepilogo della settimana" in Area docente */
@@ -16,10 +16,10 @@
     return DAYS[d.getDay()] + " " + d.getDate() + "/" + (d.getMonth() + 1);
   }
 
-  function total(c) {
-    return c.helpdesk_open.length + c.slide_questions_open + c.flags.length + c.marks_to_review +
-      c.missing.reduce(function (n, a) { return n + a.missing.length; }, 0);
-  }
+  // Solo conteggi e compiti: nessun nome, nessun testo scritto dagli studenti, nessuna consegna o voto.
+  // Funziona sia con la funzione vecchia (helpdesk_open è un elenco) sia con quella senza dati personali (un numero).
+  function count(v) { return Array.isArray(v) ? v.length : +v || 0; }
+  function stuck(c) { return Array.isArray(c.helpdesk_open) ? c.helpdesk_open.filter(function (t) { return t.stuck; }).length : +c.helpdesk_stuck || 0; }
 
   function section(h, title, items) {
     items = items.filter(Boolean);
@@ -28,37 +28,26 @@
   }
 
   function classBlock(h, c, cl, open) {
-    var help = c.helpdesk_open.map(function (t) {
-      return (t.stuck ? "🆘 " : "") + t.author + ": «" + t.body + "»" + (t.metoo ? " (+" + t.metoo + ")" : "") +
-        (t.status !== "nuova" ? " · " + t.status : "");
-    });
-    if (c.slide_questions_open) help.push(c.slide_questions_open + " domande sulle slide senza risposta");
-    var missing = c.missing.map(function (a) {
-      var who = a.missing.length ? "mancano " + a.missing.join(", ") : a.profiles ? "tutti i profili hanno consegnato" : "nessun profilo studente";
-      return a.title + " (scadenza " + day(a.due) + "): " + a.received + " consegne, " + who;
-    });
-    var flags = c.flags.map(function (f) {
-      return "⚠ " + (f.kind === "same_file" ? "File identico" : "Stesso dispositivo") + " · " + f.title + ": " + (f.students || []).join(" e ");
-    });
-    if (c.late) flags.push(c.late + " consegne in ritardo questa settimana");
-    if (c.marks_to_review) flags.push(c.marks_to_review + " voti proposti da Claude da confermare");
-    if (c.redo) flags.push(c.redo + " lavori «Da rifare» in sospeso");
-    var next = c.due_next_week.map(function (a) {
+    var nHelp = count(c.helpdesk_open), nStuck = stuck(c), nSlide = count(c.slide_questions_open);
+    var help = [
+      nHelp ? nHelp + (nHelp === 1 ? " domanda aperta" : " domande aperte") + " in Aiuto" + (nStuck ? " (" + nStuck + " 🆘 bloccati)" : "") : null,
+      nSlide ? nSlide + " domande sulle slide senza risposta" : null
+    ];
+    var next = (c.due_next_week || []).map(function (a) {
       return day(a.due) + " · " + a.title + " (" + (KIND[a.kind] || a.kind) + (a.group ? ", di gruppo" : "") + ")" +
         (a.planned ? " · previsto, se l'argomento viene segnato come fatto" : "");
-    }).concat(c.tests_next_week.map(function (t) { return day(t.date) + " · Verifica: " + t.title; }));
-    var n = total(c);
+    }).concat((c.tests_next_week || []).map(function (t) { return day(t.date) + " · Verifica: " + t.title; }));
+    var n = nHelp + nSlide;
     var body = [
       section(h, "Domande aperte", help),
-      section(h, "Consegne mancanti", missing),
-      section(h, "Da controllare", flags),
       section(h, "Prossima settimana", next)
     ].filter(Boolean);
     return h("details", { class: "rp-class", open: open && n > 0 },
       h("summary", null,
         h("span", { class: "rp-name", text: cl ? cl.name : c.name }),
         h("span", { class: "badge" + (n ? " flag-badge" : " ok-badge"), text: n ? n + " da vedere" : "tutto a posto" })),
-      body.length ? body : h("p", { class: "small muted", text: "Niente da segnalare." }));
+      body.length ? body : h("p", { class: "small muted", text: "Niente da segnalare." }),
+      n ? h("a", { class: "small", href: "#/c/" + c.id + "/aiuto", text: "Apri Aiuto →" }) : null);
   }
 
   window.NovaulaRiepilogo = {
