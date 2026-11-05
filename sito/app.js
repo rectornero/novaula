@@ -193,7 +193,7 @@
         var rows = ok(await sb.from("messages").select("*").eq("class_id", c).order("created_at", { ascending: false }).limit(150));
         return rows.reverse();
       },
-      send: async function (row) { ok(await sb.from("messages").insert(row)); },
+      send: async function (row) { return ok(await sb.from("messages").insert(row).select("id").single()); },
       deleteMessage: async function (m) { ok(await sb.from("messages").delete().eq("id", m.id)); },
       watch: function (c, onAdd, onDel) {
         var ch = sb.channel("chat-" + c)
@@ -314,6 +314,7 @@
         var m = Object.assign({ id: db.seq++, created_at: new Date().toISOString() }, row);
         db.messages.push(m); save();
         listeners.forEach(function (l) { if (l.c === m.class_id) l.add(m); });
+        return m;
       },
       deleteMessage: async function (m) {
         db.messages = db.messages.filter(function (x) { return x.id !== m.id; }); save();
@@ -362,7 +363,7 @@
     app.appendChild(h("section", { class: "hello" },
       h("p", { class: "eyebrow", text: today }),
       h("h1", null, "Ciao! ", h("span", { class: "mark", text: "Scegli la tua classe" })),
-      h("p", { class: "lede", text: "Materiali delle lezioni, compiti da consegnare e la chat della classe. Senza account, da telefono o PC." })
+      h("p", { class: "lede", text: "Materiali delle lezioni, compiti, verifiche e la chat della classe. Senza account e senza dati personali, da telefono o PC." })
     ));
     var grid = h("div", { class: "classes" }, classes.map(function (c) {
       var p = classParts(c);
@@ -585,7 +586,7 @@
     var items;
     try { items = await api.assignments(c.id); } catch (e) { box.textContent = ""; box.appendChild(notice("err", errText(e))); return; }
     box.textContent = "";
-    if (api.isTeacher()) box.appendChild(addAssignmentForm(c));
+    if (api.isTeacher()) { box.appendChild(addAssignmentForm(c)); box.appendChild(handInNote(c)); }
     // In attesa = collegati a un argomento non ancora svolto (li vede solo il docente)
     var waiting = api.isTeacher() ? items.filter(function (a) { return a.topic_id && !a.due_date; }) : [];
     // Righe tecniche delle vecchie consegne (slide, scansioni): non si mostrano più
@@ -620,8 +621,9 @@
           h("a", { class: "btn link", href: a.pdf_url, download: a.pdf_url.split("/").pop(), text: "Scarica" }))
       );
       if (api.isTeacher() && window.NovaulaAgenda) card.appendChild(h("div", { class: "row" }, window.NovaulaAgenda.share(agCtx(), shareUrl(c, "compiti"), a.title,
-        (a.due_date ? "Consegna entro il " + fmtDate(a.due_date) + " su Novaula. " : "") + (a.description || ""))));
-      card.appendChild(api.isTeacher() ? teacherActions(a) : handIn(c));
+        (a.due_date ? "Consegna entro il " + fmtDate(a.due_date) + " su Classroom. " : "") + (a.description || ""))));
+      var hi = handIn(c); if (hi) card.appendChild(hi);
+      if (api.isTeacher()) card.appendChild(teacherActions(a));
       box.appendChild(card);
     });
     if (waiting.length) {
@@ -702,7 +704,7 @@
         h("a", { href: deckLink(q, classId), target: "_blank", rel: "noopener", text: (titles[q.deck] || q.deck) + " · slide " + q.slide }),
         " · " + fmtTime(q.created_at)),
       q.slide_title && h("p", { class: "muted small", text: "«" + q.slide_title + "»" }),
-      h("p", null, h("b", { text: q.name + ": " }), q.body),
+      h("p", null, h("b", { text: "Studente: " }), q.body),
       q.answer && !teacher && h("p", { class: "answer" }, h("b", { text: "Risposta del docente: " }), q.answer),
       teacher && h("div", { class: "stack" }, ta, h("div", { class: "row" },
         h("button", { class: "btn primary", type: "button", text: q.answer ? "Aggiorna risposta" : "Rispondi", onclick: async function () {
@@ -757,11 +759,17 @@
     return h("details", { class: "teacher" }, h("summary", { text: "Docente: assegna un compito" }), form);
   }
 
-  // Senza dati personali: si consegna su Google Classroom, Novaula non raccoglie file né nomi
+  // Le consegne non passano da Novaula (niente dati personali): si consegna su Google Classroom
   function handIn(c) {
-    return c.classroom_url
-      ? h("div", { class: "row" }, h("a", { class: "btn primary", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Consegna su Classroom ↗" }))
-      : h("p", { class: "muted small", text: "Consegna su Google Classroom, come indica il docente." });
+    if (c.classroom_url) return h("div", { class: "row hand-in" },
+      h("a", { class: "btn primary", href: c.classroom_url, target: "_blank", rel: "noopener", text: "Consegna su Classroom ↗" }));
+    // senza link il docente vede una sola nota in cima alla scheda (handInNote)
+    return api.isTeacher() ? null : h("p", { class: "muted small hand-in", text: "Consegna il compito su Google Classroom, come indica il prof." });
+  }
+  function handInNote(c) {
+    return h("p", { class: "notice hand-in-note", text: c.classroom_url
+      ? "Gli studenti consegnano su Google Classroom: ogni compito ha il pulsante «Consegna su Classroom»."
+      : "Gli studenti consegnano su Google Classroom. Aggiungi il link del corso in 🗓️ Agenda e calendario: su ogni compito comparirà il pulsante «Consegna su Classroom»." });
   }
 
   // Aiuti per avvisi.js
@@ -795,7 +803,10 @@
       var open = l.filter(function (q) { return !q.answer; }).length;
       qlink.querySelector(".qcount").textContent = l.length ? l.length + (teacher && open ? " · " + open + " senza risposta" : "") : "";
     }).catch(function () {});
-    var name = teacher ? "Docente" : store("chat-name");
+    // Chat anonima: gli studenti scrivono come «Studente», il prof come «Docente». I propri messaggi si riconoscono
+    // dagli id salvati su questo dispositivo, senza nomi.
+    var name = teacher ? "Docente" : "Studente";
+    var mineIds = (store("chat-mine") || "").split(",").filter(Boolean);
     var msgs = h("div", { class: "msgs", role: "log", "aria-label": "Messaggi" });
     var input = h("textarea", { "aria-label": "Scrivi un messaggio", placeholder: "Scrivi un messaggio…", maxlength: 1000, rows: 1 });
     var sendBtn = h("button", { class: "btn primary", type: "submit", text: "Invia" });
@@ -806,30 +817,16 @@
     var lastSent = 0;
 
     function setWho() {
-      who.replaceChildren(teacher ? "Scrivi come Docente." : "Scrivi come ", teacher ? null : h("b", { text: name }), teacher ? null : " · ",
-        teacher ? null : h("button", { class: "btn link", type: "button", text: "cambia nome", onclick: askName }));
-    }
-    function askName() {
-      var field = h("input", { type: "text", id: "chatName", maxlength: 40, value: name || "", autocomplete: "nickname", "aria-label": "Il tuo nome" });
-      var f = h("form", { class: "name-form" }, h("label", { for: "chatName", text: "Come ti chiami? Nome e iniziale del cognome" }),
-        h("div", { class: "row" }, field, h("button", { class: "btn primary", type: "submit", text: "Salva" })));
-      f.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var n = field.value.trim().slice(0, 40);
-        if (n.length < 2) { toast("Il nome deve avere almeno 2 caratteri."); return; }
-        name = n; store("chat-name", n); setWho(); composer.hidden = false; input.focus();
-      });
-      composer.hidden = true;
-      who.replaceChildren(f); field.focus();
-      return false;
+      who.replaceChildren(teacher ? "Scrivi come Docente." : "Scrivi come Studente, senza nome. ",
+        h("b", { class: "no-names", text: "Non scrivere nomi, voti o dati personali." }));
     }
     function nearBottom() { return msgs.scrollHeight - msgs.scrollTop - msgs.clientHeight < 80; }
     function add(m) {
       if (!m || seen[m.id]) return;
       seen[m.id] = true;
       var stick = nearBottom();
-      var mine = !teacher && !m.is_teacher && m.author === name;
-      var who = m.is_teacher ? "Docente" : m.author;
+      var mine = !teacher && !m.is_teacher && mineIds.indexOf(String(m.id)) >= 0;
+      var who = m.is_teacher ? "Docente" : "Studente";
       var el = h("div", { class: "msg" + (m.is_teacher ? " teacher" : "") + (mine || (teacher && m.is_teacher) ? " mine" : ""), "data-id": m.id },
         h("span", { class: "avatar", style: "--av:" + (m.is_teacher ? "var(--hl)" : hue(who)), "aria-hidden": "true", text: m.is_teacher ? "★" : initials(who) }),
         h("div", { class: "bubble" },
@@ -847,12 +844,16 @@
       e.preventDefault();
       var body = input.value.trim();
       if (!body) return;
-      if (!teacher && !name) { askName(); return; }
       if (Date.now() - lastSent < 2000) return;
       lastSent = Date.now();
       sendBtn.disabled = true;
       try {
-        await api.send({ class_id: c.id, author: teacher ? "Docente" : name, body: body, is_teacher: teacher });
+        var sent = await api.send({ class_id: c.id, author: name, body: body, is_teacher: teacher });
+        if (!teacher && sent && sent.id) {
+          mineIds = mineIds.concat(String(sent.id)).slice(-50); store("chat-mine", mineIds.join(","));
+          // il messaggio può essere già arrivato in tempo reale prima della risposta all'invio
+          var own = msgs.querySelector('[data-id="' + sent.id + '"]'); if (own) own.classList.add("mine");
+        }
         input.value = "";
         if (DEMO) msgs.scrollTop = msgs.scrollHeight;
       } catch (err) { toast(errText(err)); }
@@ -864,7 +865,7 @@
     });
 
     box.appendChild(chat);
-    if (teacher || name) setWho(); else askName();
+    setWho();
     msgs.appendChild(h("p", { class: "empty", text: "Caricamento…" }));
     async function load() {
       try {
@@ -911,7 +912,7 @@
       api.cleanup();
       nowBoard();
       app.appendChild(h("div", { class: "card" },
-        h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti, scaricare le consegne e moderare la chat. Il pulsante «Studenti e voti» in ogni classe apre profili, voti e controlli." }),
+        h("p", { text: "Hai effettuato l'accesso come docente. Nelle pagine delle classi trovi i pannelli gialli per pubblicare materiali, assegnare compiti e moderare la chat. Consegne, voti e assenze restano su Google Classroom e sul registro elettronico: Novaula non conserva dati personali degli studenti." }),
         h("div", { class: "row" },
           h("a", { class: "btn primary", href: "#/", text: "Vai alle classi" }),
           window.NovaulaAgenda && api.client ? h("a", { class: "btn", href: "#/docente/agenda", text: "🗓️ Agenda e calendario" }) : null,
