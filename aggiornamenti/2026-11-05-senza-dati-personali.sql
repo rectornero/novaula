@@ -9,8 +9,11 @@
 --         3. aggiornamenti/2026-11-05-anonimo.sql di Systems (nuova helpdesk_ask, trigger anonimi, evaluation_plan e
 --            weekly_summary_data senza studenti né voti) e la funzione «notifiche» solo per il docente.
 --            Questo file si ferma da solo se evaluation_plan o weekly_summary_data leggono ancora i voti.
--- Dopo:   svuotare ed eliminare dalla dashboard i bucket consegne, correzioni, scansioni, personali, aiuto, stampe,
---         ed eliminare la Edge Function «correzioni».
+-- Dopo:   svuotare ed eliminare dalla dashboard i bucket consegne, correzioni, scansioni, personali, aiuto;
+--         svuotare (NON eliminare) il bucket stampe: il pianificatore lo usa ancora per il PDF della copisteria
+--         (copie identiche senza nomi), ma le copie vecchie della 2.18 potevano avere i nomi;
+--         eliminare la Edge Function «correzioni»; su GitHub cancellare gli artifact delle esecuzioni
+--         «Database backup» precedenti a questo script (contengono ancora gli studenti) o lasciarli scadere (35 giorni).
 -- Si può rieseguire: usa sempre "if exists".
 
 begin;
@@ -82,6 +85,9 @@ update messages set author = case when is_teacher then 'Docente' else 'Studente'
 update helpdesk set author = 'Studente', image_path = null;
 update helpdesk_replies set author = case when is_teacher then 'Docente' else 'Studente' end;
 update slide_questions set name = 'Studente';
+-- Nella 2.19.0 la riga del registro era «Argomento: … Assenti: …»: si tolgono gli assenti dalle righe salvate.
+delete from lesson_log where text ~ '^\s*Assenti:';
+update lesson_log set text = btrim(regexp_replace(text, '\s*Assenti:.*$', '')) where text ~ 'Assenti:';
 -- La vecchia helpdesk_ask chiedeva il nome (8 argomenti); quella nuova di Systems (6 argomenti) resta.
 drop function if exists helpdesk_ask(text, text, text, text, boolean, text, text, text);
 -- Pesi e periodi dei voti per singola classe o studente: restano solo quelli di tutte le classi, l'agenda e il
