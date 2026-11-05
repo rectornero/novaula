@@ -84,8 +84,9 @@ update helpdesk_replies set author = case when is_teacher then 'Docente' else 'S
 update slide_questions set name = 'Studente';
 -- La vecchia helpdesk_ask chiedeva il nome (8 argomenti); quella nuova di Systems (6 argomenti) resta.
 drop function if exists helpdesk_ask(text, text, text, text, boolean, text, text, text);
--- Pesi e periodi dei voti per singola classe o studente: restano solo quelli di tutte le classi e l'agenda.
-delete from grade_settings where scope not in ('tutte', 'agenda');
+-- Pesi e periodi dei voti per singola classe o studente: restano solo quelli di tutte le classi, l'agenda e il
+-- pianificatore (piano: minimo di verifiche, email della copisteria e firma, nessun dato di studenti).
+delete from grade_settings where scope not in ('tutte', 'agenda', 'piano');
 
 -- 6. Controllo finale: nessuna tabella o colonna con dati di uno studente.
 do $$
