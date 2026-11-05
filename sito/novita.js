@@ -8,6 +8,13 @@
 
   // Dalla più nuova. nome e motto solo per le versioni che hanno un nome.
   var NOVITA = [
+    { v: "3.0.0", data: "5 novembre 2026", punti: [
+        "Novaula non raccoglie più dati personali: niente profili, PIN, nomi, consegne o voti. Restano lezioni, programma, materiali, compiti, verifiche, quiz e agenda.",
+        "I compiti si consegnano su Google Classroom: sotto ogni compito e sulle slide «Al computer» c'è il pulsante «Consegna su Classroom ↗». I voti li trovi sul registro elettronico.",
+        "Chat, sportello «Aiuto» e domande sulle slide sono anonimi: compari come «Studente», senza foto. Non scrivere nomi, voti o dati personali; i messaggi si cancellano da soli dopo 7 giorni.",
+        "Alla LIM il sorteggio estrae un numero del registro, non più un nome.",
+        "Gli avvisi del prof restano in cima alla pagina della classe; le notifiche sul telefono per gli studenti non ci sono più."
+      ] },
     { v: "2.19.1", data: "29 ottobre 2026", punti: [
         "Il prof rivede il percorso da un'aula all'altra proprio quando suona la campanella."
       ] },
