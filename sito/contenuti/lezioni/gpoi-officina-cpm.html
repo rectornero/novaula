@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Officina 4: reticolo CPM e Gantt · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Officina 4 di 6</p>
+  <h1>Officina 4:<br>reticolo CPM e Gantt</h1>
+  <p class="lead">Dalla WBS al calendario: quanto dura ogni pacchetto, che cosa deve aspettare che cosa, quali attività non possono ritardare nemmeno di un giorno. Poi tutto in ProjectLibre.</p>
+  <p class="meta"><span class="chip">5F GPOI</span><span>Officina · stime a tre punti, precedenze, reticolo, percorso critico, slack, Gantt, baseline</span></p>
+  <aside class="notes">Quarta consegna, circa 4 settimane (8 ore), marzo. Prerequisiti di Teoria: La rappresentazione reticolare, Il CPM sotto la lente di ingrandimento, La pianificazione delle attività, Pianificare le attività con ProjectLibre (deck gpoi-reticoli-pert-cpm, gpoi-cpm, gpoi-gantt, gpoi-projectlibre). Qui non si rispiega il calcolo: si applica al progetto di ogni gruppo. Serve ProjectLibre installato sui PC del laboratorio (gratuito, senza account). Si parte dalla WBS e dal dizionario dell'Officina 3.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il vostro lancio è previsto tra 6 mesi. Quanto siete sicuri della data?</h2></div>
+  <div class="poll" data-id="of4-data">
+    <ol><li>Molto: abbiamo tempo in abbondanza</li><li>Abbastanza, se nessuno si ammala</li><li>Poco: non sappiamo quanto dura lo sviluppo</li><li>Non lo sapremo finché non facciamo il reticolo</li></ol>
+  </div>
+  <aside class="notes">Nessuna risposta giusta, ma la D è quella del project manager. Riprendere alla fine con il percorso critico: la data dipende solo dalle attività critiche, e la sicurezza si misura con lo slack.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Stimare le durate</p><h2>Tre stime invece di una</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Ottimista (o)</h3><p class="small">Tutto fila liscio. Per lo sviluppo dell'app di RipetiQui: 3 settimane.</p></div>
+    <div class="card fill"><h3>Più probabile (m)</h3><p class="small">Quello che succede di solito: 6 settimane.</p></div>
+    <div class="card"><h3>Pessimista (p)</h3><p class="small">Va storto quasi tutto, ma senza catastrofi: 9 settimane.</p></div>
+  </div>
+  <div class="callout">Stima PERT: <b>(o + 4m + p) / 6</b> = (3 + 24 + 9) / 6 = <b>6 settimane</b>. Lo scarto (p − o) / 6 = 1 settimana dice quanto è incerta.</div>
+  <aside class="notes">La stima a tre punti (PERT, anni '50, programma Polaris della marina USA) pesa di più il valore probabile. Con o = 3, m = 6, p = 9 la media coincide con m perché le stime sono simmetriche; se il pessimista fosse 15 settimane: (3 + 24 + 15) / 6 = 7 settimane. Ogni gruppo usa le stime in ore del dizionario WBS e le converte in settimane: con 2 ore di Officina a settimana più il lavoro a casa, contare quante ore reali ha ogni persona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Dalla WBS al calendario</h2></div>
+  <ol class="puzzle-ordina" data-id="of4-passi">
+    <li>Elencare le attività dai pacchetti di lavoro</li>
+    <li>Stimare le durate</li>
+    <li>Fissare le precedenze</li>
+    <li>Disegnare il reticolo</li>
+    <li>Calcolo in avanti e all'indietro</li>
+    <li>Trovare percorso critico e slack</li>
+    <li>Gantt con risorse e baseline</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Le precedenze possono essere fissate anche prima delle durate; accettare lo scambio tra i passi 2 e 3. Il Gantt viene alla fine perché è una vista del reticolo nel tempo: in ProjectLibre si inseriscono attività, durate e predecessori, e il programma calcola il resto.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il reticolo di RipetiQui</p><h2>Completa i tempi delle attività critiche</h2></div>
+  <div class="puzzle-trascina" data-id="of4-reticolo" data-extra="4-7|11-13">
+    <div style="position:relative;width:1664px;height:500px;font-size:22px">
+      <svg width="1664" height="500" style="position:absolute;left:0;top:0" aria-hidden="true">
+      <line x1="260" y1="265.0" x2="342" y2="125.0" stroke="var(--accent)" stroke-width="5"/><circle cx="342" cy="125.0" r="7" fill="var(--accent)"/>
+      <line x1="260" y1="265.0" x2="342" y2="415.0" stroke="#9aa3b5" stroke-width="3"/><circle cx="342" cy="415.0" r="7" fill="#9aa3b5"/>
+      <line x1="610" y1="125.0" x2="692" y2="65.0" stroke="var(--accent)" stroke-width="5"/><circle cx="692" cy="65.0" r="7" fill="var(--accent)"/>
+      <line x1="610" y1="125.0" x2="692" y2="245.0" stroke="#9aa3b5" stroke-width="3"/><circle cx="692" cy="245.0" r="7" fill="#9aa3b5"/>
+      <line x1="610" y1="415.0" x2="692" y2="425.0" stroke="#9aa3b5" stroke-width="3"/><circle cx="692" cy="425.0" r="7" fill="#9aa3b5"/>
+      <line x1="960" y1="65.0" x2="1042" y2="65.0" stroke="var(--accent)" stroke-width="5"/><circle cx="1042" cy="65.0" r="7" fill="var(--accent)"/>
+      <line x1="1310" y1="65.0" x2="1396" y2="265.0" stroke="var(--accent)" stroke-width="5"/><circle cx="1396" cy="265.0" r="7" fill="var(--accent)"/>
+      <line x1="960" y1="245.0" x2="1396" y2="265.0" stroke="#9aa3b5" stroke-width="3"/><circle cx="1396" cy="265.0" r="7" fill="#9aa3b5"/>
+      <line x1="960" y1="425.0" x2="1396" y2="265.0" stroke="#9aa3b5" stroke-width="3"/><circle cx="1396" cy="265.0" r="7" fill="#9aa3b5"/>
+      </svg>
+      <div class="card fill" style="position:absolute;left:0px;top:200px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>A</b> · Requisiti</span><span style="display:flex;align-items:center;gap:10px">2 sett. · <b>0-2</b></span></div>
+      <div class="card fill" style="position:absolute;left:350px;top:60px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>B</b> · Design</span><span style="display:flex;align-items:center;gap:10px">2 sett. · <b>2-4</b></span></div>
+      <div class="card" style="position:absolute;left:350px;top:350px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>D</b> · Selezione tutor</span><span style="display:flex;align-items:center;gap:10px">4 sett. · <b>2-6</b></span></div>
+      <div class="card fill" style="position:absolute;left:700px;top:0px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>C</b> · Sviluppo app</span><span style="display:flex;align-items:center;gap:10px">6 sett. · <span class="slot" data-risposta="4-10" style="width:110px;flex:none"></span></span></div>
+      <div class="card" style="position:absolute;left:700px;top:180px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>E</b> · Campagna social</span><span style="display:flex;align-items:center;gap:10px">3 sett. · <b>4-7</b></span></div>
+      <div class="card" style="position:absolute;left:700px;top:360px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>G</b> · Formazione tutor</span><span style="display:flex;align-items:center;gap:10px">1 sett. · <b>6-7</b></span></div>
+      <div class="card fill" style="position:absolute;left:1050px;top:0px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>F</b> · Test</span><span style="display:flex;align-items:center;gap:10px">2 sett. · <span class="slot" data-risposta="10-12" style="width:110px;flex:none"></span></span></div>
+      <div class="card fill" style="position:absolute;left:1404px;top:200px;width:260px;height:130px;padding:10px 14px;gap:6px;font-size:21px;line-height:1.25"><span><b>H</b> · Lancio</span><span style="display:flex;align-items:center;gap:10px">1 sett. · <span class="slot" data-risposta="12-13" style="width:110px;flex:none"></span></span></div>
+    </div>
+  </div>
+  <aside class="notes">Precedenze: A Requisiti (2) prima di B Design (2) e D Selezione tutor (4); B prima di C Sviluppo (6) ed E Campagna social (3); D prima di G Formazione tutor (1); C prima di F Test (2); F, E, G prima di H Lancio (1). Calcolo in avanti: A 0-2, B 2-4, D 2-6, C 4-10, E 4-7, G 6-7, F 10-12, H inizia quando finiscono tutti i predecessori: max(12, 7, 7) = 12, finisce a 13. Soluzioni degli slot: C 4-10, F 10-12, H 12-13. Distrattori: 4-7 (è E) e 11-13. Le frecce arancioni sono il percorso critico A-B-C-F-H, 13 settimane.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>Critica o no?</h2></div>
+  <div class="puzzle-categorie" data-id="of4-critiche" style="--cols:2">
+    <div class="cat"><h4>Critica: slack 0</h4><ul><li>A · Requisiti</li><li>B · Design</li><li>C · Sviluppo app</li><li>F · Test</li></ul></div>
+    <div class="cat"><h4>Non critica: slack 5 settimane</h4><ul><li>D · Selezione tutor</li><li>E · Campagna social</li><li>G · Formazione tutor</li></ul></div>
+  </div>
+  <aside class="notes">Calcolo all'indietro con fine progetto a 13: H 12-13; F LF 12, LS 10; C LF 10, LS 4; E LF 12, LS 9, slack 9 − 4 = 5; G LF 12, LS 11, slack 11 − 6 = 5; D LF = LS di G = 11, LS 7, slack 7 − 2 = 5; B LF = min(LS C, LS E) = min(4, 9) = 4, slack 0; A LF = min(LS B, LS D) = min(2, 7) = 2. Attenzione: D e G condividono lo stesso slack (slack totale): se D usa 5 settimane, G non ne ha più. Il lancio H è critico ma non è nel puzzle.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La selezione dei tutor (D) dura 3 settimane in più del previsto. Quando avviene il lancio?</h2></div>
+  <div class="poll" data-id="of4-ritardo" data-tipo="quiz" data-risposta="A">
+    <ol><li>Sempre alla fine della settimana 13</li><li>Alla fine della settimana 16</li><li>Alla fine della settimana 14</li><li>Dipende dal Gantt</li></ol>
+    <p class="why">D ha 5 settimane di slack: un ritardo di 3 lo assorbe, e il percorso critico A-B-C-F-H resta di 13 settimane. Ma ora a D e G restano solo 2 settimane di margine: un altro ritardo di 3 sposterebbe il lancio.</p>
+  </div>
+  <aside class="notes">Risposta A. Contro-domanda: e se lo Sviluppo (C) dura 1 settimana in più? Il lancio slitta alla settimana 14, perché C è critica. Morale per i gruppi: le attività critiche vanno affidate a chi è più affidabile e controllate ogni settimana; quelle con slack possono aspettare se serve spostare persone.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 45 minuti</span></p>
+  <h2>Il reticolo del vostro progetto, a mano e in Calc</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>cpm-gruppo.ods</b>: una riga per attività (da 12 a 20) con codice WBS, nome, o, m, p, stima PERT, predecessori.</li>
+      <li>Stima in F2: <code>=(C2+4*D2+E2)/6</code>, arrotondata alla settimana o al giorno.</li>
+      <li>Su carta o su diagrams.net disegnate il reticolo e fate il calcolo in avanti e all'indietro.</li>
+      <li>Aggiungete le colonne ES, EF, LS, LF, slack e colorate le attività critiche.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> il percorso critico va dall'inizio alla fine senza interruzioni, e la sua durata è la durata del progetto. Ogni attività non critica ha slack maggiore di 0.</div>
+  </div>
+  <aside class="notes">Prima di partire con il proprio progetto, chi ha dubbi rifà il calcolo di RipetiQui. Il docente verifica 2-3 attività a caso per gruppo. Errori frequenti: dimenticare che un'attività con più predecessori inizia dopo il massimo dei loro EF; nel calcolo all'indietro usare il minimo degli LS dei successori.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Il tempo si riempie da solo</h2></div>
+  <figure class="citazione">
+    <blockquote>Il lavoro si espande fino a occupare tutto il tempo disponibile per completarlo.</blockquote>
+    <figcaption><b>C. Northcote Parkinson</b>, storico britannico, <i>The Economist</i>, 19 novembre 1955</figcaption>
+  </figure>
+  <p class="lead">Per questo lo slack non si regala a chi fa l'attività: se una attività sa di avere 5 settimane di margine, spesso le usa tutte. Il margine è del progetto, e lo gestisce il project manager.</p>
+  <aside class="notes">Originale: "It is a commonplace observation that work expands so as to fill the time available for its completion." Apertura dell'articolo satirico "Parkinson's Law" sull'Economist (1955), poi libro nel 1957. Traduzione nostra. Collegare alla sindrome dello studente (cominciare all'ultimo momento): è il motivo per cui alcune metodologie, come la catena critica di Goldratt, tolgono i margini alle singole attività e li mettono in un unico "buffer" alla fine.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le parole di ProjectLibre</h2></div>
+  <dl class="puzzle-abbina" data-id="of4-projectlibre">
+    <dt>Milestone</dt><dd>Attività di durata zero che segna un traguardo</dd>
+    <dt>Collegamento FS</dt><dd>B comincia quando A finisce</dd>
+    <dt>Risorsa</dt><dd>Persona o mezzo assegnato a un'attività</dd>
+    <dt>Baseline</dt><dd>Fotografia del piano approvato, per confrontarlo dopo</dd>
+    <dt>Attività riepilogativa</dt><dd>Raccoglie le sottoattività di un ramo della WBS</dd>
+  </dl>
+  <aside class="notes">FS = Finish to Start, il collegamento più comune; esistono anche SS, FF, SF. In ProjectLibre la baseline si salva da Progetto, Imposta baseline (nella versione in inglese Project, Set Baseline). Le attività riepilogative si creano con il rientro (indent): così la WBS dell'Officina 3 diventa la struttura del Gantt, con gli stessi codici.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 60 minuti</span></p>
+  <h2>Il Gantt in ProjectLibre</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nuovo progetto con data di inizio reale. Inserite i rami della WBS come attività riepilogative e sotto le attività.</li>
+      <li>Durate dalla colonna PERT; predecessori nella colonna apposita.</li>
+      <li>Due milestone: "Prima versione pronta" e "Lancio". Risorse: i membri del gruppo dalla RACI.</li>
+      <li>Controllate il percorso critico (vista Gantt, attività in rosso), poi salvate la baseline e <b>gantt-gruppo.pod</b>; esportate in PDF.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> la durata calcolata da ProjectLibre è uguale a quella del vostro calcolo a mano; le attività critiche coincidono.</div>
+  </div>
+  <aside class="notes">Se i risultati non coincidono, quasi sempre è un predecessore sbagliato o un calendario con festivi (ProjectLibre conta solo i giorni lavorativi): far impostare le durate in settimane. Chiedere di controllare il diagramma delle risorse: se una persona è sovrallocata (più del 100%), bisogna spostare attività non critiche usando lo slack (livellamento delle risorse). La stampa in PDF si fa con una stampante PDF del sistema.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Marco è assegnato a C (critica) e a E (slack 5) nelle stesse settimane, al 100% su entrambe. Che cosa conviene fare?</h2></div>
+  <div class="poll" data-id="of4-livellamento" data-tipo="quiz" data-risposta="B">
+    <ol><li>Spostare C più avanti</li><li>Spostare E più avanti, dentro il suo slack</li><li>Dividere Marco al 50% su entrambe</li><li>Niente: lavorerà di più</li></ol>
+    <p class="why">E ha 5 settimane di margine: spostarla non cambia la data del lancio. Spostare C o dimezzare Marco su C allunga il percorso critico e fa slittare tutto.</p>
+  </div>
+  <aside class="notes">Risposta B: è il livellamento delle risorse. Se lo slack non basta, le alternative sono assegnare E a un'altra persona o accettare un ritardo. La D è la tentazione più diffusa e la causa più comune dei ritardi nei progetti di gruppo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Pianificare con le probabilità</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Mille progetti simulati</h3><p>Alcuni strumenti di pianificazione eseguono una <b>simulazione Monte Carlo</b>: estraggono a caso le durate tra ottimista e pessimista migliaia di volte e dicono, per esempio, "lancio entro la settimana 14 con probabilità 80%".</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Assistenti AI nel Gantt</h3><p>Diversi software di gestione dei progetti propongono durate e dipendenze o avvisano dei ritardi. Le stime però vengono da progetti di altri: le vostre ore reali le conoscete solo voi.</p></div>
+  </div>
+  <aside class="notes">La simulazione Monte Carlo si può fare anche in Calc con CASUALE.TRA o con una distribuzione triangolare: facoltativo per chi è avanti. Una data con probabilità è più onesta di una data secca: "13 settimane" è la durata se tutte le attività critiche rispettano la stima PERT, cioè circa una volta su due.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="1305" data-aiuto="la durata del progetto è la durata del percorso critico">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la durata del progetto di RipetiQui, in settimane</li>
+      <li>3ª e 4ª cifra: lo slack della campagna social (E), con lo zero davanti</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 13 settimane e 5 di slack. Ora dite quale attività ritardereste se il gruppo perdesse una persona per 3 settimane.</div>
+  </div>
+  <aside class="notes">Codice: 1305. Premio: una non critica, cioè D, E o G, entro le 5 settimane di slack (attenzione a D e G che condividono lo slack). Mai una attività critica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La consegna</p><h2>Che cosa consegnate per l'Officina 4</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Su Classroom, un file per gruppo</h3><ul class="points small"><li><b>cpm-gruppo.ods</b> con stime e calcolo</li><li><b>gantt-gruppo.pod</b> con la baseline</li><li><b>officina4-gruppo.pdf</b>: reticolo, Gantt, mezza pagina sul percorso critico e sui rischi di ritardo</li></ul></div>
+    <div class="card fill"><h3>Come si valuta (10 punti)</h3><ul class="points small"><li>Stime a tre punti e precedenze sensate: 2</li><li>Calcolo CPM corretto, percorso critico e slack: 4</li><li>Gantt con risorse, milestone e baseline: 3</li><li>Commento: 1</li></ul></div>
+  </div>
+  <aside class="notes">Griglia completa nella scheda "Officina 4". Scadenza su Novaula e Classroom, circa fine marzo. In Teoria in parallelo: il concetto di valore, i costi di progetto e i preventivi, il risk management e il monitoraggio, che servono per l'Officina 5.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="of4-uscita" data-extra="massimo|WBS">
+    <p>La stima PERT è (o + 4m + p) diviso <span class="slot" data-risposta="6"></span>.</p>
+    <p>Le attività del percorso critico hanno slack uguale a <span class="slot" data-risposta="0|zero"></span>.</p>
+    <p>Nel calcolo all'indietro si prende il <span class="slot" data-risposta="minimo"></span> degli LS dei successori.</p>
+    <p>La fotografia del piano approvato si chiama <span class="slot" data-risposta="baseline"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 6; 0; minimo; baseline. Distrattori: massimo (si usa nel calcolo in avanti), WBS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Tre stime e la formula PERT</li>
+      <li>Precedenze, reticolo, calcolo avanti e indietro</li>
+      <li>Percorso critico: slack zero, decide la data</li>
+      <li>Lo slack è del progetto, non di chi lavora</li>
+    </ul>
+    <ul class="points">
+      <li>ProjectLibre: WBS come struttura, milestone, risorse</li>
+      <li>Livellare usando lo slack delle non critiche</li>
+      <li>Baseline per confrontare piano e realtà</li>
+      <li>Prossima Officina: preventivo, pareggio e rischi</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Consegnare la scheda "Officina 4" e aprire il compito su Classroom.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

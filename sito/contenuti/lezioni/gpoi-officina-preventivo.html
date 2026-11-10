@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Officina 5: preventivo, pareggio e rischi · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Officina 5 di 6</p>
+  <h1>Officina 5:<br>preventivo, pareggio e rischi</h1>
+  <p class="lead">Quanto costa il vostro lancio, quanti clienti servono per non perdere soldi, e che cosa può andare storto. Tre fogli di calcolo che un investitore guarderebbe per primi.</p>
+  <p class="meta"><span class="chip">5F GPOI</span><span>Officina · CBS dalla WBS, spese generali, riserva di contingenza, punto di pareggio, registro e matrice dei rischi</span></p>
+  <aside class="notes">Quinta consegna, circa 4 settimane (8 ore), aprile. Prerequisiti di Teoria: Il concetto di valore nell'impresa (deck gpoi-break-even), I costi di progetto e i preventivi, Il risk management, Il monitoraggio e il controllo del progetto. Si parte da WBS e dizionario (ore stimate) dell'Officina 3 e dal Gantt dell'Officina 4. Tutti i prezzi e le tariffe sono ipotesi di esempio, da sostituire con quelle che ogni gruppo ricava da fonti (foglio Fonti dell'Officina 2).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Secondo voi, quanto costa lanciare la vostra idea?</h2></div>
+  <div class="poll" data-id="of5-costo">
+    <ol><li>Quasi niente: lo facciamo noi</li><li>Meno di 5 000 €</li><li>Tra 5 000 e 20 000 €</li><li>Più di 20 000 €</li></ol>
+  </div>
+  <aside class="notes">Molti rispondono A: è l'errore da smontare. Anche se il lavoro lo fanno i soci, il loro tempo ha un costo (costo opportunità: potrebbero lavorare altrove) e un investitore lo vuole vedere. Nel preventivo di oggi il lavoro si valorizza sempre a ore × tariffa. Si riprende il sondaggio con il totale di RipetiQui (18 570 €).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Dalla WBS al budget</h2></div>
+  <ol class="puzzle-ordina" data-id="of5-cbs">
+    <li>Ore di ogni pacchetto di lavoro, dal dizionario WBS</li>
+    <li>Ore per tariffa oraria, più acquisti e servizi</li>
+    <li>Somma per ramo: la CBS</li>
+    <li>Spese generali in percentuale</li>
+    <li>Riserva di contingenza per i rischi noti</li>
+    <li>Budget del progetto</li>
+  </ol>
+  <aside class="notes">CBS = Cost Breakdown Structure: gli stessi codici della WBS, con i costi. Stimare dal basso (bottom-up) è più preciso che "a occhio" dall'alto. Le spese generali (overhead) coprono ciò che non sta in un pacchetto: affitto, commercialista, energia. La riserva di contingenza viene dal registro dei rischi; la riserva di gestione, per i rischi imprevisti, di solito non fa parte della baseline dei costi (Teoria, I costi di progetto).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>I costi di RipetiQui: di che tipo sono?</h2></div>
+  <div class="puzzle-categorie" data-id="of5-costi" style="--cols:3">
+    <div class="cat"><h4>Investimento iniziale</h4><ul><li>Sviluppo della prima versione</li><li>Logo e grafica</li></ul></div>
+    <div class="cat"><h4>Costo fisso annuo</h4><ul><li>Server e dominio</li><li>Commercialista</li><li>Promozione continua</li></ul></div>
+    <div class="cat"><h4>Costo variabile per lezione</h4><ul><li>Commissione del pagamento online</li><li>Rimborso per lezione annullata</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. Il preventivo del progetto (lancio) contiene gli investimenti; il punto di pareggio riguarda la gestione dopo il lancio, con costi fissi e variabili annui. La promozione può essere sia fissa (budget mensile) sia variabile (pagamento per ogni nuovo cliente): accettare se motivato. I rimborsi sono variabili perché crescono con il numero di lezioni.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 45 minuti</span></p>
+  <h2>Il preventivo di RipetiQui, poi il vostro</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>costi-gruppo.ods</b>, foglio <b>CBS</b>: codice WBS, pacchetto, ore, tariffa, costo lavoro, acquisti, totale.</li>
+      <li>RipetiQui: sviluppo dell'app (2.1-2.4) 400 ore a 25 €; tutor (3.x) 60 ore a 20 €; campagna 60 ore a 20 € più 800 € di pubblicità; accordi scuole 20 ore a 20 €; gestione 50 ore a 30 €; server e dominio 600 €.</li>
+      <li>Spese generali 10% del totale; riserva di contingenza dal registro dei rischi: 1 300 €.</li>
+      <li>Ripetete con la vostra WBS e le vostre tariffe, con la fonte di ogni tariffa.</li>
+    </ol>
+    <div class="check small"><b>Controllo per RipetiQui:</b> costi diretti 15 700 €, spese generali 1 570 €, budget con la riserva <b>18 570 €</b>.</div>
+  </div>
+  <aside class="notes">Calcolo: 400 × 25 = 10 000; 60 × 20 = 1 200; 60 × 20 + 800 = 2 000; 20 × 20 = 400; 50 × 30 = 1 500; servizi 600. Totale 10 000 + 1 200 + 2 000 + 400 + 1 500 + 600 = 15 700. Spese generali 1 570, subtotale 17 270, più riserva 1 300 = 18 570 €. Tariffe di esempio: per i gruppi, cercare una fonte (contratti collettivi, annunci di lavoro, piattaforme per freelance) e scriverla. Le ore vengono dal dizionario WBS: se sono cambiate, aggiornare anche il Gantt.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Dopo il lancio</p><h2>Quante lezioni servono per non perdere soldi?</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Ricavo per lezione</h3><p class="small">15% di 20 € = <b>3,00 €</b></p></div>
+    <div class="card"><h3>Costo variabile</h3><p class="small">Pagamento online 1,5% + 0,25 € = <b>0,55 €</b></p></div>
+    <div class="card fill"><h3>Margine di contribuzione</h3><p class="small">3,00 − 0,55 = <b>2,45 €</b> per lezione</p></div>
+  </div>
+  <div class="callout">Costi fissi annui 7 200 €. Punto di pareggio = costi fissi ÷ margine = 7 200 ÷ 2,45 ≈ <b>2 939 lezioni l'anno</b>, circa 245 al mese.</div>
+  <aside class="notes">Costi fissi annui di esempio: server e dominio 600, promozione 4 000, commercialista 1 500, assicurazione e varie 1 100 = 7 200 €. 7 200 / 2,45 = 2 938,8: si arrotonda per eccesso, 2 939. Commissioni di pagamento: ordine di grandezza tipico per carte europee, da verificare sul listino del servizio scelto. Collegare all'Officina 2: il SOM del primo anno era 1 800 lezioni, sotto il pareggio. Perdita prevista: 1 800 × 2,45 − 7 200 = −2 790 €.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Completa</p><h2>Il grafico del punto di pareggio</h2></div>
+  <div class="puzzle-trascina" data-id="of5-grafico" data-extra="Margine lordo">
+    <div style="position:relative;width:1664px;height:500px;font-size:22px">
+      <svg width="1120" height="500" style="position:absolute;left:0;top:0" aria-hidden="true">
+      <line x1="80" y1="470" x2="1100" y2="470" stroke="#1d2433" stroke-width="3"/><line x1="80" y1="470" x2="80" y2="20" stroke="#1d2433" stroke-width="3"/>
+      <line x1="80.0" y1="263.6" x2="1080.0" y2="263.6" stroke="#9aa3b5" stroke-width="4" stroke-dasharray="12 8"/>
+      <line x1="80.0" y1="263.6" x2="1080.0" y2="185" stroke="#c0392b" stroke-width="5"/>
+      <line x1="80.0" y1="470.0" x2="1080.0" y2="40" stroke="var(--accent)" stroke-width="5"/>
+      <circle cx="668" cy="217" r="11" fill="#1d2433"/>
+      <line x1="668" y1="217" x2="668" y2="470" stroke="#1d2433" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="90" y="40" font-size="20" fill="#5b6475">€ all'anno</text><text x="960" y="495" font-size="20" fill="#5b6475">lezioni all'anno</text>
+      <text x="638" y="495" font-size="20" fill="#1d2433">2 939</text>
+      </svg>
+      <span class="slot" data-risposta="Ricavi" style="position:absolute;left:700px;top:30px;width:200px"></span>
+      <span class="slot" data-risposta="Costi totali" style="position:absolute;left:96px;top:183px;width:190px"></span>
+      <span class="slot" data-risposta="Costi fissi" style="position:absolute;left:880px;top:278px;width:210px"></span>
+      <span class="slot" data-risposta="Punto di pareggio" style="position:absolute;left:380px;top:110px;width:250px"></span>
+      <span class="slot" data-risposta="Area di perdita" style="position:absolute;left:100px;top:298px;width:200px"></span>
+      <div style="position:absolute;left:1180px;top:40px;width:480px;font-size:26px;line-height:1.5"><p>Linea arancione: 3 € per lezione.</p><p>Linea rossa: 7 200 € + 0,55 € per lezione.</p><p>Tratteggio grigio: 7 200 € fissi.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: linea che parte da zero = Ricavi; linea rossa che parte da 7 200 = Costi totali; linea orizzontale tratteggiata = Costi fissi; il punto nero = Punto di pareggio (2 939 lezioni, 8 817 €); a sinistra del punto, tra le due linee = Area di perdita. Distrattore: Margine lordo. Chiedere dove sta l'area di utile (a destra del punto, tra ricavi e costi totali). Lo stesso grafico si costruisce in Calc nel laboratorio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>RipetiQui alza la commissione dal 15% al 20%. Il punto di pareggio…</h2></div>
+  <div class="poll" data-id="of5-commissione" data-tipo="quiz" data-risposta="C">
+    <ol><li>Resta uguale: i costi fissi non cambiano</li><li>Sale, perché le lezioni costano di più</li><li>Scende a circa 2 087 lezioni, se il numero di lezioni non cambia</li><li>Scende a zero</li></ol>
+    <p class="why">Il margine sale a 4,00 − 0,55 = 3,45 € e 7 200 ÷ 3,45 ≈ 2 087. Ma è un "se": con una commissione più alta alcuni tutor alzeranno i prezzi o andranno altrove, e le lezioni potrebbero calare. Il calcolo va sempre accompagnato da un'ipotesi sul mercato.</p>
+  </div>
+  <aside class="notes">Risposta C, con il trabocchetto del "se". Il costo variabile resta 0,55 € perché la commissione di pagamento si calcola sul prezzo della lezione (20 €), non sulla commissione di RipetiQui. Domanda per il gruppo: conviene di più alzare la commissione o abbassare i costi fissi? Con 6 000 € di costi fissi e il 15%: 6 000 / 2,45 ≈ 2 449.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 40 minuti</span></p>
+  <h2>Il pareggio in Calc, con il grafico</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Foglio <b>Pareggio</b>: in celle con nome prezzo, percentuale di ricavo, costo variabile, costi fissi annui.</li>
+      <li>Margine e punto di pareggio con le formule, arrotondato per eccesso con <code>=ARROTONDA.ECCESSO(B6;1)</code>.</li>
+      <li>Tabella da 0 a 5 000 unità ogni 500: ricavi, costi totali, risultato. Grafico a linee.</li>
+      <li>Confrontate il pareggio con il SOM dell'Officina 2: in quale anno lo raggiungete?</li>
+    </ol>
+    <div class="check small"><b>Controllo per RipetiQui:</b> pareggio 2 939 lezioni; a 1 800 lezioni il risultato è <b>−2 790 €</b>, a 5 000 lezioni <b>+5 050 €</b>.</div>
+  </div>
+  <aside class="notes">A 5 000 lezioni: 5 000 × 2,45 − 7 200 = 12 250 − 7 200 = 5 050 €. ARROTONDA.ECCESSO è CEILING; in alcune versioni di Calc serve il secondo argomento (1). Il grafico a linee con due serie (ricavi e costi totali) mostra l'incrocio. Chi è avanti aggiunge una cella "commissione" e prova il quiz con il 20%.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Le stime sono sempre ottimiste</h2></div>
+  <figure class="citazione">
+    <blockquote>Ci vuole sempre più tempo di quanto ti aspetti, anche quando tieni conto della legge di Hofstadter.</blockquote>
+    <figcaption><b>Douglas Hofstadter</b>, <i>Gödel, Escher, Bach</i>, 1979</figcaption>
+  </figure>
+  <p class="lead">Vale anche per i soldi: le stime dei progetti sono quasi sempre troppo basse. La riserva di contingenza non è pessimismo, è onestà: mette un prezzo ai rischi che conoscete già.</p>
+  <aside class="notes">Originale: "Hofstadter's Law: It always takes longer than you expect, even when you take into account Hofstadter's Law." (Gödel, Escher, Bach, 1979, capitolo sugli scacchi al computer). Traduzione nostra. Lo stesso fenomeno, studiato da Kahneman e Tversky (1979), si chiama "fallacia della pianificazione": stimiamo pensando al caso migliore del nostro progetto invece che alla media dei progetti simili.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le strategie di risposta ai rischi</h2></div>
+  <dl class="puzzle-abbina" data-id="of5-risposte">
+    <dt>Evitare</dt><dd>Niente app per iPhone nel primo anno, così niente rischio di rifiuto dallo store</dd>
+    <dt>Trasferire</dt><dd>Un'assicurazione per i danni causati dai tutor</dd>
+    <dt>Mitigare</dt><dd>Due persone del gruppo conoscono tutto il codice</dd>
+    <dt>Accettare</dt><dd>Se piove il giorno della presentazione, si fa online</dd>
+  </dl>
+  <aside class="notes">Evitare = cambiare il piano per eliminare la causa; trasferire = spostare l'impatto economico su altri (assicurazioni, contratti con penali); mitigare = ridurre probabilità o impatto; accettare = non fare nulla in anticipo, ma avere un piano o una riserva. Per i rischi positivi (opportunità) le strategie sono sfruttare, condividere, migliorare, accettare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>"Il server va giù durante il lancio": probabilità 20%, danno 2 000 €. Quanto mettete nella riserva?</h2></div>
+  <div class="poll" data-id="of5-emv" data-tipo="quiz" data-risposta="B">
+    <ol><li>2 000 €, il danno intero</li><li>400 €, il valore atteso: 20% di 2 000</li><li>Niente: è solo il 20%</li><li>20 €</li></ol>
+    <p class="why">Il valore monetario atteso (EMV) è probabilità × impatto: 0,2 × 2 000 = 400 €. Sommando l'EMV di tutti i rischi si ottiene la riserva di contingenza: in media copre i rischi che si verificano.</p>
+  </div>
+  <aside class="notes">Risposta B. RipetiQui: server giù 0,2 × 2 000 = 400; lo sviluppatore lascia 0,1 × 6 000 = 600; ritardo nella pubblicazione 0,3 × 1 000 = 300. Totale 1 300 €, la riserva del preventivo. Limite: con pochi rischi grandi la media non basta; se si verifica il rischio da 6 000 €, la riserva non copre tutto. Per questo esiste anche la riserva di gestione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 45 minuti</span></p>
+  <h2>Registro e matrice dei rischi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Foglio <b>Rischi</b>: almeno 8 rischi, di cui 1 opportunità. Per ognuno causa, evento, effetto in una frase.</li>
+      <li>Probabilità e impatto da 1 a 5, punteggio = P × I; colore con la formattazione condizionale (verde fino a 6, giallo fino a 12, rosso oltre).</li>
+      <li>Per i rischi rossi e gialli: strategia, azione, responsabile (dalla RACI), costo dell'azione.</li>
+      <li>Per i 3 rischi principali, EMV in euro: la somma è la riserva di contingenza del preventivo.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> nessun rischio scritto come "problemi tecnici"; ogni rischio rosso ha un'azione e un nome. La riserva del foglio CBS è uguale alla somma degli EMV.</div>
+  </div>
+  <aside class="notes">La forma "a causa di… può succedere che… con l'effetto di…" (metalinguaggio del rischio) obbliga a essere precisi. Formattazione condizionale in Calc: Formato, Condizionale, Condizione. Collegare al Gantt: un rischio di ritardo su un'attività critica pesa più dello stesso rischio su una non critica, perché sposta la data del lancio.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Costi nuovi: l'AI si paga a consumo</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un costo variabile in più</h3><p>Se la vostra app usa un modello di AI tramite API, ogni richiesta si paga in base ai <b>token</b>. È un costo variabile: cresce con i clienti e va nel margine di contribuzione.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Un rischio in più</h3><p>I prezzi delle API cambiano, i fornitori possono limitare il servizio. Nel registro: dipendenza da un fornitore, con una strategia (un'alternativa pronta, un tetto di spesa).</p></div>
+  </div>
+  <aside class="notes">Esempio da fare insieme: se RipetiQui aggiungesse un riassunto automatico di ogni lezione, con un costo di qualche centesimo a lezione, il margine scenderebbe da 2,45 € e il pareggio salirebbe. Usare i listini ufficiali dei fornitori, che cambiano spesso: indicare la data in cui li avete letti. Collegamento con 5G e 3E: il costo per token si studia anche in informatica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2939" data-aiuto="costi fissi diviso margine di contribuzione, arrotondato per eccesso">
+    <ul class="points">
+      <li>Il numero di lezioni all'anno che RipetiQui deve vendere per andare in pareggio</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 7 200 ÷ 2,45 = 2 938,8, quindi 2 939. Ora dite due modi per abbassarlo senza alzare i prezzi.</div>
+  </div>
+  <aside class="notes">Codice: 2939. Premio: ridurre i costi fissi (meno promozione a pagamento, servizi gratuiti per il server nel primo anno) o il costo variabile (un servizio di pagamento con commissioni più basse, pacchetti di lezioni pagati con un'unica transazione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La consegna</p><h2>Che cosa consegnate per l'Officina 5</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Su Classroom, un file per gruppo</h3><ul class="points small"><li><b>costi-gruppo.ods</b>: fogli CBS, Pareggio, Rischi</li><li><b>officina5-gruppo.pdf</b>: grafico del pareggio, matrice dei rischi, una pagina di commento</li></ul></div>
+    <div class="card fill"><h3>Come si valuta (10 punti)</h3><ul class="points small"><li>CBS completa dalla WBS, tariffe con fonte: 3</li><li>Pareggio corretto, grafico e confronto con il SOM: 3</li><li>Registro e matrice dei rischi con risposte: 3</li><li>Riserva coerente con gli EMV: 1</li></ul></div>
+  </div>
+  <aside class="notes">Griglia completa nella scheda "Officina 5". Scadenza su Novaula e Classroom, circa fine aprile. In Teoria in parallelo: il business plan, la comunicazione di progetto e la relazione tecnica, che servono per l'Officina 6.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="of5-uscita" data-extra="ricavi|WBS">
+    <p>Il preventivo per codici della WBS si chiama <span class="slot" data-risposta="CBS"></span>.</p>
+    <p>Punto di pareggio = costi fissi diviso <span class="slot" data-risposta="margine di contribuzione|margine"></span>.</p>
+    <p>Il valore atteso di un rischio è probabilità per <span class="slot" data-risposta="impatto"></span>.</p>
+    <p>Un'assicurazione è una strategia per <span class="slot" data-risposta="trasferire"></span> il rischio.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: CBS; margine di contribuzione; impatto; trasferire. Distrattori: ricavi, WBS.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Il lavoro dei soci ha un costo: ore per tariffa</li>
+      <li>CBS dalla WBS, spese generali, riserva</li>
+      <li>Margine di contribuzione e punto di pareggio</li>
+      <li>Ogni calcolo ha un'ipotesi sul mercato</li>
+    </ul>
+    <ul class="points">
+      <li>Rischi: causa, evento, effetto</li>
+      <li>P × I per la matrice, EMV per la riserva</li>
+      <li>Evitare, trasferire, mitigare, accettare</li>
+      <li>Prossima Officina: business plan e pitch</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Consegnare la scheda "Officina 5" e aprire il compito su Classroom.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
