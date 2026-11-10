@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TLS e certificati · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 4 di 8</p>
+  <h1>TLS e<br>certificati</h1>
+  <p class="lead">Che cosa succede nei primi millisecondi di ogni connessione HTTPS, chi garantisce che stai parlando con il sito giusto, e che cosa succede quando quel garante viene violato.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Handshake TLS 1.3, ECDHE, X.509, catena di fiducia, Certificate Transparency</span></p>
+  <aside class="notes">Obiettivi: descrivere l'handshake di TLS 1.3 e il ruolo di cifratura simmetrica, asimmetrica e hash; leggere un certificato X.509 e la sua catena; capire forward secrecy, Certificate Transparency e la durata dei certificati; creare un certificato autofirmato e vedere perché il browser lo rifiuta. Prerequisiti: crittografia simmetrica e asimmetrica (vista nei corsi precedenti), hash (lezione 3), HTTP (unità 2). Servono browser, JDK (keytool) e curl. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Il lucchetto nella barra dell'indirizzo ti dice che…</h2></div>
+  <div class="poll" data-id="tls-lucchetto">
+    <ol><li>Il sito è sicuro e affidabile</li><li>Nessuno può leggere ciò che invii a quel sito</li><li>Il sito è di chi dice di essere</li><li>Non l'ho mai guardato</li></ol>
+  </div>
+  <aside class="notes">Sondaggio di apertura, poi si chiarisce durante la lezione: HTTPS garantisce che la connessione è cifrata e che dall'altra parte c'è chi controlla quel nome di dominio. Non dice nulla sull'onestà del sito: anche i siti di phishing hanno HTTPS. Per questo nel 2023 Chrome ha sostituito il lucchetto con un'icona neutra di impostazioni. Né la B è del tutto vera: il sito stesso legge tutto, ovviamente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre garanzie</p><h2>Che cosa aggiunge TLS a HTTP</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Riservatezza</h3><p class="small">Chi intercetta vede byte cifrati. Cifratura <b>simmetrica</b> veloce (AES-GCM, ChaCha20).</p></div>
+    <div class="card"><h3>Integrità</h3><p class="small">Ogni pacchetto modificato viene scartato. Cifratura <b>autenticata</b>.</p></div>
+    <div class="card fill"><h3>Autenticazione</h3><p class="small">Il server dimostra di essere quel dominio con un <b>certificato</b> e la sua chiave privata.</p></div>
+  </div>
+  <div class="callout">Il problema da risolvere: due computer che non si sono mai visti devono accordarsi su una chiave segreta, <b>su una rete dove tutti ascoltano</b>.</div>
+  <aside class="notes">TLS = Transport Layer Security, erede di SSL (le versioni di SSL e TLS 1.0 e 1.1 sono deprecate; TLS 1.0 e 1.1 formalmente dall'RFC 8996 del 2021). Oggi si usano TLS 1.2 e TLS 1.3 (RFC 8446, 2018). HTTPS = HTTP dentro TLS, porta 443. Collegare alla triade CIA: TLS copre riservatezza e integrità in transito, più l'autenticazione del server. Il problema dello scambio della chiave è quello risolto da Diffie e Hellman nel 1976: prossime slide.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">TLS 1.3</p><h2>L'handshake in un solo viaggio di andata e ritorno</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>ClientHello</h3><p class="small">Versioni, algoritmi, nome del sito (SNI) e la sua metà dello scambio di chiavi.</p></div>
+    <div class="card soft"><h3>ServerHello</h3><p class="small">Sceglie gli algoritmi e manda la sua metà: ora entrambi calcolano la chiave.</p></div>
+    <div class="card fill"><h3>Certificato</h3><p class="small">Già cifrato: il certificato e la firma con la chiave privata.</p></div>
+    <div class="card soft"><h3>Finished</h3><p class="small">Si verifica che nessuno abbia toccato l'handshake. Parte HTTP.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="callout"><b>Asimmetrica</b> per accordarsi e per firmare, <b>simmetrica</b> per tutto il resto: è molto più veloce.</div>
+    <div class="callout hl">TLS 1.2 richiedeva due viaggi prima di inviare dati: TLS 1.3 ne richiede uno.</div>
+  </div>
+  <aside class="notes">Lo scambio di chiavi è ECDHE (Diffie-Hellman su curve ellittiche, con chiavi effimere, nuove per ogni connessione), di solito con la curva X25519. Il server firma l'handshake con la chiave privata del certificato (messaggio CertificateVerify): dimostra di possederla senza inviarla. Da ECDHE si derivano le chiavi simmetriche con una funzione HKDF. Lo SNI viaggia ancora in chiaro nel ClientHello: per questo esiste ECH (Encrypted Client Hello), in via di diffusione. In TLS 1.3 esiste anche lo 0-RTT per le riconnessioni, con il rischio di richieste ripetute (replay).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine: apri https://scuola.example</h2></div>
+  <ol class="puzzle-ordina" data-id="tls-ordine">
+    <li>Il DNS risolve il nome in un indirizzo IP</li>
+    <li>Si apre la connessione TCP sulla porta 443</li>
+    <li>Il browser invia il ClientHello con la sua chiave effimera</li>
+    <li>Il server risponde con ServerHello, certificato e firma</li>
+    <li>Il browser verifica la catena del certificato e il nome</li>
+    <li>Parte la richiesta GET, cifrata con la chiave simmetrica</li>
+  </ol>
+  <aside class="notes">Collegare all'ordine "scrivi un indirizzo e premi Invio" di cyberspace, che si fermava a HTTP. Con HTTP/3 il TCP è sostituito da QUIC su UDP, che integra TLS 1.3 nello stesso handshake: un buon approfondimento per chi è curioso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il 1976</p><h2>Un segreto comune, gridato in piazza</h2></div>
+  <figure class="citazione">
+    <blockquote>Oggi siamo alle soglie di una rivoluzione nella crittografia.</blockquote>
+    <figcaption><b>Whitfield Diffie e Martin Hellman</b>, prima frase di "New Directions in Cryptography", 1976</figcaption>
+  </figure>
+  <p class="lead">Avevano ragione: senza lo scambio di chiavi di Diffie-Hellman non ci sarebbero il commercio elettronico, le chat cifrate e HTTPS ovunque.</p>
+  <aside class="notes">Traduzione nostra; originale: "We stand today on the brink of a revolution in cryptography." L'articolo è uscito su IEEE Transactions on Information Theory nel novembre 1976. Diffie e Hellman hanno ricevuto il Premio Turing nel 2015. Si è saputo poi che al GCHQ britannico idee simili erano state trovate qualche anno prima (Ellis, Cocks, Williamson) ma tenute segrete. Analogia per spiegare DH: i colori. Ognuno mescola un colore segreto con un colore pubblico comune, si scambiano le miscele, e ognuno aggiunge di nuovo il proprio segreto: entrambi ottengono lo stesso colore finale, che chi guarda non riesce a separare.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Nel 2030 viene rubata la chiave privata del certificato di un sito. Chi aveva registrato nel 2026 il traffico TLS 1.3 verso quel sito…</h2></div>
+  <div class="poll" data-id="tls-fs" data-tipo="quiz" data-risposta="C">
+    <ol><li>ora può decifrarlo tutto</li><li>può decifrare solo le password</li><li>non può decifrarlo: le chiavi di sessione erano effimere</li><li>può decifrarlo, se il certificato non era scaduto</li></ol>
+    <p class="why">In TLS 1.3 la chiave del certificato serve solo a firmare. Le chiavi di sessione nascono da uno scambio ECDHE con valori effimeri, cancellati a fine connessione. È la <b>forward secrecy</b>: rubare la chiave domani non apre il traffico di ieri.</p>
+  </div>
+  <aside class="notes">Con il vecchio scambio di chiavi RSA di TLS 1.2 e precedenti (il client cifrava il segreto con la chiave pubblica del server) la risposta sarebbe stata A: chi registrava il traffico poteva decifrarlo tutto il giorno in cui otteneva la chiave privata. TLS 1.3 ha eliminato quello scambio. Rubare la chiave privata permette però di impersonare il sito in futuro, finché il certificato non viene revocato o scade.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Leggi un certificato vero</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri un sito che usi (per esempio wikipedia.org). Clic sull'icona a sinistra dell'indirizzo, poi <b>La connessione è sicura</b>, poi <b>Il certificato è valido</b>.</li>
+      <li>Annota in <b>tls-cognome.md</b>: a chi è rilasciato, da chi, la validità e i nomi nel campo <b>Subject Alternative Name</b>.</li>
+      <li>Nella scheda dei dettagli guarda la <b>gerarchia</b>: quanti certificati ci sono dalla radice al sito?</li>
+      <li>DevTools, scheda <b>Security</b>: annota versione di TLS e algoritmo di scambio delle chiavi.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> la catena ha di solito 3 livelli (radice, intermedio, sito); la connessione usa <b>TLS 1.3</b>; la validità è di pochi mesi, non di anni.</div>
+  </div>
+  <aside class="notes">I nomi esatti dei menu cambiano tra le versioni di Chrome ed Edge; in Firefox si trova "Mostra certificato". Il SAN (Subject Alternative Name) è il campo che il browser controlla davvero: il vecchio Common Name non basta più. Nella scheda Security di Chrome compare per esempio "TLS 1.3, X25519MLKEM768, AES_128_GCM": lo scambio di chiavi ibrido post-quantistico, vedi l'ultima slide Oggi. Se la catena mostra solo 2 livelli, il certificato è firmato direttamente da una CA intermedia con radice nello store: va bene comunque.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La catena di fiducia</p><h2>Chi garantisce il garante?</h2></div>
+  <div class="cols-2 wide-left">
+    <table class="data compact">
+      <tr><th>Livello</th><th>Che cos'è</th></tr>
+      <tr><td><b>CA radice</b></td><td>Preinstallata nel sistema e nel browser, chiave tenuta offline</td></tr>
+      <tr><td><b>CA intermedia</b></td><td>Firmata dalla radice, firma ogni giorno i certificati dei siti</td></tr>
+      <tr><td><b>Sito</b></td><td>Dominio, chiave pubblica, scadenza, firma dell'intermedia</td></tr>
+    </table>
+    <ul class="points small">
+      <li>Il browser risale le firme fino a una radice che conosce</li>
+      <li>Poi controlla nome, date ed eventuale revoca</li>
+      <li>Basta una sola CA compromessa per falsificare il certificato di <b>qualsiasi</b> sito</li>
+      <li>Per questo le CA sono controllate da audit e da regole comuni (CA/Browser Forum)</li>
+    </ul>
+  </div>
+  <aside class="notes">Lo store delle radici: Windows, macOS, Android e Mozilla (usato anche da molte distribuzioni Linux) ne mantengono ciascuno uno, con processi di ammissione e revoca. Java ha il suo (il file cacerts nel JDK). Una CA ottiene un certificato solo dopo aver verificato che il richiedente controlla il dominio (validazione DV, per esempio con un file sul sito o un record DNS). Revoca: liste CRL o risposte OCSP; oggi i browser usano soprattutto liste aggregate distribuite da loro stessi. Il caso DigiNotar, nella prossima slide, mostra che cosa succede quando una CA cade.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia del 2011</p><h2>DigiNotar: la CA che ha firmato un falso Google</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Estate 2011. Un attaccante entra nei sistemi di DigiNotar, CA olandese, e si fa rilasciare centinaia di certificati falsi, tra cui uno per <b>*.google.com</b>.</p>
+      <p class="small muted">Il certificato è usato per intercettare le connessioni Gmail di centinaia di migliaia di utenti, soprattutto in Iran.</p>
+    </div>
+    <div class="card bad"><h3>Com'è finita</h3><p class="small">Chrome se ne accorge perché conosceva in anticipo i certificati attesi per Google. I browser rimuovono DigiNotar dalle radici fidate. A settembre 2011 DigiNotar fallisce.</p></div>
+  </div>
+  <aside class="notes">Fonti: il rapporto indipendente di Fox-IT per il governo olandese ("Operation Black Tulip", 2011). Chrome aveva il "pinning" delle chiavi per i domini Google: un certificato valido ma con una chiave inattesa ha fatto scattare l'allarme, segnalato da un utente iraniano. Lezione: la fiducia nelle CA è un punto unico di rottura. Risposta dell'industria: Certificate Transparency (prossima slide), che rende pubblico ogni certificato emesso, così un falso si vede.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Certificate Transparency: tutti i certificati sono pubblici</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>crt.sh</b> e cerca il dominio della scuola o di un sito a scelta.</li>
+      <li>Guarda le colonne: data, nome comune, emittente. Quante CA diverse hanno rilasciato certificati per quel dominio nell'ultimo anno?</li>
+      <li>Cerca i <b>sottodomini</b> che compaiono: ne trovi qualcuno che non conoscevi?</li>
+      <li>Annota in <b>tls-cognome.md</b> perché un'azienda dovrebbe sorvegliare questi log.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> per un sito attivo trovi decine di certificati, rinnovati ogni pochi mesi. Ogni certificato pubblico emesso oggi è in questi log.</div>
+  </div>
+  <aside class="notes">crt.sh è un motore di ricerca sui log di Certificate Transparency (RFC 6962), gestito da Sectigo. Leggerlo è lecito: è un registro pubblico creato apposta. Dal 2018 Chrome accetta solo certificati pubblici registrati nei log CT. Un'azienda li sorveglia per scoprire certificati emessi per i suoi domini senza saperlo. Attenzione: CT rivela anche i nomi dei sottodomini interni (per esempio vpn.azienda.it), un'informazione utile anche agli attaccanti nella fase di ricognizione della kill chain. Non visitare i sottodomini trovati: guardare il registro basta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Perché i certificati dei siti durano sempre meno (da anni a pochi mesi)?</h2></div>
+  <div class="poll" data-id="tls-durata" data-tipo="quiz" data-risposta="B">
+    <ol><li>Perché le CA guadagnano di più con i rinnovi</li><li>Perché un certificato rubato o sbagliato resta utilizzabile per meno tempo e il rinnovo diventa automatico</li><li>Perché la crittografia si consuma con l'uso</li><li>Perché lo impone il GDPR</li></ol>
+    <p class="why">La revoca funziona male nella pratica: una durata breve limita i danni di una chiave rubata o di un errore di emissione. E se il rinnovo è frequente, nessuno lo fa più a mano: lo fa un programma, con il protocollo ACME.</p>
+  </div>
+  <aside class="notes">Let's Encrypt (pubblico dal dicembre 2015) rilascia gratis certificati da 90 giorni con il protocollo ACME (RFC 8555) e ha reso normale il rinnovo automatico. Nel 2025 il CA/Browser Forum ha approvato una riduzione graduale della durata massima dei certificati pubblici fino a 47 giorni entro il 2029. La A è cinica ma falsa: Let's Encrypt è gratuita. La C è un mito: le chiavi non si consumano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>La catena in Java</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px">var c = (HttpsURLConnection) URI
+    .create(<span class="s">"https://www.wikipedia.org"</span>).toURL()
+    .openConnection();
+c.connect();
+<span class="k">for</span> (Certificate cert : c.getServerCertificates()) {
+  X509Certificate x = (X509Certificate) cert;
+  System.out.println(x.getSubjectX500Principal());
+  System.out.println(<span class="s">"  firmato da "</span> + x.getIssuerX500Principal());
+  System.out.println(<span class="s">"  scade il "</span> + x.getNotAfter());
+}</pre>
+      <p class="small">Scrivi <b>Catena.java</b>, provalo su tre siti, poi stampa anche <code>c.getCipherSuite()</code>.</p>
+    </div>
+    <div class="check small"><b>Controllo:</b> il primo certificato stampato è quello del sito (CN con il dominio), i successivi sono gli intermedi; ognuno è "firmato da" il successivo. La cipher suite è del tipo <b>TLS_AES_128_GCM_SHA256</b>.</div>
+  </div>
+  <aside class="notes">Import: javax.net.ssl.HttpsURLConnection, java.net.URI, java.security.cert.Certificate, java.security.cert.X509Certificate. URI.create(...).toURL() sostituisce il costruttore new URL(...), deprecato dal JDK 20. Il server di solito non invia la radice (il client ce l'ha già), quindi l'ultimo "firmato da" è una radice che non compare come certificato a sé. Estensione: c.getServerCertificates()[0].getSubjectAlternativeNames(). Se la rete del laboratorio usa un proxy che ispeziona TLS, l'emittente sarà la CA del proxy: è un'ottima occasione per spiegare l'ispezione TLS degli NGFW vista in network-web-security.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni campo del certificato al suo scopo</h2></div>
+  <dl class="puzzle-abbina" data-id="tls-campi">
+    <dt>Subject Alternative Name</dt><dd>I nomi di dominio per cui il certificato vale</dd>
+    <dt>Issuer</dt><dd>La CA che ha firmato il certificato</dd>
+    <dt>Not After</dt><dd>La data di scadenza</dd>
+    <dt>Public Key</dt><dd>La chiave che verifica le firme del server</dd>
+    <dt>Signature</dt><dd>La firma della CA su tutti gli altri campi</dd>
+  </dl>
+  <aside class="notes">La chiave privata non è mai nel certificato: resta sul server. Domanda: che cosa succede se cambio una lettera nel SAN? La firma della CA non torna più (lo stesso effetto valanga dell'hash della lezione 3), e il browser rifiuta il certificato.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Un certificato fatto in casa</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:19px">keytool -genkeypair -alias lab -keyalg EC -validity 30
+  -dname "CN=localhost" -ext SAN=dns:localhost
+  -keystore lab.p12 -storetype PKCS12 -storepass laboratorio</pre>
+      <ol class="steps small">
+        <li>Crea il certificato con il comando (tutto su una riga).</li>
+        <li>Avvia un <code>HttpsServer</code> sulla porta 8443 con quel keystore: risponde "ciao TLS".</li>
+        <li>Apri <b>https://localhost:8443</b> nel browser e poi con <code>curl -k</code>.</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> il browser avvisa che <b>la connessione non è privata</b> (autorità non riconosciuta). curl senza <code>-k</code> rifiuta, con <code>-k</code> stampa "ciao TLS". La cifratura c'è: manca la <b>fiducia</b>.</div>
+  </div>
+  <aside class="notes">Server: KeyStore ks = KeyStore.getInstance("PKCS12"); ks.load(new FileInputStream("lab.p12"), pass); KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509"); kmf.init(ks, pass); SSLContext ctx = SSLContext.getInstance("TLS"); ctx.init(kmf.getKeyManagers(), null, null); HttpsServer s = HttpsServer.create(new InetSocketAddress(8443), 0); s.setHttpsConfigurator(new HttpsConfigurator(ctx)); poi createContext come nei laboratori REST. pass = "laboratorio".toCharArray(). Messaggio chiave: un certificato autofirmato cifra benissimo, ma chiunque può crearne uno per qualsiasi nome. Senza una CA che garantisce, un attaccante in mezzo farebbe lo stesso: per questo -k va usato solo in laboratorio. In produzione si usa Let's Encrypt o la CA aziendale.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>TLS si prepara ai computer quantistici</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>Un computer quantistico abbastanza grande romperebbe RSA e le curve ellittiche. Chi registra oggi il traffico cifrato potrebbe decifrarlo domani: <b>"raccogli ora, decifra dopo"</b>.</p>
+      <p class="small muted">La cifratura simmetrica (AES) e gli hash reggono con chiavi lunghe.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel 2024 il NIST ha pubblicato lo standard <b>ML-KEM</b> (FIPS 203). Chrome, Firefox e grandi servizi come Cloudflare usano già uno scambio di chiavi <b>ibrido</b>, X25519 più ML-KEM: se uno dei due cade, l'altro protegge ancora. Probabilmente l'hai già usato senza saperlo.</p></div>
+  </div>
+  <aside class="notes">ML-KEM (Module-Lattice-based Key Encapsulation Mechanism), derivato da CRYSTALS-Kyber, standardizzato in FIPS 203 nell'agosto 2024 insieme alle firme ML-DSA (FIPS 204) e SLH-DSA (FIPS 205). L'algoritmo di Shor rompe RSA e le curve ellittiche; l'algoritmo di Grover dimezza in pratica la sicurezza delle chiavi simmetriche, per questo AES-256 resta sicuro. Nessuno oggi ha un computer quantistico in grado di farlo: il passaggio si fa prima per il traffico che deve restare segreto per molti anni. Collegare al laboratorio sul certificato: nella scheda Security compariva X25519MLKEM768.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Certificati a vita breve, rinnovati dalle macchine</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Durata massima dei certificati pubblici in calo graduale fino a <b>47 giorni</b> entro il 2029</li>
+      <li>Rinnovo automatico con <b>ACME</b>: il server chiede, dimostra di controllare il dominio, installa</li>
+      <li>Un certificato scaduto è tra le cause più comuni di disservizi</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Un servizio scritto bene oggi non ha nessun promemoria "rinnova il certificato" nel calendario di una persona: se ce l'ha, prima o poi va offline. È lo stesso principio di Novaula: niente lavori manuali che si possono dimenticare.</p></div>
+  </div>
+  <aside class="notes">Decisione del CA/Browser Forum del 2025 (ballot SC-081): massimo 200 giorni dal marzo 2026, 100 giorni dal marzo 2027, 47 giorni dal marzo 2029. Casi famosi di certificati scaduti: nel 2020 un certificato radice scaduto (AddTrust) ha bloccato molti client vecchi; nel 2021 è scaduta una radice di Let's Encrypt (DST Root CA X3) con problemi sui dispositivi non aggiornati. All'esame: in un progetto di rete o di sito, citare HTTPS con certificato automatico è un dettaglio da professionista.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="1347" data-aiuto="TLS 1.3: le prime due cifre sono 1 e 3">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la versione di TLS che ha eliminato lo scambio di chiavi RSA, senza punto</li>
+      <li>3ª e 4ª cifra: la durata massima in giorni prevista per i certificati entro il 2029</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 1.3 e 47 giorni. Ora spiegate perché una durata breve rende meno grave il furto di una chiave privata.</div>
+  </div>
+  <aside class="notes">Codice: 1347. Premio: perché il certificato con quella chiave smette presto di essere accettato, anche se la revoca non arriva a tutti i client.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Lo scambio di chiavi effimero di TLS 1.3 si chiama <span class="blank" data-risposta="ECDHE|Diffie-Hellman|DH" style="--w:7ch"></span>.</p>
+    <p>Rubare la chiave domani non apre il traffico di ieri: è la forward <span class="blank" data-risposta="secrecy" style="--w:8ch"></span>.</p>
+    <p>Il campo con i nomi di dominio di un certificato è il Subject Alternative <span class="blank" data-risposta="Name|Names" style="--w:6ch"></span>.</p>
+    <p>Il registro pubblico di tutti i certificati emessi è la Certificate <span class="blank" data-risposta="Transparency" style="--w:12ch"></span>.</p>
+    <p>La CA olandese fallita nel 2011 si chiamava <span class="blank" data-risposta="DigiNotar" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: ECDHE (accettati Diffie-Hellman e DH); secrecy; Name; Transparency; DigiNotar.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>TLS: riservatezza, integrità, autenticazione del server</li>
+      <li>TLS 1.3: un viaggio, ECDHE, forward secrecy</li>
+      <li>Catena: radice, intermedia, sito</li>
+      <li>Autofirmato: cifra, ma non dà fiducia</li>
+    </ul>
+    <ul class="points">
+      <li>DigiNotar: una CA caduta, la fiducia di tutti in pericolo</li>
+      <li>Certificate Transparency: ogni certificato è pubblico</li>
+      <li>Certificati brevi e ACME; scambio ibrido post-quantistico</li>
+      <li>Prossima lezione: OAuth, JWT e passkey</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Il controllore dei certificati").</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

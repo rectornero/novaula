@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OAuth, JWT e passkey · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 5 di 8</p>
+  <h1>OAuth, JWT<br>e passkey</h1>
+  <p class="lead">"Accedi con Google", i token che viaggiano nelle API REST e le chiavi che hanno preso il posto delle password: l'autenticazione come la costruiscono oggi le applicazioni vere.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>MFA, OAuth 2.0 e PKCE, OpenID Connect, JWT, WebAuthn e passkey</span></p>
+  <aside class="notes">Obiettivi: confrontare i fattori di autenticazione e i loro limiti (SIM swap, MFA fatigue); spiegare la differenza tra autenticazione e autorizzazione delegata (OAuth) e il flusso Authorization Code con PKCE; leggere e verificare un JWT in Java; capire perché le passkey resistono al phishing. Collegamenti: lezione 3 (password), lezione 4 (firme e chiavi pubbliche), unità 2 (web service REST). Servono JDK e browser. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Come accedi di solito a un'app nuova?</h2></div>
+  <div class="poll" data-id="auth-accesso">
+    <ol><li>Creo un account con e-mail e password</li><li>Accedi con Google, Apple o Microsoft</li><li>Con il numero di telefono e un codice SMS</li><li>Con una passkey (impronta o volto)</li><li>Non mi ricordo: faccio sempre "password dimenticata"</li></ol>
+  </div>
+  <aside class="notes">Il sondaggio mappa le quattro famiglie della lezione. La E è più comune di quanto si pensi, ed è un punto debole: il recupero dell'account via e-mail o SMS è spesso la porta più facile per un attaccante. Chiedere a chi ha risposto B: secondo te l'app conosce la tua password Google? (No: è il punto di OAuth e OpenID Connect.)</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Più fattori</p><h2>Non tutta la MFA vale uguale</h2></div>
+  <table class="data compact">
+    <tr><th>Secondo fattore</th><th>Come funziona</th><th>Punto debole</th></tr>
+    <tr><td><b>SMS</b></td><td>Codice inviato al numero di telefono</td><td>SIM swap: l'attaccante si fa intestare il tuo numero</td></tr>
+    <tr><td><b>App con codice (TOTP)</b></td><td>Codice da 6 cifre che cambia ogni 30 secondi</td><td>Un sito falso può chiederlo e usarlo subito</td></tr>
+    <tr><td><b>Notifica push</b></td><td>"Sei tu?" sul telefono, tocchi Sì</td><td>MFA fatigue: notifiche a raffica finché tocchi Sì</td></tr>
+    <tr><td><b>Chiave FIDO / passkey</b></td><td>Firma legata al dominio del sito</td><td>Resiste al phishing: sul sito falso non funziona</td></tr>
+  </table>
+  <aside class="notes">TOTP = Time-based One-Time Password, RFC 6238: codice = HMAC di un segreto condiviso e dell'ora corrente, troncato a 6 cifre (l'hai visto in prima con "due computer, lo stesso codice"). Il phishing in tempo reale (kit come quelli "adversary in the middle") inoltra password e codice al sito vero mentre la vittima li digita. MFA fatigue: nell'attacco a Uber del settembre 2022 l'attaccante ha inviato molte richieste push a un dipendente e poi lo ha contattato fingendosi del supporto IT, finché il dipendente ha accettato. Rimedio per il push: number matching (digiti sul telefono il numero mostrato sullo schermo).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Hai attivato i codici della app di autenticazione. Un sito clone della tua banca ti chiede password e codice, e tu li inserisci. Che cosa succede?</h2></div>
+  <div class="poll" data-id="auth-totp" data-tipo="quiz" data-risposta="B">
+    <ol><li>Niente: il codice è valido solo sul sito vero</li><li>L'attaccante li inoltra subito alla banca vera ed entra</li><li>La banca blocca l'accesso perché il codice arriva da un altro IP</li><li>Il codice scade prima che l'attaccante lo possa usare</li></ol>
+    <p class="why">Il codice TOTP non sa su quale sito lo stai digitando: vale per 30 secondi ovunque. Un kit di phishing in tempo reale lo inoltra alla banca in un attimo. Solo un fattore legato al dominio, come una passkey, rende inutile il sito clone.</p>
+  </div>
+  <aside class="notes">La A è la convinzione più diffusa. La C capita solo con sistemi antifrode sofisticati, non è garantita. La D è falsa: 30 secondi (e di solito il server accetta anche il codice precedente) bastano a un programma. La MFA con codici resta molto meglio della sola password: blocca il credential stuffing della lezione 3. Ma contro il phishing mirato non basta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Delegare senza dare la password</p><h2>OAuth 2.0: le chiavi della macchina, non le chiavi di casa</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Un'app di fotoritocco vuole leggere le tue foto su Drive. Con OAuth non le dai la password di Google: Google le dà un <b>token</b> limitato.</p>
+      <ul class="points small">
+        <li>Solo i permessi chiesti (<b>scope</b>): "leggi le foto", non "cancella la posta"</li>
+        <li>Per un tempo limitato, e revocabile quando vuoi</li>
+        <li>OAuth autorizza. <b>OpenID Connect</b>, sopra OAuth, aggiunge chi sei: è "Accedi con Google"</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>I quattro attori</h3><ul class="points small"><li><b>Utente</b>: tu, proprietario dei dati</li><li><b>Client</b>: l'app di fotoritocco</li><li><b>Authorization server</b>: la pagina di login di Google</li><li><b>Resource server</b>: l'API di Drive</li></ul></div>
+  </div>
+  <aside class="notes">OAuth 2.0: RFC 6749 (2012). OpenID Connect 1.0: OpenID Foundation, 2014; aggiunge l'ID token, un JWT con l'identità dell'utente. Errore concettuale classico: usare OAuth "puro" per il login, accettando un access token come prova d'identità. L'analogia della "chiave del parcheggiatore" (valet key) è quella usata spesso per spiegare OAuth: apre e avvia l'auto, ma non il bagagliaio. Collegare all'unità 2: il resource server è un web service REST che riceve il token nell'header Authorization: Bearer.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine il flusso Authorization Code con PKCE</h2></div>
+  <ol class="puzzle-ordina" data-id="auth-flusso">
+    <li>L'app genera un segreto casuale e ne manda l'hash con la richiesta</li>
+    <li>Il browser va alla pagina di login dell'authorization server</li>
+    <li>L'utente fa login e approva gli scope richiesti</li>
+    <li>Il browser torna all'app con un codice monouso</li>
+    <li>L'app scambia codice e segreto originale con un access token</li>
+    <li>L'app chiama l'API con Authorization: Bearer e il token</li>
+  </ol>
+  <aside class="notes">PKCE (Proof Key for Code Exchange, RFC 7636, si pronuncia "pixie"): il segreto si chiama code_verifier e il suo hash SHA-256 code_challenge. Se qualcuno intercetta il codice monouso al ritorno (per esempio un'altra app sul telefono che registra lo stesso indirizzo di ritorno), non può usarlo senza il code_verifier. Le buone pratiche attuali (RFC 9700, OAuth 2.0 Security Best Current Practice, 2025) chiedono PKCE per tutti i client e sconsigliano il vecchio flusso "implicit", che metteva il token direttamente nell'URL.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il formato dei token</p><h2>JWT: tre parti separate da un punto</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Header</h3><p class="small mono">{"alg":"HS256","typ":"JWT"}</p><p class="tiny muted">Algoritmo della firma</p></div>
+    <div class="card"><h3>Payload</h3><p class="small mono">{"sub":"studente42", "ruolo":"studente", "exp":1893456000}</p><p class="tiny muted">I dati (claim)</p></div>
+    <div class="card fill"><h3>Firma</h3><p class="small mono">HMAC-SHA256(header.payload, segreto)</p><p class="tiny muted">Chi non ha il segreto non può rifarla</p></div>
+  </div>
+  <div class="callout hl">Header e payload sono solo codificati in <b>Base64url</b>, non cifrati: <b>chiunque li legge</b>. La firma garantisce che non sono stati modificati, non che sono segreti.</div>
+  <aside class="notes">JWT = JSON Web Token, RFC 7519 (2015). Claim registrati: sub (soggetto), exp (scadenza, in secondi dall'1/1/1970 UTC; 1893456000 è l'1 gennaio 2030), iat, iss (emittente), aud (destinatario). HS256 = HMAC con SHA-256 e segreto condiviso; RS256 ed ES256 = firma con chiave privata, verifica con chiave pubblica (utile quando molti servizi devono verificare ma uno solo deve emettere). Mai mettere nel payload dati riservati. Vulnerabilità storiche delle librerie: accettare "alg":"none" (token senza firma) o confondere RS256 e HS256. Regola: il server decide l'algoritmo, non il token.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Leggi un JWT senza conoscere il segreto</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="tiny mono" style="word-break:break-all">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHVkZW50ZTQyIiwibm9tZSI6IlN0dWRlbnRlIGRpIHByb3ZhIiwicnVvbG8iOiJzdHVkZW50ZSIsImV4cCI6MTg5MzQ1NjAwMH0.ssNrSrqhoOiimbtQ0muTviGAP_K_cOHWiytyL1wRhT0</p>
+      <ol class="steps small">
+        <li>Copia il token in <b>Jwt.java</b> (il docente lo pubblica anche su Classroom, per non ricopiarlo a mano).</li>
+        <li>Dividilo con <code>split("\\.")</code> e decodifica le prime due parti con <code>Base64.getUrlDecoder()</code>.</li>
+        <li>Stampa header e payload e converti <code>exp</code> in data con <code>Instant.ofEpochSecond</code>.</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> il payload contiene <code>"ruolo":"studente"</code> e <code>exp</code> corrisponde al <b>1° gennaio 2030</b>, 00:00 UTC.</div>
+  </div>
+  <aside class="notes">Token di prova firmato con HS256 e segreto "segreto-di-prova" (non dirlo prima del laboratorio successivo). Codice: String[] p = token.split("\\."); String payload = new String(Base64.getUrlDecoder().decode(p[1]), StandardCharsets.UTF_8); Il decoder URL accetta l'assenza dei caratteri = di padding. Per leggere exp basta cercare il numero nella stringa (o usare una libreria JSON). Morale: chi intercetta un JWT legge tutto quello che c'è dentro. Siti come jwt.io fanno la stessa decodifica: mai incollarci token di produzione, perché un token valido è una chiave d'accesso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Promuoviti a docente (e fallisci)</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px">Mac mac = Mac.getInstance(<span class="s">"HmacSHA256"</span>);
+mac.init(<span class="k">new</span> SecretKeySpec(segreto, <span class="s">"HmacSHA256"</span>));
+<span class="k">byte</span>[] firma = mac.doFinal((p[0] + <span class="s">"."</span> + p[1]).getBytes(UTF_8));
+String attesa = Base64.getUrlEncoder().withoutPadding()
+    .encodeToString(firma);</pre>
+      <ol class="steps small">
+        <li>Il docente ti dà il segreto. Scrivi <code>verifica(token)</code>: la firma ricalcolata deve essere uguale alla terza parte.</li>
+        <li>Ora cambia <code>"studente"</code> in <code>"docente"</code> nel payload, ricodificalo e rimonta il token con la <b>vecchia</b> firma.</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> il token originale passa (la firma inizia con <b>ssNrSrqh</b>), quello modificato <b>no</b>. Per falsificarlo servirebbe il segreto.</div>
+  </div>
+  <aside class="notes">Segreto: "segreto-di-prova".getBytes(UTF_8). Il confronto delle firme va fatto con MessageDigest.isEqual sui byte (lezione 3), non con equals sulle stringhe. Il payload modificato ricodificato è eyJzdWIiOiJzdHVkZW50ZTQyIiwibm9tZSI6IlN0dWRlbnRlIGRpIHByb3ZhIiwicnVvbG8iOiJkb2NlbnRlIiwiZXhwIjoxODkzNDU2MDAwfQ (serializzazione JSON senza spazi). Discussione: con HS256 il segreto deve essere lungo e casuale: "segreto-di-prova" è debole e si troverebbe con un attacco a dizionario offline, perché chi ha un token può provare segreti all'infinito senza contattare il server. Un segreto vero: almeno 32 byte da SecureRandom. Controlli da fare oltre alla firma: exp, iss, aud, e l'algoritmo fissato dal server.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parola al suo ruolo</h2></div>
+  <dl class="puzzle-abbina" data-id="auth-termini">
+    <dt>Scope</dt><dd>I permessi che il client chiede</dd>
+    <dt>Access token</dt><dd>La chiave che il client presenta all'API</dd>
+    <dt>ID token</dt><dd>Il JWT di OpenID Connect con l'identità dell'utente</dd>
+    <dt>PKCE</dt><dd>Protegge il codice monouso da chi lo intercetta</dd>
+    <dt>exp</dt><dd>Il claim con la scadenza del token</dd>
+  </dl>
+  <aside class="notes">Domanda in più: perché gli access token durano poco (minuti) e esiste anche un refresh token che dura di più? Perché un access token rubato funziona solo per poco, mentre il refresh token viene usato solo verso l'authorization server, che può revocarlo e controllare chi lo usa.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il 1993</p><h2>Il problema non è nuovo</h2></div>
+  <figure class="citazione">
+    <blockquote>Su Internet nessuno sa che sei un cane.</blockquote>
+    <figcaption><b>Peter Steiner</b>, didascalia di una vignetta, <i>The New Yorker</i>, 5 luglio 1993</figcaption>
+  </figure>
+  <p class="lead">Trent'anni dopo cerchiamo ancora il modo migliore per dimostrare chi siamo a un server lontano, senza consegnargli un segreto che si può rubare.</p>
+  <aside class="notes">Traduzione nostra; originale: "On the Internet, nobody knows you're a dog." Nella vignetta un cane seduto al computer lo dice a un altro cane. È una delle vignette più riprodotte della storia del New Yorker. Spunto: l'anonimato è anche un valore (privacy, libertà di espressione); l'autenticazione forte serve dove c'è qualcosa da proteggere, non ovunque. Collegare a SPID e CIE visti in educazione civica.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Senza password</p><h2>Passkey: una coppia di chiavi per ogni sito</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <ul class="points small">
+        <li>Alla registrazione il dispositivo crea una <b>coppia di chiavi</b> per quel sito: la pubblica va al server, la privata resta sul dispositivo</li>
+        <li>Al login il server manda una sfida casuale, il dispositivo la <b>firma</b> dopo l'impronta, il volto o il PIN</li>
+        <li>La firma vale solo per il <b>dominio</b> registrato: su un sito clone non parte</li>
+        <li>Il server conserva solo chiavi pubbliche: un furto del database non rivela segreti</li>
+      </ul>
+    </div>
+    <div class="card fill"><h3>Che cosa sono</h3><p class="small">Credenziali <b>FIDO2 / WebAuthn</b> (standard W3C e FIDO Alliance), sincronizzabili tra i dispositivi tramite il gestore delle password di Google, Apple, Microsoft o di terzi.</p></div>
+  </div>
+  <aside class="notes">WebAuthn è uno standard W3C (prima versione 2019); con il protocollo CTAP della FIDO Alliance forma FIDO2. Il nome "passkey" è stato adottato nel 2022 da Apple, Google e Microsoft insieme alla FIDO Alliance per le credenziali FIDO sincronizzabili. L'impronta o il volto non lasciano mai il dispositivo: servono solo a sbloccare la chiave privata localmente. Lo stesso schema "sfida firmata con la chiave privata" è quello del CertificateVerify di TLS (lezione 4) e della firma digitale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Crea una passkey di prova e guarda che cosa riceve il server</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>webauthn.io</b>, il sito dimostrativo di WebAuthn. Inventa un nome utente di prova (non il tuo nome).</li>
+      <li>Premi <b>Register</b> e segui il browser (PIN di Windows Hello, telefono o chiave USB).</li>
+      <li>Premi <b>Authenticate</b>: ti serve una password? Apri il pannello dei dettagli e annota in <b>auth-cognome.md</b> che cosa riceve il server.</li>
+      <li>Alla fine elimina la passkey di prova dal gestore delle password del dispositivo.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> il login avviene senza password. Tra i dati inviati c'è una <b>chiave pubblica</b> alla registrazione e una <b>firma</b> all'accesso, mai l'impronta o il PIN.</div>
+  </div>
+  <aside class="notes">webauthn.io è un sito dimostrativo pubblico mantenuto da Duo Security (Cisco): non chiede e-mail né dati personali. Sui PC del laboratorio senza Windows Hello si può usare un telefono con il codice QR (serve il Bluetooth) oppure fare la dimostrazione dal PC del docente sulla LIM. Se il browser propone di salvare la passkey in un account personale, scegliere il dispositivo locale o un account di prova. Nei dettagli tecnici si vedono attestation, clientDataJSON (contiene l'origine e la sfida) e authenticatorData.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Un attaccante ruba il database di un sito che usa solo passkey. Che cosa ottiene?</h2></div>
+  <div class="poll" data-id="auth-passkey" data-tipo="quiz" data-risposta="A">
+    <ol><li>Chiavi pubbliche, inutili per entrare</li><li>Le impronte digitali degli utenti</li><li>Gli hash delle chiavi private, da attaccare offline</li><li>I PIN dei telefoni degli utenti</li></ol>
+    <p class="why">Il server conserva solo le chiavi pubbliche: servono a verificare le firme, non a crearle. Le chiavi private, le impronte e i PIN non lasciano mai il dispositivo. Non c'è niente da "crackare" come con gli hash delle password.</p>
+  </div>
+  <aside class="notes">Confronto con la lezione 3: con le password, anche ben conservate, una fuga di dati avvia un attacco offline agli hash. Con le passkey no. Restano due rischi: il recupero dell'account (se si può entrare con un codice via e-mail, quello diventa il punto debole) e il dispositivo o l'account di sincronizzazione compromesso.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Token anche per gli agenti AI</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Agenti con permessi</h3><p>Quando un assistente AI legge il tuo calendario o la tua posta, lo fa con un token OAuth con scope limitati. Anche il <b>Model Context Protocol</b> basa l'autorizzazione dei server remoti su OAuth: lo stesso flusso con PKCE che hai messo in ordine oggi.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Passkey ovunque</h3><p>Google, Apple, Microsoft, molti negozi online e alcune banche offrono già l'accesso con passkey. L'obiettivo dichiarato della FIDO Alliance è che le password diventino l'eccezione.</p></div>
+  </div>
+  <aside class="notes">La specifica di autorizzazione del Model Context Protocol (dalla revisione di marzo 2025) usa OAuth 2.1 con PKCE per i server MCP remoti. Il principio è il minimo privilegio della lezione su network-web-security: a un agente si danno solo gli scope che servono, per un tempo limitato, revocabili. Collegare alla prompt injection: un agente con un token troppo ampio che legge un testo malevolo può fare danni con i tuoi permessi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2030" data-aiuto="decodifica exp del token del laboratorio: è il primo giorno di un anno">
+    <ul class="points">
+      <li>Il codice è l'anno in cui scade il token del laboratorio.</li>
+      <li>Per trovarlo non serve il segreto: basta leggerlo.</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 2030. Ora dite perché un token che scade tra anni è una cattiva idea, e quanto dovrebbe durare un access token.</div>
+  </div>
+  <aside class="notes">Codice: 2030 (exp = 1893456000 = 1/1/2030 00:00 UTC). Premio: se viene rubato resta valido a lungo e i JWT non si revocano facilmente (il server non li tiene in memoria); un access token dura di solito da qualche minuto a un'ora, e si rinnova con un refresh token.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Le notifiche push a raffica finché tocchi Sì si chiamano MFA <span class="blank" data-risposta="fatigue" style="--w:8ch"></span>.</p>
+    <p>OAuth autorizza; per sapere chi è l'utente serve OpenID <span class="blank" data-risposta="Connect" style="--w:8ch"></span>.</p>
+    <p>Le parti di un JWT sono codificate in <span class="blank" data-risposta="Base64url|Base64" style="--w:9ch"></span>, non cifrate.</p>
+    <p>Il claim con la scadenza di un JWT si chiama <span class="blank" data-risposta="exp" style="--w:4ch"></span>.</p>
+    <p>Una passkey resiste al phishing perché la firma è legata al <span class="blank" data-risposta="dominio|sito|origine" style="--w:8ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: fatigue; Connect; Base64url (accettato Base64); exp; dominio (accettati sito e origine).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>MFA: meglio di niente, ma SMS e codici si rubano</li>
+      <li>OAuth: token limitati invece della password</li>
+      <li>OpenID Connect: l'identità, con l'ID token</li>
+      <li>Authorization Code con PKCE per tutti</li>
+    </ul>
+    <ul class="points">
+      <li>JWT: leggibile da tutti, firmato, con scadenza</li>
+      <li>Il server fissa l'algoritmo e controlla exp, iss, aud</li>
+      <li>Passkey: chiavi per sito, niente da rubare sul server</li>
+      <li>Prossima lezione: anatomia di un'e-mail di phishing</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Un'API con il token").</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
