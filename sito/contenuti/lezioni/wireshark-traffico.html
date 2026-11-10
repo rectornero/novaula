@@ -61,7 +61,7 @@
     </ol>
     <div class="check small"><b>Controllo:</b> la risposta DNS contiene almeno un record <b>A</b> (IPv4) o <b>AAAA</b> (IPv6). Il SYN parte dal tuo PC verso la porta <b>443</b>; il SYN-ACK torna indietro poco dopo.</div>
   </div>
-  <aside class="notes">Il tempo tra SYN e SYN-ACK è circa il round trip time verso il server (confrontarlo con il ping dell'unità 3). Se non compare nessuna richiesta DNS il browser potrebbe usare DNS over HTTPS: disattivarlo nelle impostazioni del browser per l'esercizio o usare nslookup wikipedia.org nel Prompt. Se il browser usa HTTP/3 vedrete QUIC su UDP 443 invece del SYN TCP: filtro "quic", ottimo spunto. Il file .pcapng contiene il traffico del proprio PC: non condividerlo fuori dalla classe.</aside>
+  <aside class="notes">Il tempo tra SYN e SYN-ACK è circa il round trip time verso il server (lo ritroveremo con il ping in Java nell'unità 3). Se non compare nessuna richiesta DNS il browser potrebbe usare DNS over HTTPS: disattivarlo nelle impostazioni del browser per l'esercizio o usare nslookup wikipedia.org nel Prompt. Se il browser usa HTTP/3 vedrete QUIC su UDP 443 invece del SYN TCP: filtro "quic", ottimo spunto. Il file .pcapng contiene il traffico del proprio PC: non condividerlo fuori dalla classe.</aside>
 </section>
 
 <section class="slide">
@@ -112,7 +112,7 @@
     <dt><code>tls.handshake.type == 1</code></dt><dd>Solo i Client Hello</dd>
     <dt><code>icmp</code></dt><dd>I ping e i messaggi di errore della rete</dd>
   </dl>
-  <aside class="notes">Il filtro dei soli SYN è quello che un analista usa per vedere una scansione di porte: molti SYN verso porte diverse, pochissimi completati. Il filtro icmp collega al laboratorio sul ping dell'unità 3: chi vuole può rilanciare il proprio programma Java e vedere le Echo request e reply.</aside>
+  <aside class="notes">Il filtro dei soli SYN è quello che un analista usa per vedere una scansione di porte: molti SYN verso porte diverse, pochissimi completati. Il filtro icmp tornerà utile nel laboratorio sul ping dell'unità 3: per ora basta lanciare ping dal Prompt e vedere le Echo request e reply.</aside>
 </section>
 
 <section class="slide lab">

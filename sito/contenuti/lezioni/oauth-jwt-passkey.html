@@ -13,7 +13,7 @@
   <h1>OAuth, JWT<br>e passkey</h1>
   <p class="lead">"Accedi con Google", i token che viaggiano nelle API REST e le chiavi che hanno preso il posto delle password: l'autenticazione come la costruiscono oggi le applicazioni vere.</p>
   <p class="meta"><span class="chip">5G TPSI</span><span>MFA, OAuth 2.0 e PKCE, OpenID Connect, JWT, WebAuthn e passkey</span></p>
-  <aside class="notes">Obiettivi: confrontare i fattori di autenticazione e i loro limiti (SIM swap, MFA fatigue); spiegare la differenza tra autenticazione e autorizzazione delegata (OAuth) e il flusso Authorization Code con PKCE; leggere e verificare un JWT in Java; capire perché le passkey resistono al phishing. Collegamenti: lezione 3 (password), lezione 4 (firme e chiavi pubbliche), unità 2 (web service REST). Servono JDK e browser. Durata indicativa: 3 ore.</aside>
+  <aside class="notes">Obiettivi: confrontare i fattori di autenticazione e i loro limiti (SIM swap, MFA fatigue); spiegare la differenza tra autenticazione e autorizzazione delegata (OAuth) e il flusso Authorization Code con PKCE; leggere e verificare un JWT in Java; capire perché le passkey resistono al phishing. Collegamenti: lezione 3 (password), lezione 4 (firme e chiavi pubbliche), anticipo dell'unità 2 (web service REST). Servono JDK e browser. Durata indicativa: 3 ore.</aside>
 </section>
 
 <section class="slide">
@@ -58,7 +58,7 @@
     </div>
     <div class="card soft"><h3>I quattro attori</h3><ul class="points small"><li><b>Utente</b>: tu, proprietario dei dati</li><li><b>Client</b>: l'app di fotoritocco</li><li><b>Authorization server</b>: la pagina di login di Google</li><li><b>Resource server</b>: l'API di Drive</li></ul></div>
   </div>
-  <aside class="notes">OAuth 2.0: RFC 6749 (2012). OpenID Connect 1.0: OpenID Foundation, 2014; aggiunge l'ID token, un JWT con l'identità dell'utente. Errore concettuale classico: usare OAuth "puro" per il login, accettando un access token come prova d'identità. L'analogia della "chiave del parcheggiatore" (valet key) è quella usata spesso per spiegare OAuth: apre e avvia l'auto, ma non il bagagliaio. Collegare all'unità 2: il resource server è un web service REST che riceve il token nell'header Authorization: Bearer.</aside>
+  <aside class="notes">OAuth 2.0: RFC 6749 (2012). OpenID Connect 1.0: OpenID Foundation, 2014; aggiunge l'ID token, un JWT con l'identità dell'utente. Errore concettuale classico: usare OAuth "puro" per il login, accettando un access token come prova d'identità. L'analogia della "chiave del parcheggiatore" (valet key) è quella usata spesso per spiegare OAuth: apre e avvia l'auto, ma non il bagagliaio. Anticipo dell'unità 2: il resource server è un web service REST che riceve il token nell'header Authorization: Bearer.</aside>
 </section>
 
 <section class="slide">
