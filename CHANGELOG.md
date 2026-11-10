@@ -17,6 +17,9 @@ The old topic order of the three classes is kept in the table `topics_ordine_202
   with 2-page group sheets (kind `progetto`, group work), interleaved with the theory in a new order.
 - 3E TPSI: hooks-first order of the topics not yet done (web first, then numbers and media, then projects and
   responsive sites, then the operating system). No new decks.
+- Licensing follow-ups: the example startup in `gpoi-analisi-mercato` is now the invented «Tutorino» (the old name
+  was a real brand), and the Officina 1 deck credits the redrawn Business Model Canvas (Strategyzer AG, CC BY-SA 3.0)
+  on every slide that shows it.
 - Service worker cache `classe-v42`.
 
 ## 3.0.0 (5 Nov 2026): Novaula without personal data
