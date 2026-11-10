@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Officina 3: WBS, OBS e responsabilità · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="arancio">
+
+<section class="slide cover">
+  <p class="kicker">GPOI · Officina 3 di 6</p>
+  <h1>Officina 3:<br>WBS, OBS e responsabilità</h1>
+  <p class="lead">L'idea c'è, il mercato anche: ora il progetto per lanciarla. Scomponete tutto il lavoro in pacchetti, decidete chi fa che cosa e mettetelo in una matrice che nessuno può fraintendere.</p>
+  <p class="meta"><span class="chip">5F GPOI</span><span>Officina · WBS a tre livelli, codici, dizionario, OBS, matrice RACI</span></p>
+  <aside class="notes">Terza consegna, circa 4 settimane (8 ore), febbraio. Prerequisiti di Teoria: Il progetto, Il project management, Il ciclo di vita di un progetto, L'avvio e la pianificazione (deck gpoi-wbs), La gestione delle risorse umane, La leadership. Il progetto di ogni gruppo da qui in poi è "il lancio della prima versione" della propria idea in circa 6 mesi: dalla raccolta dei requisiti al primo cliente. Si parte dal canvas v3 e dalle 2 strategie scelte nell'Officina 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>In un lavoro di gruppo a scuola, qual è il problema più frequente?</h2></div>
+  <div class="poll" data-id="of3-gruppo">
+    <ol><li>Qualcuno non fa niente</li><li>Due persone fanno la stessa cosa</li><li>Una parte del lavoro non la fa nessuno</li><li>Si scopre tutto all'ultimo giorno</li></ol>
+  </div>
+  <aside class="notes">Tutte e quattro sono problemi di pianificazione: B e C nascono da una WBS incompleta o da responsabilità non chiare, A da una matrice delle responsabilità che non c'è, D dalla mancanza di un calendario (Officina 4). Oggi risolviamo le prime tre. Tenere il risultato del sondaggio per la slide sulla RACI.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il progetto del gruppo</p><h2>Da idea a progetto: un obiettivo, una data</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Obiettivo</h3><p class="small">Lanciare la prima versione e avere i primi clienti veri. Per RipetiQui: 20 tutor e 100 lezioni prenotate.</p></div>
+    <div class="card fill"><h3>Durata</h3><p class="small">Circa 6 mesi da oggi, con un budget da stimare nell'Officina 5.</p></div>
+    <div class="card"><h3>Ambito</h3><p class="small">Che cosa è dentro il progetto e che cosa no: senza confini, la WBS non finisce mai.</p></div>
+  </div>
+  <div class="callout">Scrivete l'obiettivo in modo misurabile e la lista di ciò che <b>non</b> fate: è la prima riga del vostro dizionario WBS.</div>
+  <aside class="notes">Collegare al Project Charter già visto all'inizio dell'anno: obiettivo, ambito, vincoli, stakeholder. Il progetto è temporaneo e ha un risultato unico: il lancio. L'impresa che ne nasce, invece, continua (differenza progetto-impresa vista in Teoria). Esempi di "fuori ambito" per RipetiQui: app per iPhone (solo web e Android), pagamenti in contanti, ripetizioni per l'università.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Metti in ordine</p><h2>Come si costruisce una WBS</h2></div>
+  <ol class="puzzle-ordina" data-id="of3-passi">
+    <li>Scrivere il risultato finale del progetto</li>
+    <li>Dividerlo nei grandi deliverable (livello 1)</li>
+    <li>Scomporre ogni deliverable in parti più piccole</li>
+    <li>Fermarsi ai pacchetti di lavoro gestibili</li>
+    <li>Dare a ogni elemento un codice</li>
+    <li>Descrivere i pacchetti nel dizionario WBS</li>
+  </ol>
+  <aside class="notes">Ordine come scritto. Un pacchetto di lavoro è "gestibile" quando si può stimare, assegnare a una persona e controllare: una regola pratica diffusa è che duri tra 8 e 80 ore di lavoro (regola 8/80), oppure non più di un periodo di controllo (per noi: due settimane). I codici gerarchici (1, 1.1, 1.1.1) servono a collegare WBS, Gantt e preventivo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Completa</p><h2>La WBS di RipetiQui: metti i codici</h2></div>
+  <div class="puzzle-trascina" data-id="of3-codici" data-extra="2.5|4.3">
+    <div style="position:relative;width:1664px;height:570px;font-size:24px">
+      <div class="card fill" style="position:absolute;left:632px;top:0;width:400px;padding:14px;text-align:center"><b>0 · Lancio di RipetiQui</b></div>
+      <div class="card" style="position:absolute;left:0;top:130px;width:390px;padding:12px;text-align:center"><b>1 · Gestione progetto</b></div>
+      <div class="card" style="position:absolute;left:425px;top:130px;width:390px;padding:12px;text-align:center"><b>2 · App web</b></div>
+      <div class="card" style="position:absolute;left:850px;top:130px;width:390px;padding:12px;text-align:center"><b>3 · Comunità tutor</b></div>
+      <div class="card" style="position:absolute;left:1275px;top:130px;width:389px;padding:12px;text-align:center"><b>4 · Lancio sul mercato</b></div>
+      <div class="card" style="position:absolute;left:425px;top:250px;width:390px;padding:10px">2.1 Requisiti</div>
+      <div class="card" style="position:absolute;left:425px;top:330px;width:390px;padding:10px;flex-direction:row;align-items:center;gap:14px"><span class="slot" data-risposta="2.2" style="width:100px;flex:none"></span> Design</div>
+      <div class="card" style="position:absolute;left:425px;top:410px;width:390px;padding:10px">2.3 Sviluppo</div>
+      <div class="card" style="position:absolute;left:425px;top:490px;width:390px;padding:10px;flex-direction:row;align-items:center;gap:14px"><span class="slot" data-risposta="2.4" style="width:100px;flex:none"></span> Test</div>
+      <div class="card" style="position:absolute;left:850px;top:250px;width:390px;padding:10px;flex-direction:row;align-items:center;gap:14px"><span class="slot" data-risposta="3.1" style="width:100px;flex:none"></span> Selezione</div>
+      <div class="card" style="position:absolute;left:850px;top:330px;width:390px;padding:10px">3.2 Formazione</div>
+      <div class="card" style="position:absolute;left:1275px;top:250px;width:389px;padding:10px">4.1 Campagna social</div>
+      <div class="card" style="position:absolute;left:1275px;top:330px;width:389px;padding:10px;flex-direction:row;align-items:center;gap:14px"><span class="slot" data-risposta="4.2" style="width:100px;flex:none"></span> Accordi con le scuole</div>
+      <div class="card" style="position:absolute;left:0;top:250px;width:390px;padding:10px">1.1 Pianificazione</div>
+      <div class="card" style="position:absolute;left:0;top:330px;width:390px;padding:10px">1.2 Monitoraggio</div>
+    </div>
+  </div>
+  <aside class="notes">Soluzioni: 2.2 Design, 2.4 Test, 3.1 Selezione, 4.2 Accordi con le scuole. Distrattori 2.5 e 4.3. La WBS è orientata ai risultati (deliverable), non alle persone o ai mesi: "App web" e non "lavoro di Marco" o "febbraio". "Accordi con le scuole" viene da una strategia SO dell'Officina 2: le strategie scelte devono comparire nella WBS. La gestione del progetto è un ramo vero: il tempo per pianificare e controllare va contato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La somma dei pacchetti di lavoro di RipetiQui non comprende la promozione. Che regola è violata?</h2></div>
+  <div class="poll" data-id="of3-cento" data-tipo="quiz" data-risposta="A">
+    <ol><li>La regola del 100%: la WBS contiene tutto il lavoro del progetto, e niente di più</li><li>La regola 8/80</li><li>Il principio di Pareto</li><li>Nessuna: la promozione si fa dopo il progetto</li></ol>
+    <p class="why">Il lancio è il risultato del progetto, e senza promozione non arrivano i clienti: se il lavoro non è nella WBS non avrà tempo, persone né budget. Vale anche il contrario: niente lavoro che non serve all'obiettivo.</p>
+  </div>
+  <aside class="notes">Risposta A. La regola del 100% è del Practice Standard for WBS del PMI. La D è il trabocchetto: se l'obiettivo è "primi clienti veri", la promozione è dentro l'ambito. Far controllare a ogni gruppo la propria WBS con questa domanda: "Se facciamo tutti i pacchetti, l'obiettivo è raggiunto?"</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">In gruppo <span class="time">· 60 minuti</span></p>
+  <h2>La WBS del vostro lancio</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Su <b>app.diagrams.net</b> (modello "organigramma" o forme libere): al livello 0 il risultato, al livello 1 da 4 a 6 deliverable, compresa la gestione del progetto.</li>
+      <li>Scomponete fino al livello 3 dove serve. Nomi con un sostantivo: "Pagina di registrazione", non "fare la registrazione".</li>
+      <li>Codici gerarchici su ogni riquadro.</li>
+      <li>Controllo del 100%: se fate tutti i pacchetti, l'obiettivo è raggiunto? Esportate <b>wbs-gruppo.pdf</b>.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> da 15 a 30 pacchetti di lavoro; le 2 strategie dell'Officina 2 sono nella WBS; nessun riquadro ha il nome di una persona o di un mese.</div>
+  </div>
+  <aside class="notes">Il docente passa e chiede per un pacchetto a caso: "Quanto dura? Chi lo fa? Come capite che è finito?" Se il gruppo non sa rispondere, il pacchetto è troppo grande o troppo vago. Errore frequente: una WBS che è una lista di fasi temporali (analisi, sviluppo, test) senza i deliverable non informatici (tutor, contratti, promozione).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Menti che ci hanno preceduto</p><h2>Dividere il lavoro, moltiplicare il risultato</h2></div>
+  <figure class="citazione">
+    <blockquote>Il più grande miglioramento delle capacità produttive del lavoro sembra essere stato l'effetto della divisione del lavoro.</blockquote>
+    <figcaption><b>Adam Smith</b>, <i>La ricchezza delle nazioni</i>, libro I, capitolo 1, 1776</figcaption>
+  </figure>
+  <p class="lead">Smith raccontava una fabbrica di spilli: dieci operai, ognuno con un compito, producevano migliaia di spilli al giorno. Dividere funziona solo se poi qualcuno <b>ricompone</b>: la WBS divide, la matrice delle responsabilità ricompone.</p>
+  <aside class="notes">Originale (frase iniziale del primo capitolo): "The greatest improvement in the productive powers of labour, and the greater part of the skill, dexterity, and judgment with which it is any where directed, or applied, seem to have been the effects of the division of labour." Traduzione nostra, abbreviata. L'esempio della fabbrica di spilli è nello stesso capitolo (dieci uomini, circa 48 000 spilli al giorno). Collegamento con la Teoria: specializzazione e coordinamento nelle strutture organizzative (Mintzberg).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In quale documento va?</h2></div>
+  <div class="puzzle-categorie" data-id="of3-documenti" style="--cols:3">
+    <div class="cat"><h4>WBS</h4><ul><li>2.3 Sviluppo dell'app</li><li>Livelli e codici dei pacchetti</li></ul></div>
+    <div class="cat"><h4>OBS</h4><ul><li>Chi coordina il gruppo</li><li>Consulente esterno per il marketing</li></ul></div>
+    <div class="cat"><h4>Matrice RACI</h4><ul><li>Chi approva il design</li><li>Chi va informato a fine test</li></ul></div>
+  </div>
+  <aside class="notes">Soluzione come scritto. WBS = che cosa si fa; OBS (Organizational Breakdown Structure) = chi c'è e come è organizzato; matrice delle responsabilità (RAM, nella forma RACI) = incrocio tra le due. Nel gruppo di 4 l'OBS è piccola ma va fatta: comprende anche persone esterne (il docente come committente, un esperto, un partner).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Abbina</p><h2>Le quattro lettere della RACI</h2></div>
+  <dl class="puzzle-abbina" data-id="of3-raci">
+    <dt>R · Responsible</dt><dd>Fa il lavoro</dd>
+    <dt>A · Accountable</dt><dd>Risponde del risultato e lo approva: uno solo</dd>
+    <dt>C · Consulted</dt><dd>Dà un parere prima che si decida</dd>
+    <dt>I · Informed</dt><dd>Viene avvisato quando è fatto</dd>
+  </dl>
+  <aside class="notes">Riprendere il sondaggio iniziale: "qualcuno non fa niente" = una persona senza R; "due fanno la stessa cosa" = due R senza coordinamento; "una parte non la fa nessuno" = un pacchetto senza R. In italiano: esecutore, responsabile, consultato, informato. La A e la R possono coincidere nella stessa persona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Nella RACI del gruppo, il pacchetto "2.2 Design" ha due A. Che cosa succede?</h2></div>
+  <div class="poll" data-id="of3-dueA" data-tipo="quiz" data-risposta="D">
+    <ol><li>Niente: due controlli sono meglio di uno</li><li>Il lavoro si fa più in fretta</li><li>Va bene, se i due sono amici</li><li>Quando c'è da decidere o da rispondere di un errore, ognuno aspetta l'altro</li></ol>
+    <p class="why">La A deve essere una sola persona per pacchetto: è quella che dice "è finito" e risponde del risultato. Con due A le decisioni si bloccano o si contraddicono. Le R invece possono essere più di una.</p>
+  </div>
+  <aside class="notes">Risposta D. Controllo della matrice da fare in classe: in ogni riga esattamente una A, almeno una R; in ogni colonna almeno una R (nessuno senza lavoro) e non troppe (nessuno sommerso). Il carico va bilanciato: contare le R per persona.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 45 minuti</span></p>
+  <h2>Dizionario WBS, OBS e matrice RACI</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In <b>wbs-gruppo.ods</b>, foglio <b>Dizionario</b>: codice, nome, descrizione, risultato atteso, criterio di "finito", stima in ore.</li>
+      <li>Su diagrams.net, l'<b>OBS</b>: i membri del gruppo con il ruolo e le persone esterne.</li>
+      <li>Foglio <b>RACI</b>: pacchetti in riga, persone in colonna, una lettera per cella.</li>
+      <li>In fondo a ogni colonna, con <code>=CONTA.SE(B2:B30;"R")</code>, contate le R di ognuno.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> in ogni riga una sola A; nessuna riga senza R; le R per persona differiscono al massimo di 2 o 3.</div>
+  </div>
+  <aside class="notes">Il criterio di "finito" è decisivo: "pagina di registrazione funzionante su Chrome e Android, provata da 3 utenti esterni" è verificabile, "pagina fatta" no. Le stime in ore servono nell'Officina 4 (durate) e nell'Officina 5 (costi). CONTA.SE è il nome italiano di COUNTIF; il separatore è il punto e virgola in Calc in italiano.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>WBS generate dall'AI</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Scomporre in un attimo</h3><p>Molti strumenti di gestione dei progetti propongono con l'AI la scomposizione di un obiettivo in attività e sottoattività. Utile per non dimenticare pezzi.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Ma la WBS è vostra</h3><p>L'AI non conosce il vostro ambito, le strategie scelte né i vostri clienti: controllate la regola del 100% e togliete ciò che non serve. Dichiaratelo nella consegna.</p></div>
+  </div>
+  <aside class="notes">Esercizio facoltativo: chiedere a un assistente AI una WBS per "lancio di un'app di ripetizioni" e confrontarla con quella del gruppo: che cosa manca all'una e all'altra? Di solito l'AI produce WBS a fasi (analisi, sviluppo, test) e dimentica deliverable specifici come gli accordi con le scuole.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La consegna</p><h2>Che cosa consegnate per l'Officina 3</h2></div>
+  <div class="cols-2">
+    <div class="card"><h3>Su Classroom, un file per gruppo</h3><ul class="points small"><li><b>officina3-gruppo.pdf</b>: obiettivo, ambito, WBS e OBS</li><li><b>wbs-gruppo.ods</b>: fogli Dizionario e RACI</li></ul></div>
+    <div class="card fill"><h3>Come si valuta (10 punti)</h3><ul class="points small"><li>WBS completa, a deliverable, codificata: 4</li><li>Dizionario con criteri di "finito" e stime: 2</li><li>OBS e RACI corrette e bilanciate: 3</li><li>Cura e coerenza con le Officine 1-2: 1</li></ul></div>
+  </div>
+  <aside class="notes">Griglia completa nella scheda "Officina 3". Scadenza su Novaula e Classroom, circa fine febbraio. In Teoria in parallelo: la rappresentazione reticolare, il CPM, la pianificazione delle attività e ProjectLibre, che servono per l'Officina 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-trascina" data-id="of3-uscita" data-extra="Gantt|R">
+    <p>La WBS contiene tutto il lavoro e niente di più: è la regola del <span class="slot" data-risposta="100%"></span>.</p>
+    <p>L'ultimo livello della WBS è fatto di <span class="slot" data-risposta="pacchetti di lavoro|work package"></span>.</p>
+    <p>Lo schema di chi c'è nel progetto e come è organizzato si chiama <span class="slot" data-risposta="OBS"></span>.</p>
+    <p>In ogni riga della matrice RACI c'è una sola lettera <span class="slot" data-risposta="A"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: 100%; pacchetti di lavoro; OBS; A. Distrattori: Gantt, R (le R possono essere più di una).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Un obiettivo misurabile e un ambito con i suoi confini</li>
+      <li>WBS a deliverable, con la gestione del progetto</li>
+      <li>Regola del 100% e pacchetti gestibili</li>
+      <li>Codici e dizionario: criterio di "finito" e stima</li>
+    </ul>
+    <ul class="points">
+      <li>OBS: chi c'è, anche fuori dal gruppo</li>
+      <li>RACI: una sola A, almeno una R per riga</li>
+      <li>Carico bilanciato, contato con CONTA.SE</li>
+      <li>Prossima Officina: reticolo CPM e Gantt</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Consegnare la scheda "Officina 3" e aprire il compito su Classroom.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
