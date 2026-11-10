@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anatomia di un'e-mail · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 6 di 8</p>
+  <h1>Anatomia<br>di un'e-mail</h1>
+  <p class="lead">Il mittente di un'e-mail si può scrivere come si vuole. Come fanno allora i server a capire chi l'ha mandata davvero? Leggiamo gli header come un analista di un SOC.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>SMTP, header, SPF, DKIM, DMARC, domini sosia, BEC</span></p>
+  <aside class="notes">Obiettivi: capire perché SMTP permette di falsificare il mittente; leggere gli header di un messaggio (Received, Return-Path, Authentication-Results); spiegare SPF, DKIM e DMARC e il concetto di allineamento; riconoscere i limiti (domini sosia, account compromessi, BEC). Il phishing di base è stato visto in attacchi-informatici; qui si va dentro il protocollo. Servono un account di posta (quello scolastico va bene), il Prompt dei comandi e il JDK. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Ti arriva una mail dal "Dirigente scolastico" che chiede di comprare subito delle gift card per un'emergenza. Che cosa controlli per primo?</h2></div>
+  <div class="poll" data-id="mail-dirigente">
+    <ol><li>Se ci sono errori di ortografia</li><li>L'indirizzo del mittente</li><li>Il logo e la firma in fondo</li><li>Chiamo il dirigente al numero che conosco già</li></ol>
+  </div>
+  <aside class="notes">È lo schema classico della BEC (Business Email Compromise) e delle truffe del "CEO". La D è la difesa migliore: verifica su un canale diverso, scelto da te. La A non basta più (gli attaccanti usano l'AI per scrivere testi perfetti). La B serve, ma il nome visualizzato e anche l'indirizzo si possono falsificare: è il tema della lezione. La C non vale niente: logo e firma si copiano da qualsiasi mail vera.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il protocollo del 1982</p><h2>SMTP si fida di quello che gli scrivi</h2></div>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:22px">HELO mail.attaccante.example
+MAIL FROM:&lt;chiunque@chiunque.example&gt;
+RCPT TO:&lt;vittima@scuola.example&gt;
+DATA
+From: "Dirigente" &lt;dirigente@scuola.example&gt;
+Subject: Urgente
+
+Mi serve un favore...
+.</pre>
+    <ul class="points small">
+      <li>SMTP è nato in una rete di poche università che si fidavano l'una dell'altra</li>
+      <li><b>MAIL FROM</b> (la "busta", che diventa Return-Path) e <b>From:</b> (quello che vedi) sono due cose diverse</li>
+      <li>Nessuno dei due viene verificato dal protocollo base</li>
+      <li>Le verifiche sono state aggiunte dopo, nel DNS: SPF, DKIM, DMARC</li>
+    </ul>
+  </div>
+  <aside class="notes">SMTP: RFC 821 (1982), oggi RFC 5321; il formato del messaggio (header From, To, Subject…) è RFC 5322. L'esempio mostra un dialogo SMTP semplificato: il server ricevente risponde con codici numerici (250 OK, 354 per iniziare i dati) come HTTP. Analogia della busta e della lettera: la busta (MAIL FROM) è quello che legge il postino per restituire la lettera se non arriva; la lettera dentro può avere qualsiasi intestazione. Non far provare l'invio di mail falsificate: anche "per scherzo" verso compagni è un problema serio (sostituzione di persona, art. 494 c.p.).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Tre controlli nel DNS</p><h2>SPF, DKIM, DMARC</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>SPF</h3><p class="small">Il dominio pubblica <b>quali server</b> possono inviare per lui. Si controlla il dominio della <b>busta</b>.</p><p class="tiny mono">v=spf1 include:_spf.google.com ~all</p></div>
+    <div class="card"><h3>DKIM</h3><p class="small">Il server che invia <b>firma</b> il messaggio. La chiave pubblica è nel DNS del dominio firmatario.</p><p class="tiny mono">DKIM-Signature: d=scuola.example; s=sel1; …</p></div>
+    <div class="card fill"><h3>DMARC</h3><p class="small">Il dominio del <b>From visibile</b> deve coincidere con quello verificato da SPF o DKIM. E dice che cosa fare se no.</p><p class="tiny mono">v=DMARC1; p=reject; rua=mailto:…</p></div>
+  </div>
+  <aside class="notes">SPF: RFC 7208. "~all" = softfail (accetta ma segna come sospetto), "-all" = fail. DKIM: RFC 6376; la chiave si trova nel record TXT di selettore._domainkey.dominio (qui sel1._domainkey.scuola.example); la firma copre alcuni header e il corpo, quindi rileva anche modifiche in transito. DMARC: RFC 7489; il record è in _dmarc.dominio; p=none (solo report), quarantine (spam), reject (rifiuta). "rua" indica dove mandare i report aggregati. La parola chiave è allineamento: SPF da solo verifica la busta, non il mittente che vede l'utente; DMARC chiude il buco. Dal febbraio 2024 Gmail e Yahoo richiedono SPF, DKIM e DMARC a chi invia grandi volumi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Una mail di phishing ha <b>spf=pass</b> e <b>dkim=pass</b>. Quindi…</h2></div>
+  <div class="poll" data-id="mail-pass" data-tipo="quiz" data-risposta="C">
+    <ol><li>è sicuramente legittima</li><li>è stata inviata dal dominio che vedo nel From</li><li>è stata inviata da un server autorizzato per qualche dominio: bisogna vedere quale</li><li>il filtro antispam non funziona</li></ol>
+    <p class="why">SPF e DKIM dicono solo che un dominio ha autorizzato o firmato il messaggio. L'attaccante può usare un suo dominio, con SPF e DKIM perfetti. Conta l'allineamento con il From, cioè DMARC, e conta che il dominio sia quello giusto e non un sosia.</p>
+  </div>
+  <aside class="notes">Errore comunissimo anche tra i professionisti alle prime armi. Esempio: From: assistenza@banca-esempio-sicurezza.com, con SPF e DKIM pass per banca-esempio-sicurezza.com, dominio registrato ieri dall'attaccante. Tutto "passa", ma la banca vera è banca-esempio.it. DMARC passa anche lui, perché il dominio è allineato... con se stesso. Per questo servono anche la formazione e i controlli sui domini nuovi o simili.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Apri il "sorgente" di una mail vera</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nella posta scolastica apri una newsletter o una notifica automatica (non una mail personale).</li>
+      <li>In Gmail: menu con i tre puntini, <b>Mostra originale</b>.</li>
+      <li>In alto trovi i risultati di <b>SPF</b>, <b>DKIM</b> e <b>DMARC</b>. Annotali in <b>mail-cognome.md</b>.</li>
+      <li>Più sotto cerca le righe <code>Return-Path</code>, <code>From</code> e <code>DKIM-Signature</code> (il campo <code>d=</code>). I domini coincidono?</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> una newsletter seria mostra <b>PASS</b> per tutti e tre. Spesso il Return-Path è di un servizio di invio (per esempio un dominio di mailing), ma DMARC passa grazie alla firma DKIM allineata.</div>
+  </div>
+  <aside class="notes">Usare messaggi automatici evita di esporre conversazioni private: nel file si annotano solo i nomi dei domini e i risultati, non il contenuto. In Outlook sul web: menu, Visualizza, Visualizza dettagli messaggio. Le newsletter usano spesso servizi esterni (Mailchimp, SendGrid, Amazon SES): il Return-Path è del servizio per gestire i rimbalzi, e la firma DKIM è con il dominio del mittente. È proprio il caso in cui DMARC passa grazie a DKIM anche se SPF non è allineato.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una lezione del 2002</p><h2>L'anello che il DNS non protegge</h2></div>
+  <figure class="citazione">
+    <blockquote>Il fattore umano è davvero l'anello più debole della sicurezza.</blockquote>
+    <figcaption><b>Kevin Mitnick</b>, ex hacker poi consulente di sicurezza, <i>L'arte dell'inganno</i>, 2002</figcaption>
+  </figure>
+  <p class="lead">SPF, DKIM e DMARC fermano chi finge di essere il <b>tuo</b> dominio. Non fermano chi convince una persona a fidarsi di un dominio <b>diverso</b>.</p>
+  <aside class="notes">Traduzione nostra; originale: "...the human factor is truly security's weakest link", dall'introduzione di The Art of Deception (2002). Mitnick, arrestato nel 1995 per intrusioni informatiche, raccontava che la maggior parte dei suoi accessi era ottenuta con l'ingegneria sociale, al telefono, non con exploit tecnici. Collegare a "L'anello più debole" di cybercriminali. Spunto critico: oggi molti esperti preferiscono non dire "l'utente è l'anello debole" ma "progettiamo sistemi che non dipendano dalla perfezione delle persone": le passkey della lezione 5 vanno in questa direzione.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Leggi le regole di un dominio nel DNS</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nel Prompt dei comandi: <code>nslookup -type=txt google.com</code> e cerca la riga che inizia con <code>v=spf1</code>.</li>
+      <li>Poi: <code>nslookup -type=txt _dmarc.google.com</code></li>
+      <li>Ripeti con il dominio della scuola e con quello di una banca o di un ente pubblico.</li>
+      <li>In <b>mail-cognome.md</b> fai una tabella: dominio, SPF con <code>~all</code> o <code>-all</code>, politica DMARC (<code>none</code>, <code>quarantine</code>, <code>reject</code>).</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> per google.com trovi un record <code>v=spf1 …</code> e un record <code>v=DMARC1; p=…</code>. Se un dominio non ha il record DMARC, nslookup non trova nulla per <code>_dmarc</code>.</div>
+  </div>
+  <aside class="notes">Leggere il DNS pubblico è lecito: sono informazioni pubblicate apposta. Se il DNS del laboratorio non risponde ai TXT, provare con un resolver pubblico: nslookup -type=txt google.com 1.1.1.1. Per google.com la politica DMARC è restrittiva (al momento della preparazione era reject: verificare). Discussione: un dominio con p=none riceve solo i report, quindi chiunque può ancora falsificarlo. Molti enti partono da none, leggono i report per qualche settimana, poi passano a quarantine e reject: è un esempio di modifica graduale come la CSP in report-only della lezione 2.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni riga dell'header al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="mail-header">
+    <dt>Received</dt><dd>Un passaggio da un server all'altro, il più recente in alto</dd>
+    <dt>Return-Path</dt><dd>L'indirizzo della busta, a cui tornano gli errori</dd>
+    <dt>From</dt><dd>Il mittente che il programma di posta mostra</dd>
+    <dt>DKIM-Signature</dt><dd>La firma del dominio indicato in d=</dd>
+    <dt>Authentication-Results</dt><dd>I risultati dei controlli scritti dal server che riceve</dd>
+  </dl>
+  <aside class="notes">Le righe Received si leggono dal basso verso l'alto per ricostruire il percorso: la più in basso è il primo server. Solo quelle aggiunte dai server di cui ti fidi (il tuo provider) sono affidabili: quelle più in basso le può scrivere anche l'attaccante. Authentication-Results va letto solo se aggiunto dal proprio server di posta, per lo stesso motivo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Caso: la mail della "banca"</h2>
+  <div class="cols-2 wide-left">
+<pre class="code" style="font-size:18px">Return-Path: &lt;bounce@mailer-promo.example&gt;
+Authentication-Results: mx.scuola.example;
+  spf=pass smtp.mailfrom=mailer-promo.example;
+  dkim=none;
+  dmarc=fail header.from=banca-esempio.it
+From: "Banca Esempio" &lt;sicurezza@banca-esempio.it&gt;
+Reply-To: &lt;verifiche.banca@posta-gratis.example&gt;
+Subject: Accesso sospetto: conferma i tuoi dati</pre>
+    <div class="stack">
+      <ol class="steps small">
+        <li>In <b>mail-cognome.md</b> scrivi chi ha davvero inviato la mail e da dove si capisce.</li>
+        <li>Perché SPF passa ma DMARC fallisce?</li>
+        <li>A chi arriverebbe la tua risposta?</li>
+        <li>Che cosa succede se banca-esempio.it ha <code>p=reject</code>?</li>
+      </ol>
+      <div class="check small"><b>Controllo:</b> 4 risposte, tra cui: la mail l'ha spedita <b>mailer-promo.example</b>, non la banca; la risposta va a <b>posta-gratis.example</b>.</div>
+    </div>
+  </div>
+  <aside class="notes">Esempio inventato, domini .example riservati. Soluzioni: 1) il server di mailer-promo.example; il From dice banca-esempio.it ma niente lo conferma. 2) SPF verifica il dominio della busta (mailer-promo.example), che ha autorizzato quel server: pass. Ma il From visibile è un altro dominio e non c'è una firma DKIM di banca-esempio.it: nessun allineamento, DMARC fallisce. 3) Al Reply-To, una casella gratuita dell'attaccante: un segnale fortissimo. 4) Il server della scuola la rifiuta: non arriverebbe mai. Con p=none arriverebbe, forse nello spam. Ecco perché DMARC con reject protegge i clienti di un'azienda.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quando DMARC non basta</p><h2>Domini sosia e account veri</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Typosquatting</h3><p class="small"><b>banca-esempio.co</b>, <b>banca-esernpio.it</b> (rn al posto di m): domini dell'attaccante, con SPF e DKIM in regola.</p></div>
+    <div class="card"><h3>Omografi</h3><p class="small">Una "a" cirillica identica alla latina. Nel DNS il nome diventa <b>xn--…</b> (Punycode).</p></div>
+    <div class="card bad"><h3>Account compromesso</h3><p class="small">La mail parte davvero dalla casella del fornitore, rubata: passa tutto. È la BEC più pericolosa.</p></div>
+  </div>
+  <div class="callout">Contro questi casi servono le persone: verifica su un canale diverso per ogni richiesta di soldi o di dati, e procedure che non si saltano "per urgenza".</div>
+  <aside class="notes">Nel 2017 il ricercatore Xudong Zheng ha registrato un dominio tutto in caratteri cirillici che i browser di allora mostravano come "apple.com"; da allora i browser mostrano il Punycode (xn--...) quando gli script si mescolano in modo sospetto. BEC: la variante con l'account compromesso del fornitore che manda un IBAN "aggiornato" è tra le frodi più costose per le aziende. Le banche italiane e la Polizia Postale ricordano spesso che nessuna banca chiede le credenziali per e-mail o SMS.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>banca-esempio.it ha DMARC con p=reject. Un attaccante registra banca-esempio-sicura.it e manda mail da lì. DMARC di banca-esempio.it…</h2></div>
+  <div class="poll" data-id="mail-sosia" data-tipo="quiz" data-risposta="D">
+    <ol><li>blocca le mail, perché il nome contiene "banca-esempio"</li><li>le manda nello spam</li><li>avvisa la banca vera con un report</li><li>non c'entra: riguarda solo il dominio banca-esempio.it</li></ol>
+    <p class="why">DMARC protegge solo l'uso esatto del proprio dominio nel From. Un dominio diverso, anche simile, ha le sue regole: se l'attaccante le configura bene, le sue mail passano. La banca può sorvegliare i nuovi domini simili e chiederne la chiusura.</p>
+  </div>
+  <aside class="notes">Anche la C è falsa: i report DMARC arrivano al proprietario del dominio usato nel From, cioè all'attaccante stesso. Difese per il dominio sosia: monitoraggio delle registrazioni (servizi di brand protection, i log di Certificate Transparency della lezione 4 per i certificati con nomi simili), segnalazione al registro .it, formazione dei clienti.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Un controllore di allineamento in Java</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:20px">String dominio(String indirizzo) {
+  <span class="c">// "Banca" &lt;sicurezza@banca-esempio.it&gt; → banca-esempio.it</span>
+  <span class="k">int</span> at = indirizzo.lastIndexOf(<span class="s">'@'</span>);
+  <span class="k">return</span> indirizzo.substring(at + 1)
+      .replace(<span class="s">"&gt;"</span>, <span class="s">""</span>).trim().toLowerCase();
+}</pre>
+      <ol class="steps small">
+        <li>Salva l'header del caso in <b>caso.txt</b>. Scrivi <b>Allineamento.java</b> che legge le righe <code>From:</code>, <code>Return-Path:</code> e <code>Reply-To:</code>.</li>
+        <li>Stampa i tre domini e un avviso per ogni dominio diverso da quello del From.</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> per il caso della banca stampa due avvisi: Return-Path su <b>mailer-promo.example</b> e Reply-To su <b>posta-gratis.example</b>.</div>
+  </div>
+  <aside class="notes">Lettura: Files.readAllLines(Path.of("caso.txt")) e per ogni riga startsWith("From:") ecc. Questo è un controllo "stretto"; DMARC in modalità rilassata accetta anche i sottodomini dello stesso dominio organizzativo (news.banca-esempio.it allineato a banca-esempio.it). Estensione: confrontare il dominio organizzativo togliendo i sottodomini (attenzione ai suffissi come .co.uk: nei progetti veri si usa la Public Suffix List). Un SOC usa regole simili, con molti più segnali, per marcare le mail sospette.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il phishing senza errori di ortografia</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Testi perfetti</h3><p>Con i modelli linguistici un attaccante scrive mail fluenti in qualsiasi lingua, con il tono giusto e riferimenti presi dai social. "Ci sono errori?" non è più un buon controllo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Voci e volti falsi</h3><p>Nel 2024 un dipendente della società di ingegneria Arup, a Hong Kong, ha trasferito circa 25 milioni di dollari dopo una videochiamata con colleghi e direttore finanziario ricreati con deepfake. La regola resta: verificare su un canale scelto da te.</p></div>
+  </div>
+  <aside class="notes">Il caso Arup è stato confermato dall'azienda nel maggio 2024 dopo le notizie della polizia di Hong Kong di inizio 2024: circa 200 milioni di dollari di Hong Kong, pari a circa 25 milioni di dollari USA. Senza hype: l'AI rende gli attacchi più economici e credibili, non cambia la difesa, che è procedurale (doppia approvazione per i pagamenti, richiamata a un numero noto, parola d'ordine concordata). Dall'altra parte, i filtri di posta usano l'AI per riconoscere lo stile delle mail fraudolente.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2532" data-aiuto="la porta classica di SMTP tra server è la 25">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la porta TCP su cui i server di posta si passano i messaggi</li>
+      <li>3ª e 4ª cifra: quanti controlli nel DNS abbiamo visto oggi (SPF, DKIM, DMARC) moltiplicato per 10, più 2</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Porta 25 e 3 controlli. Ora spiegate in una frase la differenza tra Return-Path e From.</div>
+  </div>
+  <aside class="notes">Codice: 2532 (25; 3 × 10 + 2 = 32). Porte della posta: 25 tra server; 587 per l'invio dai client con autenticazione (submission); 465 per l'invio con TLS implicito; 993 IMAP su TLS. Premio: Return-Path è l'indirizzo della busta usato da SPF e per i rimbalzi; From è quello mostrato all'utente e quello che DMARC controlla.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il record che elenca i server autorizzati a inviare per un dominio è <span class="blank" data-risposta="SPF" style="--w:4ch"></span>.</p>
+    <p>La firma del messaggio con chiave pubblica nel DNS è <span class="blank" data-risposta="DKIM" style="--w:5ch"></span>.</p>
+    <p>DMARC controlla l'<span class="blank" data-risposta="allineamento" style="--w:11ch"></span> con il dominio del From.</p>
+    <p>La politica DMARC più severa è p=<span class="blank" data-risposta="reject" style="--w:7ch"></span>.</p>
+    <p>Le frodi con mail di finti dirigenti o fornitori si chiamano <span class="blank" data-risposta="BEC|Business Email Compromise" style="--w:5ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: SPF; DKIM; allineamento; reject; BEC.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>SMTP non verifica il mittente: busta e From sono diversi</li>
+      <li>SPF: chi può inviare · DKIM: chi ha firmato</li>
+      <li>DMARC: allineamento con il From e politica</li>
+      <li>Gli header si leggono, ma solo quelli dei server fidati</li>
+    </ul>
+    <ul class="points">
+      <li>Domini sosia, omografi e account rubati passano i controlli</li>
+      <li>Contro la BEC: verifica su un altro canale</li>
+      <li>L'AI toglie gli errori, non cambia le difese</li>
+      <li>Prossima lezione: Wireshark e l'analisi del traffico</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Chi può fingersi te?").</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
