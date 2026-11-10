@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XSS, CSRF e Content Security Policy · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 2 di 8</p>
+  <h1>XSS, CSRF e<br>Content Security Policy</h1>
+  <p class="lead">Quando il browser della vittima lavora per l'attaccante: tre tipi di XSS, le richieste falsificate e le difese che il server può imporre al browser.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>XSS riflesso, memorizzato e DOM, escaping, CSP, CSRF, SameSite</span></p>
+  <aside class="notes">Obiettivi: distinguere XSS riflesso, memorizzato e basato sul DOM; correggere un XSS in Java con l'escaping dell'output; imporre una Content Security Policy e vederne l'effetto; capire il CSRF e le sue difese (SameSite, token). Si riprende l'XSS introdotto in attacchi-informatici e gli header visti in network-web-security, andando a fondo. Servono Juice Shop in locale (già avviato nella lezione 5 dell'unità), il JDK e un browser con DevTools. Si attacca solo localhost. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Quale sito ti fideresti di più a usare da loggato?</h2></div>
+  <div class="poll" data-id="xss-fiducia">
+    <ol><li>Uno con HTTPS e il lucchetto</li><li>Uno famoso, con milioni di utenti</li><li>Uno che non mostra pubblicità di terzi</li><li>Nessuno: dipende da come è scritto il codice</li></ol>
+  </div>
+  <aside class="notes">Il punto della lezione: HTTPS protegge il viaggio dei dati, non il contenuto della pagina. Un sito famoso con HTTPS può comunque eseguire uno script dell'attaccante nel tuo browser, con i tuoi cookie e la tua sessione: è l'XSS. Esempio storico alla slide del worm Samy (MySpace, uno dei siti più usati del 2005).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il problema</p><h2>XSS: il dato diventa codice nella pagina</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Riflesso</h3><p class="small">Lo script arriva nella richiesta (per esempio nell'URL) e il server lo rimanda nella pagina. Serve che la vittima apra il link.</p></div>
+    <div class="card fill"><h3>Memorizzato</h3><p class="small">Lo script viene salvato nel database (un commento, un profilo) e parte per <b>chiunque</b> apra la pagina.</p></div>
+    <div class="card"><h3>DOM</h3><p class="small">Il server non c'entra: è il JavaScript della pagina a inserire un dato non fidato con <code>innerHTML</code>.</p></div>
+  </div>
+  <div class="callout">In tutti e tre i casi lo script gira <b>con l'origine del sito</b>: legge la pagina, invia richieste a nome dell'utente, ruba ciò che non è protetto.</div>
+  <aside class="notes">XSS = Cross-Site Scripting (la X per non confonderlo con CSS). Nella OWASP Top 10 2021 rientra in A03 Injection. "Origine" = schema + host + porta: la Same-Origin Policy impedisce a un sito di leggere i dati di un altro, ma lo script iniettato è dentro il sito, quindi la politica non lo ferma. Il memorizzato è il più grave perché non richiede di far cliccare un link a ogni vittima.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una storia del 2005</p><h2>Un milione di amici in meno di un giorno</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Ottobre 2005, MySpace. Samy Kamkar, 19 anni, nasconde uno script nel suo profilo. Chi lo visita aggiunge Samy agli amici, scrive "samy is my hero" sul proprio profilo e <b>copia lo script</b> anche lì.</p>
+      <p class="small muted">In meno di 24 ore oltre un milione di profili infetti. MySpace va offline per ripulire.</p>
+    </div>
+    <div class="card bad"><h3>Com'è finita</h3><p class="small">Indagine federale. Samy patteggia: tre anni di libertà vigilata, lavori socialmente utili e il divieto di usare Internet per un periodo. Oggi è un ricercatore di sicurezza noto.</p></div>
+  </div>
+  <aside class="notes">Il worm Samy è il primo worm XSS diventato famoso: un XSS memorizzato che si autoreplica. MySpace filtrava la parola "javascript" e i tag script; Samy ha aggirato i filtri con trucchi come spezzare la parola con un a capo dentro un attributo CSS. Lezione: filtrare l'input con una lista nera non funziona, serve l'escaping in output. Le cifre (oltre un milione di profili in meno di 20 ore) sono quelle riportate dallo stesso autore e dalla stampa dell'epoca. Collegare al confine legale visto in capture-the-flag: anche uno scherzo ha conseguenze penali.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Juice Shop: un XSS nel DOM</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Avvia Juice Shop in locale come nella lezione 5 e apri <b>http://localhost:3000</b>.</li>
+      <li>Nella barra di ricerca scrivi <code>&lt;b&gt;ciao&lt;/b&gt;</code>: la parola appare in grassetto?</li>
+      <li>Ora cerca: <code>&lt;iframe src="javascript:alert(`xss`)"&gt;</code></li>
+      <li>In <b>xss-cognome.md</b> spiega perché il grassetto del passo 2 era già un campanello d'allarme.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> compare un popup con <b>xss</b> e lo Score Board segna risolta la sfida <b>DOM XSS</b>.</div>
+  </div>
+  <aside class="notes">Solo su Juice Shop in locale. Se il testo cercato viene interpretato come HTML (il grassetto), allora la pagina inserisce l'input dell'utente come codice: basta un tag che esegue JavaScript. Il tag script non funziona perché HTML5 non esegue gli script inseriti con innerHTML; l'iframe con javascript: invece sì. In Juice Shop il componente di ricerca usa il bypass di sicurezza di Angular (bypassSecurityTrustHtml), cioè disattiva apposta la protezione del framework: un errore realistico. Le backtick in alert(`xss`) servono perché le virgolette sono già usate dall'attributo.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il sito sostituisce "&lt;script&gt;" con una stringa vuota in ogni commento. È protetto dall'XSS?</h2></div>
+  <div class="poll" data-id="xss-filtro" data-tipo="quiz" data-risposta="B">
+    <ol><li>Sì: senza il tag script non si esegue JavaScript</li><li>No: ci sono molti altri modi, e il filtro stesso si aggira</li><li>Sì, ma solo se usa anche HTTPS</li><li>No, ma solo per gli utenti di browser vecchi</li></ol>
+    <p class="why">Esistono attributi come <code>onerror</code>, <code>onload</code>, link <code>javascript:</code>, SVG… E il filtro si aggira: <code>&lt;scr&lt;script&gt;ipt&gt;</code> diventa <code>&lt;script&gt;</code> dopo la sostituzione. La difesa giusta è l'escaping in output, non una lista nera in input.</p>
+  </div>
+  <aside class="notes">Esempi di vettori senza tag script: &lt;img src=x onerror=alert(1)&gt;, &lt;svg onload=alert(1)&gt;, &lt;a href="javascript:alert(1)"&gt;. Il trucco dello script annidato funziona perché il filtro fa una sola passata. È esattamente la lezione del worm Samy. La C confonde riservatezza del trasporto e sicurezza della pagina; la D è falsa, funziona sui browser moderni.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La difesa principale</p><h2>Escaping: il dato resta dato</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <table class="data compact">
+        <tr><th>Carattere</th><th>Diventa</th></tr>
+        <tr><td class="mono">&amp;</td><td class="mono">&amp;amp;</td></tr>
+        <tr><td class="mono">&lt;</td><td class="mono">&amp;lt;</td></tr>
+        <tr><td class="mono">&gt;</td><td class="mono">&amp;gt;</td></tr>
+        <tr><td class="mono">"</td><td class="mono">&amp;quot;</td></tr>
+        <tr><td class="mono">'</td><td class="mono">&amp;#39;</td></tr>
+      </table>
+    </div>
+    <ul class="points small">
+      <li>Si applica <b>in output</b>, nel punto in cui il dato entra nell'HTML</li>
+      <li>Il contesto conta: dentro un attributo, in JavaScript o in un URL servono regole diverse</li>
+      <li>I framework (Angular, React, i template JSP con <code>c:out</code>) lo fanno da soli: il pericolo è quando lo si spegne</li>
+      <li>Nel DOM: <code>textContent</code> al posto di <code>innerHTML</code></li>
+    </ul>
+  </div>
+  <aside class="notes">La & va sostituita per prima, altrimenti si raddoppiano gli escape. Esempi di "spegnere" la protezione: dangerouslySetInnerHTML in React, bypassSecurityTrustHtml in Angular (il caso di Juice Shop), escapeXml="false" in JSTL. Se si deve davvero accettare HTML (un editor di testo ricco), si usa un sanificatore con lista bianca come DOMPurify o OWASP Java HTML Sanitizer, mai un filtro scritto a mano.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Un XSS riflesso in Java, poi la correzione</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+<pre class="code" style="font-size:19px">s.createContext(<span class="s">"/cerca"</span>, ex -&gt; {
+  String q = URLDecoder.decode(ex.getRequestURI()
+      .getRawQuery().substring(2), UTF_8);
+  String html = <span class="s">"&lt;h1&gt;Risultati per: "</span> + q + <span class="s">"&lt;/h1&gt;"</span>;
+  invia(ex, html);
+});</pre>
+      <ol class="steps small">
+        <li>Completa <b>Cerca.java</b> con <code>HttpServer</code> sulla porta 8080 e avvialo.</li>
+        <li>Apri <code>localhost:8080/cerca?q=&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+        <li>Scrivi <code>static String escape(String s)</code> e usala su <code>q</code>. Riprova.</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> prima appare il popup. Dopo la correzione la pagina mostra il testo <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> e nel sorgente (Ctrl+U) leggi <code>&amp;lt;script&amp;gt;</code>.</div>
+  </div>
+  <aside class="notes">invia(ex, html) imposta Content-Type: text/html; charset=utf-8, converte in byte UTF-8, chiama sendResponseHeaders(200, b.length), scrive e chiude. Il codice presuppone che l'URL contenga ?q=: senza, getRawQuery() restituisce null (gestirlo è un buon esercizio). escape: return s.replace("&amp;", "&amp;amp;").replace("&lt;", "&amp;lt;").replace("&gt;", "&amp;gt;").replace("\"", "&amp;quot;").replace("'", "&amp;#39;"); la & per prima. Il JDK non ha una funzione di escape HTML pronta: nei progetti veri si usa quella del framework o della libreria di template. I browser moderni non hanno più filtri anti-XSS integrati (Chrome ha tolto l'XSS Auditor nel 2019), quindi il popup compare davvero.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Che tipo di XSS è? Abbina</h2></div>
+  <dl class="puzzle-abbina" data-id="xss-tipi">
+    <dt>Una recensione con uno script, salvata nel database del negozio</dt><dd>Memorizzato</dd>
+    <dt>Un link per e-mail con lo script nel parametro di ricerca</dt><dd>Riflesso</dd>
+    <dt><code>el.innerHTML = location.hash</code></dt><dd>Basato sul DOM</dd>
+    <dt>Il nome utente mostrato con <code>textContent</code></dt><dd>Nessuno: è sicuro</dd>
+  </dl>
+  <aside class="notes">location.hash è la parte dell'URL dopo #: non arriva mai al server, quindi nessun controllo lato server può vederla. È il classico DOM XSS. textContent inserisce il valore come testo, non come HTML: sicuro anche se contiene tag.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il secondo strato</p><h2>Content Security Policy: il server detta le regole al browser</h2></div>
+  <pre class="code" style="font-size:26px">Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'</pre>
+  <div class="cols-3">
+    <div class="card soft"><h3>script-src 'self'</h3><p class="small">Solo script dai file del sito. Gli script <b>inline</b> e gli <code>onclick=</code> sono bloccati.</p></div>
+    <div class="card soft"><h3>Nonce</h3><p class="small">Uno script inline è ammesso solo se porta il numero casuale scritto nell'header di quella risposta.</p></div>
+    <div class="card soft"><h3>Report</h3><p class="small">Con <code>-Report-Only</code> la policy non blocca, ma segnala: per provarla senza rompere il sito.</p></div>
+  </div>
+  <aside class="notes">La CSP non sostituisce l'escaping: è il secondo strato, che limita i danni se un XSS sfugge. Una CSP con 'unsafe-inline' in script-src annulla quasi tutta la protezione contro l'XSS. Il nonce deve essere diverso a ogni risposta, altrimenti l'attaccante lo copia. Content-Security-Policy-Report-Only con la direttiva report-to (o la vecchia report-uri) manda al server le violazioni: si usa per settimane prima di attivare il blocco. Collegare alla tabella degli header di network-web-security.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Accendi la CSP e guarda che cosa blocca</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Torna alla versione <b>vulnerabile</b> di Cerca.java (senza escape).</li>
+      <li>Prima di inviare la risposta aggiungi l'header <code>Content-Security-Policy</code> con valore <code>script-src 'self'</code>.</li>
+      <li>Riapri l'URL con lo script, poi apri DevTools, scheda <b>Console</b>.</li>
+      <li>Annota in <b>xss-cognome.md</b> il messaggio e perché la CSP da sola non basta.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> il popup non compare e la console dice che il browser si è rifiutato di eseguire uno script inline perché viola la Content Security Policy.</div>
+  </div>
+  <aside class="notes">ex.getResponseHeaders().add("Content-Security-Policy", "script-src 'self'"); prima di sendResponseHeaders. Il messaggio di Chrome inizia con "Refused to execute inline script because it violates the following Content Security Policy directive". Perché non basta: l'HTML iniettato resta nella pagina (si può ancora alterare il contenuto, inserire un finto modulo di login o un link), e una CSP debole o con 'unsafe-inline' non protegge. Si tengono sempre tutte e due: escaping e CSP. Riportare poi la versione corretta con escape.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un'altra truffa del browser</p><h2>CSRF: il tuo browser firma al posto tuo</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p>Sei loggato su <b>banca.example</b>. Apri una pagina di un altro sito che contiene:</p>
+<pre class="code" style="font-size:20px">&lt;form action=<span class="s">"https://banca.example/bonifico"</span> method=<span class="s">"post"</span>&gt;
+  &lt;input name=<span class="s">"iban"</span> value=<span class="s">"IT00…attaccante"</span>&gt;
+  &lt;input name=<span class="s">"importo"</span> value=<span class="s">"500"</span>&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit()&lt;/script&gt;</pre>
+    </div>
+    <div class="card bad"><h3>Che cosa succede</h3><p class="small">Il browser invia la richiesta <b>con i tuoi cookie</b>. Se la banca controlla solo la sessione, il bonifico parte. L'attaccante non legge nulla: gli basta che l'azione avvenga.</p></div>
+  </div>
+  <aside class="notes">CSRF = Cross-Site Request Forgery. Differenza con l'XSS: nell'XSS lo script gira dentro il sito vittima; nel CSRF la richiesta parte da un altro sito, alla cieca. Difese: 1) cookie SameSite=Lax o Strict, che non partono con le richieste avviate da altri siti (Lax lascia passare solo la navigazione con GET); 2) token anti-CSRF casuale nel modulo, che il sito attaccante non può conoscere; 3) per le azioni importanti, una nuova conferma (password, codice MFA). Le azioni che cambiano dati non vanno mai fatte con GET. Dal 2020 Chrome tratta i cookie senza attributo SameSite come Lax: il CSRF classico è più difficile, ma non scomparso (sottodomini, siti vecchi, eccezioni).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Quale difesa ferma il CSRF del bonifico, ma <u>non</u> un XSS sulla stessa banca?</h2></div>
+  <div class="poll" data-id="xss-csrf" data-tipo="quiz" data-risposta="A">
+    <ol><li>Il cookie di sessione con SameSite=Strict</li><li>L'escaping dell'output in tutte le pagine</li><li>Una Content Security Policy senza 'unsafe-inline'</li><li>HTTPS con HSTS</li></ol>
+    <p class="why">SameSite impedisce che il cookie parta con una richiesta avviata da un altro sito, quindi il modulo dell'attaccante non è autenticato. Ma uno script XSS gira dentro la banca stessa: le sue richieste sono "dallo stesso sito" e il cookie parte comunque.</p>
+  </div>
+  <aside class="notes">B e C sono difese contro l'XSS, non contro il CSRF. D protegge il trasporto e non c'entra con nessuno dei due. Messaggio: un XSS rompe quasi tutte le difese anti-CSRF, compresi i token, perché lo script può leggere il token dalla pagina. Per questo l'XSS va eliminato per primo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Leggi i cookie di un sito vero, senza toccare nulla</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Accedi con il tuo account scolastico a un servizio che usi già (per esempio Classroom).</li>
+      <li>DevTools, scheda <b>Application</b>, voce <b>Cookies</b>: guarda le colonne <b>HttpOnly</b>, <b>Secure</b> e <b>SameSite</b>.</li>
+      <li>Fai lo stesso su Juice Shop, dopo il login.</li>
+      <li>In <b>xss-cognome.md</b> confronta: quali cookie di sessione sono protetti, e da che cosa?</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> nei servizi grandi i cookie di sessione hanno quasi sempre <b>Secure</b> e <b>HttpOnly</b>. In Juice Shop il token si trova anche in un cookie leggibile dal JavaScript: un XSS potrebbe rubarlo.</div>
+  </div>
+  <aside class="notes">Guardare i propri cookie nel proprio browser è lecito: non si modifica e non si invia nulla. Non copiare i valori dei cookie in nessun file, né condividerli: un cookie di sessione vale come la password. In Juice Shop il JWT di accesso è salvato in un cookie "token" senza HttpOnly e anche nel localStorage: proprio per questo è usato per insegnare il furto di sessione. Il JWT lo studiamo nella lezione 5 del blocco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una lezione del 1984</p><h2>Di quale codice ti puoi fidare?</h2></div>
+  <figure class="citazione">
+    <blockquote>Non puoi fidarti del codice che non hai scritto tu, completamente.</blockquote>
+    <figcaption><b>Ken Thompson</b>, co-autore di Unix, "Reflections on Trusting Trust", discorso per il Premio Turing, 1984</figcaption>
+  </figure>
+  <p class="lead">Ogni <code>&lt;script src&gt;</code> di un altro sito è codice di altri che gira con i tuoi permessi. La CSP serve anche a decidere <b>di chi</b> fidarsi.</p>
+  <aside class="notes">Traduzione nostra; originale: "You can't trust code that you did not totally create yourself." Nel discorso Thompson mostra un compilatore C modificato che inserisce una backdoor nel programma di login e si riproduce anche ricompilando il compilatore dai sorgenti puliti. Collegamento: nel 2024 il sito polyfill.io, incluso come script esterno da moltissimi siti, è passato a un nuovo proprietario e ha iniziato a servire codice malevolo; chi aveva una CSP stretta o copiava lo script sul proprio server era protetto. Esiste anche l'attributo integrity (Subresource Integrity) per verificare l'hash di uno script esterno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il browser aiuta, l'AI a volte no</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Trusted Types</h3><p>Nei browser basati su Chromium una CSP può imporre <b>require-trusted-types-for 'script'</b>: allora <b>innerHTML</b> rifiuta le stringhe semplici e accetta solo valori passati da una funzione di sanificazione approvata. Il DOM XSS diventa un errore visibile in sviluppo.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Codice scritto con l'AI</h3><p>Un assistente di programmazione propone volentieri <b>innerHTML</b> o una query concatenata se il prompt non parla di sicurezza. Va rivisto come il codice di un collega: dove entra un dato dell'utente? come esce?</p></div>
+  </div>
+  <aside class="notes">Trusted Types è supportato da Chrome ed Edge dal 2020; altri browser lo stanno adottando. Google lo usa in molti suoi servizi proprio per eliminare il DOM XSS. Sull'AI: niente statistiche, solo la pratica. Esercizio veloce a voce: chiedere alla classe come scriverebbero un prompt che porta a codice sicuro (specificare escaping, PreparedStatement, test con input malevolo) e ricordare che la revisione resta umana. Collegare alla lezione su Claude Code già vista dalla 5G.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="2005" data-aiuto="è l'anno del worm su MySpace">
+    <ul class="points">
+      <li>Il codice è l'anno in cui un worm XSS ha aggiunto un milione di amici a un ragazzo di 19 anni.</li>
+      <li>Attenzione: avete solo tre tentativi prima dell'indizio.</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Ora scrivete in una riga perché il filtro di MySpace non è bastato, e quale difesa lo avrebbe fermato.</div>
+  </div>
+  <aside class="notes">Codice: 2005. Risposta attesa al premio: MySpace usava una lista nera di parole e tag, aggirabile; serviva l'escaping in output (o un sanificatore a lista bianca) e, oggi, una CSP. Variante più difficile per squadre veloci: chiedere anche il tipo di XSS (memorizzato, autoreplicante).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Uno script salvato in un commento e servito a tutti è un XSS <span class="blank" data-risposta="memorizzato|stored|persistente" style="--w:11ch"></span>.</p>
+    <p>Per inserire testo nel DOM senza rischi si usa <span class="blank" data-risposta="textContent" style="--w:11ch"></span> al posto di innerHTML.</p>
+    <p>Il carattere &lt; in HTML si scrive <span class="blank" data-risposta="&amp;lt;|&amp;lt" style="--w:5ch"></span>.</p>
+    <p>L'header che decide da dove si caricano gli script è la Content <span class="blank" data-risposta="Security Policy|SecurityPolicy" style="--w:14ch"></span>.</p>
+    <p>L'attributo del cookie contro il CSRF è <span class="blank" data-risposta="SameSite|same site" style="--w:9ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: memorizzato (accettati stored e persistente); textContent; &amp;lt;; Security Policy; SameSite.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>XSS riflesso, memorizzato, DOM</li>
+      <li>Liste nere in input: si aggirano sempre</li>
+      <li>Escaping in output, textContent, sanificatori</li>
+      <li>CSP: secondo strato, senza 'unsafe-inline'</li>
+    </ul>
+    <ul class="points">
+      <li>CSRF: il browser invia i cookie per conto tuo</li>
+      <li>SameSite, token, nuova conferma per le azioni gravi</li>
+      <li>Un XSS rompe quasi tutte le altre difese</li>
+      <li>Prossima lezione: password, hash e salt</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Il guestbook blindato"). Ricordare di fermare Juice Shop e il server Java.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
