@@ -8,6 +8,9 @@ MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiorname
 ## 3.1.0 (10 Nov 2026): new programmes for 3E, 5F and 5G
 Nero's desk decisions of 9 Nov 2026 (Storywriting). Content only: no app code changes beyond this version number.
 Needs `aggiornamenti/2026-11-10-programmi-3e-5f-5g.sql` (idempotent, deletes nothing; run the database backup first).
+Released 10 Nov 2026 after the Licensing audit (`management/licensing/audits/2026-11-10-3.1.0.md`) and its two
+follow-ups (#43: a fictional startup name in two GPOI decks, the canvas credit in Officina 1). The site went live
+before the SQL, so the new topics never link to files that are not online yet.
 The old topic order of the three classes is kept in the table `topics_ordine_2026_11_10`. No lesson is removed.
 - 5G «Cybersecurity avanzata»: 8 new decks right after the CTF and before Unit 2 (`vulnerabilita-cve`, `xss-csrf-csp`,
   `password-hash`, `tls-certificati`, `oauth-jwt-passkey`, `email-spf-dkim-dmarc`, `wireshark-traffico`,
