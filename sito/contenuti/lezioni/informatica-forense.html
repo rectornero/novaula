@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informatica forense · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 8 di 8</p>
+  <h1>Informatica forense:<br>le prove digitali</h1>
+  <p class="lead">Dopo un incidente qualcuno deve dire che cosa è successo, quando e chi è stato, con prove che reggano davanti a un giudice. Si lavora sulle copie, si misura tutto con un hash e si scrive ogni passaggio.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Ordine di volatilità, copia forense, hash, catena di custodia, date dei file, registro eventi, timeline</span></p>
+  <aside class="notes">Obiettivi: conoscere le fasi dell'indagine forense (identificazione, acquisizione, conservazione, analisi, presentazione); applicare l'ordine di volatilità; acquisire una cartella con hash e catena di custodia; leggere le date dei file e il registro eventi di Windows; costruire una timeline. Riprende l'hash di "protezione-sicurezza-dati" e il ruolo dell'analista forense di "cyberdefender". Tutti i laboratori si fanno sul proprio PC e su file propri: nessuna analisi dei PC di altri. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>In azienda il PC di un dipendente sospettato di aver copiato dati riservati è acceso, sbloccato. Arrivi tu. Che cosa fai per prima cosa?</h2></div>
+  <div class="poll" data-id="fo-primo">
+    <ol><li>Lo spengo subito, così non cambia più nulla</li><li>Apro le cartelle per vedere che cosa ha copiato</li><li>Non tocco nulla, fotografo lo schermo e scrivo l'ora</li><li>Stacco il cavo di rete e chiamo il dipendente</li></ol>
+  </div>
+  <aside class="notes">Non rivelare subito: si riprende dopo l'ordine di volatilità. Spegnere cancella la RAM (processi, connessioni, chiavi di cifratura in memoria); aprire le cartelle modifica le date di accesso e i file recenti; staccare la rete può essere sensato ma va documentato e deciso, non fatto d'istinto. La risposta migliore come primo passo è la C: documentare lo stato prima di qualsiasi azione, poi decidere se acquisire la RAM. In azienda serve anche una base legale e una policy: il datore di lavoro non può controllare liberamente i dipendenti (Statuto dei lavoratori, art. 4, e GDPR).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il metodo</p><h2>Quattro fasi, una regola d'oro</h2></div>
+  <div class="flow">
+    <div class="card"><h3>1 · Identificare</h3><p class="small">Quali dispositivi, account e log possono contenere prove.</p></div>
+    <div class="card"><h3>2 · Acquisire</h3><p class="small">Copia bit a bit e hash, senza modificare l'originale.</p></div>
+    <div class="card"><h3>3 · Analizzare</h3><p class="small">Sempre sulla copia: file, date, log, timeline.</p></div>
+    <div class="card"><h3>4 · Riferire</h3><p class="small">Una relazione che chiunque possa ripetere e controllare.</p></div>
+  </div>
+  <div class="callout"><b>Regola d'oro:</b> l'originale non si tocca. Ogni passaggio deve essere <b>ripetibile</b> e <b>documentato</b>, altrimenti la prova si può contestare.</div>
+  <aside class="notes">Molti testi aggiungono una quinta fase, la conservazione, che attraversa tutte le altre: copia e originale vanno custoditi e ogni passaggio di mano registrato (catena di custodia). Lo standard internazionale di riferimento per identificazione, raccolta, acquisizione e conservazione è ISO/IEC 27037 (2012). In Italia la legge 48/2008, che ha ratificato la Convenzione di Budapest sul cybercrime, ha introdotto nel codice di procedura penale l'obbligo di usare misure tecniche che assicurino la conservazione dei dati originali e ne impediscano l'alterazione (per esempio artt. 247 e 354 c.p.p.).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Ordine di volatilità: che cosa si raccoglie prima?</h2></div>
+  <ol class="puzzle-ordina" data-id="fo-volatilita">
+    <li>Registri e cache del processore</li>
+    <li>Memoria RAM: processi e connessioni aperte</li>
+    <li>File temporanei</li>
+    <li>Disco del computer</li>
+    <li>Log su server remoti</li>
+    <li>Backup e archivi</li>
+  </ol>
+  <aside class="notes">Fonte: RFC 3227 (2002), "Guidelines for Evidence Collection and Archiving", sezione 2.1: si raccoglie prima ciò che sparisce prima. In pratica i registri della CPU non si acquisiscono; la RAM sì, con strumenti appositi, prima di spegnere: contiene processi, connessioni, password e chiavi di cifratura del disco. Tornare al sondaggio: spegnere subito (A) perde i primi due livelli. Oggi, con i dischi cifrati con BitLocker, spegnere può rendere il disco illeggibile senza la chiave.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">La copia forense</p><h2>Copiare un file non basta</h2></div>
+  <div class="cols-2">
+    <div class="card bad"><h3>Copia normale</h3><ul class="points small"><li>Solo i file visibili</li><li>Perde i file cancellati e lo spazio libero</li><li>Cambia alcune date</li><li>Nessuna prova che sia identica</li></ul></div>
+    <div class="card ok"><h3>Copia forense (immagine)</h3><ul class="points small"><li>Tutto il disco, bit per bit, spazio libero compreso</li><li><b>Write blocker</b>: il PC dell'analista non può scrivere sull'originale</li><li>Hash dell'originale e della copia: devono coincidere</li><li>Formati come .E01 o .dd</li></ul></div>
+  </div>
+  <aside class="notes">Un file cancellato di solito resta sul disco finché lo spazio non viene riusato: per questo serve l'immagine intera. Sugli SSD il comando TRIM può cancellare davvero i blocchi poco dopo: un motivo in più per acquisire presto. Il write blocker può essere hardware (un adattatore tra disco e PC) o software. Strumenti noti: FTK Imager (gratuito), dd e dc3dd su Linux, Autopsy per l'analisi (open source). In laboratorio non facciamo immagini di dischi: lavoriamo su una cartella, ma con lo stesso metodo.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Acquisisci una cartella come un perito</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Crea <b>reperto-cognome</b> con tre file tuoi: un testo, un'immagine, un foglio di calcolo.</li>
+      <li>In PowerShell, nella cartella: <code>Get-FileHash * -Algorithm SHA256 | Export-Csv ..\hash-originale.csv</code></li>
+      <li>Comprimi la cartella in <b>reperto-cognome.zip</b>, estraila altrove e ricalcola gli hash nella copia.</li>
+      <li>Compila il <b>verbale</b>: data e ora, chi ha acquisito, che cosa, con quale comando, hash, a chi lo consegni.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> gli hash della copia sono <b>identici</b> a quelli dell'originale. Cambia una lettera in un file della copia: il suo hash cambia del tutto, gli altri no.</div>
+  </div>
+  <aside class="notes">Get-FileHash è disponibile da PowerShell 4 (Windows 8.1 in poi); usa SHA256 di default, ma scriverlo rende il verbale chiaro. In alternativa certutil -hashfile file SHA256, già visto in terza e quarta. Il verbale è la catena di custodia in miniatura: in un caso vero ogni passaggio di mano del reperto (dal sequestro al laboratorio al tribunale) ha una riga firmata. Perché SHA-256 e non MD5: MD5 ha collisioni costruibili (lezione 3), quindi oggi si usa SHA-256, spesso insieme a MD5 solo per compatibilità con strumenti vecchi.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il tempo dei file</p><h2>Ogni file ha almeno tre orologi</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Creazione</h3><p class="small">Quando il file è nato <b>su questo disco</b>. Una copia ne ha una nuova.</p></div>
+    <div class="card"><h3>Ultima modifica</h3><p class="small">Quando è cambiato il contenuto. Copiando di solito <b>resta</b> quella dell'originale.</p></div>
+    <div class="card"><h3>Ultimo accesso</h3><p class="small">Quando è stato letto. Spesso poco affidabile: Windows la aggiorna in modo approssimato.</p></div>
+  </div>
+  <div class="callout">Un file con <b>modifica più vecchia della creazione</b> è quasi sempre una copia arrivata da un altro disco o da una chiavetta. Un indizio prezioso.</div>
+  <aside class="notes">Sul file system NTFS si parla di MACB: Modified, Accessed, Changed (modifica dei metadati, nella MFT), Born (creazione). Esplora file ne mostra tre; gli strumenti forensi leggono anche il quarto. Attenzione: le date si possono falsificare (la tecnica si chiama timestomping), per questo si confrontano con altre fonti, come i log. Collegare all'ora del PC: se l'orologio è sbagliato o il fuso orario non è annotato, l'intera timeline è sbagliata. Si annota sempre in UTC o con il fuso.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Gli orologi dei tuoi file</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nella cartella originale: <code>Get-ChildItem | Select Name, CreationTime, LastWriteTime, LastAccessTime</code></li>
+      <li>Copia un file su una chiavetta o in un'altra cartella e ripeti il comando lì.</li>
+      <li>Apri il file copiato solo in lettura, chiudilo e ripeti ancora.</li>
+      <li>Salva i risultati con <code>| Export-Csv ..\date-cognome.csv</code> e annota in tre righe che cosa è cambiato.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> nella copia la <b>creazione</b> è l'ora della copia, mentre l'<b>ultima modifica</b> è ancora quella dell'originale. Quindi modifica &lt; creazione.</div>
+  </div>
+  <aside class="notes">Se l'ultimo accesso non cambia, è normale: su molti Windows l'aggiornamento è disattivato o ritardato per prestazioni (impostazione NtfsDisableLastAccessUpdate). Bel momento per dire che un dato assente non prova nulla. Spostare un file nello stesso disco invece mantiene la data di creazione: chi vuole lo prova. Se la chiavetta è FAT32, le date hanno una precisione di 2 secondi per la modifica: altra fonte di piccole differenze.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Sul PC di un dipendente trovi progetto.dwg con creazione 14/03 alle 18:02 e ultima modifica 02/11 dell'anno prima. Che cosa è più probabile?</h2></div>
+  <div class="poll" data-id="fo-date" data-tipo="quiz" data-risposta="C">
+    <ol><li>L'orologio del PC è rotto</li><li>Il file è stato scritto il 14/03 alle 18:02</li><li>Il 14/03 alle 18:02 il file è stato copiato su questo PC da un altro supporto</li><li>Il file è stato modificato il 14/03</li></ol>
+    <p class="why">La modifica più vecchia della creazione è la firma tipica di una copia: la creazione è il momento in cui il file è arrivato su questo disco, la modifica viene dall'originale. Va confermato con altre fonti, per esempio il registro dei dispositivi USB collegati in quell'ora.</p>
+  </div>
+  <aside class="notes">Fonti di conferma su Windows: le chiavi di registro USBSTOR e i log di installazione dei dispositivi (setupapi.dev.log) registrano quali chiavette sono state collegate e quando; i file .lnk e le "Jump List" ricordano quali file sono stati aperti e da dove. Non entrare nei dettagli: basta far capire che si incrociano più fonti.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni traccia a ciò che racconta</h2></div>
+  <dl class="puzzle-abbina" data-id="fo-tracce">
+    <dt>Registro eventi di Windows</dt><dd>Accensioni, accessi, errori, servizi avviati</dd>
+    <dt>Cronologia del browser</dt><dd>Siti visitati e download, con data e ora</dd>
+    <dt>Metadati EXIF di una foto</dt><dd>Modello del telefono, data dello scatto, a volte la posizione GPS</dd>
+    <dt>Cestino</dt><dd>File cancellati e da quale cartella venivano</dd>
+    <dt>Log del firewall aziendale</dt><dd>Quali PC hanno parlato con quali server, e quanto</dd>
+  </dl>
+  <aside class="notes">Ogni traccia ha limiti: la cronologia si cancella, l'EXIF si toglie o si modifica, il Cestino si svuota. Le tracce più difficili da alterare sono quelle fuori dal PC sospetto (log di server e firewall), per questo in un'azienda conviene inviarle a un server centrale (SIEM, lezione cyberdefender). Privacy: i metadati GPS nelle foto pubblicate sui social hanno fatto trovare persone e luoghi: collegare all'educazione civica digitale.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Il diario del tuo PC: il registro eventi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>Visualizzatore eventi</b>, <b>Registri di Windows</b>, <b>Sistema</b>. Guarda livello, data, origine, ID.</li>
+      <li>In PowerShell: <code>Get-WinEvent -FilterHashtable @{LogName='System'; Id=6005,6006} -MaxEvents 10</code></li>
+      <li>6005 è il registro che si avvia (accensione), 6006 che si ferma (spegnimento): a che ora è stato acceso il PC oggi?</li>
+      <li>Aggiungi <code>| Select TimeCreated, Id, Message | Export-Csv ..\eventi-cognome.csv</code></li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> l'evento 6005 più recente coincide più o meno con l'ora in cui hai acceso il PC a inizio lezione.</div>
+  </div>
+  <aside class="notes">Il registro Sistema è leggibile anche dagli utenti normali; il registro Sicurezza (eventi 4624 accesso riuscito, 4625 accesso fallito, 4720 utente creato) richiede i permessi di amministratore: se il docente li ha, mostrarlo alla LIM. Con l'avvio rapido di Windows lo "spegnimento" è in parte un'ibernazione, quindi possono mancare alcuni 6005: un'altra occasione per dire che un dato assente non è una prova. Ricordare: si legge solo il registro del proprio PC.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il padre della scienza forense</p><h2>Chi agisce lascia tracce</h2></div>
+  <figure class="citazione">
+    <blockquote>Nessuno può agire con l'intensità che l'azione criminale richiede senza lasciare segni molteplici del suo passaggio.</blockquote>
+    <figcaption><b>Edmond Locard</b>, <i>L'enquête criminelle et les méthodes scientifiques</i>, 1920</figcaption>
+  </figure>
+  <p class="lead">Nel digitale vale ancora di più: log, date, cache, metadati. Ma vale anche per chi indaga. Ogni clic dell'analista sull'originale è una traccia in più che <b>inquina</b> la prova.</p>
+  <aside class="notes">Traduzione nostra dal francese: "Nul ne peut agir avec l'intensité que suppose l'action criminelle sans laisser des marques multiples de son passage." È da qui che nasce il "principio di interscambio di Locard", spesso riassunto come "ogni contatto lascia una traccia" (il riassunto non è una sua frase testuale). Locard fondò a Lione nel 1910 uno dei primi laboratori di polizia scientifica.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Ricostruisci la timeline</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>In Calc apri <b>date-cognome.csv</b> ed <b>eventi-cognome.csv</b> e copia tutto in un foglio <b>Timeline</b> con colonne: data e ora, fonte, evento.</li>
+      <li>Aggiungi a mano 3 eventi che ricordi (per esempio "apro il browser", "copio il file sulla chiavetta"), con fonte "testimonianza".</li>
+      <li>Ordina per data e ora (<b>Dati</b>, <b>Ordina</b>). Colora per fonte.</li>
+      <li>Scrivi sotto due righe: dove le fonti concordano e dove no.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> la copia sulla chiavetta compare dopo l'accensione del PC, e la data di creazione della copia combacia con l'ora che ricordi.</div>
+  </div>
+  <aside class="notes">Se le date dei CSV sono testo e non si ordinano, usare Dati, Testo in colonne con tipo Data, o rigenerare il CSV con la cultura italiana. La timeline è il cuore della relazione forense: incrociare fonti indipendenti (file system, log, testimonianze) rende una ricostruzione solida. Gli strumenti professionali la costruiscono in automatico da migliaia di fonti (per esempio Plaso, open source, che genera una "super timeline"). Discutere le discordanze: orologio, fuso orario, memoria umana.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Le prove non stanno più solo nel PC</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Cloud e telefoni</h3><p>Mail, chat e documenti stanno su server in altri paesi. Il regolamento europeo <b>e-evidence</b> (UE 2023/1543), in vigore da agosto 2026, permette ai giudici di chiederli direttamente ai fornitori di un altro stato UE.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Vero o generato?</h3><p>Con i deepfake una foto o un audio non provano più nulla da soli. Si controllano metadati, origine e firme digitali come le <b>Content Credentials</b> (standard C2PA) che alcune fotocamere e app aggiungono allo scatto.</p></div>
+  </div>
+  <aside class="notes">Regolamento (UE) 2023/1543 sugli ordini europei di produzione e conservazione delle prove elettroniche, applicabile dal 18 agosto 2026; insieme alla direttiva 2023/1544 sui rappresentanti legali dei fornitori. Prima servivano rogatorie internazionali lunghe mesi. C2PA (Coalition for Content Provenance and Authenticity) definisce un manifest firmato allegato al file; se il file viene modificato la firma non torna. Senza hype: un file senza Content Credentials non è per forza falso, e i metadati si possono togliere.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Il perito calcola l'hash SHA-256 del disco originale e della copia: sono identici. Che cosa dimostra?</h2></div>
+  <div class="poll" data-id="fo-hash" data-tipo="quiz" data-risposta="B">
+    <ol><li>Che il proprietario del disco è colpevole</li><li>Che la copia è identica bit per bit all'originale</li><li>Che sul disco non ci sono virus</li><li>Che nessuno ha mai modificato i file del disco</li></ol>
+    <p class="why">L'hash prova solo che copia e originale sono uguali in quel momento: l'analisi sulla copia vale come sull'originale. Non dice nulla su chi ha scritto i file, su che cosa contengono, né su che cosa è successo prima dell'acquisizione.</p>
+  </div>
+  <aside class="notes">Il trabocchetto è la D: l'hash fotografa lo stato al momento dell'acquisizione; modifiche precedenti non si vedono. Per questo l'hash va calcolato subito e scritto nel verbale, e ricalcolato a ogni passaggio di mano: se cambia, la catena di custodia si è rotta. Riprendere il compito della lezione 3: un hash non è una cifratura e non si "decifra".</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="0827" data-aiuto="la legge italiana che ha ratificato la Convenzione di Budapest è dell'anno 2008">
+    <ul class="points">
+      <li>1ª e 2ª cifra: le ultime due cifre dell'anno della legge italiana sulle prove digitali (Convenzione di Budapest)</li>
+      <li>3ª e 4ª cifra: le ultime due cifre dello standard ISO/IEC 270__ sulla raccolta delle prove</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> Legge 48/2008 e ISO/IEC 27037. Ora dite le due regole che entrambi impongono a chi raccoglie una prova.</div>
+  </div>
+  <aside class="notes">Codice: 0827. Premio: non alterare l'originale (misure tecniche, write blocker, lavoro sulla copia) e poter dimostrare l'integrità (hash, catena di custodia documentata). Se una squadra prova 2737 o simili, ricordare che la legge è del 2008.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Si raccoglie per prima la parte più <span class="blank" data-risposta="volatile" style="--w:8ch"></span>, per esempio la RAM.</p>
+    <p>Il dispositivo che impedisce di scrivere sul disco originale si chiama write <span class="blank" data-risposta="blocker" style="--w:7ch"></span>.</p>
+    <p>Il registro di ogni passaggio di mano di un reperto è la catena di <span class="blank" data-risposta="custodia" style="--w:8ch"></span>.</p>
+    <p>Un file copiato ha la data di <span class="blank" data-risposta="creazione" style="--w:9ch"></span> più recente di quella di modifica.</p>
+    <p>L'evento di Windows che segna l'avvio del registro, cioè l'accensione, ha ID <span class="blank" data-risposta="6005" style="--w:4ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: volatile; blocker; custodia; creazione; 6005.</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Identificare, acquisire, analizzare, riferire</li>
+      <li>Prima il più volatile: la RAM prima del disco</li>
+      <li>Copia bit a bit, write blocker, hash uguali</li>
+      <li>Catena di custodia: ogni passaggio scritto</li>
+    </ul>
+    <ul class="points">
+      <li>Tre orologi per file; la copia si tradisce</li>
+      <li>Registro eventi, browser, EXIF, log di rete</li>
+      <li>Timeline: incrociare fonti indipendenti</li>
+      <li>Fine del blocco: prossima volta la verifica</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Il caso della chiavetta"). Con questa lezione si chiude il blocco di cybersecurity avanzata: annunciare la simulazione e la verifica.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>
