@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wireshark: leggere il traffico · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 7 di 8</p>
+  <h1>Wireshark:<br>leggere il traffico</h1>
+  <p class="lead">I protocolli studiati per anni, finalmente visti pacchetto per pacchetto: DNS, handshake TCP, una password in chiaro e la stessa connessione protetta da TLS.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Cattura, filtri di visualizzazione, DNS, TCP, HTTP in chiaro, TLS, che cosa resta visibile</span></p>
+  <aside class="notes">Obiettivi: catturare il proprio traffico in modo lecito; usare i filtri di visualizzazione; riconoscere DNS, three-way handshake, HTTP e TLS; dimostrare perché HTTP in chiaro non va usato per i login; capire quali metadati restano visibili con HTTPS. Prerequisito tecnico: Wireshark con il driver Npcap (compresa l'opzione per catturare il traffico di loopback) installato sui PC del laboratorio. Se l'installazione non è possibile, il docente cattura sul proprio PC e proietta. Durata indicativa: 3 ore.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Sei sulla Wi-Fi pubblica di un bar e apri https://www.wikipedia.org/wiki/Gatto. Che cosa vede chi gestisce la rete?</h2></div>
+  <div class="poll" data-id="ws-wifi">
+    <ol><li>Tutto, compresa la pagina sul gatto</li><li>Che sei su wikipedia.org, ma non quale pagina</li><li>Niente di niente</li><li>Solo il tuo indirizzo IP</li></ol>
+  </div>
+  <aside class="notes">Non rivelare: lo scopriamo nel laboratorio TLS. La risposta tecnica è la B: con HTTPS il gestore vede indirizzi IP, il nome del sito nel ClientHello (SNI) e spesso le richieste DNS, più quantità e tempi del traffico; non vede il percorso /wiki/Gatto né il contenuto. Con ECH e DNS cifrato vedrebbe ancora meno.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Prima di aprire il programma</p><h2>Che cosa si può catturare, e che cosa no</h2></div>
+  <div class="cols-2">
+    <div class="card ok"><h3>Lecito</h3><ul class="points small"><li>Il traffico del <b>tuo</b> PC, sulla tua rete o in laboratorio con il permesso del docente</li><li>Il traffico di loopback dei tuoi programmi (localhost)</li><li>File di cattura preparati per l'esercizio</li></ul></div>
+    <div class="card bad"><h3>Reato</h3><ul class="points small"><li>Intercettare le comunicazioni di altri, anche sulla Wi-Fi della scuola o di casa</li><li>Installare programmi di cattura sui PC di altri</li><li>Diffondere ciò che hai intercettato</li></ul></div>
+  </div>
+  <div class="callout">La legge italiana punisce l'intercettazione di comunicazioni informatiche: <b>art. 617-quater c.p.</b> In laboratorio si cattura solo sul proprio PC.</div>
+  <aside class="notes">Art. 617-quater c.p.: intercettazione, impedimento o interruzione illecita di comunicazioni informatiche o telematiche; l'art. 617-quinquies punisce l'installazione di apparecchiature per farlo. Un amministratore di rete può analizzare il traffico per motivi tecnici e di sicurezza, ma sempre nei limiti delle policy aziendali e della normativa sul lavoro e sulla privacy. Su una rete con switch, il PC vede comunque soprattutto il proprio traffico e quello broadcast: ma il punto è legale, non tecnico.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>Wireshark in tre riquadri</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>1 · Elenco</h3><p class="small">Un pacchetto per riga: numero, tempo, origine, destinazione, protocollo, info.</p></div>
+    <div class="card"><h3>2 · Dettagli</h3><p class="small">Il pacchetto scomposto per livelli: Ethernet, IP, TCP o UDP, applicazione. Si apre come un albero.</p></div>
+    <div class="card"><h3>3 · Byte</h3><p class="small">Il pacchetto grezzo in esadecimale e ASCII: clic su un campo e si illumina.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="callout"><b>Filtro di visualizzazione</b> (barra in alto): nasconde quello che non serve, senza perdere nulla. Esempio <code>dns</code>.</div>
+    <div class="callout"><b>Segui il flusso</b> (tasto destro, Segui, TCP Stream): ricompone una conversazione intera.</div>
+  </div>
+  <aside class="notes">Wireshark è software libero (licenza GPL), nato nel 1998 come Ethereal da Gerald Combs e rinominato nel 2006. Su Windows usa il driver Npcap per catturare. I filtri di cattura (sintassi BPF, per esempio "port 53") decidono che cosa salvare; i filtri di visualizzazione (sintassi di Wireshark, per esempio "dns") decidono che cosa mostrare: a scuola si usano quasi solo questi. Collegare al modello TCP/IP: il riquadro dei dettagli è letteralmente l'incapsulamento visto in terza e quarta.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Primo giro: DNS e handshake TCP</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri Wireshark, doppio clic sulla scheda di rete in uso (quella con il grafico che si muove).</li>
+      <li>Nel Prompt: <code>ipconfig /flushdns</code>, poi apri <b>wikipedia.org</b> nel browser. Ferma la cattura (quadrato rosso).</li>
+      <li>Filtro <code>dns.qry.name contains "wikipedia"</code>: trova domanda e risposta. Quale IP?</li>
+      <li>Filtro <code>ip.addr == &lt;quell'IP&gt; &amp;&amp; tcp.flags.syn == 1</code>: trova SYN e SYN-ACK.</li>
+      <li>Salva la cattura come <b>primo-giro-cognome.pcapng</b>.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> la risposta DNS contiene almeno un record <b>A</b> (IPv4) o <b>AAAA</b> (IPv6). Il SYN parte dal tuo PC verso la porta <b>443</b>; il SYN-ACK torna indietro poco dopo.</div>
+  </div>
+  <aside class="notes">Il tempo tra SYN e SYN-ACK è circa il round trip time verso il server (lo ritroveremo con il ping in Java nell'unità 3). Se non compare nessuna richiesta DNS il browser potrebbe usare DNS over HTTPS: disattivarlo nelle impostazioni del browser per l'esercizio o usare nslookup wikipedia.org nel Prompt. Se il browser usa HTTP/3 vedrete QUIC su UDP 443 invece del SYN TCP: filtro "quic", ottimo spunto. Il file .pcapng contiene il traffico del proprio PC: non condividerlo fuori dalla classe.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine i pacchetti di una connessione HTTPS</h2></div>
+  <ol class="puzzle-ordina" data-id="ws-ordine">
+    <li>DNS: richiesta del nome</li>
+    <li>DNS: risposta con l'indirizzo</li>
+    <li>TCP: SYN</li>
+    <li>TCP: SYN, ACK</li>
+    <li>TCP: ACK</li>
+    <li>TLS: Client Hello</li>
+    <li>TLS: Server Hello</li>
+  </ol>
+  <aside class="notes">Dopo il Server Hello, in TLS 1.3, Wireshark mostra quasi solo "Application Data": anche il certificato viaggia cifrato (lezione 4). Chiedere: perché il SYN-ACK è un solo pacchetto? Perché il server conferma il SYN del client e manda il proprio SYN insieme.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il galateo dei protocolli</p><h2>Una regola scritta nel 1981</h2></div>
+  <figure class="citazione">
+    <blockquote>Sii prudente in ciò che fai, sii liberale in ciò che accetti dagli altri.</blockquote>
+    <figcaption><b>Jon Postel</b>, curatore delle RFC di Internet, RFC 793 (TCP), 1981</figcaption>
+  </figure>
+  <p class="lead">Ha permesso a reti diversissime di parlarsi. Ma un server troppo "liberale" accetta anche pacchetti malformati: è così che nascono molti attacchi. Oggi si dice: <b>liberale sì, ma verifica tutto</b>.</p>
+  <aside class="notes">Traduzione nostra; originale: "be conservative in what you do, be liberal in what you accept from others" (RFC 793, sezione 2.10, "Robustness Principle"; un'idea simile è già nell'RFC 760 del 1980). Jon Postel ha curato le RFC per quasi trent'anni ed è stato il primo gestore della IANA. L'RFC 9413 (2023) discute i problemi del principio quando accettare input malformati crea ambiguità e falle: collegare a Heartbleed (lezione 1), dove il server si fidava della lunghezza dichiarata dal client.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Una password in chiaro, vista con i tuoi occhi</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Avvia il server Java di un compito precedente (per esempio il guestbook o l'API con il token) su <b>http://localhost:8080</b>.</li>
+      <li>In Wireshark cattura sull'interfaccia <b>Adapter for loopback traffic capture</b>.</li>
+      <li>Invia un login o un messaggio con una password <b>inventata</b>, per esempio <code>Prova-Lab-123</code>.</li>
+      <li>Filtro <code>http.request.method == "POST"</code>, poi tasto destro, <b>Segui</b>, <b>HTTP Stream</b>.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> nel flusso, in rosso, leggi la richiesta POST intera, con la password <b>Prova-Lab-123</b> in chiaro. Chiunque fosse sul percorso la leggerebbe uguale.</div>
+  </div>
+  <aside class="notes">L'interfaccia di loopback compare solo se Npcap è stato installato con l'opzione per il traffico di loopback (predefinita nelle versioni recenti). Se non c'è: usare due PC del laboratorio, server su uno e browser sull'altro, catturando sul PC del client (è il proprio traffico). Il rosso nel flusso è il client, il blu il server. Ripetere che si usano solo password inventate. Collegare alla lezione 2: anche i cookie di sessione viaggiano in chiaro con HTTP, ed ecco perché HSTS e l'attributo Secure.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni filtro a ciò che mostra</h2></div>
+  <dl class="puzzle-abbina" data-id="ws-filtri">
+    <dt><code>dns</code></dt><dd>Domande e risposte sui nomi</dd>
+    <dt><code>tcp.port == 443</code></dt><dd>Il traffico verso o da HTTPS</dd>
+    <dt><code>tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0</code></dt><dd>Solo i tentativi di aprire una connessione</dd>
+    <dt><code>tls.handshake.type == 1</code></dt><dd>Solo i Client Hello</dd>
+    <dt><code>icmp</code></dt><dd>I ping e i messaggi di errore della rete</dd>
+  </dl>
+  <aside class="notes">Il filtro dei soli SYN è quello che un analista usa per vedere una scansione di porte: molti SYN verso porte diverse, pochissimi completati. Il filtro icmp tornerà utile nel laboratorio sul ping dell'unità 3: per ora basta lanciare ping dal Prompt e vedere le Echo request e reply.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>La stessa cosa con TLS: che cosa resta visibile?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Cattura sulla scheda di rete mentre apri <b>https://www.wikipedia.org/wiki/Gatto</b>.</li>
+      <li>Filtro <code>tls.handshake.type == 1</code>: apri il Client Hello, cerca l'estensione <b>server_name</b>.</li>
+      <li>Segui il flusso TCP: si legge qualcosa della pagina o del percorso <b>/wiki/Gatto</b>?</li>
+      <li>In <b>wireshark-cognome.md</b> scrivi l'elenco di ciò che resta visibile e di ciò che è nascosto. Rispondi al sondaggio iniziale.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> nel Client Hello leggi <b>www.wikipedia.org</b> in chiaro. Il percorso e il contenuto non compaiono da nessuna parte: solo "Application Data" cifrati.</div>
+  </div>
+  <aside class="notes">Resta visibile: indirizzi IP e porte, nome del server nello SNI (a meno di ECH), richieste DNS se non cifrate, dimensioni e tempi dei pacchetti (da cui si possono fare inferenze: "traffic analysis"). Nascosti: percorso, parametri, header HTTP, cookie, contenuto. Se il browser usa ECH, lo SNI esterno mostra un nome generico del provider (per esempio di una CDN). Se la rete della scuola ispeziona TLS, il certificato sarà quello del proxy (lezione 4).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>Con una VPN commerciale attiva, sulla Wi-Fi del bar, chi può vedere il nome dei siti che visiti?</h2></div>
+  <div class="poll" data-id="ws-vpn" data-tipo="quiz" data-risposta="C">
+    <ol><li>Nessuno, la VPN rende anonimi</li><li>Solo il gestore della Wi-Fi</li><li>Il fornitore della VPN, al posto del gestore della Wi-Fi</li><li>Tutti quelli collegati alla stessa Wi-Fi</li></ol>
+    <p class="why">La VPN cifra tutto fino al suo server: chi gestisce la Wi-Fi vede solo traffico verso la VPN. Ma all'uscita dal tunnel il fornitore della VPN vede gli stessi metadati che avrebbe visto il gestore: hai solo spostato la fiducia.</p>
+  </div>
+  <aside class="notes">Riprende il sondaggio di network-web-security. In Wireshark, con la VPN attiva, si vedrebbero solo pacchetti verso un unico indirizzo, per esempio UDP per WireGuard. Domanda: di chi ti fidi di più, del bar o del fornitore della VPN? Non c'è una risposta unica: dipende dal fornitore, dalla sua giurisdizione e dalla sua politica sui log.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>Le statistiche: chi parla di più?</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Riapri <b>primo-giro-cognome.pcapng</b> o fai una cattura di 2 minuti di navigazione normale.</li>
+      <li>Menu <b>Statistiche</b>, <b>Conversazioni</b>, scheda IPv4: ordina per byte.</li>
+      <li>Menu <b>Statistiche</b>, <b>Gerarchia dei protocolli</b>: quale percentuale è TLS? Quanta è DNS?</li>
+      <li>Annota i tre indirizzi con più traffico e prova a capire a quali servizi appartengono (nslookup inverso o i nomi DNS della cattura).</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> TLS (o QUIC) occupa la gran parte dei byte; il DNS è una frazione minima dei byte ma tanti piccoli pacchetti.</div>
+  </div>
+  <aside class="notes">Il nome del menu in italiano può essere "Statistics" se Wireshark è in inglese: Statistics, Conversations e Protocol Hierarchy. È esattamente il tipo di vista che usano i sistemi di NDR (Network Detection and Response) dei SOC: senza leggere il contenuto, notano chi parla con chi, quanto e quando. Esempio: un PC che di notte invia gigabyte verso un indirizzo mai visto è un segnale di esfiltrazione (collegare a cyberdefender).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Oggi</p><h2>Il traffico è sempre più cifrato: e la difesa?</h2></div>
+  <div class="cols-2">
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Meno da vedere</h3><p>HTTPS ovunque, DNS cifrato (DoH), QUIC e ora <b>ECH</b>, che nasconde anche il nome del sito: chi analizza la rete vede sempre meno contenuto. Ottimo per la privacy, più difficile per chi difende.</p></div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><h3>Più da dedurre</h3><p>I sistemi di rilevamento usano modelli di machine learning sui <b>metadati</b>: tempi, dimensioni, destinazioni, impronte dei Client Hello. Riconoscono un malware dal "modo di parlare", senza decifrare nulla.</p></div>
+  </div>
+  <aside class="notes">ECH = Encrypted Client Hello, in fase di standardizzazione all'IETF e già supportato da Chrome e Firefox con alcuni provider (per esempio Cloudflare). Un'impronta nota del Client Hello è JA3 (2017, Salesforce) e il suo successore JA4: dall'ordine di algoritmi ed estensioni si riconosce il programma che si connette. Senza hype: il machine learning nei SOC produce anche molti falsi positivi, e il lavoro dell'analista resta centrale (lezione cyberdefender).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Nella cattura vedi 500 pacchetti SYN dal PC 10.0.3.27 verso 500 porte diverse di un server, in 2 secondi, e quasi nessun SYN-ACK. Che cos'è più probabile?</h2></div>
+  <div class="poll" data-id="ws-scan" data-tipo="quiz" data-risposta="B">
+    <ol><li>Un aggiornamento di Windows</li><li>Una scansione delle porte</li><li>Un attacco DDoS</li><li>Una videochiamata</li></ol>
+    <p class="why">Tante porte diverse, un solo bersaglio, connessioni mai completate: è la firma di una scansione (per esempio con nmap), la fase di ricognizione della kill chain. Un DDoS arriva da molte origini verso pochi servizi; aggiornamenti e videochiamate usano poche porte e connessioni complete.</p>
+  </div>
+  <aside class="notes">Collegare alla Cyber Kill Chain (cybercriminali): ricognizione. Un IDS come Suricata o Snort ha regole proprio per questo schema. Ricordare: fare scansioni di porte su sistemi di altri senza autorizzazione non è lecito; in laboratorio solo su macchine proprie o predisposte. Il filtro per trovarle è quello del puzzle: tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="5380" data-aiuto="il DNS risponde sulla porta 53">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la porta del DNS</li>
+      <li>3ª e 4ª cifra: la porta di HTTP, quello in chiaro dove avete letto la password</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 53 e 80. Ora dite quale delle due porte, oggi, andrebbe chiusa sul server del login e sostituita da quale.</div>
+  </div>
+  <aside class="notes">Codice: 5380. Premio: la 80 per il login (sostituita dalla 443 con TLS; la 80 può restare aperta solo per reindirizzare a HTTPS, insieme a HSTS). Il DNS usa UDP 53 per le richieste normali e TCP 53 per le risposte grandi e i trasferimenti di zona.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Il driver che Wireshark usa su Windows per catturare si chiama <span class="blank" data-risposta="Npcap" style="--w:6ch"></span>.</p>
+    <p>Il primo pacchetto del three-way handshake è il <span class="blank" data-risposta="SYN" style="--w:4ch"></span>.</p>
+    <p>Con HTTPS il nome del sito resta visibile nel campo <span class="blank" data-risposta="SNI|server_name|server name" style="--w:5ch"></span> del Client Hello.</p>
+    <p>Intercettare le comunicazioni di altri è punito dall'articolo 617-<span class="blank" data-risposta="quater" style="--w:6ch"></span> del codice penale.</p>
+    <p>Per ricomporre una conversazione si usa Segui <span class="blank" data-risposta="TCP Stream|flusso TCP|flusso" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: Npcap; SYN; SNI (accettato server_name); quater; TCP Stream (accettato flusso TCP).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Si cattura solo il proprio traffico: il resto è reato</li>
+      <li>Elenco, dettagli per livelli, byte; filtri di visualizzazione</li>
+      <li>DNS, SYN, SYN-ACK, ACK, Client Hello</li>
+      <li>HTTP: password leggibile da chiunque sul percorso</li>
+    </ul>
+    <ul class="points">
+      <li>TLS: visibili IP, SNI, tempi e dimensioni; nascosto il resto</li>
+      <li>La VPN sposta la fiducia, non la elimina</li>
+      <li>Statistiche e metadati: come lavora chi difende</li>
+      <li>Prossima lezione: informatica forense</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("Il diario di una pagina web"). Ricordare di cancellare dai PC del laboratorio le catture con traffico personale.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

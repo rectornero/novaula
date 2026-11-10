@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dalla falla al CVE · Novaula</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body data-accent="viola">
+
+<section class="slide cover">
+  <p class="kicker">Cybersecurity avanzata · Lezione 1 di 8</p>
+  <h1>Dalla falla<br>al CVE</h1>
+  <p class="lead">Che cosa succede tra il momento in cui qualcuno trova una vulnerabilità e il momento in cui il tuo PC si aggiorna. E come si misura quanto è grave.</p>
+  <p class="meta"><span class="chip">5G TPSI</span><span>Ciclo di vita, CVE, CVSS, divulgazione coordinata, bug bounty</span></p>
+  <aside class="notes">Prima lezione del blocco avanzato, dopo l'Unità 1 (cyberspace, cybersecurity aziendale, cybercriminali, cyberdefender, network e web app security, capture the flag). Obiettivi: conoscere il ciclo di vita di una vulnerabilità, leggere un identificatore CVE e un vettore CVSS 3.1, calcolare un punteggio, sapere come si segnala una falla in modo legale (divulgazione coordinata, security.txt, bug bounty). Durata indicativa: 3 ore. Servono solo il browser e il JDK. Tutti i laboratori usano dati pubblici: non si prova nessuna falla su sistemi reali.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Per cominciare</p><h2>Scopri per caso che cambiando un numero nell'URL vedi il registro di un'altra classe. Che cosa fai?</h2></div>
+  <div class="poll" data-id="cve-scoperta">
+    <ol><li>Niente: non sono affari miei</li><li>Lo dico subito al docente o alla segreteria, senza provare altro</li><li>Provo qualche altro numero per capire quanto è grave</li><li>Lo racconto ai compagni</li><li>Scrivo all'azienda che produce il registro</li></ol>
+  </div>
+  <aside class="notes">Non dare subito la risposta: riprendere il sondaggio alla slide sulla divulgazione coordinata. Punto chiave: la C sembra "da professionisti", ma provare altri numeri significa accedere ad altri dati senza autorizzazione, cioè quello che punisce l'art. 615-ter c.p. (accesso abusivo a un sistema informatico). La strada giusta è B o E: fermarsi, annotare che cosa si è visto e segnalarlo a chi può correggere. La D diffonde la falla prima che sia corretta. È lo stesso caso IDOR visto in network-web-security.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il percorso</p><h2>La vita di una vulnerabilità</h2></div>
+  <div class="flow">
+    <div class="card soft"><h3>Scoperta</h3><p class="small">Un ricercatore, un fuzzer, un'AI o un criminale trova la falla.</p></div>
+    <div class="card soft"><h3>Segnalazione</h3><p class="small">Al produttore, in privato.</p></div>
+    <div class="card fill"><h3>Patch e avviso</h3><p class="small">Correzione, ID CVE, punteggio.</p></div>
+    <div class="card soft"><h3>Aggiornamento</h3><p class="small">Chi usa il software installa la patch.</p></div>
+  </div>
+  <div class="cols-2">
+    <div class="callout"><b>Zero-day</b>: una falla che gli attaccanti sfruttano quando il produttore ha avuto "zero giorni" per correggerla.</div>
+    <div class="callout hl">Il tratto più pericoloso è spesso l'ultimo: la patch esiste, ma <b>nessuno la installa</b>.</div>
+  </div>
+  <aside class="notes">Se il primo a trovare la falla è un criminale, il percorso salta segnalazione e correzione: la falla viene sfruttata (zero-day) finché qualcuno non se ne accorge. Esempio dell'ultimo tratto: WannaCry (maggio 2017) sfruttava una falla di Windows SMB per cui Microsoft aveva pubblicato la patch MS17-010 a marzo 2017, due mesi prima; i sistemi colpiti erano quelli non aggiornati. Collegare alla categoria A06 della OWASP Top 10 (componenti vulnerabili e non aggiornati) vista nella lezione 5 dell'unità.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Metti in ordine: una falla scoperta da una ricercatrice, gestita bene</h2></div>
+  <ol class="puzzle-ordina" data-id="cve-ordine">
+    <li>Trova un errore di memoria nel software di un router</li>
+    <li>Scrive al produttore all'indirizzo indicato nel suo security.txt</li>
+    <li>Il produttore conferma e chiede un ID CVE</li>
+    <li>Esce l'aggiornamento del firmware</li>
+    <li>Viene pubblicato l'avviso con il CVE e il punteggio CVSS</li>
+    <li>La ricercatrice presenta la sua analisi a una conferenza</li>
+  </ol>
+  <aside class="notes">L'ID CVE si può riservare prima della pubblicazione: il produttore (se è una CNA) o un'altra CNA lo assegna in stato riservato, e i dettagli diventano pubblici solo insieme alla patch o poco dopo. Discussione: perché la ricercatrice aspetta a parlarne in pubblico? Per dare agli utenti il tempo di aggiornare. Il security.txt lo vediamo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Un nome per ogni falla</p><h2>CVE: Common Vulnerabilities and Exposures</h2></div>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="big" style="font-size:72px">CVE-2021-44228</p>
+      <ul class="points small">
+        <li><b>2021</b>: l'anno in cui l'ID è stato assegnato o riservato</li>
+        <li><b>44228</b>: un numero progressivo, di 4 o più cifre</li>
+        <li>Un ID = una falla, uguale in tutto il mondo: avvisi, antivirus e scanner parlano la stessa lingua</li>
+      </ul>
+    </div>
+    <div class="card soft"><h3>Chi fa che cosa</h3><ul class="points small"><li><b>MITRE</b> gestisce il programma CVE, nato nel 1999</li><li><b>CNA</b>: le organizzazioni autorizzate ad assegnare gli ID (Microsoft, Google, Red Hat…)</li><li><b>NVD</b> e <b>EUVD</b>: database che arricchiscono i CVE con punteggi e prodotti colpiti</li></ul></div>
+  </div>
+  <aside class="notes">CVE-2021-44228 è Log4Shell, la falla di Apache Log4j 2 resa pubblica nel dicembre 2021: bastava far scrivere nei log una stringa come ${jndi:ldap://…} per far eseguire codice remoto al server. Log4j è una libreria Java di logging usata ovunque: per questo è il caso perfetto per una classe che programma in Java. CNA = CVE Numbering Authority; oggi sono diverse centinaia. NVD = National Vulnerability Database del NIST (USA). EUVD = European Vulnerability Database, gestito dall'ENISA, attivo dal 2025. Dal 2014 la parte numerica può avere più di 4 cifre.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 20 minuti</span></p>
+  <h2>Leggi due falle famose nel database</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Apri <b>nvd.nist.gov</b>, menu Vulnerabilities, e cerca <b>CVE-2021-44228</b>.</li>
+      <li>Annota: prodotto, data di pubblicazione, punteggio CVSS 3.x e il suo <b>vettore</b> (la stringa che inizia con <code>CVSS:3.1/</code>).</li>
+      <li>Ripeti con <b>CVE-2014-0160</b>.</li>
+      <li>Salva tutto in <b>cve-cognome.md</b>: per ciascuna, una riga su che cosa permetteva di fare.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> CVE-2021-44228 è Apache Log4j, punteggio <b>10.0</b> (Critical). CVE-2014-0160 è OpenSSL, la falla chiamata <b>Heartbleed</b>.</div>
+  </div>
+  <aside class="notes">Il vettore di Log4Shell su NVD è CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H, punteggio 10.0. Heartbleed (aprile 2014) permetteva di leggere fino a 64 KB della memoria di un server per ogni richiesta "heartbeat" malformata: dentro potevano esserci password, cookie di sessione e perfino la chiave privata del certificato. Il punteggio CVSS 3.x di Heartbleed su NVD è 7.5 (alto); il CVSS 2 originale era più basso. Se NVD è lento, la stessa ricerca funziona su euvd.enisa.europa.eu o su cve.org (che però non mostra sempre il punteggio).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Misurare la gravità</p><h2>CVSS 3.1: un vettore, un numero da 0 a 10</h2></div>
+  <table class="data compact">
+    <tr><th>Metrica</th><th>Domanda</th><th>Valori</th></tr>
+    <tr><td class="mono">AV</td><td>Da dove si attacca?</td><td>Network, Adjacent, Local, Physical</td></tr>
+    <tr><td class="mono">AC</td><td>Serve una situazione particolare?</td><td>Low, High</td></tr>
+    <tr><td class="mono">PR</td><td>Servono privilegi?</td><td>None, Low, High</td></tr>
+    <tr><td class="mono">UI</td><td>Serve un'azione della vittima?</td><td>None, Required</td></tr>
+    <tr><td class="mono">S</td><td>L'effetto esce dal componente colpito?</td><td>Unchanged, Changed</td></tr>
+    <tr><td class="mono">C · I · A</td><td>Quanto colpisce riservatezza, integrità, disponibilità?</td><td>High, Low, None</td></tr>
+  </table>
+  <p class="small">Fasce: <b>0.1-3.9</b> bassa · <b>4.0-6.9</b> media · <b>7.0-8.9</b> alta · <b>9.0-10.0</b> critica</p>
+  <aside class="notes">CVSS = Common Vulnerability Scoring System, gestito dal FIRST (Forum of Incident Response and Security Teams). Queste sono le metriche Base: descrivono la falla in sé. Esistono anche metriche Temporal e Environmental (nella versione 4.0 diventate Threat ed Environmental) per adattare il punteggio al contesto. La versione 4.0 è uscita a fine 2023, ma NVD e molti avvisi usano ancora la 3.1, quindi partiamo da questa. C, I, A: la triade vista in principi-sicurezza. Il punteggio misura la gravità tecnica, non il rischio per la tua azienda: lo vediamo tra poco.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz a trabocchetto</p><h2>La tua azienda ha 200 falle aperte. Quali correggi per prime?</h2></div>
+  <div class="poll" data-id="cve-priorita" data-tipo="quiz" data-risposta="C">
+    <ol><li>Quelle con il CVSS più alto, sempre</li><li>Quelle più vecchie</li><li>Quelle già sfruttate dagli attaccanti, sui sistemi esposti e importanti</li><li>Quelle che hanno un nome famoso, come Heartbleed</li></ol>
+    <p class="why">Il CVSS misura la gravità tecnica, non la probabilità che qualcuno la sfrutti né l'importanza del sistema. Una falla da 7.5 sfruttata ogni giorno su un server esposto viene prima di un 9.8 su un PC isolato. Per questo si usano il catalogo KEV delle falle già sfruttate e il punteggio EPSS.</p>
+  </div>
+  <aside class="notes">Quasi tutti rispondono A. Il catalogo KEV (Known Exploited Vulnerabilities) della CISA americana, pubblico dal novembre 2021, elenca le falle con prove di sfruttamento reale. EPSS (Exploit Prediction Scoring System, sempre del FIRST) stima la probabilità che una falla venga sfruttata nei prossimi 30 giorni. Una buona priorità combina tre cose: è sfruttata? (KEV/EPSS), quanto è grave? (CVSS), quanto conta il sistema? (registro degli asset visto in cybersecurity-aziendale).</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 25 minuti</span></p>
+  <h2>Dai tu il voto a tre falle</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Apri il calcolatore ufficiale: <b>first.org/cvss/calculator/3.1</b>. Per ogni caso scegli le metriche e annota vettore e punteggio in <b>cvss-cognome.md</b>.</p>
+      <ol class="steps small">
+        <li><b>Caso A</b>: chiunque su Internet, senza login e senza aiuto della vittima, esegue codice sul server e ne prende il controllo.</li>
+        <li><b>Caso B</b>: un utente loggato cambia l'ID nell'URL e legge gli ordini degli altri clienti (l'IDOR della lezione 5).</li>
+        <li><b>Caso C</b>: un link preparato fa eseguire uno script nel browser di chi lo apre (XSS riflesso).</li>
+      </ol>
+    </div>
+    <div class="check small"><b>Controllo:</b> A = <b>9.8</b> critica · B = <b>6.5</b> media · C = <b>6.1</b> media. Se trovi altro, confronta il vettore con il compagno.</div>
+  </div>
+  <aside class="notes">Vettori attesi. A: AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H = 9.8. B: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N = 6.5 (servono privilegi bassi, cioè un account; si leggono dati, non si modificano). C: AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N = 6.1 (serve che la vittima clicchi; lo scope cambia perché lo script gira nel browser della vittima, fuori dal server vulnerabile). Discussione: B prende "solo" 6.5, ma per un negozio che espone indirizzi e ordini dei clienti è un incidente con obbligo di notifica al Garante (GDPR, art. 33). Ecco perché il voto tecnico non basta.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Una promessa del 1997</p><h2>Tanti occhi, nessun bug?</h2></div>
+  <figure class="citazione">
+    <blockquote>Con abbastanza occhi, tutti i bug vengono a galla.</blockquote>
+    <figcaption><b>Eric S. Raymond</b>, <i>La cattedrale e il bazaar</i> (1997), la chiama "legge di Linus" in onore di Linus Torvalds</figcaption>
+  </figure>
+  <p class="lead">Nel 2014 Heartbleed ha mostrato il limite: OpenSSL proteggeva mezzo web, ma lo mantenevano pochissime persone, quasi tutte volontarie.</p>
+  <aside class="notes">Traduzione nostra; originale: "Given enough eyeballs, all bugs are shallow", dal saggio The Cathedral and the Bazaar, presentato nel 1997 e pubblicato come libro nel 1999. Raymond attribuisce l'idea a Torvalds e le dà il suo nome. Heartbleed: il codice difettoso era entrato in OpenSSL a fine 2011 ed era nelle versioni pubblicate dal marzo 2012; è stato scoperto e reso pubblico nell'aprile 2014. Dopo il caso, la Linux Foundation ha avviato la Core Infrastructure Initiative per finanziare i progetti open source critici (oggi le attività proseguono nella OpenSSF). Domanda alla classe: allora il software open source è meno sicuro? No: gli occhi servono, ma devono esserci davvero, e qualcuno deve pagarli.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Quiz</p><h2>Per quanto tempo il codice di Heartbleed è rimasto nelle versioni pubblicate di OpenSSL, prima di essere scoperto?</h2></div>
+  <div class="poll" data-id="cve-heartbleed" data-tipo="quiz" data-risposta="D">
+    <ol><li>Poche ore: lo hanno notato subito</li><li>Circa una settimana</li><li>Circa tre mesi</li><li>Circa due anni</li></ol>
+    <p class="why">Le versioni con l'errore sono uscite nel marzo 2012 e la falla è stata resa pubblica nell'aprile 2014: due anni in cui chiunque l'avesse notata poteva leggere la memoria dei server senza lasciare tracce nei log.</p>
+  </div>
+  <aside class="notes">Nessuno sa se qualcuno l'abbia sfruttata prima del 2014. L'errore era un controllo mancante sulla lunghezza: il client dichiarava di inviare per esempio 64 KB di dati di heartbeat ma ne mandava 1 byte, e il server rispondeva copiando 64 KB della sua memoria. Lo stesso tipo di errore (lettura oltre il buffer) è quello che i linguaggi con controllo dei limiti, come Java, impediscono.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Come si segnala</p><h2>Divulgazione coordinata, security.txt, bug bounty</h2></div>
+  <div class="cols-3">
+    <div class="card"><h3>Divulgazione coordinata</h3><p class="small">Segnali in privato, il produttore corregge, poi si pubblica insieme. Google Project Zero dà <b>90 giorni</b> di tempo.</p></div>
+    <div class="card"><h3>security.txt</h3><p class="small">Un file in <code>/.well-known/security.txt</code> dice a chi scrivere. Standard <b>RFC 9116</b> (2022).</p></div>
+    <div class="card"><h3>Bug bounty</h3><p class="small">Programmi che <b>autorizzano</b> i test su un perimetro preciso e pagano le falle trovate.</p></div>
+  </div>
+  <div class="callout">Senza un'autorizzazione scritta, anche "solo per vedere" resta accesso abusivo. Il bug bounty è legale perché <b>le regole le scrive il proprietario</b>.</div>
+  <aside class="notes">Riprendere il sondaggio iniziale. La divulgazione completa immediata (full disclosure) mette pressione ai produttori ma lascia gli utenti scoperti; la divulgazione coordinata (CVD) è oggi la prassi. La politica di Project Zero: 90 giorni per la correzione, più 30 giorni prima di pubblicare i dettagli se la patch è uscita in tempo; meno tempo se la falla è già sfruttata. Piattaforme di bug bounty: HackerOne, Bugcrowd, Intigriti (europea, con sede in Belgio). Ogni programma ha un "scope": fuori da quello non si è autorizzati. La NIS2 chiede a ogni Stato dell'UE di indicare un CSIRT come coordinatore della divulgazione: in Italia è il CSIRT Italia, presso l'ACN.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 15 minuti</span></p>
+  <h2>A chi scriveresti? Leggi i security.txt</h2>
+  <div class="cols-2 wide-left">
+    <ol class="steps small">
+      <li>Nel Prompt dei comandi: <code>curl -s https://www.google.com/.well-known/security.txt</code></li>
+      <li>Ripeti con altri due siti a scelta (per esempio github.com e il sito di una banca). Se ricevi una pagina d'errore, il sito non ce l'ha.</li>
+      <li>In <b>cve-cognome.md</b> annota i campi <code>Contact</code>, <code>Expires</code> e, se ci sono, <code>Policy</code> e <code>Preferred-Languages</code>.</li>
+      <li>Scrivi il security.txt per l'app della vostra classe: 4 righe.</li>
+    </ol>
+    <div class="check small"><b>Controllo:</b> ogni security.txt valido ha almeno un <code>Contact:</code> (e-mail o URL) e un <code>Expires:</code> con una data futura.</div>
+  </div>
+  <aside class="notes">Leggere un file pubblico che il sito pubblica apposta è lecito: è come leggere un cartello. Non si fa nient'altro sul sito. RFC 9116 rende obbligatori Contact ed Expires; Policy rimanda alle regole della segnalazione, Encryption alla chiave PGP, Canonical all'URL ufficiale del file. Esempio per la classe: Contact: mailto:sicurezza@scuola.example / Expires: 2027-06-30T23:00:00.000Z / Preferred-Languages: it, en / Policy: https://scuola.example/segnalazioni. Se in laboratorio curl non risolve HTTPS, aprire lo stesso indirizzo nel browser.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Puzzle</p><h2>Abbina ogni parola al suo significato</h2></div>
+  <dl class="puzzle-abbina" data-id="cve-termini">
+    <dt>Zero-day</dt><dd>Falla sfruttata prima che esista una correzione</dd>
+    <dt>CNA</dt><dd>Organizzazione autorizzata ad assegnare gli ID CVE</dd>
+    <dt>KEV</dt><dd>Catalogo delle falle con sfruttamento reale accertato</dd>
+    <dt>EPSS</dt><dd>Probabilità che una falla venga sfruttata nei prossimi 30 giorni</dd>
+    <dt>Scope di un bug bounty</dt><dd>Sistemi che il proprietario autorizza a testare</dd>
+  </dl>
+  <aside class="notes">Far lavorare a coppie, 3 minuti. Errore tipico: confondere KEV ed EPSS. KEV è una lista di fatti (è stata sfruttata), EPSS è una previsione (probabilità). Le due cose insieme guidano la priorità delle patch.</aside>
+</section>
+
+<section class="slide lab">
+  <p class="lab-tag">Al computer <span class="time">· 30 minuti</span></p>
+  <h2>Il calcolatore CVSS in Java</h2>
+  <div class="cols-2 wide-left">
+    <div class="stack">
+      <p class="small">Scrivi <b>Cvss.java</b> con un metodo <code>double base(String vettore)</code> per i vettori con <b>S:U</b>.</p>
+<pre class="code" style="font-size:20px">iss  = 1 - (1-C)*(1-I)*(1-A)
+imp  = 6.42 * iss
+expl = 8.22 * AV * AC * PR * UI
+base = imp &lt;= 0 ? 0 : roundUp(min(imp+expl, 10))</pre>
+      <p class="tiny muted">AV N .85 A .62 L .55 P .2 · AC L .77 H .44 · PR N .85 L .62 H .27 · UI N .85 R .62 · C/I/A H .56 L .22 N 0</p>
+    </div>
+    <div class="check small"><b>Controllo:</b> <code>AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</code> stampa <b>9.8</b> e il vettore del caso B stampa <b>6.5</b>.</div>
+  </div>
+  <aside class="notes">roundUp arrotonda per eccesso a una cifra decimale. La specifica 3.1 lo fa con gli interi per evitare errori in virgola mobile: int x = (int)Math.round(v * 100000); if (x % 10000 == 0) return x / 100000.0; else return (Math.floor(x / 10000) + 1) / 10.0. Soluzione: dividere il vettore con split("/"), poi ogni pezzo con split(":"), e usare una Map&lt;String, Double&gt; per i pesi. Verifica a mano del caso B: iss = 0.56; imp = 3.5952; expl = 8.22 × 0.85 × 0.77 × 0.62 × 0.85 = 2.8353; somma 6.4305, arrotondata per eccesso 6.5. Estensione per chi finisce: lo scope Changed (imp = 7.52 × (iss − 0.029) − 3.25 × (iss − 0.02)^15, PR con pesi L .68 H .5, base = roundUp(min(1.08 × (imp + expl), 10))) e la verifica con Log4Shell = 10.0.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Regole nuove</p><h2>Dal 2026 chi vende software deve segnalare</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li><b>Cyber Resilience Act</b> (regolamento UE 2024): i prodotti con parti digitali vendute in Europa devono gestire le vulnerabilità per tutta la vita del prodotto</li>
+      <li>Dall'11 settembre 2026 i produttori devono segnalare le falle <b>attivamente sfruttate</b> al CSIRT e all'ENISA</li>
+      <li>Patch di sicurezza gratuite e un contatto per le segnalazioni diventano obblighi</li>
+    </ul>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Il "security.txt" e la gestione delle segnalazioni non sono più una cortesia: per chi produce app, router o dispositivi smart sono parte della conformità del prodotto, come la marcatura CE.</p></div>
+  </div>
+  <aside class="notes">Il Cyber Resilience Act è il regolamento (UE) 2024/2847, in vigore dal dicembre 2024. Gli obblighi di segnalazione delle vulnerabilità attivamente sfruttate e degli incidenti gravi si applicano dall'11 settembre 2026; la maggior parte degli altri obblighi dal dicembre 2027. La segnalazione passa da una piattaforma unica gestita dall'ENISA. Collegare alla NIS2 vista in cybersecurity-aziendale e cyberdefender: la NIS2 riguarda chi offre servizi essenziali, il CRA riguarda chi produce prodotti. All'esame: un buon collegamento tra informatica, diritto ed economia.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Chi trova le falle</p><h2>Anche l'AI cerca vulnerabilità</h2></div>
+  <div class="cols-2">
+    <div class="stack">
+      <p>I <b>fuzzer</b> inviano milioni di input casuali o malformati a un programma e guardano se si blocca: così si trovano molte falle di memoria.</p>
+      <p class="small muted">OSS-Fuzz di Google prova da anni migliaia di progetti open source, ogni giorno, in automatico.</p>
+    </div>
+    <div class="oggi"><p class="oggi-tag">Oggi</p><p>Nel novembre 2024 Google ha annunciato che <b>Big Sleep</b>, un agente basato su un modello linguistico, aveva trovato una falla sfruttabile in <b>SQLite</b> prima che entrasse in una versione ufficiale. Gli stessi strumenti sono a disposizione di chi attacca: la corsa tra scoperta e patch si accorcia.</p></div>
+  </div>
+  <aside class="notes">Fonte: blog di Google Project Zero, "From Naptime to Big Sleep" (1 novembre 2024): un buffer underflow nello stack di SQLite, trovato nel ramo di sviluppo e corretto lo stesso giorno della segnalazione, quindi senza impatto sugli utenti. Senza hype: gli agenti AI sono utili soprattutto per guidare il fuzzing e analizzare il codice; un esperto deve sempre verificare che la falla sia reale. Collegare all'AI nei SOC (cyberdefender) e alla prompt injection (network-web-security).</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Sfida a squadre</p><h2>Apri il lucchetto</h2></div>
+  <div class="puzzle-codice" data-risposta="9065" data-aiuto="le prime due cifre sono la soglia (senza virgola) da cui una falla è critica">
+    <ul class="points">
+      <li>1ª e 2ª cifra: la soglia CVSS da cui una falla è <b>critica</b>, senza virgola (x.0 → x0)</li>
+      <li>3ª e 4ª cifra: il punteggio del caso B del laboratorio, senza virgola</li>
+    </ul>
+    <div class="premio"><b>Lucchetto aperto!</b> 9.0 e 6.5. Ora spiegate perché il caso B, "solo" medio, può costare a un negozio più del caso A su un PC isolato.</div>
+  </div>
+  <aside class="notes">Codice: 9065 (critica da 9.0, caso B 6.5). Il premio riprende il quiz sulle priorità: gravità tecnica, sfruttamento reale e valore del sistema sono tre cose diverse.</aside>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Biglietto d'uscita</p><h2>Completa prima di uscire</h2></div>
+  <div class="puzzle-completa">
+    <p>Una falla sfruttata prima che esista la patch si chiama <span class="blank" data-risposta="zero-day|zero day|0-day" style="--w:8ch"></span>.</p>
+    <p>Il punteggio di gravità da 0 a 10 si chiama <span class="blank" data-risposta="CVSS" style="--w:6ch"></span>.</p>
+    <p>Il file che dice a chi segnalare una falla è <span class="blank" data-risposta="security.txt" style="--w:11ch"></span>.</p>
+    <p>Log4Shell ha l'ID CVE-2021-<span class="blank" data-risposta="44228" style="--w:6ch"></span>.</p>
+    <p>Segnalare in privato e pubblicare insieme al produttore si chiama divulgazione <span class="blank" data-risposta="coordinata|responsabile" style="--w:10ch"></span>.</p>
+  </div>
+  <div class="timer" data-min="3"></div>
+  <aside class="notes">Soluzioni: zero-day; CVSS; security.txt; 44228; coordinata (accettato anche "responsabile", il nome più vecchio).</aside>
+</section>
+
+<section class="slide dark">
+  <div class="head"><p class="kicker">Riepilogo</p><h2>Cosa portiamo a casa</h2></div>
+  <div class="cols-2">
+    <ul class="points">
+      <li>Scoperta, segnalazione, patch, avviso, aggiornamento</li>
+      <li>CVE: un nome unico per ogni falla</li>
+      <li>CVSS: gravità tecnica da 0 a 10, letta dal vettore</li>
+      <li>Priorità: sfruttata? grave? importante?</li>
+    </ul>
+    <ul class="points">
+      <li>Divulgazione coordinata, security.txt, bug bounty</li>
+      <li>Senza autorizzazione non si prova nulla</li>
+      <li>Cyber Resilience Act: segnalare diventa un obbligo</li>
+      <li>Prossima lezione: XSS, CSRF e Content Security Policy</li>
+    </ul>
+  </div>
+  <p class="lead">Hai una domanda su una slide? Usa il pulsante <b>? Domande</b> in basso: la vedrà il docente e tutta la classe.</p>
+  <aside class="notes">Assegnare il compito collegato ("L'avviso di sicurezza"): si sceglie una falla del catalogo KEV e si scrive un avviso di una pagina per un'azienda di esempio.</aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

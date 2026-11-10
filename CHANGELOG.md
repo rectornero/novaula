@@ -5,6 +5,20 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 3.1.0 (10 Nov 2026): new programmes for 3E, 5F and 5G
+Nero's desk decisions of 9 Nov 2026 (Storywriting). Content only: no app code changes beyond this version number.
+Needs `aggiornamenti/2026-11-10-programmi-3e-5f-5g.sql` (idempotent, deletes nothing; run the database backup first).
+The old topic order of the three classes is kept in the table `topics_ordine_2026_11_10`. No lesson is removed.
+- 5G «Cybersecurity avanzata»: 8 new decks right after the CTF and before Unit 2 (`vulnerabilita-cve`, `xss-csrf-csp`,
+  `password-hash`, `tls-certificati`, `oauth-jwt-passkey`, `email-spf-dkim-dmarc`, `wireshark-traffico`,
+  `informatica-forense`), each with a homework PDF, plus a test (practice, test and solutions PDFs, position 15). Test
+  date left empty: the block takes about 8 weeks, so the later 5G test dates need moving in the planner.
+- 5F GPOI «Officina»: 6 workshop decks (`gpoi-officina-canvas`, `-mercato`, `-wbs`, `-cpm`, `-preventivo`, `-pitch`)
+  with 2-page group sheets (kind `progetto`, group work), interleaved with the theory in a new order.
+- 3E TPSI: hooks-first order of the topics not yet done (web first, then numbers and media, then projects and
+  responsive sites, then the operating system). No new decks.
+- Service worker cache `classe-v42`.
+
 ## 3.0.0 (5 Nov 2026): Novaula without personal data
 Nero's decision: Novaula becomes a materials-only platform. Lessons, programme, materials, homework as a task list,
 tests and practice tests, quizzes, agenda and timetable stay; everything that stored who a student is or how they did
