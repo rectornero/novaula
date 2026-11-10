@@ -8,6 +8,11 @@
 
   // Dalla più nuova. nome e motto solo per le versioni che hanno un nome.
   var NOVITA = [
+    { v: "3.1.0", data: "10 novembre 2026", punti: [
+        "5G: arriva il blocco «Cybersecurity avanzata», otto lezioni subito dopo la CTF: CVE e CVSS, XSS e CSRF, password e hash, TLS, OAuth e passkey, SPF e DMARC, Wireshark e informatica forense, ognuna con il suo compito, più una verifica con la simulazione.",
+        "5F: GPOI ora ha due binari, Teoria e Officina. Nelle sei Officine il vostro gruppo costruisce una startup passo passo: Business Model Canvas, mercato e SWOT, WBS, Gantt, preventivo e pareggio, business plan e pitch.",
+        "3E: il programma parte dal web. Si costruisce subito la prima pagina in HTML e CSS, e la teoria su numeri, immagini e suoni arriva quando serve."
+      ] },
     { v: "3.0.0", data: "5 novembre 2026", punti: [
         "Novaula non raccoglie più dati personali: niente profili, PIN, nomi, consegne o voti. Restano lezioni, programma, materiali, compiti, verifiche, quiz e agenda.",
         "I compiti si consegnano su Google Classroom: sotto ogni compito e sulle slide «Al computer» c'è il pulsante «Consegna su Classroom ↗». I voti li trovi sul registro elettronico.",
