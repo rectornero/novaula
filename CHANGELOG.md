@@ -13,11 +13,14 @@ No SQL needed. Ships with 3.1.1 (its SQL first).
   consegne di gruppo". The phone remembers the last track opened for each class.
 - The teacher's ↑ ↓ buttons move a topic within its own track. Other classes look exactly as before.
 
-## 3.1.1 (11 Nov 2026): 5F Officine at the start of each phase
+## 3.1.1 (11 Nov 2026): 5F Officine first in each phase, full canvas in Officina 1
 Needs `aggiornamenti/2026-11-11-5f-officine-in-testa.sql` (moves 6 topics, deletes nothing).
 - 3.1.0 put each 5F Officina after its theory topics, so Officina 1 sat 15 topics down and the Programma looked
   like the old book order. Theory (1 h) and Officina (2 h) run in parallel every week, so each Officina now opens its
   phase: Officina 1 is the next 5F topic.
+- Officina 1 deck (`gpoi-officina-canvas`, now 22 slides) explains the whole Business Model Canvas: the full nine-block
+  canvas, the right side (customer, value, revenue) and the left side (resources, activities, partners, costs) with
+  the RipetiQui example, and RipetiQui's completed canvas. Nero asked for it on 11 Nov.
 
 ## 3.1.0 (10 Nov 2026): new programmes for 3E, 5F and 5G
 Nero's desk decisions of 9 Nov 2026 (Storywriting). Content only: no app code changes beyond this version number.
