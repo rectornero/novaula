@@ -5,6 +5,12 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 3.1.1 (11 Nov 2026): 5F Officine at the start of each phase
+Needs `aggiornamenti/2026-11-11-5f-officine-in-testa.sql` (moves 6 topics, deletes nothing).
+- 3.1.0 put each 5F Officina after its theory topics, so Officina 1 sat 15 topics down and the Programma looked
+  like the old book order. Theory (1 h) and Officina (2 h) run in parallel every week, so each Officina now opens its
+  phase: Officina 1 is the next 5F topic.
+
 ## 3.1.0 (10 Nov 2026): new programmes for 3E, 5F and 5G
 Nero's desk decisions of 9 Nov 2026 (Storywriting). Content only: no app code changes beyond this version number.
 Needs `aggiornamenti/2026-11-10-programmi-3e-5f-5g.sql` (idempotent, deletes nothing; run the database backup first).
