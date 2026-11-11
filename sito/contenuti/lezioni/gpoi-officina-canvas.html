@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Officina 1: il Business Model Canvas · Novaula</title>
 <link rel="stylesheet" href="deck.css">
+<style>
+.bmc{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr);gap:10px;height:555px;margin-top:4px;flex:none}
+.bmc>div{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.bmc h4{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--accent);margin:0;display:flex;gap:10px;align-items:baseline}
+.bmc h4 i{font-style:normal;font-size:19px;color:#fff;background:var(--accent);border-radius:99px;min-width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.bmc p{margin:0;font-size:25px;line-height:1.28;color:var(--muted)}
+.bmc ul{margin:0;padding-left:24px;font-size:25px;line-height:1.3}
+.bmc .kp{grid-column:1/3;grid-row:1/3}.bmc .ka{grid-column:3/5;grid-row:1}.bmc .kr{grid-column:3/5;grid-row:2}
+.bmc .vp{grid-column:5/7;grid-row:1/3;background:var(--accent-soft);border-color:transparent}
+.bmc .cr{grid-column:7/9;grid-row:1}.bmc .ch{grid-column:7/9;grid-row:2}.bmc .cs{grid-column:9/11;grid-row:1/3}
+.bmc .co{grid-column:1/6;grid-row:3}.bmc .rv{grid-column:6/11;grid-row:3}
+.bmc-lati{display:flex;justify-content:space-between;font-size:24px;color:var(--muted);margin-top:-4px}
+.bmc-lati b{color:var(--ink)}
+</style>
 </head>
 <body data-accent="arancio">
 
@@ -13,7 +27,7 @@
   <h1>Officina 1:<br>il Business Model Canvas</h1>
   <p class="lead">Da oggi ogni gruppo porta avanti una sua idea di startup per tutto l'anno. Primo prodotto da consegnare: il modello di business su un foglio, verificato parlando con clienti veri.</p>
   <p class="meta"><span class="chip">5F GPOI</span><span>Officina · 2 ore a settimana · consegna di gruppo su Classroom</span></p>
-  <aside class="notes">Prima delle sei consegne dell'Officina (decisione del docente, novembre 2026): ogni settimana 1 ora di Teoria con i deck del libro e 2 ore di Officina, in cui i gruppi producono documenti veri. Le consegne valgono il 60% del voto di GPOI, le verifiche di teoria il 40%. Questo pacchetto dura circa 5 settimane (10 ore). Prerequisiti di teoria, nelle ore di Teoria: L'impresa, Il prodotto, Come si sviluppa un'impresa (vision e mission), Le startup e le PMI. Il canvas è già stato presentato nel deck del business plan: qui non si spiega di nuovo, si costruisce. Materiale: la scheda "Officina 1" (modello del canvas, checklist e griglia).</aside>
+  <aside class="notes">Prima delle sei consegne dell'Officina (decisione del docente, novembre 2026): ogni settimana 1 ora di Teoria con i deck del libro e 2 ore di Officina, in cui i gruppi producono documenti veri. Le consegne valgono il 60% del voto di GPOI, le verifiche di teoria il 40%. Questo pacchetto dura circa 5 settimane (10 ore). Prerequisiti di teoria, nelle ore di Teoria: L'impresa, Il prodotto, Come si sviluppa un'impresa (vision e mission), Le startup e le PMI. Il canvas si spiega qui per intero (modello completo, lato destro, lato sinistro, esempio compilato), poi si costruisce; nel deck del business plan torna solo come ripasso. Materiale: la scheda "Officina 1" (modello del canvas, checklist e griglia).</aside>
   <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
 </section>
 
@@ -67,6 +81,52 @@
 </section>
 
 <section class="slide">
+  <div class="head"><p class="kicker">Lo strumento</p><h2>Il Business Model Canvas, un'impresa su un foglio</h2></div>
+  <div class="bmc-lati"><span>⟵ <b>Lato sinistro</b>: come produciamo il valore (efficienza)</span><span><b>Lato destro</b>: a chi lo diamo e chi paga (valore) ⟶</span></div>
+  <div class="bmc">
+    <div class="kp"><h4>Partner chiave</h4><p>Chi ci aiuta dall'esterno? Fornitori, alleati, servizi che non facciamo noi.</p></div>
+    <div class="ka"><h4>Attività chiave</h4><p>Che cosa dobbiamo fare bene ogni giorno?</p></div>
+    <div class="kr"><h4>Risorse chiave</h4><p>Di che cosa non possiamo fare a meno?</p></div>
+    <div class="vp"><h4>Proposta di valore</h4><p>Quale problema risolviamo, o quale desiderio soddisfiamo, per ogni segmento? Perché dovrebbero scegliere noi?</p></div>
+    <div class="cr"><h4>Relazioni con i clienti</h4><p>Come li conquistiamo e li teniamo?</p></div>
+    <div class="ch"><h4>Canali</h4><p>Come ci trovano, comprano e ricevono il servizio?</p></div>
+    <div class="cs"><h4>Segmenti di clientela</h4><p>Per chi creiamo valore? Chi sono i clienti più importanti? Possono essere più di uno.</p></div>
+    <div class="co"><h4>Struttura dei costi</h4><p>Quali sono i costi più grandi? Quali dipendono da quanto vendiamo?</p></div>
+    <div class="rv"><h4>Flussi di ricavi</h4><p>Per che cosa pagano, quanto e come? Una volta, a consumo, in abbonamento, con una commissione?</p></div>
+  </div>
+  <aside class="notes">Il Business Model Canvas (Alexander Osterwalder e Yves Pigneur, Business Model Generation, 2010) descrive in nove blocchi come un'impresa crea, consegna e cattura valore. Si legge così: al centro la proposta di valore; a destra il cliente (segmenti, canali, relazioni) e in basso a destra i ricavi che ne arrivano; a sinistra la "macchina" che produce il valore (attività, risorse, partner) e in basso a sinistra i costi che quella macchina genera. L'ordine in cui si compila (si parte sempre dal cliente) è il puzzle di qualche slide dopo: non anticiparlo. Il canvas è un foglio di ipotesi: ogni post-it è una scommessa da verificare, e per questo il v1 si colora di giallo. Nella scheda dell'Officina 1 c'è lo stesso modello vuoto da stampare in A3.</aside>
+  <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il lato destro</p><h2>Chi è il cliente, che cosa gli diamo, chi paga</h2></div>
+  <table class="data">
+    <tr><th>Blocco</th><th>Che cosa scrivere</th><th>RipetiQui</th></tr>
+    <tr><td><b>Segmenti</b></td><td>Gruppi di persone con lo stesso bisogno, descritti bene</td><td>Studenti delle superiori con insufficienze; universitari che vogliono guadagnare</td></tr>
+    <tr><td><b>Proposta di valore</b></td><td>Il problema risolto per <i>ogni</i> segmento, non l'elenco delle funzioni</td><td>Tutor verificati vicino a casa, prenotati in 2 minuti; orari flessibili per chi insegna</td></tr>
+    <tr><td><b>Canali</b></td><td>Come ci scoprono, provano, comprano e usano</td><td>TikTok e Instagram, volantini davanti alle scuole, l'app</td></tr>
+    <tr><td><b>Relazioni</b></td><td>Il tipo di rapporto: self-service, assistenza, comunità</td><td>Recensioni, chat con il tutor, sconto a chi porta un amico</td></tr>
+    <tr><td><b>Ricavi</b></td><td>Chi paga, per che cosa e in che modo</td><td>Commissione del 15% su ogni lezione da 20 €, pacchetto 10 lezioni</td></tr>
+  </table>
+  <aside class="notes">Il lato destro è il "perché" dell'impresa: se qui non c'è un cliente vero con un problema vero, il resto non serve. Errori tipici: segmento "tutti gli studenti" (troppo largo); proposta di valore scritta come elenco di funzioni ("ha la chat, ha le recensioni") invece che come problema risolto; canali confusi con le relazioni (i canali sono la strada, le relazioni il tipo di rapporto). In una piattaforma a due lati, segmenti e proposte di valore sono due.</aside>
+  <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il lato sinistro</p><h2>Che cosa serve per farlo, e quanto costa</h2></div>
+  <table class="data">
+    <tr><th>Blocco</th><th>Che cosa scrivere</th><th>RipetiQui</th></tr>
+    <tr><td><b>Risorse chiave</b></td><td>Ciò senza cui il valore non esiste</td><td>L'app, la comunità di tutor verificati, il marchio</td></tr>
+    <tr><td><b>Attività chiave</b></td><td>Il lavoro che va fatto bene, sempre</td><td>Selezionare i tutor, sviluppare l'app, fare promozione</td></tr>
+    <tr><td><b>Partner chiave</b></td><td>Chi fa ciò che non conviene fare da soli</td><td>Pagamenti online, associazioni studentesche</td></tr>
+    <tr><td><b>Costi</b></td><td>I costi più grandi, fissi e variabili</td><td>App e server, pubblicità, commissioni di pagamento</td></tr>
+  </table>
+  <div class="callout">Ogni costo nasce da risorse, attività o partner; ogni ricavo da un segmento.</div>
+  <aside class="notes">Il lato sinistro è il "come". Si compila dopo il destro, perché risorse e attività servono a mantenere la proposta di valore, non a mostrare quello che il gruppo sa fare. Prova di coerenza (criterio della scheda): se un post-it non è collegato a niente, si toglie; frecce tra i blocchi collegati. I numeri dei costi e dei ricavi qui sono solo voci: le cifre arrivano nell'Officina 5 (preventivo e pareggio).</aside>
+  <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
+</section>
+
+<section class="slide">
   <div class="head"><p class="kicker">Mettiti alla prova</p><h2>In quale blocco del canvas di RipetiQui va?</h2></div>
   <div class="puzzle-categorie" data-id="of1-blocchi" style="--cols:4">
     <div class="cat"><h4>Segmenti di clientela</h4><ul><li>Studenti delle superiori</li><li>Universitari che insegnano</li></ul></div>
@@ -103,6 +163,23 @@
     <li>Struttura dei costi</li>
   </ol>
   <aside class="notes">È l'ordine suggerito dagli autori del canvas: prima il lato destro (il cliente e il valore), poi il lato sinistro (come lo produciamo), infine i costi, che dipendono da tutto il resto. Accettare piccoli scambi (canali e relazioni) se motivati. Errore tipico dei gruppi: partire dalle risorse ("abbiamo un PC e sappiamo programmare") invece che dal cliente.</aside>
+  <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
+</section>
+
+<section class="slide">
+  <div class="head"><p class="kicker">Il canvas completo</p><h2>RipetiQui sul canvas: tutto si tiene</h2></div>
+  <div class="bmc">
+    <div class="kp"><h4>Partner chiave</h4><ul><li>Pagamenti online</li><li>Associazioni studentesche</li></ul></div>
+    <div class="ka"><h4>Attività chiave</h4><ul><li>Selezionare i tutor</li><li>Sviluppare l'app</li></ul></div>
+    <div class="kr"><h4>Risorse chiave</h4><ul><li>App</li><li>Tutor verificati</li><li>Marchio</li></ul></div>
+    <div class="vp"><h4>Proposta di valore</h4><ul><li>Studenti: tutor verificati vicino a casa, in 2 minuti</li><li>Tutor: guadagno con orari flessibili</li></ul></div>
+    <div class="cr"><h4>Relazioni</h4><ul><li>Recensioni</li><li>Chat con il tutor</li></ul></div>
+    <div class="ch"><h4>Canali</h4><ul><li>TikTok, Instagram</li><li>Volantini, app</li></ul></div>
+    <div class="cs"><h4>Segmenti</h4><ul><li>Studenti delle superiori</li><li>Universitari che insegnano</li></ul></div>
+    <div class="co"><h4>Struttura dei costi</h4><ul><li>Sviluppo e server · pubblicità · commissioni di pagamento</li></ul></div>
+    <div class="rv"><h4>Flussi di ricavi</h4><ul><li>15% su ogni lezione da 20 € · pacchetto 10 lezioni</li></ul></div>
+  </div>
+  <aside class="notes">Il canvas v1 di RipetiQui, come esempio di consegna: poche parole per blocco, due segmenti con due proposte di valore, ogni ricavo legato a un segmento (gli studenti pagano la lezione, RipetiQui trattiene il 15%), ogni costo legato a risorse e attività. Chiedere: quali post-it sono ancora ipotesi da verificare con le interviste? Quasi tutti, in particolare "in 2 minuti" e il 15% (i tutor lo accetterebbero?).</aside>
   <p class="credito" style="position:absolute;left:96px;right:96px;bottom:12px;margin:0;font-size:18px;color:var(--muted)">Business Model Canvas di Strategyzer AG (strategyzer.com), ridisegnato da Novaula · licenza CC BY-SA 3.0</p>
 </section>
 
