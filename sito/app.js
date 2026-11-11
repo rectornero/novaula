@@ -4,7 +4,7 @@
   "use strict";
 
   // Versione dell'app: ogni modifica la aumenta e la descrive in CHANGELOG.md
-  var VERSION = "3.1.1";
+  var VERSION = "3.2.0";
   var CFG = window.PIATTAFORMA_CONFIG || {};
   var DEMO = !CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY;
   var app = document.getElementById("app");
@@ -500,8 +500,9 @@
       h("b", { text: done + (done === 1 ? " argomento svolto" : " argomenti svolti") }),
       topics.length > done ? " · " + (topics.length - done) + " in programma" : "",
       h("span", { class: "muted", text: " Tocca un materiale per aprirlo." })));
+    function list(items) {
     var ol = h("ol", { class: "program", style: "--cc:" + classColor(c) });
-    topics.forEach(function (t, i) {
+    items.forEach(function (t, i) {
       var linked = (t.material_ids || []).map(function (id) { return byId[id]; }).filter(Boolean);
       var li = h("li", { class: "topic" + (t.done === false ? " todo" : "") },
         h("span", { class: "dot", "aria-hidden": "true", text: String(i + 1) }),
@@ -519,8 +520,8 @@
             );
           })) : null,
           teacher && h("div", { class: "row topic-tools" },
-            h("button", { class: "btn link", type: "button", text: "↑", "aria-label": "Sposta su", disabled: i === 0 ? true : null, onclick: function () { swap(i, i - 1); } }),
-            h("button", { class: "btn link", type: "button", text: "↓", "aria-label": "Sposta giù", disabled: i === topics.length - 1 ? true : null, onclick: function () { swap(i, i + 1); } }),
+            h("button", { class: "btn link", type: "button", text: "↑", "aria-label": "Sposta su", disabled: i === 0 ? true : null, onclick: function () { swap(items[i], items[i - 1]); } }),
+            h("button", { class: "btn link", type: "button", text: "↓", "aria-label": "Sposta giù", disabled: i === items.length - 1 ? true : null, onclick: function () { swap(items[i], items[i + 1]); } }),
             h("button", { class: "btn link", type: "button", text: t.done === false ? "Segna come svolto" : "Segna da svolgere", onclick: async function () {
               try {
                 await api.updateTopic(t.id, { done: t.done === false });
@@ -535,14 +536,45 @@
       );
       ol.appendChild(li);
     });
-    box.appendChild(ol);
-    async function swap(a, b) {
-      var A = topics[a], B = topics[b];
+    return ol;
+    }
+    // Teoria e Officina: se la classe ha argomenti «Officina …», il programma si divide in due percorsi
+    var off = topics.filter(isOfficina);
+    if (!off.length) { box.appendChild(list(topics)); }
+    else {
+      var tracks = [
+        { key: "teoria", name: "Teoria", items: topics.filter(function (t) { return !isOfficina(t); }) },
+        { key: "officina", name: "Officina", items: off }
+      ];
+      var hours = TRACK_HOURS[c.id] || {};
+      var saved = store("programma-percorso-" + c.id);
+      var cur = tracks.some(function (k) { return k.key === saved; }) ? saved : "teoria";
+      var panel = h("div", { class: "track-panel" });
+      var btns = tracks.map(function (k) {
+        var d = k.items.filter(function (t) { return t.done !== false; }).length;
+        return h("button", { class: "track-btn", type: "button", role: "tab", "data-track": k.key, onclick: function () { show(k.key); } },
+          h("b", { text: k.name }), h("span", { class: "track-count", text: d + " / " + k.items.length }));
+      });
+      box.appendChild(h("div", { class: "track-switch", role: "tablist", "aria-label": "Percorsi del programma", style: "--cc:" + classColor(c) }, btns));
+      box.appendChild(panel);
+      show(cur);
+      function show(key) {
+        var k = tracks.filter(function (x) { return x.key === key; })[0];
+        btns.forEach(function (b) { var on = b.getAttribute("data-track") === key; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
+        store("programma-percorso-" + c.id, key);
+        panel.textContent = "";
+        panel.appendChild(h("p", { class: "track-lede", text: k.name + (hours[key] ? " · " + hours[key] : "") }));
+        panel.appendChild(k.items.length ? list(k.items) : h("p", { class: "empty", text: "Nessun argomento in questo percorso." }));
+      }
+    }
+    async function swap(A, B) {
       var pa = A.position, pb = B.position;
-      if (pa === pb) { pa = a * 10; pb = b * 10; }
+      if (pa === pb) { pa = topics.indexOf(A) * 10; pb = topics.indexOf(B) * 10; }
       try { await api.updateTopic(A.id, { position: pb }); await api.updateTopic(B.id, { position: pa }); route(); } catch (e) { toast(errText(e)); }
     }
   }
+  function isOfficina(t) { return /^Officina\s/.test(t.title || ""); }
+  var TRACK_HOURS = { "5f": { teoria: "1 ora a settimana", officina: "2 ore a settimana, consegne di gruppo" } };
 
   function topicForm(c, mats, t, topics) {
     var msg = h("div");

@@ -163,6 +163,15 @@ details.teacher form{margin-top:14px}
 
 /* Programma svolto: linea del tempo con i materiali come piccoli pulsanti */
 .program-intro{font-size:.95rem;padding:0 4px}
+/* Teoria e Officina: due percorsi separati (5F) */
+.track-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.track-btn{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;padding:8px 10px;border:0;border-radius:12px;background:transparent;color:var(--muted);font:inherit;cursor:pointer}
+.track-btn b{font:800 1rem/1.1 var(--display);color:var(--ink)}
+.track-btn .track-count{font-size:.8rem;font-weight:700}
+.track-btn.on{background:var(--cc);color:#fff}
+.track-btn.on b{color:#fff}
+.track-btn:focus-visible{outline:3px solid var(--hl);outline-offset:2px}
+.track-lede{font-weight:800;color:var(--cc);padding:4px 4px 10px;font-size:.95rem}
 .program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;position:relative}
 .program::before{content:"";position:absolute;left:17px;top:18px;bottom:18px;width:2px;background:color-mix(in srgb,var(--cc) 35%,var(--line))}
 .topic{position:relative;display:flex;gap:14px;padding:0 0 14px}

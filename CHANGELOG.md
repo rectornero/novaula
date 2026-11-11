@@ -5,6 +5,14 @@ Every change to the app gets a new version here, newest first, and the same numb
 Versions follow MAJOR.MINOR.PATCH: MAJOR when the way students or the teacher use the app changes,
 MINOR for new features, PATCH for fixes. Each entry names any SQL in `aggiornamenti/` it needs.
 
+## 3.2.0 (11 Nov 2026): Teoria and Officina as two tracks in the Programma
+No SQL needed. Ships with 3.1.1 (its SQL first).
+- When a class has topics titled "Officina …" (today only 5F), the Programma tab splits them into two separate
+  tracks behind a Teoria / Officina switch, instead of one mixed list. Each track has its own numbering and a
+  "done / total" count. For 5F the tracks say "Teoria · 1 ora a settimana" and "Officina · 2 ore a settimana,
+  consegne di gruppo". The phone remembers the last track opened for each class.
+- The teacher's ↑ ↓ buttons move a topic within its own track. Other classes look exactly as before.
+
 ## 3.1.1 (11 Nov 2026): 5F Officine at the start of each phase
 Needs `aggiornamenti/2026-11-11-5f-officine-in-testa.sql` (moves 6 topics, deletes nothing).
 - 3.1.0 put each 5F Officina after its theory topics, so Officina 1 sat 15 topics down and the Programma looked
